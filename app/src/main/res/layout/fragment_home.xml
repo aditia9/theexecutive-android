@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="globalsinglton"
+            type="com.ranosys.theexecutive.utils.GlobalSingelton" />
+        <variable
+            name="mainfragmentviewmodel"
+            type="com.ranosys.theexecutive.fragments.Dashboard.HomeModelView" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/main_fragment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:padding="@dimen/eight_dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_items"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+</layout>

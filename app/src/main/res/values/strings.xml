@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">The Executive</string>
+    <string name="login">Login</string>
+    <string name="app_title">Kotlin MVVM Architecture</string>
+    <string name="user_id">User ID</string>
+    <string name="empty_user_name">Please provide User Name.</string>
+    <string name="empty_user_company">Please provide company name if you are CCM’s existing customer.</string>
+    <string name="empty_user_mobile">Please provide Mobile Number.</string>
+    <string name="provide_valid_email">Please provide valid Email.</string>
+    <string name="privacy_policy_error">Please accept Privacy Policy.</string>
+    <string name="terms_condition_error">Please accept Terms and Conditions.</string>
+    <string name="empty_email">Please provide Email.</string>
+    <string name="empty_full_name">Please provide Full Name.</string>
+    <string name="empty_user_id">Please provide NRIC /FIN /Passport.</string>
+    <string name="empty_password">Please provide Password.</string>
+    <string name="mobile_error">Please provide Mobile.</string>
+    <string name="city_error">Please provide city.</string>
+    <string name="state_error">Please provide state</string>
+    <string name="name_error">Please provide a name</string>
+    <string name="empty_description">Please provide Description.</string>
+    <string name="name">Name</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="signup">Signup</string>
+    <string name="create_new_account">Create New Account.</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="state">State</string>
+    <string name="city">City</string>
+    <string name="blood_group">Blood Group</string>
+    <string name="gender">Gender</string>
+    <string name="mobile">Mobile</string>
+    <string name="email_id">Email Id</string>
+    <string name="edit">Edit</string>
 </resources>

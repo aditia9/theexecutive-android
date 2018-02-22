@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="data"
+            type="com.ranosys.theexecutive.fragments.Dashboard.HomeDataClass.HomeUserData">
+        </variable>
+    </data>
+
+<RelativeLayout
+    android:padding="@dimen/four_dp"
+    android:id="@+id/items_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <RelativeLayout
+        android:id="@+id/item_row_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/dark_gray"
+        >
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="@dimen/sixty_four"
+            android:layout_height="@dimen/sixty_four" />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@{data.title}"
+            android:textColor="@android:color/white"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/thirtyTwo_dp"
+            />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
+</layout>

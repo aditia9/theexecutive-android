@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <string-array name="states_array">
+       <item>State</item>
+       <item>Rajasthan</item>
+       <item>Delhi</item>
+       <item>JK</item>
+   </string-array>
+</resources>
