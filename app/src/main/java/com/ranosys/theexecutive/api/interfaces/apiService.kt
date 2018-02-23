@@ -13,7 +13,7 @@ interface apiService {
 
     interface LoginService {
         @POST("user/login/email")
-        @Headers("Content-Type: application/json", "X-Requested-With: XMLHttpRequest", "Cache-Control: no-cache")
+        @Headers(ApiConstants.API_HEADER)
         fun getLoginData(@Body loginRequest: LoginDataClass.LoginRequest?): Call<LoginDataClass.LoginResponse>
     }
 }

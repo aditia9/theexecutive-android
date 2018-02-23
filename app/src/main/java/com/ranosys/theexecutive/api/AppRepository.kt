@@ -50,7 +50,7 @@ class AppRepository private constructor(){
                     }else{
                         apiResponse.apiResponse = response.body()
                         dataLogin.value = apiResponse
-                        Log.e("Login:",""+dataLogin.value?.apiResponse?.accessToken)
+                        printLog("Login:",""+dataLogin.value?.apiResponse?.accessToken)
 
                     }
 
@@ -58,12 +58,20 @@ class AppRepository private constructor(){
 
                 override fun onFailure(call: Call<LoginDataClass.LoginResponse>, t: Throwable) {
                     dataLogin.value = null
-                    Log.e("Login:","Failed")
+                    printLog("Login:","Failed")
 
                 }
             })
         }
 
+        fun printLog(TAG:String, message: String): Unit{
+            if(BuildConfig.DEBUG){
+                Log.e(TAG, message)
+            }
+        }
+
     }
+
+
 
 }

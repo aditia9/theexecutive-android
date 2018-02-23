@@ -6,7 +6,6 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,6 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.UserActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
-import com.ranosys.theexecutive.fragments.Profile.ProfileFragment
-import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -29,7 +26,7 @@ class HomeFragment : BaseFragment() {
     var homeModelView: HomeModelView? = null
 
     override fun getTitle(): String? {
-        return "Home"
+        return getString(R.string.title_home)
     }
 
     companion object {
@@ -44,7 +41,6 @@ class HomeFragment : BaseFragment() {
         mViewDataBinding?.setVariable(getBindingVariable(), homeModelView)
         mViewDataBinding?.executePendingBindings()
         observeButtonClicks()
-        observeBackButton()
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -56,22 +52,6 @@ class HomeFragment : BaseFragment() {
     private fun observeButtonClicks() {
         homeModelView?.buttonClicked?.observe(this, Observer<HomeDataClass.HomeUserData>{ userData ->
         })
-    }
-
-    private fun observeBackButton() {
-        homeModelView?.backButtonClicked?.observe(this, Observer<Boolean> { isClicked ->
-            if (isClicked!!) {
-                onBackPressed()
-            }
-        })
-    }
-
-    private fun showAllRequests() {
-        Log.e("HomeFragment", "Show all request method")
-    }
-
-    private fun generateNewRequest() {
-        Log.e("HomeFragment", "Generate new request")
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -91,13 +71,10 @@ class HomeFragment : BaseFragment() {
                         Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
 
                     }
-                    3->{
-                        FragmentUtils.addFragment(activity, ProfileFragment.newInstance(), ProfileFragment::class.java.name)
-
-                    }
                     4->{
-                        SavedPreferences.getInstance()?.setIsLogin(false)
-                        SavedPreferences.getInstance()?.storeUserEmail("")
+                        val prefInstance = SavedPreferences.getInstance()
+                        prefInstance?.setIsLogin(false)
+                        prefInstance?.storeUserEmail("")
                         var signoutIntent = Intent(activity, UserActivity::class.java)
                         startActivity(signoutIntent)
                         activity.finish()

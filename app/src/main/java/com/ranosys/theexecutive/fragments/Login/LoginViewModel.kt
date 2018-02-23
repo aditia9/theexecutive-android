@@ -25,7 +25,6 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     var password :ObservableField<String>? = ObservableField<String>()
     val emailError = ObservableField<String>()
     val passwordError = ObservableField<String>()
-    val isButtonClicked = MutableLiveData<Int>()
     val isCreateAcctClicked = MutableLiveData<Int>()
     var mutualresponse = MutableLiveData<ApiResponse<LoginDataClass.LoginResponse>>()
 
@@ -33,13 +32,26 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         this.loginRequest = loginRequest
     }
 
-    fun onLoginClick(view: View) {
-        if (isDataValid(view.context)) {
-            isButtonClicked.setValue(view.id)
-        }
-    }
     fun onRegisterClick(view: View){
-        isCreateAcctClicked.value = view.id
+        when(view.id){
+            R.id.tv_forgot_password ->{
+
+                if (!TextUtils.isEmpty(email?.get())) {
+                    if (Utils.isValidEmail(email?.get())) {
+                        isCreateAcctClicked.value = view.id
+                    } else {
+                        emailError?.set(view.context.getString(R.string.error_invalid_email))
+                    }
+                } else {
+                    emailError?.set(view.context.getString(R.string.error_empty_email_id))
+                }
+            }
+            else ->{
+                isCreateAcctClicked.value = view.id
+            }
+
+        }
+
     }
 
     fun login(){
@@ -50,7 +62,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         loginRequest?.email = email?.get().toString()
         loginRequest?.password = password?.get().toString()
 
-        AppRepository.login(loginRequest, mutualresponse)
+        if(isDataValid(getApplication())){
+            AppRepository.login(loginRequest, mutualresponse)
+        }
+
     }
 
     fun isDataValid(context: Context): Boolean {
@@ -68,19 +83,6 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         }
 
         return isValid
-    }
-
-
-    fun getObservableProject(): LiveData<LoginDataClass.LoginResponse>? {
-        return loginObservable
-    }
-
-    fun onEmailTextChanged(text: CharSequence) {
-        emailError.set("")
-    }
-
-    fun onPasswordTextChanged(text: CharSequence) {
-        passwordError.set("")
     }
 
 }

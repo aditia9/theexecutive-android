@@ -38,7 +38,6 @@ class LoginFragment : BaseFragment() {
 
     private var loginViewModel: LoginViewModel? = null
     private var mAuth: FirebaseAuth? = null
-    private var globalSingelton: GlobalSingelton? = null
     private var savedPreferences: SavedPreferences? = null
 
     companion object {
@@ -58,7 +57,6 @@ class LoginFragment : BaseFragment() {
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java!!)
         mViewDataBinding?.setVariable(getBindingVariable(), loginViewModel)
         mViewDataBinding?.executePendingBindings()
-        observeButtonClick()
         observeNewClick()
         observeLoginApiResponse()
         return mViewDataBinding?.root
@@ -77,37 +75,10 @@ class LoginFragment : BaseFragment() {
                         FragmentUtils.replaceFragment(activity, RegisterFragment.newInstance(), RegisterFragment::class.java.name)
                 }
                 R.id.tv_forgot_password -> {
-                    if (!TextUtils.isEmpty(loginViewModel?.email?.get())) {
-                        if (Utils.isValidEmail(loginViewModel?.email?.get())) {
-                            showLoading()
-                            sendResetPasswordMail(loginViewModel?.email?.get()!!)
-                        } else {
-                            loginViewModel?.emailError?.set("Invalid mail id.")
-                        }
-                    } else {
-                        loginViewModel?.emailError?.set("Provide email id.")
-                    }
+                    showLoading()
+                    sendResetPasswordMail(loginViewModel?.email?.get()!!)
                 }
-            }
-        })
-    }
 
-    private fun sendResetPasswordMail(mail: String) {
-        mAuth?.sendPasswordResetEmail(mail)?.addOnCompleteListener(object : OnCompleteListener<Void> {
-            override fun onComplete(task: Task<Void>) {
-                hideLoading()
-                if (task.isSuccessful) {
-                    Toast.makeText(activity, "An email with link to reset password has been sent to you.", Toast.LENGTH_LONG).show()
-                } else {
-                    loginViewModel?.emailError?.set("Invalid mail id.")
-                }
-            }
-        })
-    }
-
-    private fun observeButtonClick() {
-        loginViewModel?.isButtonClicked?.observe(this, Observer<Int> { id ->
-            when (id) {
                 R.id.btn_login -> {
                     Utils.hideSoftKeypad(activity)
                     if (Utils.isConnectionAvailable(activity)) {
@@ -121,6 +92,11 @@ class LoginFragment : BaseFragment() {
             }
         })
     }
+
+    private fun sendResetPasswordMail(mail: String) {
+        Toast.makeText(activity, "Reset password functionality.", Toast.LENGTH_LONG).show()
+    }
+
 
 
     private fun observeLoginApiResponse() {
@@ -145,7 +121,7 @@ class LoginFragment : BaseFragment() {
     }
 
     override fun getTitle(): String? {
-        return "Login"
+        return getString(R.string.title_login)
     }
 
     override fun getLayoutId(): Int {
@@ -155,56 +131,4 @@ class LoginFragment : BaseFragment() {
     override fun getBindingVariable(): Int {
         return BR.loginModel
     }
-
-    fun logIn() {
-        mAuth?.signInWithEmailAndPassword(loginViewModel?.email!!.get(),
-                loginViewModel?.password!!.get())!!
-                .addOnCompleteListener(activity, object : OnCompleteListener<AuthResult> {
-                    override fun onComplete(task: Task<AuthResult>) {
-                        hideLoading()
-                        if (task.isSuccessful) {
-                            val user = mAuth?.getCurrentUser()
-                            if (user?.isEmailVerified!!) {
-                                savedPreferences?.storeUserEmail(user.email!!)
-                                savedPreferences?.setIsLogin(true)
-                                val dashboard = Intent(activity, DashBoardActivity::class.java)
-                                startActivity(dashboard)
-                                activity.finish()
-                                Toast.makeText(activity, "Verified User Login.", Toast.LENGTH_LONG).show()
-                            } else {
-                                Toast.makeText(activity, "Please verify your mail id to proceed login.", Toast.LENGTH_LONG).show()
-                            }
-                        } else {
-                            val errorCode = (task.exception as FirebaseAuthException).errorCode
-                            when (errorCode) {
-                                "ERROR_INVALID_CREDENTIAL" -> {
-                                    loginViewModel?.emailError?.set("Invalid email id.")
-                                    et_emailid.requestFocus()
-                                }
-                                "ERROR_INVALID_EMAIL" -> {
-                                    loginViewModel?.emailError?.set("The email address is badly formatted.")
-                                    et_emailid.requestFocus()
-                                }
-                                "ERROR_WRONG_PASSWORD" -> {
-                                    loginViewModel?.passwordError?.set("Password is incorrect ")
-                                    password_et.requestFocus()
-                                    loginViewModel?.password?.set("")
-                                }
-                                "ERROR_USER_MISMATCH" ->
-                                    Toast.makeText(activity, "The supplied credentials do not correspond to the previously signed in user.", Toast.LENGTH_LONG).show()
-                                "ERROR_USER_DISABLED" ->
-                                    Toast.makeText(activity, "The user account has been disabled by an administrator.", Toast.LENGTH_LONG).show()
-                                "ERROR_USER_NOT_FOUND" -> {
-                                    loginViewModel?.emailError?.set("This account does not exists.")
-                                    et_emailid.requestFocus()
-                                }
-                            }
-                            Toast.makeText(activity, errorCode, Toast.LENGTH_LONG).show()
-                        }
-
-                    }
-
-                })
-    }
-
 }

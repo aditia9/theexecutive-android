@@ -20,7 +20,7 @@ open class BaseActivity: RunTimePermissionActivity(){
     override fun onBackPressed() {
         Utils.hideSoftKeypad(this)
         if(supportFragmentManager.backStackEntryCount > 1){
-            supportFragmentManager.popBackStack()
+            supportFragmentManager.popBackStackImmediate()
         }else{
             this.finish()
         }
