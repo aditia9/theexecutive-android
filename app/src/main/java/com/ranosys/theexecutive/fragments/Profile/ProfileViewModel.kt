@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.fragments.Profile
 
+import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableField
 import android.util.Log
@@ -13,7 +14,7 @@ import com.ranosys.theexecutive.utils.SavedPreferences
 /**
  * Created by Vikash Kumar Bijarniya on 6/2/18.
  */
-class ProfileViewModel(userProfile: ProfileDataClass.UserProfile, database: FirebaseDatabase) : BaseViewModel() {
+class ProfileViewModel(application: Application, database: FirebaseDatabase) : BaseViewModel(application) {
 
     var userProfile: ProfileDataClass.UserProfile? = null
     var name: ObservableField<String>? = ObservableField()

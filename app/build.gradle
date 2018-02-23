@@ -6,7 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
         applicationId "com.ranosys.theexecutive"
         minSdkVersion rootProject.minSdkVersion
@@ -24,21 +24,51 @@ android {
     dataBinding {
         enabled = true
     }
+
+    flavorDimensions "production", "uat", "dev", "qat"
+    productFlavors {
+        production {
+            applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
+            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+            dimension 'production'
+        }
+
+        UAT {
+            applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
+            resValue "string", 'app_name', "The Executive"  //app name to be shown in device
+            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+            dimension 'uat'
+        }
+        dev {
+            applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
+            resValue "string", 'app_name', "D-The Executive"  //app name to be shown in device
+            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+            dimension 'dev'
+        }
+        QAT {
+            applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
+            resValue "string", 'app_name', "The Executive"  //app name to be shown in device
+            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+            dimension 'qat'
+        }
+
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':rtp')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation "com.android.support:appcompat-v7:${rootProject.supportLibVersion}"
     implementation "com.android.support:support-v4:${rootProject.supportLibVersion}"
     implementation "com.android.support:design:${rootProject.supportLibVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.android.support:recyclerview-v7:${rootProject.supportLibVersion}"
 
     //For test cases
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:0.5'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    testImplementation "junit:junit:${rootProject.junitVersion}"
+    androidTestImplementation "com.android.support.test:runner:${rootProject.runnerVersion}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${rootProject.espressoVersion}"
 
     //For kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -51,23 +81,18 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     implementation 'com.squareup.okhttp3:okhttp:3.4.1'
-    implementation 'com.google.firebase:firebase-database:11.8.0'
 
-    /*//For crash reports
-    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
-        transitive = true;
-    }
-*/
     // For Lifecycle, ViewModel and LiveData
-    implementation 'android.arch.lifecycle:runtime:1.0.0-alpha9'
-    implementation 'android.arch.lifecycle:extensions:1.0.0-alpha9'
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha9"
+    implementation "android.arch.lifecycle:runtime:${rootProject.lifeCycleVersion}"
+    implementation "android.arch.lifecycle:extensions:${rootProject.lifeCycleVersion}"
+    annotationProcessor "android.arch.lifecycle:compiler:${rootProject.lifeCycleVersion}"
 
     //For databinding in Kotlin
     kapt 'com.android.databinding:compiler:3.0.0-alpha5'
 
     // For firebase authentication
-    compile 'com.google.firebase:firebase-auth:11.8.0'
+    implementation "com.google.firebase:firebase-database:${rootProject.fireBaseVersion}"
+    implementation "com.google.firebase:firebase-auth:${rootProject.fireBaseVersion}"
 }
 apply plugin: 'com.google.gms.google-services'
 

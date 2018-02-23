@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.fragments.Dashboard
 
+import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableField
 import com.ranosys.theexecutive.base.BaseViewModel
@@ -7,7 +8,7 @@ import com.ranosys.theexecutive.base.BaseViewModel
 /**
  * Created by Mohammad Sunny on 2/2/18.
  */
-class HomeModelView : BaseViewModel() {
+class HomeModelView(application: Application) : BaseViewModel(application) {
 
     var userData: ObservableField<HomeDataClass.HomeUserData>? = ObservableField<HomeDataClass.HomeUserData>()
 

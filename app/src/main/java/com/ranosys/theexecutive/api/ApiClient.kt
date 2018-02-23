@@ -20,7 +20,7 @@ class ApiClient {
         get() {
             field = field ?: Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))
-                    .baseUrl("http://raview.net/")
+                    .baseUrl(BuildConfig.API_URL)
                     .client(client)
                     .build()
             return field

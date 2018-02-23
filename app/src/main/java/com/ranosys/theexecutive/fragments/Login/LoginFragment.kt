@@ -1,7 +1,9 @@
 package com.ranosys.theexecutive.fragments.Login
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.Nullable
 /**
  * Created by Mohammad Sunny on 25/1/18.
  */
-class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
+class LoginFragment : BaseFragment() {
 
     private var loginViewModel: LoginViewModel? = null
     private var mAuth: FirebaseAuth? = null
@@ -52,12 +54,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        loginViewModel = LoginViewModel(LoginDataClass.LoginRequest("", "", "", "", ""))
-        //  loginViewModel = ViewModelProviders.of(this).get(MyViewModel::class.java!!)
+        val mViewDataBinding : FragmentLoginBinding? = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java!!)
+        mViewDataBinding?.setVariable(getBindingVariable(), loginViewModel)
+        mViewDataBinding?.executePendingBindings()
         observeButtonClick()
         observeNewClick()
         observeLoginApiResponse()
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return mViewDataBinding?.root
     }
 
     override fun onResume() {
@@ -69,7 +73,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
         loginViewModel?.isCreateAcctClicked?.observe(this, Observer<Int> { id ->
             when (id) {
                 R.id.tv_already_have_ac -> {
-                    FragmentUtils.replaceFragment(activity, RegisterFragment.newInstance(), RegisterFragment::class.java.name)
+                    if(null == fragmentManager.findFragmentByTag(RegisterFragment::class.java.name))
+                        FragmentUtils.replaceFragment(activity, RegisterFragment.newInstance(), RegisterFragment::class.java.name)
                 }
                 R.id.tv_forgot_password -> {
                     if (!TextUtils.isEmpty(loginViewModel?.email?.get())) {
@@ -149,10 +154,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     override fun getBindingVariable(): Int {
         return BR.loginModel
-    }
-
-    override fun getViewModel(): LoginViewModel {
-        return loginViewModel as LoginViewModel
     }
 
     fun logIn() {

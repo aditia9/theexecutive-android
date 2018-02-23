@@ -1,7 +1,9 @@
 package com.ranosys.theexecutive.fragments.Dashboard
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -13,7 +15,6 @@ import com.ranosys.theexecutive.BR
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.UserActivity
 import com.ranosys.theexecutive.base.BaseFragment
-import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
 import com.ranosys.theexecutive.fragments.Profile.ProfileFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 /**
  * Created by Mohammad Sunny on 2/2/18.
  */
-class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
+class HomeFragment : BaseFragment() {
 
     var homeModelView: HomeModelView? = null
 
@@ -38,7 +39,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        homeModelView = HomeModelView()
+        val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        homeModelView = ViewModelProviders.of(this).get(HomeModelView::class.java!!)
+        mViewDataBinding?.setVariable(getBindingVariable(), homeModelView)
+        mViewDataBinding?.executePendingBindings()
         observeButtonClicks()
         observeBackButton()
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -112,8 +116,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, BaseViewModel>() {
         return BR.mainfragmentviewmodel
     }
 
-    override fun getViewModel(): BaseViewModel {
-        return homeModelView as HomeModelView
-    }
 
 }

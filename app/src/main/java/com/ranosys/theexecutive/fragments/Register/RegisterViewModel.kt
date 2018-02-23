@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.fragments.Register
 
+import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.databinding.ObservableField
@@ -17,8 +18,7 @@ import com.ranosys.theexecutive.utils.Utils
 /**
  * Created by Mohammad Sunny on 31/1/18.
  */
-class RegisterViewModel(registerRequest: RegisterDataClass.RegisterRequest): BaseViewModel() {
-    var registerResponse = ObservableField<RegisterDataClass.RegisterResponse>()
+class RegisterViewModel(application: Application): BaseViewModel(application) {
     var registerRequest: RegisterDataClass.RegisterRequest? = null
     var name: ObservableField<String>? = ObservableField()
     var mobile: ObservableField<String>? = ObservableField()

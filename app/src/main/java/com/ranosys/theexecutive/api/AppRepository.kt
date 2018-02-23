@@ -28,7 +28,6 @@ class AppRepository private constructor(){
 
             callPost?.enqueue(object : Callback<LoginDataClass.LoginResponse> {
                 override fun onResponse(call: Call<LoginDataClass.LoginResponse>?, response: Response<LoginDataClass.LoginResponse>?) {
-                    //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                     if(!response!!.isSuccessful){
                         try {
                             val jobError = JSONObject(response.errorBody()?.string())
@@ -58,7 +57,6 @@ class AppRepository private constructor(){
                 }
 
                 override fun onFailure(call: Call<LoginDataClass.LoginResponse>, t: Throwable) {
-                    // TODO better error handling in part #2 ...
                     dataLogin.value = null
                     Log.e("Login:","Failed")
 

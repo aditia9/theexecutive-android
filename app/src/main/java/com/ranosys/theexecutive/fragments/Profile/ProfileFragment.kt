@@ -9,14 +9,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.ranosys.theexecutive.BR
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
-import com.ranosys.theexecutive.databinding.FragmentProfileBinding
 import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 /**
  * Created by Mohammad Sunny on 5/2/18.
  */
-class ProfileFragment: BaseFragment<FragmentProfileBinding, ProfileViewModel>() {
+class ProfileFragment: BaseFragment() {
 
     var savedPreferences : SavedPreferences? = null
     var profileViewModel: ProfileViewModel? = null
@@ -84,7 +83,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding, ProfileViewModel>() 
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        profileViewModel = ProfileViewModel(ProfileDataClass.UserProfile("", "", "", "", "", "", ""), database!!)
+        profileViewModel = ProfileViewModel(activity.application, database!!)
         profileViewModel!!.getFromServer()
         observeUserData()
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -116,7 +115,4 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding, ProfileViewModel>() 
         return BR.userInfo
     }
 
-    override fun getViewModel(): ProfileViewModel {
-        return profileViewModel as ProfileViewModel
-    }
 }

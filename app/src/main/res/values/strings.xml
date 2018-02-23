@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">The Executive</string>
+    <!--<string name="app_name">The Executive</string>-->
     <string name="login">Login</string>
     <string name="app_title">Kotlin MVVM Architecture</string>
     <string name="user_id">User ID</string>

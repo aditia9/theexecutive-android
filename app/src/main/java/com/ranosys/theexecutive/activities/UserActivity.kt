@@ -21,8 +21,10 @@ class UserActivity: BaseActivity() {
             val homeIntent = Intent(this, DashBoardActivity::class.java)
             startActivity(homeIntent)
             finish()
-        }else{
-            FragmentUtils.addFragment(this, LoginFragment.newInstance(), LoginFragment::class.java.name)
+        }else {
+            if (savedInstanceState == null) {
+                FragmentUtils.addFragment(this, LoginFragment.newInstance(), LoginFragment::class.java.name)
+            }
         }
     }
 

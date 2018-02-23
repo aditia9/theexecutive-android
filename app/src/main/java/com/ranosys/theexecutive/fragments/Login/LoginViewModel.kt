@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.fragments.Login
 
+import android.app.Application
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
@@ -15,7 +16,7 @@ import com.ranosys.theexecutive.utils.Utils
 /**
  * Created by Mohammad Sunny on 25/1/18.
  */
-class LoginViewModel(loginRequest: LoginDataClass.LoginRequest) : BaseViewModel(){
+class LoginViewModel(application: Application) : BaseViewModel(application){
 
     var login = ObservableField<LoginDataClass.LoginResponse>()
     var loginObservable: LiveData<LoginDataClass.LoginResponse>? = null

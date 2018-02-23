@@ -1,6 +1,8 @@
 package com.ranosys.theexecutive.fragments.Register
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.ranosys.theexecutive.BR
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
-import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.utils.Utils
 
@@ -22,7 +23,7 @@ import com.ranosys.theexecutive.utils.Utils
 /**
  * Created by Mohammad Sunny on 31/1/18.
  */
-class RegisterFragment: BaseFragment<FragmentRegisterBinding, BaseViewModel>() {
+class RegisterFragment: BaseFragment() {
     private var registerViewModel: RegisterViewModel? = null
     private var mAuth: FirebaseAuth? = null
     var database = FirebaseDatabase.getInstance()
@@ -44,10 +45,13 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding, BaseViewModel>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        registerViewModel = RegisterViewModel(RegisterDataClass.RegisterRequest("", "","","","",",",""))
-        mAuth = FirebaseAuth.getInstance()
+        val mViewDataBinding : FragmentRegisterBinding? = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java!!)
+        mViewDataBinding?.setVariable(getBindingVariable(), registerViewModel)
+        mViewDataBinding?.executePendingBindings()
         observeRegisterButton()
-        return super.onCreateView(inflater, container, savedInstanceState)
+        mAuth = FirebaseAuth.getInstance()
+        return mViewDataBinding?.root
 
     }
 
@@ -121,10 +125,6 @@ class RegisterFragment: BaseFragment<FragmentRegisterBinding, BaseViewModel>() {
 
     override fun getBindingVariable(): Int {
         return BR.registerViewModel
-    }
-
-    override fun getViewModel(): RegisterViewModel {
-        return registerViewModel as RegisterViewModel
     }
 
 }

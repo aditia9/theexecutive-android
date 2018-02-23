@@ -12,7 +12,7 @@ import retrofit2.http.POST
 interface apiService {
 
     interface LoginService {
-        @POST("api/v1/user/login/email")
+        @POST("user/login/email")
         @Headers("Content-Type: application/json", "X-Requested-With: XMLHttpRequest", "Cache-Control: no-cache")
         fun getLoginData(@Body loginRequest: LoginDataClass.LoginRequest?): Call<LoginDataClass.LoginResponse>
     }

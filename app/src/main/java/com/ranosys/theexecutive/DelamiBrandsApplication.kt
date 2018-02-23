@@ -8,10 +8,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 /**
  * Created by Mohammad Sunny on 24/1/18.
  */
-class SampleApplication: Application(){
+class DelamiBrandsApplication : Application(){
 
     companion object {
-        var samleApplication: SampleApplication? = null
+        var samleApplication: DelamiBrandsApplication? = null
     }
 
     override fun onCreate() {

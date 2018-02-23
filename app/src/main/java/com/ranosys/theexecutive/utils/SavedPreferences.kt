@@ -2,7 +2,7 @@ package com.ranosys.theexecutive.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.ranosys.theexecutive.SampleApplication
+import com.ranosys.theexecutive.DelamiBrandsApplication
 
 
 
@@ -34,7 +34,7 @@ class SavedPreferences private constructor(){
 
         fun getInstance(): SavedPreferences? {
             if (savedPreferences == null) {
-                init(SampleApplication.samleApplication?.applicationContext!!)
+                init(DelamiBrandsApplication.samleApplication?.applicationContext!!)
             }
             return savedPreferences
         }
