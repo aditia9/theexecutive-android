@@ -25,10 +25,6 @@ class HomeFragment : BaseFragment() {
 
     var homeModelView: HomeModelView? = null
 
-    override fun getTitle(): String? {
-        return getString(R.string.title_home)
-    }
-
     companion object {
         fun newInstance(): HomeFragment {
             return HomeFragment()
@@ -36,9 +32,9 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         homeModelView = ViewModelProviders.of(this).get(HomeModelView::class.java!!)
-        mViewDataBinding?.setVariable(getBindingVariable(), homeModelView)
+        mViewDataBinding?.mainfragmentviewmodel = homeModelView
         mViewDataBinding?.executePendingBindings()
         observeButtonClicks()
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -46,7 +42,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setTitle()
+        setTitle(getString(R.string.title_home))
     }
 
     private fun observeButtonClicks() {
@@ -84,14 +80,5 @@ class HomeFragment : BaseFragment() {
             }
         })
     }
-
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_home
-    }
-
-    override fun getBindingVariable(): Int {
-        return BR.mainfragmentviewmodel
-    }
-
 
 }

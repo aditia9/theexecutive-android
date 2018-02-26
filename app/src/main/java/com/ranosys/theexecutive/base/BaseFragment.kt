@@ -28,25 +28,10 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
 
-    fun setTitle(){
-        val titleId = getTitle() ?: getString(R.string.app_name)
+    fun setTitle(title: String = getString(R.string.app_name)){
+        val titleId = title
         (activity as BaseActivity).setScreenTitle(titleId)
     }
-
-    abstract fun getTitle() : String?
-
-    /**
-     * @return layout resource id
-     */
-    @LayoutRes
-    abstract fun getLayoutId(): Int
-
-    /**
-     * Override for set binding variable
-     *
-     * @return variable id
-     */
-    abstract fun getBindingVariable(): Int
 
     fun getPermission(permissionList: List<String>, isPermissionGrantedInterface: IsPermissionGrantedInterface) {
         (activity as BaseActivity).getPermission(permissionList, isPermissionGrantedInterface)

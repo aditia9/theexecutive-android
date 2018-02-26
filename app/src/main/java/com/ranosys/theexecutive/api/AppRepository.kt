@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.api
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.ranosys.theexecutive.BuildConfig
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.apiService
 import com.ranosys.theexecutive.fragments.Login.LoginDataClass
 import org.json.JSONException
@@ -21,8 +22,8 @@ class AppRepository private constructor(){
 
     companion object {
 
-        fun login(loginRequest: LoginDataClass.LoginRequest?, dataLogin : MutableLiveData<ApiResponse<LoginDataClass.LoginResponse>>) {
-            val apiResponse = ApiResponse<LoginDataClass.LoginResponse>()
+        fun login(loginRequest: LoginDataClass.LoginRequest?, callBack: ApiCallback<LoginDataClass.LoginResponse>) {
+            //val apiResponse = ApiResponse<LoginDataClass.LoginResponse>()
             val retrofit = ApiClient.retrofit
             val callPost = retrofit?.create<apiService.LoginService>(apiService.LoginService::class.java!!)?.getLoginData(loginRequest)
 
@@ -32,32 +33,37 @@ class AppRepository private constructor(){
                         try {
                             val jobError = JSONObject(response.errorBody()?.string())
                             var errorBody = jobError.getString("errorCode")
-                            apiResponse.apiResponse = response.body()
-                            apiResponse.error = errorBody
-                            dataLogin.value = apiResponse
+                            callBack.onError(errorBody)
+//                            apiResponse.apiResponse = response.body()
+//                            apiResponse.error = errorBody
+//                            dataLogin.value = apiResponse
 
                         } catch (e: JSONException) {
-                            apiResponse.throwable = Throwable("Error")
-                            dataLogin.value = apiResponse
+//                            apiResponse.throwable = Throwable("Error")
+//                            dataLogin.value = apiResponse
+                            callBack.onException(Throwable("Error"))
                             if (BuildConfig.DEBUG)
                                 e.printStackTrace();
                         } catch (e:IOException) {
-                            apiResponse.throwable = Throwable("Error")
-                            dataLogin.value = apiResponse
+//                            apiResponse.throwable = Throwable("Error")
+//                            dataLogin.value = apiResponse
+                            callBack.onException(Throwable("Error"))
                             if (BuildConfig.DEBUG)
                                 e.printStackTrace();
                         }
                     }else{
-                        apiResponse.apiResponse = response.body()
-                        dataLogin.value = apiResponse
-                        printLog("Login:",""+dataLogin.value?.apiResponse?.accessToken)
+//                        apiResponse.apiResponse = response.body()
+//                        dataLogin.value = apiResponse
+//                        printLog("Login:",""+dataLogin.value?.apiResponse?.accessToken)
+                        callBack.onSuccess(response.body())
 
                     }
 
                 }
 
                 override fun onFailure(call: Call<LoginDataClass.LoginResponse>, t: Throwable) {
-                    dataLogin.value = null
+//                    dataLogin.value = null
+                    callBack.onError("Error")
                     printLog("Login:","Failed")
 
                 }
