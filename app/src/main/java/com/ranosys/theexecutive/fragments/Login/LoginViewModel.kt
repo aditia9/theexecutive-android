@@ -10,6 +10,7 @@ import android.view.View
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.utils.Utils
 
@@ -67,7 +68,19 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         loginRequest?.password = password?.get().toString()
 
         if(isDataValid(getApplication())){
-            AppRepository.login(loginRequest, mutualresponse)
+            AppRepository.login(loginRequest, object : ApiCallback<LoginDataClass.LoginResponse> {
+                override fun onException(error: Throwable) {
+                    mutualresponse.value?.throwable = error
+                }
+
+                override fun onError(errorMsg: String) {
+                    mutualresponse.value?.error = errorMsg
+                }
+
+                override fun onSuccess(t: LoginDataClass.LoginResponse?) {
+                    mutualresponse.value?.apiResponse = t
+                }
+            })
         }
 
     }

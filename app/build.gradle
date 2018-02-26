@@ -9,6 +9,7 @@ android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
         applicationId "com.ranosys.theexecutive"
+        buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
@@ -25,35 +26,35 @@ android {
         enabled = true
     }
 
-    flavorDimensions "default"
-    productFlavors {
-        production {
-            applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
-            resValue "string", 'app_name', "The Executive" //app name to be shown in device
-            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
-           // dimension 'production'
-        }
-
-        UAT {
-            applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
-            resValue "string", 'app_name', "The Executive"  //app name to be shown in device
-            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
-            //dimension 'uat'
-        }
-        dev {
-            applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
-            resValue "string", 'app_name', "D-The Executive"  //app name to be shown in device
-            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
-           // dimension 'dev'
-        }
-        QAT {
-            applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
-            resValue "string", 'app_name', "The Executive"  //app name to be shown in device
-            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
-           // dimension 'qat'
-        }
-
-    }
+    //flavorDimensions "default", "qat", "dev", "production", "uat"
+//    productFlavors {
+//        production {
+//            applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
+//            resValue "string", 'app_name', "The Executive" //app name to be shown in device
+//            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+//            dimension 'production'
+//        }
+//
+//        UAT {
+//            applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
+//            resValue "string", 'app_name', "The Executive"  //app name to be shown in device
+//            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+//            dimension 'uat'
+//        }
+//        dev {
+//            applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
+//            resValue "string", 'app_name', "D-The Executive"  //app name to be shown in device
+//            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+//            dimension 'dev'
+//        }
+//        QAT {
+//            applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
+//            resValue "string", 'app_name', "The Executive"  //app name to be shown in device
+//            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+//            dimension 'qat'
+//        }
+//
+//    }
 }
 
 dependencies {

@@ -53,9 +53,9 @@ class LoginFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val mViewDataBinding : FragmentLoginBinding? = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        val mViewDataBinding : FragmentLoginBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java!!)
-        mViewDataBinding?.setVariable(getBindingVariable(), loginViewModel)
+        mViewDataBinding?.loginModel = loginViewModel
         mViewDataBinding?.executePendingBindings()
         observeNewClick()
         observeLoginApiResponse()
@@ -64,7 +64,7 @@ class LoginFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setTitle()
+        setTitle(getString(R.string.title_login))
     }
 
     private fun observeNewClick() {
@@ -125,15 +125,4 @@ class LoginFragment : BaseFragment() {
         })
     }
 
-    override fun getTitle(): String? {
-        return getString(R.string.title_login)
-    }
-
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_login
-    }
-
-    override fun getBindingVariable(): Int {
-        return BR.loginModel
-    }
 }

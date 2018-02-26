@@ -41,13 +41,13 @@ class RegisterFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setTitle()
+        setTitle(getString(R.string.title_register))
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val mViewDataBinding : FragmentRegisterBinding? = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        val mViewDataBinding : FragmentRegisterBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java!!)
-        mViewDataBinding?.setVariable(getBindingVariable(), registerViewModel)
+        mViewDataBinding?.registerViewModel =  registerViewModel
         mViewDataBinding?.executePendingBindings()
         observeRegisterButton()
         mAuth = FirebaseAuth.getInstance()
@@ -112,19 +112,6 @@ class RegisterFragment: BaseFragment() {
                 }
             }
         })
-    }
-
-    override fun getTitle(): String? {
-        return "Register"
-    }
-
-    override fun getLayoutId(): Int {
-        return R.layout.fragment_register
-
-    }
-
-    override fun getBindingVariable(): Int {
-        return BR.registerViewModel
     }
 
 }
