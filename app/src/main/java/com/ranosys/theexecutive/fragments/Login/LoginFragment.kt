@@ -68,15 +68,19 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun observeNewClick() {
-        loginViewModel?.isCreateAcctClicked?.observe(this, Observer<Int> { id ->
+        loginViewModel?.clickedBtnId?.observe(this, Observer<Int> { id ->
+
             when (id) {
                 R.id.tv_already_have_ac -> {
                     if(null == fragmentManager.findFragmentByTag(RegisterFragment::class.java.name))
                         FragmentUtils.replaceFragment(activity, RegisterFragment.newInstance(), RegisterFragment::class.java.name)
+                    loginViewModel?.clickedBtnId?.value = null
+
                 }
                 R.id.tv_forgot_password -> {
                     showLoading()
                     sendResetPasswordMail(loginViewModel?.email?.get()!!)
+                    loginViewModel?.clickedBtnId?.value = null
                 }
 
                 R.id.btn_login -> {
@@ -88,6 +92,7 @@ class LoginFragment : BaseFragment() {
                     } else {
                         Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
                     }
+                    loginViewModel?.clickedBtnId?.value = null
                 }
             }
         })

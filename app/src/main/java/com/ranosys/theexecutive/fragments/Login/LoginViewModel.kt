@@ -25,7 +25,11 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     var password :ObservableField<String>? = ObservableField<String>()
     val emailError = ObservableField<String>()
     val passwordError = ObservableField<String>()
-    val isCreateAcctClicked = MutableLiveData<Int>()
+    var clickedBtnId: MutableLiveData<Int>? = null
+        get() {
+            field =  field ?: MutableLiveData()
+            return field
+        }
     var mutualresponse = MutableLiveData<ApiResponse<LoginDataClass.LoginResponse>>()
 
     init {
@@ -38,7 +42,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
                 if (!TextUtils.isEmpty(email?.get())) {
                     if (Utils.isValidEmail(email?.get())) {
-                        isCreateAcctClicked.value = view.id
+                        clickedBtnId?.value = view.id
                     } else {
                         emailError?.set(view.context.getString(R.string.error_invalid_email))
                     }
@@ -47,7 +51,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 }
             }
             else ->{
-                isCreateAcctClicked.value = view.id
+                clickedBtnId?.value = view.id
             }
 
         }
