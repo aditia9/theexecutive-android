@@ -25,34 +25,47 @@ android {
         enabled = true
     }
 
-    flavorDimensions "default"
+    flavorDimensions "client","server"
     productFlavors {
-        production {
-            applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
+
+        productionClient {
+            dimension "client"
             resValue "string", 'app_name', "The Executive" //app name to be shown in device
+            applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
+        }
+        uatClient {
+            dimension "client"
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
+            applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
+        }
+        devClient {
+            dimension "client"
+            resValue "string", 'app_name', "D-The Executive" //app name to be shown in device
+            applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
+        }
+        qatClient {
+            dimension "client"
+            resValue "string", 'app_name', "D-The Executive" //app name to be shown in device
+            applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
+        }
+
+        production {
             buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
-           // dimension 'production'
+            dimension "server"
         }
 
         UAT {
-            applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
-            resValue "string", 'app_name', "The Executive"  //app name to be shown in device
             buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
-            //dimension 'uat'
+            dimension "server"
         }
         dev {
-            applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
-            resValue "string", 'app_name', "D-The Executive"  //app name to be shown in device
             buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
-           // dimension 'dev'
+            dimension "server"
         }
         QAT {
-            applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
-            resValue "string", 'app_name', "The Executive"  //app name to be shown in device
             buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
-           // dimension 'qat'
+            dimension "server"
         }
-
     }
 }
 
@@ -90,9 +103,6 @@ dependencies {
     //For databinding in Kotlin
     kapt 'com.android.databinding:compiler:3.0.0-alpha5'
 
-    // For firebase authentication
-    implementation "com.google.firebase:firebase-database:${rootProject.fireBaseVersion}"
-    implementation "com.google.firebase:firebase-auth:${rootProject.fireBaseVersion}"
 }
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
 

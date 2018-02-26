@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.utils
 
-import com.google.firebase.auth.FirebaseUser
 import com.ranosys.theexecutive.fragments.Register.RegisterDataClass
 
 /**
@@ -8,7 +7,6 @@ import com.ranosys.theexecutive.fragments.Register.RegisterDataClass
  */
 class GlobalSingelton private constructor(){
 
-    var firebaseUser: FirebaseUser? = null
     var userData: RegisterDataClass.RegisterRequest? = null
 
     companion object {

@@ -4,15 +4,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.*
-import com.google.firebase.database.FirebaseDatabase
 import com.ranosys.theexecutive.BR
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
@@ -25,8 +20,6 @@ import com.ranosys.theexecutive.utils.Utils
  */
 class RegisterFragment: BaseFragment() {
     private var registerViewModel: RegisterViewModel? = null
-    private var mAuth: FirebaseAuth? = null
-    var database = FirebaseDatabase.getInstance()
 
     companion object {
         fun newInstance(): RegisterFragment {
@@ -50,7 +43,6 @@ class RegisterFragment: BaseFragment() {
         mViewDataBinding?.setVariable(getBindingVariable(), registerViewModel)
         mViewDataBinding?.executePendingBindings()
         observeRegisterButton()
-        mAuth = FirebaseAuth.getInstance()
         return mViewDataBinding?.root
 
     }
@@ -68,50 +60,10 @@ class RegisterFragment: BaseFragment() {
         if (Utils.isConnectionAvailable(activity)) {
             showLoading()
             // loginViewModel?.login()
-            registerCall()
+            //registerCall()
         } else {
             Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show()
         }
-    }
-    private fun registerCall() {
-        mAuth?.createUserWithEmailAndPassword(registerViewModel?.emailId?.get().toString(), registerViewModel?.password?.get().toString())?.addOnCompleteListener(object : OnCompleteListener<AuthResult>{
-                    override fun onComplete(task: Task<AuthResult>) {
-                        hideLoading()
-                        if(task.isSuccessful){
-                            val user = mAuth!!.currentUser
-                            sendVarificationMail(user)
-                            val rootReference = database.getReference()
-                            val result = user?.email?.replace("[-+.^:,@#]".toRegex(),"")
-                            rootReference.root.child(result).child("HOMEDATA").setValue(registerViewModel?.registerRequest)
-                            Log.e("User", user?.email)
-                        }else{
-                            try {
-                                throw task.getException()!!
-                            } catch (e: FirebaseAuthWeakPasswordException) {
-                                registerViewModel?.passwordError?.set("Weak password entered")
-                            } catch (e: FirebaseAuthInvalidCredentialsException) {
-                                registerViewModel?.emailError?.set("Invalid Email id entered")
-                            } catch (e: FirebaseAuthUserCollisionException) {
-                                registerViewModel?.emailError?.set("User already exists")
-                            } catch (e: Exception) {
-                                Log.e("Register Error", e.message)
-                            }
-                        }
-                    }
-
-                })
-    }
-
-    private fun sendVarificationMail(user: FirebaseUser?) {
-        user?.sendEmailVerification()?.addOnCompleteListener(object : OnCompleteListener<Void>{
-            override fun onComplete(response: Task<Void>) {
-                if(response.isSuccessful){
-                    Toast.makeText(activity, "A varification mail has been sent to "+user.email+", verify to login.", Toast.LENGTH_LONG).show()
-                }else{
-                    Toast.makeText(activity, "Something Went Wrong.", Toast.LENGTH_LONG).show()
-                }
-            }
-        })
     }
 
     override fun getTitle(): String? {

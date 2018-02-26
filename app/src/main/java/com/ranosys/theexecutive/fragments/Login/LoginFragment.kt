@@ -5,17 +5,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.ranosys.theexecutive.BR
 import com.ranosys.theexecutive.DashBoardActivity
 import com.ranosys.theexecutive.R
@@ -24,10 +18,8 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.fragments.Register.RegisterFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
-import kotlinx.android.synthetic.main.fragment_login.*
 import org.jetbrains.annotations.Nullable
 
 
@@ -37,7 +29,6 @@ import org.jetbrains.annotations.Nullable
 class LoginFragment : BaseFragment() {
 
     private var loginViewModel: LoginViewModel? = null
-    private var mAuth: FirebaseAuth? = null
     private var savedPreferences: SavedPreferences? = null
 
     companion object {
@@ -48,7 +39,6 @@ class LoginFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mAuth = FirebaseAuth.getInstance()
         savedPreferences = SavedPreferences.getInstance()
     }
 
