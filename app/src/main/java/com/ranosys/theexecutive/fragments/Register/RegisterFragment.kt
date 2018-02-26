@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.ranosys.theexecutive.BR
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
@@ -59,8 +58,7 @@ class RegisterFragment: BaseFragment() {
     private fun register() {
         if (Utils.isConnectionAvailable(activity)) {
             showLoading()
-            // loginViewModel?.login()
-            //registerCall()
+            //do register
         } else {
             Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show()
         }
