@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.fragments.Dashboard
+package com.ranosys.theexecutive.modules.home
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData

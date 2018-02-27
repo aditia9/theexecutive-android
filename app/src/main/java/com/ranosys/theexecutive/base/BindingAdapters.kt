@@ -10,7 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
-import com.ranosys.theexecutive.fragments.Dashboard.HomeModelView
+import com.ranosys.theexecutive.modules.home.HomeModelView
 
 
 /**
@@ -28,13 +28,6 @@ class BindingAdapters {
 //        } else {
 //            view.setErrorEnabled(true)
 //        }
-        }
-
-
-        @JvmStatic
-        @BindingAdapter("app:onClickItem")
-        fun onItemClick(view : RecyclerView, model : HomeModelView){
-             model.onItemClick(model.userData?.get())
         }
 
         @JvmStatic

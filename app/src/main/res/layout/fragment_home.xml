@@ -7,7 +7,7 @@
             type="com.ranosys.theexecutive.utils.GlobalSingelton" />
         <variable
             name="mainfragmentviewmodel"
-            type="com.ranosys.theexecutive.fragments.Dashboard.HomeModelView" />
+            type="com.ranosys.theexecutive.modules.home.HomeModelView" />
     </data>
 
     <RelativeLayout

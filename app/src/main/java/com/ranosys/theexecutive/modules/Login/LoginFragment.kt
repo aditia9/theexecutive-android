@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.fragments.Login
+package com.ranosys.theexecutive.modules.Login
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -10,13 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.ranosys.theexecutive.BR
 import com.ranosys.theexecutive.DashBoardActivity
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
-import com.ranosys.theexecutive.fragments.Register.RegisterFragment
+import com.ranosys.theexecutive.modules.Register.RegisterFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils

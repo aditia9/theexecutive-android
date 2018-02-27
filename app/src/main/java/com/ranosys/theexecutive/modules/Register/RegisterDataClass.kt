@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.fragments.Register
+package com.ranosys.theexecutive.modules.Register
 
 /**
  * Created by Mohammad Sunny on 31/1/18.

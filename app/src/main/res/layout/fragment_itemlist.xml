@@ -4,7 +4,7 @@
     <data>
         <variable
             name="data"
-            type="com.ranosys.theexecutive.fragments.Register.RegisterDataClass.RegisterRequest">
+            type="com.ranosys.theexecutive.modules.Register.RegisterDataClass.RegisterRequest">
         </variable>
     </data>
 

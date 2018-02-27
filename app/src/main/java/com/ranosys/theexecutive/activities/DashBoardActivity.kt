@@ -2,7 +2,7 @@ package com.ranosys.theexecutive
 
 import android.os.Bundle
 import com.ranosys.theexecutive.base.BaseActivity
-import com.ranosys.theexecutive.fragments.Dashboard.HomeFragment
+import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 import kotlinx.android.synthetic.main.activity_user.*
 

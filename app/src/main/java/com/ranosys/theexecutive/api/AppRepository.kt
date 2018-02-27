@@ -4,7 +4,7 @@ import android.util.Log
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
-import com.ranosys.theexecutive.fragments.Login.LoginDataClass
+import com.ranosys.theexecutive.modules.Login.LoginDataClass
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call

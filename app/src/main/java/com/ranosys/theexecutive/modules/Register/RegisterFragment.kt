@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.fragments.Register
+package com.ranosys.theexecutive.modules.Register
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders

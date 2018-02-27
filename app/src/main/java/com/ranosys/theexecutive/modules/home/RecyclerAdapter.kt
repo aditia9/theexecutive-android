@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.fragments.Dashboard
+package com.ranosys.theexecutive.modules.home
 
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding

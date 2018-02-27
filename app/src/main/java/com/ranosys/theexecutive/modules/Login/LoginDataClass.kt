@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.fragments.Login
+package com.ranosys.theexecutive.modules.Login
 
 /**
  * Created by Mohammad Sunny on 25/1/18.

@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.fragments.Dashboard
+package com.ranosys.theexecutive.modules.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.ranosys.theexecutive.BR
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.UserActivity
 import com.ranosys.theexecutive.base.BaseFragment
