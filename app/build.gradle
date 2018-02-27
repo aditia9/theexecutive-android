@@ -50,20 +50,20 @@ android {
         }
 
         production {
-            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
             dimension "server"
         }
 
         UAT {
-            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
             dimension "server"
         }
         dev {
-            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
             dimension "server"
         }
         QAT {
-            buildConfigField 'String', 'API_URL', '"http://raview.net/api/v1"'
+            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
             dimension "server"
         }
     }

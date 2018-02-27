@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.api.interfaces
+package com.ranosys.theexecutive.api
 
 /**
  * Created by nikhil on 23/2/18.

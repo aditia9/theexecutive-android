@@ -14,23 +14,23 @@ import com.ranosys.theexecutive.DelamiBrandsApplication
  */
 class SavedPreferences private constructor(){
 
-    val user_pref = "SSAppData"
     var sharedPreferences: SharedPreferences? = null
     var USER_EMAIL_KEY = "userEmail"
     var IS_LOGIN_KEY = "isLogin"
 
+
     companion object {
+
+        val user_pref = "APP_DATA"
+        var savedPreferences: SavedPreferences? = null
 
         private fun init(context: Context) {
             if (savedPreferences == null) {
                 savedPreferences = SavedPreferences()
-                savedPreferences!!.sharedPreferences = context.getSharedPreferences(user_pref, Context.MODE_PRIVATE)
+                savedPreferences?.sharedPreferences = context.getSharedPreferences(user_pref, Context.MODE_PRIVATE)
             }
         }
 
-        val user_pref = "SSAppData"
-
-        var savedPreferences: SavedPreferences? = null
 
         fun getInstance(): SavedPreferences? {
             if (savedPreferences == null) {
