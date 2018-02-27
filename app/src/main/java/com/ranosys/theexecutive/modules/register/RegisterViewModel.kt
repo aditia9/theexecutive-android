@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.Register
+package com.ranosys.theexecutive.modules.register
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData

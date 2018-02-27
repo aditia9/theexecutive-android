@@ -7,7 +7,7 @@
 
         <variable
             name="registerViewModel"
-            type="com.ranosys.theexecutive.modules.Register.RegisterViewModel">
+            type="com.ranosys.theexecutive.modules.register.RegisterViewModel">
 
         </variable>
     </data>

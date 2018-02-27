@@ -1,6 +1,6 @@
 package com.ranosys.theexecutive.api.interfaces
 
-import com.ranosys.theexecutive.modules.Login.LoginDataClass
+import com.ranosys.theexecutive.modules.login.LoginDataClass
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers

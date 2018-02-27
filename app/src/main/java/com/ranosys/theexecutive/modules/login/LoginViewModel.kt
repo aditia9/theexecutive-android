@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.Login
+package com.ranosys.theexecutive.modules.login
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
@@ -48,7 +48,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                         emailError?.set(view.context.getString(R.string.error_invalid_email))
                     }
                 } else {
-                    emailError?.set(view.context.getString(R.string.error_empty_email_id))
+                    emailError?.set(view.context.getString(R.string.empty_email))
                 }
             }
             else ->{

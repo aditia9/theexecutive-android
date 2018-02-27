@@ -1,6 +1,6 @@
 package com.ranosys.theexecutive.utils
 
-import com.ranosys.theexecutive.modules.Register.RegisterDataClass
+import com.ranosys.theexecutive.modules.register.RegisterDataClass
 
 /**
  * Created by Mohammad Sunny on 24/1/18.

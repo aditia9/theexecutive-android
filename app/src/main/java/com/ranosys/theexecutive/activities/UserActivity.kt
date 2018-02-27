@@ -3,7 +3,7 @@ package com.ranosys.theexecutive
 import android.content.Intent
 import android.os.Bundle
 import com.ranosys.theexecutive.base.BaseActivity
-import com.ranosys.theexecutive.modules.Login.LoginFragment
+import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.activity_user.*

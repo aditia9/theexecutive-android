@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.Login
+package com.ranosys.theexecutive.modules.login
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -15,10 +15,11 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
-import com.ranosys.theexecutive.modules.Register.RegisterFragment
+import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.fragment_login.*
 import org.jetbrains.annotations.Nullable
 
 
@@ -60,19 +61,19 @@ class LoginFragment : BaseFragment() {
         loginViewModel?.clickedBtnId?.observe(this, Observer<Int> { id ->
 
             when (id) {
-                R.id.tv_already_have_ac -> {
+                tv_already_have_ac.id -> {
                     if(null == fragmentManager.findFragmentByTag(RegisterFragment::class.java.name))
                         FragmentUtils.replaceFragment(activity, RegisterFragment.newInstance(), RegisterFragment::class.java.name)
                     loginViewModel?.clickedBtnId?.value = null
 
                 }
-                R.id.tv_forgot_password -> {
+                tv_forgot_password.id -> {
                     showLoading()
                     sendResetPasswordMail(loginViewModel?.email?.get()!!)
                     loginViewModel?.clickedBtnId?.value = null
                 }
 
-                R.id.btn_login -> {
+                btn_login.id -> {
                     Utils.hideSoftKeypad(activity)
                     if (Utils.isConnectionAvailable(activity)) {
                         showLoading()

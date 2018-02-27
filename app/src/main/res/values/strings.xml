@@ -37,6 +37,5 @@
     <string name="title_home">Home</string>
     <string name="title_login">Login</string>
     <string name="error_invalid_email">Invalid mail id.</string>
-    <string name="error_empty_email_id">Provide email id.</string>
     <string name="title_register">Register</string>
 </resources>
