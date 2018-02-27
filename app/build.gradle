@@ -90,10 +90,10 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     // retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.4.1'
+    implementation "com.squareup.retrofit2:retrofit:${rootProject.retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${rootProject.retrofitVersion}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${rootProject.okHttpVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${rootProject.okHttpVersion}"
 
     // For Lifecycle, ViewModel and LiveData
     implementation "android.arch.lifecycle:runtime:${rootProject.lifeCycleVersion}"
@@ -104,5 +104,4 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.0.0-alpha5'
 
 }
-//apply plugin: 'com.google.gms.google-services'
 

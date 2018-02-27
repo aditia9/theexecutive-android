@@ -1,10 +1,9 @@
 package com.ranosys.theexecutive.api
 
-import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
-import com.ranosys.theexecutive.api.interfaces.apiService
+import com.ranosys.theexecutive.api.interfaces.ApiService
 import com.ranosys.theexecutive.fragments.Login.LoginDataClass
 import org.json.JSONException
 import org.json.JSONObject
@@ -25,7 +24,7 @@ class AppRepository private constructor(){
         fun login(loginRequest: LoginDataClass.LoginRequest?, callBack: ApiCallback<LoginDataClass.LoginResponse>) {
             //val apiResponse = ApiResponse<LoginDataClass.LoginResponse>()
             val retrofit = ApiClient.retrofit
-            val callPost = retrofit?.create<apiService.LoginService>(apiService.LoginService::class.java!!)?.getLoginData(loginRequest)
+            val callPost = retrofit?.create<ApiService.LoginService>(ApiService.LoginService::class.java!!)?.getLoginData(loginRequest)
 
             callPost?.enqueue(object : Callback<LoginDataClass.LoginResponse> {
                 override fun onResponse(call: Call<LoginDataClass.LoginResponse>?, response: Response<LoginDataClass.LoginResponse>?) {

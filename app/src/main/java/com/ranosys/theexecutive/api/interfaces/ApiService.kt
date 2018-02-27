@@ -9,7 +9,7 @@ import retrofit2.http.POST
 /**
  * Created by Mohammad Sunny on 25/1/18.
  */
-interface apiService {
+interface ApiService {
 
     interface LoginService {
         @POST("user/login/email")

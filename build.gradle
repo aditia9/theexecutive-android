@@ -37,6 +37,8 @@ ext{
     runnerVersion = '0.5'
     rulesVersion = '0.5'
     espressoVersion = '2.2.2'
+    retrofitVersion = '2.3.0'
+    okHttpVersion = '3.4.1'
     arch = "1.0.0-alpha1"
     lifeCycleVersion = "1.0.0-alpha9"
     fireBaseVersion = "11.8.0"
