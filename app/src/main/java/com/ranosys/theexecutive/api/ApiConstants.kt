@@ -6,7 +6,11 @@ package com.ranosys.theexecutive.api
 class ApiConstants {
 
     companion object {
-        const val API_HEADER = "Content-Type: application/json\", \"X-Requested-With: XMLHttpRequest\", \"Cache-Control: no-cache"
+        const val X_REQUESTED_WITH = "X-Requested-With: XMLHttpRequest"
+        const val CONTENT_TYPE = "Content-Type:application/json"
+        const val CACHE_CONTROL = "Cache-Control: no-cache"
+        const val AUTHORIZATION_KEY = "Authorization"
+        const val BEARER = "Bearer "
     }
 
 }

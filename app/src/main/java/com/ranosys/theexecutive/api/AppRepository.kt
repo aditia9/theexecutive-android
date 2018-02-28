@@ -9,6 +9,7 @@ import com.ranosys.theexecutive.modules.splash.AdminDataClass
 import com.ranosys.theexecutive.modules.splash.Store
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.SavedPreferences
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -27,7 +28,8 @@ class AppRepository private constructor(){
 
         fun getStores(callBack: ApiCallback<StoreResponse>) {
             val retrofit = ApiClient.retrofit
-            val callPost = retrofit?.create<ApiService.StoresService>(ApiService.StoresService::class.java!!)?.getStores()
+            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+            val callPost = retrofit?.create<ApiService.StoresService>(ApiService.StoresService::class.java!!)?.getStores(ApiConstants.BEARER + adminToken)
 
             callPost?.enqueue(object : Callback<StoreResponse> {
                 override fun onResponse(call: Call<StoreResponse>?, response: Response<StoreResponse>?) {
