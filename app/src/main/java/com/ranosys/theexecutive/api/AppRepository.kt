@@ -5,8 +5,6 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
 import com.ranosys.theexecutive.modules.login.LoginDataClass
-import com.ranosys.theexecutive.modules.splash.AdminDataClass
-import com.ranosys.theexecutive.modules.splash.Store
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -18,7 +16,6 @@ import retrofit2.Response
 import java.io.IOException
 
 
-
 /**
  * Created by Mohammad Sunny on 25/1/18.
  */
@@ -26,94 +23,47 @@ class AppRepository private constructor(){
 
     companion object {
 
-        fun getStores(callBack: ApiCallback<StoreResponse>) {
+        fun printLog(TAG:String, message: String): Unit{
+            if(BuildConfig.DEBUG){
+                Log.e(TAG, message)
+            }
+        }
+
+        private fun parseError(response: Response<Any>?, callBack: ApiCallback<Any>) {
+            try {
+                val jobError = JSONObject(response?.errorBody()?.string())
+                var errorBody = jobError.getString("message")
+                callBack.onError(errorBody)
+
+            } catch (e: JSONException) {
+                callBack.onException(Throwable("Error"))
+                if (BuildConfig.DEBUG)
+                    e.printStackTrace()
+            } catch (e:IOException) {
+                callBack.onException(Throwable("Error"))
+                if (BuildConfig.DEBUG)
+                    e.printStackTrace()
+            }
+        }
+
+        fun getStores(callBack: ApiCallback<ArrayList<StoreResponse>>) {
             val retrofit = ApiClient.retrofit
             val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
             val callPost = retrofit?.create<ApiService.StoresService>(ApiService.StoresService::class.java!!)?.getStores(ApiConstants.BEARER + adminToken)
 
-            callPost?.enqueue(object : Callback<StoreResponse> {
-                override fun onResponse(call: Call<StoreResponse>?, response: Response<StoreResponse>?) {
+            callPost?.enqueue(object : Callback<ArrayList<StoreResponse>> {
+                override fun onResponse(call: Call<ArrayList<StoreResponse>>?, response: Response<ArrayList<StoreResponse>>?) {
                     if(!response!!.isSuccessful){
-                        try {
-                            val jobError = JSONObject(response.errorBody()?.string())
-                            var errorBody = jobError.getString("errorCode")
-                            callBack.onError(errorBody)
-//                            apiResponse.apiResponse = response.body()
-//                            apiResponse.error = errorBody
-//                            dataLogin.value = apiResponse
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
 
-                        } catch (e: JSONException) {
-//                            apiResponse.throwable = Throwable("Error")
-//                            dataLogin.value = apiResponse
-                            callBack.onException(Throwable("Error"))
-                            if (BuildConfig.DEBUG)
-                                e.printStackTrace();
-                        } catch (e:IOException) {
-//                            apiResponse.throwable = Throwable("Error")
-//                            dataLogin.value = apiResponse
-                            callBack.onException(Throwable("Error"))
-                            if (BuildConfig.DEBUG)
-                                e.printStackTrace();
-                        }
                     }else{
-//                        apiResponse.apiResponse = response.body()
-//                        dataLogin.value = apiResponse
-//                        printLog("Login:",""+dataLogin.value?.apiResponse?.accessToken)
                         callBack.onSuccess(response.body())
 
                     }
 
                 }
 
-                override fun onFailure(call: Call<StoreResponse>, t: Throwable) {
-//                    dataLogin.value = null
-                    callBack.onError("Error")
-                    printLog("Login:","Failed")
-
-                }
-            })
-        }
-
-        fun getAdminToken(adminTokenRequest : AdminDataClass, callBack: ApiCallback<String>) {
-            val retrofit = ApiClient.retrofit
-            val callPost = retrofit?.create<ApiService.AdminTokenService>(ApiService.AdminTokenService::class.java!!)?.getAdminToken(adminTokenRequest)
-
-            callPost?.enqueue(object : Callback<String> {
-                override fun onResponse(call: Call<String>?, response: Response<String>?) {
-                    if(!response!!.isSuccessful){
-                        try {
-                            val jobError = JSONObject(response.errorBody()?.string())
-                            var errorBody = jobError.getString("errorCode")
-                            callBack.onError(errorBody)
-//                            apiResponse.apiResponse = response.body()
-//                            apiResponse.error = errorBody
-//                            dataLogin.value = apiResponse
-
-                        } catch (e: JSONException) {
-//                            apiResponse.throwable = Throwable("Error")
-//                            dataLogin.value = apiResponse
-                            callBack.onException(Throwable("Error"))
-                            if (BuildConfig.DEBUG)
-                                e.printStackTrace();
-                        } catch (e:IOException) {
-//                            apiResponse.throwable = Throwable("Error")
-//                            dataLogin.value = apiResponse
-                            callBack.onException(Throwable("Error"))
-                            if (BuildConfig.DEBUG)
-                                e.printStackTrace();
-                        }
-                    }else{
-//                        apiResponse.apiResponse = response.body()
-//                        dataLogin.value = apiResponse
-//                        printLog("Login:",""+dataLogin.value?.apiResponse?.accessToken)
-                        callBack.onSuccess(response.body())
-
-                    }
-
-                }
-
-                override fun onFailure(call: Call<String>, t: Throwable) {
-//                    dataLogin.value = null
+                override fun onFailure(call: Call<ArrayList<StoreResponse>>, t: Throwable) {
                     callBack.onError("Error")
                     printLog("Login:","Failed")
 
@@ -123,38 +73,14 @@ class AppRepository private constructor(){
 
 
         fun login(loginRequest: LoginDataClass.LoginRequest?, callBack: ApiCallback<LoginDataClass.LoginResponse>) {
-            //val apiResponse = ApiResponse<LoginDataClass.LoginResponse>()
             val retrofit = ApiClient.retrofit
             val callPost = retrofit?.create<ApiService.LoginService>(ApiService.LoginService::class.java!!)?.getLoginData(loginRequest)
 
             callPost?.enqueue(object : Callback<LoginDataClass.LoginResponse> {
                 override fun onResponse(call: Call<LoginDataClass.LoginResponse>?, response: Response<LoginDataClass.LoginResponse>?) {
                     if(!response!!.isSuccessful){
-                        try {
-                            val jobError = JSONObject(response.errorBody()?.string())
-                            var errorBody = jobError.getString("errorCode")
-                            callBack.onError(errorBody)
-//                            apiResponse.apiResponse = response.body()
-//                            apiResponse.error = errorBody
-//                            dataLogin.value = apiResponse
-
-                        } catch (e: JSONException) {
-//                            apiResponse.throwable = Throwable("Error")
-//                            dataLogin.value = apiResponse
-                            callBack.onException(Throwable("Error"))
-                            if (BuildConfig.DEBUG)
-                                e.printStackTrace();
-                        } catch (e:IOException) {
-//                            apiResponse.throwable = Throwable("Error")
-//                            dataLogin.value = apiResponse
-                            callBack.onException(Throwable("Error"))
-                            if (BuildConfig.DEBUG)
-                                e.printStackTrace();
-                        }
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                     }else{
-//                        apiResponse.apiResponse = response.body()
-//                        dataLogin.value = apiResponse
-//                        printLog("Login:",""+dataLogin.value?.apiResponse?.accessToken)
                         callBack.onSuccess(response.body())
 
                     }
@@ -162,18 +88,11 @@ class AppRepository private constructor(){
                 }
 
                 override fun onFailure(call: Call<LoginDataClass.LoginResponse>, t: Throwable) {
-//                    dataLogin.value = null
                     callBack.onError("Error")
                     printLog("Login:","Failed")
 
                 }
             })
-        }
-
-        fun printLog(TAG:String, message: String): Unit{
-            if(BuildConfig.DEBUG){
-                Log.e(TAG, message)
-            }
         }
 
     }

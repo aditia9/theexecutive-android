@@ -24,10 +24,10 @@ interface ApiService {
     }
 
     interface StoresService {
-        @GET("rest/all/V1/store/storeViews")
+        @GET("rest/all/V1/store/storeViewsa")
         @Headers(ApiConstants.CONTENT_TYPE,
             ApiConstants.X_REQUESTED_WITH,
             ApiConstants.CACHE_CONTROL)
-        fun getStores(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?): Call<StoreResponse>
+        fun getStores(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?): Call<ArrayList<StoreResponse>>
     }
 }

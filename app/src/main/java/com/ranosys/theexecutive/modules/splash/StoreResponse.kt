@@ -3,13 +3,7 @@ package com.ranosys.theexecutive.modules.splash
 /**
  * Created by nikhil on 27/2/18.
  */
-
-data class StoreResponse(
-        val stores: Array<Store>
-
-)
-
-data class Store(val id: Int,
+data class StoreResponse(val id: Int,
                  val code: String,
                  val name: String,
                  val website_id: Int,

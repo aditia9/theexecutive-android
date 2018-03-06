@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
+import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import java.io.BufferedReader
@@ -18,13 +21,16 @@ import java.io.InputStreamReader
  */
 class SplashActivity : BaseActivity() {
 
-    val SPLASH_TIMEOUT = 1000
+    val SPLASH_TIMEOUT = 3000
     val handler = Handler()
+    var canNavigateToHome: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //call setting api
+        //call configuration api
+        getStoresApi()
+
 
         //fetch device id
         getDeviceID()
@@ -42,12 +48,45 @@ class SplashActivity : BaseActivity() {
 
         handler.postDelayed(Runnable {
             kotlin.run {
-                moveToHome()
+                if(canNavigateToHome){
+                    moveToHome()
+                }else{
+                    canNavigateToHome = true
+                }
             }
         }, SPLASH_TIMEOUT.toLong())
 
     }
 
+    private fun getStoresApi() {
+        AppRepository.getStores(object: ApiCallback<ArrayList<StoreResponse>>{
+            override fun onSuccess(t: ArrayList<StoreResponse>?) {
+                if(canNavigateToHome){
+                    moveToHome()
+                }else{
+                    canNavigateToHome = true
+                }
+            }
+
+            override fun onException(error: Throwable) {
+                if(canNavigateToHome){
+                    moveToHome()
+                }else{
+                    canNavigateToHome = true
+                }
+            }
+
+            override fun onError(errorMsg: String) {
+                if(canNavigateToHome){
+                    moveToHome()
+                }else{
+                    canNavigateToHome = true
+                }
+            }
+
+
+        })
+    }
 
 
     private fun moveToHome(){
