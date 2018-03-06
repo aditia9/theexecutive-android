@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
+import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 import java.io.BufferedReader
 import java.io.IOException
@@ -28,9 +31,8 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //call configuration api
+        //call stores api
         getStoresApi()
-
 
         //fetch device id
         getDeviceID()
@@ -42,8 +44,8 @@ class SplashActivity : BaseActivity() {
         }
 
         //check for selected language
-        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_KEY))){
-            SavedPreferences.getInstance()?.saveStringValue(Constants.DEFAULT_STORE_CODE, Constants.SELECTED_STORE_KEY)
+        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
+            SavedPreferences.getInstance()?.saveStringValue(Constants.DEFAULT_STORE_CODE, Constants.SELECTED_STORE_CODE_KEY)
         }
 
         handler.postDelayed(Runnable {
@@ -58,30 +60,68 @@ class SplashActivity : BaseActivity() {
 
     }
 
-    private fun getStoresApi() {
-        AppRepository.getStores(object: ApiCallback<ArrayList<StoreResponse>>{
-            override fun onSuccess(t: ArrayList<StoreResponse>?) {
-                if(canNavigateToHome){
-                    moveToHome()
-                }else{
-                    canNavigateToHome = true
-                }
-            }
-
+    private fun getConfigurationApi() {
+        AppRepository.getConfiguration(object: ApiCallback<ConfigurationResponse>{
             override fun onException(error: Throwable) {
-                if(canNavigateToHome){
-                    moveToHome()
-                }else{
-                    canNavigateToHome = true
-                }
+                Log.d("Config Api", "Error")
+                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
             override fun onError(errorMsg: String) {
-                if(canNavigateToHome){
-                    moveToHome()
-                }else{
-                    canNavigateToHome = true
+                Log.d("Config Api", errorMsg)
+                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+            }
+
+            override fun onSuccess(configuration: ConfigurationResponse?) {
+                manageConfiguration(configuration)
+
+                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+
+            }
+
+        })
+    }
+
+    private fun manageConfiguration(configuration: ConfigurationResponse?) {
+        if(configuration?.maintenance == "0"){
+
+            //check version
+            if(configuration.version.toFloat() >= BuildConfig.VERSION_CODE + 1){
+                //force update
+                Log.d("Config Api", "Force Update")
+            }else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
+                //soft update
+                Log.d("Config Api", "Soft Update")
+            }
+        }else{
+            //stop app with maintance message
+            Log.d("Config Api", "Maintance Mode")
+        }
+    }
+
+    private fun getStoresApi() {
+        AppRepository.getStores(object: ApiCallback<ArrayList<StoreResponse>>{
+            override fun onSuccess(stores: ArrayList<StoreResponse>?) {
+                GlobalSingelton.instance?.storeList = stores
+
+                for(store in stores!!){
+                    if(store.id == 1){
+                        SavedPreferences.getInstance()?.saveStringValue(store.code, Constants.SELECTED_STORE_CODE_KEY)
+                        SavedPreferences.getInstance()?.saveIntValue(store.id, Constants.SELECTED_STORE_ID_KEY)
+                    }
                 }
+
+                //call configuration API
+                getConfigurationApi()
+            }
+
+            override fun onException(error: Throwable) {
+                Log.d("Store Api", "error")
+            }
+
+            override fun onError(errorMsg: String) {
+                Log.d("Store Api", errorMsg)
+
             }
 
 

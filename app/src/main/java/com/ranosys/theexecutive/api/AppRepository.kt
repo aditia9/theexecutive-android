@@ -5,6 +5,7 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
 import com.ranosys.theexecutive.modules.login.LoginDataClass
+import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -64,6 +65,32 @@ class AppRepository private constructor(){
                 }
 
                 override fun onFailure(call: Call<ArrayList<StoreResponse>>, t: Throwable) {
+                    callBack.onError("Error")
+                    printLog("Login:","Failed")
+
+                }
+            })
+        }
+
+        fun getConfiguration(callBack: ApiCallback<ConfigurationResponse>) {
+            val retrofit = ApiClient.retrofit
+            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java!!)?.getConfiguration(ApiConstants.BEARER + adminToken,  storeCode)
+
+            callGet?.enqueue(object : Callback<ConfigurationResponse> {
+                override fun onResponse(call: Call<ConfigurationResponse>?, response: Response<ConfigurationResponse>?) {
+                    if(!response!!.isSuccessful){
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+
+                    }else{
+                        callBack.onSuccess(response.body())
+
+                    }
+
+                }
+
+                override fun onFailure(call: Call<ConfigurationResponse>, t: Throwable) {
                     callBack.onError("Error")
                     printLog("Login:","Failed")
 
