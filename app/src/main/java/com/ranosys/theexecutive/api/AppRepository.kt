@@ -70,7 +70,8 @@ class AppRepository private constructor(){
         fun getConfiguration(callBack: ApiCallback<ConfigurationResponse>) {
             val retrofit = ApiClient.retrofit
             val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
-            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            //val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val storeCode: String = "all"
             val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java!!)?.getConfiguration(ApiConstants.BEARER + adminToken,  storeCode)
 
             callGet?.enqueue(object : Callback<ConfigurationResponse> {

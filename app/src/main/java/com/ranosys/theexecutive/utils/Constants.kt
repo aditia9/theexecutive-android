@@ -11,6 +11,7 @@ class Constants {
         val DEFAULT_STORE_CODE = "en"
         val SELECTED_STORE_CODE_KEY = "selected_store_code"
         val SELECTED_STORE_ID_KEY = "selected_store_id"
+        val SELECTED_WEBSITE_ID_KEY = "selected_website_id"
         val ANDROID_DEVICE_ID_KEY = "device_id"
         val MESSAGE = "message"
         val ERROR = "Error"

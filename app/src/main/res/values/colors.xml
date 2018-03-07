@@ -8,4 +8,8 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="headertextcolor">#8c8888</color>
+    <color name="theme_black_color">#231f20</color>
+    <color name="theme_accent_color">#999999</color>
+    <color name="colorText">#ffffff</color>
+
 </resources>

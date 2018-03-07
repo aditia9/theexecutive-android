@@ -10,20 +10,8 @@
             type="com.ranosys.theexecutive.modules.home.HomeModelView" />
     </data>
 
-    <RelativeLayout
-        android:id="@+id/main_fragment_layout"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:padding="@dimen/eight_dp">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_items"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-
-        </android.support.v7.widget.RecyclerView>
-
-    </RelativeLayout>
+        android:text="HOME FRAGMENT"/>
 </layout>

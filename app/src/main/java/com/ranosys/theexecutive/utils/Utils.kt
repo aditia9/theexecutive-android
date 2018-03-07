@@ -3,10 +3,12 @@ package com.ranosys.theexecutive.utils
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.os.Build
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import com.ranosys.theexecutive.BuildConfig
@@ -77,6 +79,15 @@ open class Utils {
             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(activity.currentFocus?.windowToken,
                     InputMethodManager.HIDE_NOT_ALWAYS)
+        }
+
+
+        fun showAlertDialog(message : String, context: Context) {
+            val builder = AlertDialog.Builder(context)
+            builder.setMessage(message)
+                    .setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+            val alert = builder.create()
+            alert.show()
         }
     }
 

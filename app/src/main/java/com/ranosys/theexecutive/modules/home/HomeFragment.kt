@@ -51,33 +51,33 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recycler_items.layoutManager = LinearLayoutManager(activity)
-        recycler_items.adapter = RecyclerAdapter(object : RecyclerAdapter.OnItemClickListener {
-            override fun onItemClick(item: HomeDataClass.HomeUserData, position: Int) {
-                when(position){
-                    0->{
-                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
-                    }
-                    1-> {
-                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
-
-                    }
-                    2->{
-                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
-
-                    }
-                    4->{
-                        val prefInstance = SavedPreferences.getInstance()
-                        prefInstance?.setIsLogin(false)
-                        prefInstance?.storeUserEmail("")
-                        var signoutIntent = Intent(activity, UserActivity::class.java)
-                        startActivity(signoutIntent)
-                        activity.finish()
-
-                    }
-                }
-            }
-        })
+//        recycler_items.layoutManager = LinearLayoutManager(activity)
+//        recycler_items.adapter = RecyclerAdapter(object : RecyclerAdapter.OnItemClickListener {
+//            override fun onItemClick(item: HomeDataClass.HomeUserData, position: Int) {
+//                when(position){
+//                    0->{
+//                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
+//                    }
+//                    1-> {
+//                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
+//
+//                    }
+//                    2->{
+//                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
+//
+//                    }
+//                    4->{
+//                        val prefInstance = SavedPreferences.getInstance()
+//                        prefInstance?.setIsLogin(false)
+//                        prefInstance?.storeUserEmail("")
+//                        var signoutIntent = Intent(activity, UserActivity::class.java)
+//                        startActivity(signoutIntent)
+//                        activity.finish()
+//
+//                    }
+//                }
+//            }
+//        })
     }
 
 }

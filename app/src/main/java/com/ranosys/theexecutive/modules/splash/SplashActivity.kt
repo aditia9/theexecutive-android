@@ -1,6 +1,7 @@
 package com.ranosys.theexecutive
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -31,8 +32,8 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //call stores api
-        getStoresApi()
+        //call configuration API
+        getConfigurationApi()
 
         //fetch device id
         getDeviceID()
@@ -41,11 +42,6 @@ class SplashActivity : BaseActivity() {
         if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
             val token: String = getAuthToken()
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
-        }
-
-        //check for selected language
-        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
-            SavedPreferences.getInstance()?.saveStringValue(Constants.DEFAULT_STORE_CODE, Constants.SELECTED_STORE_CODE_KEY)
         }
 
         handler.postDelayed(Runnable {
@@ -60,19 +56,16 @@ class SplashActivity : BaseActivity() {
         AppRepository.getConfiguration(object: ApiCallback<ConfigurationResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("Config Api", "Error")
-                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+                getStoresApi()
             }
 
             override fun onError(errorMsg: String) {
                 Utils.printLog("Config Api", errorMsg)
-                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+                getStoresApi()
             }
 
             override fun onSuccess(configuration: ConfigurationResponse?) {
                 manageConfiguration(configuration)
-
-                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
-
             }
 
         })
@@ -81,17 +74,25 @@ class SplashActivity : BaseActivity() {
     private fun manageConfiguration(configuration: ConfigurationResponse?) {
         if(configuration?.maintenance == Constants.MAINTENENCE_OFF){
 
+            //call store api
+            getStoresApi()
+
             //check version
             if(configuration.version.toFloat() >= BuildConfig.VERSION_CODE + 1){
                 //force update
                 Utils.printLog("Config Api", "Force Update")
+                showExitApplicationDialog(getString(R.string.force_update_msg), {
+                    //redirect to play store
+                })
             }else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
                 //soft update
                 Utils.printLog("Config Api", "Soft Update")
             }
         }else{
-            //stop app with maintance message
+            //stop app with maintenance message
             Utils.printLog("Config Api", "Maintance Mode")
+            showExitApplicationDialog(getString(R.string.maintenence_msg), {finish()})
+
         }
     }
 
@@ -100,34 +101,51 @@ class SplashActivity : BaseActivity() {
             override fun onSuccess(stores: ArrayList<StoreResponse>?) {
                 GlobalSingelton.instance?.storeList = stores
 
-                for(store in stores!!){
-                    if(store.id == 1){
-                        SavedPreferences.getInstance()?.saveStringValue(store.code, Constants.SELECTED_STORE_CODE_KEY)
-                        SavedPreferences.getInstance()?.saveIntValue(store.id, Constants.SELECTED_STORE_ID_KEY)
-                        break
+                if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)) ||
+                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_ID_KEY)) ||
+                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_WEBSITE_ID_KEY))){
+                    for(store in stores!!){
+                        if(store.id == 1){
+                            SavedPreferences.getInstance()?.saveStringValue(store.code, Constants.SELECTED_STORE_CODE_KEY)
+                            SavedPreferences.getInstance()?.saveIntValue(store.id, Constants.SELECTED_STORE_ID_KEY)
+                            SavedPreferences.getInstance()?.saveIntValue(store.website_id, Constants.SELECTED_WEBSITE_ID_KEY)
+                            break
+                        }
                     }
                 }
 
-                //call configuration API
-                getConfigurationApi()
+                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
             override fun onException(error: Throwable) {
                 Utils.printLog("Store Api", "error")
+                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+
             }
 
             override fun onError(errorMsg: String) {
                 Utils.printLog("Store Api", errorMsg)
-
+                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
 
         })
     }
 
+    private fun showExitApplicationDialog(message: String, action:() -> Unit = {}) {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(message)
+                .setPositiveButton("OK") {
+                    dialog, id -> dialog.cancel()
+                    action()}
+
+        val alert = builder.create()
+        alert.show()
+    }
+
 
     private fun moveToHome(){
-        val intent = Intent(this@SplashActivity, UserActivity::class.java)
+        val intent = Intent(this@SplashActivity, DashBoardActivity::class.java)
         startActivity(intent)
         finish()
     }

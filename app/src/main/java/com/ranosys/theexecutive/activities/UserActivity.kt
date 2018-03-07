@@ -6,6 +6,7 @@ import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
+import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.activity_user.*
 
 /**
