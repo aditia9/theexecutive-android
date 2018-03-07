@@ -25,10 +25,8 @@ class SavedPreferences private constructor(){
         var savedPreferences: SavedPreferences? = null
 
         private fun init(context: Context) {
-            if (savedPreferences == null) {
-                savedPreferences = SavedPreferences()
-                savedPreferences?.sharedPreferences = context.getSharedPreferences(user_pref, Context.MODE_PRIVATE)
-            }
+            savedPreferences = SavedPreferences()
+            savedPreferences?.sharedPreferences = context.getSharedPreferences(user_pref, Context.MODE_PRIVATE)
         }
 
 

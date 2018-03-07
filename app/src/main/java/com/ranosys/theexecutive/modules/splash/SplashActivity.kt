@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
-import android.util.Log
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
@@ -15,6 +14,7 @@ import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.Utils
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -50,11 +50,7 @@ class SplashActivity : BaseActivity() {
 
         handler.postDelayed(Runnable {
             kotlin.run {
-                if(canNavigateToHome){
-                    moveToHome()
-                }else{
-                    canNavigateToHome = true
-                }
+                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
         }, SPLASH_TIMEOUT.toLong())
 
@@ -63,12 +59,12 @@ class SplashActivity : BaseActivity() {
     private fun getConfigurationApi() {
         AppRepository.getConfiguration(object: ApiCallback<ConfigurationResponse>{
             override fun onException(error: Throwable) {
-                Log.d("Config Api", "Error")
+                Utils.printLog("Config Api", "Error")
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
             override fun onError(errorMsg: String) {
-                Log.d("Config Api", errorMsg)
+                Utils.printLog("Config Api", errorMsg)
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
@@ -83,19 +79,19 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun manageConfiguration(configuration: ConfigurationResponse?) {
-        if(configuration?.maintenance == "0"){
+        if(configuration?.maintenance == Constants.MAINTENENCE_OFF){
 
             //check version
             if(configuration.version.toFloat() >= BuildConfig.VERSION_CODE + 1){
                 //force update
-                Log.d("Config Api", "Force Update")
+                Utils.printLog("Config Api", "Force Update")
             }else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
                 //soft update
-                Log.d("Config Api", "Soft Update")
+                Utils.printLog("Config Api", "Soft Update")
             }
         }else{
             //stop app with maintance message
-            Log.d("Config Api", "Maintance Mode")
+            Utils.printLog("Config Api", "Maintance Mode")
         }
     }
 
@@ -108,6 +104,7 @@ class SplashActivity : BaseActivity() {
                     if(store.id == 1){
                         SavedPreferences.getInstance()?.saveStringValue(store.code, Constants.SELECTED_STORE_CODE_KEY)
                         SavedPreferences.getInstance()?.saveIntValue(store.id, Constants.SELECTED_STORE_ID_KEY)
+                        break
                     }
                 }
 
@@ -116,11 +113,11 @@ class SplashActivity : BaseActivity() {
             }
 
             override fun onException(error: Throwable) {
-                Log.d("Store Api", "error")
+                Utils.printLog("Store Api", "error")
             }
 
             override fun onError(errorMsg: String) {
-                Log.d("Store Api", errorMsg)
+                Utils.printLog("Store Api", errorMsg)
 
             }
 
@@ -145,19 +142,18 @@ class SplashActivity : BaseActivity() {
         var reader: BufferedReader? = null
         var token: String = ""
         try {
-            reader =  BufferedReader(InputStreamReader(getAssets().open("config")))
+            reader =  BufferedReader(InputStreamReader(getAssets().open(Constants.CONFIG_FILE_NAME)))
             token = reader.readLine()
-
-
 
         } catch (e: IOException) {
         } finally {
-            if (reader != null) {
+            if (null != reader) {
                 try {
                     reader.close()
                 } catch (e: IOException) {
+                    if (BuildConfig.DEBUG)
+                        e.printStackTrace()
                 }
-
             }
         }
 

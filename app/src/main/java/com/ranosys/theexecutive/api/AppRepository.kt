@@ -9,6 +9,7 @@ import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.Utils
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -24,24 +25,18 @@ class AppRepository private constructor(){
 
     companion object {
 
-        fun printLog(TAG:String, message: String): Unit{
-            if(BuildConfig.DEBUG){
-                Log.e(TAG, message)
-            }
-        }
-
         private fun parseError(response: Response<Any>?, callBack: ApiCallback<Any>) {
             try {
                 val jobError = JSONObject(response?.errorBody()?.string())
-                var errorBody = jobError.getString("message")
+                var errorBody = jobError.getString(Constants.MESSAGE)
                 callBack.onError(errorBody)
 
             } catch (e: JSONException) {
-                callBack.onException(Throwable("Error"))
+                callBack.onException(Throwable(Constants.ERROR))
                 if (BuildConfig.DEBUG)
                     e.printStackTrace()
             } catch (e:IOException) {
-                callBack.onException(Throwable("Error"))
+                callBack.onException(Throwable(Constants.ERROR))
                 if (BuildConfig.DEBUG)
                     e.printStackTrace()
             }
@@ -65,8 +60,8 @@ class AppRepository private constructor(){
                 }
 
                 override fun onFailure(call: Call<ArrayList<StoreResponse>>, t: Throwable) {
-                    callBack.onError("Error")
-                    printLog("Login:","Failed")
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("Login:","Failed")
 
                 }
             })
@@ -91,8 +86,8 @@ class AppRepository private constructor(){
                 }
 
                 override fun onFailure(call: Call<ConfigurationResponse>, t: Throwable) {
-                    callBack.onError("Error")
-                    printLog("Login:","Failed")
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("Login:","Failed")
 
                 }
             })
@@ -115,8 +110,8 @@ class AppRepository private constructor(){
                 }
 
                 override fun onFailure(call: Call<LoginDataClass.LoginResponse>, t: Throwable) {
-                    callBack.onError("Error")
-                    printLog("Login:","Failed")
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("Login:","Failed")
 
                 }
             })

@@ -10,7 +10,7 @@ import com.ranosys.theexecutive.modules.splash.StoreResponse
 class GlobalSingelton private constructor(){
 
     var userData: RegisterDataClass.RegisterRequest? = null
-    var storeList: ArrayList<StoreResponse>? = null
+    var storeList: List<StoreResponse>? = null
 
     companion object {
         var instance: GlobalSingelton? = null

@@ -7,7 +7,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.os.Build
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import java.util.regex.Pattern
 
@@ -18,6 +20,12 @@ import java.util.regex.Pattern
 open class Utils {
 
     companion object {
+
+        fun printLog(TAG:String, message: String): Unit{
+            if(BuildConfig.DEBUG){
+                Log.e(TAG, message)
+            }
+        }
 
         val isMarshmallowOrAbove: Boolean?
             get() {

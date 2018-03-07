@@ -2,7 +2,6 @@ package com.ranosys.theexecutive.api.interfaces
 
 import com.ranosys.theexecutive.api.ApiConstants
 import com.ranosys.theexecutive.modules.login.LoginDataClass
-import com.ranosys.theexecutive.modules.splash.AdminDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import retrofit2.Call
@@ -18,11 +17,11 @@ interface ApiService {
         fun getLoginData(@Body loginRequest: LoginDataClass.LoginRequest?): Call<LoginDataClass.LoginResponse>
     }
 
-    interface AdminTokenService {
-        @POST("rest/all/V1/integration/admin/token")
-        @Headers("Content-Type: application/json", "X-Requested-With: XMLHttpRequest", "Cache-Control: no-cache")
-        fun getAdminToken(@Body adminTokenRequest: AdminDataClass): Call<String>
-    }
+//    interface AdminTokenService {
+//        @POST("rest/all/V1/integration/admin/token")
+//        @Headers("Content-Type: application/json", "X-Requested-With: XMLHttpRequest", "Cache-Control: no-cache")
+//        fun getAdminToken(@Body adminTokenRequest: AdminDataClass): Call<String>
+//    }
 
     interface StoresService {
         @GET("rest/all/V1/store/storeViews")
