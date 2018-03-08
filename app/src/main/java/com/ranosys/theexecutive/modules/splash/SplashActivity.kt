@@ -102,8 +102,8 @@ class SplashActivity : BaseActivity() {
                 GlobalSingelton.instance?.storeList = stores
 
                 if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)) ||
-                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_ID_KEY)) ||
-                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_WEBSITE_ID_KEY))){
+                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_STORE_ID_KEY).toString()) ||
+                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY).toString())){
                     for(store in stores!!){
                         if(store.id == 1){
                             SavedPreferences.getInstance()?.saveStringValue(store.code, Constants.SELECTED_STORE_CODE_KEY)

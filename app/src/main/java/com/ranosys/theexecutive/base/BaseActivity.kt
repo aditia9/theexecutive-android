@@ -5,7 +5,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import com.ranosys.rtp.RunTimePermissionActivity
+import com.ranosys.theexecutive.DashBoardActivity
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.activity_dashboard.view.*
 
 /**
  * Created by Mohammad Sunny on 24/1/18.
@@ -27,7 +29,7 @@ open class BaseActivity: RunTimePermissionActivity(){
     }
 
     fun setScreenTitle(title: String){
-        supportActionBar?.setTitle(title)
+        DashBoardActivity.toolbarViewModel?.title?.set(title)
     }
 
     private fun changeStatusBarColor(color: Int) {

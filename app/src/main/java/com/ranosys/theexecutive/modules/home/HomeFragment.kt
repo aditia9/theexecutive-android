@@ -32,7 +32,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        homeModelView = ViewModelProviders.of(this).get(HomeModelView::class.java!!)
+        homeModelView = ViewModelProviders.of(this).get(HomeModelView::class.java)
         mViewDataBinding?.mainfragmentviewmodel = homeModelView
         mViewDataBinding?.executePendingBindings()
         observeButtonClicks()
