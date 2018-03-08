@@ -2,20 +2,14 @@ package com.ranosys.theexecutive.modules.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.UserActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
-import com.ranosys.theexecutive.utils.SavedPreferences
-import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * Created by Mohammad Sunny on 2/2/18.
@@ -42,6 +36,7 @@ class HomeFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         setTitle(getString(R.string.title_home))
+        setLeftIcon(R.drawable.ic_action_backward)
     }
 
     private fun observeButtonClicks() {
