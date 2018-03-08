@@ -5,6 +5,7 @@ import android.arch.lifecycle.LifecycleFragment
 import android.content.Context
 import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.utils.Utils
 
 
@@ -26,16 +27,44 @@ abstract class BaseFragment : LifecycleFragment() {
         }
     }
 
+    fun setToolBarParams(title: String, leftIcon : Int, leftIconVisibilty : Boolean,
+                         rightIcon : Int, rightIconVisibilty : Boolean){
+        setTitle(title)
+        setLeftIcon(leftIcon)
+        setLeftIconVisibilty(leftIconVisibilty)
+        setRightIcon(rightIcon)
+        setRightIconVisibilty(rightIconVisibilty)
+
+    }
+
+    protected fun getToolBarViewModel() : ToolbarViewModel?{
+        return  (activity as BaseActivity).toolbarViewModel
+    }
+
     fun setTitle(title: String = getString(R.string.app_name)){
         (activity as BaseActivity).setScreenTitle(title)
     }
 
     fun setLeftIcon(icon: Int = R.drawable.ic_action_backward){
-        (activity as BaseActivity).setLeftIcon(icon)
+        if(icon == 0)
+            (activity as BaseActivity).setLeftIcon(android.R.color.transparent)
+        else
+            (activity as BaseActivity).setLeftIcon(icon)
     }
 
     fun setLeftIconVisibilty(isVisible: Boolean = true){
         (activity as BaseActivity).setLeftIconVisibility(isVisible)
+    }
+
+    fun setRightIcon(icon: Int = R.drawable.ic_action_backward){
+        if(icon == 0)
+            (activity as BaseActivity).setRightIcon(android.R.color.transparent)
+        else
+            (activity as BaseActivity).setRightIcon(icon)
+    }
+
+    fun setRightIconVisibilty(isVisible: Boolean = true){
+        (activity as BaseActivity).setRightIconVisibility(isVisible)
     }
 
     fun getPermission(permissionList: List<String>, isPermissionGrantedInterface: IsPermissionGrantedInterface) {
@@ -48,9 +77,9 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     protected fun setBackButton() {
-      /*  if (activity is DashboardActivity) {
-            (activity as DashboardActivity).setBackButton()
-        }*/
+        /*  if (activity is DashboardActivity) {
+              (activity as DashboardActivity).setBackButton()
+          }*/
     }
 
 }

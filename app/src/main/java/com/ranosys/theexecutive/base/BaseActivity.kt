@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.toolbar_layout.*
  */
 open class BaseActivity: RunTimePermissionActivity(){
 
+    var toolbarViewModel: ToolbarViewModel? = null
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +39,19 @@ open class BaseActivity: RunTimePermissionActivity(){
     }
 
     fun setLeftIcon(icon: Int){
-        toolbarViewModel?.icon?.set(icon)
+        toolbarViewModel?.leftIcon?.set(icon)
     }
 
     fun setLeftIconVisibility(isVisible: Boolean){
-        toolbarViewModel?.isIconVisible?.set(isVisible)
+        toolbarViewModel?.isLeftIconVisible?.set(isVisible)
+    }
+
+    fun setRightIcon(icon: Int){
+        toolbarViewModel?.rightIcon?.set(icon)
+    }
+
+    fun setRightIconVisibility(isVisible: Boolean){
+        toolbarViewModel?.isRightIconVisible?.set(isVisible)
     }
 
     private fun changeStatusBarColor(color: Int) {
@@ -57,7 +67,4 @@ open class BaseActivity: RunTimePermissionActivity(){
         supportActionBar?.hide()
     }
 
-    companion object{
-        var toolbarViewModel: ToolbarViewModel? = null
-    }
 }

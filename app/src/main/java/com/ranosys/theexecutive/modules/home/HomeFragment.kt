@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
@@ -18,10 +19,11 @@ class HomeFragment : BaseFragment() {
 
     var homeModelView: HomeModelView? = null
 
-    companion object {
-        fun newInstance(): HomeFragment {
-            return HomeFragment()
-        }
+
+    private fun observeLeftIconClick() {
+        getToolBarViewModel()?.leftIconClicked?.observe(this, Observer<Int> {  id ->
+           Toast.makeText(activity,"icon clicked",Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,13 +32,13 @@ class HomeFragment : BaseFragment() {
         mViewDataBinding?.mainfragmentviewmodel = homeModelView
         mViewDataBinding?.executePendingBindings()
         observeButtonClicks()
+        observeLeftIconClick()
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onResume() {
         super.onResume()
-        setTitle(getString(R.string.title_home))
-        setLeftIcon(R.drawable.ic_action_backward)
+        setToolBarParams(getString(R.string.title_home), R.drawable.ic_action_backward, true, 0, false )
     }
 
     private fun observeButtonClicks() {
@@ -46,33 +48,12 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        recycler_items.layoutManager = LinearLayoutManager(activity)
-//        recycler_items.adapter = RecyclerAdapter(object : RecyclerAdapter.OnItemClickListener {
-//            override fun onItemClick(item: HomeDataClass.HomeUserData, position: Int) {
-//                when(position){
-//                    0->{
-//                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
-//                    }
-//                    1-> {
-//                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
-//
-//                    }
-//                    2->{
-//                        Toast.makeText(activity, item.title + " " + position, Toast.LENGTH_SHORT).show()
-//
-//                    }
-//                    4->{
-//                        val prefInstance = SavedPreferences.getInstance()
-//                        prefInstance?.setIsLogin(false)
-//                        prefInstance?.storeUserEmail("")
-//                        var signoutIntent = Intent(activity, UserActivity::class.java)
-//                        startActivity(signoutIntent)
-//                        activity.finish()
-//
-//                    }
-//                }
-//            }
-//        })
+
     }
 
+    companion object {
+        fun newInstance(): HomeFragment {
+            return HomeFragment()
+        }
+    }
 }
