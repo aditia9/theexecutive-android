@@ -8,6 +8,7 @@ import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
+import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -33,7 +34,8 @@ class DashBoardActivity: BaseActivity() {
 
         toolbarViewModel!!.title.set("DashBoard")
 
-        FragmentUtils.addFragment(this, HomeFragment.newInstance(), HomeFragment::class.java.name)
+        FragmentUtils.addFragment(this, ForgotPasswordFragment(), ForgotPasswordFragment::class.java.name)
+        //FragmentUtils.addFragment(this, HomeFragment.newInstance(), HomeFragment::class.java.name)
     }
 
 }
