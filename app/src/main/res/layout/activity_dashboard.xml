@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="vm"
+            name="toolbarViewModel"
             type="com.ranosys.theexecutive.activities.ToolbarViewModel"/>
     </data>
 
@@ -14,29 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="parent">
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="#000000"
-                android:text="@{vm.title}"
-                android:layout_gravity="center"
-                android:fontFamily="@font/dax_regular" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_action_backward" />
-        </android.support.v7.widget.Toolbar>
+        <include layout="@layout/toolbar_layout"
+            app:toolbarViewModel="@{toolbarViewModel}"/>
 
         <FrameLayout
             android:id="@+id/main_container"
@@ -46,5 +25,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -44,7 +44,7 @@ class SplashActivity : BaseActivity() {
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
         }
 
-        handler.postDelayed(Runnable {
+        handler.postDelayed({
             kotlin.run {
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }

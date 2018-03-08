@@ -3,7 +3,6 @@ package com.ranosys.theexecutive.base
 import android.app.Dialog
 import android.arch.lifecycle.LifecycleFragment
 import android.content.Context
-import android.support.annotation.LayoutRes
 import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.utils.Utils
@@ -27,10 +26,16 @@ abstract class BaseFragment : LifecycleFragment() {
         }
     }
 
-
     fun setTitle(title: String = getString(R.string.app_name)){
-        val titleId = title
-        (activity as BaseActivity).setScreenTitle(titleId)
+        (activity as BaseActivity).setScreenTitle(title)
+    }
+
+    fun setLeftIcon(icon: Int = R.drawable.ic_action_backward){
+        (activity as BaseActivity).setLeftIcon(icon)
+    }
+
+    fun setLeftIconVisibilty(isVisible: Boolean = true){
+        (activity as BaseActivity).setLeftIconVisibility(isVisible)
     }
 
     fun getPermission(permissionList: List<String>, isPermissionGrantedInterface: IsPermissionGrantedInterface) {
