@@ -37,7 +37,7 @@ class RegisterFragment: BaseFragment() {
         setTitle(getString(R.string.title_register))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentRegisterBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java!!)
         mViewDataBinding?.registerViewModel =  registerViewModel

@@ -43,7 +43,7 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     protected fun onBackPressed() {
-        activity.onBackPressed()
+        activity?.onBackPressed()
 
     }
 

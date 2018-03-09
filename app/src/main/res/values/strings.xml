@@ -42,4 +42,8 @@
     <string name="exit">Exit</string>
     <string name="maintenence_msg">Applicaiton is under maintenence</string>
     <string name="force_update_msg">New Version application is availabel.</string>
+
+    <!--fb integration-->
+    <string name="facebook_app_id">174246843202937</string>
+    <string name="fb_login_protocol_scheme">fb174246843202937</string>
 </resources>
