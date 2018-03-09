@@ -8,6 +8,7 @@ class Constants {
         val pref_name = "data_pref"
         val STORE_ID_KEY = "store_id"
         val ACCESS_TOKEN_KEY = "access_token"
+        val USER_ACCESS_TOKEN_KEY = "user_access_token"
         val DEFAULT_STORE_CODE = "en"
         val SELECTED_STORE_CODE_KEY = "selected_store_code"
         val SELECTED_STORE_ID_KEY = "selected_store_id"

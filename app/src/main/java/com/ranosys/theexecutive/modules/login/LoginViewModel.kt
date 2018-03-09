@@ -12,6 +12,8 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 
 /**
@@ -19,74 +21,66 @@ import com.ranosys.theexecutive.utils.Utils
  */
 class LoginViewModel(application: Application) : BaseViewModel(application){
 
-    var login = ObservableField<LoginDataClass.LoginResponse>()
-    var loginObservable: LiveData<LoginDataClass.LoginResponse>? = null
-    var loginRequest: LoginDataClass.LoginRequest? = null
-    var email: ObservableField<String>? = ObservableField<String>()
-    var password :ObservableField<String>? = ObservableField<String>()
     val emailError = ObservableField<String>()
     val passwordError = ObservableField<String>()
+    var email = ObservableField<String>()
+    var password = ObservableField<String>()
+
+    var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
+    var apiSuccessResponse: MutableLiveData<String>? = MutableLiveData()
+
     var clickedBtnId: MutableLiveData<Int>? = null
         get() {
             field =  field ?: MutableLiveData()
             return field
         }
-    var mutualresponse = MutableLiveData<ApiResponse<LoginDataClass.LoginResponse>>()
 
-    init {
-        this.loginRequest = loginRequest
-    }
-
-    fun onRegisterClick(view: View){
+    fun btnClicked(view: View){
         when(view.id){
-            R.id.tv_forgot_password ->{
+            R.id.btn_login ->{
 
-                if (!TextUtils.isEmpty(email?.get())) {
-                    if (Utils.isValidEmail(email?.get())) {
-                        clickedBtnId?.value = view.id
-                    } else {
-                        emailError?.set(view.context.getString(R.string.error_invalid_email))
-                    }
-                } else {
-                    emailError?.set(view.context.getString(R.string.empty_email))
+                //validate data
+                if(validateData(getApplication())){
+                    clickedBtnId?.value = R.id.btn_login
                 }
             }
-            else ->{
-                clickedBtnId?.value = view.id
-            }
-
         }
-
     }
+
 
     fun login(){
 
-        loginRequest?.registrationId = "fksjflkslfksaofishfslkfgjlkjjljlkjl34"
-        loginRequest?.deviceType = "DEVICE_ANDROID"
-        loginRequest?.deviceId = "123456"
-        loginRequest?.email = email?.get().toString()
-        loginRequest?.password = password?.get().toString()
+        val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString())
 
-        if(isDataValid(getApplication())){
-            AppRepository.login(loginRequest, object : ApiCallback<LoginDataClass.LoginResponse> {
-                override fun onException(error: Throwable) {
-                    mutualresponse.value?.throwable = error
-                }
 
-                override fun onError(errorMsg: String) {
-                    mutualresponse.value?.error = errorMsg
-                }
 
-                override fun onSuccess(t: LoginDataClass.LoginResponse?) {
-                    mutualresponse.value?.apiResponse = t
-                }
-            })
-        }
+
+        AppRepository.login(loginRequest, object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                Utils.printLog("Login Api", "error")
+                apiFailureResponse?.value = "Something went wrong"
+
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog("Login Api", "error")
+                apiFailureResponse?.value = errorMsg
+            }
+
+            override fun onSuccess(accessToken: String?) {
+                //save customer token
+                SavedPreferences.getInstance()?.saveStringValue(accessToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+                apiSuccessResponse?.value = accessToken
+
+            }
+        })
+
 
     }
 
-    fun isDataValid(context: Context): Boolean {
+    fun validateData(context: Context): Boolean {
         var isValid = true
+
         if (TextUtils.isEmpty(email?.get())) {
             emailError.set(context.getString(R.string.empty_email))
             isValid = false
@@ -94,10 +88,12 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             emailError.set(context.getString(R.string.provide_valid_email))
             isValid = false
         }
+
         if (TextUtils.isEmpty(password?.get())) {
             passwordError.set(context.getString(R.string.empty_password))
             isValid = false
         }
+        //add password regex validation
 
         return isValid
     }

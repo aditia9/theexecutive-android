@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="match_constraint">0dp</dimen>
+    <dimen name="ten_dp">10dp</dimen>
+    <dimen name="thirty_dp">30dp</dimen>
+    <dimen name="twenty_dp">20dp</dimen>
+    <dimen name="forty_dp">40dp</dimen>
+    <dimen name="one_dp">1dp</dimen>
+    <dimen name="forty_eight_dp">48dp</dimen>
+    <dimen name="eighteen_sp">18sp</dimen>
 </resources>

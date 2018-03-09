@@ -2,99 +2,94 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="loginModel"
+        <variable name="loginViewModel"
             type="com.ranosys.theexecutive.modules.login.LoginViewModel"/>
-        <variable
-            name="loginResponse"
-            type="com.ranosys.theexecutive.modules.login.LoginDataClass.LoginResponse">
-        </variable>
     </data>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/eight_dp"
-    >
-    <ScrollView
-        android:layout_width="match_parent"
-        android:fillViewport="true"
-        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/login_field_layout"
-            android:layout_below="@+id/title_tv"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/eight_dp">
+        <ScrollView
             android:layout_width="match_parent"
+            android:fillViewport="true"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/title_tv"
-                android:text="@string/app_title"
-                android:textSize="@dimen/sixteen_dp"
-                android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/et_emailid"
+            <RelativeLayout
+                android:id="@+id/login_field_layout"
                 android:layout_below="@+id/title_tv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/user_id"
-                android:layout_marginTop="@dimen/thirtyTwo_dp"
-                android:text="@={loginModel.email}"
-                app:errorText="@{loginModel.emailError}"
-                android:inputType="textEmailAddress"
-                android:layout_marginBottom="@dimen/two_dp"/>
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/password_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:layout_below="@+id/et_emailid"
-                android:layout_marginTop="@dimen/four_dp"
-                android:text="@={loginModel.password}"
-                app:errorText="@{loginModel.passwordError}"
-                android:layout_marginBottom="@dimen/two_dp"/>
-            <Button
-                android:id="@+id/btn_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:textColor="@android:color/white"
-                android:background="@color/dark_gray"
-                android:layout_below="@+id/password_et"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/four_dp"
-                android:onClick="@{(view)->loginModel.onRegisterClick(view)}"
-                android:layout_centerHorizontal="true"
-                />
-            <TextView
-                android:id="@+id/tv_forgot_password"
-                android:text="@string/forgot_password"
-                android:layout_below="@+id/btn_login"
-                android:gravity="center_horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:layout_marginTop="@dimen/eight_dp"
-                android:onClick="@{(view)->loginModel.onRegisterClick(view)}"
-                />
-            <TextView
-                android:id="@+id/tv_already_have_ac"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_below="@+id/tv_forgot_password"
-                android:gravity="center_horizontal"
-                android:text="@string/create_new_account"
-                android:textColor="@color/colorPrimary"
-                android:layout_marginTop="@dimen/eight_dp"
-                android:onClick="@{(view)->loginModel.onRegisterClick(view)}"
-                />
+                <!--<TextView-->
+                    <!--android:id="@+id/title_tv"-->
+                    <!--android:text="@string/app_title"-->
+                    <!--android:textSize="@dimen/sixteen_dp"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-        </RelativeLayout>
+                <EditText
+                    android:id="@+id/et_emailid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_id"
+                    android:layout_marginTop="@dimen/thirtyTwo_dp"
+                    android:text="@={loginViewModel.email}"
+                    app:errorText="@{loginViewModel.emailError}"
+                    android:inputType="textEmailAddress"
+                    android:layout_marginBottom="@dimen/two_dp"/>
 
-    </ScrollView>
+                <EditText
+                    android:id="@+id/password_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:layout_below="@+id/et_emailid"
+                    android:layout_marginTop="@dimen/four_dp"
+                    android:text="@={loginViewModel.password}"
+                    app:errorText="@{loginViewModel.passwordError}"
+                    android:layout_marginBottom="@dimen/two_dp"/>
+                <Button
+                    android:id="@+id/btn_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login"
+                    android:textColor="@android:color/white"
+                    android:background="@color/dark_gray"
+                    android:layout_below="@+id/password_et"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/four_dp"
+                    android:onClick="@{(view)->loginViewModel.btnClicked(view)}"
+                    android:layout_centerHorizontal="true"
+                    />
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_forgot_password"-->
+                    <!--android:text="@string/forgot_password"-->
+                    <!--android:layout_below="@+id/btn_login"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:layout_marginTop="@dimen/eight_dp"-->
+                    <!--android:onClick="@{(view)->loginModel.onRegisterClick(view)}"-->
+                    <!--/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_already_have_ac"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_below="@+id/tv_forgot_password"-->
+                    <!--android:gravity="center_horizontal"-->
+                    <!--android:text="@string/create_new_account"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:layout_marginTop="@dimen/eight_dp"-->
+                    <!--android:onClick="@{(view)->loginModel.onRegisterClick(view)}"-->
+                    <!--/>-->
 
-</RelativeLayout>
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
 </layout>

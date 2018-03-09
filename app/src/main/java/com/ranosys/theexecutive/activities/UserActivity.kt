@@ -23,7 +23,7 @@ class UserActivity: BaseActivity() {
             finish()
         }else {
             if (savedInstanceState == null) {
-                FragmentUtils.addFragment(this, LoginFragment.newInstance(), LoginFragment::class.java.name)
+                FragmentUtils.addFragment(this, LoginFragment(), LoginFragment::class.java.name)
             }
         }
     }

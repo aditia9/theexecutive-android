@@ -13,8 +13,11 @@ import retrofit2.http.*
 interface ApiService {
 
     interface LoginService {
-        @POST("user/login/email")
-        fun getLoginData(@Body loginRequest: LoginDataClass.LoginRequest?): Call<LoginDataClass.LoginResponse>
+        @POST("rest/{store_code}/V1/integration/customer/token")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body loginRequest: LoginDataClass.LoginRequest?): Call<String>
     }
 
 //    interface AdminTokenService {
