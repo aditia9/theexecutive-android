@@ -35,10 +35,26 @@ interface ApiService {
     }
 
     interface ConfigurationService {
-        @GET("rest/{store_code}/V1/mobileappversionapi/configuration/androivd")
+        @GET("rest/{store_code}/V1/mobileappversionapi/configuration/android")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getConfiguration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String): Call<ConfigurationResponse>
+    }
+
+    interface IsEmailAvailableService {
+        @POST("rest/{store_code}/V1/customers/isEmailAvailable")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun isEmailAvailableApi(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: LoginDataClass.IsEmailAvailableRequest?): Call<Boolean>
+    }
+
+    interface SocialLoginService {
+        @POST("rest/{store_code}/V1/customer/sociallogin/token")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun socialLogin(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: LoginDataClass.SocialLoginRequest?): Call<String>
     }
 }

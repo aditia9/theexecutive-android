@@ -1,14 +1,12 @@
 package com.ranosys.theexecutive.modules.login
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.databinding.ObservableField
 import android.text.TextUtils
 import android.view.View
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
@@ -44,6 +42,11 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                     clickedBtnId?.value = R.id.btn_login
                 }
             }
+
+            R.id.btn_fb_login ->{
+
+                clickedBtnId?.value = R.id.btn_fb_login
+            }
         }
     }
 
@@ -67,15 +70,13 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 apiFailureResponse?.value = errorMsg
             }
 
-            override fun onSuccess(accessToken: String?) {
+            override fun onSuccess(userToken: String?) {
                 //save customer token
-                SavedPreferences.getInstance()?.saveStringValue(accessToken!!, Constants.USER_ACCESS_TOKEN_KEY)
-                apiSuccessResponse?.value = accessToken
+                SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+                apiSuccessResponse?.value = userToken
 
             }
         })
-
-
     }
 
     fun validateData(context: Context): Boolean {
@@ -96,6 +97,52 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         //add password regex validation
 
         return isValid
+    }
+
+    fun isEmailAvailableApi(userData: LoginDataClass.SocialLoginData) {
+        val request = LoginDataClass.IsEmailAvailableRequest(userData.email, SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)?:  1)
+        AppRepository.isEmailAvailable(request, object : ApiCallback<Boolean>{
+            override fun onException(error: Throwable) {
+                Utils.printLog("Is Email Available Api", "error")
+                apiFailureResponse?.value = "Something went wrong"
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog("Is Email Available Api", "error")
+                apiFailureResponse?.value = errorMsg
+            }
+
+            override fun onSuccess(available: Boolean?) {
+                if(available!!){
+                    //call social login api
+                    callSocialLoginApi(userData)
+                }else{
+                    //load register screen
+                }
+            }
+
+        })
+    }
+
+    private fun callSocialLoginApi(userData: LoginDataClass.SocialLoginData) {
+        val request = LoginDataClass.SocialLoginRequest(userData.email, userData.type, userData.token)
+        AppRepository.socialLogin(request, object: ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                Utils.printLog("Socail Login Api", "error")
+                apiFailureResponse?.value = "Something went wrong"
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog("Socail Login Api", "error")
+                apiFailureResponse?.value = errorMsg
+            }
+
+            override fun onSuccess(userToken: String?) {
+                SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+                apiSuccessResponse?.value = userToken
+            }
+
+        })
     }
 
 }

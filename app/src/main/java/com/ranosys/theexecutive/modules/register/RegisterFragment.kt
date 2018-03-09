@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.register
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -49,7 +50,7 @@ class RegisterFragment: BaseFragment() {
 
     private fun observeRegisterButton() {
         registerViewModel?.buttonClicked?.observe(this, Observer<Int> { id ->
-            Utils.hideSoftKeypad(activity)
+            Utils.hideSoftKeypad(activity as Context)
             when (id) {
                 btn_signup.id -> register()
             }
@@ -57,7 +58,7 @@ class RegisterFragment: BaseFragment() {
     }
 
     private fun register() {
-        if (Utils.isConnectionAvailable(activity)) {
+        if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
             //do register
         } else {
