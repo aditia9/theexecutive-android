@@ -32,17 +32,18 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //check for auth token in SP if not get from assets
+        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
+            val token: String = getAuthToken()
+            SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
+        }
+
         //call configuration API
         getConfigurationApi()
 
         //fetch device id
         getDeviceID()
 
-        //check for auth token in SP if not get from assets
-        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
-            val token: String = getAuthToken()
-            SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
-        }
 
         handler.postDelayed({
             kotlin.run {

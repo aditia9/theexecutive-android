@@ -1,9 +1,9 @@
 package com.ranosys.theexecutive.api
 
-import android.util.Log
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
+import com.ranosys.theexecutive.modules.home.HomeResponseDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
@@ -35,7 +35,7 @@ class AppRepository private constructor(){
                 callBack.onException(Throwable(Constants.ERROR))
                 if (BuildConfig.DEBUG)
                     e.printStackTrace()
-            } catch (e:IOException) {
+            } catch (e: IOException) {
                 callBack.onException(Throwable(Constants.ERROR))
                 if (BuildConfig.DEBUG)
                     e.printStackTrace()
@@ -49,10 +49,10 @@ class AppRepository private constructor(){
 
             callPost?.enqueue(object : Callback<ArrayList<StoreResponse>> {
                 override fun onResponse(call: Call<ArrayList<StoreResponse>>?, response: Response<ArrayList<StoreResponse>>?) {
-                    if(!response!!.isSuccessful){
+                    if (!response!!.isSuccessful) {
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
 
-                    }else{
+                    } else {
                         callBack.onSuccess(response.body())
 
                     }
@@ -61,7 +61,7 @@ class AppRepository private constructor(){
 
                 override fun onFailure(call: Call<ArrayList<StoreResponse>>, t: Throwable) {
                     callBack.onError(Constants.ERROR)
-                    Utils.printLog("Login:","Failed")
+                    Utils.printLog("Login:", "Failed")
 
                 }
             })
@@ -72,14 +72,14 @@ class AppRepository private constructor(){
             val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
             //val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
             val storeCode: String = "all"
-            val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java!!)?.getConfiguration(ApiConstants.BEARER + adminToken,  storeCode)
+            val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java!!)?.getConfiguration(ApiConstants.BEARER + adminToken, storeCode)
 
             callGet?.enqueue(object : Callback<ConfigurationResponse> {
                 override fun onResponse(call: Call<ConfigurationResponse>?, response: Response<ConfigurationResponse>?) {
-                    if(!response!!.isSuccessful){
+                    if (!response!!.isSuccessful) {
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
 
-                    }else{
+                    } else {
                         callBack.onSuccess(response.body())
 
                     }
@@ -88,7 +88,7 @@ class AppRepository private constructor(){
 
                 override fun onFailure(call: Call<ConfigurationResponse>, t: Throwable) {
                     callBack.onError(Constants.ERROR)
-                    Utils.printLog("Login:","Failed")
+                    Utils.printLog("Login:", "Failed")
 
                 }
             })
@@ -101,9 +101,9 @@ class AppRepository private constructor(){
 
             callPost?.enqueue(object : Callback<LoginDataClass.LoginResponse> {
                 override fun onResponse(call: Call<LoginDataClass.LoginResponse>?, response: Response<LoginDataClass.LoginResponse>?) {
-                    if(!response!!.isSuccessful){
+                    if (!response!!.isSuccessful) {
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
-                    }else{
+                    } else {
                         callBack.onSuccess(response.body())
 
                     }
@@ -112,14 +112,35 @@ class AppRepository private constructor(){
 
                 override fun onFailure(call: Call<LoginDataClass.LoginResponse>, t: Throwable) {
                     callBack.onError(Constants.ERROR)
-                    Utils.printLog("Login:","Failed")
+                    Utils.printLog("Login:", "Failed")
 
                 }
             })
         }
 
+        fun getCategories(callBack: ApiCallback<HomeResponseDataClass>) {
+            val retrofit = ApiClient.retrofit
+            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val callGet = retrofit?.create<ApiService.CategoryService>(ApiService.CategoryService::class.java!!)?.getCategories(ApiConstants.BEARER + adminToken, storeCode)
+
+            callGet?.enqueue(object : Callback<HomeResponseDataClass> {
+                override fun onResponse(call: Call<HomeResponseDataClass>?, response: Response<HomeResponseDataClass>?) {
+                    if (!response!!.isSuccessful) {
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+
+                    } else {
+                        callBack.onSuccess(response.body())
+                    }
+
+                }
+
+                override fun onFailure(call: Call<HomeResponseDataClass>, t: Throwable) {
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("Login:", "Failed")
+                }
+            })
+        }
+
     }
-
-
-
 }

@@ -2,9 +2,11 @@ package com.ranosys.theexecutive.modules.home
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
-import android.databinding.BindingAdapter
+import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
-import android.support.v7.widget.RecyclerView
+import com.ranosys.theexecutive.api.ApiResponse
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 
 /**
@@ -12,23 +14,28 @@ import com.ranosys.theexecutive.base.BaseViewModel
  */
 class HomeModelView(application: Application) : BaseViewModel(application) {
 
-    companion object {
-        //binding adapters
-        @JvmStatic
-        @BindingAdapter("app:onClickItem")
-        fun onItemClick(view : RecyclerView, model : HomeModelView){
-            model.onItemClick(model.userData?.get())
-        }
-    }
+    var categoryList : ObservableArrayList<ChildrenData>? = ObservableArrayList<ChildrenData>()
+    var mutualHomeResponse = MutableLiveData<ApiResponse<HomeResponseDataClass>>()
+    var homeResponse = ObservableField<HomeResponseDataClass>()
 
-    var userData: ObservableField<HomeDataClass.HomeUserData>? = ObservableField<HomeDataClass.HomeUserData>()
+    fun getCategories(){
+        var apiResponse = ApiResponse<HomeResponseDataClass>()
+        AppRepository.getCategories(object : ApiCallback<HomeResponseDataClass>{
+            override fun onException(error: Throwable) {
+                mutualHomeResponse.value?.throwable = error
+            }
 
-    var name: ObservableField<String>? = ObservableField()
-    var buttonClicked = MutableLiveData<HomeDataClass.HomeUserData>()
+            override fun onError(errorMsg: String) {
+                mutualHomeResponse.value?.error = errorMsg
+            }
 
+            override fun onSuccess(t: HomeResponseDataClass?) {
+                apiResponse.apiResponse = t
+                mutualHomeResponse.value = apiResponse
+               // categoryList?.set(0, t)
+            }
 
-    fun onItemClick(userData: HomeDataClass.HomeUserData?){
-        buttonClicked.value = userData
+        })
     }
 
 }

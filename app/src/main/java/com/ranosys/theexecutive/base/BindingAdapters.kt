@@ -5,10 +5,9 @@ import android.databinding.InverseBindingAdapter
 import android.databinding.InverseBindingListener
 import android.support.v7.widget.AppCompatSpinner
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.*
+import com.ranosys.theexecutive.modules.home.ChildrenData
+import com.ranosys.theexecutive.modules.home.HomeTwoLevelAdapter
 
 
 /**
@@ -54,6 +53,13 @@ class BindingAdapters {
         @BindingAdapter("android:src")
         fun setImageResoruce(imageView: ImageView, resource: Int) {
             imageView.setImageResource(resource)
+        }
+
+        @JvmStatic
+        @BindingAdapter("categoryItems")
+        fun bindList(view: ExpandableListView, list: ArrayList<ChildrenData>) {
+            val adapter = HomeTwoLevelAdapter(list)
+            view.setAdapter(adapter)
         }
     }
 }
