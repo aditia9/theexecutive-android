@@ -135,7 +135,7 @@ class SplashActivity : BaseActivity() {
     private fun showExitApplicationDialog(message: String, action:() -> Unit = {}) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(message)
-                .setPositiveButton("OK") {
+                .setPositiveButton(android.R.string.ok) {
                     dialog, id -> dialog.cancel()
                     action()}
 
@@ -158,12 +158,14 @@ class SplashActivity : BaseActivity() {
 
     fun getAuthToken(): String{
         var reader: BufferedReader? = null
-        var token: String = ""
+        var token = ""
         try {
             reader =  BufferedReader(InputStreamReader(getAssets().open(Constants.CONFIG_FILE_NAME)))
             token = reader.readLine()
 
         } catch (e: IOException) {
+            if(BuildConfig.DEBUG)
+                e.printStackTrace()
         } finally {
             if (null != reader) {
                 try {

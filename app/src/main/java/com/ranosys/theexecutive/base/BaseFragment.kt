@@ -2,7 +2,9 @@ package com.ranosys.theexecutive.base
 
 import android.app.Dialog
 import android.arch.lifecycle.LifecycleFragment
+import android.arch.lifecycle.Observer
 import android.content.Context
+import android.os.Bundle
 import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
@@ -16,6 +18,12 @@ abstract class BaseFragment : LifecycleFragment() {
 
     private var mContext : Context? = null
     private var mProgressDialog: Dialog? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        observeLeftIconClick()
+    }
+
 
     fun showLoading() {
         mProgressDialog = Utils.showDialog(mContext)
@@ -72,9 +80,15 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     protected fun onBackPressed() {
-        activity.onBackPressed()
 
     }
+
+    private fun observeLeftIconClick() {
+        getToolBarViewModel()?.leftIconClicked?.observe(this, Observer<Int> {  id ->
+            activity.onBackPressed()
+        })
+    }
+
 
     protected fun setBackButton() {
         /*  if (activity is DashboardActivity) {
