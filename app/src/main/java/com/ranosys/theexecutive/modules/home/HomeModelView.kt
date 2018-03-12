@@ -16,10 +16,10 @@ class HomeModelView(application: Application) : BaseViewModel(application) {
 
     var categoryList : ObservableArrayList<ChildrenData>? = ObservableArrayList<ChildrenData>()
     var mutualHomeResponse = MutableLiveData<ApiResponse<HomeResponseDataClass>>()
-    var homeResponse = ObservableField<HomeResponseDataClass>()
+    var homeResponse : ObservableField<HomeResponseDataClass>? = ObservableField<HomeResponseDataClass>()
 
     fun getCategories(){
-        var apiResponse = ApiResponse<HomeResponseDataClass>()
+        val apiResponse = ApiResponse<HomeResponseDataClass>()
         AppRepository.getCategories(object : ApiCallback<HomeResponseDataClass>{
             override fun onException(error: Throwable) {
                 mutualHomeResponse.value?.throwable = error
@@ -32,7 +32,6 @@ class HomeModelView(application: Application) : BaseViewModel(application) {
             override fun onSuccess(t: HomeResponseDataClass?) {
                 apiResponse.apiResponse = t
                 mutualHomeResponse.value = apiResponse
-               // categoryList?.set(0, t)
             }
 
         })

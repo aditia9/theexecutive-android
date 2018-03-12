@@ -50,10 +50,8 @@ class HomeFragment : BaseFragment() {
                // hideLoading()
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is HomeResponseDataClass) {
-                    response.children_data
-                    homeModelView?.categoryList?.set(0, response.children_data as ChildrenData?)
+                    homeModelView?.homeResponse?.set(response)
                     Toast.makeText(activity, "Got categories", Toast.LENGTH_LONG).show()
-
                 } else {
                     Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show()
                 }

@@ -3,11 +3,12 @@ package com.ranosys.theexecutive.base
 import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
 import android.databinding.InverseBindingListener
+import android.databinding.ObservableField
 import android.support.v7.widget.AppCompatSpinner
 import android.view.View
 import android.widget.*
-import com.ranosys.theexecutive.modules.home.ChildrenData
-import com.ranosys.theexecutive.modules.home.HomeTwoLevelAdapter
+import com.ranosys.theexecutive.modules.home.HomeResponseDataClass
+import com.ranosys.theexecutive.modules.home.HomeThreeLevelAdapter
 
 
 /**
@@ -57,8 +58,8 @@ class BindingAdapters {
 
         @JvmStatic
         @BindingAdapter("categoryItems")
-        fun bindList(view: ExpandableListView, list: ArrayList<ChildrenData>) {
-            val adapter = HomeTwoLevelAdapter(list)
+        fun bindList(view: ExpandableListView, response: ObservableField<HomeResponseDataClass>?) {
+            val adapter = HomeThreeLevelAdapter(view.context, response?.get()?.children_data)
             view.setAdapter(adapter)
         }
     }

@@ -15,7 +15,7 @@
         android:divider="@null"
         android:childDivider="@null"
         android:groupIndicator="@null"
-        categoryItems="@{homeViewModel.categoryList}"
+        categoryItems="@{homeViewModel.homeResponse}"
         >
 
     </ExpandableListView>

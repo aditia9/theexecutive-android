@@ -8,30 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListAdapter
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.databinding.RowSecondBinding
-import com.ranosys.theexecutive.databinding.RowThirdBinding
+import com.ranosys.theexecutive.databinding.RowFirstBinding
 
 /**
- * Created by Mohammad Sunny on 12/3/18.
+ * Created by Mohammad Sunny on 9/3/18.
  */
-class HomeTwoLevelAdapter (context: Context?, list :ArrayList<ChildrenData>?) : ExpandableListAdapter {
+class HomeThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData>?) : ExpandableListAdapter{
 
+    var context: Context? = null
     var categoryList: ArrayList<ChildrenData>?
 
     init {
+        this.context = context
         categoryList = list
     }
 
-    override fun getGroupCount(): Int {
-        if(null != categoryList && categoryList!!.size > 0)
-            return categoryList?.size!!
-        else
-            return 0
-    }
 
     override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View {
         val layoutInflater = LayoutInflater.from(p3?.context)
-        val listGroupBinding: RowSecondBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_second, p3, false);
+        val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false);
         listGroupBinding.childData = getGroup(p0)
         return listGroupBinding.root
     }
@@ -43,32 +38,34 @@ class HomeTwoLevelAdapter (context: Context?, list :ArrayList<ChildrenData>?) : 
             return null
     }
 
-    override fun getChildrenCount(p0: Int): Int {
+    override fun getGroupCount(): Int {
         if(null != categoryList && categoryList!!.size > 0)
-            return categoryList?.get(p0)?.children_data?.size!!
+            return categoryList?.size!!
         else
             return 0
     }
 
     override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
-        val layoutInflater = LayoutInflater.from(p4?.context)
-        val listChildBinding : RowThirdBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_third, p4, false);
-        listChildBinding.childData = getChild(p0, p1)
-        return listChildBinding.root
+
+       // if(categoryList?.get(p0)?.children_data?.size!! > 0) {
+            val expandableListView = SecondLevelExpandableListView(context)
+            expandableListView.setAdapter(HomeTwoLevelAdapter(context,categoryList?.get(p0)?.children_data))
+            expandableListView.setGroupIndicator(null)
+            expandableListView.setChildIndicator(null)
+            expandableListView.setDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
+            expandableListView.setChildDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
+            return expandableListView
+       // }
+       // return p3!!
+
+    }
+
+    override fun getChildrenCount(p0: Int): Int {
+        return 1
     }
 
     override fun getChild(p0: Int, p1: Int): ChildrenData? {
         return categoryList?.get(p0)?.children_data?.get(p1)
-    }
-
-    override fun onGroupCollapsed(p0: Int) {
-    }
-
-    override fun isEmpty(): Boolean {
-        return false
-    }
-
-    override fun registerDataSetObserver(p0: DataSetObserver?) {
     }
 
     override fun onGroupExpanded(p0: Int) {
@@ -102,7 +99,16 @@ class HomeTwoLevelAdapter (context: Context?, list :ArrayList<ChildrenData>?) : 
         return p0
     }
 
-    override fun unregisterDataSetObserver(p0: DataSetObserver?) {
+    override fun onGroupCollapsed(p0: Int) {
     }
 
+    override fun isEmpty(): Boolean {
+        return false
+    }
+
+    override fun registerDataSetObserver(p0: DataSetObserver?) {
+    }
+
+    override fun unregisterDataSetObserver(p0: DataSetObserver?) {
+    }
 }
