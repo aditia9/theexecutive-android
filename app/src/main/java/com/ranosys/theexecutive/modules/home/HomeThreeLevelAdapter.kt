@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListAdapter
+import android.widget.ExpandableListView
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.RowFirstBinding
 
@@ -46,17 +47,23 @@ class HomeThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData>?) 
     }
 
     override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
+        val expandableListView = SecondLevelExpandableListView(context)
+        expandableListView.setAdapter(HomeTwoLevelAdapter(context,categoryList?.get(p0)?.children_data))
+        expandableListView.setGroupIndicator(null)
+        expandableListView.setChildIndicator(null)
+        expandableListView.setDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
+        expandableListView.setChildDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
+        expandableListView.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
+            var previousGroup = -1
+            override fun onGroupExpand(p0: Int) {
+                if(p0 != previousGroup){
+                    expandableListView.collapseGroup(previousGroup)
+                }
+                previousGroup = p0
+            }
 
-       // if(categoryList?.get(p0)?.children_data?.size!! > 0) {
-            val expandableListView = SecondLevelExpandableListView(context)
-            expandableListView.setAdapter(HomeTwoLevelAdapter(context,categoryList?.get(p0)?.children_data))
-            expandableListView.setGroupIndicator(null)
-            expandableListView.setChildIndicator(null)
-            expandableListView.setDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
-            expandableListView.setChildDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
-            return expandableListView
-       // }
-       // return p3!!
+        })
+        return expandableListView
 
     }
 

@@ -8,11 +8,16 @@ import android.support.annotation.Nullable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import android.widget.ExpandableListView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
+import kotlinx.android.synthetic.main.fragment_home.*
+
 
 /**
  * Created by Mohammad Sunny on 2/2/18.
@@ -31,6 +36,24 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        elv_parent_category.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
+            var previousGroup = -1
+            override fun onGroupExpand(p0: Int) {
+                if(p0 != previousGroup){
+                    elv_parent_category.collapseGroup(previousGroup)
+                }
+                previousGroup = p0
+
+            }
+
+        })
+        elv_parent_category.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
+            override fun onGroupClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
+                // Toast.makeText(activity,"" + groupPosition + " " + childPosition,Toast.LENGTH_SHORT).show()
+                return true
+            }
+
+        })
         observeLoginApiResponse()
         getCategories()
     }
@@ -41,13 +64,13 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun getCategories() {
-         homeModelView?.getCategories()
+        homeModelView?.getCategories()
     }
 
     private fun observeLoginApiResponse() {
         homeModelView?.mutualHomeResponse?.observe(this, object : Observer<ApiResponse<HomeResponseDataClass>> {
             override fun onChanged(@Nullable apiResponse: ApiResponse<HomeResponseDataClass>?) {
-               // hideLoading()
+                // hideLoading()
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is HomeResponseDataClass) {
                     homeModelView?.homeResponse?.set(response)
@@ -63,5 +86,31 @@ class HomeFragment : BaseFragment() {
         fun newInstance(): HomeFragment {
             return HomeFragment()
         }
+    }
+
+    fun expand(v: View) {
+        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val targetHeight = v.measuredHeight
+
+        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+        v.layoutParams.height = 1
+        v.visibility = View.VISIBLE
+        val a = object : Animation() {
+            override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
+                v.layoutParams.height = if (interpolatedTime == 1f)
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                else
+                    (targetHeight * interpolatedTime).toInt()
+                v.requestLayout()
+            }
+
+            override fun willChangeBounds(): Boolean {
+                return true
+            }
+        }
+
+        // 1dp/ms
+        a.duration = (targetHeight / v.context.resources.displayMetrics.density).toInt().toLong()
+        v.startAnimation(a)
     }
 }

@@ -10,6 +10,7 @@ import android.widget.ExpandableListAdapter
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.RowSecondBinding
 import com.ranosys.theexecutive.databinding.RowThirdBinding
+import kotlinx.android.synthetic.main.row_second.view.*
 
 /**
  * Created by Mohammad Sunny on 12/3/18.
@@ -29,10 +30,16 @@ class HomeTwoLevelAdapter (context: Context?, list :ArrayList<ChildrenData>?) : 
             return 0
     }
 
-    override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View {
+    override fun getGroupView(p0: Int, isExpanded: Boolean, p2: View?, p3: ViewGroup?): View {
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowSecondBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_second, p3, false);
         listGroupBinding.childData = getGroup(p0)
+        if(isExpanded){
+            listGroupBinding.root.tb_expand_collapse.isChecked = true
+        }
+        else{
+            listGroupBinding.root.tb_expand_collapse.isChecked = false
+        }
         return listGroupBinding.root
     }
 

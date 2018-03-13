@@ -9,7 +9,7 @@
     </data>
 
     <ExpandableListView
-        android:id="@+id/elv_category"
+        android:id="@+id/elv_parent_category"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"

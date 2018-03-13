@@ -15,7 +15,7 @@
             android:id="@+id/rowSecondText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/expand_colapse"
+            android:layout_toLeftOf="@+id/tb_expand_collapse"
             android:textAllCaps="true"
             android:padding="10dp"
             android:layout_marginLeft="20dp"
@@ -23,7 +23,7 @@
             android:textSize="18sp"/>
 
         <ToggleButton
-            android:id="@+id/expand_colapse"
+            android:id="@+id/tb_expand_collapse"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"
