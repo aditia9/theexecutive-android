@@ -12,7 +12,7 @@ import com.ranosys.theexecutive.utils.Utils
 
 
 /**
- * Created by Mohammad Sunny on 24/1/18.
+ * Created by Mohammad Sunny on 22/2/18.
  */
 abstract class BaseFragment : LifecycleFragment() {
 
@@ -30,18 +30,18 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     fun hideLoading() {
-        if (mProgressDialog?.isShowing()!!) {
+        if (mProgressDialog?.isShowing!!) {
             mProgressDialog?.cancel()
         }
     }
 
-    fun setToolBarParams(title: String, leftIcon : Int, leftIconVisibilty : Boolean,
-                         rightIcon : Int, rightIconVisibilty : Boolean){
+    fun setToolBarParams(title: String, leftIcon : Int, leftIconVisibility : Boolean,
+                         rightIcon : Int, rightIconVisibility : Boolean){
         setTitle(title)
         setLeftIcon(leftIcon)
-        setLeftIconVisibilty(leftIconVisibilty)
+        setLeftIconVisibilty(leftIconVisibility)
         setRightIcon(rightIcon)
-        setRightIconVisibilty(rightIconVisibilty)
+        setRightIconVisibilty(rightIconVisibility)
 
     }
 
@@ -79,21 +79,10 @@ abstract class BaseFragment : LifecycleFragment() {
         (activity as BaseActivity).getPermission(permissionList, isPermissionGrantedInterface)
     }
 
-    protected fun onBackPressed() {
-
-    }
-
     private fun observeLeftIconClick() {
         getToolBarViewModel()?.leftIconClicked?.observe(this, Observer<Int> {  id ->
             activity.onBackPressed()
         })
-    }
-
-
-    protected fun setBackButton() {
-        /*  if (activity is DashboardActivity) {
-              (activity as DashboardActivity).setBackButton()
-          }*/
     }
 
 }

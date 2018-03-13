@@ -11,7 +11,7 @@ import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 /**
- * Created by Mohammad Sunny on 24/1/18.
+ * Created by Mohammad Sunny on 22/2/18.
  */
 open class BaseActivity: RunTimePermissionActivity(){
 

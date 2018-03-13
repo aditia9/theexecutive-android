@@ -8,7 +8,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 /**
- * Created by Mohammad Sunny on 25/1/18.
+ * Created by Mohammad Sunny on 21/2/18.
  */
 interface ApiService {
 
@@ -16,12 +16,6 @@ interface ApiService {
         @POST("user/login/email")
         fun getLoginData(@Body loginRequest: LoginDataClass.LoginRequest?): Call<LoginDataClass.LoginResponse>
     }
-
-//    interface AdminTokenService {
-//        @POST("rest/all/V1/integration/admin/token")
-//        @Headers("Content-Type: application/json", "X-Requested-With: XMLHttpRequest", "Cache-Control: no-cache")
-//        fun getAdminToken(@Body adminTokenRequest: AdminDataClass): Call<String>
-//    }
 
     interface StoresService {
         @GET("rest/all/V1/store/storeViews")

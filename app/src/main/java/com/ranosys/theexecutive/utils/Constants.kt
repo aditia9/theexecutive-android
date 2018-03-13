@@ -5,7 +5,7 @@ package com.ranosys.theexecutive.utils
  */
 class Constants {
     companion object {
-        val pref_name = "data_pref"
+        val PREF_NAME = "data_pref"
         val STORE_ID_KEY = "store_id"
         val ACCESS_TOKEN_KEY = "access_token"
         val DEFAULT_STORE_CODE = "en"
@@ -18,5 +18,6 @@ class Constants {
         val MAINTENENCE_OFF = "0"
         val MAINTENENCE_ON = "1"
         val CONFIG_FILE_NAME = "config"
+        val ALL: String = "all"
     }
 }
