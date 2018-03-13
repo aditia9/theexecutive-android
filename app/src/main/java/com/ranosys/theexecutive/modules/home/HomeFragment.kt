@@ -47,13 +47,6 @@ class HomeFragment : BaseFragment() {
             }
 
         })
-        elv_parent_category.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
-            override fun onGroupClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
-                // Toast.makeText(activity,"" + groupPosition + " " + childPosition,Toast.LENGTH_SHORT).show()
-                return true
-            }
-
-        })
         observeLoginApiResponse()
         getCategories()
     }
