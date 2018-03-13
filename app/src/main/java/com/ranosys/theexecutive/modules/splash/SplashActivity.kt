@@ -34,7 +34,8 @@ class SplashActivity : BaseActivity() {
 
         //check for auth token in SP if not get from assets
         if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
-            val token: String = getAuthToken()
+            //val token: String = getAuthToken()
+            val token: String = Constants.ADMIN_TOKEN
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
         }
 

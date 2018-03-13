@@ -46,4 +46,9 @@
     <!--fb integration-->
     <string name="facebook_app_id">174246843202937</string>
     <string name="fb_login_protocol_scheme">fb174246843202937</string>
+    <string name="email_address">Email address</string>
+    <string name="login_with">Login with</string>
+    <string name="facebook_login">Login with Facebook</string>
+    <string name="gmail_login">Login with Gmail</string>
+    <string name="create_account">Create an Account</string>
 </resources>

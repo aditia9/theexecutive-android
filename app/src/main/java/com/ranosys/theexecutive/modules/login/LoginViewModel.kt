@@ -47,6 +47,11 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
                 clickedBtnId?.value = R.id.btn_fb_login
             }
+
+            R.id.btn_gmail_login ->{
+
+                clickedBtnId?.value = R.id.btn_gmail_login
+            }
         }
     }
 

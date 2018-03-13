@@ -5,6 +5,7 @@ package com.ranosys.theexecutive.utils
  */
 class Constants {
     companion object {
+        const val ADMIN_TOKEN = "cigid62rumgjietso83lrlk16c5ki7bp"
         val pref_name = "data_pref"
         val STORE_ID_KEY = "store_id"
         val ACCESS_TOKEN_KEY = "access_token"
