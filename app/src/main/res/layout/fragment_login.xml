@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="loginViewModel"
+        <variable name="loginVM"
             type="com.ranosys.theexecutive.modules.login.LoginViewModel"/>
     </data>
 
@@ -46,6 +46,8 @@
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:hint="@string/email_address"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{loginVM.emailError}"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left">
@@ -53,7 +55,7 @@
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_email"
                         android:fontFamily="@font/dax_light"
-                        android:text="@={loginViewModel.email}"
+                        android:text="@{loginVM.email}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
@@ -66,6 +68,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/password"
+                    app:errorText="@{loginVM.passwordError}"
+                    android:theme="@style/tilTheme"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@id/til_email">
@@ -74,10 +78,11 @@
                         android:id="@+id/et_password"
                         android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
-                        android:text="@={loginViewModel.password}"
+                        android:text="@={loginVM.password}"
                         android:inputType="textPassword"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
+
 
 
                 <TextView
@@ -93,7 +98,7 @@
                     android:id="@+id/btn_login"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
-                    android:onClick="@{(view)->loginViewModel.btnClicked(view)}"
+                    android:onClick="@{(view)->loginVM.btnClicked(view)}"
                     android:text="@string/login"
                     android:textSize="@dimen/twenty_sp"
                     android:textColor="@color/colorText"
@@ -137,7 +142,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginRight="16dp"
                     android:contentDescription="@string/facebook_login"
-                    android:onClick="@{(view)->loginViewModel.btnClicked(view)}"
+                    android:onClick="@{(view)->loginVM.btnClicked(view)}"
                     android:src="@drawable/fb"
                     app:layout_constraintBottom_toBottomOf="@+id/view_vertical"
                     app:layout_constraintRight_toLeftOf="@+id/view_vertical"
@@ -151,7 +156,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginLeft="16dp"
                     android:contentDescription="@string/gmail_login"
-                    android:onClick="@{(view)->loginViewModel.btnClicked(view)}"
+                    android:onClick="@{(view)->loginVM.btnClicked(view)}"
                     android:src="@drawable/google"
                     app:layout_constraintBottom_toBottomOf="@+id/view_vertical"
                     app:layout_constraintLeft_toRightOf="@id/view_vertical"
@@ -166,11 +171,12 @@
                     android:padding="16dp"
                     android:gravity="center"
                     android:background="@drawable/ghost_btn_bg"
-
                     android:orientation="horizontal"
+                    android:layout_marginTop="36dp"
                     app:layout_constraintLeft_toLeftOf="@id/guideline_left"
                     app:layout_constraintRight_toRightOf="@id/guideline_right"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_vertical">
 
                     <TextView
                         android:id="@+id/tv_register"
@@ -180,7 +186,7 @@
                         android:textAllCaps="false"
                         android:gravity="center"
                         android:singleLine="true"
-                        android:onClick="@{(view)->loginViewModel.btnClicked(view)}"
+                        android:onClick="@{(view)->loginVM.btnClicked(view)}"
                         android:text="@string/create_account"
                         android:fontFamily="@font/dax_regular"/>
 

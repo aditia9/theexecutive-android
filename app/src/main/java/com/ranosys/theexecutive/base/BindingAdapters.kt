@@ -3,7 +3,9 @@ package com.ranosys.theexecutive.base
 import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
 import android.databinding.InverseBindingListener
+import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.AppCompatSpinner
+import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -19,13 +21,13 @@ class BindingAdapters {
     companion object {
         @JvmStatic
         @BindingAdapter("app:errorText")
-        fun setErrorMessage(view: EditText, errorMessage: String?) {
+        fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
             view.setError(errorMessage)
-//        if (TextUtils.isEmpty(errorMessage)) {
-//            view.setErrorEnabled(false)
-//        } else {
-//            view.setErrorEnabled(true)
-//        }
+        if (TextUtils.isEmpty(errorMessage)) {
+            view.setErrorEnabled(false)
+        } else {
+            view.setErrorEnabled(true)
+        }
         }
 
         @JvmStatic

@@ -8,6 +8,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +48,7 @@ class LoginFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        mBinding.loginViewModel = loginViewModel
+        mBinding.loginVM = loginViewModel
 
         observeEvent()
         observeApiFailure()
@@ -72,16 +73,25 @@ class LoginFragment : BaseFragment() {
 
         })
 
-        //gmail login
+        initialiseGmailLoginParams()
+
+        return mBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        et_password.transformationMethod = PasswordTransformationMethod()
+    }
+
+    private fun initialiseGmailLoginParams() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.gmail_server_client_id))
                 .requestEmail()
                 .requestProfile()
                 .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(activity as Activity, gso)
 
-
-        return mBinding.root
     }
 
     override fun onResume() {
@@ -220,7 +230,7 @@ class LoginFragment : BaseFragment() {
 
             var gmailToken : String? = account.idToken
             val gmailData = getGmailData(account)
-            gmailData?.token = gmailToken!!
+            gmailData.token = gmailToken!!
 
             if(!TextUtils.isEmpty(gmailData.email))loginViewModel.isEmailAvailableApi(gmailData)else Utils.printLog("Gmail User Data", "error in gmail data")
 
@@ -237,7 +247,7 @@ class LoginFragment : BaseFragment() {
             val email = account.email
 
             //return all data
-            return LoginDataClass.SocialLoginData(firstName!!, lastName!!, email = email!!, gender = "", type = "gmail", token = "")
+            return LoginDataClass.SocialLoginData(firstName!!, lastName!!, email = email!!, gender = "", type = "google", token = "")
     }
 
 

@@ -52,7 +52,7 @@ class RegisterFragment: BaseFragment() {
         registerViewModel?.buttonClicked?.observe(this, Observer<Int> { id ->
             Utils.hideSoftKeypad(activity as Context)
             when (id) {
-                btn_signup.id -> register()
+                //btn_signup.id -> register()
             }
         })
     }
