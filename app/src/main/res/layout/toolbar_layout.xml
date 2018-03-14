@@ -32,6 +32,7 @@
             android:id="@+id/toolbar_left_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/toolbar_left_icon"
             android:visibility="@{toolbarViewModel.isLeftIconVisible() ? View.VISIBLE : View.GONE,  default = visible}"
             android:src="@{ContextCompat.getDrawable(context, toolbarViewModel.leftIcon)}"
             android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"

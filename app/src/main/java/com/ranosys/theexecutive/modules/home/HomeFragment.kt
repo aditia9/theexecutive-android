@@ -20,11 +20,11 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 
 /**
- * Created by Mohammad Sunny on 2/2/18.
+ * Created by Mohammad Sunny on 21/2/18.
  */
 class HomeFragment : BaseFragment() {
 
-    var homeModelView: HomeModelView? = null
+    private var homeModelView: HomeModelView? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)

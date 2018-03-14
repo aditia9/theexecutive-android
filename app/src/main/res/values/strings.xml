@@ -1,10 +1,8 @@
 <resources>
     <!--<string name="app_name">The Executive</string>-->
     <string name="login">Login</string>
-    <string name="app_title">Kotlin MVVM Architecture</string>
     <string name="user_id">User ID</string>
     <string name="empty_user_name">Please provide User Name.</string>
-    <string name="empty_user_company">Please provide company name if you are CCM’s existing customer.</string>
     <string name="empty_user_mobile">Please provide Mobile Number.</string>
     <string name="provide_valid_email">Please provide valid Email.</string>
     <string name="privacy_policy_error">Please accept Privacy Policy.</string>
@@ -32,14 +30,15 @@
     <string name="mobile">Mobile</string>
     <string name="email_id">Email Id</string>
     <string name="edit">Edit</string>
+    <string name="toolbar_left_icon">Toolbar left icon</string>
 
     <!--titles-->
     <string name="title_home">Home</string>
     <string name="title_login">Login</string>
     <string name="error_invalid_email">Invalid mail id.</string>
     <string name="title_register">Register</string>
-    <string name="some_thing_went_wront_error">Something went wrong</string>
+    <string name="something_went_wrong_error">Something went wrong</string>
     <string name="exit">Exit</string>
-    <string name="maintenence_msg">Applicaiton is under maintenence</string>
-    <string name="force_update_msg">New Version application is availabel.</string>
+    <string name="maintenence_msg">Application is under maintenance</string>
+    <string name="force_update_msg">New Version application is available.</string>
 </resources>

@@ -17,13 +17,13 @@ import java.util.regex.Pattern
 
 
 /**
- * Created by ranosys on 25/1/18.
+ * Created by Mohammad Sunny on 21/2/18.
  */
 open class Utils {
 
     companion object {
 
-        fun printLog(TAG:String, message: String): Unit{
+        fun printLog(TAG:String, message: String){
             if(BuildConfig.DEBUG){
                 Log.e(TAG, message)
             }
