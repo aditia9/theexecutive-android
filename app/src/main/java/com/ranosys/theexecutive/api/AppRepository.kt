@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.api
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
+import com.ranosys.theexecutive.modules.home.HomeResponseDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
@@ -110,6 +111,30 @@ class AppRepository private constructor(){
                 override fun onFailure(call: Call<LoginDataClass.LoginResponse>, t: Throwable) {
                     callBack.onError(Constants.ERROR)
                     Utils.printLog("Login:","Failed")
+                }
+            })
+        }
+
+        fun getCategories(callBack: ApiCallback<HomeResponseDataClass>) {
+            val retrofit = ApiClient.retrofit
+            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val callGet = retrofit?.create<ApiService.CategoryService>(ApiService.CategoryService::class.java)?.getCategories(ApiConstants.BEARER + adminToken, storeCode)
+
+            callGet?.enqueue(object : Callback<HomeResponseDataClass> {
+                override fun onResponse(call: Call<HomeResponseDataClass>?, response: Response<HomeResponseDataClass>?) {
+                    if (!response!!.isSuccessful) {
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+
+                    } else {
+                        callBack.onSuccess(response.body())
+                    }
+
+                }
+
+                override fun onFailure(call: Call<HomeResponseDataClass>, t: Throwable) {
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("Login:", "Failed")
                 }
             })
         }

@@ -1,7 +1,7 @@
 package com.ranosys.theexecutive.utils
 
 /**
- * Created by Vikash Kumar Bijarniya on 5/2/18.
+ * Created by Mohammad Sunny on 22/2/18.
  */
 class Constants {
     companion object {

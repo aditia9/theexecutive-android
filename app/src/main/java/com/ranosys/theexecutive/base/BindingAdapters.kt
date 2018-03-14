@@ -4,28 +4,33 @@ import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
 import android.databinding.InverseBindingListener
 import android.databinding.ObservableField
+import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.AppCompatSpinner
+import android.text.TextUtils
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ExpandableListView
+import android.widget.ImageView
 import com.ranosys.theexecutive.modules.home.HomeResponseDataClass
 import com.ranosys.theexecutive.modules.home.HomeThreeLevelAdapter
 
 
 /**
- * Created by Mohammad Sunny on 31/1/18.
+ * Created by Mohammad Sunny on 22/2/18.
  */
 class BindingAdapters {
 
     companion object {
         @JvmStatic
-        @BindingAdapter("app:errorText")
-        fun setErrorMessage(view: EditText, errorMessage: String?) {
-            view.setError(errorMessage)
-//        if (TextUtils.isEmpty(errorMessage)) {
-//            view.setErrorEnabled(false)
-//        } else {
-//            view.setErrorEnabled(true)
-//        }
+        @BindingAdapter("errorData")
+        fun setErrorMessage(view: TextInputLayout?, errorMessage: String?) {
+            view?.setError(errorMessage)
+            if (TextUtils.isEmpty(errorMessage)) {
+                view?.setErrorEnabled(false)
+            } else {
+                view?.setErrorEnabled(true)
+            }
         }
 
         @JvmStatic
