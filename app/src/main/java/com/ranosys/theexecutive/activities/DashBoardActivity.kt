@@ -1,20 +1,22 @@
-package com.ranosys.theexecutive
+package com.ranosys.theexecutive.activities
 
+import android.databinding.DataBindingUtil
 import android.os.Bundle
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
+import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
-import kotlinx.android.synthetic.main.activity_user.*
 
 /**
- * Created by Vikash Kumar Bijarniya on 2/2/18.
+ * Created by Mohammad Sunny on 19/2/18.
  */
 class DashBoardActivity: BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
-        setSupportActionBar(toolbar)
+        val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+        toolbarBinding?.toolbarViewModel = toolbarViewModel
         FragmentUtils.addFragment(this, HomeFragment.newInstance(), HomeFragment::class.java.name)
     }
 

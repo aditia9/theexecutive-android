@@ -4,42 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.ranosys.theexecutive.DelamiBrandsApplication
 
-
-
-
-
-
 /**
- * Created by Vikash Kumar Bijarniya on 5/2/18.
+ * Created by Mohammad Sunny on 20/2/18.
  */
 class SavedPreferences private constructor(){
 
-    val user_pref = "SSAppData"
-    var sharedPreferences: SharedPreferences? = null
-    var USER_EMAIL_KEY = "userEmail"
-    var IS_LOGIN_KEY = "isLogin"
+    private var sharedPreferences: SharedPreferences? = null
+    private var USER_EMAIL_KEY = "userEmail"
+    private var IS_LOGIN_KEY = "isLogin"
 
-    companion object {
-
-        private fun init(context: Context) {
-            if (savedPreferences == null) {
-                savedPreferences = SavedPreferences()
-                savedPreferences!!.sharedPreferences = context.getSharedPreferences(user_pref, Context.MODE_PRIVATE)
-            }
-        }
-
-        val user_pref = "SSAppData"
-
-        var savedPreferences: SavedPreferences? = null
-
-        fun getInstance(): SavedPreferences? {
-            if (savedPreferences == null) {
-                init(DelamiBrandsApplication.samleApplication?.applicationContext!!)
-            }
-            return savedPreferences
-        }
-
-    }
 
     fun saveStringValue(value: String, key: String) {
         val editor = getEditor()
@@ -88,8 +61,9 @@ class SavedPreferences private constructor(){
         editor?.putBoolean(IS_LOGIN_KEY, islogin)
         editor?.apply()
     }
+
     fun getIsLogin():Boolean?{
-        var islogin: Boolean?
+        val islogin: Boolean?
         islogin = getBooleanValue(IS_LOGIN_KEY)
         return islogin
     }
@@ -98,5 +72,24 @@ class SavedPreferences private constructor(){
         return sharedPreferences?.getBoolean(key, false)
     }
 
+    companion object {
+
+        val user_pref = "APP_DATA"
+        var savedPreferences: SavedPreferences? = null
+
+        private fun init(context: Context) {
+            savedPreferences = SavedPreferences()
+            savedPreferences?.sharedPreferences = context.getSharedPreferences(user_pref, Context.MODE_PRIVATE)
+        }
+
+
+        fun getInstance(): SavedPreferences? {
+            if (savedPreferences == null) {
+                init(DelamiBrandsApplication.samleApplication?.applicationContext!!)
+            }
+            return savedPreferences
+        }
+
+    }
 
 }
