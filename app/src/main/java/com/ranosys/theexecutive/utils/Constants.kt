@@ -5,6 +5,7 @@ package com.ranosys.theexecutive.utils
  */
 class Constants {
     companion object {
+        val PREF_NAME = "data_pref"
         const val ADMIN_TOKEN = "cigid62rumgjietso83lrlk16c5ki7bp"
         val pref_name = "data_pref"
         val STORE_ID_KEY = "store_id"
@@ -20,5 +21,8 @@ class Constants {
         val MAINTENENCE_OFF = "0"
         val MAINTENENCE_ON = "1"
         val CONFIG_FILE_NAME = "config"
+        val ALL: String = "all"
+        val TYPE_FACEBOOK: String = "facebook"
+        val TYPE_GMAIL: String = "google"
     }
 }

@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.api
 
-import android.util.Log
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
@@ -19,7 +18,7 @@ import java.io.IOException
 
 
 /**
- * Created by Mohammad Sunny on 25/1/18.
+ * Created by Mohammad Sunny on 23/2/18.
  */
 class AppRepository private constructor(){
 
@@ -28,7 +27,7 @@ class AppRepository private constructor(){
         private fun parseError(response: Response<Any>?, callBack: ApiCallback<Any>) {
             try {
                 val jobError = JSONObject(response?.errorBody()?.string())
-                var errorBody = jobError.getString(Constants.MESSAGE)
+                val errorBody = jobError.getString(Constants.MESSAGE)
                 callBack.onError(errorBody)
 
             } catch (e: JSONException) {
@@ -45,7 +44,7 @@ class AppRepository private constructor(){
         fun getStores(callBack: ApiCallback<ArrayList<StoreResponse>>) {
             val retrofit = ApiClient.retrofit
             val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
-            val callPost = retrofit?.create<ApiService.StoresService>(ApiService.StoresService::class.java!!)?.getStores(ApiConstants.BEARER + adminToken)
+            val callPost = retrofit?.create<ApiService.StoresService>(ApiService.StoresService::class.java)?.getStores(ApiConstants.BEARER + adminToken)
 
             callPost?.enqueue(object : Callback<ArrayList<StoreResponse>> {
                 override fun onResponse(call: Call<ArrayList<StoreResponse>>?, response: Response<ArrayList<StoreResponse>>?) {
@@ -71,8 +70,8 @@ class AppRepository private constructor(){
             val retrofit = ApiClient.retrofit
             val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
             //val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-            val storeCode: String = "all"
-            val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java!!)?.getConfiguration(ApiConstants.BEARER + adminToken,  storeCode)
+            val storeCode = Constants.ALL
+            val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java)?.getConfiguration(ApiConstants.BEARER + adminToken,  storeCode)
 
             callGet?.enqueue(object : Callback<ConfigurationResponse> {
                 override fun onResponse(call: Call<ConfigurationResponse>?, response: Response<ConfigurationResponse>?) {
@@ -81,7 +80,6 @@ class AppRepository private constructor(){
 
                     }else{
                         callBack.onSuccess(response.body())
-
                     }
 
                 }
@@ -107,7 +105,6 @@ class AppRepository private constructor(){
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                     }else{
                         callBack.onSuccess(response.body())
-
                     }
 
                 }
@@ -115,7 +112,6 @@ class AppRepository private constructor(){
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     callBack.onError(Constants.ERROR)
                     Utils.printLog("Login:","Failed")
-
                 }
             })
         }

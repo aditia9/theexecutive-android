@@ -1,7 +1,8 @@
-package com.ranosys.theexecutive
+package com.ranosys.theexecutive.activities
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
@@ -9,7 +10,7 @@ import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 
 /**
- * Created by Vikash Kumar Bijarniya on 2/2/18.
+ * Created by Mohammad Sunny on 19/2/18.
  */
 class DashBoardActivity: BaseActivity() {
 

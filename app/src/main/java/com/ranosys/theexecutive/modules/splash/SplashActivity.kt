@@ -1,12 +1,13 @@
-package com.ranosys.theexecutive
+package com.ranosys.theexecutive.activities
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
+import com.ranosys.theexecutive.BuildConfig
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
@@ -21,13 +22,13 @@ import java.io.IOException
 import java.io.InputStreamReader
 
 /**
- * Created by Mohammad Sunny on 25/1/18.
+ * Created by Mohammad Sunny on 21/2/18.
  */
 class SplashActivity : BaseActivity() {
 
-    val SPLASH_TIMEOUT = 3000
-    val handler = Handler()
-    var canNavigateToHome: Boolean = false
+    private val SPLASH_TIMEOUT = 3000
+    private val handler = Handler()
+    private var canNavigateToHome: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,7 +139,7 @@ class SplashActivity : BaseActivity() {
     private fun showExitApplicationDialog(message: String, action:() -> Unit = {}) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(message)
-                .setPositiveButton("OK") {
+                .setPositiveButton(android.R.string.ok) {
                     dialog, id -> dialog.cancel()
                     action()}
 
@@ -153,20 +154,21 @@ class SplashActivity : BaseActivity() {
         finish()
     }
 
-    @SuppressLint("MissingSuperCall")
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null);
     }
 
-    fun getAuthToken(): String{
+    private fun getAuthToken(): String{
         var reader: BufferedReader? = null
-        var token: String = ""
+        var token = ""
         try {
-            reader =  BufferedReader(InputStreamReader(getAssets().open(Constants.CONFIG_FILE_NAME)))
+            reader =  BufferedReader(InputStreamReader(assets.open(Constants.CONFIG_FILE_NAME)))
             token = reader.readLine()
 
         } catch (e: IOException) {
+            if(BuildConfig.DEBUG)
+                e.printStackTrace()
         } finally {
             if (null != reader) {
                 try {

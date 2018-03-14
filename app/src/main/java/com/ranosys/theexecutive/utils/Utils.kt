@@ -17,13 +17,13 @@ import java.util.regex.Pattern
 
 
 /**
- * Created by ranosys on 25/1/18.
+ * Created by Mohammad Sunny on 21/2/18.
  */
 open class Utils {
 
     companion object {
 
-        fun printLog(TAG:String, message: String): Unit{
+        fun printLog(TAG:String, message: String){
             if(BuildConfig.DEBUG){
                 Log.e(TAG, message)
             }
@@ -42,7 +42,7 @@ open class Utils {
 
         fun isValidPassword(password: String): Boolean {
 
-            val p = Pattern.compile("^\\w*(?=\\w*\\d)(?=\\w*[a-zA-Z])\\w*$")
+            val p = Pattern.compile("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#\$%^&+=])(?=\\S+\$).{8,}\$")
             val m = p.matcher(password)
             return m.matches()
         }

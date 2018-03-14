@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
@@ -219,7 +220,7 @@ class LoginFragment : BaseFragment() {
         }
         Utils.printLog("FB USER_INFO", "" + firstName + lastName + gender + email + id + "")
 
-        return LoginDataClass.SocialLoginData(firstName, lastName, email = email, gender = gender, type = "facebook", token = "")
+        return LoginDataClass.SocialLoginData(firstName, lastName, email = email, gender = gender, type = Constants.TYPE_FACEBOOK, token = "")
     }
 
 
@@ -242,12 +243,12 @@ class LoginFragment : BaseFragment() {
 
     fun getGmailData(account: GoogleSignInAccount): LoginDataClass.SocialLoginData {
 
-            val firstName = account.displayName
-            val lastName = account.familyName
-            val email = account.email
+        val firstName = account.displayName
+        val lastName = account.familyName
+        val email = account.email
 
-            //return all data
-            return LoginDataClass.SocialLoginData(firstName!!, lastName!!, email = email!!, gender = "", type = "google", token = "")
+        //return all data
+        return LoginDataClass.SocialLoginData(firstName!!, lastName!!, email = email!!, gender = "", type = Constants.TYPE_GMAIL, token = "")
     }
 
 

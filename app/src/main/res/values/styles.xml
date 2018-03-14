@@ -13,7 +13,7 @@
 
     </style>
 
-    <style name="Toolbar" parent="Theme.AppCompat">
+    <style name="toolbar" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/toolBarColor</item>
         <item name="colorPrimaryDark">@color/toolBarColor</item>
         <item name="colorAccent">@color/toolBarColor</item>
