@@ -2,7 +2,6 @@ package com.ranosys.theexecutive.modules.home
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
-import android.databinding.ObservableArrayList
 import android.databinding.ObservableField
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
@@ -14,7 +13,6 @@ import com.ranosys.theexecutive.base.BaseViewModel
  */
 class HomeModelView(application: Application) : BaseViewModel(application) {
 
-    var categoryList : ObservableArrayList<ChildrenData>? = ObservableArrayList<ChildrenData>()
     var mutualHomeResponse = MutableLiveData<ApiResponse<HomeResponseDataClass>>()
     var homeResponse : ObservableField<HomeResponseDataClass>? = ObservableField<HomeResponseDataClass>()
 

@@ -8,6 +8,8 @@
     <dimen name="sixty_four">64dp</dimen>
     <dimen name="one_two_eight">128dp</dimen>
     <dimen name="twelve_dp">12dp</dimen>
+    <dimen name="ten_dp">10dp</dimen>
+    <dimen name="parent_category_image_height">350dp</dimen>
 
 
     <dimen name="two_sp">2sp</dimen>
@@ -20,4 +22,5 @@
     <dimen name="sixty_four_sp">64sp</dimen>
     <dimen name="one_two_eight_sp">128sp</dimen>
     <dimen name="twelve_sp">12sp</dimen>
+    <dimen name="eighteen_sp">18sp</dimen>
 </resources>

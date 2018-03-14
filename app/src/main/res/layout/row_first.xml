@@ -14,23 +14,25 @@
 
 
         <TextView
-            android:id="@+id/rowParentTextView"
+            android:id="@+id/tv_parent_category_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/eighteen_sp"
             android:textAllCaps="true"
             android:textStyle="bold"
-            android:padding="10dp"
+            android:padding="@dimen/ten_dp"
             android:text="@{childData.name}"
+            android:fontFamily="@font/dax_regular"
             />
 
         <ImageView
-            android:id="@+id/rowParentText"
+            android:id="@+id/img_parent_category_image"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="@dimen/parent_category_image_height"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:src="@drawable/one"
+            android:contentDescription="@string/category_image"
             />
     </LinearLayout>
 </layout>

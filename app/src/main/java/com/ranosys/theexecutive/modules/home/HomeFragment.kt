@@ -5,7 +5,9 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.Nullable
+import android.support.design.widget.BottomNavigationView
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListView
@@ -14,7 +16,9 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
+import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -35,6 +39,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         elv_parent_category.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
             var previousGroup = -1
             override fun onGroupExpand(p0: Int) {
@@ -46,6 +51,26 @@ class HomeFragment : BaseFragment() {
             }
 
         })
+
+        bottom_navigation.setOnNavigationItemSelectedListener(
+                object : BottomNavigationView.OnNavigationItemSelectedListener {
+                    override
+                    fun onNavigationItemSelected(item: MenuItem): Boolean {
+                        when (item.itemId) {
+                            R.id.action_home -> {
+
+                            }
+                            R.id.action_my_account -> {
+                                FragmentUtils.replaceFragment(activity, LoginFragment.newInstance(), LoginFragment::class.java.name)
+                            }
+                            R.id.action_wishlist -> {
+
+                            }
+                        }
+                        return true
+                    }
+                });
+
         observeLoginApiResponse()
         getCategories()
     }
@@ -66,7 +91,6 @@ class HomeFragment : BaseFragment() {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is HomeResponseDataClass) {
                     homeModelView?.homeResponse?.set(response)
-                    Toast.makeText(activity, "Got categories", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
                 }

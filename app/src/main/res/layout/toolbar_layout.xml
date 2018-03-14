@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <import type="android.support.v4.content.ContextCompat" />
@@ -15,18 +13,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="parent">
+        >
 
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/theme_black_color"
-            android:text="@{toolbarViewModel.title}"
-            android:layout_gravity="center"
-            android:fontFamily="@font/dax_regular" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/toolbar_left_icon"
@@ -37,6 +28,30 @@
             android:src="@{ContextCompat.getDrawable(context, toolbarViewModel.leftIcon)}"
             android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
             />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/twenty_sp"
+            android:textColor="@color/theme_black_color"
+            android:text="@{toolbarViewModel.title}"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/dax_regular" />
+
+        <ImageView
+            android:id="@+id/toolbar_right_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/eight_dp"
+            android:contentDescription="@string/toolbar_left_icon"
+            android:visibility="@{toolbarViewModel.isRightIconVisible() ? View.VISIBLE : View.GONE,  default = visible}"
+            android:src="@{ContextCompat.getDrawable(context, toolbarViewModel.rightIcon)}"
+            android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
+            />
+
+        </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 

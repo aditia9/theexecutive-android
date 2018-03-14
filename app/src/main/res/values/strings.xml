@@ -34,7 +34,6 @@
     <string name="toolbar_left_icon">Toolbar left icon</string>
 
     <!--titles-->
-    <string name="title_home">Home</string>
     <string name="title_login">Login</string>
     <string name="error_invalid_email">Invalid mail id.</string>
     <string name="title_register">Register</string>
@@ -42,4 +41,13 @@
     <string name="exit">Exit</string>
     <string name="maintenence_msg">Application is under maintenance</string>
     <string name="force_update_msg">New Version application is available.</string>
+
+    <!--Home Screen-->
+    <string name="home">Home</string>
+    <string name="my_account">My Account</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="search">Search</string>
+    <string name="category_image">Parent category image.</string>
+
+
 </resources>
