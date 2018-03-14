@@ -27,7 +27,7 @@ class AppRepository private constructor(){
         private fun parseError(response: Response<Any>?, callBack: ApiCallback<Any>) {
             try {
                 val jobError = JSONObject(response?.errorBody()?.string())
-                var errorBody = jobError.getString(Constants.MESSAGE)
+                val errorBody = jobError.getString(Constants.MESSAGE)
                 callBack.onError(errorBody)
 
             } catch (e: JSONException) {

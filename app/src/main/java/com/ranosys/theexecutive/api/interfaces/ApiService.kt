@@ -26,7 +26,7 @@ interface ApiService {
     }
 
     interface ConfigurationService {
-        @GET("rest/{store_code}/V1/mobileappversionapi/configuration/androivd")
+        @GET("rest/{store_code}/V1/mobileappversionapi/configuration/android")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
