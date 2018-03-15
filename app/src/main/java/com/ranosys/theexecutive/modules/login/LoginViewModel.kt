@@ -14,9 +14,6 @@ import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 
-/**
- * Created by Mohammad Sunny on 25/1/18.
- */
 class LoginViewModel(application: Application) : BaseViewModel(application){
 
     val emailError = ObservableField<String>()
@@ -37,7 +34,6 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         when(view.id){
             R.id.btn_login ->{
 
-                //validate data
                 if(validateData(getApplication())){
                     clickedBtnId?.value = R.id.btn_login
                 }
@@ -60,13 +56,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
         val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString())
 
-
-
-
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 Utils.printLog("Login Api", "error")
-                apiFailureResponse?.value = "Something went wrong"
+                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
 
             }
 
@@ -84,7 +77,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         })
     }
 
-    fun validateData(context: Context): Boolean {
+    private fun validateData(context: Context): Boolean {
         var isValid = true
 
         if (TextUtils.isEmpty(email.get())) {
@@ -110,7 +103,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         AppRepository.isEmailAvailable(request, object : ApiCallback<Boolean>{
             override fun onException(error: Throwable) {
                 Utils.printLog("Is Email Available Api", "error")
-                apiFailureResponse?.value = "Something went wrong"
+                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
             }
 
             override fun onError(errorMsg: String) {
@@ -120,10 +113,9 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
             override fun onSuccess(available: Boolean?) {
                 if(available!!){
-                    //call social login api
                     callSocialLoginApi(userData)
                 }else{
-                    //load register screen
+                    //TODO - load register screen
                 }
             }
 
@@ -135,7 +127,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         AppRepository.socialLogin(request, object: ApiCallback<String>{
             override fun onException(error: Throwable) {
                 Utils.printLog("Socail Login Api", "error")
-                apiFailureResponse?.value = "Something went wrong"
+                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
             }
 
             override fun onError(errorMsg: String) {

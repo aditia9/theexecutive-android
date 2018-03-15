@@ -9,7 +9,6 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.ImageView
 
 
@@ -22,12 +21,12 @@ class BindingAdapters {
         @JvmStatic
         @BindingAdapter("app:errorText")
         fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
-            view.setError(errorMessage)
-        if (TextUtils.isEmpty(errorMessage)) {
-            view.setErrorEnabled(false)
-        } else {
-            view.setErrorEnabled(true)
-        }
+            view.error = errorMessage
+            if (TextUtils.isEmpty(errorMessage)) {
+                view.isErrorEnabled = false
+            } else {
+                view.isErrorEnabled = true
+            }
         }
 
         @JvmStatic
@@ -48,7 +47,7 @@ class BindingAdapters {
 
         @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
         fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String {
-            return pAppCompatSpinner.getSelectedItem().toString()
+            return pAppCompatSpinner.selectedItem.toString()
 
         }
 

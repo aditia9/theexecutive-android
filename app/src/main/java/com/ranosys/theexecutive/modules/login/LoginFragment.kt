@@ -35,15 +35,12 @@ import java.net.URL
 import java.util.*
 
 
-/**
- * Created by Mohammad Sunny on 25/1/18.
- */
 class LoginFragment : BaseFragment() {
 
-    lateinit var loginViewModel: LoginViewModel
-    lateinit var mBinding: FragmentLoginBinding
-    lateinit var callBackManager: CallbackManager
-    lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var loginViewModel: LoginViewModel
+    private lateinit var mBinding: FragmentLoginBinding
+    private lateinit var callBackManager: CallbackManager
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -107,21 +104,21 @@ class LoginFragment : BaseFragment() {
 
         if (requestCode == RC_GMAIL_SIGN_IN) {
 
-            val task :Task<GoogleSignInAccount> =  GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleGmailSignInResult(task);
+            val task :Task<GoogleSignInAccount> =  GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleGmailSignInResult(task)
         }
     }
 
 
     private fun observeEvent() {
 
-        loginViewModel?.clickedBtnId?.observe(this, Observer<Int> { id ->
+        loginViewModel.clickedBtnId?.observe(this, Observer<Int> { id ->
 
             when (id) {
                 btn_login.id -> {
                     Utils.hideSoftKeypad(activity as Context)
                     if (Utils.isConnectionAvailable(activity as Context)) {
-                        //showLoading()
+                        //TODO - showLoading()
                         loginViewModel.login()
 
                     } else {
@@ -150,16 +147,16 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun observeApiFailure() {
-        loginViewModel?.apiFailureResponse?.observe(this, Observer { msg ->
+        loginViewModel.apiFailureResponse?.observe(this, Observer { msg ->
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
         })
 
     }
 
     private fun observeApiSuccess() {
-        loginViewModel?.apiSuccessResponse?.observe(this, Observer { token ->
+        loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             Toast.makeText(activity, token, Toast.LENGTH_SHORT).show()
-            //load home fragment
+            /*TODO  - load home fragment*/
         })
 
     }
@@ -208,11 +205,11 @@ class LoginFragment : BaseFragment() {
                 gender = `object`.getString("gender")
             }
 
-            try {
-                val profilePicUrl = URL("https://graph.facebook.com/$id/picture?type=large")
-            } catch (e: MalformedURLException) {
-                e.printStackTrace()
-            }
+//            try {
+//                val profilePicUrl = URL("https://graph.facebook.com/$id/picture?type=large")
+//            } catch (e: MalformedURLException) {
+//                e.printStackTrace()
+//            }
 
 
         } catch (e: JSONException) {
@@ -227,9 +224,9 @@ class LoginFragment : BaseFragment() {
     //method to get user data from Gmail
     private fun handleGmailSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            var account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java);
+            val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)
 
-            var gmailToken : String? = account.idToken
+            val gmailToken : String? = account.idToken
             val gmailData = getGmailData(account)
             gmailData.token = gmailToken!!
 
@@ -237,11 +234,11 @@ class LoginFragment : BaseFragment() {
 
         } catch (e : ApiException ) {
             // The ApiException status code indicates the detailed failure reason.
-            Utils.printLog("GMAIL LOG IN", "signInResult:failed code=" + e.getStatusCode());
+            Utils.printLog("GMAIL LOG IN", "signInResult:failed code=" + e.statusCode)
         }
     }
 
-    fun getGmailData(account: GoogleSignInAccount): LoginDataClass.SocialLoginData {
+    private fun getGmailData(account: GoogleSignInAccount): LoginDataClass.SocialLoginData {
 
         val firstName = account.displayName
         val lastName = account.familyName

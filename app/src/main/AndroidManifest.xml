@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/myAppTheme">
-        <activity android:name=".activities.SplashActivity"
+        <activity android:name=".modules.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="stateHidden">

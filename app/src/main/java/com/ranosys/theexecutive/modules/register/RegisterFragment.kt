@@ -13,7 +13,6 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.utils.Utils
-import kotlinx.android.synthetic.main.fragment_register.*
 
 
 /**
@@ -52,7 +51,7 @@ class RegisterFragment: BaseFragment() {
         registerViewModel?.buttonClicked?.observe(this, Observer<Int> { id ->
             Utils.hideSoftKeypad(activity as Context)
             when (id) {
-                //btn_signup.id -> register()
+            //btn_signup.id -> register()
             }
         })
     }

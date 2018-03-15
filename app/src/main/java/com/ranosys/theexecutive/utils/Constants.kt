@@ -1,8 +1,6 @@
 package com.ranosys.theexecutive.utils
 
-/**
- * Created by Vikash Kumar Bijarniya on 5/2/18.
- */
+
 class Constants {
     companion object {
         val PREF_NAME = "data_pref"
@@ -24,5 +22,6 @@ class Constants {
         val ALL: String = "all"
         val TYPE_FACEBOOK: String = "facebook"
         val TYPE_GMAIL: String = "google"
+        val UNKNOWN_ERROR: String = "Something went wrong"
     }
 }
