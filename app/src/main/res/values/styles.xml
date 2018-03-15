@@ -27,4 +27,8 @@
         <item name="colorAccent">@color/theme_accent_color</item>
     </style>
 
+    <style name="tilTheme" parent="myAppTheme">
+        <item name="android:textColorHint">@color/theme_accent_color</item>
+    </style>
+
 </resources>

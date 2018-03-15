@@ -18,13 +18,13 @@ class HomeFragment : BaseFragment() {
 
     private var homeModelView: HomeModelView? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         homeModelView = ViewModelProviders.of(this).get(HomeModelView::class.java)
         mViewDataBinding?.mainfragmentviewmodel = homeModelView
         mViewDataBinding?.executePendingBindings()
         observeButtonClicks()
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return mViewDataBinding?.root
     }
 
     override fun onResume() {
@@ -37,7 +37,7 @@ class HomeFragment : BaseFragment() {
         })
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
 

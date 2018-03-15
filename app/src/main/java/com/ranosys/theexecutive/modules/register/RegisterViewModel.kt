@@ -86,8 +86,8 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
     fun onRadioClick(radioGroup: RadioGroup, id: Int) {
         when (id) {
-            R.id.radio_male -> gender?.set("Male")
-            R.id.radio_female -> gender?.set("Female")
+//            R.id.radio_male -> gender?.set("Male")
+//            R.id.radio_female -> gender?.set("Female")
         }
         Log.e("Gender", gender?.get())
     }

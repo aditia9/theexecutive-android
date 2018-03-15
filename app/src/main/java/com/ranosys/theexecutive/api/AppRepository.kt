@@ -93,12 +93,14 @@ class AppRepository private constructor(){
         }
 
 
-        fun login(loginRequest: LoginDataClass.LoginRequest?, callBack: ApiCallback<LoginDataClass.LoginResponse>) {
+        fun login(loginRequest: LoginDataClass.LoginRequest?, callBack: ApiCallback<String>) {
             val retrofit = ApiClient.retrofit
-            val callPost = retrofit?.create<ApiService.LoginService>(ApiService.LoginService::class.java)?.getLoginData(loginRequest)
+            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val callPost = retrofit?.create<ApiService.LoginService>(ApiService.LoginService::class.java)?.getLoginData(ApiConstants.BEARER + adminToken,  storeCode, loginRequest)
 
-            callPost?.enqueue(object : Callback<LoginDataClass.LoginResponse> {
-                override fun onResponse(call: Call<LoginDataClass.LoginResponse>?, response: Response<LoginDataClass.LoginResponse>?) {
+            callPost?.enqueue(object : Callback<String> {
+                override fun onResponse(call: Call<String>?, response: Response<String>?) {
                     if(!response!!.isSuccessful){
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                     }else{
@@ -107,15 +109,63 @@ class AppRepository private constructor(){
 
                 }
 
-                override fun onFailure(call: Call<LoginDataClass.LoginResponse>, t: Throwable) {
+                override fun onFailure(call: Call<String>, t: Throwable) {
                     callBack.onError(Constants.ERROR)
                     Utils.printLog("Login:","Failed")
                 }
             })
         }
 
+        fun isEmailAvailable(request: LoginDataClass.IsEmailAvailableRequest?, callBack: ApiCallback<Boolean>) {
+            val retrofit = ApiClient.retrofit
+            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val callPost = retrofit?.create<ApiService.IsEmailAvailableService>(ApiService.IsEmailAvailableService::class.java)?.isEmailAvailableApi(ApiConstants.BEARER + adminToken,  storeCode = storeCode, request = request)
+
+            callPost?.enqueue(object : Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
+                    if(!response!!.isSuccessful){
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }else{
+                        callBack.onSuccess(response.body())
+
+                    }
+
+                }
+
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("Is Email Available:","Failed")
+
+                }
+            })
+        }
+
+        fun socialLogin(request: LoginDataClass.SocialLoginRequest?, callBack: ApiCallback<String>) {
+            val retrofit = ApiClient.retrofit
+            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val callPost = retrofit?.create<ApiService.SocialLoginService>(ApiService.SocialLoginService::class.java)?.socialLogin(ApiConstants.BEARER + adminToken,  storeCode, request = request)
+
+            callPost?.enqueue(object : Callback<String> {
+                override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                    if(!response!!.isSuccessful){
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }else{
+                        callBack.onSuccess(response.body())
+
+                    }
+
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("Is Email Available:","Failed")
+
+                }
+            })
+        }
+
     }
-
-
 
 }
