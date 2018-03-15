@@ -45,6 +45,7 @@
             android:childDivider="@null"
             android:groupIndicator="@null"
             android:layout_below="@+id/til_search"
+            android:layout_marginTop="@dimen/four_dp"
             categoryItems="@{homeViewModel.homeResponse}"
             >
 

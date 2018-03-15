@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
+import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 
 /**
@@ -22,10 +24,14 @@ class DashBoardActivity: BaseActivity() {
 
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
             override fun onBackStackChanged() {
-                 var backStackCount = supportFragmentManager.getBackStackEntryCount()
+                val backStackCount = supportFragmentManager.getBackStackEntryCount()
                 if(backStackCount > 0){
-                    var fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
+                    val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
                     if(null != fragment){
+                        if(fragment is HomeFragment)
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.app_title),0, false, 0, false )
+                        if(fragment is LoginFragment)
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, false, 0, false )
 
                     }
                 }
@@ -34,45 +40,4 @@ class DashBoardActivity: BaseActivity() {
         })
 
     }
-
-   /* fun  getListener() : FragmentManager.OnBackStackChangedListener{
-        FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener() {
-            public void onBackStackChanged() {
-                FragmentManager manager = getSupportFragmentManager();
-                if (manager != null) {
-                    int backStackEntryCount = manager.getBackStackEntryCount();
-                    if (backStackEntryCount > 0) {
-                        BaseFragment fragment = FragmentUtils.getCurrentFragment(DashboardActivity.this);
-                        if (null != fragment) {
-                            fragment.setTitle();
-                            if(fragment instanceof MyProfileFragment){
-                                showEditMenuItem();
-                            } else {
-                                hideEditMenuItem();
-                            }
-                            if(fragment instanceof MyProfileFragment || fragment instanceof EditProfileFragment
-                                    || fragment instanceof PromotionListFragment || fragment instanceof PromotionDetailFragment) {
-                                hideNotificationMenuItem();
-                            } else {
-                                showNotificationMenuItem();
-                            }
-                            if(fragment instanceof SearchDialog) {
-                                setTransparentScreen();
-                                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                            } else {
-                                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                            }
-                            if(fragment instanceof MyRewardsFragment) {
-                                ((MyRewardsFragment)fragment).getGiftPointData();
-                            }
-                        }
-                    }
-
-                }
-            }
-        };
-        return result;
-    }
-*/
-
 }

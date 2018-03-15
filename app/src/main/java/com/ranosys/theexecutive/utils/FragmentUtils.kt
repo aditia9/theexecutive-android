@@ -7,33 +7,31 @@ import com.ranosys.theexecutive.base.BaseActivity
 import java.util.*
 
 /**
- * Created by Vikash Kumar Bijarniya on 25/1/18.
+ * Created by Mohammad Sunny on 22/2/18.
  */
-class FragmentUtils {
+object FragmentUtils {
 
-    companion object {
-
-        var sFragmentStack: Stack<String> = Stack()
+        var sFragmentStack: Stack<String>? = Stack()
 
         fun addFragment(context: Context, fragment: Fragment, fragmentId: String){
-            var activity: BaseActivity = context as BaseActivity
+            val activity: BaseActivity = context as BaseActivity
             if(fragment != getCurrentFragment(activity)){
                 activity.supportFragmentManager.beginTransaction()
                         .add(R.id.main_container, fragment, fragmentId)
                         .addToBackStack(fragmentId)
                         .commit()
-                       sFragmentStack.add(fragmentId)
+                       sFragmentStack?.add(fragmentId)
             }
         }
 
         fun replaceFragment(context: Context, fragment: Fragment, fragmentId: String){
-            var activity: BaseActivity = context as BaseActivity
+            val activity: BaseActivity = context as BaseActivity
             if(fragment != getCurrentFragment(activity)){
                 activity.supportFragmentManager.beginTransaction()
                         .replace(R.id.main_container, fragment, fragmentId)
                         .addToBackStack(fragmentId)
                         .commit()
-                sFragmentStack.add(fragmentId)
+                sFragmentStack?.add(fragmentId)
             }
         }
 
@@ -41,6 +39,5 @@ class FragmentUtils {
             val currentFragment = baseActivity.supportFragmentManager.findFragmentById(R.id.main_container)
             return currentFragment
         }
-    }
 
 }

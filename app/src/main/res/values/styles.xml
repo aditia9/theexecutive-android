@@ -29,7 +29,7 @@
 
     <style name="bottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/dax_light</item>
-        <item name="android:textSize">@dimen/eighteen_sp</item>
+        <item name="android:textSize">@dimen/design_bottom_navigation_text_size</item>
     </style>
 
 </resources>

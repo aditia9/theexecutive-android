@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable
 
 
 /**
- * Created by Mohammad Sunny on 25/1/18.
+ * Created by Mohammad Sunny on 21/2/18.
  */
 class LoginFragment : BaseFragment() {
 
@@ -54,7 +54,7 @@ class LoginFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setTitle(getString(R.string.title_login))
+        setToolBarParams(getString(R.string.login),0, false, 0, false )
     }
 
     private fun observeNewClick() {

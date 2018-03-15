@@ -51,7 +51,6 @@ class HomeFragment : BaseFragment() {
             }
 
         })
-
         bottom_navigation.setOnNavigationItemSelectedListener(
                 object : BottomNavigationView.OnNavigationItemSelectedListener {
                     override
@@ -61,7 +60,7 @@ class HomeFragment : BaseFragment() {
 
                             }
                             R.id.action_my_account -> {
-                                FragmentUtils.replaceFragment(activity, LoginFragment.newInstance(), LoginFragment::class.java.name)
+                                FragmentUtils.addFragment(activity, LoginFragment.newInstance(), LoginFragment::class.java.name)
                             }
                             R.id.action_wishlist -> {
 
