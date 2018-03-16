@@ -25,7 +25,9 @@ import com.google.android.gms.tasks.Task
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
+import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
@@ -115,6 +117,12 @@ class LoginFragment : BaseFragment() {
         loginViewModel.clickedBtnId?.observe(this, Observer<Int> { id ->
 
             when (id) {
+
+                btn_register.id -> {
+                    //TODO - load register fragment
+                    FragmentUtils.addFragment(activity as Context, RegisterFragment(), RegisterFragment::class.java.name)
+                }
+
                 btn_login.id -> {
                     Utils.hideSoftKeypad(activity as Context)
                     if (Utils.isConnectionAvailable(activity as Context)) {
