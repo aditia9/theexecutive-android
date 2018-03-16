@@ -13,17 +13,18 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
         >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/toolbar_left_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/toolbar_left_icon"
+            android:layout_marginLeft="@dimen/four_dp"
+            android:padding="@dimen/ten_dp"
+            android:layout_gravity="left|center_vertical"
             android:visibility="@{toolbarViewModel.isLeftIconVisible() ? View.VISIBLE : View.GONE,  default = visible}"
             android:src="@{ContextCompat.getDrawable(context, toolbarViewModel.leftIcon)}"
             android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
@@ -33,10 +34,10 @@
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/twenty_sp"
+            android:textSize="@dimen/twentyfour_sp"
             android:textColor="@color/theme_black_color"
             android:text="@{toolbarViewModel.title}"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center|center_vertical"
             android:fontFamily="@font/dax_regular" />
 
         <ImageView
@@ -44,14 +45,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/eight_dp"
-            android:contentDescription="@string/toolbar_left_icon"
+            android:layout_marginRight="@dimen/sixteen_dp"
+            android:padding="@dimen/five_dp"
+            android:layout_gravity="right|center_vertical"
+            android:contentDescription="@string/toolbar_right_icon"
             android:visibility="@{toolbarViewModel.isRightIconVisible() ? View.VISIBLE : View.GONE,  default = visible}"
             android:src="@{ContextCompat.getDrawable(context, toolbarViewModel.rightIcon)}"
             android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
             />
 
-        </RelativeLayout>
+
 
     </android.support.v7.widget.Toolbar>
 

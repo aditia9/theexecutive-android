@@ -32,6 +32,7 @@
     <string name="email_id">Email Id</string>
     <string name="edit">Edit</string>
     <string name="toolbar_left_icon">Toolbar left icon</string>
+    <string name="toolbar_right_icon">Toolbar right icon</string>
 
     <!--titles-->
     <string name="title_login">Login</string>
@@ -54,7 +55,7 @@
     <!--fb integration-->
     <string name="facebook_app_id">174246843202937</string>
     <string name="fb_login_protocol_scheme">fb174246843202937</string>
-    <string name="email_address">Email address</string>
+    <string name="email_address">Email Address</string>
     <string name="login_with">Login with</string>
     <string name="facebook_login">Login with Facebook</string>
     <string name="gmail_login">Login with Gmail</string>

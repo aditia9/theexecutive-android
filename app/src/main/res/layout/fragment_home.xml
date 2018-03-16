@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:background="@color/white"
         >
 
         <android.support.design.widget.TextInputLayout
@@ -29,10 +30,12 @@
                 android:theme="@style/myAppTheme"
                 android:textColor="@color/theme_black_color"
                 android:fontFamily="@font/dax_regular"
-                android:paddingLeft="@dimen/sixteen_dp"
-                android:layout_marginLeft="@dimen/eight_dp"
-                android:layout_marginRight="@dimen/eight_dp"
-                android:background="@android:color/transparent"
+                android:paddingLeft="@dimen/ten_dp"
+                android:paddingRight="@dimen/ten_dp"
+                android:layout_marginLeft="@dimen/sixteen_dp"
+                android:layout_marginRight="@dimen/sixteen_dp"
+                android:drawableEnd="@drawable/search"
+                android:backgroundTint="@color/theme_accent_color"
                 />
 
         </android.support.design.widget.TextInputLayout>
@@ -46,12 +49,13 @@
             android:groupIndicator="@null"
             android:layout_below="@+id/til_search"
             android:layout_marginTop="@dimen/four_dp"
+            android:layout_above="@+id/bottom_navigation"
             categoryItems="@{homeViewModel.homeResponse}"
             >
 
         </ExpandableListView>
 
-        <android.support.design.widget.BottomNavigationView
+        <com.ranosys.theexecutive.customViews.CustomBottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

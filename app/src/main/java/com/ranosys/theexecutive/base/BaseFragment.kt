@@ -80,8 +80,14 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     private fun observeLeftIconClick() {
+
         getToolBarViewModel()?.leftIconClicked?.observe(this, Observer<Int> {  id ->
-            activity?.onBackPressed()
+            when(id) {
+                R.id.toolbar_left_icon -> {
+                    getToolBarViewModel()?.leftIconClicked?.value = null
+                    (activity as BaseActivity).onBackPressed()
+                }
+            }
         })
     }
 

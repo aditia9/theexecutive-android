@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.base
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ open class BaseActivity: RunTimePermissionActivity(){
 
     var toolbarViewModel: ToolbarViewModel? = null
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbarViewModel = ViewModelProviders.of(this).get(ToolbarViewModel::class.java)

@@ -8,12 +8,12 @@ import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.AppCompatSpinner
 import android.text.TextUtils
 import android.view.View
-import android.widget.*
-import com.ranosys.theexecutive.modules.home.HomeResponseDataClass
-import com.ranosys.theexecutive.modules.home.HomeThreeLevelAdapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ExpandableListView
 import android.widget.ImageView
+import com.ranosys.theexecutive.modules.home.HomeResponseDataClass
+import com.ranosys.theexecutive.modules.home.HomeThreeLevelAdapter
 
 
 /**

@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.Nullable
@@ -29,7 +30,7 @@ class HomeFragment : BaseFragment() {
 
     private var homeModelView: HomeModelView? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         homeModelView = ViewModelProviders.of(this).get(HomeModelView::class.java)
         mViewDataBinding?.homeViewModel = homeModelView
@@ -37,7 +38,7 @@ class HomeFragment : BaseFragment() {
         return mViewDataBinding?.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         elv_parent_category.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
@@ -51,24 +52,24 @@ class HomeFragment : BaseFragment() {
             }
 
         })
-        bottom_navigation.setOnNavigationItemSelectedListener(
-                object : BottomNavigationView.OnNavigationItemSelectedListener {
-                    override
-                    fun onNavigationItemSelected(item: MenuItem): Boolean {
-                        when (item.itemId) {
-                            R.id.action_home -> {
+        bottom_navigation.enableAnimation(false)
+        bottom_navigation.onNavigationItemSelectedListener = object : BottomNavigationView.OnNavigationItemSelectedListener {
+            override
+            fun onNavigationItemSelected(item: MenuItem): Boolean {
+                when (item.itemId) {
+                    R.id.action_home -> {
 
-                            }
-                            R.id.action_my_account -> {
-                                FragmentUtils.addFragment(activity, LoginFragment.newInstance(), LoginFragment::class.java.name)
-                            }
-                            R.id.action_wishlist -> {
-
-                            }
-                        }
-                        return true
                     }
-                });
+                    R.id.action_my_account -> {
+                        FragmentUtils.addFragment(activity as Context, LoginFragment(), LoginFragment::class.java.name)
+                    }
+                    R.id.action_wishlist -> {
+
+                    }
+                }
+                return true
+            }
+        };
 
         observeLoginApiResponse()
         getCategories()
@@ -76,7 +77,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.app_title),0, false, 0, false )
+        setToolBarParams(getString(R.string.app_title),0, false, R.drawable.bag, true )
     }
 
     private fun getCategories() {

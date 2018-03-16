@@ -1,8 +1,6 @@
-package com.ranosys.theexecutive.modules.home;
+package com.ranosys.theexecutive.customViews;
 
-
-
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Paint;
@@ -32,7 +30,8 @@ import java.lang.reflect.Field;
 /**
  * Created by ranosys-sunny on 16/3/18.
  */
-public class BottomNavigationViewEx extends BottomNavigationView {
+@SuppressLint("RestrictedApi")
+public class CustomBottomNavigationView extends BottomNavigationView {
     // used for animation
     private int mShiftAmount;
     private float mScaleUpFactor;
@@ -57,29 +56,17 @@ public class BottomNavigationViewEx extends BottomNavigationView {
     // detect navigation tab changes when the user clicking on navigation item
     private static boolean isNavigationItemClicking = false;
 
-    public BottomNavigationViewEx(Context context) {
+    public CustomBottomNavigationView(Context context) {
         super(context);
-//        init();
     }
 
-    public BottomNavigationViewEx(Context context, AttributeSet attrs) {
+    public CustomBottomNavigationView(Context context, AttributeSet attrs) {
         super(context, attrs);
-//        init();
     }
 
-    public BottomNavigationViewEx(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomBottomNavigationView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-//        init();
     }
-
-    private void init() {
-        try {
-            addAnimationListener();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private void addAnimationListener() {
         /**
@@ -199,12 +186,10 @@ public class BottomNavigationViewEx extends BottomNavigationView {
             BottomNavigationItemView button = mButtons[0];
             if (null != button) {
                 final ImageView mIcon = getField(button.getClass(), button, "mIcon");
-//                System.out.println("mIcon.getMeasuredHeight():" + mIcon.getMeasuredHeight());
                 if (null != mIcon) {
                     mIcon.post(new Runnable() {
                         @Override
                         public void run() {
-//                            System.out.println("mIcon.getMeasuredHeight():" + mIcon.getMeasuredHeight());
                             setItemHeight(mItemHeight - mIcon.getMeasuredHeight());
                         }
                     });
@@ -283,11 +268,6 @@ public class BottomNavigationViewEx extends BottomNavigationView {
                 mItemHeight = getItemHeight();
             }
 
-            // change mItemHeight to only icon size in mMenuView
-            // private final int mItemHeight;
-
-            // change mItemHeight
-//            System.out.println("mLargeLabel.getMeasuredHeight():" + getFontHeight(mSmallLabelSize));
             setItemHeight(mItemHeight - getFontHeight(mSmallLabelSize));
 
         } else {
@@ -358,11 +338,8 @@ public class BottomNavigationViewEx extends BottomNavigationView {
 
                     mLargeLabelSize = mLargeLabel.getTextSize();
                     mSmallLabelSize = mSmallLabel.getTextSize();
-
-//                    System.out.println("mShiftAmount:" + mShiftAmount + " mScaleUpFactor:"
-//                            + mScaleUpFactor + " mScaleDownFactor:" + mScaleDownFactor
-//                            + " mLargeLabel:" + mLargeLabelSize + " mSmallLabel:" + mSmallLabelSize);
                 }
+
                 // disable
                 setField(button.getClass(), button, "mShiftAmount", 0);
                 setField(button.getClass(), button, "mScaleUpFactor", 1);
@@ -370,11 +347,6 @@ public class BottomNavigationViewEx extends BottomNavigationView {
 
                 // let the mLargeLabel font size equal to mSmallLabel
                 mLargeLabel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSmallLabelSize);
-
-                // debug start
-//                mLargeLabelSize = mLargeLabel.getTextSize();
-//                System.out.println("mLargeLabel:" + mLargeLabelSize);
-                // debug end
 
             } else {
                 // haven't change the value. It means it was the first call this method. So nothing need to do.
@@ -455,8 +427,6 @@ public class BottomNavigationViewEx extends BottomNavigationView {
         3. get menu and traverse it to get the checked one
          */
 
-        // 1. get mMenuView
-//        BottomNavigationMenuView mMenuView = getBottomNavigationMenuView();
         // 2. get mButtons
         BottomNavigationItemView[] mButtons = getBottomNavigationItemViews();
         // 3. get menu and traverse it to get the checked one
@@ -530,7 +500,6 @@ public class BottomNavigationViewEx extends BottomNavigationView {
      * @return
      */
     public OnNavigationItemSelectedListener getOnNavigationItemSelectedListener() {
-        // private OnNavigationItemSelectedListener mListener;
         OnNavigationItemSelectedListener mListener = getField(BottomNavigationView.class, this, "mSelectedListener");
         return mListener;
     }
@@ -565,10 +534,6 @@ public class BottomNavigationViewEx extends BottomNavigationView {
     public BottomNavigationItemView[] getBottomNavigationItemViews() {
         if (null != mButtons)
             return mButtons;
-        /*
-         * 1 private final BottomNavigationMenuView mMenuView;
-         * 2 private BottomNavigationItemView[] mButtons;
-         */
         BottomNavigationMenuView mMenuView = getBottomNavigationMenuView();
         mButtons = getField(mMenuView.getClass(), mMenuView, "mButtons");
         return mButtons;
@@ -609,11 +574,6 @@ public class BottomNavigationViewEx extends BottomNavigationView {
      * @return
      */
     public TextView getSmallLabelAt(int position) {
-        /*
-         * 1 private final BottomNavigationMenuView mMenuView;
-         * 2 private BottomNavigationItemView[] mButtons;
-         * 3 private final TextView mSmallLabel;
-         */
         BottomNavigationItemView mButtons = getBottomNavigationItemView(position);
         TextView mSmallLabel = getField(BottomNavigationItemView.class, mButtons, "mSmallLabel");
         return mSmallLabel;
@@ -627,11 +587,6 @@ public class BottomNavigationViewEx extends BottomNavigationView {
      * @return
      */
     public TextView getLargeLabelAt(int position) {
-        /*
-         * 1 private final BottomNavigationMenuView mMenuView;
-         * 2 private BottomNavigationItemView[] mButtons;
-         * 3 private final TextView mLargeLabel;
-         */
         BottomNavigationItemView mButtons = getBottomNavigationItemView(position);
         TextView mLargeLabel = getField(BottomNavigationItemView.class, mButtons, "mLargeLabel");
         return mLargeLabel;
@@ -883,7 +838,7 @@ public class BottomNavigationViewEx extends BottomNavigationView {
 
     /**
      * A {@link ViewPager.OnPageChangeListener} class which contains the
-     * necessary calls back to the provided {@link BottomNavigationViewEx} so that the tab position is
+     * necessary calls back to the provided {@link CustomBottomNavigationView} so that the tab position is
      * kept in sync.
      * <p>
      * <p>This class stores the provided BottomNavigationViewEx weakly, meaning that you can use
@@ -892,9 +847,9 @@ public class BottomNavigationViewEx extends BottomNavigationView {
      * not cause a leak.
      */
     private static class BottomNavigationViewExOnPageChangeListener implements ViewPager.OnPageChangeListener {
-        private final WeakReference<BottomNavigationViewEx> mBnveRef;
+        private final WeakReference<CustomBottomNavigationView> mBnveRef;
 
-        public BottomNavigationViewExOnPageChangeListener(BottomNavigationViewEx bnve) {
+        public BottomNavigationViewExOnPageChangeListener(CustomBottomNavigationView bnve) {
             mBnveRef = new WeakReference<>(bnve);
         }
 
@@ -909,7 +864,7 @@ public class BottomNavigationViewEx extends BottomNavigationView {
 
         @Override
         public void onPageSelected(final int position) {
-            final BottomNavigationViewEx bnve = mBnveRef.get();
+            final CustomBottomNavigationView bnve = mBnveRef.get();
             if (null != bnve && !isNavigationItemClicking)
                 bnve.setCurrentItem(position);
 //            Log.d("onPageSelected", "--------- position " + position + " ------------");
@@ -927,7 +882,7 @@ public class BottomNavigationViewEx extends BottomNavigationView {
         private int previousPosition = -1;
 
 
-        MyOnNavigationItemSelectedListener(ViewPager viewPager, BottomNavigationViewEx bnve, boolean smoothScroll, OnNavigationItemSelectedListener listener) {
+        MyOnNavigationItemSelectedListener(ViewPager viewPager, CustomBottomNavigationView bnve, boolean smoothScroll, OnNavigationItemSelectedListener listener) {
             this.viewPagerRef = new WeakReference<>(viewPager);
             this.listener = listener;
             this.smoothScroll = smoothScroll;
@@ -953,7 +908,6 @@ public class BottomNavigationViewEx extends BottomNavigationView {
             if (previousPosition == position) {
                 return true;
             }
-//            Log.d("onNavigationItemSelecte", "position:"  + position);
             // user listener
             if (null != listener) {
                 boolean bool = listener.onNavigationItemSelected(item);
@@ -991,6 +945,7 @@ public class BottomNavigationViewEx extends BottomNavigationView {
     public void setIconTintList(int position, ColorStateList tint) {
         getBottomNavigationItemView(position).setIconTintList(tint);
     }
+
 
     public void setTextTintList(int position, ColorStateList tint) {
         getBottomNavigationItemView(position).setTextColor(tint);

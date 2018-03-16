@@ -30,8 +30,6 @@ import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
 import org.json.JSONObject
-import java.net.MalformedURLException
-import java.net.URL
 import java.util.*
 
 
@@ -94,7 +92,8 @@ class LoginFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setTitle(getString(R.string.title_login))
+        setToolBarParams(getString(R.string.login), R.drawable.back, true, 0, false )
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
