@@ -1,5 +1,6 @@
-package com.ranosys.theexecutive.activities
+package com.ranosys.theexecutive.modules.splash
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -8,11 +9,10 @@ import android.provider.Settings
 import android.text.TextUtils
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
-import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
-import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -154,7 +154,7 @@ class SplashActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacksAndMessages(null);
+        handler.removeCallbacksAndMessages(null)
     }
 
     private fun getAuthToken(): String{

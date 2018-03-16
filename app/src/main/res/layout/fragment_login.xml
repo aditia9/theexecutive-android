@@ -1,100 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="loginModel"
+        <variable name="loginVM"
             type="com.ranosys.theexecutive.modules.login.LoginViewModel"/>
-        <variable
-            name="loginResponse"
-            type="com.ranosys.theexecutive.modules.login.LoginDataClass.LoginResponse">
-        </variable>
     </data>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/eight_dp"
-    android:background="@color/white"
-    >\
-    <ScrollView
+
+    <android.support.constraint.ConstraintLayout
+        android:paddingTop="@dimen/ten_dp"
         android:layout_width="match_parent"
-        android:fillViewport="true"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/ten_dp">
 
-        <RelativeLayout
-            android:id="@+id/login_field_layout"
-            android:layout_below="@+id/title_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:fillViewport="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-            <TextView
-                android:id="@+id/title_tv"
-                android:textSize="@dimen/sixteen_dp"
-                android:layout_centerHorizontal="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/et_emailid"
-                android:layout_below="@+id/title_tv"
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/container_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/user_id"
-                android:layout_marginTop="@dimen/thirtyTwo_dp"
-                android:text="@={loginModel.email}"
-                app:errorText="@{loginModel.emailError}"
-                android:inputType="textEmailAddress"
-                android:layout_marginBottom="@dimen/two_dp"/>
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/password_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:layout_below="@+id/et_emailid"
-                android:layout_marginTop="@dimen/four_dp"
-                android:text="@={loginModel.password}"
-                app:errorText="@{loginModel.passwordError}"
-                android:layout_marginBottom="@dimen/two_dp"/>
-            <Button
-                android:id="@+id/btn_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:textColor="@android:color/white"
-                android:background="@color/dark_gray"
-                android:layout_below="@+id/password_et"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/four_dp"
-                android:onClick="@{(view)->loginModel.onRegisterClick(view)}"
-                android:layout_centerHorizontal="true"
-                />
-            <TextView
-                android:id="@+id/tv_forgot_password"
-                android:text="@string/forgot_password"
-                android:layout_below="@+id/btn_login"
-                android:gravity="center_horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
-                android:layout_marginTop="@dimen/eight_dp"
-                android:onClick="@{(view)->loginModel.onRegisterClick(view)}"
-                />
-            <TextView
-                android:id="@+id/tv_already_have_ac"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_below="@+id/tv_forgot_password"
-                android:gravity="center_horizontal"
-                android:text="@string/create_new_account"
-                android:textColor="@color/colorPrimary"
-                android:layout_marginTop="@dimen/eight_dp"
-                android:onClick="@{(view)->loginModel.onRegisterClick(view)}"
-                />
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/thirty_dp" />
 
-        </RelativeLayout>
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/thirty_dp" />
 
-    </ScrollView>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_email"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email_address"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{loginVM.emailError}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left">
 
-</RelativeLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_email"
+                        android:fontFamily="@font/dax_light"
+                        android:text="@={loginVM.email}"
+                        android:onTextChanged="@{() -> loginVM.onEmailTextChanged()}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_password"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/password"
+                    app:errorText="@{loginVM.passwordError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_email">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_password"
+                        android:fontFamily="@font/dax_light"
+                        android:layout_width="match_parent"
+                        android:text="@={loginVM.password}"
+                        android:inputType="textPassword"
+                        android:onTextChanged="@{() -> loginVM.onPasswordTextChanged()}"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+
+
+
+                <TextView
+                    android:id="@+id/tv_forgot_password"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgot_password"
+                    android:fontFamily="@font/dax_light"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/til_password" />
+
+                <Button
+                    android:id="@+id/btn_login"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{(view)->loginVM.btnClicked(view)}"
+                    android:text="@string/login"
+                    android:textSize="@dimen/twenty_sp"
+                    android:textColor="@color/colorText"
+                    android:textAllCaps="false"
+                    android:background="@color/theme_black_color"
+                    android:layout_marginTop="@dimen/forty_dp"
+                    android:fontFamily="@font/dax_regular"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/tv_forgot_password" />
+
+
+
+                <TextView
+                    android:id="@+id/tv_login_with"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sixteen_sp"
+                    android:text="@string/login_with"
+                    android:fontFamily="@font/dax_light"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_register"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/btn_login"
+                    app:layout_constraintVertical_bias="0.5" />
+
+                <View
+                    android:id="@+id/view_vertical"
+                    android:layout_width="@dimen/one_dp"
+                    android:layout_height="@dimen/thirtyTwo_dp"
+                    android:layout_marginEnd="@dimen/eight_dp"
+                    android:layout_marginStart="@dimen/eight_dp"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:background="@color/theme_accent_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_login_with" />
+
+
+                <LinearLayout
+                    android:id="@+id/btn_register"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/sixteen_dp"
+                    android:gravity="center"
+                    android:background="@drawable/ghost_btn_bg"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/ten_dp"
+                    app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+                    app:layout_constraintRight_toRightOf="@id/guideline_right"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_register"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/eighteen_sp"
+                        android:textAllCaps="false"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:onClick="@{(view)->loginVM.btnClicked(view)}"
+                        android:text="@string/create_account"
+                        android:fontFamily="@font/dax_regular"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/forward"
+                        android:layout_marginLeft="6dp"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/btn_gmail_login"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/eight_dp"
+                    android:layout_marginStart="@dimen/sixteen_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:contentDescription="@string/gmail_login"
+                    android:onClick="@{(view)->loginVM.btnClicked(view)}"
+                    android:src="@drawable/google"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_vertical"
+                    app:layout_constraintStart_toEndOf="@+id/view_vertical"
+                    app:layout_constraintTop_toTopOf="@+id/view_vertical" />
+
+                <ImageView
+                    android:id="@+id/btn_fb_login"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/eight_dp"
+                    android:layout_marginEnd="@dimen/sixteen_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:contentDescription="@string/facebook_login"
+                    android:onClick="@{(view)->loginVM.btnClicked(view)}"
+                    android:src="@drawable/fb"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_vertical"
+                    app:layout_constraintEnd_toStartOf="@+id/view_vertical"
+                    app:layout_constraintTop_toTopOf="@+id/view_vertical" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </ScrollView>
+
+    </android.support.constraint.ConstraintLayout>
 </layout>

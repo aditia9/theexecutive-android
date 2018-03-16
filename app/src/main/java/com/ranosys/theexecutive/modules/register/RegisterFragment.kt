@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.register
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +13,6 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.utils.Utils
-import kotlinx.android.synthetic.main.fragment_register.*
 
 
 /**
@@ -37,7 +37,7 @@ class RegisterFragment: BaseFragment() {
         setTitle(getString(R.string.title_register))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentRegisterBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java!!)
         mViewDataBinding?.registerViewModel =  registerViewModel
@@ -49,15 +49,15 @@ class RegisterFragment: BaseFragment() {
 
     private fun observeRegisterButton() {
         registerViewModel?.buttonClicked?.observe(this, Observer<Int> { id ->
-            Utils.hideSoftKeypad(activity)
+            Utils.hideSoftKeypad(activity as Context)
             when (id) {
-                btn_signup.id -> register()
+            //btn_signup.id -> register()
             }
         })
     }
 
     private fun register() {
-        if (Utils.isConnectionAvailable(activity)) {
+        if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
             //do register
         } else {

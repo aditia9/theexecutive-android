@@ -14,8 +14,11 @@ import retrofit2.http.*
 interface ApiService {
 
     interface LoginService {
-        @POST("user/login/email")
-        fun getLoginData(@Body loginRequest: LoginDataClass.LoginRequest?): Call<LoginDataClass.LoginResponse>
+        @POST("rest/{store_code}/V1/integration/customer/token")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body loginRequest: LoginDataClass.LoginRequest?): Call<String>
     }
 
     interface StoresService {
@@ -32,6 +35,22 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getConfiguration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String): Call<ConfigurationResponse>
+    }
+
+    interface IsEmailAvailableService {
+        @POST("rest/{store_code}/V1/customers/isEmailAvailable")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun isEmailAvailableApi(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: LoginDataClass.IsEmailAvailableRequest?): Call<Boolean>
+    }
+
+    interface SocialLoginService {
+        @POST("rest/{store_code}/V1/customer/sociallogin/token")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun socialLogin(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: LoginDataClass.SocialLoginRequest?): Call<String>
     }
 
     interface CategoryService {

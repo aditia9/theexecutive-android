@@ -40,6 +40,14 @@ open class Utils {
             return m.matches()
         }
 
+        fun isValidPassword(password: String): Boolean {
+
+            val p = Pattern.compile("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#\$%^&+=])(?=\\S+\$).{8,}\$")
+            val m = p.matcher(password)
+            return m.matches()
+        }
+
+
         fun isConnectionAvailable(context: Context): Boolean{
             try {
                 val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

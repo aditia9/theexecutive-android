@@ -32,4 +32,8 @@
         <item name="android:textSize">@dimen/design_bottom_navigation_text_size</item>
     </style>
 
+    <style name="tilTheme" parent="myAppTheme">
+        <item name="android:textColorHint">@color/theme_accent_color</item>
+    </style>
+
 </resources>

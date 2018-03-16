@@ -23,7 +23,7 @@
     <string name="signup">Signup</string>
     <string name="create_new_account">Create New Account.</string>
     <string name="password">Password</string>
-    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
     <string name="state">State</string>
     <string name="city">City</string>
     <string name="blood_group">Blood Group</string>
@@ -50,4 +50,15 @@
     <string name="category_image">Parent category image.</string>
 
 
+
+    <!--fb integration-->
+    <string name="facebook_app_id">174246843202937</string>
+    <string name="fb_login_protocol_scheme">fb174246843202937</string>
+    <string name="email_address">Email address</string>
+    <string name="login_with">Login with</string>
+    <string name="facebook_login">Login with Facebook</string>
+    <string name="gmail_login">Login with Gmail</string>
+    <string name="create_account">Create an Account</string>
+    <string name="gmail_server_client_id">818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com</string>
+    <string name="password_validation_err">Password should contain 8 characters, one digit, one special character</string>
 </resources>
