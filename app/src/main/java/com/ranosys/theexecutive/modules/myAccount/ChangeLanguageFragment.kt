@@ -45,7 +45,7 @@ class ChangeLanguageFragment: BaseFragment() {
 
         val storeListAdapter: StoreListAdapter = StoreListAdapter(GlobalSingelton.instance?.storeList, selectedStoreCode)
         storeListAdapter.setClickListsner(object: StoreListAdapter.OnItemClickListener {
-            override fun onItemClick(item: StoreResponse, position: Int) {
+            override fun onItemClick(item: StoreResponse) {
                 storeListAdapter.selectedStore = item.code
                 storeListAdapter.notifyDataSetChanged()
             }
