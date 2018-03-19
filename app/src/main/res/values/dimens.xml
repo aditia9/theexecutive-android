@@ -8,4 +8,6 @@
     <dimen name="one_dp">1dp</dimen>
     <dimen name="forty_eight_dp">48dp</dimen>
     <dimen name="eighteen_sp">18sp</dimen>
+    <dimen name="one_dip">1dip</dimen>
+    <dimen name="twenty_four_dp">24dp</dimen>
 </resources>
