@@ -99,6 +99,15 @@ class SplashActivity : BaseActivity() {
     private fun getStoresApi() {
         AppRepository.getStores(object: ApiCallback<ArrayList<StoreResponse>>{
             override fun onSuccess(stores: ArrayList<StoreResponse>?) {
+
+                val it = stores?.iterator()
+                while (it?.hasNext()!!) {
+                    val integer = it.next()
+                    if (integer.id ==  0) {
+                        it.remove()
+                    }
+                }
+
                 GlobalSingelton.instance?.storeList = stores
 
 //                if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)) ||

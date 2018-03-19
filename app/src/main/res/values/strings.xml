@@ -52,4 +52,6 @@
     <string name="create_account">Create an Account</string>
     <string name="gmail_server_client_id">818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com</string>
     <string name="password_validation_err">Password should contain 8 characters, one digit, one special character</string>
+    <string name="select_lang_title">Select Language</string>
+    <string name="continue_btn">Continue</string>
 </resources>
