@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.home
+package com.ranosys.theexecutive.modules.category
 
 import android.content.Context
 import android.database.DataSetObserver
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.row_second.view.*
 /**
  * Created by Mohammad Sunny on 12/3/18.
  */
-class HomeTwoLevelAdapter (context: Context?, list :ArrayList<ChildrenData>?) : ExpandableListAdapter {
+class CategoryTwoLevelAdapter(context: Context?, list :ArrayList<ChildrenData>?) : ExpandableListAdapter {
 
     var categoryList: ArrayList<ChildrenData>?
 

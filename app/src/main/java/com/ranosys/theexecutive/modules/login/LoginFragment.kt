@@ -90,12 +90,6 @@ class LoginFragment : BaseFragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        setToolBarParams(getString(R.string.login), R.drawable.back, true, 0, false )
-
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 

@@ -1,9 +1,9 @@
-package com.ranosys.theexecutive.modules.home
+package com.ranosys.theexecutive.modules.category
 
 /**
  * Created by Mohammad Sunny on 5/2/18.
  */
-data class HomeResponseDataClass(
+data class CategoryResponseDataClass(
 		val id: Int? = 0,
 		val parent_id: Int? = 0,
 		val name: String? = "",

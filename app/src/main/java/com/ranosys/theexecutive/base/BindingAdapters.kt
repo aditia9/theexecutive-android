@@ -12,8 +12,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ExpandableListView
 import android.widget.ImageView
-import com.ranosys.theexecutive.modules.home.HomeResponseDataClass
-import com.ranosys.theexecutive.modules.home.HomeThreeLevelAdapter
+import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
+import com.ranosys.theexecutive.modules.category.CategoryThreeLevelAdapter
 
 
 /**
@@ -63,8 +63,8 @@ class BindingAdapters {
 
         @JvmStatic
         @BindingAdapter("categoryItems")
-        fun bindList(view: ExpandableListView, response: ObservableField<HomeResponseDataClass>?) {
-            val adapter = HomeThreeLevelAdapter(view.context, response?.get()?.children_data)
+        fun bindList(view: ExpandableListView, response: ObservableField<CategoryResponseDataClass>?) {
+            val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data)
             view.setAdapter(adapter)
         }
     }

@@ -4,7 +4,7 @@
     <data>
         <variable
             name="data"
-            type="com.ranosys.theexecutive.modules.home.HomeResponseDataClass">
+            type="com.ranosys.theexecutive.modules.category.CategoryResponseDataClass">
         </variable>
     </data>
 

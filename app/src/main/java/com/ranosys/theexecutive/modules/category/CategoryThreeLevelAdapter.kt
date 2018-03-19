@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.home
+package com.ranosys.theexecutive.modules.category
 
 import android.content.Context
 import android.database.DataSetObserver
@@ -15,7 +15,7 @@ import com.ranosys.theexecutive.databinding.RowFirstBinding
 /**
  * Created by Mohammad Sunny on 9/3/18.
  */
-class HomeThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData>?) : ExpandableListAdapter{
+class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData>?) : ExpandableListAdapter{
 
     var context: Context? = null
     var categoryList: ArrayList<ChildrenData>?
@@ -49,7 +49,7 @@ class HomeThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData>?) 
 
     override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
         val expandableListView = SecondLevelExpandableListView(context)
-        expandableListView.setAdapter(HomeTwoLevelAdapter(context,categoryList?.get(p0)?.children_data))
+        expandableListView.setAdapter(CategoryTwoLevelAdapter(context, categoryList?.get(p0)?.children_data))
         expandableListView.setGroupIndicator(null)
         expandableListView.setChildIndicator(null)
         expandableListView.setDivider(context?.getResources()?.getDrawable(android.R.color.transparent))

@@ -1,7 +1,7 @@
 package com.ranosys.theexecutive.api.interfaces
 
 import com.ranosys.theexecutive.api.ApiConstants
-import com.ranosys.theexecutive.modules.home.HomeResponseDataClass
+import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
@@ -58,6 +58,6 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getCategories(@Header(ApiConstants.AUTHORIZATION_KEY) token:String?, @Path("store_code") storeCode:String): Call<HomeResponseDataClass>
+        fun getCategories(@Header(ApiConstants.AUTHORIZATION_KEY) token:String?, @Path("store_code") storeCode:String): Call<CategoryResponseDataClass>
     }
 }

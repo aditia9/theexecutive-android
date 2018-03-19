@@ -25,5 +25,7 @@ class Constants {
         val TYPE_FACEBOOK: String = "facebook"
         val TYPE_GMAIL: String = "google"
         val UNKNOWN_ERROR: String = "Something went wrong"
+        val PRODUCT_MEDIA_URL: String = "product_media_url"
+        val CATEGORY_MEDIA_URL: String = "category_media_url"
     }
 }
