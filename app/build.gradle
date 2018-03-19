@@ -108,6 +108,5 @@ dependencies {
 
     //google playservice
     compile 'com.google.android.gms:play-services-auth:11.8.0'
-
 }
 
