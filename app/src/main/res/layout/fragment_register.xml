@@ -1,146 +1,388 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="registerViewModel"
             type="com.ranosys.theexecutive.modules.register.RegisterViewModel">
-
         </variable>
     </data>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
+
+        android:id="@+id/cl_main_layout"
+        android:paddingTop="@dimen/twenty_dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/eight_dp"
-        android:background="@android:color/white">
+        android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_above="@+id/btn_signup">
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:fillViewport="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_create_account">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl_inside_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/profile_pic_imageview"
-            android:layout_width="@dimen/one_two_eight"
-            android:layout_height="@dimen/one_two_eight"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/sixteen_dp"
-            android:src="@drawable/placeholder" />
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_right"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_end="@dimen/thirty_dp" />
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/et_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/name"
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-        <RadioGroup
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/four_dp"
-            android:checkedButton="@id/radio_male"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:id="@+id/radio_male"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/four_dp"
-                android:text="@string/male"
-                />
-            <RadioButton
-                android:id="@+id/radio_female"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/sixty_four"
-                android:padding="@dimen/four_dp"
-                android:text="@string/female"/>
-        </RadioGroup>
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_left"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_begin="@dimen/thirty_dp" />
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/til_first_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/first_name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left">
 
-                    <EditText
-                        android:id="@+id/et_mobile"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_first_name"
+                        android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/mobile"/>
-                </android.support.design.widget.TextInputLayout>
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/et_mail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/email_id"
-                        android:inputType="textEmailAddress"/>
+                        android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/til_last_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/last_name"
+                    app:layout_constraintTop_toBottomOf="@id/til_first_name"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left">
 
-                    <EditText
-                        android:id="@+id/et_state"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_last_name"
+                        android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/state"/>
-
+                        android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/et_city"
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/wrapper_email_address"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/email"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_last_name">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_email_address"
+                        android:layout_width="match_parent"
+                        android:fontFamily="@font/dax_light"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinner_country_code"
+                    android:layout_height="@dimen/match_constraint"
+                    android:layout_width="wrap_content"
+                    android:minWidth="@dimen/match_constraint"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/country_code"
+                    android:background="@drawable/spinner"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toTopOf="@id/wrapper_mobile_no"
+                    app:layout_constraintEnd_toStartOf="@id/wrapper_mobile_no"
+                    app:layout_constraintBottom_toBottomOf="@+id/wrapper_mobile_no" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/wrapper_mobile_no"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/mobile_number"
+                    app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_email_address"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_mobile_number"
+                        android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/city"/>
-
+                        android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
+
+
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
+                    android:id="@+id/wrapper_address"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/address"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_mobile_no">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_address"
+                        android:fontFamily="@font/dax_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <Spinner
+                    android:id="@+id/spinner_province"
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/states_array"
+                    android:padding="@dimen/ten_dp"
+                    android:background="@drawable/spinner"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_address" />
+
+                <Spinner
+                    android:id="@+id/spinner_city"
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:padding="@dimen/ten_dp"
+                    android:entries="@array/states_array"
+                    android:background="@drawable/spinner"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_province" />
+
+                <Spinner
+                    android:id="@+id/spinner_district"
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:padding="@dimen/ten_dp"
+                    android:entries="@array/states_array"
+                    android:background="@drawable/spinner"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_city" />
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/wrapper_postcode"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/postcode"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_district">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_postcode"
+                        android:fontFamily="@font/dax_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+
+
+
+                <Spinner
+                    android:id="@+id/spinner_date"
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:padding="@dimen/ten_dp"
+                    android:entries="@array/states_array"
+                    android:background="@drawable/spinner"
+                    android:spinnerMode="dropdown"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_postcode" />
+
+
+                <Spinner
+                    android:id="@+id/spinner_month"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/states_array"
+                    android:padding="@dimen/ten_dp"
+                    android:background="@drawable/spinner"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    app:layout_constraintEnd_toStartOf="@id/spinner_year"
+                    app:layout_constraintStart_toEndOf="@id/spinner_date"
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_postcode" />
+
+                <Spinner
+                    android:id="@+id/spinner_year"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ten_dp"
+                    android:entries="@array/states_array"
+                    android:background="@drawable/spinner"
+                    android:spinnerMode="dropdown"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_postcode"/>
+
+                <View
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="1dp"
+                    android:background="@color/theme_black_color"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_date"/>
+
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/radiobutton"
+                    android:layout_marginTop="20dp"
+                    android:padding="@dimen/ten_dp"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_date">
+
+                    <RadioButton
+                        android:id="@+id/rb_male"
+                        android:layout_width="@dimen/match_constraint"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dax_light"
+                        android:textSize="@dimen/sixteen_sp"
+                        android:button="@drawable/radiobuttonselector"
+                        android:paddingStart="@dimen/ten_dp"
+                        android:layout_marginLeft="@dimen/ten_dp"
+                        android:layout_weight="1"
+                        android:text="@string/male" />
+
+
+                    <RadioButton
+                        android:id="@+id/rb_female"
+                        android:layout_width="@dimen/match_constraint"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@drawable/radiobuttonselector"
+                        android:paddingStart="@dimen/ten_dp"
+                        android:textSize="@dimen/sixteen_sp"
+                        android:fontFamily="@font/dax_light"
+                        android:text="@string/female" />
+                </RadioGroup>
+
+                <View
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="1dp"
+                    android:background="@color/theme_black_color"
+                    app:layout_constraintTop_toBottomOf="@id/radioGroup"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/wrapper_password"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/password"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/radioGroup">
+
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_password"
+                        android:inputType="textPassword"
+                        android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/password"
-                        android:inputType="textPassword"/>
+                        android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
 
-            </LinearLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/wrapper_confirm_password"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/confirm_password"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_password">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_confirm_password"
+                        android:inputType="textPassword"
+                        android:fontFamily="@font/dax_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/cb_subscribe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/thirty_dp"
+                    android:fontFamily="@font/dax_regular"
+                    android:text="@string/subscribe"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_confirm_password"/>
+
+                <TextView
+                    android:id="@+id/tv_terms_and_conditions"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:layout_marginTop="@dimen/forty_dp"
+                    android:layout_marginBottom="@dimen/forty_dp"
+                    android:fontFamily="@font/dax_light"
+                    android:text="@string/term_and_condition"
+                    app:layout_constraintTop_toBottomOf="@+id/cb_subscribe"
+                    app:layout_constraintBottom_toBottomOf="@+id/cl_inside_scroll_view"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left" />
+
+            </android.support.constraint.ConstraintLayout>
+
         </ScrollView>
-
         <Button
-            android:id="@+id/btn_signup"
-            android:layout_width="match_parent"
+            android:id="@+id/btn_create_account"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/four_dp"
-            android:background="@color/dark_gray"
-            android:text="@string/signup"
+            android:textSize="@dimen/sixteen_sp"
+            android:layout_marginLeft="@dimen/thirty_dp"
+            android:layout_marginRight="@dimen/thirty_dp"
+            android:layout_marginBottom="@dimen/ten_dp"
+            android:textColor="@color/colorText"
             android:textAllCaps="false"
-            android:textColor="@android:color/white" />
-    </RelativeLayout>
-
+            android:background="@color/theme_black_color"
+            android:text="@string/create_account"
+            android:fontFamily="@font/dax_regular"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
 </layout>
