@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.api
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
+import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
@@ -21,9 +22,7 @@ import java.io.IOException
 /**
  * Created by Mohammad Sunny on 23/2/18.
  */
-class AppRepository private constructor(){
-
-    companion object {
+object AppRepository {
 
         private fun parseError(response: Response<Any>?, callBack: ApiCallback<Any>) {
             try {
@@ -141,6 +140,30 @@ class AppRepository private constructor(){
             })
         }
 
+    fun getCategoryData(categoryId :  String, callBack: ApiCallback<CategoryDataResponse>) {
+        val retrofit = ApiClient.retrofit
+        val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.CategoryService>(ApiService.CategoryService::class.java)?.getCategoryData(ApiConstants.BEARER + adminToken, storeCode, categoryId)
+
+        callGet?.enqueue(object : Callback<CategoryDataResponse> {
+            override fun onResponse(call: Call<CategoryDataResponse>?, response: Response<CategoryDataResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+
+            }
+
+            override fun onFailure(call: Call<CategoryDataResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+                Utils.printLog("Login:", "Failed")
+            }
+        })
+    }
+
         fun isEmailAvailable(request: LoginDataClass.IsEmailAvailableRequest?, callBack: ApiCallback<Boolean>) {
             val retrofit = ApiClient.retrofit
             val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
@@ -190,8 +213,6 @@ class AppRepository private constructor(){
                 }
             })
         }
-
-    }
 
 
 }
