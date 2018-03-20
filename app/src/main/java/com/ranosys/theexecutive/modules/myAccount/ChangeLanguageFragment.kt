@@ -33,7 +33,7 @@ class ChangeLanguageFragment: BaseFragment() {
         linearLayoutManager = LinearLayoutManager(activity)
         language_list.layoutManager = linearLayoutManager
 
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horozontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
         language_list.addItemDecoration(itemDecor)
 
         val selectedStoreCode: String = if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
@@ -43,7 +43,7 @@ class ChangeLanguageFragment: BaseFragment() {
         }
 
         val storeListAdapter = StoreListAdapter(GlobalSingelton.instance?.storeList, selectedStoreCode)
-        storeListAdapter.setClickListsner(object: StoreListAdapter.OnItemClickListener {
+        storeListAdapter.setItemClickListener(object: StoreListAdapter.OnItemClickListener {
             override fun onItemClick(item: StoreResponse) {
                 storeListAdapter.selectedStore = item.code
                 storeListAdapter.notifyDataSetChanged()
