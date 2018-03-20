@@ -10,6 +10,7 @@
     <color name="header_text_color">#8c8888</color>
     <color name="theme_black_color">#231f20</color>
     <color name="theme_accent_color">#999999</color>
+    <color name="divider_color">#DDDDDD</color>
     <color name="colorText">#ffffff</color>
 
 </resources>
