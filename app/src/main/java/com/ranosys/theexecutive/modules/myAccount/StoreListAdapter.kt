@@ -15,18 +15,13 @@ import com.ranosys.theexecutive.modules.splash.StoreResponse
 class StoreListAdapter(var storeListData: List<StoreResponse>?, selectedStoreCode: String): RecyclerView.Adapter<StoreListAdapter.Holder>() {
 
     var clickListener: OnItemClickListener? = null
-    var selectedStore: String
-
-    init {
-        selectedStore = selectedStoreCode
-    }
-
+    var selectedStore: String = selectedStoreCode
 
     interface OnItemClickListener {
         fun onItemClick(item : StoreResponse)
     }
 
-    fun setClickListsner(listener: OnItemClickListener){
+    fun setItemClickListener(listener: OnItemClickListener){
         clickListener = listener
     }
 

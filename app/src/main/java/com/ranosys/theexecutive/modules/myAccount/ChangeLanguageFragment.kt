@@ -24,8 +24,7 @@ class ChangeLanguageFragment: BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val view: View = inflater.inflate(R.layout.change_language_fragment, null, false)
-        return view
+        return inflater.inflate(R.layout.change_language_fragment, null, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,7 +33,7 @@ class ChangeLanguageFragment: BaseFragment() {
         linearLayoutManager = LinearLayoutManager(activity)
         language_list.layoutManager = linearLayoutManager
 
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horozontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
         language_list.addItemDecoration(itemDecor)
 
         val selectedStoreCode: String = if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
@@ -43,9 +42,9 @@ class ChangeLanguageFragment: BaseFragment() {
             SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)!!
         }
 
-        val storeListAdapter: StoreListAdapter = StoreListAdapter(GlobalSingelton.instance?.storeList, selectedStoreCode)
-        storeListAdapter.setClickListsner(object: StoreListAdapter.OnItemClickListener {
-            override fun onItemClick(item: StoreResponse, position: Int) {
+        val storeListAdapter = StoreListAdapter(GlobalSingelton.instance?.storeList, selectedStoreCode)
+        storeListAdapter.setItemClickListener(object: StoreListAdapter.OnItemClickListener {
+            override fun onItemClick(item: StoreResponse) {
                 storeListAdapter.selectedStore = item.code
                 storeListAdapter.notifyDataSetChanged()
             }
