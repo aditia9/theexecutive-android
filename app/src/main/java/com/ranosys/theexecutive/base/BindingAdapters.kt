@@ -3,11 +3,12 @@ package com.ranosys.theexecutive.base
 import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
 import android.databinding.InverseBindingListener
+import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.AppCompatSpinner
+import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.ImageView
 
 
@@ -19,13 +20,13 @@ class BindingAdapters {
     companion object {
         @JvmStatic
         @BindingAdapter("app:errorText")
-        fun setErrorMessage(view: EditText, errorMessage: String?) {
-            view.setError(errorMessage)
-//        if (TextUtils.isEmpty(errorMessage)) {
-//            view.setErrorEnabled(false)
-//        } else {
-//            view.setErrorEnabled(true)
-//        }
+        fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
+            view.error = errorMessage
+            if (TextUtils.isEmpty(errorMessage)) {
+                view.isErrorEnabled = false
+            } else {
+                view.isErrorEnabled = true
+            }
         }
 
         @JvmStatic
@@ -46,7 +47,7 @@ class BindingAdapters {
 
         @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
         fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String {
-            return pAppCompatSpinner.getSelectedItem().toString()
+            return pAppCompatSpinner.selectedItem.toString()
 
         }
 

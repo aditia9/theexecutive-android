@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.forgot_password
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -56,7 +57,7 @@ class ForgotPasswordFragment(): BaseFragment() {
                 btn_submit.id ->{
                     Utils.printLog("FORGOT PASSWORD", "SUBMIT CLICKED")
 
-                    if (Utils.isConnectionAvailable(activity)) {
+                    if (Utils.isConnectionAvailable(activity as Context)) {
                         //validation
                         if(validateData(et_email.text.toString())){
                             //showLoading()

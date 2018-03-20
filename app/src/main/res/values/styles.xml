@@ -13,7 +13,7 @@
 
     </style>
 
-    <style name="Toolbar" parent="Theme.AppCompat">
+    <style name="toolbar" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/toolBarColor</item>
         <item name="colorPrimaryDark">@color/toolBarColor</item>
         <item name="colorAccent">@color/toolBarColor</item>
@@ -25,6 +25,10 @@
         <item name="colorPrimary">@color/theme_black_color</item>
         <item name="colorPrimaryDark">@color/theme_black_color</item>
         <item name="colorAccent">@color/theme_accent_color</item>
+    </style>
+
+    <style name="tilTheme" parent="myAppTheme">
+        <item name="android:textColorHint">@color/theme_accent_color</item>
     </style>
 
 </resources>

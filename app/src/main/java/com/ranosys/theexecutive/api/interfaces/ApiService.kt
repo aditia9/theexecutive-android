@@ -9,20 +9,17 @@ import retrofit2.Call
 import retrofit2.http.*
 
 /**
- * Created by Mohammad Sunny on 25/1/18.
+ * Created by Mohammad Sunny on 21/2/18.
  */
 interface ApiService {
 
     interface LoginService {
-        @POST("user/login/email")
-        fun getLoginData(@Body loginRequest: LoginDataClass.LoginRequest?): Call<LoginDataClass.LoginResponse>
+        @POST("rest/{store_code}/V1/integration/customer/token")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body loginRequest: LoginDataClass.LoginRequest?): Call<String>
     }
-
-//    interface AdminTokenService {
-//        @POST("rest/all/V1/integration/admin/token")
-//        @Headers("Content-Type: application/json", "X-Requested-With: XMLHttpRequest", "Cache-Control: no-cache")
-//        fun getAdminToken(@Body adminTokenRequest: AdminDataClass): Call<String>
-//    }
 
     interface StoresService {
         @GET("rest/all/V1/store/storeViews")
@@ -33,11 +30,27 @@ interface ApiService {
     }
 
     interface ConfigurationService {
-        @GET("rest/{store_code}/V1/mobileappversionapi/configuration/androivd")
+        @GET("rest/{store_code}/V1/mobileappversionapi/configuration/android")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getConfiguration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String): Call<ConfigurationResponse>
+    }
+
+    interface IsEmailAvailableService {
+        @POST("rest/{store_code}/V1/customers/isEmailAvailable")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun isEmailAvailableApi(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: LoginDataClass.IsEmailAvailableRequest?): Call<Boolean>
+    }
+
+    interface SocialLoginService {
+        @POST("rest/{store_code}/V1/customer/sociallogin/token")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun socialLogin(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: LoginDataClass.SocialLoginRequest?): Call<String>
     }
 
     interface ForgotPasswordService {

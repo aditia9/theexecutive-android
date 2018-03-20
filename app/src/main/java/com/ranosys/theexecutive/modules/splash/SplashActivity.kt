@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive
+package com.ranosys.theexecutive.modules.splash
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -7,11 +7,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
+import com.ranosys.theexecutive.BuildConfig
+import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
-import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
-import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -20,17 +21,24 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
+
 /**
- * Created by Mohammad Sunny on 25/1/18.
+ * Created by nikhil on 2/3/18.
  */
 class SplashActivity : BaseActivity() {
 
-    val SPLASH_TIMEOUT = 3000
-    val handler = Handler()
-    var canNavigateToHome: Boolean = false
+    private val SPLASH_TIMEOUT = 3000
+    private val handler = Handler()
+    private var canNavigateToHome: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //check for auth token in SP if not get from assets
+        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
+            val token: String = getAuthToken()
+            SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
+        }
 
         //call configuration API
         getConfigurationApi()
@@ -38,11 +46,7 @@ class SplashActivity : BaseActivity() {
         //fetch device id
         getDeviceID()
 
-        //check for auth token in SP if not get from assets
-        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
-            val token: String = getAuthToken()
-            SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
-        }
+
 
         handler.postDelayed({
             kotlin.run {
@@ -99,20 +103,16 @@ class SplashActivity : BaseActivity() {
     private fun getStoresApi() {
         AppRepository.getStores(object: ApiCallback<ArrayList<StoreResponse>>{
             override fun onSuccess(stores: ArrayList<StoreResponse>?) {
-                GlobalSingelton.instance?.storeList = stores
 
-                if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)) ||
-                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_STORE_ID_KEY).toString()) ||
-                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY).toString())){
-                    for(store in stores!!){
-                        if(store.id == 1){
-                            SavedPreferences.getInstance()?.saveStringValue(store.code, Constants.SELECTED_STORE_CODE_KEY)
-                            SavedPreferences.getInstance()?.saveIntValue(store.id, Constants.SELECTED_STORE_ID_KEY)
-                            SavedPreferences.getInstance()?.saveIntValue(store.website_id, Constants.SELECTED_WEBSITE_ID_KEY)
-                            break
-                        }
+                val it = stores?.iterator()
+                while (it?.hasNext()!!) {
+                    val integer = it.next()
+                    if (integer.id ==  0) {
+                        it.remove()
                     }
                 }
+
+                GlobalSingelton.instance?.storeList = stores
 
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
@@ -135,7 +135,7 @@ class SplashActivity : BaseActivity() {
     private fun showExitApplicationDialog(message: String, action:() -> Unit = {}) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(message)
-                .setPositiveButton("OK") {
+                .setPositiveButton(android.R.string.ok) {
                     dialog, id -> dialog.cancel()
                     action()}
 
@@ -153,17 +153,19 @@ class SplashActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacksAndMessages(null);
+        handler.removeCallbacksAndMessages(null)
     }
 
-    fun getAuthToken(): String{
+    private fun getAuthToken(): String{
         var reader: BufferedReader? = null
-        var token: String = ""
+        var token = ""
         try {
-            reader =  BufferedReader(InputStreamReader(getAssets().open(Constants.CONFIG_FILE_NAME)))
+            reader =  BufferedReader(InputStreamReader(assets.open(Constants.CONFIG_FILE_NAME)))
             token = reader.readLine()
 
         } catch (e: IOException) {
+            if(BuildConfig.DEBUG)
+                e.printStackTrace()
         } finally {
             if (null != reader) {
                 try {

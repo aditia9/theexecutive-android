@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.base
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Build
 import android.os.Bundle
@@ -11,11 +10,12 @@ import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 /**
- * Created by Mohammad Sunny on 24/1/18.
+ * Created by Mohammad Sunny on 22/2/18.
  */
 open class BaseActivity: RunTimePermissionActivity(){
 
-    @SuppressLint("MissingSuperCall")
+    var toolbarViewModel: ToolbarViewModel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbarViewModel = ViewModelProviders.of(this).get(ToolbarViewModel::class.java)
@@ -37,11 +37,19 @@ open class BaseActivity: RunTimePermissionActivity(){
     }
 
     fun setLeftIcon(icon: Int){
-        toolbarViewModel?.icon?.set(icon)
+        toolbarViewModel?.leftIcon?.set(icon)
     }
 
     fun setLeftIconVisibility(isVisible: Boolean){
-        toolbarViewModel?.isIconVisible?.set(isVisible)
+        toolbarViewModel?.isLeftIconVisible?.set(isVisible)
+    }
+
+    fun setRightIcon(icon: Int){
+        toolbarViewModel?.rightIcon?.set(icon)
+    }
+
+    fun setRightIconVisibility(isVisible: Boolean){
+        toolbarViewModel?.isRightIconVisible?.set(isVisible)
     }
 
     private fun changeStatusBarColor(color: Int) {
@@ -57,7 +65,4 @@ open class BaseActivity: RunTimePermissionActivity(){
         supportActionBar?.hide()
     }
 
-    companion object{
-        var toolbarViewModel: ToolbarViewModel? = null
-    }
 }

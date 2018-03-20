@@ -5,20 +5,24 @@ package com.ranosys.theexecutive.modules.login
  */
 class LoginDataClass {
 
-    data class LoginRequest(var email: String,
-                            var password: String,
-                            var registrationId : String,
-                            var deviceId : String,
-                            var deviceType : String)
+    data class LoginRequest(var username: String,
+                            var password: String)
 
-    data class LoginResponse(val accessToken : String,
-                             val refreshToken : String,
-                             val isFirstLogin : Boolean,
-                             val error : String,
-                             val message : String,
-                             val isSubscriptionPurchased : Boolean,
-                             val invitationCode : String,
-                             val isCodeUsed : Boolean,
-                             val referralUrl : String)
+    data class IsEmailAvailableRequest(var customerEmail: String,
+                                       var websiteId: Int)
+
+    data class SocialLoginData(var firstName: String,
+                               var latsName: String,
+                               var email: String,
+                               var gender: String,
+                               var type: String,
+                               var token: String)
+
+
+    data class SocialLoginRequest(
+            val email: String,
+            val type: String,
+            val token: String
+    )
 }
 

@@ -1,7 +1,8 @@
-package com.ranosys.theexecutive
+package com.ranosys.theexecutive.activities
 
 import android.content.Intent
 import android.os.Bundle
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -9,7 +10,7 @@ import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 /**
- * Created by Mohammad Sunny on 25/1/18.
+ * Created by Mohammad Sunny on 19/2/18.
  */
 class UserActivity: BaseActivity() {
 
@@ -23,7 +24,7 @@ class UserActivity: BaseActivity() {
             finish()
         }else {
             if (savedInstanceState == null) {
-                FragmentUtils.addFragment(this, LoginFragment.newInstance(), LoginFragment::class.java.name)
+                FragmentUtils.addFragment(this, LoginFragment(), LoginFragment::class.java.name)
             }
         }
     }
