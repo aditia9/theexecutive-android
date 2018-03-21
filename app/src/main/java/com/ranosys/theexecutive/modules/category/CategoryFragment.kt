@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.Nullable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +47,16 @@ class CategoryFragment : BaseFragment() {
 
             }
 
+        })
+
+        elv_parent_category.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
+            override fun onGroupClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
+                Log.i("Top group Size",""+categoryModelView?.categoryResponse?.get()?.children_data?.size)
+               /* if(){
+
+                }*/
+                return false
+            }
         })
 
         observeCategoryApiResponse()

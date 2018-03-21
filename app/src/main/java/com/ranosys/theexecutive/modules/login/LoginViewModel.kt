@@ -48,6 +48,11 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
                 clickedBtnId?.value = R.id.btn_gmail_login
             }
+
+            R.id.tv_forgot_password ->{
+
+                clickedBtnId?.value = R.id.tv_forgot_password
+            }
         }
     }
 

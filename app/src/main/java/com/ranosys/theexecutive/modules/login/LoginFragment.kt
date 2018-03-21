@@ -25,7 +25,9 @@ import com.google.android.gms.tasks.Task
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
+import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordFragment
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
@@ -134,6 +136,11 @@ class LoginFragment : BaseFragment() {
                     } else {
                         Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
                     }
+                }
+
+                tv_forgot_password.id -> {
+                    FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), ForgotPasswordFragment::class.java.name)
+
                 }
             }
         })

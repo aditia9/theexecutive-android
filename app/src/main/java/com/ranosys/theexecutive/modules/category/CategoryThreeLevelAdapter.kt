@@ -3,7 +3,6 @@ package com.ranosys.theexecutive.modules.category
 import android.content.Context
 import android.database.DataSetObserver
 import android.databinding.DataBindingUtil
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +63,7 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
             }
 
         })
-        expandableListView.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
+       /* expandableListView.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
             override fun onGroupClick(expandableListView: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
                 Log.i("group Size",""+categoryList?.get(p2)?.children_data?.size)
                 if(categoryList?.get(p2)?.children_data?.size!! == 0){
@@ -77,9 +76,12 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
         expandableListView.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
             override fun onChildClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Int, p4: Long): Boolean {
                 Log.i("child List Size",""+categoryList?.get(p2)?.children_data?.get(p3)?.children_data?.size)
+                if(categoryList?.get(p2)?.children_data?.get(p3)?.children_data?.size!! == 0){
+
+                }
                 return false
             }
-        })
+        })*/
 
         return expandableListView
 

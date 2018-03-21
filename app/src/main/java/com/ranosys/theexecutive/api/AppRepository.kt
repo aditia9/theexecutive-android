@@ -3,10 +3,10 @@ package com.ranosys.theexecutive.api
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
-import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
+import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
@@ -220,59 +220,51 @@ object AppRepository {
                 ?: Constants.DEFAULT_STORE_CODE
         val callPost = retrofit?.create<ApiService.SocialLoginService>(ApiService.SocialLoginService::class.java)?.socialLogin(ApiConstants.BEARER + adminToken, storeCode, request = request)
 
-
-        fun socialLogin(request: LoginDataClass.SocialLoginRequest?, callBack: ApiCallback<String>) {
-            val retrofit = ApiClient.retrofit
-            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
-            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
-                    ?: Constants.DEFAULT_STORE_CODE
-            val callPost = retrofit?.create<ApiService.SocialLoginService>(ApiService.SocialLoginService::class.java)?.socialLogin(ApiConstants.BEARER + adminToken, storeCode, request = request)
-
-            callPost?.enqueue(object : Callback<String> {
-                override fun onResponse(call: Call<String>?, response: Response<String>?) {
-                    if (!response!!.isSuccessful) {
-                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
-                    } else {
-                        callBack.onSuccess(response.body())
-
-                    }
+        callPost?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
 
                 }
 
-                override fun onFailure(call: Call<String>, t: Throwable) {
-                    callBack.onError(Constants.ERROR)
-                    Utils.printLog("Is Email Available:", "Failed")
+            }
 
-                }
-            })
-        }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+                Utils.printLog("Is Email Available:", "Failed")
 
-        fun forgotPassword(request: ForgotPasswordDataClass.ForgotPasswordRequest, callBack: ApiCallback<Boolean>) {
-            val retrofit = ApiClient.retrofit
-            val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
-            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
-                    ?: Constants.DEFAULT_STORE_CODE
-            val callPut = retrofit?.create<ApiService.ForgotPasswordService>(ApiService.ForgotPasswordService::class.java!!)?.forgotPasswordApi(ApiConstants.BEARER + adminToken, storeCode, request)
-
-            callPut?.enqueue(object : Callback<Boolean> {
-                override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
-                    if (!response!!.isSuccessful) {
-                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
-
-                    } else {
-                        callBack.onSuccess(response.body())
-
-                    }
-
-                }
-
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    callBack.onError(Constants.ERROR)
-                    Utils.printLog("Login:", "Failed")
-
-                }
-            })
-        }
+            }
+        })
     }
+
+    fun forgotPassword(request: ForgotPasswordDataClass.ForgotPasswordRequest, callBack: ApiCallback<Boolean>) {
+        val retrofit = ApiClient.retrofit
+        val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
+                ?: Constants.DEFAULT_STORE_CODE
+        val callPut = retrofit?.create<ApiService.ForgotPasswordService>(ApiService.ForgotPasswordService::class.java!!)?.forgotPasswordApi(ApiConstants.BEARER + adminToken, storeCode, request)
+
+        callPut?.enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+
+                } else {
+                    callBack.onSuccess(response.body())
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+                Utils.printLog("Login:", "Failed")
+
+            }
+        })
+    }
+
 
 }

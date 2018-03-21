@@ -29,10 +29,8 @@ class DashBoardActivity: BaseActivity() {
             FragmentUtils.addFragment(this, ChangeLanguageFragment(), ChangeLanguageFragment::class.java.name)
 
         }else{
-            FragmentUtils.addFragment(this, LoginFragment(), LoginFragment::class.java.name)
+            FragmentUtils.addFragment(this, HomeFragment(), HomeFragment::class.java.name)
         }
-    }
-        FragmentUtils.addFragment(this, HomeFragment(), HomeFragment::class.java.name)
 
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
             override fun onBackStackChanged() {
