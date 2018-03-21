@@ -48,7 +48,8 @@ class CategoryFragment : BaseFragment() {
 
         })
 
-        observeLoginApiResponse()
+        observeCategoryApiResponse()
+        observeAllCategoryDataApiResponse()
         getCategories()
     }
 
@@ -56,18 +57,62 @@ class CategoryFragment : BaseFragment() {
         categoryModelView?.getCategories()
     }
 
-    private fun observeLoginApiResponse() {
+    private fun getAllCategoriesData(queryMap : HashMap<String,String>?) {
+        categoryModelView?.getAllCategoriesData(queryMap)
+    }
+
+    private fun observeCategoryApiResponse() {
         categoryModelView?.mutualHomeResponse?.observe(this, object : Observer<ApiResponse<CategoryResponseDataClass>> {
             override fun onChanged(@Nullable apiResponse: ApiResponse<CategoryResponseDataClass>?) {
                 // hideLoading()
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is CategoryResponseDataClass) {
                     categoryModelView?.categoryResponse?.set(response)
+                   // getAllCategoriesData(getQueryMap(response.children_data))
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
                 }
             }
         })
+    }
+
+    private fun observeAllCategoryDataApiResponse() {
+        categoryModelView?.allCategoryDataResponse?.observe(this, object : Observer<ApiResponse<AllCategoryDataResponse>> {
+            override fun onChanged(@Nullable apiResponse: ApiResponse<AllCategoryDataResponse>?) {
+                // hideLoading()
+                val response = apiResponse?.apiResponse ?: apiResponse?.error
+                if (response is AllCategoryDataResponse) {
+
+                } else {
+                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
+
+    fun getQueryMap(childrenDataList: ArrayList<ChildrenData>?): HashMap<String, String> {
+
+        val queryMap = HashMap<String, String>()
+
+        queryMap.put("searchCriteria[filterGroups][0][filters][0][field]", "entity_id")
+        queryMap.put("searchCriteria[filterGroups][0][filters][0][[conditionType]", "in")
+
+        if (childrenDataList!!.size > 0) {
+
+            val childrenDataListSize = childrenDataList.size
+            val categoryArray = StringBuilder()
+
+            for (k in 0 until childrenDataListSize) {
+
+                if(childrenDataList.get(k).is_active!!){
+                    categoryArray.append(childrenDataList.get(k).id)
+                }
+            }
+            queryMap.put("searchCriteria[filterGroups][0][filters][0][[conditionType]", categoryArray.toString())
+
+        }
+
+        return queryMap
     }
 
 }

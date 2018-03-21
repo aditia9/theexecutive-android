@@ -15,6 +15,7 @@ class CategoryModelView(application: Application) : BaseViewModel(application) {
 
     var mutualHomeResponse = MutableLiveData<ApiResponse<CategoryResponseDataClass>>()
     var categoryResponse: ObservableField<CategoryResponseDataClass>? = ObservableField<CategoryResponseDataClass>()
+    var allCategoryDataResponse = MutableLiveData<ApiResponse<AllCategoryDataResponse>>()
 
     fun getCategories(){
         val apiResponse = ApiResponse<CategoryResponseDataClass>()
@@ -34,5 +35,24 @@ class CategoryModelView(application: Application) : BaseViewModel(application) {
 
         })
     }
+
+    fun getAllCategoriesData(queryMap : HashMap<String,String>?){
+        val apiResponse = ApiResponse<AllCategoryDataResponse>()
+        AppRepository.getAllCategoryData(queryMap, object : ApiCallback<AllCategoryDataResponse>{
+            override fun onException(error: Throwable) {
+                allCategoryDataResponse.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                allCategoryDataResponse.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: AllCategoryDataResponse?) {
+                apiResponse.apiResponse = t
+                allCategoryDataResponse.value = apiResponse
+            }
+        })
+    }
+
 
 }
