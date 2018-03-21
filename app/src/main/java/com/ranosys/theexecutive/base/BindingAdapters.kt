@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 
 /**
@@ -61,9 +62,7 @@ class BindingAdapters {
         @JvmStatic
         @BindingAdapter("bind:imageUrl")
         fun loadImage(imageView: ImageView, imageUrl: String) {
-            Glide.with(imageView)
-                    .load(imageUrl)
-                    .into(imageView);
+
         }
     }
 }

@@ -1,11 +1,15 @@
 package com.ranosys.theexecutive.modules.productListing
 
 import android.databinding.DataBindingUtil
+import android.graphics.Paint
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.ProductListItemBinding
+import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+import android.text.TextUtils
+
 
 /**
  * Created by nikhil on 20/3/18.
@@ -33,6 +37,8 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Dumm
 
         fun bind(product: ProductListingDataClass.DummyResponse, listener: ProductListAdapter.OnItemClickListener){
             itemBinding.productItem = product
+            itemBinding.tvNormalPrice.setPaintFlags(itemBinding.tvNormalPrice.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+
             itemView.setOnClickListener {
                 listener.onItemClick(product)
             }
