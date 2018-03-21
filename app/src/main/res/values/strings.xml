@@ -55,4 +55,5 @@
     <string name="select_lang_title">Select Language</string>
     <string name="continue_btn">Continue</string>
     <string name="language_hint">Language</string>
+    <string name="search">Search</string>
 </resources>

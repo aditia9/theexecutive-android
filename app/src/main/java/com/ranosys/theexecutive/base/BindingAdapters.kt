@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 
 
 /**
@@ -55,6 +56,14 @@ class BindingAdapters {
         @BindingAdapter("android:src")
         fun setImageResoruce(imageView: ImageView, resource: Int) {
             imageView.setImageResource(resource)
+        }
+
+        @JvmStatic
+        @BindingAdapter("bind:imageUrl")
+        fun loadImage(imageView: ImageView, imageUrl: String) {
+            Glide.with(imageView)
+                    .load(imageUrl)
+                    .into(imageView);
         }
     }
 }
