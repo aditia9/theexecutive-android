@@ -10,4 +10,23 @@
     <dimen name="eighteen_sp">18sp</dimen>
     <dimen name="one_dip">1dip</dimen>
     <dimen name="twenty_four_dp">24dp</dimen>
+    <dimen name="sixty_dp">60dp</dimen>
+    <dimen name="two_dp">2dp</dimen>
+    <dimen name="four_dp">4dp</dimen>
+    <dimen name="eight_dp">8dp</dimen>
+    <dimen name="sixteen_dp">16dp</dimen>
+    <dimen name="thirtyTwo_dp">32dp</dimen>
+    <dimen name="sixty_four">64dp</dimen>
+    <dimen name="one_two_eight">128dp</dimen>
+    <dimen name="twelve_dp">12dp</dimen>
+    <dimen name="two_sp">2sp</dimen>
+    <dimen name="four_sp">4sp</dimen>
+    <dimen name="eight_sp">8sp</dimen>
+    <dimen name="ten_sp">10sp</dimen>
+    <dimen name="sixteen_sp">16sp</dimen>
+    <dimen name="twenty_sp">20sp</dimen>
+    <dimen name="thirtyTwo_sp">32sp</dimen>
+    <dimen name="sixty_four_sp">64sp</dimen>
+    <dimen name="one_two_eight_sp">128sp</dimen>
+    <dimen name="twelve_sp">12sp</dimen>
 </resources>
