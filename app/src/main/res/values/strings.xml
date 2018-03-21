@@ -39,12 +39,13 @@
     <string name="title_register">Register</string>
     <string name="something_went_wrong_error">Something went wrong</string>
     <string name="exit">Exit</string>
-    <string name="maintenence_msg">Applicaiton is under maintenence</string>
-    <string name="force_update_msg">New Version application is availabel.</string>
-    <string name="plaese_enter_your_email_address_below">Please enter your Email address below.</string>
+    <string name="maintenance_msg">Application is under maintenance</string>
+    <string name="force_update_msg">New Version application is available.</string>
+    <string name="please_enter_your_email_address_below">Please enter your Email address below.</string>
     <string name="email">Email address</string>
     <string name="password_info">* You will receive a link to reset your password</string>
     <string name="submit">Submit</string>
+    <string name="forgot_password_title">Forgot Password</string>
 
     <!--fb integration-->
     <string name="facebook_app_id">174246843202937</string>
@@ -59,4 +60,5 @@
     <string name="select_lang_title">Select Language</string>
     <string name="continue_btn">Continue</string>
     <string name="language_hint">Language</string>
+
 </resources>

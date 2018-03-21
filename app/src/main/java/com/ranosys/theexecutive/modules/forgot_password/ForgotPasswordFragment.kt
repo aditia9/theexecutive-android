@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.fragment_forgot_password.*
  */
 class ForgotPasswordFragment(): BaseFragment() {
 
-    lateinit var forgotPassVM: ForgotPasswordViewModel
-    lateinit var mBinding: FragmentForgotPasswordBinding
+    private lateinit var forgotPassVM: ForgotPasswordViewModel
+    private lateinit var mBinding: FragmentForgotPasswordBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_forgot_password, container, false)
@@ -36,7 +36,7 @@ class ForgotPasswordFragment(): BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setTitle("Forgot Password")
+        setTitle(getString(R.string.forgot_password_title))
     }
 
     private fun observeApiFailure() {
