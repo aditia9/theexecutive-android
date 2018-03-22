@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.ProductListItemBinding
-import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
-import android.text.TextUtils
 
 
 /**
@@ -30,7 +28,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Dumm
     fun addProducts(products: ArrayList<ProductListingDataClass.DummyResponse>){
         val lastPos = productList.size
         productList.addAll(products)
-        notifyItemRangeInserted(lastPos - 1, products.size)
+        notifyItemRangeInserted(lastPos, products.size)
     }
 
     class Holder(val itemBinding: ProductListItemBinding): RecyclerView.ViewHolder(itemBinding.root) {

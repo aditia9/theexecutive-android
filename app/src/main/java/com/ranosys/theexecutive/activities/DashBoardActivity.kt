@@ -25,10 +25,10 @@ class DashBoardActivity: BaseActivity() {
         toolbarBinding?.toolbarViewModel = toolbarViewModel
         if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
             //redirect user to Home fragment with selected store enm is store api fails
-            if(null == GlobalSingelton.instance?.storeList || GlobalSingelton.instance?.storeList!!.size == 0){
-                SavedPreferences.getInstance()?.saveStringValue(Constants.DEFAULT_STORE_CODE, Constants.SELECTED_STORE_CODE_KEY)
-                FragmentUtils.addFragment(this, ProductListingFragment(), ProductListingFragment::class.java.name)
-            }
+//            if(null == GlobalSingelton.instance?.storeList || GlobalSingelton.instance?.storeList!!.size == 0){
+//                SavedPreferences.getInstance()?.saveStringValue(Constants.DEFAULT_STORE_CODE, Constants.SELECTED_STORE_CODE_KEY)
+//                FragmentUtils.addFragment(this, ProductListingFragment(), ProductListingFragment::class.java.name)
+//            }
             FragmentUtils.addFragment(this, ChangeLanguageFragment(), ChangeLanguageFragment::class.java.name)
 
         }else{

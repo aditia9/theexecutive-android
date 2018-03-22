@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,29 @@ class ProductListingFragment: BaseFragment() {
             }
         }
 
+        val threshold = 2
         product_list.layoutManager = gridLayoutManager
+        product_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                //if down scroll
+                if(dy > 0){
+
+                    val visibleItemCount = gridLayoutManager.childCount
+                    val totalItemCount = gridLayoutManager.itemCount
+                    val firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition()
+
+                    val allProductLoaded = productListAdapter.itemCount >= mViewModel.totalProductCount
+                    val shouldPaging = (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold)
+
+                    if(!mViewModel.isLoading && !allProductLoaded && shouldPaging){
+                        Toast.makeText(recyclerView?.context, "load data", Toast.LENGTH_SHORT).show()
+                        //TODO - call product listing api
+                    }
+                }
+            }
+        })
+
 
         val emptyList = ArrayList<ProductListingDataClass.DummyResponse>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
@@ -64,9 +87,9 @@ class ProductListingFragment: BaseFragment() {
     }
 
     private fun observeProductList() {
-        mViewModel.productList.observe(this, Observer<ArrayList<ProductListingDataClass.DummyResponse>> { productList ->
-            if (productList != null) {
-                productListAdapter.addProducts(productList)
+        mViewModel.partialProductList.observe(this, Observer<ArrayList<ProductListingDataClass.DummyResponse>> { partialProductList ->
+            if (partialProductList != null) {
+                productListAdapter.addProducts(partialProductList)
             }
         })
     }
