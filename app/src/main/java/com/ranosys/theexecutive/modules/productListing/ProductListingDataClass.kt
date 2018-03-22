@@ -14,7 +14,7 @@ class ProductListingDataClass {
                         var type: String = "New",
                         var discountPer: Int = 40,
                         var collectionTag: String = "Chinese Collections",
-                        var imageUrl: String = "http://www.thoroughbredbonusscheme.co.nz/images/category_9/Online%20Sale%20Hot%20products%20Zara%20Black%20Printed%20Slides%20Mens%20Footwear%20R40JEdtLkigj_5.jpeg")
+                        var imageUrl: String = "https://www.planwallpaper.com/static/images/8ccb4ec4225b290726ae9be975220ff4.jpg")
 
 
 }

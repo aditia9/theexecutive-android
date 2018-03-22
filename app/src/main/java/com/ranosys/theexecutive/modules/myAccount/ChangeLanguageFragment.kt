@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.myAccount
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
@@ -30,7 +31,7 @@ class ChangeLanguageFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager = LinearLayoutManager(activity as Context)
         language_list.layoutManager = linearLayoutManager
 
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
