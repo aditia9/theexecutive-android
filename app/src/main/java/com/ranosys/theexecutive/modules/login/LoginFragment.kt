@@ -139,7 +139,7 @@ class LoginFragment : BaseFragment() {
                 }
 
                 tv_forgot_password.id -> {
-                    FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), ForgotPasswordFragment::class.java.name)
+                    FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), null, ForgotPasswordFragment::class.java.name, true)
 
                 }
             }

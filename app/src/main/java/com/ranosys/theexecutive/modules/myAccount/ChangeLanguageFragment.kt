@@ -57,7 +57,7 @@ class ChangeLanguageFragment: BaseFragment() {
         btn_continue.setOnClickListener {
             //store selected language code
             SavedPreferences.getInstance()?.saveStringValue(storeListAdapter.selectedStore, Constants.SELECTED_STORE_CODE_KEY)
-            FragmentUtils.addFragment(activity as Context, HomeFragment(), HomeFragment::class.java.name)
+            FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, true)
 
         }
     }

@@ -35,10 +35,10 @@ class CategoryTwoLevelAdapter(context: Context?, list :ArrayList<ChildrenData>?)
         val listGroupBinding: RowSecondBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_second, p3, false);
         listGroupBinding.childData = getGroup(p0)
         if(isExpanded){
-            listGroupBinding.root.tb_expand_collapse.isChecked = true
+            listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.dropdown)
         }
         else{
-            listGroupBinding.root.tb_expand_collapse.isChecked = false
+            listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.forward)
         }
         return listGroupBinding.root
     }

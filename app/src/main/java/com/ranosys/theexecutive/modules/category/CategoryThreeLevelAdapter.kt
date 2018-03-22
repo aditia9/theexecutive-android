@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.modules.category
 import android.content.Context
 import android.database.DataSetObserver
 import android.databinding.DataBindingUtil
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.ExpandableListAdapter
 import android.widget.ExpandableListView
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.RowFirstBinding
+import com.ranosys.theexecutive.utils.Constants
 
 /**
  * Created by Mohammad Sunny on 9/3/18.
@@ -46,9 +48,9 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
             return 0
     }
 
-    override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
+    override fun getChildView(group: Int, child: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
         val expandableListView = SecondLevelExpandableListView(context)
-        expandableListView.setAdapter(CategoryTwoLevelAdapter(context, categoryList?.get(p0)?.children_data))
+        expandableListView.setAdapter(CategoryTwoLevelAdapter(context, categoryList?.get(group)?.children_data))
         expandableListView.setGroupIndicator(null)
         expandableListView.setChildIndicator(null)
         expandableListView.setDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
@@ -63,11 +65,13 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
             }
 
         })
-       /* expandableListView.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
-            override fun onGroupClick(expandableListView: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
-                Log.i("group Size",""+categoryList?.get(p2)?.children_data?.size)
-                if(categoryList?.get(p2)?.children_data?.size!! == 0){
 
+        expandableListView.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
+            override fun onGroupClick(expandableListView: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
+                if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
+                    val bundle = Bundle()
+                    bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
+                   // FragmentUtils.addFragment(context!!, ProductListingFragment(), null, ProductListingFragment::class.java.name, true)
                 }
                 return false
             }
@@ -75,13 +79,13 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
 
         expandableListView.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
             override fun onChildClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Int, p4: Long): Boolean {
-                Log.i("child List Size",""+categoryList?.get(p2)?.children_data?.get(p3)?.children_data?.size)
-                if(categoryList?.get(p2)?.children_data?.get(p3)?.children_data?.size!! == 0){
-
-                }
+                val bundle = Bundle()
+                bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.children_data?.get(p3)?.id!!)
+                //FragmentUtils.addFragment(context!!, ProductListingFragment(), null, ProductListingFragment::class.java.name, true)
                 return false
             }
-        })*/
+        })
+
 
         return expandableListView
 

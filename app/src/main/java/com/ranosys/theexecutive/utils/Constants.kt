@@ -3,8 +3,7 @@ package com.ranosys.theexecutive.utils
 /**
  * Created by Mohammad Sunny on 22/2/18.
  */
-class Constants {
-    companion object {
+object Constants {
         val PREF_NAME = "data_pref"
         const val ADMIN_TOKEN = "cigid62rumgjietso83lrlk16c5ki7bp"
         val pref_name = "data_pref"
@@ -28,5 +27,5 @@ class Constants {
         val UNKNOWN_ERROR: String = "Something went wrong"
         val PRODUCT_MEDIA_URL: String = "product_media_url"
         val CATEGORY_MEDIA_URL: String = "category_media_url"
-    }
+        val CATEGORY_ID: String = "category_id"
 }

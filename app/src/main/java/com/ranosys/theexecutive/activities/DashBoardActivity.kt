@@ -26,10 +26,10 @@ class DashBoardActivity: BaseActivity() {
         val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding?.toolbarViewModel = toolbarViewModel
         if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
-            FragmentUtils.addFragment(this, ChangeLanguageFragment(), ChangeLanguageFragment::class.java.name)
+            FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
 
         }else{
-            FragmentUtils.addFragment(this, HomeFragment(), HomeFragment::class.java.name)
+            FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
         }
 
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
