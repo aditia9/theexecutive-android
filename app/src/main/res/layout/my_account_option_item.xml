@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="option"
+            type="com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass.MyAccountOption"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/thirty_dp"
+        android:paddingBottom="@dimen/thirty_dp">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/thirty_dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/thirty_dp" />
+
+        <ImageView
+            android:id="@+id/option_icon_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/my_account_option_icon"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/option_name_tv"
+            app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/tick" />
+
+        <TextView
+            android:id="@+id/option_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/language_hint"
+            android:text="@{option.title}"
+            android:fontFamily="@font/dax_regular"
+            android:layout_marginStart="@dimen/thirtyTwo_dp"
+            android:textColor="@color/theme_black_color"
+            android:textSize="@dimen/eighteen_sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/option_icon_iv"/>
+
+
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
