@@ -12,9 +12,11 @@
     <string name="empty_user_id">Please provide NRIC /FIN /Passport.</string>
     <string name="empty_password">Please provide Password.</string>
     <string name="mobile_error">Please provide Mobile.</string>
+    <string name="dob_error">Please provide DOB.</string>
     <string name="city_error">Please provide city.</string>
     <string name="state_error">Please provide state</string>
-    <string name="name_error">Please provide a name</string>
+    <string name="first_name_error">Please provide first name</string>
+    <string name="last_name_error">Please provide last name</string>
     <string name="empty_description">Please provide Description.</string>
     <string name="name">Name</string>
     <string name="male">Male</string>
@@ -57,8 +59,14 @@
     <string name="email">Email address</string>
     <string name="mobile_number">Mobile number</string>
     <string name="address">Address</string>
-    <string name="postcode">Postcode</string>
+    <string name="postcode">Zip/ Postcode</string>
     <string name="confirm_password">Confirm password</string>
     <string name="subscribe">Suscribe to get IDR 50,000 Voucher</string>
     <string name="term_and_condition"><![CDATA[By creating your account, you agree to our Terms & Conditions and Privacy Policy]]></string>
+    <string name="dob_hint">DD/MM/YYYY</string>
+    <string name="street_address_1">Street Address Line 1</string>
+    <string name="street_address_2">Street Address Line 2</string>
+    <string name="postal_error">Please provide postal code</string>
+    <string name="valid_password_error">Please provide valid password</string>
+    <string name="confirm_password_error">Password mismatch</string>
 </resources>

@@ -4,6 +4,7 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
 import com.ranosys.theexecutive.modules.login.LoginDataClass
+import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
@@ -165,6 +166,51 @@ class AppRepository private constructor(){
                 }
             })
         }
+
+        fun getCountryList(callBack: ApiCallback<List<RegisterDataClass.Country>>){
+            val retrofit = ApiClient.retrofit
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val callGet = retrofit?.create<ApiService.CountryListService>(ApiService.CountryListService::class.java)?.countryList(storeCode)
+
+            callGet?.enqueue(object : Callback<List<RegisterDataClass.Country>> {
+                override fun onResponse(call: Call<List<RegisterDataClass.Country>>?, response: Response<List<RegisterDataClass.Country>>?) {
+                    if(!response!!.isSuccessful){
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }else{
+                        callBack.onSuccess(response.body())
+                    }
+                }
+
+                override fun onFailure(call: Call<List<RegisterDataClass.Country>>, t: Throwable) {
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("Country Api:","Failed")
+
+                }
+            })
+        }
+
+        fun getCityList(stateCode: Int, callBack: ApiCallback<List<RegisterDataClass.City>>){
+            val retrofit = ApiClient.retrofit
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+            val callGet = retrofit?.create<ApiService.CityListService>(ApiService.CityListService::class.java)?.cityList(storeCode, stateCode)
+
+            callGet?.enqueue(object : Callback<List<RegisterDataClass.City>> {
+                override fun onResponse(call: Call<List<RegisterDataClass.City>>?, response: Response<List<RegisterDataClass.City>>?) {
+                    if(!response!!.isSuccessful){
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }else{
+                        callBack.onSuccess(response.body())
+                    }
+                }
+
+                override fun onFailure(call: Call<List<RegisterDataClass.City>>, t: Throwable) {
+                    callBack.onError(Constants.ERROR)
+                    Utils.printLog("City Api:","Failed")
+
+                }
+            })
+        }
+
 
     }
 

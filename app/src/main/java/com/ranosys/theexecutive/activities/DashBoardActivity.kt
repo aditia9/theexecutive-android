@@ -6,6 +6,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
+import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 
 /**
@@ -17,7 +18,7 @@ class DashBoardActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding?.toolbarViewModel = toolbarViewModel
-        FragmentUtils.addFragment(this, LoginFragment(), LoginFragment::class.java.name)
+        FragmentUtils.addFragment(this, RegisterFragment(), RegisterFragment::class.java.name)
     }
 
 }

@@ -13,56 +13,47 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.fragment_register.*
 
 
 /**
  * Created by Mohammad Sunny on 31/1/18.
  */
 class RegisterFragment: BaseFragment() {
-    private var registerViewModel: RegisterViewModel? = null
 
-    companion object {
-        fun newInstance(): RegisterFragment {
-            return RegisterFragment()
-        }
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setTitle()
-
-    }
+    private lateinit var  registerViewModel: RegisterViewModel
 
     override fun onResume() {
         super.onResume()
-        setTitle(getString(R.string.title_register))
+        setToolBarParams(getString(R.string.title_register), 0, false, 0, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentRegisterBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
-        registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java!!)
+        registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
         mViewDataBinding?.registerViewModel =  registerViewModel
-        mViewDataBinding?.executePendingBindings()
-        observeRegisterButton()
+
+        registerViewModel.callCountryApi()
         return mViewDataBinding?.root
 
     }
 
-    private fun observeRegisterButton() {
-        registerViewModel?.buttonClicked?.observe(this, Observer<Int> { id ->
-            Utils.hideSoftKeypad(activity as Context)
-            when (id) {
-            //btn_signup.id -> register()
-            }
-        })
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    private fun register() {
-        if (Utils.isConnectionAvailable(activity as Context)) {
-            showLoading()
-            //do register
-        } else {
-            Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show()
+        btn_create_account.setOnClickListener {
+
+            Utils.hideSoftKeypad(activity as Context)
+            if (Utils.isConnectionAvailable(activity as Context)) {
+                //TODO - showLoading()
+                registerViewModel.callRegisterApi()
+
+            } else {
+                Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+            }
         }
+
+
     }
 
 }
