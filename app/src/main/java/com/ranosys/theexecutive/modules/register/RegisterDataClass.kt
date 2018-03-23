@@ -25,10 +25,14 @@ class RegisterDataClass {
     }
 
     data class State(
-            val id: String,
-            val code: String,
-            val name: String
-    )
+            val id: String = "",
+            val code: String = "123",
+            val name: String = "raj"
+    ){
+        override fun toString(): String {
+            return name
+        }
+    }
 
 
     data class City(

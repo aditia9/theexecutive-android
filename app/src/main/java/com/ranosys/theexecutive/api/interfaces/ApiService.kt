@@ -66,6 +66,6 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun cityList(@Path("store_code") storeCode:String, @Path("state_code") stateCode:Int): Call<List<RegisterDataClass.City>>
+        fun cityList(@Path("store_code") storeCode:String, @Path("state_code") stateCode:String): Call<List<RegisterDataClass.City>>
     }
 }

@@ -38,6 +38,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var city: ObservableField<String> = ObservableField()
     var country: ObservableField<String> = ObservableField()
     var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
+    var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
     var postalCode: ObservableField<String> = ObservableField()
     var postalCodeError: ObservableField<String> = ObservableField()
     var password: ObservableField<String> = ObservableField()
@@ -47,9 +48,11 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var mutualresponse = MutableLiveData<ApiResponse<RegisterDataClass.RegisterResponse>>()
 
     var countryList :MutableList<RegisterDataClass.Country> = mutableListOf<RegisterDataClass.Country>()
+    var stateList :MutableList<RegisterDataClass.State> = mutableListOf<RegisterDataClass.State>()
 
     init {
         countryList.add(RegisterDataClass.Country(available_regions = null))
+        stateList.add(RegisterDataClass.State())
     }
 
 
@@ -104,16 +107,17 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     fun onCountrySelection(countrySpinner: View, position: Int){
         selectedcountry.set(countryList[position])
         //TODO - update data set for province spinner
+        if(null != selectedcountry.get().available_regions)
+        stateList.addAll(selectedcountry.get().available_regions as ArrayList)
     }
 
-    fun onStateSelection(stateSpinner: Spinner){
-        state.set(stateSpinner.selectedItem.toString())
+    fun onStateSelection(stateSpinner: View, position: Int){
+        selectedState.set(stateList[position])
         //TODO - call respective city for city api spinner
-        val stateCode = 543 // will be replaced by actual code of selected state
-        callCityApi(stateCode)
+        callCityApi(selectedState.get().id)
     }
 
-    private fun callCityApi(stateCode: Int) {
+    private fun callCityApi(stateCode: String) {
         AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>>{
             override fun onException(error: Throwable) {
                 Utils.printLog("City API", "error")
@@ -149,14 +153,26 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             override fun onError(errorMsg: String) {
                 Utils.printLog("Country API", "error")
                 var countries = ArrayList<RegisterDataClass.Country>()
-                countries.add(RegisterDataClass.Country(full_name_locale = "india", available_regions = null))
-                countries.add(RegisterDataClass.Country(full_name_locale = "pak",available_regions = null))
-                countries.add(RegisterDataClass.Country(full_name_locale = "shrilanks",available_regions = null))
-                countries.add(RegisterDataClass.Country(full_name_locale = "bhutan",available_regions = null))
-                countries.add(RegisterDataClass.Country(full_name_locale = "usa",available_regions = null))
-                countries.add(RegisterDataClass.Country(full_name_locale = "uk",available_regions = null))
-                countries.add(RegisterDataClass.Country(full_name_locale = "Australia",available_regions = null))
-                countries.add(RegisterDataClass.Country(full_name_locale = "indinesia",available_regions = null))
+                var states = ArrayList<RegisterDataClass.State>()
+                states.add(RegisterDataClass.State())
+                states.add(RegisterDataClass.State())
+                states.add(RegisterDataClass.State())
+                states.add(RegisterDataClass.State())
+
+                var states2 = ArrayList<RegisterDataClass.State>()
+                states.add(RegisterDataClass.State(name = "MP"))
+                states.add(RegisterDataClass.State(name = "MP"))
+                states.add(RegisterDataClass.State(name = "MP"))
+                states.add(RegisterDataClass.State(name = "MP"))
+
+
+                countries.add(RegisterDataClass.Country(full_name_locale = "india", available_regions = states))
+                countries.add(RegisterDataClass.Country(full_name_locale = "shrilanks",available_regions = states2))
+                countries.add(RegisterDataClass.Country(full_name_locale = "bhutan",available_regions = states))
+                countries.add(RegisterDataClass.Country(full_name_locale = "usa",available_regions = states2))
+                countries.add(RegisterDataClass.Country(full_name_locale = "uk",available_regions = states))
+                countries.add(RegisterDataClass.Country(full_name_locale = "Australia",available_regions = states2))
+                countries.add(RegisterDataClass.Country(full_name_locale = "indinesia",available_regions = states))
 
                 countryList.addAll(countries as ArrayList<RegisterDataClass.Country>)
             }

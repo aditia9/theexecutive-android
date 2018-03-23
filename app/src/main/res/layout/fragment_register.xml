@@ -206,12 +206,13 @@
 
 
                 <Spinner
-                    android:id="@+id/spinner_province"
+                    android:id="@+id/spinner_state"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:spinnerMode="dropdown"
-                    android:entries="@array/states_array"
+                    android:entries="@{registerViewModel.stateList}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onStateSelection(parent, pos)}"
                     android:padding="@dimen/ten_dp"
                     android:background="@drawable/spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
@@ -229,7 +230,7 @@
                     android:spinnerMode="dropdown"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                    app:layout_constraintTop_toBottomOf="@id/spinner_province" />
+                    app:layout_constraintTop_toBottomOf="@id/spinner_state" />
 
 
                 <android.support.design.widget.TextInputLayout

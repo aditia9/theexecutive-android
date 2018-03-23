@@ -189,7 +189,7 @@ class AppRepository private constructor(){
             })
         }
 
-        fun getCityList(stateCode: Int, callBack: ApiCallback<List<RegisterDataClass.City>>){
+        fun getCityList(stateCode: String, callBack: ApiCallback<List<RegisterDataClass.City>>){
             val retrofit = ApiClient.retrofit
             val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
             val callGet = retrofit?.create<ApiService.CityListService>(ApiService.CityListService::class.java)?.cityList(storeCode, stateCode)
