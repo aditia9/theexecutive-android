@@ -19,6 +19,7 @@ class Constants {
         val MAINTENENCE_OFF = "0"
         val MAINTENENCE_ON = "1"
         val CONFIG_FILE_NAME = "config"
+        val FORGOT_PASSWORD_REQUEST_PARAM_TEMPLATE = "email_reset"
         val ALL: String = "all"
         val TYPE_FACEBOOK: String = "facebook"
         val TYPE_GMAIL: String = "google"
