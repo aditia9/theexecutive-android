@@ -1,0 +1,98 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="newsLetterVM"
+            type="com.ranosys.theexecutive.modules.myAccount.NewsLetterViewModel"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_main_layout"
+        android:paddingTop="@dimen/twenty_dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:fillViewport="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_subscribe">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/thirty_dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/thirty_dp" />
+
+
+                <TextView
+                    android:id="@+id/tv_subscribe_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dax_light"
+                    android:textSize="@dimen/sixteen_sp"
+                    android:text="@string/subscribe_info"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_email"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/sixty_dp"
+                    android:fontFamily="@font/dax_light"
+                    android:hint="@string/email"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{newsLetterVM.emailError}"
+                    android:labelFor="@+id/et_email"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/til_email">
+
+                    <EditText
+                        android:id="@+id/et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dax_light"
+                        android:inputType="textEmailAddress"
+                        android:onTextChanged="@{() -> newsLetterVM.onEmailTextChanged()}"
+                        android:text="@={newsLetterVM.email}"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+        <Button
+            android:id="@+id/btn_subscribe"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:textSize="@dimen/sixteen_sp"
+            android:textColor="@color/colorText"
+            android:textAllCaps="false"
+            android:background="@color/theme_black_color"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:fontFamily="@font/dax_regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

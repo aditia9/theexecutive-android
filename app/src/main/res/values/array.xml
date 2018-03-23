@@ -6,4 +6,22 @@
        <item>Delhi</item>
        <item>JK</item>
    </string-array>
+
+    <string-array name="my_account_option_title_array">
+        <item>My Information</item>
+        <item>My Orders</item>
+        <item>Suscribe to Newsletter</item>
+        <item>Select Language</item>
+        <item>Change Password</item>
+        <item>Contact Us</item>
+    </string-array>
+
+    <integer-array name="my_account_option_icon_array">
+        <item>@drawable/back</item>
+        <item>@drawable/back</item>
+        <item>@drawable/back</item>
+        <item>@drawable/back</item>
+        <item>@drawable/back</item>
+        <item>@drawable/back</item>
+    </integer-array>
 </resources>

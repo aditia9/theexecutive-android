@@ -8,6 +8,7 @@ import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.myAccount.MyAccountFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -25,7 +26,7 @@ class DashBoardActivity: BaseActivity() {
             FragmentUtils.addFragment(this, ChangeLanguageFragment(), ChangeLanguageFragment::class.java.name)
 
         }else{
-            FragmentUtils.addFragment(this, LoginFragment(), LoginFragment::class.java.name)
+            FragmentUtils.addFragment(this, MyAccountFragment(), MyAccountFragment::class.java.name)
         }
     }
 

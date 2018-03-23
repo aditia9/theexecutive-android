@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.myAccount
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
+import com.ranosys.theexecutive.utils.FragmentUtils
 import kotlinx.android.synthetic.main.fragment_my_account.*
 
 /**
@@ -32,11 +34,29 @@ class MyAccountFragment: BaseFragment() {
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
         my_account_options_list.addItemDecoration(itemDecor)
 
+        my_account_options_list.adapter = MyAccountAdapter(getAccountOptions(), activity as Context)
+
     }
 
-    class MyAccountAdapter(val optionArray: List<MyAccountDataClass.MyAccountOption>): RecyclerView.Adapter<MyAccountAdapter.MyAccountHolder>(){
+    override fun onResume() {
+        super.onResume()
+        setToolBarParams(getString(R.string.my_account_title), 0 , false, 0 ,false)
+    }
+
+    private fun getAccountOptions(): List<MyAccountDataClass.MyAccountOption> {
+        var optionList = ArrayList<MyAccountDataClass.MyAccountOption>()
+
+        val titleArray = resources.getStringArray(R.array.my_account_option_title_array)
+        val iconArray = resources.getIntArray(R.array.my_account_option_icon_array)
+
+        (0..(titleArray.size -1)).mapTo(optionList) { MyAccountDataClass.MyAccountOption(titleArray[it], iconArray[it]) }
+
+        return optionList
+    }
+
+    class MyAccountAdapter(val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context): RecyclerView.Adapter<MyAccountAdapter.MyAccountHolder>(){
         override fun onBindViewHolder(holder: MyAccountHolder?, position: Int) {
-            holder?.bind(optionArray[position])
+            holder?.bind(optionArray[position], context)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyAccountHolder {
@@ -50,12 +70,16 @@ class MyAccountFragment: BaseFragment() {
         class MyAccountHolder(val itemBinding: MyAccountOptionItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
 
 
-            fun bind(option: MyAccountDataClass.MyAccountOption){
+            fun bind(option: MyAccountDataClass.MyAccountOption, context: Context){
                 itemBinding.option = option
 
                 itemView.setOnClickListener {
                     //TODO - move to respective screen using option title
-                    option.title
+                    when(option.title){
+                        context.getString(R.string.news_letter_option) -> {
+                            FragmentUtils.addFragment(context, NewsLetterFragment(),NewsLetterFragment::class.java.name )
+                        }
+                    }
                 }
             }
         }

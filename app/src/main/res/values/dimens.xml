@@ -10,4 +10,5 @@
     <dimen name="eighteen_sp">18sp</dimen>
     <dimen name="one_dip">1dip</dimen>
     <dimen name="twenty_four_dp">24dp</dimen>
+    <dimen name="sixty_dp">60dp</dimen>
 </resources>

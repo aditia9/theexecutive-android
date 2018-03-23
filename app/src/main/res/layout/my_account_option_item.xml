@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/thirty_dp"
-        android:paddingBottom="@dimen/thirty_dp">
+        android:paddingBottom="@dimen/thirty_dp"
+        android:background="?selectableItemBackground">
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline_right"
@@ -35,18 +36,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/my_account_option_icon"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/option_name_tv"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/tick" />
+            app:srcCompat="@drawable/back" />
 
         <TextView
             android:id="@+id/option_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/language_hint"
-            android:text="@{option.title}"
+           android:text="@{option.title}"
             android:fontFamily="@font/dax_regular"
             android:layout_marginStart="@dimen/thirtyTwo_dp"
             android:textColor="@color/theme_black_color"
