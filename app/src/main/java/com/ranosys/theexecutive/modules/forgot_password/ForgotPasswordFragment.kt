@@ -13,7 +13,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
 import com.ranosys.theexecutive.utils.Utils
-import kotlinx.android.synthetic.main.fragment_forgot_password.*
+import kotlinx.android.synthetic.main.fragment_news_letter.*
 
 /**
  * Created by nikhil on 8/3/18.
@@ -28,10 +28,24 @@ class ForgotPasswordFragment(): BaseFragment() {
         forgotPassVM = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         mBinding.vm = forgotPassVM
 
-        observeSubmitClicked()
         observeApiSuccess()
         observeApiFailure()
         return mBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        btn_subscribe.setOnClickListener({
+            Utils.printLog("FORGOT PASSWORD", "SUBMIT CLICKED")
+
+            if (Utils.isConnectionAvailable(activity as Context)) {
+                forgotPassVM.callForgetPasswordApi()
+
+            }else{
+                Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun onResume() {
@@ -50,34 +64,4 @@ class ForgotPasswordFragment(): BaseFragment() {
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
         })
     }
-
-    private fun observeSubmitClicked() {
-        forgotPassVM.btnClicked?.observe(this, Observer<Int> { id ->
-            when(id){
-                btn_submit.id ->{
-                    Utils.printLog("FORGOT PASSWORD", "SUBMIT CLICKED")
-
-                    if (Utils.isConnectionAvailable(activity as Context)) {
-                        //validation
-                        if(validateData(et_email.text.toString())){
-                            //showLoading()
-                            forgotPassVM?.callForgetPasswordApi()
-                        }else{
-                            //show validation message
-                            til_email.error = "Invalid Email"
-                        }
-                    }else{
-                        Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        })
-
-    }
-
-    private fun validateData(email: String): Boolean {
-        return Utils.isValidEmail(email)
-    }
-
-
 }
