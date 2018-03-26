@@ -21,6 +21,14 @@ interface ApiService {
         fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body loginRequest: LoginDataClass.LoginRequest?): Call<String>
     }
 
+    interface RegistrationService {
+        @POST("rest/{store_code}/V1/customers")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun registration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body registrationRequest: RegisterDataClass.RegisterRequest?): Call<String>
+    }
+
     interface StoresService {
         @GET("rest/all/V1/store/storeViews")
         @Headers(ApiConstants.CONTENT_TYPE,
@@ -62,7 +70,7 @@ interface ApiService {
     }
 
     interface CityListService {
-        @GET("rest/{store_code}/custom/cities/{state_code}")
+        @GET("rest/{store_code}/V1/custom/cities/{state_code}")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)

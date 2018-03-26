@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.modules.register
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil

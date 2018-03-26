@@ -4,10 +4,6 @@ package com.ranosys.theexecutive.modules.register
  * Created by Mohammad Sunny on 31/1/18.
  */
 class RegisterDataClass {
-    data class RegisterRequest(var name: String, var mobile: String,
-                               var email: String, var city: String,
-                               var state: String, var gender: String,
-                               var password: String)
 
     data class RegisterResponse(var isSuccess: Boolean)
 
@@ -37,6 +33,75 @@ class RegisterDataClass {
 
     data class City(
             val name: String,
-            val value: Int
+            val value: Int = 0
+    ){
+        override fun toString(): String {
+            return name
+        }
+    }
+
+
+    data class RegisterRequest(
+            val customer: Customer,
+            val password: String
     )
+
+    data class Customer(
+            val group_id: Int,
+            val confirmation: String,
+            val dob: String,
+            val email: String,
+            val prefix: String = "Mr.",
+            val firstname: String,
+            val lastname: String,
+            val gender: Int,
+            val store_id: Int,
+            val website_id: Int,
+            val addresses: List<Address>
+    )
+
+    data class Address(
+            val region: Region,
+            val region_id: Int,
+            val country_id: String,
+            val street: List<String>,
+            val telephone: String,
+            val postcode: String,
+            val city: String,
+            val prefix: String = "Mr.",
+            val firstname: String,
+            val lastname: String,
+            val default_shipping: Boolean,
+            val default_billing: Boolean
+    )
+
+    data class Region(
+            val region_code: String,
+            val region: String,
+            val region_id: Int
+    )
+
+
+data class RegistrationResponse(
+		val id: Int,
+		val group_id: Int,
+		val default_billing: String,
+		val default_shipping: String,
+		val confirmation: String,
+		val created_at: String,
+		val updated_at: String,
+		val created_in: String,
+		val dob: String,
+		val email: String,
+		val firstname: String,
+		val lastname: String,
+		val prefix: String,
+		val gender: Int,
+		val store_id: Int,
+		val website_id: Int,
+		val addresses: List<Address>,
+		val disable_auto_group_change: Int
+)
+
+
 }

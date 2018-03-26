@@ -50,6 +50,7 @@
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:hint="@string/first_name"
+                    app:errorText="@{registerViewModel.firstNameError}"
                     android:theme="@style/tilTheme"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
@@ -58,6 +59,7 @@
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_first_name"
                         android:fontFamily="@font/dax_light"
+                        android:text="@={registerViewModel.firstName}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
@@ -68,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/last_name"
+                    app:errorText="@{registerViewModel.lastNameError}"
                     android:theme="@style/tilTheme"
                     app:layout_constraintTop_toBottomOf="@id/til_first_name"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
@@ -76,9 +79,53 @@
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_last_name"
                         android:fontFamily="@font/dax_light"
+                        android:text="@={registerViewModel.lastName}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/select_gender_label"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dax_regular"
+                    android:text="Select Gender"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+                    app:layout_constraintRight_toRightOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@+id/til_last_name"/>
+
+                <RadioGroup
+                    android:id="@+id/gender_radio_group"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:checkedButton="@id/rb_male"
+                    android:layout_marginTop="20dp"
+                    android:onCheckedChanged="@{(view, id) -> registerViewModel.onGenderSelection(view, id)}"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/select_gender_label">
+
+                    <RadioButton
+                        android:id="@+id/rb_male"
+                        android:layout_width="@dimen/match_constraint"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/dax_light"
+                        android:buttonTint="@color/theme_accent_color"
+                        android:text="@string/male" />
+
+
+                    <RadioButton
+                        android:id="@+id/rb_female"
+                        android:layout_width="@dimen/match_constraint"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/dax_light"
+                        android:buttonTint="@color/theme_accent_color"
+                        android:text="@string/female" />
+                </RadioGroup>
 
 
 
@@ -89,14 +136,16 @@
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:theme="@style/tilTheme"
                     android:hint="@string/email"
+                    app:errorText="@{registerViewModel.emailAddressError}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/til_last_name">
+                    app:layout_constraintTop_toBottomOf="@id/gender_radio_group">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_email_address"
                         android:layout_width="match_parent"
                         android:fontFamily="@font/dax_light"
+                        android:text="@={registerViewModel.emailAddress}"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
@@ -120,6 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/mobile_number"
+                    app:errorText="@{registerViewModel.mobileNumberError}"
                     android:theme="@style/tilTheme"
                     app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
                     app:layout_constraintTop_toBottomOf="@id/wrapper_email_address"
@@ -130,6 +180,7 @@
                         android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.mobileNumber}"
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -139,6 +190,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/dob_hint"
+                    app:errorText="@{registerViewModel.dobError}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@id/wrapper_mobile_no">
@@ -158,6 +210,7 @@
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/street_address_1"
                     android:theme="@style/tilTheme"
+                    app:errorText="@{registerViewModel.streetAddress1Error}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@id/wrapper_dob">
@@ -167,6 +220,7 @@
                         android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress1}"
                         android:inputType="text" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -176,6 +230,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/street_address_2"
+                    app:errorText="@{registerViewModel.streetAddress2Error}"
                     android:theme="@style/tilTheme"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
@@ -186,6 +241,7 @@
                         android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress2}"
                         android:inputType="text" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -225,7 +281,8 @@
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:padding="@dimen/ten_dp"
-                    android:entries="@array/states_array"
+                    android:entries="@{registerViewModel.cityList}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onCitySelection(parent, pos)}"
                     android:background="@drawable/spinner"
                     android:spinnerMode="dropdown"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
@@ -239,6 +296,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/postcode"
+                    app:errorText="@{registerViewModel.postalCodeError}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@id/spinner_city">
@@ -248,54 +306,10 @@
                         android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.postalCode}"
                         android:inputType="text" />
                 </android.support.design.widget.TextInputLayout>
 
-
-                <RadioGroup
-                    android:id="@+id/radioGroup"
-                    android:layout_width="@dimen/match_constraint"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@drawable/radiobutton"
-                    android:layout_marginTop="20dp"
-                    android:padding="@dimen/ten_dp"
-                    app:layout_constraintStart_toStartOf="@id/guideline_left"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                    app:layout_constraintTop_toBottomOf="@id/wrapper_postcode">
-
-                    <RadioButton
-                        android:id="@+id/rb_male"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/dax_light"
-                        android:textSize="@dimen/sixteen_sp"
-                        android:button="@drawable/radiobuttonselector"
-                        android:paddingStart="@dimen/ten_dp"
-                        android:layout_marginLeft="@dimen/ten_dp"
-                        android:layout_weight="1"
-                        android:text="@string/male" />
-
-
-                    <RadioButton
-                        android:id="@+id/rb_female"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@drawable/radiobuttonselector"
-                        android:paddingStart="@dimen/ten_dp"
-                        android:textSize="@dimen/sixteen_sp"
-                        android:fontFamily="@font/dax_light"
-                        android:text="@string/female" />
-                </RadioGroup>
-
-                <View
-                    android:layout_width="@dimen/match_constraint"
-                    android:layout_height="1dp"
-                    android:background="@color/theme_black_color"
-                    app:layout_constraintTop_toBottomOf="@id/radioGroup"
-                    app:layout_constraintStart_toStartOf="@id/guideline_left"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_right" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/wrapper_password"
@@ -303,10 +317,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/password"
+                    app:errorText="@{registerViewModel.passwordError}"
                     android:theme="@style/tilTheme"
+                    android:text="@={registerViewModel.password}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/radioGroup">
+                    app:layout_constraintTop_toBottomOf="@id/wrapper_postcode">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_password"
@@ -322,6 +338,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/confirm_password"
+                    app:errorText="@{registerViewModel.confirmPasswordError}"
                     android:theme="@style/tilTheme"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
@@ -332,7 +349,8 @@
                         android:inputType="textPassword"
                         android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.confirmPassword}"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <CheckBox

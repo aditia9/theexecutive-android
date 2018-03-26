@@ -23,5 +23,7 @@ class Constants {
         val TYPE_FACEBOOK: String = "facebook"
         val TYPE_GMAIL: String = "google"
         val UNKNOWN_ERROR: String = "Something went wrong"
+        val DEFAULT_GROUP_ID: Int = 1
+        val SOCIAL_LOGIN_CONFIRMATION: String = "social"
     }
 }
