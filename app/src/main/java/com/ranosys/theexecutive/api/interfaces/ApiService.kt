@@ -4,6 +4,7 @@ import com.ranosys.theexecutive.api.ApiConstants
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
+import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
@@ -62,6 +63,15 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun forgotPasswordApi(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body requets: ForgotPasswordDataClass.ForgotPasswordRequest): Call<Boolean>
+    }
+
+    interface PromotionService{
+        @GET("rest/{store_code}/V1/homepromotions/list")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getPromotions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String): Call<List<PromotionsResponseDataClass>>
+
     }
 
     interface CategoryService {

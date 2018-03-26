@@ -13,9 +13,30 @@ import com.ranosys.theexecutive.base.BaseViewModel
  */
 class CategoryModelView(application: Application) : BaseViewModel(application) {
 
+    var mutualPromotionResponse = MutableLiveData<ApiResponse<List<PromotionsResponseDataClass>>>()
     var mutualHomeResponse = MutableLiveData<ApiResponse<CategoryResponseDataClass>>()
     var categoryResponse: ObservableField<CategoryResponseDataClass>? = ObservableField<CategoryResponseDataClass>()
+    var promotionResponse: ObservableField<List<PromotionsResponseDataClass>>? = ObservableField<List<PromotionsResponseDataClass>>()
     var allCategoryDataResponse = MutableLiveData<ApiResponse<AllCategoryDataResponse>>()
+
+    fun getPromotions(){
+        val apiResponse = ApiResponse<List<PromotionsResponseDataClass>>()
+        AppRepository.getPromotions(object : ApiCallback<List<PromotionsResponseDataClass>>{
+            override fun onException(error: Throwable) {
+                mutualPromotionResponse.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                mutualPromotionResponse.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: List<PromotionsResponseDataClass>?) {
+                apiResponse.apiResponse = t
+                mutualPromotionResponse.value = apiResponse
+            }
+
+        })
+    }
 
     fun getCategories(){
         val apiResponse = ApiResponse<CategoryResponseDataClass>()

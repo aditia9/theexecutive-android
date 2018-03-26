@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.category
+package com.ranosys.theexecutive.modules.category.adapters
 
 import android.content.Context
 import android.database.DataSetObserver
@@ -11,6 +11,8 @@ import android.widget.ExpandableListAdapter
 import android.widget.ExpandableListView
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.RowFirstBinding
+import com.ranosys.theexecutive.modules.category.ChildrenData
+import com.ranosys.theexecutive.modules.category.SecondLevelExpandableListView
 import com.ranosys.theexecutive.utils.Constants
 
 /**
@@ -26,11 +28,12 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
         categoryList = list
     }
 
-    override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View {
+    override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View? {
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false);
         listGroupBinding.childData = getGroup(p0)
         return listGroupBinding.root
+
     }
 
     override fun getGroup(p0: Int): ChildrenData? {

@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
+import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.utils.Constants
 import kotlinx.android.synthetic.main.fragment_category.*
 
@@ -36,17 +37,25 @@ class CategoryFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolBarParams(getString(R.string.app_title),0, false, R.drawable.bag, true )
+        val inflater = LayoutInflater.from(context)
+
+
+        val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
+        promotionBinding?.categoryModel = categoryModelView
+        elv_parent_category.addHeaderView(promotionBinding?.root)
+
         elv_parent_category.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
             var previousGroup = -1
-            override fun onGroupExpand(p0: Int) {
-                if(p0 != previousGroup){
+            override fun onGroupExpand(groupPosition: Int) {
+                if(groupPosition != previousGroup){
                     elv_parent_category.collapseGroup(previousGroup)
                 }
-                previousGroup = p0
+                previousGroup = groupPosition
 
             }
 
         })
+
 
         elv_parent_category.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
             override fun onGroupClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
@@ -59,9 +68,15 @@ class CategoryFragment : BaseFragment() {
             }
         })
 
+        observePromotionsApiResponse()
         observeCategoryApiResponse()
         observeAllCategoryDataApiResponse()
+        getPromotions()
         getCategories()
+    }
+
+    private fun getPromotions() {
+        categoryModelView?.getPromotions()
     }
 
     private fun getCategories() {
@@ -70,6 +85,20 @@ class CategoryFragment : BaseFragment() {
 
     private fun getAllCategoriesData(queryMap : HashMap<String,String>?) {
         categoryModelView?.getAllCategoriesData(queryMap)
+    }
+
+    private fun observePromotionsApiResponse() {
+        categoryModelView?.mutualPromotionResponse?.observe(this, object : Observer<ApiResponse<List<PromotionsResponseDataClass>>> {
+            override fun onChanged(@Nullable apiResponse: ApiResponse<List<PromotionsResponseDataClass>>?) {
+                // hideLoading()
+                val response = apiResponse?.apiResponse ?: apiResponse?.error
+                if (response is List<*>) {
+                    categoryModelView?.promotionResponse?.set(response as List<PromotionsResponseDataClass>?)
+                } else {
+                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
     }
 
     private fun observeCategoryApiResponse() {

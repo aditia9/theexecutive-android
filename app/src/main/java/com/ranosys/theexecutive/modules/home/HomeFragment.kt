@@ -32,6 +32,7 @@ class HomeFragment : BaseFragment() {
 
     private fun setPagerAdapter(){
         val homeViewPager = HomeViewPager(childFragmentManager)
+        viewpager.setPagingEnabled(false)
         viewpager.adapter = homeViewPager
         viewpager.offscreenPageLimit = 0
         tabLayout.setupWithViewPager(viewpager)

@@ -6,6 +6,7 @@ import com.ranosys.theexecutive.api.interfaces.ApiService
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
+import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
@@ -114,6 +115,29 @@ object AppRepository {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
                 Utils.printLog("Login:","Failed")
+            }
+        })
+    }
+
+    fun getPromotions(callBack: ApiCallback<List<PromotionsResponseDataClass>>) {
+        val retrofit = ApiClient.retrofit
+        val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.PromotionService>(ApiService.PromotionService::class.java)?.getPromotions(ApiConstants.BEARER + adminToken, storeCode)
+
+        callGet?.enqueue(object : Callback<List<PromotionsResponseDataClass>> {
+            override fun onResponse(call: Call<List<PromotionsResponseDataClass>>?, response: Response<List<PromotionsResponseDataClass>>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<PromotionsResponseDataClass>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
             }
         })
     }

@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.category
+package com.ranosys.theexecutive.modules.category.adapters
 
 import android.content.Context
 import android.database.DataSetObserver
@@ -10,6 +10,7 @@ import android.widget.ExpandableListAdapter
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.RowSecondBinding
 import com.ranosys.theexecutive.databinding.RowThirdBinding
+import com.ranosys.theexecutive.modules.category.ChildrenData
 import kotlinx.android.synthetic.main.row_second.view.*
 
 /**
@@ -34,11 +35,14 @@ class CategoryTwoLevelAdapter(context: Context?, list :ArrayList<ChildrenData>?)
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowSecondBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_second, p3, false);
         listGroupBinding.childData = getGroup(p0)
-        if(isExpanded){
-            listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.dropdown)
-        }
-        else{
-            listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.forward)
+        if(categoryList?.get(p0)?.children_data?.size!! > 0) {
+            if (isExpanded) {
+                listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.dropdown)
+            } else {
+                listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.forward)
+            }
+        }else{
+            listGroupBinding.root.img_expand_collapse.setImageResource(0)
         }
         return listGroupBinding.root
     }

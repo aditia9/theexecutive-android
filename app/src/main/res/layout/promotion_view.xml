@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <data>
+        <variable
+            name="promotionResponse"
+            type="com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/img_promotion"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/promotion_image"
+            android:src="@drawable/one"
+            />
+
+    </RelativeLayout>
+</layout>
