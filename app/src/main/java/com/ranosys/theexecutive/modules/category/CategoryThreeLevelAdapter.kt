@@ -26,7 +26,6 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
         categoryList = list
     }
 
-
     override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View {
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false);
@@ -35,17 +34,17 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
     }
 
     override fun getGroup(p0: Int): ChildrenData? {
-        if(null != categoryList && categoryList!!.size > 0)
-            return categoryList?.get(p0)
-        else
-            return null
+        categoryList?.run {
+            return get(p0)
+        }
+        return null
     }
 
     override fun getGroupCount(): Int {
-        if(null != categoryList && categoryList!!.size > 0)
-            return categoryList?.size!!
-        else
-            return 0
+        categoryList?.run {
+            return size
+        }
+        return 0
     }
 
     override fun getChildView(group: Int, child: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
@@ -71,7 +70,7 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
                 if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
                     val bundle = Bundle()
                     bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
-                   // FragmentUtils.addFragment(context!!, ProductListingFragment(), null, ProductListingFragment::class.java.name, true)
+                    // FragmentUtils.addFragment(context!!, ProductListingFragment(), null, ProductListingFragment::class.java.name, true)
                 }
                 return false
             }

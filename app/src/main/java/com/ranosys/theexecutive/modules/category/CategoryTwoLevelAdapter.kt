@@ -24,10 +24,10 @@ class CategoryTwoLevelAdapter(context: Context?, list :ArrayList<ChildrenData>?)
     }
 
     override fun getGroupCount(): Int {
-        if(null != categoryList && categoryList!!.size > 0)
-            return categoryList?.size!!
-        else
-            return 0
+        categoryList?.run {
+            return size
+        }
+        return 0
     }
 
     override fun getGroupView(p0: Int, isExpanded: Boolean, p2: View?, p3: ViewGroup?): View {
@@ -44,17 +44,17 @@ class CategoryTwoLevelAdapter(context: Context?, list :ArrayList<ChildrenData>?)
     }
 
     override fun getGroup(p0: Int): ChildrenData? {
-        if(null != categoryList && categoryList!!.size > 0)
-            return categoryList?.get(p0)
-        else
-            return null
+        categoryList?.run {
+            return get(p0)
+        }
+        return null
     }
 
     override fun getChildrenCount(p0: Int): Int {
-        if(null != categoryList && categoryList!!.size > 0)
-            return categoryList?.get(p0)?.children_data?.size!!
-        else
-            return 0
+        categoryList?.run {
+            return get(p0).children_data.size
+        }
+        return 0
     }
 
     override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {

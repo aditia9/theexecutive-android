@@ -34,7 +34,7 @@ class DashBoardActivity: BaseActivity() {
 
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
             override fun onBackStackChanged() {
-                val backStackCount = supportFragmentManager.getBackStackEntryCount()
+                val backStackCount = supportFragmentManager.backStackEntryCount
                 if(backStackCount > 0){
                     val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
                     if(null != fragment){
