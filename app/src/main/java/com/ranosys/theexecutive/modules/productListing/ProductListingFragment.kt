@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentProductListingBinding
+import com.ranosys.theexecutive.utils.Constants
 import kotlinx.android.synthetic.main.fragment_product_listing.*
 
 /**
@@ -20,14 +21,19 @@ import kotlinx.android.synthetic.main.fragment_product_listing.*
  */
 class ProductListingFragment: BaseFragment() {
 
-    companion object {
-        const val COLUMN_TWO = 2
-        const val COLUMN_ONE = 2
-        const val COLUMN_CHANGE_FACTOR = 5
-    }
+    var category_id : Int? = null
+
+
     private lateinit var mBinding: FragmentProductListingBinding
     private lateinit var mViewModel: ProductListingViewModel
     private lateinit var productListAdapter: ProductListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val data = arguments
+        category_id = data?.get(Constants.CATEGORY_ID) as Int?
+        category_name = data?.get(Constants.CATEGORY_NAME) as String?
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_listing, container,  false)
@@ -38,8 +44,7 @@ class ProductListingFragment: BaseFragment() {
         //TODO - call filter option api
         mViewModel.getFilterOptions()
         //TODO - call product listing api
-        val sku: String = "1" //need to be replace with selected category sku
-        mViewModel.getProductListing(sku)
+        mViewModel.getProductListing(category_id.toString())
 
         observeProductList()
 
@@ -71,7 +76,7 @@ class ProductListingFragment: BaseFragment() {
                     val allProductLoaded = productListAdapter.itemCount >= mViewModel.totalProductCount
                     val shouldPaging = (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold)
 
-                    if(!mViewModel.isLoading && !allProductLoaded && shouldPaging){
+                    if(mViewModel.isLoading.not() && allProductLoaded.not() && shouldPaging){
                         Toast.makeText(recyclerView?.context, "load data", Toast.LENGTH_SHORT).show()
                         //TODO - call product listing api
                     }
@@ -83,7 +88,7 @@ class ProductListingFragment: BaseFragment() {
         val emptyList = ArrayList<ProductListingDataClass.DummyResponse>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.DummyResponse) {
-                Toast.makeText(activity, "Producted selected", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, selectedProduct.name + " product selected", Toast.LENGTH_SHORT).show()
                 //TODO - geather necessary info and move to product details
             }
 
@@ -94,7 +99,7 @@ class ProductListingFragment: BaseFragment() {
 
     private fun observeProductList() {
         mViewModel.partialProductList.observe(this, Observer<ArrayList<ProductListingDataClass.DummyResponse>> { partialProductList ->
-            if (partialProductList != null) {
+            partialProductList?.run {
                 productListAdapter.addProducts(partialProductList)
             }
         })
@@ -102,7 +107,13 @@ class ProductListingFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        val categoryName = "Men" //replace with selected category
-        setToolBarParams(categoryName, R.drawable.back, true, R.drawable.bag, true)
+        setToolBarParams(category_name, R.drawable.back, true, R.drawable.bag, true)
+    }
+
+    companion object {
+        const val COLUMN_TWO = 2
+        const val COLUMN_ONE = 1
+        const val COLUMN_CHANGE_FACTOR = 5
+        var category_name : String? = null
     }
 }

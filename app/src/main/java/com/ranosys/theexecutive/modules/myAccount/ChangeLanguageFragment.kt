@@ -65,7 +65,6 @@ class ChangeLanguageFragment: BaseFragment() {
     override fun onResume() {
         super.onResume()
         if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
-
             setToolBarParams(getString(R.string.select_lang_title), 0, false, 0, false)
         } else {
             setToolBarParams(getString(R.string.select_lang_title), R.drawable.back, true, 0, false)

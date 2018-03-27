@@ -1,7 +1,7 @@
 package com.ranosys.theexecutive.modules.category
 
 /**
- * Created by Mohammad Sunny on 5/2/18.
+ * Created by Mohammad Sunny on 21/2/18.
  */
 data class CategoryResponseDataClass(
 		val id: Int? = 0,

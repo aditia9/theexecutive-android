@@ -5,12 +5,12 @@ package com.ranosys.theexecutive.modules.category
  */
 
 data class PromotionsResponseDataClass(
-		val entity_id: String,
-		val title: String,
-		val description: String,
-		val type: String,
+		val entity_id: String?,
+		val title: String?,
+		val description: String?,
+		val type: String?,
 		val value: String,
-		val position: Int,
-		val image: String,
-		val created_at: String
+		val position: Int?,
+		val image: String?,
+		val created_at: String?
 )

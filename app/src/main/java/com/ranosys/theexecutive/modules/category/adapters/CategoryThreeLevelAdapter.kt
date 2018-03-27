@@ -13,7 +13,9 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.RowFirstBinding
 import com.ranosys.theexecutive.modules.category.ChildrenData
 import com.ranosys.theexecutive.modules.category.SecondLevelExpandableListView
+import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 
 /**
  * Created by Mohammad Sunny on 9/3/18.
@@ -73,7 +75,8 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
                 if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
                     val bundle = Bundle()
                     bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
-                    // FragmentUtils.addFragment(context!!, ProductListingFragment(), null, ProductListingFragment::class.java.name, true)
+                    bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
+                    FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 }
                 return false
             }
@@ -83,7 +86,8 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
             override fun onChildClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Int, p4: Long): Boolean {
                 val bundle = Bundle()
                 bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.children_data?.get(p3)?.id!!)
-                //FragmentUtils.addFragment(context!!, ProductListingFragment(), null, ProductListingFragment::class.java.name, true)
+                bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.children_data?.get(p3)?.name!!)
+                FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 return false
             }
         })

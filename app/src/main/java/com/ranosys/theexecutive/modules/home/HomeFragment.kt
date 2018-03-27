@@ -87,12 +87,15 @@ class HomeFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 when(position){
                     0 -> {
+                        fragmentPosition = 0
                         setToolBarParams(getString(R.string.app_title),0, false, R.drawable.bag, true )
                     }
                     1 -> {
-                        setToolBarParams(getString(R.string.login), R.drawable.back, true, 0, false )
+                        fragmentPosition = 1
+                        setToolBarParams(getString(R.string.login), 0, false, 0, false )
                     }
                     2 -> {
+                        fragmentPosition = 2
                         setToolBarParams(getString(R.string.my_wishlist),0, false, 0, false )
                     }
                 }
@@ -120,5 +123,9 @@ class HomeFragment : BaseFragment() {
         tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist, 0, 0)
         tabLayout.getTabAt(2)?.customView = tabThree
 
+    }
+
+    companion object {
+        var fragmentPosition : Int? = null
     }
 }

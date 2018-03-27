@@ -34,11 +34,11 @@ open class BaseActivity: RunTimePermissionActivity(){
         }
     }
 
-    fun setScreenTitle(title: String){
+    fun setScreenTitle(title: String?){
         toolbarViewModel?.title?.set(title)
     }
 
-    fun setLeftIcon(icon: Int){
+    fun setLeftIcon(icon: Int?){
         toolbarViewModel?.leftIcon?.set(icon)
     }
 
@@ -46,7 +46,7 @@ open class BaseActivity: RunTimePermissionActivity(){
         toolbarViewModel?.isLeftIconVisible?.set(isVisible)
     }
 
-    fun setRightIcon(icon: Int){
+    fun setRightIcon(icon: Int?){
         toolbarViewModel?.rightIcon?.set(icon)
     }
 

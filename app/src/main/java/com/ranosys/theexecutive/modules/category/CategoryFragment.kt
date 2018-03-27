@@ -18,7 +18,9 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
 import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
+import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
 
@@ -58,7 +60,6 @@ class CategoryFragment : BaseFragment() {
                     elv_parent_category.collapseGroup(previousGroup)
                 }
                 previousGroup = groupPosition
-
             }
 
         })
@@ -66,10 +67,11 @@ class CategoryFragment : BaseFragment() {
 
         elv_parent_category.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
             override fun onGroupClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
-                if(categoryModelView?.categoryResponse?.get()?.children_data?.size!! == 0){
+                if(categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.children_data?.size!! == 0){
                     val bundle = Bundle()
                     bundle.putInt(Constants.CATEGORY_ID, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.id!!)
-                   // FragmentUtils.addFragment(context!!, ProductListingFragment(), null, ProductListingFragment::class.java.name, true)
+                    bundle.putString(Constants.CATEGORY_NAME, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.name!!)
+                    FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 }
                 return false
             }
@@ -117,7 +119,6 @@ class CategoryFragment : BaseFragment() {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is CategoryResponseDataClass) {
                     categoryModelView?.categoryResponse?.set(response)
-                   // getAllCategoriesData(getQueryMap(response.children_data))
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
                 }

@@ -8,7 +8,6 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
-import com.ranosys.theexecutive.modules.category.CategoryFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
@@ -39,10 +38,23 @@ class DashBoardActivity: BaseActivity() {
                 if(backStackCount > 0){
                     val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
                     if(null != fragment){
-                        if(fragment is CategoryFragment)
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.app_title),0, false, 0, false )
+                        if(fragment is HomeFragment) {
+                            when(HomeFragment.fragmentPosition){
+                                0 -> {
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.app_title), 0, false, R.drawable.bag, true)
+                                }
+                                1 -> {
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, false, 0, false)
+                                }
+                                2 -> {
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, false, 0, false)
+                                }
+                            }
+                        }
+                        if(fragment is ProductListingFragment)
+                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.category_name,R.drawable.back, true, R.drawable.bag, true )
                         if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login), R.drawable.back, true, 0, false)
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, false, 0, false)
                         }
                     }
                 }

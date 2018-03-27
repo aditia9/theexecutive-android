@@ -139,6 +139,7 @@ class LoginFragment : BaseFragment() {
                 }
 
                 tv_forgot_password.id -> {
+                    Utils.hideSoftKeypad(activity as Context)
                     FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), null, ForgotPasswordFragment::class.java.name, true)
 
                 }

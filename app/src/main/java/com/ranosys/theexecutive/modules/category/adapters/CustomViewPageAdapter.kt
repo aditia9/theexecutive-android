@@ -37,9 +37,10 @@ class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDat
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        val listGroupBinding: PromotionViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.promotion_view, container, false);
-        container.addView(listGroupBinding.root)
-        return listGroupBinding.root
+        val listGroupBinding: PromotionViewBinding? = DataBindingUtil.inflate(layoutInflater, R.layout.promotion_view, container, false);
+        listGroupBinding?.promotionResponse = promotionList?.get(position)
+        container.addView(listGroupBinding?.root)
+        return listGroupBinding?.root!!
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {

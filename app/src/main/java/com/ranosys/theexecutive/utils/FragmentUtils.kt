@@ -17,7 +17,7 @@ object FragmentUtils {
     fun addFragment(context: Context, fragment: Fragment, bundle : Bundle?, fragmentId: String, isAdded : Boolean){
         val activity: BaseActivity = context as BaseActivity
         if(fragment != getCurrentFragment(activity)){
-            if(null != bundle){
+            bundle?.run{
                 fragment.arguments = bundle
             }
             val transaction = activity.supportFragmentManager.beginTransaction()
@@ -33,7 +33,7 @@ object FragmentUtils {
     fun replaceFragment(context: Context, fragment: Fragment, bundle : Bundle?, fragmentId: String, isAdded : Boolean){
         val activity: BaseActivity = context as BaseActivity
         if(fragment != getCurrentFragment(activity)){
-            if(null != bundle){
+            bundle?.run{
                 fragment.arguments = bundle
             }
             val transaction = activity.supportFragmentManager.beginTransaction()
