@@ -17,6 +17,7 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
         jcenter()
     }
@@ -41,5 +42,7 @@ ext{
     okHttpVersion = '3.4.1'
     arch = "1.0.0-alpha1"
     lifeCycleVersion = "1.0.0-alpha9"
+    kotinDatabindingVersion = "3.0.0-alpha5"
     fireBaseVersion = "11.8.0"
+    glideVersion = "4.6.1"
 }

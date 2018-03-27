@@ -26,13 +26,13 @@ class ChangeLanguageFragment: BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.change_language_fragment, null, false)
+        return inflater.inflate(R.layout.change_language_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager = LinearLayoutManager(activity as Context)
         language_list.layoutManager = linearLayoutManager
 
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
