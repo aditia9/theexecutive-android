@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.databinding.ObservableField
+import android.support.design.widget.TextInputEditText
 import android.text.TextUtils
 import android.view.View
 import android.widget.RadioGroup
@@ -138,19 +139,22 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     fun callRegisterApi() {
         if(isValidData(getApplication())){
             //TODO - create register request
-            val address = RegisterDataClass.Address(region_id = selectedState.get().id as Int,
+            val address = RegisterDataClass.Address(region_id = 1, //region_id = selectedState?.get().id as Int,
                     firstname = firstName.get(),
                     lastname = lastName.get(),
                     telephone = mobileNumber.get(),
-                    city = selectedCity.get().name,
+                    city = "test",//  city = selectedCity.get().name,
                     postcode = postalCode.get(),
                     default_billing = true,
                     default_shipping = true,
-                    country_id = selectedcountry.get().id,
+                    country_id = "1",
+                    //country_id = selectedcountry.get().id,
                     street = listOf(streetAddress1.get(), streetAddress2.get()),
-                    region = RegisterDataClass.Region(region_code = selectedState.get().code,
-                            region_id = selectedState.get().id as Int,
-                            region = selectedState.get().name)
+                    region = RegisterDataClass.Region(region_code = "1", //region_code = selectedState.get().code,
+                            region_id = 1,
+                            //region_id = selectedState.get().id as Int,
+                            region = "1")
+                            //region = selectedState.get().name)
 
             )
 
@@ -163,7 +167,8 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     lastname = lastName.get(),
                     store_id = SavedPreferences.getInstance()?.getIntValue(Constants.STORE_ID_KEY)!!,
                     website_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)!!,
-                    dob = dob.get(),
+                    dob = "22-01-1993",
+                    //dob = dob.get(),
                     addresses = listOf(address))
 
             val password = password.get()
@@ -226,6 +231,21 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         }
     }
 
+    fun onTextChanged(et: TextInputEditText){
+        when(et.id){
+            R.id.et_first_name -> firstNameError.set("")
+            R.id.et_last_name -> lastNameError.set("")
+            R.id.et_email_address -> emailAddressError.set("")
+            R.id.et_mobile_number -> mobileNumberError.set("")
+            R.id.et_address_1 -> streetAddress1Error.set("")
+            R.id.et_postcode -> postalCodeError.set("")
+            R.id.et_password -> passwordError.set("")
+            R.id.et_confirm_password -> confirmPasswordError.set("")
+        }
+    }
+
+
+
 
 
     private fun isValidData(context: Context): Boolean {
@@ -249,8 +269,18 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             isValid = false
         }
 
-        if (TextUtils.isEmpty(dob.get())){
-            dobError.set(context.getString(R.string.dob_error))
+        if (TextUtils.isEmpty(mobileNumber.get())){
+            mobileNumberError.set(context.getString(R.string.mobile_error))
+            isValid = false
+        }
+
+//        if (TextUtils.isEmpty(dob.get())){
+//            dobError.set(context.getString(R.string.dob_error))
+//            isValid = false
+//        }
+
+        if (TextUtils.isEmpty(streetAddress1.get()) && TextUtils.isEmpty(streetAddress2.get())){
+            streetAddress1Error.set(context.getString(R.string.street_address_1))
             isValid = false
         }
 

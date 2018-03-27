@@ -60,6 +60,7 @@
                         android:id="@+id/et_first_name"
                         android:fontFamily="@font/dax_light"
                         android:text="@={registerViewModel.firstName}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etFirstName)}'
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
@@ -80,6 +81,7 @@
                         android:id="@+id/et_last_name"
                         android:fontFamily="@font/dax_light"
                         android:text="@={registerViewModel.lastName}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etLastName)}'
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
@@ -146,6 +148,7 @@
                         android:layout_width="match_parent"
                         android:fontFamily="@font/dax_light"
                         android:text="@={registerViewModel.emailAddress}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etEmailAddress)}'
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
@@ -181,6 +184,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={registerViewModel.mobileNumber}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etMobileNumber)}'
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -190,7 +194,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/dob_hint"
-                    app:errorText="@{registerViewModel.dobError}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@id/wrapper_mobile_no">
@@ -221,6 +224,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={registerViewModel.streetAddress1}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etAddress1)}'
                         android:inputType="text" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -230,7 +234,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/street_address_2"
-                    app:errorText="@{registerViewModel.streetAddress2Error}"
                     android:theme="@style/tilTheme"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
@@ -307,6 +310,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={registerViewModel.postalCode}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etPostcode)}'
                         android:inputType="text" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -319,7 +323,6 @@
                     android:hint="@string/password"
                     app:errorText="@{registerViewModel.passwordError}"
                     android:theme="@style/tilTheme"
-                    android:text="@={registerViewModel.password}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@id/wrapper_postcode">
@@ -328,6 +331,8 @@
                         android:id="@+id/et_password"
                         android:inputType="textPassword"
                         android:fontFamily="@font/dax_light"
+                        android:text="@={registerViewModel.password}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etPassword)}'
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
@@ -350,6 +355,7 @@
                         android:fontFamily="@font/dax_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etConfirmPassword)}'
                         android:text="@={registerViewModel.confirmPassword}"/>
                 </android.support.design.widget.TextInputLayout>
 
