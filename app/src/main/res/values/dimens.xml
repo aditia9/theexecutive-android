@@ -10,6 +10,13 @@
     <dimen name="eighteen_sp">18sp</dimen>
     <dimen name="one_dip">1dip</dimen>
     <dimen name="twenty_four_dp">24dp</dimen>
+    <dimen name="twenty_two_sp">22sp</dimen>
+    <dimen name="fourteen_sp">14sp</dimen>
+    <dimen name="thirty_six_dp">36dp</dimen>
+    <dimen name="half_dip">.5dip</dimen>
+    <dimen name="two_fifty_dp">250dp</dimen>
+    <dimen name="six_dp">6dp</dimen>
+    <dimen name="three_dp">3dp</dimen>
     <dimen name="sixty_dp">60dp</dimen>
     <dimen name="two_dp">2dp</dimen>
     <dimen name="four_dp">4dp</dimen>

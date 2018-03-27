@@ -86,9 +86,6 @@ dependencies {
     //For kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
-    //For image downloading
-    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:${rootProject.retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${rootProject.retrofitVersion}"
@@ -101,12 +98,16 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:${rootProject.lifeCycleVersion}"
 
     //For databinding in Kotlin
-    kapt 'com.android.databinding:compiler:3.0.0-alpha5'
+    kapt "com.android.databinding:compiler:${rootProject.kotinDatabindingVersion}"
 
     //fb login dependencies
     implementation 'com.facebook.android:facebook-login:[4,5)'
 
     //google playservice
-    compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile "com.google.android.gms:play-services-auth:${rootProject.fireBaseVersion}"
+
+    //glide photo library
+    implementation "com.github.bumptech.glide:glide:${rootProject.glideVersion}"
+    kapt "com.github.bumptech.glide:compiler:${rootProject.glideVersion}"
 }
 

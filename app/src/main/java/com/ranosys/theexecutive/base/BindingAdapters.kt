@@ -10,6 +10,11 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.utils.GlideApp
 
 
 /**
@@ -53,8 +58,22 @@ class BindingAdapters {
 
         @JvmStatic
         @BindingAdapter("android:src")
-        fun setImageResoruce(imageView: ImageView, resource: Int) {
+        fun setImageResource(imageView: ImageView, resource: Int) {
             imageView.setImageResource(resource)
+        }
+
+        @JvmStatic
+        @BindingAdapter("bind:imageUrl")
+        fun loadImage(imageView: ImageView, imageUrl: String) {
+            GlideApp.with(imageView.context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                    .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .centerCrop()
+                    .into(imageView)
         }
     }
 }
