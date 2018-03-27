@@ -11,6 +11,9 @@
     <color name="theme_black_color">#231f20</color>
     <color name="theme_radio_btn_color">#232021</color>
     <color name="theme_accent_color">#999999</color>
+    <color name="divider_color">#DDDDDD</color>
     <color name="colorText">#ffffff</color>
+    <color name="light_background">#F6F6F6</color>
+    <color name="translucent_bg">#0D000000</color>
 
 </resources>

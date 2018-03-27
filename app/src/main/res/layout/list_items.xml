@@ -4,7 +4,7 @@
     <data>
         <variable
             name="data"
-            type="com.ranosys.theexecutive.modules.home.HomeDataClass.HomeUserData">
+            type="com.ranosys.theexecutive.modules.category.CategoryResponseDataClass">
         </variable>
     </data>
 
@@ -30,7 +30,7 @@
             android:id="@+id/tv_title"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="@{data.title}"
+            android:text="@{data.name}"
             android:textColor="@android:color/white"
             android:layout_centerInParent="true"
             android:textSize="@dimen/thirtyTwo_dp"

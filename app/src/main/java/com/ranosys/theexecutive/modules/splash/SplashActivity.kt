@@ -21,6 +21,10 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
+
+/**
+ * Created by nikhil on 2/3/18.
+ */
 class SplashActivity : BaseActivity() {
 
     private val SPLASH_TIMEOUT = 3000
@@ -41,7 +45,6 @@ class SplashActivity : BaseActivity() {
 
         //fetch device id
         getDeviceID()
-
 
 
         handler.postDelayed({
@@ -74,6 +77,11 @@ class SplashActivity : BaseActivity() {
     private fun manageConfiguration(configuration: ConfigurationResponse?) {
         if(configuration?.maintenance == Constants.MAINTENENCE_OFF){
 
+            SavedPreferences.getInstance()?.saveStringValue(configuration.product_media_url, Constants.PRODUCT_MEDIA_URL)
+            SavedPreferences.getInstance()?.saveStringValue(configuration.category_media_url, Constants.CATEGORY_MEDIA_URL)
+            SavedPreferences.getInstance()?.saveStringValue(configuration.voucher_amount, Constants.VOUCHER_AMT)
+            SavedPreferences.getInstance()?.saveStringValue(configuration.subscription_message, Constants.SUBS_MESSAGE)
+
             //call store api
             getStoresApi()
 
@@ -91,7 +99,7 @@ class SplashActivity : BaseActivity() {
         }else{
             //stop app with maintenance message
             Utils.printLog("Config Api", "Maintance Mode")
-            showExitApplicationDialog(getString(R.string.maintenence_msg), {finish()})
+            showExitApplicationDialog(getString(R.string.maintenance_msg), {finish()})
 
         }
     }
@@ -99,20 +107,16 @@ class SplashActivity : BaseActivity() {
     private fun getStoresApi() {
         AppRepository.getStores(object: ApiCallback<ArrayList<StoreResponse>>{
             override fun onSuccess(stores: ArrayList<StoreResponse>?) {
-                GlobalSingelton.instance?.storeList = stores
 
-                if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)) ||
-                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_STORE_ID_KEY).toString()) ||
-                        TextUtils.isEmpty(SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY).toString())){
-                    for(store in stores!!){
-                        if(store.id == 1){
-                            SavedPreferences.getInstance()?.saveStringValue(store.code, Constants.SELECTED_STORE_CODE_KEY)
-                            SavedPreferences.getInstance()?.saveIntValue(store.id, Constants.SELECTED_STORE_ID_KEY)
-                            SavedPreferences.getInstance()?.saveIntValue(store.website_id, Constants.SELECTED_WEBSITE_ID_KEY)
-                            break
-                        }
+                val it = stores?.iterator()
+                while (it?.hasNext()!!) {
+                    val integer = it.next()
+                    if (integer.id ==  0) {
+                        it.remove()
                     }
                 }
+
+                GlobalSingelton.instance?.storeList = stores
 
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }

@@ -14,13 +14,13 @@ class SavedPreferences private constructor(){
     private var IS_LOGIN_KEY = "isLogin"
 
 
-    fun saveStringValue(value: String, key: String) {
+    fun saveStringValue(value: String?, key: String?) {
         val editor = getEditor()
         editor?.putString(key, value)
         editor?.commit()
     }
 
-    fun getStringValue(key: String): String? {
+    fun getStringValue(key: String?): String? {
         return sharedPreferences?.getString(key, "")
     }
 

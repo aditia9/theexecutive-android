@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
+import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordFragment
 import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -32,8 +33,6 @@ import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
 import org.json.JSONObject
-import java.net.MalformedURLException
-import java.net.URL
 import java.util.*
 
 
@@ -94,11 +93,6 @@ class LoginFragment : BaseFragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        setTitle(getString(R.string.title_login))
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -120,7 +114,7 @@ class LoginFragment : BaseFragment() {
 
                 btn_register.id -> {
                     //TODO - load register fragment
-                    FragmentUtils.addFragment(activity as Context, RegisterFragment(), RegisterFragment::class.java.name)
+                    FragmentUtils.addFragment(activity as Context, RegisterFragment(),null,  RegisterFragment::class.java.name, true)
                 }
 
                 btn_login.id -> {
@@ -149,6 +143,12 @@ class LoginFragment : BaseFragment() {
                     } else {
                         Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
                     }
+                }
+
+                tv_forgot_password.id -> {
+                    Utils.hideSoftKeypad(activity as Context)
+                    FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), null, ForgotPasswordFragment::class.java.name, true)
+
                 }
             }
         })

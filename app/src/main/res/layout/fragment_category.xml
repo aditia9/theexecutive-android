@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <data>
+        <variable
+            name="categoryViewModel"
+            type="com.ranosys.theexecutive.modules.category.CategoryModelView" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:background="@color/white"
+        >
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search"
+                android:theme="@style/myAppTheme"
+                android:textColor="@color/theme_black_color"
+                android:fontFamily="@font/dax_regular"
+                android:paddingLeft="@dimen/ten_dp"
+                android:paddingRight="@dimen/ten_dp"
+                android:layout_marginLeft="@dimen/sixteen_dp"
+                android:layout_marginRight="@dimen/sixteen_dp"
+                android:drawableEnd="@drawable/search"
+                android:backgroundTint="@color/theme_accent_color"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ExpandableListView
+            android:id="@+id/elv_parent_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:childDivider="@null"
+            android:groupIndicator="@null"
+            android:layout_below="@+id/til_search"
+            android:layout_marginTop="@dimen/four_dp"
+            categoryItems="@{categoryViewModel.categoryResponse}"
+            >
+
+        </ExpandableListView>
+
+    </RelativeLayout>
+
+</layout>
