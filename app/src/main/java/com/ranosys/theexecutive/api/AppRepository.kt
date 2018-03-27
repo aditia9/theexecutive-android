@@ -165,6 +165,7 @@ object AppRepository {
         })
     }
 
+    // It will use in future
     fun getCategoryData(categoryId :  String, callBack: ApiCallback<CategoryDataResponse>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
@@ -188,7 +189,7 @@ object AppRepository {
         })
     }
 
-
+    // It will use in future
     fun getAllCategoryData(queryMap :  HashMap<String,String>?, callBack: ApiCallback<AllCategoryDataResponse>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)

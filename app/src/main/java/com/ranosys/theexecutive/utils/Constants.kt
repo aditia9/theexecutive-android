@@ -28,4 +28,6 @@ object Constants {
         val PRODUCT_MEDIA_URL: String = "product_media_url"
         val CATEGORY_MEDIA_URL: String = "category_media_url"
         val CATEGORY_ID: String = "category_id"
+        val VOUCHER_AMT: String = "voucher_amount"
+        val SUBS_MESSAGE: String = "subscription_message"
 }

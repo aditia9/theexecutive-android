@@ -40,17 +40,19 @@
             android:layout_gravity="center|center_vertical"
             android:fontFamily="@font/dax_regular" />
 
-        <ImageView
+        <TextView
             android:id="@+id/toolbar_right_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/sixteen_dp"
-            android:padding="@dimen/five_dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="0"
+            android:paddingTop="@dimen/five_dp"
             android:layout_gravity="right|center_vertical"
             android:contentDescription="@string/toolbar_right_icon"
             android:visibility="@{toolbarViewModel.isRightIconVisible() ? View.VISIBLE : View.GONE,  default = visible}"
-            android:src="@{ContextCompat.getDrawable(context, toolbarViewModel.rightIcon)}"
+            android:background="@{ContextCompat.getDrawable(context, toolbarViewModel.rightIcon)}"
             android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
             />
 

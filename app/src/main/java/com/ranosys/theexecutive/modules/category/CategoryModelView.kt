@@ -8,6 +8,7 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 
+
 /**
  * Created by Mohammad Sunny on 2/2/18.
  */
@@ -17,7 +18,6 @@ class CategoryModelView(application: Application) : BaseViewModel(application) {
     var mutualHomeResponse = MutableLiveData<ApiResponse<CategoryResponseDataClass>>()
     var categoryResponse: ObservableField<CategoryResponseDataClass>? = ObservableField<CategoryResponseDataClass>()
     var promotionResponse: ObservableField<List<PromotionsResponseDataClass>>? = ObservableField<List<PromotionsResponseDataClass>>()
-    var allCategoryDataResponse = MutableLiveData<ApiResponse<AllCategoryDataResponse>>()
 
     fun getPromotions(){
         val apiResponse = ApiResponse<List<PromotionsResponseDataClass>>()
@@ -56,24 +56,5 @@ class CategoryModelView(application: Application) : BaseViewModel(application) {
 
         })
     }
-
-    fun getAllCategoriesData(queryMap : HashMap<String,String>?){
-        val apiResponse = ApiResponse<AllCategoryDataResponse>()
-        AppRepository.getAllCategoryData(queryMap, object : ApiCallback<AllCategoryDataResponse>{
-            override fun onException(error: Throwable) {
-                allCategoryDataResponse.value?.throwable = error
-            }
-
-            override fun onError(errorMsg: String) {
-                allCategoryDataResponse.value?.error = errorMsg
-            }
-
-            override fun onSuccess(t: AllCategoryDataResponse?) {
-                apiResponse.apiResponse = t
-                allCategoryDataResponse.value = apiResponse
-            }
-        })
-    }
-
 
 }

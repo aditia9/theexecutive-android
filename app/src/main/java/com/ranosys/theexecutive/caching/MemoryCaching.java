@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.caching;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
@@ -10,7 +9,6 @@ import android.support.v4.util.LruCache;
 public class MemoryCaching {
 
     private static LruCache<String, Bitmap> mMemoryCache;
-    private Context mContext;
 
     public static int getCacheSize(){
         // Get max available VM memory, exceeding this amount will throw an
@@ -26,7 +24,6 @@ public class MemoryCaching {
     }
 
     public MemoryCaching(){
-        //mMemoryCache = memoryCache;
 
         if(null == mMemoryCache)
         {
