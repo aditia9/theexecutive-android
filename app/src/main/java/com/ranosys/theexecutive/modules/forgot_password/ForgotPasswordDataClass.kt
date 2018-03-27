@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.modules.forgot_password
 
-import android.provider.SyncStateContract
 import com.ranosys.theexecutive.utils.Constants
 
 /**

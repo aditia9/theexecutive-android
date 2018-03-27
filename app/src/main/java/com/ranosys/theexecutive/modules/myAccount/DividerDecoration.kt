@@ -1,9 +1,8 @@
 package com.ranosys.theexecutive.modules.myAccount
 
 import android.graphics.Canvas
-import android.support.v7.widget.RecyclerView
 import android.graphics.drawable.Drawable
-
+import android.support.v7.widget.RecyclerView
 
 
 /**

@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.base
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ open class BaseActivity: RunTimePermissionActivity(){
 
     var toolbarViewModel: ToolbarViewModel? = null
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbarViewModel = ViewModelProviders.of(this).get(ToolbarViewModel::class.java)
@@ -32,11 +34,11 @@ open class BaseActivity: RunTimePermissionActivity(){
         }
     }
 
-    fun setScreenTitle(title: String){
+    fun setScreenTitle(title: String?){
         toolbarViewModel?.title?.set(title)
     }
 
-    fun setLeftIcon(icon: Int){
+    fun setLeftIcon(icon: Int?){
         toolbarViewModel?.leftIcon?.set(icon)
     }
 
@@ -44,7 +46,7 @@ open class BaseActivity: RunTimePermissionActivity(){
         toolbarViewModel?.isLeftIconVisible?.set(isVisible)
     }
 
-    fun setRightIcon(icon: Int){
+    fun setRightIcon(icon: Int?){
         toolbarViewModel?.rightIcon?.set(icon)
     }
 

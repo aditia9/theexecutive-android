@@ -35,8 +35,8 @@ abstract class BaseFragment : LifecycleFragment() {
         }
     }
 
-    fun setToolBarParams(title: String, leftIcon : Int, leftIconVisibility : Boolean,
-                         rightIcon : Int, rightIconVisibility : Boolean){
+    fun setToolBarParams(title: String?, leftIcon : Int?, leftIconVisibility : Boolean,
+                         rightIcon : Int?, rightIconVisibility : Boolean){
         setTitle(title)
         setLeftIcon(leftIcon)
         setLeftIconVisibilty(leftIconVisibility)
@@ -49,11 +49,11 @@ abstract class BaseFragment : LifecycleFragment() {
         return  (activity as BaseActivity).toolbarViewModel
     }
 
-    fun setTitle(title: String = getString(R.string.app_name)){
+    fun setTitle(title: String? = getString(R.string.app_name)){
         (activity as BaseActivity).setScreenTitle(title)
     }
 
-    fun setLeftIcon(icon: Int = R.drawable.ic_action_backward){
+    fun setLeftIcon(icon: Int? = R.drawable.ic_action_backward){
         if(icon == 0)
             (activity as BaseActivity).setLeftIcon(android.R.color.transparent)
         else
@@ -64,7 +64,7 @@ abstract class BaseFragment : LifecycleFragment() {
         (activity as BaseActivity).setLeftIconVisibility(isVisible)
     }
 
-    fun setRightIcon(icon: Int = R.drawable.ic_action_backward){
+    fun setRightIcon(icon: Int? = R.drawable.ic_action_backward){
         if(icon == 0)
             (activity as BaseActivity).setRightIcon(android.R.color.transparent)
         else
@@ -80,8 +80,14 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     private fun observeLeftIconClick() {
+
         getToolBarViewModel()?.leftIconClicked?.observe(this, Observer<Int> {  id ->
-            activity?.onBackPressed()
+            when(id) {
+                R.id.toolbar_left_icon -> {
+                    getToolBarViewModel()?.leftIconClicked?.value = null
+                    (activity as BaseActivity).onBackPressed()
+                }
+            }
         })
     }
 

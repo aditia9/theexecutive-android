@@ -47,7 +47,6 @@ class SplashActivity : BaseActivity() {
         getDeviceID()
 
 
-
         handler.postDelayed({
             kotlin.run {
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
@@ -77,6 +76,11 @@ class SplashActivity : BaseActivity() {
 
     private fun manageConfiguration(configuration: ConfigurationResponse?) {
         if(configuration?.maintenance == Constants.MAINTENENCE_OFF){
+
+            SavedPreferences.getInstance()?.saveStringValue(configuration.product_media_url, Constants.PRODUCT_MEDIA_URL)
+            SavedPreferences.getInstance()?.saveStringValue(configuration.category_media_url, Constants.CATEGORY_MEDIA_URL)
+            SavedPreferences.getInstance()?.saveStringValue(configuration.voucher_amount, Constants.VOUCHER_AMT)
+            SavedPreferences.getInstance()?.saveStringValue(configuration.subscription_message, Constants.SUBS_MESSAGE)
 
             //call store api
             getStoresApi()
