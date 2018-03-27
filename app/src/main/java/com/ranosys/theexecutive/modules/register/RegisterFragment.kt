@@ -12,6 +12,8 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
@@ -58,8 +60,12 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         }
 
         et_dob.setOnClickListener {
-            showDate(Calendar.getInstance().get(Calendar.YEAR), 0, 1, R.style.DatePickerSpinner)
+
+            showDate(Calendar.getInstance().get(Calendar.YEAR) - Constants.MINIMUM_AGE, 0, 1, R.style.DatePickerSpinner)
         }
+
+        cb_subscribe.text = getString(R.string.subscribe, SavedPreferences.getInstance()?.getStringValue(Constants.VOUCHER_AMT))
+        tv_terms_and_conditions.text = SavedPreferences.getInstance()?.getStringValue(Constants.SUBS_MESSAGE)
     }
 
    fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
@@ -80,7 +86,9 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-       et_dob.setText("" + year + "-" + monthOfYear + "-" + dayOfMonth)
+        val month = monthOfYear + 1
+        val dob = "$dayOfMonth/$month/$year"
+       et_dob.setText(dob)
     }
 
 }

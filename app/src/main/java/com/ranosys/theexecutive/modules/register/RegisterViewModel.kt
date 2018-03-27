@@ -171,7 +171,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     country_id = selectedcountry.get().id,
                     street = listOf(streetAddress1.get(), streetAddress2.get()),
                     region = RegisterDataClass.Region(region_code = selectedState.get().code,
-                            region_id = selectedState.get().id as Int,
+                            region_id = if(!TextUtils.isEmpty(selectedState.get().id)) selectedState.get().id.toInt() else 1,
                             region = selectedState.get().name)
 
             )
@@ -258,6 +258,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             R.id.et_postcode -> postalCodeError.set("")
             R.id.et_password -> passwordError.set("")
             R.id.et_confirm_password -> confirmPasswordError.set("")
+            R.id.et_dob -> dobError.set("")
         }
     }
 
@@ -291,9 +292,28 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             isValid = false
         }
 
+        if (TextUtils.isEmpty(dob.get())){
+            dobError.set(context.getString(R.string.dob_error))
+            isValid = false
+        }
+
 
         if (TextUtils.isEmpty(streetAddress1.get()) && TextUtils.isEmpty(streetAddress2.get())){
             streetAddress1Error.set(context.getString(R.string.street_address_1))
+            isValid = false
+        }
+
+        if(selectedcountry.get() == countryHint){
+            //TODO - asho an alert dialog to select country
+            Toast.makeText(context, "Please select country", Toast.LENGTH_SHORT ).show()
+            isValid = false
+        }else if(selectedState.get() == stateHint){
+            //TODO - asho an alert dialog to select state
+            Toast.makeText(context, "Please select State", Toast.LENGTH_SHORT ).show()
+            isValid = false
+        }else if(selectedCity.get() == cityHint){
+            //TODO - asho an alert dialog to select city
+            Toast.makeText(context, "Please select country", Toast.LENGTH_SHORT ).show()
             isValid = false
         }
 

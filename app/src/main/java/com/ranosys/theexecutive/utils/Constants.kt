@@ -33,5 +33,6 @@ object Constants {
         val SUBS_MESSAGE: String = "subscription_message"
         val DEFAULT_GROUP_ID: Int = 1
         val SOCIAL_LOGIN_CONFIRMATION: String = "social"
+        val MINIMUM_AGE: Int = 13
 
 }
