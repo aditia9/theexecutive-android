@@ -95,7 +95,7 @@ class SplashActivity : BaseActivity() {
         }else{
             //stop app with maintenance message
             Utils.printLog("Config Api", "Maintance Mode")
-            showExitApplicationDialog(getString(R.string.maintenence_msg), {finish()})
+            showExitApplicationDialog(getString(R.string.maintenance_msg), {finish()})
 
         }
     }
