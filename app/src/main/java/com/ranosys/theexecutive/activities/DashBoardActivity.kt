@@ -6,12 +6,10 @@ import android.text.TextUtils
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
-import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 
 /**

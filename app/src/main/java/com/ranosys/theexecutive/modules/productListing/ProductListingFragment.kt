@@ -19,6 +19,12 @@ import kotlinx.android.synthetic.main.fragment_product_listing.*
  * Created by nikhil on 20/3/18.
  */
 class ProductListingFragment: BaseFragment() {
+
+    companion object {
+        const val COLUMN_TWO = 2
+        const val COLUMN_ONE = 2
+        const val COLUMN_CHANGE_FACTOR = 5
+    }
     private lateinit var mBinding: FragmentProductListingBinding
     private lateinit var mViewModel: ProductListingViewModel
     private lateinit var productListAdapter: ProductListAdapter
@@ -43,10 +49,10 @@ class ProductListingFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gridLayoutManager = GridLayoutManager(view.context, 2)
+        val gridLayoutManager = GridLayoutManager(view.context, COLUMN_TWO)
         gridLayoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup(){
             override fun getSpanSize(position: Int): Int {
-                return if((position + 1) % 5 == 0) 2 else 1
+                return if((position + 1) % COLUMN_CHANGE_FACTOR == 0) COLUMN_TWO else COLUMN_ONE
             }
         }
 

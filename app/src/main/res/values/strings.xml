@@ -61,9 +61,9 @@
     <string name="continue_btn">Continue</string>
     <string name="language_hint">Language</string>
     <string name="search">Search</string>
-    <string name="sort_by">Sory by</string>
+    <string name="sort_by">Sort by</string>
     <string name="filter_by">Filter by</string>
-    <string name="product_list">Product_list</string>
+    <string name="product_list">Product List</string>
     <string name="product_image">Product Image</string>
 
 </resources>

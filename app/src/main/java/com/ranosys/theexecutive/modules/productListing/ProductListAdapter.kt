@@ -35,7 +35,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Dumm
 
         fun bind(product: ProductListingDataClass.DummyResponse, listener: ProductListAdapter.OnItemClickListener){
             itemBinding.productItem = product
-            itemBinding.tvNormalPrice.setPaintFlags(itemBinding.tvNormalPrice.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+            itemBinding.tvNormalPrice.paintFlags = (itemBinding.tvNormalPrice.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
 
             itemView.setOnClickListener {
                 listener.onItemClick(product)
