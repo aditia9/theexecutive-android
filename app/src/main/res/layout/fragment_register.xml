@@ -115,7 +115,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/dax_light"
-                        android:buttonTint="@color/theme_accent_color"
+                        android:buttonTint="@color/theme_radio_btn_color"
                         android:text="@string/male" />
 
 
@@ -132,7 +132,7 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_email_address"
+                    android:id="@+id/til_email_address"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
@@ -159,15 +159,16 @@
                     android:layout_width="wrap_content"
                     android:minWidth="@dimen/match_constraint"
                     android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
                     android:entries="@array/country_code"
                     android:background="@drawable/spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
-                    app:layout_constraintTop_toTopOf="@id/wrapper_mobile_no"
-                    app:layout_constraintEnd_toStartOf="@id/wrapper_mobile_no"
-                    app:layout_constraintBottom_toBottomOf="@+id/wrapper_mobile_no" />
+                    app:layout_constraintTop_toTopOf="@id/til_mobile_no"
+                    app:layout_constraintEnd_toStartOf="@id/til_mobile_no"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_mobile_no"
+                    android:id="@+id/til_mobile_no"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
@@ -175,7 +176,7 @@
                     app:errorText="@{registerViewModel.mobileNumberError}"
                     android:theme="@style/tilTheme"
                     app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
-                    app:layout_constraintTop_toBottomOf="@id/wrapper_email_address"
+                    app:layout_constraintTop_toBottomOf="@id/til_email_address"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right">
 
                     <android.support.design.widget.TextInputEditText
@@ -189,25 +190,30 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_dob"
+                    android:id="@+id/til_dob"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/dob_hint"
+                    app:errorText="@{registerViewModel.dobError}"
+                    android:theme="@style/tilTheme"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/wrapper_mobile_no">
+                    app:layout_constraintTop_toBottomOf="@id/til_mobile_no">
 
-                    <TextView
-                        android:id="@+id/tv_dob"
-                        android:fontFamily="@font/dax_light"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_dob"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:theme="@style/tilTheme"
+                        android:fontFamily="@font/dax_light"
+                        android:text="@={registerViewModel.dob}" />
                 </android.support.design.widget.TextInputLayout>
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_address_1"
+                    android:id="@+id/til_address_1"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
@@ -216,7 +222,7 @@
                     app:errorText="@{registerViewModel.streetAddress1Error}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/wrapper_dob">
+                    app:layout_constraintTop_toBottomOf="@id/til_dob">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_address_1"
@@ -229,7 +235,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_address_2"
+                    android:id="@+id/til_address_2"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
@@ -237,7 +243,7 @@
                     android:theme="@style/tilTheme"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/wrapper_address_1">
+                    app:layout_constraintTop_toBottomOf="@id/til_address_1">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_address_2"
@@ -255,13 +261,15 @@
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
                     android:entries="@{registerViewModel.countryList}"
-                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onCountrySelection(parent, pos)}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onCountrySelection(parent, pos, spinnerState)}"
                     android:padding="@dimen/ten_dp"
+                    android:theme="@style/spinnerItemStyle"
                     android:background="@drawable/spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                    app:layout_constraintTop_toBottomOf="@id/wrapper_address_2" />
+                    app:layout_constraintTop_toBottomOf="@id/til_address_2" />
 
 
                 <Spinner
@@ -270,8 +278,9 @@
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
                     android:entries="@{registerViewModel.stateList}"
-                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onStateSelection(parent, pos)}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onStateSelection(parent, pos, spinnerCity)}"
                     android:padding="@dimen/ten_dp"
                     android:background="@drawable/spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
@@ -283,6 +292,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
+                    android:overlapAnchor="false"
                     android:padding="@dimen/ten_dp"
                     android:entries="@{registerViewModel.cityList}"
                     android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onCitySelection(parent, pos)}"
@@ -294,7 +304,7 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_postcode"
+                    android:id="@+id/til_postcode"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
@@ -316,7 +326,7 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_password"
+                    android:id="@+id/til_password"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
@@ -325,7 +335,7 @@
                     android:theme="@style/tilTheme"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/wrapper_postcode">
+                    app:layout_constraintTop_toBottomOf="@id/til_postcode">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_password"
@@ -347,7 +357,7 @@
                     android:theme="@style/tilTheme"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/wrapper_password">
+                    app:layout_constraintTop_toBottomOf="@id/til_password">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_confirm_password"
@@ -365,6 +375,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/thirty_dp"
                     android:fontFamily="@font/dax_regular"
+                    android:buttonTint="@color/theme_radio_btn_color"
                     android:text="@string/subscribe"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@id/wrapper_confirm_password"/>

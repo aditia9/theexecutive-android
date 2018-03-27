@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.register
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,13 +13,17 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.utils.Utils
+import com.tsongkha.spinnerdatepicker.DatePicker
+import com.tsongkha.spinnerdatepicker.DatePickerDialog
+import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
 import kotlinx.android.synthetic.main.fragment_register.*
+import java.util.*
 
 
 /**
  * Created by Mohammad Sunny on 31/1/18.
  */
-class RegisterFragment: BaseFragment() {
+class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     private lateinit var  registerViewModel: RegisterViewModel
 
@@ -52,7 +57,30 @@ class RegisterFragment: BaseFragment() {
             }
         }
 
+        et_dob.setOnClickListener {
+            showDate(Calendar.getInstance().get(Calendar.YEAR), 0, 1, R.style.DatePickerSpinner)
+        }
+    }
 
+   fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
+        val dpd = SpinnerDatePickerDialogBuilder()
+                .context(activity)
+                .callback(this)
+                .spinnerTheme(spinnerTheme)
+                .year(year)
+                .monthOfYear(monthOfYear)
+                .dayOfMonth(dayOfMonth)
+                .build()
+
+
+        dpd.show()
+        dpd.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(resources.getColor(android.R.color.black))
+        dpd.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(resources.getColor(android.R.color.black))
+
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
+       et_dob.setText("" + year + "-" + monthOfYear + "-" + dayOfMonth)
     }
 
 }

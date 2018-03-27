@@ -8,12 +8,12 @@ class RegisterDataClass {
     data class RegisterResponse(var isSuccess: Boolean)
 
     data class Country(
-            val id: String = "1",
+            val id: String = "",
             val two_letter_abbreviation: String = "",
             val three_letter_abbreviation: String = "",
-            val full_name_locale: String = "india",
+            val full_name_locale: String = "",
             val full_name_english: String = "",
-            val available_regions: List<State>?
+            val available_regions: List<State> = listOf()
     ){
         override fun toString(): String {
             return full_name_locale
@@ -22,8 +22,8 @@ class RegisterDataClass {
 
     data class State(
             val id: String = "",
-            val code: String = "123",
-            val name: String = "raj"
+            val code: String = "",
+            val name: String = ""
     ){
         override fun toString(): String {
             return name
@@ -32,7 +32,7 @@ class RegisterDataClass {
 
 
     data class City(
-            val name: String,
+            val name: String = "",
             val value: Int = 0
     ){
         override fun toString(): String {
@@ -62,7 +62,7 @@ class RegisterDataClass {
 
     data class Address(
             val region: Region,
-            val region_id: Int,
+            val region_id: String,
             val country_id: String,
             val street: List<String>,
             val telephone: String,

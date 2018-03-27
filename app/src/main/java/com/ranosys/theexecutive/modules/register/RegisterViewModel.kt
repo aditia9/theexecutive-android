@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputEditText
 import android.text.TextUtils
 import android.view.View
 import android.widget.RadioGroup
+import android.widget.Spinner
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
@@ -36,10 +37,6 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var streetAddress1: ObservableField<String> = ObservableField()
     var streetAddress1Error: ObservableField<String> = ObservableField()
     var streetAddress2: ObservableField<String> = ObservableField()
-    var streetAddress2Error: ObservableField<String> = ObservableField()
-    var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
-    var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
-    var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
     var postalCode: ObservableField<String> = ObservableField()
     var postalCodeError: ObservableField<String> = ObservableField()
     var password: ObservableField<String> = ObservableField()
@@ -50,6 +47,12 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var countryList :MutableList<RegisterDataClass.Country> = mutableListOf<RegisterDataClass.Country>()
     var stateList :MutableList<RegisterDataClass.State> = mutableListOf<RegisterDataClass.State>()
     var cityList :MutableList<RegisterDataClass.City> = mutableListOf<RegisterDataClass.City>()
+    var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
+    var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
+    var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
+    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = "Country")
+    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = "State")
+    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = "City")
 
     var isSocialLogin: Boolean = false
 
@@ -61,34 +64,67 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     }
 
     init {
-        countryList.add(RegisterDataClass.Country(full_name_locale = "Country", available_regions = null))
-        stateList.add(RegisterDataClass.State(name = "State"))
-        cityList.add(RegisterDataClass.City(name = "City"))
+        countryList.add(countryHint)
+        stateList.add(stateHint)
+        cityList.add(cityHint)
+
+        selectedcountry.set(countryHint)
+        selectedState.set(stateHint)
+        selectedCity.set(cityHint)
     }
 
 
-    fun onCountrySelection(countrySpinner: View, position: Int){
-        if(position > 0){
-            selectedcountry.set(countryList[position])
-            stateList.clear()
-            selectedcountry.get().available_regions?.run{
-                stateList.addAll(selectedcountry.get().available_regions as ArrayList)
+    fun callCountryApi() {
+        AppRepository.getCountryList(object : ApiCallback<List<RegisterDataClass.Country>>{
+            override fun onException(error: Throwable) {
+                Utils.printLog("Country API", "error")
             }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog("Country API", "error")
+            }
+
+            override fun onSuccess(countries: List<RegisterDataClass.Country>?) {
+                if(null != countries && countries.isNotEmpty()){
+                    countryList.addAll(countries as ArrayList<RegisterDataClass.Country>)
+                }
+            }
+        })
+    }
+
+    fun onCountrySelection(countrySpinner: View, position: Int, stateSpinner: Spinner){
+        if(countryHint != countryList[position]){
+            selectedcountry.set(countryList[position])
+            if(selectedcountry.get().available_regions.isNotEmpty()){
+                stateList.addAll(selectedcountry.get().available_regions as ArrayList)
+
+            }else{
+                Utils.printLog("No state available for this country", "error")
+            }
+
         }else{
             stateList.clear()
-            stateList.add(RegisterDataClass.State(name = "City"))
+            stateList.add(stateHint)
+            selectedState.set(stateHint)
+            selectedCity.set(cityHint)
         }
+        stateSpinner.setSelection(0)
     }
 
-    fun onStateSelection(stateSpinner: View, position: Int){
-        if(position > 0){
+    fun onStateSelection(stateSpinner: View, position: Int, citySpinner: Spinner){
+        if(stateHint != stateList[position]){
             selectedState.set(stateList[position])
             callCityApi(selectedState.get().id)
+        }else{
+            cityList.clear()
+            cityList.add(cityHint)
+            selectedCity.set(cityHint)
         }
+        citySpinner.setSelection(0)
     }
 
     fun onCitySelection(citySpinner: View, position: Int){
-        if(position > 0){
+        if(cityHint != cityList[position]){
             selectedCity.set(cityList[position])
         }
     }
@@ -108,8 +144,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                 //TODO- set value in city spinner
                 cities?.run {
                     if(cities.isNotEmpty()){
-                        cityList.clear()
                         cityList.addAll(cities)
+                    }else{
+                        Utils.printLog("No cities available", "error")
                     }
                 }
             }
@@ -117,44 +154,25 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         })
     }
 
-    fun callCountryApi() {
-        AppRepository.getCountryList(object : ApiCallback<List<RegisterDataClass.Country>>{
-            override fun onException(error: Throwable) {
-                Utils.printLog("Country API", "error")
-            }
 
-            override fun onError(errorMsg: String) {
-                Utils.printLog("Country API", "error")
-            }
-
-            override fun onSuccess(countries: List<RegisterDataClass.Country>?) {
-                //TODO - set value in country spinner
-                countryList.addAll(countries as ArrayList<RegisterDataClass.Country>)
-            }
-        })
-    }
 
 
 
     fun callRegisterApi() {
         if(isValidData(getApplication())){
-            //TODO - create register request
-            val address = RegisterDataClass.Address(region_id = 1, //region_id = selectedState?.get().id as Int,
+            val address = RegisterDataClass.Address(region_id = selectedState.get().id,
                     firstname = firstName.get(),
                     lastname = lastName.get(),
                     telephone = mobileNumber.get(),
-                    city = "test",//  city = selectedCity.get().name,
+                    city =      selectedCity.get().name ,
                     postcode = postalCode.get(),
                     default_billing = true,
                     default_shipping = true,
-                    country_id = "1",
-                    //country_id = selectedcountry.get().id,
+                    country_id = selectedcountry.get().id,
                     street = listOf(streetAddress1.get(), streetAddress2.get()),
-                    region = RegisterDataClass.Region(region_code = "1", //region_code = selectedState.get().code,
-                            region_id = 1,
-                            //region_id = selectedState.get().id as Int,
-                            region = "1")
-                            //region = selectedState.get().name)
+                    region = RegisterDataClass.Region(region_code = selectedState.get().code,
+                            region_id = selectedState.get().id as Int,
+                            region = selectedState.get().name)
 
             )
 
@@ -167,8 +185,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     lastname = lastName.get(),
                     store_id = SavedPreferences.getInstance()?.getIntValue(Constants.STORE_ID_KEY)!!,
                     website_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)!!,
-                    dob = "22-01-1993",
-                    //dob = dob.get(),
+                    dob = dob.get(),
                     addresses = listOf(address))
 
             val password = password.get()
@@ -274,10 +291,6 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             isValid = false
         }
 
-//        if (TextUtils.isEmpty(dob.get())){
-//            dobError.set(context.getString(R.string.dob_error))
-//            isValid = false
-//        }
 
         if (TextUtils.isEmpty(streetAddress1.get()) && TextUtils.isEmpty(streetAddress2.get())){
             streetAddress1Error.set(context.getString(R.string.street_address_1))
