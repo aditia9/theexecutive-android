@@ -28,7 +28,7 @@ class MyAccountFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager = LinearLayoutManager(activity as Context)
         my_account_options_list.layoutManager = linearLayoutManager
 
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
@@ -47,9 +47,11 @@ class MyAccountFragment: BaseFragment() {
         var optionList = ArrayList<MyAccountDataClass.MyAccountOption>()
 
         val titleArray = resources.getStringArray(R.array.my_account_option_title_array)
-        val iconArray = resources.getIntArray(R.array.my_account_option_icon_array)
+        val iconArray = resources.obtainTypedArray(R.array.my_account_option_icon_array)
 
-        (0..(titleArray.size -1)).mapTo(optionList) { MyAccountDataClass.MyAccountOption(titleArray[it], iconArray[it]) }
+        for (i in 0..(titleArray.size - 1)){
+            optionList.add(MyAccountDataClass.MyAccountOption(titleArray[i], iconArray.getResourceId(i, -1)))
+        }
 
         return optionList
     }
@@ -77,7 +79,7 @@ class MyAccountFragment: BaseFragment() {
                     //TODO - move to respective screen using option title
                     when(option.title){
                         context.getString(R.string.news_letter_option) -> {
-                            FragmentUtils.addFragment(context, NewsLetterFragment(),NewsLetterFragment::class.java.name )
+                            FragmentUtils.addFragment(context, NewsLetterFragment(),null, NewsLetterFragment::class.java.name, true )
                         }
                     }
                 }

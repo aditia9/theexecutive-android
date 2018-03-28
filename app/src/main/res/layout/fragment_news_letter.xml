@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/sixty_dp"
                     android:fontFamily="@font/dax_light"
-                    android:hint="@string/email"
+                    android:hint="@string/email_address"
                     android:theme="@style/tilTheme"
                     app:errorText="@{newsLetterVM.emailError}"
                     android:labelFor="@+id/et_email"

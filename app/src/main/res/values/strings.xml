@@ -83,6 +83,7 @@
     <!--wishlist-->
     <string name="my_wishlist">My Wishlist</string>
     <string name="promotion_image">Image for promotion</string>
+    <string name="logout">Logout</string>
 
 
 </resources>
