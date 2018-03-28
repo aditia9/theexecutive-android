@@ -1,8 +1,9 @@
 package com.ranosys.theexecutive.utils
 
-
-class Constants {
-    companion object {
+/**
+ * Created by Mohammad Sunny on 22/2/18.
+ */
+object Constants {
         val PREF_NAME = "data_pref"
         const val ADMIN_TOKEN = "cigid62rumgjietso83lrlk16c5ki7bp"
         val pref_name = "data_pref"
@@ -24,5 +25,10 @@ class Constants {
         val TYPE_FACEBOOK: String = "facebook"
         val TYPE_GMAIL: String = "google"
         val UNKNOWN_ERROR: String = "Something went wrong"
-    }
+        val PRODUCT_MEDIA_URL: String = "product_media_url"
+        val CATEGORY_MEDIA_URL: String = "category_media_url"
+        val CATEGORY_ID: String = "category_id"
+        val CATEGORY_NAME: String = "category_name"
+        val VOUCHER_AMT: String = "voucher_amount"
+        val SUBS_MESSAGE: String = "subscription_message"
 }

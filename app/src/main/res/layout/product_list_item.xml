@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
+        <variable
+            name="productItem"
+            type="com.ranosys.theexecutive.modules.productListing.ProductListingDataClass.DummyResponse"/>
+    </data>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/eight_dp"
+        android:layout_marginStart="@dimen/eight_dp"
+        android:layout_marginBottom="@dimen/thirty_six_dp"
+        android:background="?selectableItemBackground">
+        
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/two_fifty_dp"
+            bind:imageUrl="@{productItem.imageUrl}"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/product_image"
+            android:layout_marginTop="@dimen/four_dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingRight="@dimen/eight_dp"
+            android:paddingLeft="@dimen/eight_dp"
+            android:paddingTop="@dimen/two_dp"
+            android:paddingBottom="@dimen/two_dp"
+            android:background="@color/light_background"
+            android:fontFamily="@font/dax_regular"
+            android:textColor="@color/theme_black_color"
+            android:text="@{productItem.type}"
+            android:visibility="@{TextUtils.isEmpty(productItem.type)? View.GONE : View.VISIBLE}"
+            app:layout_constraintTop_toTopOf="@id/image"
+            app:layout_constraintLeft_toLeftOf="@id/image"/>
+
+
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/six_dp"
+            android:paddingBottom="@dimen/six_dp"
+            android:gravity="center"
+            android:textSize="@dimen/eight_sp"
+            android:fontFamily="@font/dax_regular"
+            android:visibility='@{TextUtils.isEmpty(productItem.type + "")? View.GONE : View.VISIBLE}'
+            android:text='@{productItem.discountPer + "%"}'
+            android:textColor="@color/white"
+            android:background="@drawable/discount_banner"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="@id/image"/>
+
+        <TextView
+            android:id="@+id/tv_collection_tag"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/three_dp"
+            android:paddingBottom="@dimen/three_dp"
+            android:background="@color/translucent_bg"
+            android:fontFamily="@font/dax_light"
+            android:textColor="@color/theme_black_color"
+            android:text="@{productItem.collectionTag}"
+            android:visibility="@{TextUtils.isEmpty(productItem.collectionTag)? View.GONE : View.VISIBLE}"
+            android:ellipsize="end"
+            android:layout_marginBottom="@dimen/twenty_dp"
+            app:layout_constraintBottom_toBottomOf="@id/image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="@dimen/eighteen_sp"
+            android:layout_marginTop="@dimen/eight_dp"
+            android:textColor="@color/theme_black_color"
+            android:text="@{productItem.name}"
+            android:ellipsize="end"
+            android:fontFamily="@font/dax_regular"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image"/>
+
+        <TextView
+            android:id="@+id/tv_sp_price"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/eighteen_sp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="@color/theme_black_color"
+            android:layout_marginTop="@dimen/six_dp"
+            android:text='@{"IDR " + productItem.specialPrice}'
+            android:visibility="@{TextUtils.isEmpty(productItem.specialPrice)? View.GONE : View.VISIBLE}"
+            android:fontFamily="@font/dax_regular"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"/>
+
+        <TextView
+            android:id="@+id/tv_normal_price"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/fourteen_sp"
+            android:gravity="center"
+            android:textColor="@color/theme_black_color"
+            android:layout_marginTop="@dimen/four_dp"
+            android:maxLines="1"
+            android:text='@{"IDR " + productItem.normalPrice}'
+            android:visibility="@{TextUtils.isEmpty(productItem.normalPrice)? View.GONE : View.VISIBLE}"
+            android:fontFamily="@font/dax_light"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_sp_price"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

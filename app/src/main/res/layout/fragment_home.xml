@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="globalsinglton"
-            type="com.ranosys.theexecutive.utils.GlobalSingelton" />
-        <variable
-            name="mainfragmentviewmodel"
-            type="com.ranosys.theexecutive.modules.home.HomeModelView" />
-    </data>
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
+
+        <!-- View pager to swipe views -->
+        <com.ranosys.theexecutive.customViews.CustomViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tabLayout"
+            />
+
+        <!-- our tablayout to display tabs  -->
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            app:tabIndicatorHeight="0dp"
+            app:tabBackground="@drawable/tab_color_selector"
+            />
+
+
+    </RelativeLayout>
+
+
 </layout>

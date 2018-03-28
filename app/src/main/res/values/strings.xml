@@ -1,5 +1,6 @@
 <resources>
     <!--<string name="app_name">The Executive</string>-->
+    <string name="app_title">The Executive</string>
     <string name="login">Login</string>
     <string name="user_id">User ID</string>
     <string name="empty_user_name">Please provide User Name.</string>
@@ -31,9 +32,9 @@
     <string name="email_id">Email Id</string>
     <string name="edit">Edit</string>
     <string name="toolbar_left_icon">Toolbar left icon</string>
+    <string name="toolbar_right_icon">Toolbar right icon</string>
 
     <!--titles-->
-    <string name="title_home">Home</string>
     <string name="title_login">Login</string>
     <string name="error_invalid_email">Invalid mail id.</string>
     <string name="title_register">Register</string>
@@ -42,15 +43,23 @@
     <string name="maintenance_msg">Application is under maintenance</string>
     <string name="force_update_msg">New Version application is available.</string>
     <string name="please_enter_your_email_address_below">Please enter your Email address below.</string>
-    <string name="email">Email address</string>
     <string name="password_info">* You will receive a link to reset your password</string>
     <string name="submit">Submit</string>
     <string name="forgot_password_title">Forgot Password</string>
 
+    <!--Home Screen-->
+    <string name="home">Home</string>
+    <string name="my_account">My Account</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="search">Search</string>
+    <string name="category_image">Parent category image.</string>
+
+
+
     <!--fb integration-->
     <string name="facebook_app_id">174246843202937</string>
     <string name="fb_login_protocol_scheme">fb174246843202937</string>
-    <string name="email_address">Email address</string>
+    <string name="email_address">Email Address</string>
     <string name="login_with">Login with</string>
     <string name="facebook_login">Login with Facebook</string>
     <string name="gmail_login">Login with Gmail</string>
@@ -65,5 +74,15 @@
     <string name="news_letter_option">Suscribe to Newsletter</string>
     <string name="subscribe_info">Subscrive info</string>
     <string name="new_letter_title">News Letter</string>
+    <string name="sort_by">Sort by</string>
+    <string name="filter_by">Filter by</string>
+    <string name="product_list">Product List</string>
+    <string name="product_image">Product Image</string>
+
+
+    <!--wishlist-->
+    <string name="my_wishlist">My Wishlist</string>
+    <string name="promotion_image">Image for promotion</string>
+
 
 </resources>

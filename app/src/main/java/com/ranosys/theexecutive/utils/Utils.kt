@@ -19,9 +19,7 @@ import java.util.regex.Pattern
 /**
  * Created by Mohammad Sunny on 21/2/18.
  */
-open class Utils {
-
-    companion object {
+object Utils {
 
         fun printLog(TAG:String, message: String){
             if(BuildConfig.DEBUG){
@@ -97,6 +95,5 @@ open class Utils {
             val alert = builder.create()
             alert.show()
         }
-    }
 
 }

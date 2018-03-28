@@ -1,16 +1,18 @@
 package com.ranosys.theexecutive.modules.myAccount
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
+import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.change_language_fragment.*
@@ -24,13 +26,13 @@ class ChangeLanguageFragment: BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.change_language_fragment, null, false)
+        return inflater.inflate(R.layout.change_language_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        linearLayoutManager = LinearLayoutManager(activity)
+        linearLayoutManager = LinearLayoutManager(activity as Context)
         language_list.layoutManager = linearLayoutManager
 
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
@@ -53,19 +55,16 @@ class ChangeLanguageFragment: BaseFragment() {
         language_list.adapter = storeListAdapter
 
         btn_continue.setOnClickListener {
-            Toast.makeText(activity, "Lang selected", Toast.LENGTH_SHORT).show()
-
             //store selected language code
             SavedPreferences.getInstance()?.saveStringValue(storeListAdapter.selectedStore, Constants.SELECTED_STORE_CODE_KEY)
+            FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, true)
 
-            //TODO - redirecrtion
         }
     }
 
     override fun onResume() {
         super.onResume()
         if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
-
             setToolBarParams(getString(R.string.select_lang_title), 0, false, 0, false)
         } else {
             setToolBarParams(getString(R.string.select_lang_title), R.drawable.back, true, 0, false)

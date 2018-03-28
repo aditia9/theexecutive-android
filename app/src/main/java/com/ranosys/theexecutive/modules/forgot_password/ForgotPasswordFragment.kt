@@ -50,7 +50,7 @@ class ForgotPasswordFragment(): BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setTitle(getString(R.string.forgot_password_title))
+        setToolBarParams(getString(R.string.forgot_password_title), R.drawable.back, true, 0, false )
     }
 
     private fun observeApiFailure() {

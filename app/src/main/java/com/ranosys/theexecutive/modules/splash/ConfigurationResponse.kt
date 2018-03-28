@@ -8,5 +8,9 @@ data class ConfigurationResponse(
 		val version: String,
 		val maintenance: String,
 		val message_maintenance: String,
-		val appstore_url: String
+		val appstore_url: String,
+		val product_media_url: String,
+		val category_media_url: String,
+		val voucher_amount: String,
+		val subscription_message: String
 )
