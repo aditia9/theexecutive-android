@@ -78,6 +78,8 @@
     <!--wishlist-->
     <string name="my_wishlist">My Wishlist</string>
     <string name="promotion_image">Image for promotion</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 
 </resources>

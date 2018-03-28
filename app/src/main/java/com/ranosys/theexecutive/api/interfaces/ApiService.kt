@@ -75,7 +75,7 @@ interface ApiService {
     }
 
     interface CategoryService {
-        @GET("rest/{store_code}/V1/categories")
+        @GET("rest/{store_code}/V1/categoriescustom")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
