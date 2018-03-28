@@ -33,7 +33,7 @@ class ForgotPasswordViewModel(application: Application): BaseViewModel(applicati
             AppRepository.forgotPassword(request, object: ApiCallback<Boolean>{
                 override fun onException(error: Throwable) {
                     Utils.printLog("Forgot password Api", "error")
-                    apiFailureResponse?.value = "Something went wrong"
+                    apiFailureResponse?.value = error.message
                 }
 
                 override fun onError(errorMsg: String) {
@@ -54,17 +54,15 @@ class ForgotPasswordViewModel(application: Application): BaseViewModel(applicati
 
     private fun validateData(context: Context): Boolean {
 
-        var isValid = true
-
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))
-            isValid = false
+            return false
         } else if (!Utils.isValidEmail(email.get())) {
             emailError.set(context.getString(R.string.provide_valid_email))
-            isValid = false
+            return false
         }
 
-        return isValid
+        return true
     }
 
     fun onEmailTextChanged() {

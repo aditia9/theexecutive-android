@@ -69,10 +69,10 @@
     <string name="select_lang_title">Select Language</string>
     <string name="continue_btn">Continue</string>
     <string name="language_hint">Language</string>
-    <string name="my_account_option_icon">My accoun option icon</string>
+    <string name="my_account_option_icon">My account option icon</string>
     <string name="my_account_title">My Account</string>
-    <string name="news_letter_option">Suscribe to Newsletter</string>
-    <string name="subscribe_info">Subscrive info</string>
+    <string name="news_letter_option">Subscribe to Newsletter</string>
+    <string name="subscribe_info">Subscribe info</string>
     <string name="new_letter_title">News Letter</string>
     <string name="sort_by">Sort by</string>
     <string name="filter_by">Filter by</string>

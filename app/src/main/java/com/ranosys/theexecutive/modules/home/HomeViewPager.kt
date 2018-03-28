@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.ranosys.theexecutive.modules.category.CategoryFragment
-import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.MyAccountFragment
 import com.ranosys.theexecutive.modules.wishlist.WishlistFragment
 

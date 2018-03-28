@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_news_letter.*
 /**
  * Created by nikhil on 8/3/18.
  */
-class ForgotPasswordFragment(): BaseFragment() {
+class ForgotPasswordFragment: BaseFragment() {
 
     private lateinit var forgotPassVM: ForgotPasswordViewModel
     private lateinit var mBinding: FragmentForgotPasswordBinding

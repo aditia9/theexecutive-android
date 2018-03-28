@@ -29,17 +29,15 @@ class NewsLetterViewModel(application: Application): BaseViewModel(application) 
 
     private fun validateData(context: Context): Boolean {
 
-        var isValid = true
-
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))
-            isValid = false
+            return false
         } else if (!Utils.isValidEmail(email.get())) {
             emailError.set(context.getString(R.string.provide_valid_email))
-            isValid = false
+            return false
         }
 
-        return isValid
+        return true
     }
 
     fun onEmailTextChanged() {

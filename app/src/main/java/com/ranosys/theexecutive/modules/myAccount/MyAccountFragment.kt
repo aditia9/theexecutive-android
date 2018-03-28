@@ -33,7 +33,6 @@ class MyAccountFragment: BaseFragment() {
 
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
         my_account_options_list.addItemDecoration(itemDecor)
-
         my_account_options_list.adapter = MyAccountAdapter(getAccountOptions(), activity as Context)
 
     }
@@ -44,7 +43,7 @@ class MyAccountFragment: BaseFragment() {
     }
 
     private fun getAccountOptions(): List<MyAccountDataClass.MyAccountOption> {
-        var optionList = ArrayList<MyAccountDataClass.MyAccountOption>()
+        val optionList = ArrayList<MyAccountDataClass.MyAccountOption>()
 
         val titleArray = resources.getStringArray(R.array.my_account_option_title_array)
         val iconArray = resources.obtainTypedArray(R.array.my_account_option_icon_array)
@@ -56,27 +55,43 @@ class MyAccountFragment: BaseFragment() {
         return optionList
     }
 
-    class MyAccountAdapter(val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context): RecyclerView.Adapter<MyAccountAdapter.MyAccountHolder>(){
-        override fun onBindViewHolder(holder: MyAccountHolder?, position: Int) {
-            holder?.bind(optionArray[position], context)
+    class MyAccountAdapter(val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+        companion object {
+            const val VIEW_TYPE_FOOTER = 2
+            const val VIEW_TYPE_ITEM = 1
+        }
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            if(holder is MyAccountHolder){
+                holder.bind(optionArray[position], context)
+            }
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyAccountHolder {
-            val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent,false)
-            return MyAccountAdapter.MyAccountHolder(binding)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            if(viewType == VIEW_TYPE_FOOTER){
+                val itemView = LayoutInflater.from(parent.context).inflate(R.layout.logout_btn, parent, false)
+                return MyAccountFooterHolder(itemView = itemView)
+
+            }else{
+                val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent,false)
+                return MyAccountAdapter.MyAccountHolder(binding)
+            }
+
         }
 
-        override fun getItemCount() = optionArray.size
+        override fun getItemViewType(position: Int): Int {
+            return if (position == optionArray.size) VIEW_TYPE_FOOTER else VIEW_TYPE_ITEM
+        }
+
+        override fun getItemCount() = optionArray.size + 1
 
 
         class MyAccountHolder(val itemBinding: MyAccountOptionItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
-
 
             fun bind(option: MyAccountDataClass.MyAccountOption, context: Context){
                 itemBinding.option = option
 
                 itemView.setOnClickListener {
-                    //TODO - move to respective screen using option title
                     when(option.title){
                         context.getString(R.string.news_letter_option) -> {
                             FragmentUtils.addFragment(context, NewsLetterFragment(),null, NewsLetterFragment::class.java.name, true )
@@ -85,6 +100,8 @@ class MyAccountFragment: BaseFragment() {
                 }
             }
         }
+
+        class MyAccountFooterHolder(val itemView: View): RecyclerView.ViewHolder(itemView)
 
     }
 }
