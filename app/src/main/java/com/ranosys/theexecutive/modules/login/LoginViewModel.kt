@@ -4,13 +4,16 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.databinding.ObservableField
+import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 
@@ -23,6 +26,8 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
     var apiSuccessResponse: MutableLiveData<String>? = MutableLiveData()
+    var isEmailNotAvailable: MutableLiveData<LoginDataClass.SocialLoginData>? = MutableLiveData()
+
 
     var clickedBtnId: MutableLiveData<Int>? = null
         get() {
@@ -120,7 +125,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 if(available!!){
                     callSocialLoginApi(userData)
                 }else{
-                    //TODO - load register screen
+                    isEmailNotAvailable?.value = userData
                 }
             }
 

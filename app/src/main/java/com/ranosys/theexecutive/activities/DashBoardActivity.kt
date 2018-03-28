@@ -12,7 +12,6 @@ import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
-import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -26,13 +25,12 @@ class DashBoardActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding?.toolbarViewModel = toolbarViewModel
-//        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
-//            FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
-//
-//        }else{
-//            FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
-//        }
-        FragmentUtils.addFragment(this, RegisterFragment(), null, RegisterFragment::class.java.name, true)
+        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
+            FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
+
+        }else{
+            FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
+        }
 
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
             override fun onBackStackChanged() {

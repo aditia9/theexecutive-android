@@ -12,6 +12,7 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
+import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
@@ -29,10 +30,23 @@ import java.util.*
 class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     private lateinit var  registerViewModel: RegisterViewModel
+    private var  isFromSocialLogin: Boolean = false
+    private var  socialLoginFirstName: String = ""
+    private var  socialLoginLastName: String = ""
+    private var  socialLoginEmail: String = ""
 
     override fun onResume() {
         super.onResume()
         setToolBarParams(getString(R.string.title_register), 0, false, 0, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val data = arguments
+        isFromSocialLogin = data?.get(Constants.FROM_SOCIAL_LOGIN) as Boolean
+        socialLoginFirstName = data.get(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME).toString()
+        socialLoginLastName = data.get(Constants.FROM_SOCIAL_LOGIN_LAST_NAME).toString()
+        socialLoginEmail = data.get(Constants.FROM_SOCIAL_LOGIN_EMAIL).toString()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,6 +54,10 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
         mViewDataBinding?.registerViewModel =  registerViewModel
 
+        registerViewModel.isSocialLogin = isFromSocialLogin
+        registerViewModel.firstName.set(socialLoginFirstName)
+        registerViewModel.lastName.set(socialLoginLastName)
+        registerViewModel.emailAddress.set(socialLoginEmail)
         registerViewModel.callCountryApi()
         return mViewDataBinding?.root
 

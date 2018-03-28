@@ -34,5 +34,9 @@ object Constants {
         val DEFAULT_GROUP_ID: Int = 1
         val SOCIAL_LOGIN_CONFIRMATION: String = "social"
         val MINIMUM_AGE: Int = 13
+        val FROM_SOCIAL_LOGIN: String = "from_social"
+        val FROM_SOCIAL_LOGIN_FIRST_NAME: String? = "from_social_first_name"
+        val FROM_SOCIAL_LOGIN_LAST_NAME: String? = "from_social_last_name"
+        val FROM_SOCIAL_LOGIN_EMAIL: String? = "from_social_email"
 
 }

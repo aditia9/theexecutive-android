@@ -188,7 +188,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     email = emailAddress.get(),
                     firstname = firstName.get(),
                     lastname = lastName.get(),
-                    store_id = SavedPreferences.getInstance()?.getIntValue(Constants.STORE_ID_KEY)!!,
+                    store_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_STORE_ID_KEY)!!,
                     website_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)!!,
                     dob = SimpleDateFormat("yyyy-MM-dd").format(dob.get()),
                     addresses = listOf(address),

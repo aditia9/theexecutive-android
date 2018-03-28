@@ -58,14 +58,8 @@ class ForgotPasswordFragment(): BaseFragment() {
                     Utils.printLog("FORGOT PASSWORD", "SUBMIT CLICKED")
 
                     if (Utils.isConnectionAvailable(activity as Context)) {
-                        //validation
-                        if(validateData(et_email.text.toString())){
-                            //showLoading()
-                            forgotPassVM?.callForgetPasswordApi()
-                        }else{
-                            //show validation message
-                            til_email.error = "Invalid Email"
-                        }
+                        forgotPassVM.callForgetPasswordApi()
+
                     }else{
                         Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
                     }
@@ -75,9 +69,7 @@ class ForgotPasswordFragment(): BaseFragment() {
 
     }
 
-    private fun validateData(email: String): Boolean {
-        return Utils.isValidEmail(email)
-    }
+
 
 
 }

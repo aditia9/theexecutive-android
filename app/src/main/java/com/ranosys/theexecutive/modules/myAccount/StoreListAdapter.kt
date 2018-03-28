@@ -15,7 +15,7 @@ import com.ranosys.theexecutive.modules.splash.StoreResponse
 class StoreListAdapter(var storeListData: List<StoreResponse>?, selectedStoreCode: String): RecyclerView.Adapter<StoreListAdapter.Holder>() {
 
     var clickListener: OnItemClickListener? = null
-    var selectedStore: String = selectedStoreCode
+    var selectedStoreCode: String = selectedStoreCode
 
     interface OnItemClickListener {
         fun onItemClick(item : StoreResponse)
@@ -31,7 +31,7 @@ class StoreListAdapter(var storeListData: List<StoreResponse>?, selectedStoreCod
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(storeListData!!.get(position), selectedStoreCode = selectedStore, listener = clickListener!!)
+        holder.bind(storeListData!!.get(position), selectedStoreCode = selectedStoreCode, listener = clickListener!!)
     }
 
     override fun getItemCount(): Int = storeListData?.size?:0
