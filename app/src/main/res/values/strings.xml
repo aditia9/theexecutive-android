@@ -64,8 +64,6 @@
     <string name="my_account_title">My Account</string>
     <string name="news_letter_option">Suscribe to Newsletter</string>
     <string name="subscribe_info">Subscrive info</string>
-    <string name="email">Email Address</string>
-    <string name="submit">Subscribe</string>
     <string name="new_letter_title">News Letter</string>
 
 </resources>
