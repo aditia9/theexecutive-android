@@ -57,7 +57,12 @@ class RegisterDataClass {
             val gender: Int,
             val store_id: Int,
             val website_id: Int,
+            val extension_attributes: ExtensionAttributes,
             val addresses: List<Address>
+    )
+
+    data class ExtensionAttributes(
+            val is_subscribed: Boolean
     )
 
     data class Address(
@@ -82,26 +87,24 @@ class RegisterDataClass {
     )
 
 
-data class RegistrationResponse(
-		val id: Int,
-		val group_id: Int,
-		val default_billing: String,
-		val default_shipping: String,
-		val confirmation: String,
-		val created_at: String,
-		val updated_at: String,
-		val created_in: String,
-		val dob: String,
-		val email: String,
-		val firstname: String,
-		val lastname: String,
-		val prefix: String,
-		val gender: Int,
-		val store_id: Int,
-		val website_id: Int,
-		val addresses: List<Address>,
-		val disable_auto_group_change: Int
-)
-
-
+    data class RegistrationResponse(
+            val id: Int,
+            val group_id: Int,
+            val default_billing: String,
+            val default_shipping: String,
+            val confirmation: String,
+            val created_at: String,
+            val updated_at: String,
+            val created_in: String,
+            val dob: String,
+            val email: String,
+            val firstname: String,
+            val lastname: String,
+            val prefix: String,
+            val gender: Int,
+            val store_id: Int,
+            val website_id: Int,
+            val addresses: List<Address>,
+            val disable_auto_group_change: Int
+    )
 }

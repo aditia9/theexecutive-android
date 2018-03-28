@@ -209,8 +209,8 @@
                         android:focusable="false"
                         android:onTextChanged='@{() -> registerViewModel.onTextChanged(etDob)}'
                         android:theme="@style/tilTheme"
-                        android:fontFamily="@font/dax_light"
-                        android:text="@={registerViewModel.dob}" />
+                        android:drawableRight="@drawable/calender"
+                        android:fontFamily="@font/dax_light"/>
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -388,6 +388,7 @@
                     android:maxLines="2"
                     android:layout_marginTop="@dimen/forty_dp"
                     android:layout_marginBottom="@dimen/forty_dp"
+                    android:text="@string/term_and_condition"
                     android:fontFamily="@font/dax_light"
                     app:layout_constraintTop_toBottomOf="@+id/cb_subscribe"
                     app:layout_constraintBottom_toBottomOf="@+id/cl_inside_scroll_view"

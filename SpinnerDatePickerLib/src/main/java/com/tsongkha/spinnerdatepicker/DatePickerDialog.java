@@ -45,6 +45,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
     public static int NO_YEAR = DatePicker.NO_YEAR;
 
     private static final String YEAR = "year";
+    private static final String FINAL_YEAR = "final_year";
     private static final String MONTH = "month";
     private static final String DAY = "day";
     private static final String YEAR_OPTIONAL = "year_optional";
@@ -55,6 +56,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
     private final DateFormat mTitleNoYearDateFormat;
 
     private int mInitialYear;
+    private int mFinalYear;
     private int mInitialMonth;
     private int mInitialDay;
 
@@ -78,6 +80,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
                      int spinnerTheme,
                      OnDateSetListener callBack,
                      int year,
+                     int finalYear,
                      int monthOfYear,
                      int dayOfMonth,
                      boolean yearOptional) {
@@ -85,6 +88,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
 
         mCallBack = callBack;
         mInitialYear = year;
+        mFinalYear = finalYear;
         mInitialMonth = monthOfYear;
         mInitialDay = dayOfMonth;
 
@@ -103,7 +107,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
         View view = inflater.inflate(R.layout.date_picker_dialog_container, null);
         setView(view);
         mDatePicker = new DatePicker(context, (ViewGroup) view, spinnerTheme);
-        mDatePicker.init(mInitialYear, mInitialMonth, mInitialDay, yearOptional, this);
+        mDatePicker.init(mInitialYear, mInitialMonth, mInitialDay, yearOptional, finalYear,this);
     }
 
     @Override
@@ -141,6 +145,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
     public Bundle onSaveInstanceState() {
         Bundle state = super.onSaveInstanceState();
         state.putInt(YEAR, mDatePicker.getYear());
+        state.putInt(FINAL_YEAR, mFinalYear);
         state.putInt(MONTH, mDatePicker.getMonth());
         state.putInt(DAY, mDatePicker.getDayOfMonth());
         state.putBoolean(YEAR_OPTIONAL, mDatePicker.isYearOptional());
@@ -151,10 +156,11 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         int year = savedInstanceState.getInt(YEAR);
+        int finalYear = savedInstanceState.getInt(FINAL_YEAR);
         int month = savedInstanceState.getInt(MONTH);
         int day = savedInstanceState.getInt(DAY);
         boolean yearOptional = savedInstanceState.getBoolean(YEAR_OPTIONAL);
-        mDatePicker.init(year, month, day, yearOptional, this);
+        mDatePicker.init(year, month, day, yearOptional,finalYear, this);
         //updateTitle(year, month, day);
     }
 }

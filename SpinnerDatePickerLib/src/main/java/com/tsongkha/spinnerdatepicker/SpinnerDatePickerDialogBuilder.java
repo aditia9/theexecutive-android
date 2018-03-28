@@ -2,11 +2,14 @@ package com.tsongkha.spinnerdatepicker;
 
 import android.content.Context;
 
+import java.util.Calendar;
+
 public class SpinnerDatePickerDialogBuilder {
 
     private Context context;
     private DatePickerDialog.OnDateSetListener callBack;
     private int year = 1980;
+    private int finalYear = Calendar.getInstance().get(Calendar.YEAR);
     private int monthOfYear = 0;            //months are indexed from 0
     private int dayOfMonth = 1;
     private boolean yearOptional = false;
@@ -25,6 +28,11 @@ public class SpinnerDatePickerDialogBuilder {
 
     public SpinnerDatePickerDialogBuilder year(int year) {
         this.year = year;
+        return this;
+    }
+
+    public SpinnerDatePickerDialogBuilder finalYear(int finalYear) {
+        this.finalYear = finalYear;
         return this;
     }
 
@@ -56,6 +64,6 @@ public class SpinnerDatePickerDialogBuilder {
     public DatePickerDialog build() {
         if (context == null) throw new IllegalArgumentException("Context must not be null");
 
-        return new DatePickerDialog(context, theme, spinnerTheme, callBack, year, monthOfYear, dayOfMonth, yearOptional);
+        return new DatePickerDialog(context, theme, spinnerTheme, callBack, year, finalYear, monthOfYear, dayOfMonth, yearOptional);
     }
 }

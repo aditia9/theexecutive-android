@@ -19,6 +19,7 @@ import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
 import kotlinx.android.synthetic.main.fragment_register.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -64,8 +65,11 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             showDate(Calendar.getInstance().get(Calendar.YEAR) - Constants.MINIMUM_AGE, 0, 1, R.style.DatePickerSpinner)
         }
 
-        cb_subscribe.text = getString(R.string.subscribe, SavedPreferences.getInstance()?.getStringValue(Constants.VOUCHER_AMT))
-        tv_terms_and_conditions.text = SavedPreferences.getInstance()?.getStringValue(Constants.SUBS_MESSAGE)
+        cb_subscribe.text = SavedPreferences.getInstance()?.getStringValue(Constants.SUBS_MESSAGE)
+
+        cb_subscribe.setOnCheckedChangeListener { buttonView, isChecked ->
+            registerViewModel.isSubscribed.set(isChecked)
+        }
     }
 
    fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
@@ -74,6 +78,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
                 .callback(this)
                 .spinnerTheme(spinnerTheme)
                 .year(year)
+                .finalYear(Calendar.getInstance().get(Calendar.YEAR) - Constants.MINIMUM_AGE)
                 .monthOfYear(monthOfYear)
                 .dayOfMonth(dayOfMonth)
                 .build()
@@ -86,9 +91,13 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        val month = monthOfYear + 1
-        val dob = "$dayOfMonth/$month/$year"
-       et_dob.setText(dob)
+
+        val calender: Calendar = Calendar.getInstance()
+        calender.set(year, monthOfYear, dayOfMonth)
+        val dob: Date = calender.time
+        registerViewModel.dob.set(dob)
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        et_dob.setText(dateFormat.format(dob))
     }
 
 }

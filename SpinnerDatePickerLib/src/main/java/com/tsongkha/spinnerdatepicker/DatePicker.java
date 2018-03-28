@@ -51,9 +51,9 @@ import java.util.Locale;
 public class DatePicker extends FrameLayout {
     /** Magic year that represents "no year" */
     public static int NO_YEAR = 0;
-
+    private static final int MIN_AGE = 13;
     private static final int DEFAULT_START_YEAR = 1900;
-    private static final int DEFAULT_END_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+    private static int DEFAULT_END_YEAR = Calendar.getInstance().get(Calendar.YEAR) - MIN_AGE;
     private static final TwoDigitFormatter sTwoDigitFormatter = new TwoDigitFormatter();
 
     /* UI Components */
@@ -76,6 +76,8 @@ public class DatePicker extends FrameLayout {
     /**
      * The callback used to indicate the user changes the date.
      */
+
+
     public interface OnDateChangedListener {
 
         /**
@@ -189,9 +191,10 @@ public class DatePicker extends FrameLayout {
     private void reorderPickers() {
         // We use numeric spinners for year and day, but textual months. Ask icu4c what
         // order the user's locale uses for that combination. http://b/7207103.
-        String skeleton = mHasYear ? "yyyyMMMdd" : "MMMdd";
+        String skeleton = mHasYear ? "yyyyMMMdd" : "ddMMM";
         String pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
-        char[] order = ICU.getDateFormatOrder(pattern);
+        //char[] order = ICU.getDateFormatOrder(pattern);
+        char[] order = {'d', 'M', 'y'};
 
         /* Remove the 3 pickers from their parent and then add them back in the
          * required order.
@@ -342,7 +345,7 @@ public class DatePicker extends FrameLayout {
      */
     public void init(int year, int monthOfYear, int dayOfMonth,
                      OnDateChangedListener onDateChangedListener) {
-        init(year, monthOfYear, dayOfMonth, false, onDateChangedListener);
+        init(year, monthOfYear, dayOfMonth, false,Calendar.getInstance().get(Calendar.YEAR) - 13, onDateChangedListener);
     }
 
     /**
@@ -353,7 +356,7 @@ public class DatePicker extends FrameLayout {
      * @param yearOptional True if the user can toggle the year
      * @param onDateChangedListener How user is notified date is changed by user, can be null.
      */
-    public void init(int year, int monthOfYear, int dayOfMonth, boolean yearOptional,
+    public void init(int year, int monthOfYear, int dayOfMonth, boolean yearOptional, int maxYear,
                      OnDateChangedListener onDateChangedListener) {
         mYear = (yearOptional && year == NO_YEAR) ? getCurrentYear() : year;
         mMonth = monthOfYear;
@@ -361,6 +364,7 @@ public class DatePicker extends FrameLayout {
         mYearOptional = yearOptional;
         mHasYear = yearOptional ? (year != NO_YEAR) : true;
         mOnDateChangedListener = onDateChangedListener;
+        DEFAULT_END_YEAR = maxYear;
         updateSpinners();
     }
 
@@ -418,4 +422,5 @@ public class DatePicker extends FrameLayout {
             mOnDateChangedListener.onDateChanged(DatePicker.this, year, mMonth, mDay);
         }
     }
+
 }

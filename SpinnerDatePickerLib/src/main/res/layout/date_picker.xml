@@ -28,10 +28,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
-
-        <!-- Month -->
+        <!-- Day -->
         <NumberPicker
-            android:id="@+id/month"
+            android:id="@+id/day"
             android:layout_width="80dip"
             android:layout_height="wrap_content"
             android:layout_marginEnd="1dip"
@@ -42,9 +41,9 @@
             android:focusableInTouchMode="true"
             />
 
-        <!-- Day -->
+        <!-- Month -->
         <NumberPicker
-            android:id="@+id/day"
+            android:id="@+id/month"
             android:layout_width="80dip"
             android:layout_height="wrap_content"
             android:layout_marginEnd="1dip"

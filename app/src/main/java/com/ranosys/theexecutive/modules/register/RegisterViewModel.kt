@@ -14,10 +14,14 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Mohammad Sunny on 31/1/18.
@@ -32,7 +36,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var mobileNumber: ObservableField<String> = ObservableField()
     var mobileNumberError: ObservableField<String> = ObservableField()
     var selectedGender: ObservableField<Int> = ObservableField(MALE)
-    var dob: ObservableField<String> = ObservableField()
+    var dob: ObservableField<Date> = ObservableField()
     var dobError: ObservableField<String> = ObservableField()
     var streetAddress1: ObservableField<String> = ObservableField()
     var streetAddress1Error: ObservableField<String> = ObservableField()
@@ -43,6 +47,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     val passwordError = ObservableField<String>()
     var confirmPassword: ObservableField<String> = ObservableField()
     val confirmPasswordError = ObservableField<String>()
+    val isSubscribed = ObservableField<Boolean>(false)
 
     var countryList :MutableList<RegisterDataClass.Country> = mutableListOf<RegisterDataClass.Country>()
     var stateList :MutableList<RegisterDataClass.State> = mutableListOf<RegisterDataClass.State>()
@@ -169,7 +174,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     default_billing = true,
                     default_shipping = true,
                     country_id = selectedcountry.get().id,
-                    street = listOf(streetAddress1.get(), streetAddress2.get()),
+                    street = listOf(streetAddress1.get(), streetAddress2.get()?:""),
                     region = RegisterDataClass.Region(region_code = selectedState.get().code,
                             region_id = if(!TextUtils.isEmpty(selectedState.get().id)) selectedState.get().id.toInt() else 1,
                             region = selectedState.get().name)
@@ -185,8 +190,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     lastname = lastName.get(),
                     store_id = SavedPreferences.getInstance()?.getIntValue(Constants.STORE_ID_KEY)!!,
                     website_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)!!,
-                    dob = dob.get(),
-                    addresses = listOf(address))
+                    dob = SimpleDateFormat("yyyy-MM-dd").format(dob.get()),
+                    addresses = listOf(address),
+                    extension_attributes = RegisterDataClass.ExtensionAttributes(is_subscribed = isSubscribed.get() ))
 
             val password = password.get()
             val registerRequest = RegisterDataClass.RegisterRequest(customer, password)
@@ -208,6 +214,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                         callLoginApi()
                     }else{
                         //TODO  - redirect to Login screen with message
+                        FragmentUtils.addFragment(getApplication(), HomeFragment(), null, HomeFragment::class.java.name, false)
 
                     }
                 }
@@ -292,7 +299,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             isValid = false
         }
 
-        if (TextUtils.isEmpty(dob.get())){
+        if (TextUtils.isEmpty(dob.get()?.toString())){
             dobError.set(context.getString(R.string.dob_error))
             isValid = false
         }
@@ -304,16 +311,16 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         }
 
         if(selectedcountry.get() == countryHint){
-            //TODO - asho an alert dialog to select country
+            //TODO - show an alert dialog to select country
             Toast.makeText(context, "Please select country", Toast.LENGTH_SHORT ).show()
             isValid = false
         }else if(selectedState.get() == stateHint){
-            //TODO - asho an alert dialog to select state
+            //TODO - show an alert dialog to select state
             Toast.makeText(context, "Please select State", Toast.LENGTH_SHORT ).show()
             isValid = false
         }else if(selectedCity.get() == cityHint){
             //TODO - asho an alert dialog to select city
-            Toast.makeText(context, "Please select country", Toast.LENGTH_SHORT ).show()
+            Toast.makeText(context, "Please select city", Toast.LENGTH_SHORT ).show()
             isValid = false
         }
 
