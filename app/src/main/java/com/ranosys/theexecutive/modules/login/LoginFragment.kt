@@ -26,9 +26,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -113,7 +111,7 @@ class LoginFragment : BaseFragment() {
                 btn_login.id -> {
                     Utils.hideSoftKeypad(activity as Context)
                     if (Utils.isConnectionAvailable(activity as Context)) {
-                        //TODO - showLoading()
+                        showLoading()
                         loginViewModel.login()
 
                     } else {
@@ -149,15 +147,22 @@ class LoginFragment : BaseFragment() {
 
     private fun observeApiFailure() {
         loginViewModel.apiFailureResponse?.observe(this, Observer { msg ->
-            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
+                override fun setDone(done: Boolean) {
+
+                }
+
+            })
         })
 
     }
 
     private fun observeApiSuccess() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
-            Toast.makeText(activity, token, Toast.LENGTH_SHORT).show()
-            /*TODO  - load home fragment*/
+            hideLoading()
+            SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
+            activity?.onBackPressed()
         })
 
     }

@@ -37,7 +37,7 @@ class DashBoardActivity: BaseActivity() {
                 val backStackCount = supportFragmentManager.backStackEntryCount
                 if(backStackCount > 0){
                     val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
-                    if(null != fragment){
+                    fragment?.run{
                         if(fragment is HomeFragment) {
                             when(HomeFragment.fragmentPosition){
                                 0 -> {

@@ -21,15 +21,6 @@ class MyAccountFragment: BaseFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
 
-  /*  override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-        if(TextUtils.isEmpty(isLogin)){
-            FragmentUtils.addFragment(activity as Context, com.ranosys.theexecutive.modules.login.LoginFragment(), null, LoginFragment::class.java.name, false)
-            return
-        }
-    }
-*/
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_my_account, container, false)
     }

@@ -13,7 +13,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
 import com.ranosys.theexecutive.utils.Utils
-import kotlinx.android.synthetic.main.fragment_news_letter.*
+import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
 /**
  * Created by nikhil on 8/3/18.
@@ -36,7 +36,7 @@ class ForgotPasswordFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        btn_subscribe.setOnClickListener({
+        btn_submit?.setOnClickListener({
             Utils.printLog("FORGOT PASSWORD", "SUBMIT CLICKED")
 
             if (Utils.isConnectionAvailable(activity as Context)) {

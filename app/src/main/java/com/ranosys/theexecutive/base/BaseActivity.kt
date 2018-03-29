@@ -7,8 +7,11 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.ranosys.rtp.RunTimePermissionActivity
 import com.ranosys.theexecutive.activities.ToolbarViewModel
+import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 /**
@@ -31,12 +34,25 @@ open class BaseActivity: RunTimePermissionActivity(){
         if(supportFragmentManager.backStackEntryCount > 1){
             supportFragmentManager.popBackStackImmediate()
         }else{
-            Utils.showDialog(this, "Are you sure you want to close application?",
-                    "YES", "NO", object : DialogOkCallback {
-                override fun setDone(done: Boolean) {
-                    finish()
+            val fragment = FragmentUtils.getCurrentFragment(this@BaseActivity)
+            fragment?.run {
+                if (fragment is HomeFragment) {
+                    when(HomeFragment.fragmentPosition){
+                        0-> {
+                            Utils.showDialog(this@BaseActivity, "Are you sure you want to close application?",
+                                    "YES", "NO", object : DialogOkCallback {
+                                override fun setDone(done: Boolean) {
+                                    finish()
+                                }
+                            })
+                        }
+                        1,2 -> {
+                            (fragment as HomeFragment).viewpager.setCurrentItem(0, true)
+                        }
+                    }
+
                 }
-            })
+            }
 
         }
     }
