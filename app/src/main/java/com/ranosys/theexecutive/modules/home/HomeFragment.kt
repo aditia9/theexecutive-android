@@ -92,7 +92,7 @@ class HomeFragment : BaseFragment() {
                     }
                     1 -> {
                         fragmentPosition = 1
-                        setToolBarParams(getString(R.string.login), 0, false, 0, false )
+                        setToolBarParams(getString(R.string.my_account_title), 0, false, 0, false )
                     }
                     2 -> {
                         fragmentPosition = 2

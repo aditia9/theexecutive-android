@@ -44,7 +44,7 @@ class DashBoardActivity: BaseActivity() {
                                     (fragment as BaseFragment).setToolBarParams(getString(R.string.app_title), 0, false, R.drawable.bag, true)
                                 }
                                 1 -> {
-                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, false, 0, false)
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, false, 0, false)
                                 }
                                 2 -> {
                                     (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, false, 0, false)
