@@ -101,7 +101,9 @@ class MyAccountFragment: BaseFragment() {
             }
         }
 
-        class MyAccountFooterHolder(val itemView: View): RecyclerView.ViewHolder(itemView)
+        class MyAccountFooterHolder(val itemView: View): RecyclerView.ViewHolder(itemView){
+
+        }
 
     }
 }

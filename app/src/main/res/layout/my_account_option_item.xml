@@ -13,8 +13,6 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/thirty_dp"
-        android:paddingBottom="@dimen/thirty_dp"
         android:background="?selectableItemBackground">
 
         <android.support.constraint.Guideline
@@ -36,8 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/my_account_option_icon"
-            android:layout_margin="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/option_name_tv"
+            android:layout_marginTop="@dimen/thirty_dp"
+            android:layout_marginBottom="@dimen/thirty_dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
             app:layout_constraintTop_toTopOf="parent"
             android:src="@{option.icon}"/>
@@ -47,14 +46,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{option.title}"
+            android:layout_marginTop="@dimen/thirty_dp"
+            android:layout_marginBottom="@dimen/thirty_dp"
+            android:layout_marginStart="@dimen/sixteen_dp"
             android:fontFamily="@font/dax_regular"
-            android:layout_marginStart="@dimen/thirtyTwo_dp"
             android:textColor="@color/theme_black_color"
             android:textSize="@dimen/eighteen_sp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="@id/option_icon_iv"/>
-
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/option_icon_iv"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

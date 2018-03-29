@@ -2,6 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/forty_dp"
+    android:layout_marginRight="@dimen/twenty_dp"
+    android:layout_marginLeft="@dimen/twenty_dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Button
@@ -13,14 +16,7 @@
         android:textColor="@color/colorText"
         android:textAllCaps="false"
         android:background="@drawable/black_button_bg"
-        android:layout_marginTop="@dimen/ten_dp"
-        android:layout_marginLeft="@dimen/thirty_dp"
-        android:layout_marginRight="@dimen/thirty_dp"
-        android:layout_marginBottom="@dimen/twenty_dp"
         android:fontFamily="@font/dax_regular"
-        android:layout_marginStart="@dimen/thirty_dp"
-        android:layout_marginEnd="@dimen/thirty_dp"
-        app:layout_constraintTop_toBottomOf="@+id/list_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
