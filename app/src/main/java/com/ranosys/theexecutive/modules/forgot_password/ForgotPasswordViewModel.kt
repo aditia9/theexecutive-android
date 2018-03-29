@@ -2,8 +2,9 @@ package com.ranosys.theexecutive.modules.forgot_password
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import android.content.Context
 import android.databinding.ObservableField
-import android.view.View
+import android.text.TextUtils
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
@@ -16,42 +17,55 @@ import com.ranosys.theexecutive.utils.Utils
  * Created by nikhil on 8/3/18.
  */
 class ForgotPasswordViewModel(application: Application): BaseViewModel(application) {
-    var email: ObservableField<String>? = ObservableField<String>()
-    var btnClicked: MutableLiveData<Int>? = MutableLiveData()
+    var email: ObservableField<String> = ObservableField<String>()
+    val emailError = ObservableField<String>()
     var apiSuccessResponse: MutableLiveData<String>? = MutableLiveData()
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
 
 
+    fun callForgetPasswordApi(){
 
-    fun onSubmitClick(view: View){
-        when(view.id){
-            R.id.btn_submit -> {
-                btnClicked?.value = view.id
-            }
+        if(validateData(getApplication())){
+            //showLoading()
+            val websiteId = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)
+            val request = ForgotPasswordDataClass.ForgotPasswordRequest(email = email.get(), websiteId = websiteId)
+
+            AppRepository.forgotPassword(request, object: ApiCallback<Boolean>{
+                override fun onException(error: Throwable) {
+                    Utils.printLog("Forgot password Api", "error")
+                    apiFailureResponse?.value = error.message
+                }
+
+                override fun onError(errorMsg: String) {
+                    Utils.printLog("Forgot password Api", "error")
+                    apiFailureResponse?.value = errorMsg
+                }
+
+                override fun onSuccess(linkSent: Boolean?) {
+                    //show toast to of success
+                    if(linkSent!!) apiSuccessResponse?.value = "link sent" else apiSuccessResponse?.value = "link not sent"
+                }
+
+            })
         }
+
+
     }
 
-    fun callForgetPasswordApi(){
-        val websiteId = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)
-        val request = ForgotPasswordDataClass.ForgotPasswordRequest(email = email?.get(), websiteId = websiteId)
+    private fun validateData(context: Context): Boolean {
 
-        AppRepository.forgotPassword(request, object: ApiCallback<Boolean>{
-            override fun onException(error: Throwable) {
-                Utils.printLog("Forgot password Api", "error")
-                apiFailureResponse?.value = "Something went wrong"
-            }
+        if (TextUtils.isEmpty(email.get())) {
+            emailError.set(context.getString(R.string.empty_email))
+            return false
+        } else if (!Utils.isValidEmail(email.get())) {
+            emailError.set(context.getString(R.string.provide_valid_email))
+            return false
+        }
 
-            override fun onError(errorMsg: String) {
-                Utils.printLog("Forgot password Api", "error")
-                apiFailureResponse?.value = errorMsg
-            }
+        return true
+    }
 
-            override fun onSuccess(linkSent: Boolean?) {
-                //show toast to of success
-                if(linkSent!!) apiSuccessResponse?.value = "link sent" else apiSuccessResponse?.value = "link not sent"
-            }
-
-        })
-
+    fun onEmailTextChanged() {
+        emailError.set("")
     }
 }
