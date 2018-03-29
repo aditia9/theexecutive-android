@@ -12,6 +12,7 @@ import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
+import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -29,7 +30,8 @@ class DashBoardActivity: BaseActivity() {
             FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
 
         }else{
-            FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
+            //FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
+            FragmentUtils.addFragment(this, LoginFragment(), null, LoginFragment::class.java.name, true)
         }
 
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{

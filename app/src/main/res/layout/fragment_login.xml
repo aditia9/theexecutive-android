@@ -57,7 +57,6 @@
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_email"
-                        android:fontFamily="@font/dax_light"
                         android:text="@={loginVM.email}"
                         android:paddingLeft="@dimen/twentyfour_sp"
                         android:onTextChanged="@{() -> loginVM.onEmailTextChanged()}"
