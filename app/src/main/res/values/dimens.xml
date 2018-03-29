@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <dimen name="text_size_regular">16sp</dimen>
+    <dimen name="text_size_heading">24sp</dimen>
+    <dimen name="text_size_sub_heading">20sp</dimen>
+    <dimen name="btn_text_size">16sp</dimen>
+    <dimen name="field_start_padding">8dp</dimen>
+
     <dimen name="match_constraint">0dp</dimen>
     <dimen name="ten_dp">10dp</dimen>
     <dimen name="thirty_dp">30dp</dimen>
@@ -44,5 +51,6 @@
 
     <dimen name="design_bottom_navigation_text_size" tools:override="true">20sp</dimen>
     <dimen name="five_dp">5dp</dimen>
+    <dimen name="twenty_eight_dp">28dp</dimen>
 
 </resources>

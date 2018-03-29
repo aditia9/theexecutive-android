@@ -143,6 +143,12 @@ class LoginFragment : BaseFragment() {
                     FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), null, ForgotPasswordFragment::class.java.name, true)
 
                 }
+
+                btn_register.id -> {
+                    //TODO - redrect to register fragment
+                    //FragmentUtils.addFragment(activity as Context, RegisterFragment(), null, RegisterFragment::class.java.name, true)
+
+                }
             }
         })
     }

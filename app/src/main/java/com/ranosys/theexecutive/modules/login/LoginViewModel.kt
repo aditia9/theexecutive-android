@@ -53,6 +53,11 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
                 clickedBtnId?.value = R.id.tv_forgot_password
             }
+
+            R.id.btn_register ->{
+
+                clickedBtnId?.value = R.id.btn_register
+            }
         }
     }
 
