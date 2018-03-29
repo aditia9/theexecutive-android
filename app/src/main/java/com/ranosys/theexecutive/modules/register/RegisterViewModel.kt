@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginDataClass
@@ -55,9 +56,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
     var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
     var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
-    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = "Country")
-    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = "State")
-    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = "City")
+    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = Constants.COUNTRY_LABEL)
+    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = Constants.STATE_LABEL)
+    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
 
     var isSocialLogin: Boolean = false
 
@@ -66,6 +67,13 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     companion object {
         const val MALE = 1
         const val FEMALE = 2
+
+        //error tags
+        val ERROR_TAG = "error"
+        val COUNTRY_API_TAG = "Country Api"
+        val CITY_API_TAG = "City Api"
+        val REGISTRATION_API_TAG = "Registration Api"
+        val LOGIN_API_TAG = "Login Api"
     }
 
     init {
@@ -82,11 +90,11 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     fun callCountryApi() {
         AppRepository.getCountryList(object : ApiCallback<List<RegisterDataClass.Country>>{
             override fun onException(error: Throwable) {
-                Utils.printLog("Country API", "error")
+                Utils.printLog(COUNTRY_API_TAG, error.message!!)
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Country API", "error")
+                Utils.printLog(COUNTRY_API_TAG, errorMsg)
             }
 
             override fun onSuccess(countries: List<RegisterDataClass.Country>?) {
@@ -104,7 +112,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                 stateList.addAll(selectedcountry.get().available_regions as ArrayList)
 
             }else{
-                Utils.printLog("No state available for this country", "error")
+                Utils.printLog(ERROR_TAG, getApplication<Application>().getString(R.string.no_state_available_error))
             }
 
         }else{
@@ -135,23 +143,22 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     }
 
     private fun callCityApi(stateCode: String) {
-        AppRepository.getCityList("543", object : ApiCallback<List<RegisterDataClass.City>>{
+        AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>>{
             override fun onException(error: Throwable) {
-                Utils.printLog("City API", "error")
+                Utils.printLog(CITY_API_TAG, ERROR_TAG)
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("City API", "error")
+                Utils.printLog(CITY_API_TAG, ERROR_TAG)
                 Toast.makeText(getApplication<Application>(), errorMsg, Toast.LENGTH_SHORT).show()
             }
 
             override fun onSuccess(cities: List<RegisterDataClass.City>?) {
-                //TODO- set value in city spinner
                 cities?.run {
                     if(cities.isNotEmpty()){
                         cityList.addAll(cities)
                     }else{
-                        Utils.printLog("No cities available", "error")
+                        Utils.printLog(ERROR_TAG, getApplication<Application>().getString(R.string.no_cities_available_error))
                     }
                 }
             }
@@ -190,7 +197,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     lastname = lastName.get(),
                     store_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_STORE_ID_KEY)!!,
                     website_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)!!,
-                    dob = SimpleDateFormat("yyyy-MM-dd").format(dob.get()),
+                    dob = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT).format(dob.get()),
                     addresses = listOf(address),
                     extension_attributes = RegisterDataClass.ExtensionAttributes(is_subscribed = isSubscribed.get() ))
 
@@ -200,23 +207,15 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             //TODO - call register API
             AppRepository.registrationApi(registerRequest, object: ApiCallback<String>{
                 override fun onException(error: Throwable) {
-                    Utils.printLog("Registration API", "error")
+                    Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)
                 }
 
                 override fun onError(errorMsg: String) {
-                    Utils.printLog("Registration API", "error")
+                    Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)
                 }
 
                 override fun onSuccess(t: String?) {
-                    Utils.printLog("Registration API", "Success")
-                    if(isSocialLogin){
-                        //TODO -  if social registration Login user and redirect to home screen
-                        callLoginApi()
-                    }else{
-                        //TODO  - redirect to Login screen with message
-                        FragmentUtils.addFragment(getApplication(), HomeFragment(), null, HomeFragment::class.java.name, false)
-
-                    }
+                    if(isSocialLogin) callLoginApi() else FragmentUtils.addFragment(getApplication(), HomeFragment(), null, HomeFragment::class.java.name, false)
                 }
 
             })
@@ -229,18 +228,17 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
-                Utils.printLog("Login Api", "error")
+                Utils.printLog(LOGIN_API_TAG, ERROR_TAG)
                 apiFailureResponse?.value = Constants.UNKNOWN_ERROR
 
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Login Api", "error")
+                Utils.printLog(LOGIN_API_TAG, ERROR_TAG)
                 apiFailureResponse?.value = errorMsg
             }
 
             override fun onSuccess(userToken: String?) {
-                //save customer token
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
                 //TODO - Move to Home screen
 
@@ -312,15 +310,15 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         if(selectedcountry.get() == countryHint){
             //TODO - show an alert dialog to select country
-            Toast.makeText(context, "Please select country", Toast.LENGTH_SHORT ).show()
+            Toast.makeText(context, context.getString(R.string.empty_country_error), Toast.LENGTH_SHORT ).show()
             isValid = false
         }else if(selectedState.get() == stateHint){
             //TODO - show an alert dialog to select state
-            Toast.makeText(context, "Please select State", Toast.LENGTH_SHORT ).show()
+            Toast.makeText(context, context.getString(R.string.empty_state_error), Toast.LENGTH_SHORT ).show()
             isValid = false
         }else if(selectedCity.get() == cityHint){
-            //TODO - asho an alert dialog to select city
-            Toast.makeText(context, "Please select city", Toast.LENGTH_SHORT ).show()
+            //TODO - show an alert dialog to select city
+            Toast.makeText(context, context.getString(R.string.empty_city_error), Toast.LENGTH_SHORT ).show()
             isValid = false
         }
 

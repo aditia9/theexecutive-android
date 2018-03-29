@@ -38,5 +38,10 @@ object Constants {
         val FROM_SOCIAL_LOGIN_FIRST_NAME: String? = "from_social_first_name"
         val FROM_SOCIAL_LOGIN_LAST_NAME: String? = "from_social_last_name"
         val FROM_SOCIAL_LOGIN_EMAIL: String? = "from_social_email"
+        val DD_MM_YY_DATE_FORMAT: String = "dd/MM/yyyy"
+        val YY_MM__DD_DATE_FORMAT: String = "yyyy-MM-dd"
+        val COUNTRY_LABEL: String = "Country"
+        val STATE_LABEL: String = "State"
+        val CITY_LABEL: String = "City"
 
 }

@@ -96,6 +96,13 @@
     <!--wishlist-->
     <string name="my_wishlist">My Wishlist</string>
     <string name="promotion_image">Image for promotion</string>
+    <string name="network_error">Network Error</string>
+    <string name="select_gender_label">Select Gender</string>
+    <string name="no_state_available_error">No state available for this country</string>
+    <string name="no_cities_available_error">No cities available</string>
+    <string name="empty_country_error">Please select country</string>
+    <string name="empty_city_error">Please select city</string>
+    <string name="empty_state_error">Please select State</string>
 
 
 </resources>

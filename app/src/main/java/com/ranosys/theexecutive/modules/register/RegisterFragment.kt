@@ -12,7 +12,6 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
-import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
@@ -74,7 +73,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
                 registerViewModel.callRegisterApi()
 
             } else {
-                Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.network_error), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -90,7 +89,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         }
     }
 
-   fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
+    private fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
         val dpd = SpinnerDatePickerDialogBuilder()
                 .context(activity)
                 .callback(this)
@@ -114,7 +113,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         calender.set(year, monthOfYear, dayOfMonth)
         val dob: Date = calender.time
         registerViewModel.dob.set(dob)
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val dateFormat = SimpleDateFormat(Constants.DD_MM_YY_DATE_FORMAT)
         et_dob.setText(dateFormat.format(dob))
     }
 
