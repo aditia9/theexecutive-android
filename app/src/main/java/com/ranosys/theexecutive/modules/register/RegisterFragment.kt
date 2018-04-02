@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,8 +105,8 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
 
         dpd.show()
-        dpd.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(resources.getColor(android.R.color.black))
-        dpd.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(resources.getColor(android.R.color.black))
+        dpd.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity as Context, R.color.black))
+        dpd.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(activity as Context, R.color.black))
 
     }
 

@@ -13,7 +13,6 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
-import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginDataClass
@@ -204,7 +203,6 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             val password = password.get()
             val registerRequest = RegisterDataClass.RegisterRequest(customer, password)
 
-            //TODO - call register API
             AppRepository.registrationApi(registerRequest, object: ApiCallback<String>{
                 override fun onException(error: Throwable) {
                     Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)

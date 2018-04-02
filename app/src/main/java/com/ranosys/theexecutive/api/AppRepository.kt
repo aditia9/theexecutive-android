@@ -57,15 +57,12 @@ object AppRepository {
 
                 } else {
                     callBack.onSuccess(response.body())
-
                 }
 
             }
 
             override fun onFailure(call: Call<ArrayList<StoreResponse>>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("Login:", "Failed")
-
             }
         })
     }
@@ -85,13 +82,10 @@ object AppRepository {
                 } else {
                     callBack.onSuccess(response.body())
                 }
-
             }
 
             override fun onFailure(call: Call<ConfigurationResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("Login:", "Failed")
-
             }
         })
     }
@@ -115,7 +109,6 @@ object AppRepository {
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("Login:","Failed")
             }
         })
     }
@@ -233,7 +226,6 @@ object AppRepository {
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("Is Email Available:","Failed")
 
             }
         })
@@ -259,7 +251,6 @@ object AppRepository {
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("Is Email Available:", "Failed")
 
             }
         })
@@ -286,7 +277,6 @@ object AppRepository {
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("Login:", "Failed")
 
             }
         })
@@ -308,7 +298,6 @@ object AppRepository {
 
             override fun onFailure(call: Call<List<RegisterDataClass.Country>>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("Country Api:","Failed")
 
             }
         })
@@ -330,7 +319,6 @@ object AppRepository {
 
             override fun onFailure(call: Call<List<RegisterDataClass.City>>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("City Api:","Failed")
 
             }
         })
@@ -353,7 +341,6 @@ object AppRepository {
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
-                Utils.printLog("Registration:","Failed")
             }
         })
     }

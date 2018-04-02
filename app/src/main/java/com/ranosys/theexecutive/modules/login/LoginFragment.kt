@@ -25,11 +25,8 @@ import com.google.android.gms.tasks.Task
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
-import com.ranosys.theexecutive.modules.register.RegisterFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.Utils
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
+import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.*
 import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -118,7 +115,6 @@ class LoginFragment : BaseFragment() {
             when (id) {
 
                 btn_register.id -> {
-                    //TODO - load register fragment
                     FragmentUtils.addFragment(activity as Context, RegisterFragment(),null,  RegisterFragment::class.java.name, true)
                 }
 
