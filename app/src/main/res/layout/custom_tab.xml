@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:textColor="@color/theme_black_color"
-    android:textSize="@dimen/twenty_sp"
+    android:textSize="@dimen/sixteen_sp"
     android:fontFamily="@font/dax_regular"
+    android:textAllCaps="true"
     />

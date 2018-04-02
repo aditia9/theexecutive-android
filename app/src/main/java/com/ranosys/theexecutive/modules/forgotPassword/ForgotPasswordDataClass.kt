@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.forgot_password
+package com.ranosys.theexecutive.modules.forgotPassword
 
 import com.ranosys.theexecutive.utils.Constants
 

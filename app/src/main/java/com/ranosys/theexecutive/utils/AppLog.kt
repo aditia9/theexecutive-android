@@ -47,7 +47,7 @@ object AppLog {
 
     fun printStackTrace(ex: Exception) {
         if (BuildConfig.DEBUG) {
-            ex.stackTrace
+            ex.printStackTrace()
         }
     }
 

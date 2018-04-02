@@ -37,11 +37,6 @@ class MyAccountFragment: BaseFragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        setToolBarParams(getString(R.string.my_account_title), 0 , false, 0 ,false)
-    }
-
     private fun getAccountOptions(): List<MyAccountDataClass.MyAccountOption> {
         val optionList = ArrayList<MyAccountDataClass.MyAccountOption>()
 
