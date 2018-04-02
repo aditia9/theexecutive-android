@@ -1,9 +1,12 @@
 package com.ranosys.theexecutive.modules.home
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +14,8 @@ import android.widget.TextView
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -34,7 +39,7 @@ class HomeFragment : BaseFragment() {
         val homeViewPager = HomeViewPager(childFragmentManager)
         viewpager.setPagingEnabled(false)
         viewpager.adapter = homeViewPager
-        viewpager.offscreenPageLimit = 0
+        viewpager.offscreenPageLimit = 2
         tabLayout.setupWithViewPager(viewpager)
         createTabIcons()
 
@@ -44,34 +49,34 @@ class HomeFragment : BaseFragment() {
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
-                view.setTextColor(resources.getColor(R.color.theme_black_color))
-                 when(tab.position){
-                     0 ->{
-                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home, 0, 0)
-                     }
-                     1 ->{
-                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.my_account, 0, 0)
-                     }
-                     2 ->{
-                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist, 0, 0)
-                     }
-                 }
+                view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_accent_color))
+                when(tab.position){
+                    0 ->{
+                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home, 0, 0)
+                    }
+                    1 ->{
+                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.my_account, 0, 0)
+                    }
+                    2 ->{
+                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist, 0, 0)
+                    }
+                }
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
-                view.setTextColor(resources.getColor(R.color.white))
-                   when(tab.position) {
-                      0 -> {
-                          view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_white, 0, 0)
-                      }
-                      1 -> {
-                          view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.my_account_white, 0, 0)
-                      }
-                      2 -> {
-                          view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist_white, 0, 0)
-                      }
-                  }
+                view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_black_color))
+                when(tab.position) {
+                    0 -> {
+                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
+                    }
+                    1 -> {
+                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.my_account_dark, 0, 0)
+                    }
+                    2 -> {
+                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist_dark, 0, 0)
+                    }
+                }
             }
 
 
@@ -88,14 +93,28 @@ class HomeFragment : BaseFragment() {
                 when(position){
                     0 -> {
                         fragmentPosition = 0
+                        tabLayout.visibility = View.VISIBLE
+                        tv_chat.visibility = View.VISIBLE
                         setToolBarParams(getString(R.string.app_title),0, false, R.drawable.bag, true )
                     }
                     1 -> {
                         fragmentPosition = 1
-                        setToolBarParams(getString(R.string.login), 0, false, 0, false )
+                        tv_chat.visibility = View.GONE
+                        val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                        if(TextUtils.isEmpty(isLogin)){
+                            tabLayout.visibility = View.GONE
+                            setToolBarParams(getString(R.string.login), 0, false, 0, false)
+                        }
+                        else{
+                           // homeViewPager.getItem(1)
+                            tabLayout.visibility = View.VISIBLE
+                            setToolBarParams(getString(R.string.my_account_title), 0, false, 0, false)
+                        }
                     }
                     2 -> {
                         fragmentPosition = 2
+                        tabLayout.visibility = View.VISIBLE
+                        tv_chat.visibility = View.GONE
                         setToolBarParams(getString(R.string.my_wishlist),0, false, 0, false )
                     }
                 }
@@ -109,8 +128,8 @@ class HomeFragment : BaseFragment() {
 
         val tabOne = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null) as TextView
         tabOne.text = getString(R.string.home)
-        tabOne.setTextColor(resources.getColor(R.color.white))
-        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_white, 0, 0)
+        fragmentPosition = 0
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
         tabLayout.getTabAt(0)?.customView = tabOne
 
         val tabTwo = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null) as TextView

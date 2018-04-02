@@ -250,4 +250,30 @@
         <item>260</item>
         <item>263</item>
     </string-array>
+
+    <string-array name="my_account_option_title_array">
+        <item>My Information</item>
+        <item>My Orders</item>
+        <item>Shipping Address</item>
+        <item>Notifications</item>
+        <item>Subscribe to Newsletter</item>
+        <item>Select Language</item>
+        <item>Change Password</item>
+        <item>Buying Guide</item>
+        <item>Contact Us</item>
+        <item>Settings</item>
+    </string-array>
+
+    <integer-array name="my_account_option_icon_array">
+        <item>@drawable/info</item>
+        <item>@drawable/order</item>
+        <item>@drawable/shipping_address</item>
+        <item>@drawable/notification</item>
+        <item>@drawable/newsletter</item>
+        <item>@drawable/language</item>
+        <item>@drawable/change_password</item>
+        <item>@drawable/buying_guide</item>
+        <item>@drawable/contact</item>
+        <item>@drawable/setting</item>
+    </integer-array>
 </resources>

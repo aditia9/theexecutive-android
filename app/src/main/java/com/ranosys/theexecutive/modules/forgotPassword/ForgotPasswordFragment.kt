@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.forgot_password
+package com.ranosys.theexecutive.modules.forgotPassword
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,13 +12,14 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
 /**
  * Created by nikhil on 8/3/18.
  */
-class ForgotPasswordFragment(): BaseFragment() {
+class ForgotPasswordFragment: BaseFragment() {
 
     private lateinit var forgotPassVM: ForgotPasswordViewModel
     private lateinit var mBinding: FragmentForgotPasswordBinding
@@ -28,10 +29,26 @@ class ForgotPasswordFragment(): BaseFragment() {
         forgotPassVM = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         mBinding.vm = forgotPassVM
 
-        observeSubmitClicked()
         observeApiSuccess()
         observeApiFailure()
         return mBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        btn_submit?.setOnClickListener({
+            if (Utils.isConnectionAvailable(activity as Context)) {
+                forgotPassVM.callForgetPasswordApi()
+
+            }else{
+                Utils.showDialog(activity, getString(R.string.network_err_text),getString(android.R.string.ok), "", object : DialogOkCallback{
+                    override fun setDone(done: Boolean) {
+
+                    }
+                })
+            }
+        })
     }
 
     override fun onResume() {
@@ -50,26 +67,4 @@ class ForgotPasswordFragment(): BaseFragment() {
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
         })
     }
-
-    private fun observeSubmitClicked() {
-        forgotPassVM.btnClicked?.observe(this, Observer<Int> { id ->
-            when(id){
-                btn_submit.id ->{
-                    Utils.printLog("FORGOT PASSWORD", "SUBMIT CLICKED")
-
-                    if (Utils.isConnectionAvailable(activity as Context)) {
-                        forgotPassVM.callForgetPasswordApi()
-
-                    }else{
-                        Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        })
-
-    }
-
-
-
-
 }

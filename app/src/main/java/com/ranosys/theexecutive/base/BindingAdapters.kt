@@ -20,7 +20,9 @@ import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlideApp
+import com.ranosys.theexecutive.utils.SavedPreferences
 
 
 /**
@@ -88,6 +90,23 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(imageUrl)
+                        .placeholder(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .centerCrop()
+                        .into(imageView)
+            }
+        }
+
+        @JvmStatic
+        @BindingAdapter("bind:baseWithimageUrl")
+        fun loadImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
+            val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.CATEGORY_MEDIA_URL)
+            imageUrl?.run {
+                GlideApp.with(imageView.context)
+                        .load(baseUrl+imageUrl)
                         .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null

@@ -59,7 +59,7 @@ android {
             dimension "server"
         }
         dev {
-            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             dimension "server"
         }
         QAT {

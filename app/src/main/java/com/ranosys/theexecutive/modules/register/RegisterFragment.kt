@@ -42,10 +42,12 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val data = arguments
-        isFromSocialLogin = data?.get(Constants.FROM_SOCIAL_LOGIN) as Boolean
-        socialLoginFirstName = data.get(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME).toString()
-        socialLoginLastName = data.get(Constants.FROM_SOCIAL_LOGIN_LAST_NAME).toString()
-        socialLoginEmail = data.get(Constants.FROM_SOCIAL_LOGIN_EMAIL).toString()
+        if(null != data) {
+            isFromSocialLogin = (data.get(Constants.FROM_SOCIAL_LOGIN)) as Boolean
+            socialLoginFirstName = data.get(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME).toString()
+            socialLoginLastName = data.get(Constants.FROM_SOCIAL_LOGIN_LAST_NAME).toString()
+            socialLoginEmail = data.get(Constants.FROM_SOCIAL_LOGIN_EMAIL).toString()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

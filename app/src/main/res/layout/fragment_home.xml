@@ -5,7 +5,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <!-- View pager to swipe views -->
         <com.ranosys.theexecutive.customViews.CustomViewPager
@@ -15,6 +16,22 @@
             android:layout_above="@+id/tabLayout"
             />
 
+        <TextView
+            android:id="@+id/tv_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tabLayout"
+            android:layout_alignParentRight="true"
+            android:background="@color/theme_black_color"
+            android:text="@string/chat"
+            android:textSize="@dimen/sixteen_sp"
+            android:textColor="@color/white"
+            android:drawableLeft="@drawable/chat"
+            android:padding="@dimen/ten_dp"
+            android:drawablePadding="@dimen/ten_dp"
+            android:layout_margin="@dimen/ten_dp"
+            />
+
         <!-- our tablayout to display tabs  -->
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
@@ -22,7 +39,6 @@
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             app:tabIndicatorHeight="0dp"
-            app:tabBackground="@drawable/tab_color_selector"
             />
 
 
