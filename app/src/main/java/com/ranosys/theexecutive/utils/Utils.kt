@@ -3,12 +3,10 @@ package com.ranosys.theexecutive.utils
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.os.Build
-import android.support.v7.app.AlertDialog
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -92,20 +90,10 @@ object Utils {
                 InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
-
-    fun showAlertDialog(message : String, context: Context) {
-        val builder = AlertDialog.Builder(context)
-        builder.setMessage(message)
-                .setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-        val alert = builder.create()
-        alert.show()
-    }
-
-    fun showDialog(context: Context?, title: String?, postiveMessage: String?, negativeMessage: String?, dialogOkCallback: DialogOkCallback?) {
+    fun showDialog(context: Context?, title: String?, positiveMessage: String?, negativeMessage: String?, dialogOkCallback: DialogOkCallback?) {
         if (context != null) {
             val dialog : Dialog? = Dialog(context)
             dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            //dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog?.setContentView(R.layout.alert_dialog)
             dialog?.findViewById<TextView>(R.id.tv_title)?.text = title
             if(TextUtils.isEmpty(negativeMessage).not()){
@@ -118,7 +106,7 @@ object Utils {
             else{
                 dialog?.findViewById<TextView>(R.id.tv_no)?.visibility = View.GONE
             }
-            dialog?.findViewById<TextView>(R.id.tv_yes)?.text = postiveMessage
+            dialog?.findViewById<TextView>(R.id.tv_yes)?.text = positiveMessage
             dialog?.findViewById<TextView>(R.id.tv_yes)?.setOnClickListener { v ->
                 dialog.dismiss()
                 dialogOkCallback?.setDone(true)
@@ -131,6 +119,14 @@ object Utils {
 
         }
 
+    }
+
+    fun showNetworkErrorDialog(context: Context){
+        Utils.showDialog(context, context.getString(R.string.network_err_text),context.getString(android.R.string.ok), "", object : DialogOkCallback{
+            override fun setDone(done: Boolean) {
+
+            }
+        })
     }
 
 }

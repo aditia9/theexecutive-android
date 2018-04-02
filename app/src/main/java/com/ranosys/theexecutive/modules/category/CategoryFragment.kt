@@ -134,7 +134,7 @@ class CategoryFragment : BaseFragment() {
                 if (currentPage == count) {
                     currentPage = 0
                 }
-                viewPager.setCurrentItem(currentPage++, true);
+                viewPager.setCurrentItem(currentPage++, true)
                 handler.postDelayed(this, 3000)
             }
         }

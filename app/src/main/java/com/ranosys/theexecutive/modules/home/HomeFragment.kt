@@ -1,8 +1,10 @@
 package com.ranosys.theexecutive.modules.home
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -47,7 +49,7 @@ class HomeFragment : BaseFragment() {
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
-                view.setTextColor(resources.getColor(R.color.theme_accent_color))
+                view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_accent_color))
                 when(tab.position){
                     0 ->{
                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home, 0, 0)
@@ -63,7 +65,7 @@ class HomeFragment : BaseFragment() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
-                view.setTextColor(resources.getColor(R.color.theme_black_color))
+                view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_black_color))
                 when(tab.position) {
                     0 -> {
                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
@@ -92,10 +94,12 @@ class HomeFragment : BaseFragment() {
                     0 -> {
                         fragmentPosition = 0
                         tabLayout.visibility = View.VISIBLE
+                        tv_chat.visibility = View.VISIBLE
                         setToolBarParams(getString(R.string.app_title),0, false, R.drawable.bag, true )
                     }
                     1 -> {
                         fragmentPosition = 1
+                        tv_chat.visibility = View.GONE
                         val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                         if(TextUtils.isEmpty(isLogin)){
                             tabLayout.visibility = View.GONE
@@ -110,6 +114,7 @@ class HomeFragment : BaseFragment() {
                     2 -> {
                         fragmentPosition = 2
                         tabLayout.visibility = View.VISIBLE
+                        tv_chat.visibility = View.GONE
                         setToolBarParams(getString(R.string.my_wishlist),0, false, 0, false )
                     }
                 }

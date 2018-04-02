@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.login
 
+import AppLog
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,7 +13,6 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -25,8 +25,9 @@ import com.google.android.gms.tasks.Task
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
-import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordFragment
+import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
 import com.ranosys.theexecutive.utils.*
+import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -115,7 +116,7 @@ class LoginFragment : BaseFragment() {
                         loginViewModel.login()
 
                     } else {
-                        Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+                        showNetworkErrorDialog(activity as Context)
                     }
                 }
 
@@ -124,7 +125,7 @@ class LoginFragment : BaseFragment() {
                         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday", "user_photos"))
 
                     } else {
-                        Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+                        showNetworkErrorDialog(activity as Context)
                     }
                 }
 
@@ -132,7 +133,7 @@ class LoginFragment : BaseFragment() {
                     if (Utils.isConnectionAvailable(activity as Context)) {
                         gmailSignIn()
                     } else {
-                        Toast.makeText(activity, "Network Error", Toast.LENGTH_LONG).show()
+                        showNetworkErrorDialog(activity as Context)
                     }
                 }
 
@@ -168,7 +169,7 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun gmailSignIn() {
-        val gmailSignInIntent = mGoogleSignInClient.getSignInIntent()
+        val gmailSignInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(gmailSignInIntent, RC_GMAIL_SIGN_IN)
     }
 
@@ -211,15 +212,8 @@ class LoginFragment : BaseFragment() {
                 gender = `object`.getString("gender")
             }
 
-//            try {
-//                val profilePicUrl = URL("https://graph.facebook.com/$id/picture?type=large")
-//            } catch (e: MalformedURLException) {
-//                e.printStackTrace()
-//            }
-
-
         } catch (e: JSONException) {
-            e.printStackTrace()
+            AppLog.printStackTrace(e)
         }
         Utils.printLog("FB USER_INFO", "" + firstName + lastName + gender + email + id + "")
 
@@ -239,8 +233,7 @@ class LoginFragment : BaseFragment() {
             if(!TextUtils.isEmpty(gmailData.email))loginViewModel.isEmailAvailableApi(gmailData)else Utils.printLog("Gmail User Data", "error in gmail data")
 
         } catch (e : ApiException ) {
-            // The ApiException status code indicates the detailed failure reason.
-            Utils.printLog("GMAIL LOG IN", "signInResult:failed code=" + e.statusCode)
+            AppLog.printStackTrace(e)
         }
     }
 

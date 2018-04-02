@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import com.ranosys.rtp.RunTimePermissionActivity
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
@@ -39,15 +40,15 @@ open class BaseActivity: RunTimePermissionActivity(){
                 if (fragment is HomeFragment) {
                     when(HomeFragment.fragmentPosition){
                         0-> {
-                            Utils.showDialog(this@BaseActivity, "Are you sure you want to close application?",
-                                    "YES", "NO", object : DialogOkCallback {
+                            Utils.showDialog(this@BaseActivity, getString(R.string.close_app_text),
+                                    getString(R.string.yes), getString(R.string.no), object : DialogOkCallback {
                                 override fun setDone(done: Boolean) {
                                     finish()
                                 }
                             })
                         }
                         1,2 -> {
-                            (fragment as HomeFragment).viewpager.setCurrentItem(0, true)
+                            fragment.viewpager.setCurrentItem(0, true)
                         }
                     }
 

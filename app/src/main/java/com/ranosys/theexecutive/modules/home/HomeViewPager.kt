@@ -24,7 +24,7 @@ class HomeViewPager(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
     init {
         fragmentManager = fm
-        sparseArray = SparseArray<Fragment>()
+        sparseArray = SparseArray()
     }
 
 
