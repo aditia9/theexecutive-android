@@ -109,5 +109,7 @@ dependencies {
     //glide photo library
     implementation "com.github.bumptech.glide:glide:${rootProject.glideVersion}"
     kapt "com.github.bumptech.glide:compiler:${rootProject.glideVersion}"
+
+    implementation project(':SpinnerDatePickerLib')
 }
 

@@ -1,163 +1,421 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
-    app:ignore="NamespaceTypo">
-
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
         <variable
             name="registerViewModel"
             type="com.ranosys.theexecutive.modules.register.RegisterViewModel">
-
         </variable>
     </data>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_main_layout"
+        android:paddingTop="@dimen/sixteen_dp"
+        android:paddingBottom="@dimen/sixteen_dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/eight_dp"
-        android:background="@android:color/white">
+        android:background="@color/white">
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:fillViewport="true"-->
-        <!--android:layout_above="@+id/btn_signup">-->
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_create_account">
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:orientation="vertical">-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl_inside_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <!--<ImageView-->
-            <!--android:id="@+id/profile_pic_imageview"-->
-            <!--android:layout_width="@dimen/one_two_eight"-->
-            <!--android:layout_height="@dimen/one_two_eight"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginTop="@dimen/sixteen_dp"-->
-            <!--android:src="@drawable/placeholder" />-->
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_right"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
 
-                <!--<android.support.design.widget.TextInputLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_left"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/et_name"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:hint="@string/name"-->
-                        <!--android:text="@={registerViewModel.name}"-->
-                        <!--app:errorText="@{registerViewModel.nameError}" />-->
-                <!--</android.support.design.widget.TextInputLayout>-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_first_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/first_name"
+                    android:labelFor="@+id/et_first_name"
+                    app:errorText="@{registerViewModel.firstNameError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left">
 
-        <!--<RadioGroup-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:layout_marginTop="@dimen/four_dp"-->
-            <!--android:checkedButton="@id/radio_male"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:onCheckedChanged="@{(view, id)->registerViewModel.onRadioClick(view,id)}"-->
-            <!--&gt;-->
-            <!--<RadioButton-->
-                <!--android:id="@+id/radio_male"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:padding="@dimen/four_dp"-->
-                <!--android:text="@string/male"-->
-                <!--/>-->
-            <!--<RadioButton-->
-                <!--android:id="@+id/radio_female"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="@dimen/sixty_four"-->
-                <!--android:padding="@dimen/four_dp"-->
-                <!--android:text="@string/female"/>-->
-        <!--</RadioGroup>-->
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_first_name"
+                        android:text="@={registerViewModel.firstName}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etFirstName)}'
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
 
-                <!--<android.support.design.widget.TextInputLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_last_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/last_name"
+                    android:labelFor="@+id/et_last_name"
+                    app:errorText="@{registerViewModel.lastNameError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintTop_toBottomOf="@id/til_first_name"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left">
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/et_mobile"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:hint="@string/mobile"-->
-                        <!--android:text="@={registerViewModel.mobile}"-->
-                        <!--app:errorText="@{registerViewModel.mobileError}" />-->
-                <!--</android.support.design.widget.TextInputLayout>-->
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_last_name"
+                        android:text="@={registerViewModel.lastName}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etLastName)}'
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/select_gender_label"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_gender_label"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+                    app:layout_constraintRight_toRightOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@+id/til_last_name"/>
+
+                <RadioGroup
+                    android:id="@+id/gender_radio_group"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:checkedButton="@id/rb_male"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:onCheckedChanged="@{(view, id) -> registerViewModel.onGenderSelection(view, id)}"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/select_gender_label">
+
+                    <RadioButton
+                        android:id="@+id/rb_male"
+                        android:layout_width="@dimen/match_constraint"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/theme_radio_btn_color"
+                        android:text="@string/male" />
 
 
-                <!--<android.support.design.widget.TextInputLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
+                    <RadioButton
+                        android:id="@+id/rb_female"
+                        android:layout_width="@dimen/match_constraint"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/theme_accent_color"
+                        android:text="@string/female" />
+                </RadioGroup>
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/et_mail"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:hint="@string/email_id"-->
-                        <!--android:inputType="textEmailAddress"-->
-                        <!--android:text="@={registerViewModel.emailId}"-->
-                        <!--app:errorText="@{registerViewModel.emailError}" />-->
-                <!--</android.support.design.widget.TextInputLayout>-->
 
-                <!--<android.support.design.widget.TextInputLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/et_state"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:hint="@string/state"-->
-                        <!--android:text="@={registerViewModel.state}"-->
-                        <!--app:errorText="@{registerViewModel.stateError}" />-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_email_address"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:theme="@style/tilTheme"
+                    android:hint="@string/email"
+                    android:labelFor="@+id/et_email_address"
+                    app:errorText="@{registerViewModel.emailAddressError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/gender_radio_group">
 
-                <!--</android.support.design.widget.TextInputLayout>-->
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_email_address"
+                        android:layout_width="match_parent"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={registerViewModel.emailAddress}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etEmailAddress)}'
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress" />
+                </android.support.design.widget.TextInputLayout>
 
-                <!--<android.support.design.widget.TextInputLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
+                <Spinner
+                    android:id="@+id/spinner_country_code"
+                    android:layout_height="@dimen/match_constraint"
+                    android:layout_width="wrap_content"
+                    android:minWidth="@dimen/match_constraint"
+                    android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
+                    android:entries="@array/country_code"
+                    android:background="@drawable/spinner"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toTopOf="@id/til_mobile_no"
+                    app:layout_constraintEnd_toStartOf="@id/til_mobile_no"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
 
-                    <!--<EditText-->
-                        <!--android:id="@+id/et_city"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:hint="@string/city"-->
-                        <!--android:text="@={registerViewModel.city}"-->
-                        <!--app:errorText="@{registerViewModel.cityError}" />-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_mobile_no"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/mobile_number"
+                    android:labelFor="@+id/et_mobile_number"
+                    app:errorText="@{registerViewModel.mobileNumberError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
+                    app:layout_constraintTop_toBottomOf="@id/til_email_address"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right">
 
-                <!--</android.support.design.widget.TextInputLayout>-->
-                <!--<android.support.design.widget.TextInputLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content">-->
-                    <!--<EditText-->
-                        <!--android:id="@+id/et_password"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:hint="@string/password"-->
-                        <!--android:inputType="textPassword"-->
-                        <!--android:text="@={registerViewModel.password}"-->
-                        <!--app:errorText="@{registerViewModel.passwordError}" />-->
-                <!--</android.support.design.widget.TextInputLayout>-->
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_mobile_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={registerViewModel.mobileNumber}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etMobileNumber)}'
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
 
-            <!--</LinearLayout>-->
-        <!--</ScrollView>-->
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_dob"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/dob_hint"
+                    android:labelFor="@+id/et_dob"
+                    app:errorText="@{registerViewModel.dobError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_mobile_no">
 
-        <!--<Button-->
-            <!--android:id="@+id/btn_signup"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginTop="@dimen/four_dp"-->
-            <!--android:background="@color/dark_gray"-->
-            <!--android:onClick="@{(view)->registerViewModel.onSignupClick(view)}"-->
-            <!--android:text="@string/signup"-->
-            <!--android:textAllCaps="false"-->
-            <!--android:textColor="@android:color/white" />-->
-    </RelativeLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_dob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etDob)}'
+                        android:drawableEnd="@drawable/calender"/>
+                </android.support.design.widget.TextInputLayout>
 
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_address_1"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/street_address_1"
+                    android:labelFor="@+id/et_address_1"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{registerViewModel.streetAddress1Error}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_dob">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_address_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress1}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etAddress1)}'
+                        android:inputType="text"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_address_2"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/street_address_2"
+                    android:labelFor="@+id/et_address_2"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_address_1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_address_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress2}"
+                        android:inputType="text"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+                <Spinner
+                    android:id="@+id/spinner_country"
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
+                    android:entries="@{registerViewModel.countryList}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onCountrySelection(parent, pos, spinnerState)}"
+                    android:padding="@dimen/ten_dp"
+                    android:theme="@style/spinnerItemStyle"
+                    android:background="@drawable/spinner"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/til_address_2" />
+
+
+                <Spinner
+                    android:id="@+id/spinner_state"
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
+                    android:entries="@{registerViewModel.stateList}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onStateSelection(parent, pos, spinnerCity)}"
+                    android:padding="@dimen/ten_dp"
+                    android:background="@drawable/spinner"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_country" />
+
+                <Spinner
+                    android:id="@+id/spinner_city"
+                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:overlapAnchor="false"
+                    android:padding="@dimen/ten_dp"
+                    android:entries="@{registerViewModel.cityList}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onCitySelection(parent, pos)}"
+                    android:background="@drawable/spinner"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_state" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_postcode"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/postcode"
+                    android:labelFor="@+id/et_postcode"
+                    app:errorText="@{registerViewModel.postalCodeError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/spinner_city">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_postcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={registerViewModel.postalCode}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etPostcode)}'
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_password"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/password"
+                    android:labelFor="@+id/et_password"
+                    app:errorText="@{registerViewModel.passwordError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_postcode">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_password"
+                        android:inputType="textPassword"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={registerViewModel.password}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etPassword)}'
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_confirm_password"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/confirm_password"
+                    android:labelFor="@+id/et_confirm_password"
+                    app:errorText="@{registerViewModel.confirmPasswordError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_password">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_confirm_password"
+                        android:inputType="textPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etConfirmPassword)}'
+                        android:text="@={registerViewModel.confirmPassword}"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/cb_subscribe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/thirty_dp"
+                    android:buttonTint="@color/theme_radio_btn_color"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_confirm_password"/>
+
+                <TextView
+                    android:id="@+id/tv_terms_and_conditions"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:layout_marginTop="@dimen/forty_dp"
+                    android:layout_marginBottom="@dimen/forty_dp"
+                    android:text="@string/term_and_condition"
+                    app:layout_constraintTop_toBottomOf="@+id/cb_subscribe"
+                    app:layout_constraintBottom_toBottomOf="@+id/cl_inside_scroll_view"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btn_create_account"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:background="@drawable/black_button_bg"
+            android:text="@string/create_account"
+            android:theme="@style/button_theme"
+            android:layout_marginRight="@dimen/twenty_four_dp"
+            android:layout_marginLeft="@dimen/twenty_four_dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
 </layout>

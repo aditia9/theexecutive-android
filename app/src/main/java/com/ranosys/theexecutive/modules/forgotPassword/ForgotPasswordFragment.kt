@@ -39,14 +39,13 @@ class ForgotPasswordFragment: BaseFragment() {
 
         btn_submit?.setOnClickListener({
             if (Utils.isConnectionAvailable(activity as Context)) {
-                forgotPassVM.callForgetPasswordApi()
+                if(forgotPassVM.validateData(activity as Context)){
+                    showLoading()
+                    forgotPassVM.callForgetPasswordApi()
+                }
 
             }else{
-                Utils.showDialog(activity, getString(R.string.network_err_text),getString(android.R.string.ok), "", object : DialogOkCallback{
-                    override fun setDone(done: Boolean) {
-
-                    }
-                })
+                Utils.showNetworkErrorDialog(activity as Context)
             }
         })
     }
@@ -58,12 +57,14 @@ class ForgotPasswordFragment: BaseFragment() {
 
     private fun observeApiFailure() {
         forgotPassVM.apiFailureResponse?.observe(this, Observer { msg ->
+            hideLoading()
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
         })
     }
 
     private fun observeApiSuccess() {
         forgotPassVM.apiSuccessResponse?.observe(this, Observer { msg ->
+            hideLoading()
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
         })
     }

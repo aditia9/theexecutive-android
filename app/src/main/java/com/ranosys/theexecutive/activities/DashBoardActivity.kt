@@ -30,8 +30,7 @@ class DashBoardActivity: BaseActivity() {
             FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
 
         }else{
-            //FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
-            FragmentUtils.addFragment(this, LoginFragment(), null, LoginFragment::class.java.name, true)
+            FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
         }
 
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
