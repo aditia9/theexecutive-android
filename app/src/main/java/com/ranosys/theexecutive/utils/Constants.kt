@@ -31,4 +31,17 @@ object Constants {
         val CATEGORY_NAME: String = "category_name"
         val VOUCHER_AMT: String = "voucher_amount"
         val SUBS_MESSAGE: String = "subscription_message"
+        val DEFAULT_GROUP_ID: Int = 1
+        val SOCIAL_LOGIN_CONFIRMATION: String = "social"
+        val MINIMUM_AGE: Int = 13
+        val FROM_SOCIAL_LOGIN: String = "from_social"
+        val FROM_SOCIAL_LOGIN_FIRST_NAME: String? = "from_social_first_name"
+        val FROM_SOCIAL_LOGIN_LAST_NAME: String? = "from_social_last_name"
+        val FROM_SOCIAL_LOGIN_EMAIL: String? = "from_social_email"
+        val DD_MM_YY_DATE_FORMAT: String = "dd/MM/yyyy"
+        val YY_MM__DD_DATE_FORMAT: String = "yyyy-MM-dd"
+        val COUNTRY_LABEL: String = "Country"
+        val STATE_LABEL: String = "State"
+        val CITY_LABEL: String = "City"
+
 }

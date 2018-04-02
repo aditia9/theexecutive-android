@@ -26,6 +26,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
+import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.*
 import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -50,6 +51,8 @@ class LoginFragment : BaseFragment() {
         observeEvent()
         observeApiFailure()
         observeApiSuccess()
+        observeIsEmailAvailableResponse()
+
 
         //call backs for fb login
         callBackManager = CallbackManager.Factory.create()
@@ -74,6 +77,7 @@ class LoginFragment : BaseFragment() {
 
         return mBinding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -109,6 +113,11 @@ class LoginFragment : BaseFragment() {
         loginViewModel.clickedBtnId?.observe(this, Observer<Int> { id ->
 
             when (id) {
+
+                btn_register.id -> {
+                    FragmentUtils.addFragment(activity as Context, RegisterFragment(),null,  RegisterFragment::class.java.name, true)
+                }
+
                 btn_login.id -> {
                     Utils.hideSoftKeypad(activity as Context)
                     if (Utils.isConnectionAvailable(activity as Context)) {
@@ -166,6 +175,19 @@ class LoginFragment : BaseFragment() {
             activity?.onBackPressed()
         })
 
+    }
+
+    private fun observeIsEmailAvailableResponse() {
+        loginViewModel.isEmailNotAvailable?.observe(this, Observer { data ->
+            loginViewModel.isEmailNotAvailable = null
+
+            val bundle = Bundle()
+            bundle.putBoolean(Constants.FROM_SOCIAL_LOGIN, true)
+            bundle.putString(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME, data?.firstName)
+            bundle.putString(Constants.FROM_SOCIAL_LOGIN_LAST_NAME, data?.latsName)
+            bundle.putString(Constants.FROM_SOCIAL_LOGIN_EMAIL, data?.email)
+            FragmentUtils.addFragment(activity as Context, RegisterFragment(), bundle, RegisterFragment::class.java.name, true)
+        })
     }
 
     private fun gmailSignIn() {

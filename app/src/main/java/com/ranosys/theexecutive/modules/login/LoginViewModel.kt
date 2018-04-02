@@ -23,6 +23,8 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
     var apiSuccessResponse: MutableLiveData<String>? = MutableLiveData()
+    var isEmailNotAvailable: MutableLiveData<LoginDataClass.SocialLoginData>? = MutableLiveData()
+
 
     var clickedBtnId: MutableLiveData<Int>? = null
         get() {
@@ -37,6 +39,11 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 if(validateData(getApplication())){
                     clickedBtnId?.value = R.id.btn_login
                 }
+            }
+
+            R.id.btn_register ->{
+
+                clickedBtnId?.value = R.id.btn_register
             }
 
             R.id.btn_fb_login ->{
@@ -120,7 +127,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 if(available!!){
                     callSocialLoginApi(userData)
                 }else{
-                    //TODO - load register screen
+                    isEmailNotAvailable?.value = userData
                 }
             }
 

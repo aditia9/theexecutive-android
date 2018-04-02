@@ -4,95 +4,341 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.databinding.ObservableField
+import android.support.design.widget.TextInputEditText
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
-import android.widget.Adapter
-import android.widget.AdapterView
 import android.widget.RadioGroup
+import android.widget.Spinner
+import android.widget.Toast
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.api.ApiResponse
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.login.LoginDataClass
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Mohammad Sunny on 31/1/18.
  */
 class RegisterViewModel(application: Application): BaseViewModel(application) {
-    var registerRequest: RegisterDataClass.RegisterRequest? = null
-    var name: ObservableField<String>? = ObservableField()
-    var mobile: ObservableField<String>? = ObservableField()
-    var emailId: ObservableField<String>? = ObservableField()
-    var gender: ObservableField<String>? = ObservableField()
-    var state: ObservableField<String>? = ObservableField()
-    var city: ObservableField<String>? = ObservableField()
-    var password: ObservableField<String>? = ObservableField()
-    val emailError = ObservableField<String>()
+    var firstName: ObservableField<String> = ObservableField()
+    var firstNameError: ObservableField<String> = ObservableField()
+    var lastName: ObservableField<String> = ObservableField()
+    var lastNameError: ObservableField<String> = ObservableField()
+    var emailAddress: ObservableField<String> = ObservableField()
+    var emailAddressError: ObservableField<String> = ObservableField()
+    var mobileNumber: ObservableField<String> = ObservableField()
+    var mobileNumberError: ObservableField<String> = ObservableField()
+    var selectedGender: ObservableField<Int> = ObservableField(MALE)
+    var dob: ObservableField<Date> = ObservableField()
+    var dobError: ObservableField<String> = ObservableField()
+    var streetAddress1: ObservableField<String> = ObservableField()
+    var streetAddress1Error: ObservableField<String> = ObservableField()
+    var streetAddress2: ObservableField<String> = ObservableField()
+    var postalCode: ObservableField<String> = ObservableField()
+    var postalCodeError: ObservableField<String> = ObservableField()
+    var password: ObservableField<String> = ObservableField()
     val passwordError = ObservableField<String>()
-    val nameError = ObservableField<String>()
-    val mobileError = ObservableField<String>()
-    val cityError = ObservableField<String>()
-    val stateError = ObservableField<String>()
-    var buttonClicked = MutableLiveData<Int>()
-    var mutualresponse = MutableLiveData<ApiResponse<RegisterDataClass.RegisterResponse>>()
+    var confirmPassword: ObservableField<String> = ObservableField()
+    val confirmPasswordError = ObservableField<String>()
+    val isSubscribed = ObservableField<Boolean>(false)
+
+    var countryList :MutableList<RegisterDataClass.Country> = mutableListOf<RegisterDataClass.Country>()
+    var stateList :MutableList<RegisterDataClass.State> = mutableListOf<RegisterDataClass.State>()
+    var cityList :MutableList<RegisterDataClass.City> = mutableListOf<RegisterDataClass.City>()
+    var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
+    var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
+    var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
+    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = Constants.COUNTRY_LABEL)
+    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = Constants.STATE_LABEL)
+    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
+
+    var isSocialLogin: Boolean = false
+
+    var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
+
+    companion object {
+        const val MALE = 1
+        const val FEMALE = 2
+
+        //error tags
+        val ERROR_TAG = "error"
+        val COUNTRY_API_TAG = "Country Api"
+        val CITY_API_TAG = "City Api"
+        val REGISTRATION_API_TAG = "Registration Api"
+        val LOGIN_API_TAG = "Login Api"
+    }
 
     init {
-        this.registerRequest = registerRequest
-        this.gender?.set("Male")
+        countryList.add(countryHint)
+        stateList.add(stateHint)
+        cityList.add(cityHint)
+
+        selectedcountry.set(countryHint)
+        selectedState.set(stateHint)
+        selectedCity.set(cityHint)
     }
 
-    fun onSignupClick(view: View) {
-        if(isValidData(view.context))
-        buttonClicked.value = view.id
-        this.registerRequest = RegisterDataClass.RegisterRequest(
-                name?.get().toString(), mobile?.get().toString(),
-                emailId?.get().toString(),city?.get().toString(),
-                state?.get().toString(), gender?.get().toString(),
-                password?.get().toString()
-        )
+
+    fun callCountryApi() {
+        AppRepository.getCountryList(object : ApiCallback<List<RegisterDataClass.Country>>{
+            override fun onException(error: Throwable) {
+                Utils.printLog(COUNTRY_API_TAG, error.message!!)
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog(COUNTRY_API_TAG, errorMsg)
+            }
+
+            override fun onSuccess(countries: List<RegisterDataClass.Country>?) {
+                if(null != countries && countries.isNotEmpty()){
+                    countryList.addAll(countries as ArrayList<RegisterDataClass.Country>)
+                }
+            }
+        })
     }
+
+    fun onCountrySelection(countrySpinner: View, position: Int, stateSpinner: Spinner){
+        if(countryHint != countryList[position]){
+            selectedcountry.set(countryList[position])
+            if(selectedcountry.get().available_regions.isNotEmpty()){
+                stateList.addAll(selectedcountry.get().available_regions as ArrayList)
+
+            }else{
+                Utils.printLog(ERROR_TAG, getApplication<Application>().getString(R.string.no_state_available_error))
+            }
+
+        }else{
+            stateList.clear()
+            stateList.add(stateHint)
+            selectedState.set(stateHint)
+            selectedCity.set(cityHint)
+        }
+        stateSpinner.setSelection(0)
+    }
+
+    fun onStateSelection(stateSpinner: View, position: Int, citySpinner: Spinner){
+        if(stateHint != stateList[position]){
+            selectedState.set(stateList[position])
+            callCityApi(selectedState.get().id)
+        }else{
+            cityList.clear()
+            cityList.add(cityHint)
+            selectedCity.set(cityHint)
+        }
+        citySpinner.setSelection(0)
+    }
+
+    fun onCitySelection(citySpinner: View, position: Int){
+        if(cityHint != cityList[position]){
+            selectedCity.set(cityList[position])
+        }
+    }
+
+    private fun callCityApi(stateCode: String) {
+        AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>>{
+            override fun onException(error: Throwable) {
+                Utils.printLog(CITY_API_TAG, ERROR_TAG)
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog(CITY_API_TAG, ERROR_TAG)
+                Toast.makeText(getApplication<Application>(), errorMsg, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSuccess(cities: List<RegisterDataClass.City>?) {
+                cities?.run {
+                    if(cities.isNotEmpty()){
+                        cityList.addAll(cities)
+                    }else{
+                        Utils.printLog(ERROR_TAG, getApplication<Application>().getString(R.string.no_cities_available_error))
+                    }
+                }
+            }
+
+        })
+    }
+
+
+
+
+
+    fun callRegisterApi() {
+        if(isValidData(getApplication())){
+            val address = RegisterDataClass.Address(region_id = selectedState.get().id,
+                    firstname = firstName.get(),
+                    lastname = lastName.get(),
+                    telephone = mobileNumber.get(),
+                    city =      selectedCity.get().name ,
+                    postcode = postalCode.get(),
+                    default_billing = true,
+                    default_shipping = true,
+                    country_id = selectedcountry.get().id,
+                    street = listOf(streetAddress1.get(), streetAddress2.get()?:""),
+                    region = RegisterDataClass.Region(region_code = selectedState.get().code,
+                            region_id = if(!TextUtils.isEmpty(selectedState.get().id)) selectedState.get().id.toInt() else 1,
+                            region = selectedState.get().name)
+
+            )
+
+            val customer = RegisterDataClass.Customer(
+                    group_id = Constants.DEFAULT_GROUP_ID,
+                    confirmation = if(isSocialLogin) Constants.SOCIAL_LOGIN_CONFIRMATION else "",
+                    gender = selectedGender.get(),
+                    email = emailAddress.get(),
+                    firstname = firstName.get(),
+                    lastname = lastName.get(),
+                    store_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_STORE_ID_KEY)!!,
+                    website_id = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)!!,
+                    dob = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT).format(dob.get()),
+                    addresses = listOf(address),
+                    extension_attributes = RegisterDataClass.ExtensionAttributes(is_subscribed = isSubscribed.get() ))
+
+            val password = password.get()
+            val registerRequest = RegisterDataClass.RegisterRequest(customer, password)
+
+            AppRepository.registrationApi(registerRequest, object: ApiCallback<String>{
+                override fun onException(error: Throwable) {
+                    Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)
+                }
+
+                override fun onError(errorMsg: String) {
+                    Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)
+                }
+
+                override fun onSuccess(t: String?) {
+                    if(isSocialLogin) callLoginApi() else FragmentUtils.addFragment(getApplication(), HomeFragment(), null, HomeFragment::class.java.name, false)
+                }
+
+            })
+        }
+    }
+
+
+    private fun callLoginApi() {
+        val loginRequest = LoginDataClass.LoginRequest(emailAddress.get().toString(), password.get().toString())
+
+        AppRepository.login(loginRequest, object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                Utils.printLog(LOGIN_API_TAG, ERROR_TAG)
+                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
+
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog(LOGIN_API_TAG, ERROR_TAG)
+                apiFailureResponse?.value = errorMsg
+            }
+
+            override fun onSuccess(userToken: String?) {
+                SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+                //TODO - Move to Home screen
+
+            }
+        })
+    }
+
+    fun onGenderSelection(view: RadioGroup, id:Int){
+        when(id){
+            R.id.rb_male -> selectedGender.set(MALE)
+            R.id.rb_female -> selectedGender.set(FEMALE)
+        }
+    }
+
+    fun onTextChanged(et: TextInputEditText){
+        when(et.id){
+            R.id.et_first_name -> firstNameError.set("")
+            R.id.et_last_name -> lastNameError.set("")
+            R.id.et_email_address -> emailAddressError.set("")
+            R.id.et_mobile_number -> mobileNumberError.set("")
+            R.id.et_address_1 -> streetAddress1Error.set("")
+            R.id.et_postcode -> postalCodeError.set("")
+            R.id.et_password -> passwordError.set("")
+            R.id.et_confirm_password -> confirmPasswordError.set("")
+            R.id.et_dob -> dobError.set("")
+        }
+    }
+
+
+
+
 
     private fun isValidData(context: Context): Boolean {
         var isValid = true
-        if (TextUtils.isEmpty(emailId?.get())) {
-            emailError.set(context.getString(R.string.empty_email))
-            isValid = false
-        } else if (!Utils.isValidEmail(emailId?.get())) {
-            emailError.set(context.getString(R.string.provide_valid_email))
+
+        if (TextUtils.isEmpty(firstName.get())){
+            firstNameError.set(context.getString(R.string.first_name_error))
             isValid = false
         }
-        if (TextUtils.isEmpty(password?.get())) {
+
+        if (TextUtils.isEmpty(lastName.get())){
+            lastNameError.set(context.getString(R.string.last_name_error))
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(emailAddress.get())) {
+            emailAddressError.set(context.getString(R.string.empty_email))
+            isValid = false
+        } else if (!Utils.isValidEmail(emailAddress.get())) {
+            emailAddressError.set(context.getString(R.string.provide_valid_email))
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(mobileNumber.get())){
+            mobileNumberError.set(context.getString(R.string.mobile_error))
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(dob.get()?.toString())){
+            dobError.set(context.getString(R.string.dob_error))
+            isValid = false
+        }
+
+
+        if (TextUtils.isEmpty(streetAddress1.get()) && TextUtils.isEmpty(streetAddress2.get())){
+            streetAddress1Error.set(context.getString(R.string.street_address_1))
+            isValid = false
+        }
+
+        if(selectedcountry.get() == countryHint){
+            //TODO - show an alert dialog to select country
+            Toast.makeText(context, context.getString(R.string.empty_country_error), Toast.LENGTH_SHORT ).show()
+            isValid = false
+        }else if(selectedState.get() == stateHint){
+            //TODO - show an alert dialog to select state
+            Toast.makeText(context, context.getString(R.string.empty_state_error), Toast.LENGTH_SHORT ).show()
+            isValid = false
+        }else if(selectedCity.get() == cityHint){
+            //TODO - show an alert dialog to select city
+            Toast.makeText(context, context.getString(R.string.empty_city_error), Toast.LENGTH_SHORT ).show()
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(postalCode.get())){
+            postalCodeError.set(context.getString(R.string.postal_error))
+            isValid = false
+        }
+
+        if (TextUtils.isEmpty(password.get())) {
             passwordError.set(context.getString(R.string.empty_password))
             isValid = false
-        }
-        if (TextUtils.isEmpty(name?.get())){
-            nameError.set(context.getString(R.string.name_error))
+        }else if(!Utils.isValidPassword(password.get())){
+            passwordError.set(context.getString(R.string.valid_password_error))
             isValid = false
         }
-        if (TextUtils.isEmpty(mobile?.get())){
-            mobileError.set(context.getString(R.string.mobile_error))
+
+        if((password.get() == confirmPassword.get()).not()){
+            confirmPasswordError.set(context.getString(R.string.confirm_password_error))
             isValid = false
         }
-        if (TextUtils.isEmpty(city?.get())){
-            cityError.set(context.getString(R.string.city_error))
-            isValid = false
-        }
-        if (TextUtils.isEmpty(state?.get())){
-            stateError.set(context.getString(R.string.state_error))
-            isValid = false
-        }
+
         return isValid
     }
 
-    fun onRadioClick(radioGroup: RadioGroup, id: Int) {
-        when (id) {
-//            R.id.radio_male -> gender?.set("Male")
-//            R.id.radio_female -> gender?.set("Female")
-        }
-        Log.e("Gender", gender?.get())
-    }
-
-    fun onStateSelected(parent: AdapterView<Adapter>, v: View, position: Int, id: Long) {
-
-    }
 }

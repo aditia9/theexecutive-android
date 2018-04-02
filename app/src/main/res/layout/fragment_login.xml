@@ -153,6 +153,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/sixteen_dp"
                     android:gravity="center"
+                    android:onClick="@{(view)->loginVM.btnClicked(view)}"
                     android:background="@drawable/ghost_btn_bg"
                     android:orientation="horizontal"
                     android:layout_marginBottom="@dimen/ten_dp"
@@ -168,7 +169,6 @@
                         android:textAllCaps="false"
                         android:gravity="center"
                         android:singleLine="true"
-                        android:onClick="@{(view)->loginVM.btnClicked(view)}"
                         android:text="@string/create_account"
                         android:fontFamily="@font/dax_regular"/>
 

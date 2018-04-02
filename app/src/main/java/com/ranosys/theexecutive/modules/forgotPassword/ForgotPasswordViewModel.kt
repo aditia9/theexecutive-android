@@ -48,8 +48,6 @@ class ForgotPasswordViewModel(application: Application): BaseViewModel(applicati
 
             })
         }
-
-
     }
 
     private fun validateData(context: Context): Boolean {
