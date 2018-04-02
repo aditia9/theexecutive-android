@@ -83,7 +83,12 @@
     <!--wishlist-->
     <string name="my_wishlist">My Wishlist</string>
     <string name="promotion_image">Image for promotion</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="logout">Logout</string>
+    <string name="chat">CHAT</string>
+    <string name="close_app_text">\"Are you sure you want to close application?\"</string>
+    <string name="network_err_text">Network Error</string>
 
 
 </resources>

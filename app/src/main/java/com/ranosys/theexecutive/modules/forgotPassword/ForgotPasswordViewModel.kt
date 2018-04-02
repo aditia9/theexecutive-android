@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.forgot_password
+package com.ranosys.theexecutive.modules.forgotPassword
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData

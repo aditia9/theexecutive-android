@@ -44,5 +44,7 @@
 
     <dimen name="design_bottom_navigation_text_size" tools:override="true">20sp</dimen>
     <dimen name="five_dp">5dp</dimen>
+    <dimen name="fifty_dp">50dp</dimen>
+    <dimen name="one_fifty_dp">150dp</dimen>
 
 </resources>

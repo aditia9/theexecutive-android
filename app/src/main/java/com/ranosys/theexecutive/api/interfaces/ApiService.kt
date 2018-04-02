@@ -5,7 +5,7 @@ import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
-import com.ranosys.theexecutive.modules.forgot_password.ForgotPasswordDataClass
+import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
@@ -75,7 +75,7 @@ interface ApiService {
     }
 
     interface CategoryService {
-        @GET("rest/{store_code}/V1/categories")
+        @GET("rest/{store_code}/V1/categoriescustom")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)

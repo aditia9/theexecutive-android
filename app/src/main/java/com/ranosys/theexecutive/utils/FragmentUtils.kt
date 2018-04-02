@@ -14,19 +14,21 @@ object FragmentUtils {
 
     var sFragmentStack: Stack<String>? = Stack()
 
-    fun addFragment(context: Context, fragment: Fragment, bundle : Bundle?, fragmentId: String, isAdded : Boolean){
-        val activity: BaseActivity = context as BaseActivity
-        if(fragment != getCurrentFragment(activity)){
-            bundle?.run{
-                fragment.arguments = bundle
+    fun addFragment(context: Context?, fragment: Fragment?, bundle : Bundle?, fragmentId: String?, isAdded : Boolean?) : Fragment?{
+        return fragment?.apply {
+            val activity: BaseActivity = context as BaseActivity
+            if (fragment != getCurrentFragment(activity)) {
+                bundle?.run {
+                    fragment.arguments = bundle
+                }
+                val transaction = activity.supportFragmentManager.beginTransaction()
+                transaction.add(R.id.main_container, fragment, fragmentId)
+                if (isAdded!!) {
+                    transaction.addToBackStack(fragmentId)
+                }
+                transaction.commit()
+                sFragmentStack?.add(fragmentId)
             }
-            val transaction = activity.supportFragmentManager.beginTransaction()
-            transaction.add(R.id.main_container, fragment, fragmentId)
-            if(isAdded){
-                transaction.addToBackStack(fragmentId)
-            }
-            transaction.commit()
-            sFragmentStack?.add(fragmentId)
         }
     }
 
