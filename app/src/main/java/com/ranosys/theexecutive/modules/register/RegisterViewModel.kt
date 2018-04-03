@@ -62,6 +62,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var isSocialLogin: Boolean = false
 
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
+    var apiSuccessResponse: MutableLiveData<RegisterDataClass.RegistrationResponse>? = MutableLiveData()
 
     companion object {
         const val MALE = 1
@@ -203,7 +204,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             val password = password.get()
             val registerRequest = RegisterDataClass.RegisterRequest(customer, password)
 
-            AppRepository.registrationApi(registerRequest, object: ApiCallback<String>{
+            AppRepository.registrationApi(registerRequest, object: ApiCallback<RegisterDataClass.RegistrationResponse>{
                 override fun onException(error: Throwable) {
                     Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)
                 }
@@ -212,8 +213,8 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)
                 }
 
-                override fun onSuccess(t: String?) {
-                    if(isSocialLogin) callLoginApi() else FragmentUtils.addFragment(getApplication(), HomeFragment(), null, HomeFragment::class.java.name, false)
+                override fun onSuccess(response: RegisterDataClass.RegistrationResponse?) {
+                    if(isSocialLogin) callLoginApi() else apiSuccessResponse?.value = response
                 }
 
             })

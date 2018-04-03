@@ -14,7 +14,6 @@ import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
-import com.ranosys.theexecutive.utils.Utils
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -324,14 +323,14 @@ object AppRepository {
         })
     }
 
-    fun registrationApi(registrationRequest: RegisterDataClass.RegisterRequest, callBack: ApiCallback<String>) {
+    fun registrationApi(registrationRequest: RegisterDataClass.RegisterRequest, callBack: ApiCallback<RegisterDataClass.RegistrationResponse>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
         val callPost = retrofit?.create<ApiService.RegistrationService>(ApiService.RegistrationService::class.java)?.registration(ApiConstants.BEARER + adminToken,  storeCode, registrationRequest)
 
-        callPost?.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+        callPost?.enqueue(object : Callback<RegisterDataClass.RegistrationResponse> {
+            override fun onResponse(call: Call<RegisterDataClass.RegistrationResponse>?, response: Response<RegisterDataClass.RegistrationResponse>?) {
                 if(!response!!.isSuccessful){
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                 }else{
@@ -339,7 +338,7 @@ object AppRepository {
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<RegisterDataClass.RegistrationResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

@@ -6,10 +6,16 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.*
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
+import android.support.customtabs.CustomTabsClient.getPackageName
 import android.text.TextUtils
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +38,9 @@ import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
 import org.json.JSONObject
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+import java.security.Signature
 import java.util.*
 
 
@@ -154,11 +163,6 @@ class LoginFragment : BaseFragment() {
 
                 }
 
-                btn_register.id -> {
-                    //TODO - redrect to register fragment
-                    //FragmentUtils.addFragment(activity as Context, RegisterFragment(), null, RegisterFragment::class.java.name, true)
-
-                }
             }
         })
     }
