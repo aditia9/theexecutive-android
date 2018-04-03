@@ -6,4 +6,6 @@ package com.ranosys.theexecutive.modules.myAccount
 class MyAccountDataClass {
 
     data class MyAccountOption(val title: String, val icon: Int)
+
+    data class NewsletterSubscriptionRequest(val email: String)
 }

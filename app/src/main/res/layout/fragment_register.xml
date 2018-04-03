@@ -65,6 +65,7 @@
                         android:onTextChanged='@{() -> registerViewModel.onTextChanged(etFirstName)}'
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text|textCapWords"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -87,6 +88,7 @@
                         android:onTextChanged='@{() -> registerViewModel.onTextChanged(etLastName)}'
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="text|textCapWords"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -237,7 +239,7 @@
                         android:layout_height="wrap_content"
                         android:text="@={registerViewModel.streetAddress1}"
                         android:onTextChanged='@{() -> registerViewModel.onTextChanged(etAddress1)}'
-                        android:inputType="text"
+                        android:inputType="text|textCapWords"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -258,7 +260,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={registerViewModel.streetAddress2}"
-                        android:inputType="text"
+                        android:inputType="text|textCapWords"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -330,7 +332,7 @@
                         android:paddingStart="@dimen/field_start_padding"
                         android:text="@={registerViewModel.postalCode}"
                         android:onTextChanged='@{() -> registerViewModel.onTextChanged(etPostcode)}'
-                        android:inputType="text" />
+                        android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
 
 
