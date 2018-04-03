@@ -11,7 +11,6 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 
@@ -91,7 +90,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         })
     }
 
-     fun validateData(context: Context): Boolean {
+    fun validateData(context: Context): Boolean {
         var isValid = true
 
         if (TextUtils.isEmpty(email.get())) {

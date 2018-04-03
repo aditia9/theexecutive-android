@@ -6,16 +6,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.pm.PackageManager.*
 import android.databinding.DataBindingUtil
-import android.os.Build
 import android.os.Bundle
-import android.support.customtabs.CustomTabsClient.getPackageName
 import android.text.TextUtils
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,11 +32,11 @@ import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
 import org.json.JSONObject
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import java.security.Signature
 import java.util.*
 
+/**
+ * Created by Nikhil Agarwal on 23/2/18.
+ */
 
 class LoginFragment : BaseFragment() {
 
@@ -67,12 +61,11 @@ class LoginFragment : BaseFragment() {
         callBackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().registerCallback(callBackManager, object : FacebookCallback<LoginResult>{
             override fun onError(error: FacebookException?) {
-                Utils.printLog("FB LOGIN", "some error occurred")
                 LoginManager.getInstance().logOut()
             }
 
             override fun onCancel() {
-                Utils.printLog("FB LOGIN", "login failed")
+                Utils.printLog("FB LOGIN", "login cancled")
             }
 
             override fun onSuccess(result: LoginResult) {
@@ -110,7 +103,6 @@ class LoginFragment : BaseFragment() {
         callBackManager.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_GMAIL_SIGN_IN) {
-
             val task :Task<GoogleSignInAccount> =  GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGmailSignInResult(task)
         }
@@ -122,7 +114,6 @@ class LoginFragment : BaseFragment() {
         loginViewModel.clickedBtnId?.observe(this, Observer<Int> { id ->
 
             when (id) {
-
                 btn_register.id -> {
                     FragmentUtils.addFragment(activity as Context, RegisterFragment(),null,  RegisterFragment::class.java.name, true)
                 }
@@ -172,9 +163,7 @@ class LoginFragment : BaseFragment() {
             hideLoading()
             Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
                 override fun setDone(done: Boolean) {
-
                 }
-
             })
         })
 
@@ -198,7 +187,7 @@ class LoginFragment : BaseFragment() {
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME, data?.firstName)
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_LAST_NAME, data?.latsName)
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_EMAIL, data?.email)
-            FragmentUtils.addFragment(activity as Context, RegisterFragment(), bundle, RegisterFragment::class.java.name, true)
+            FragmentUtils.addFragment(activity as Context, RegisterFragment(), bundle, RegisterFragment::class.java.name, false)
         })
     }
 

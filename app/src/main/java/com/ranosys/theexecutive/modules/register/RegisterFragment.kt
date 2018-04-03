@@ -6,13 +6,14 @@ import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
+import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.*
 import com.tsongkha.spinnerdatepicker.DatePicker
@@ -24,7 +25,7 @@ import java.util.*
 
 
 /**
- * Created by Mohammad Sunny on 31/1/18.
+ * Created by Mohammad Sunny on 12/3/18.
  */
 class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
@@ -69,7 +70,8 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun observeApiSuccess() {
-        registerViewModel.apiSuccessResponse?.observe(this, android.arch.lifecycle.Observer { response ->
+        registerViewModel.apiDirectRegSuccessResponse?.observe(this, android.arch.lifecycle.Observer { response ->
+            hideLoading()
             Utils.showDialog(activity as Context, getString(R.string.verify_email_message), context?.getString(android.R.string.ok), "", object: DialogOkCallback{
                 override fun setDone(done: Boolean) {
                     FragmentUtils.addFragment(activity as Context, LoginFragment(), null, LoginFragment::class.java.name, false)
@@ -78,10 +80,19 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             } )
 
         })
+
+        registerViewModel.apiSocialRegResponse?.observe(this, android.arch.lifecycle.Observer { token ->
+            if(!TextUtils.isEmpty(token)){
+                hideLoading()
+                HomeFragment.fragmentPosition = 1
+                FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, false)
+            }
+        })
     }
 
     private fun observeApiFailure() {
         registerViewModel.apiFailureResponse?.observe(this, android.arch.lifecycle.Observer { errorMsg ->
+            hideLoading()
             Utils.showDialog(activity as Context, errorMsg, context?.getString(android.R.string.ok), "", null)
         })
     }
@@ -93,16 +104,17 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
             Utils.hideSoftKeypad(activity as Context)
             if (Utils.isConnectionAvailable(activity as Context)) {
-                //TODO - showLoading()
-                registerViewModel.callRegisterApi()
+                if(registerViewModel.isValidData(activity as Context)){
+                    showLoading()
+                    registerViewModel.callRegisterApi()
+                }
 
             } else {
-                Toast.makeText(activity, getString(R.string.network_error), Toast.LENGTH_LONG).show()
+                Utils.showNetworkErrorDialog(activity as Context)
             }
         }
 
         et_dob.setOnClickListener {
-
             showDate(Calendar.getInstance().get(Calendar.YEAR) - Constants.MINIMUM_AGE, 0, 1, R.style.DatePickerSpinner)
         }
 
@@ -124,11 +136,9 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
                 .dayOfMonth(dayOfMonth)
                 .build()
 
-
         dpd.show()
         dpd.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(activity as Context, R.color.black))
         dpd.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(activity as Context, R.color.black))
-
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
