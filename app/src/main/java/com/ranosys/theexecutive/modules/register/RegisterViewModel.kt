@@ -14,10 +14,8 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
-import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import java.text.SimpleDateFormat
@@ -62,6 +60,8 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var isSocialLogin: Boolean = false
 
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
+    var apiSocialRegResponse: MutableLiveData<String>? = MutableLiveData()
+    var apiDirectRegSuccessResponse: MutableLiveData<RegisterDataClass.RegistrationResponse>? = MutableLiveData()
 
     companion object {
         const val MALE = 1
@@ -203,17 +203,17 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             val password = password.get()
             val registerRequest = RegisterDataClass.RegisterRequest(customer, password)
 
-            AppRepository.registrationApi(registerRequest, object: ApiCallback<String>{
+            AppRepository.registrationApi(registerRequest, object: ApiCallback<RegisterDataClass.RegistrationResponse>{
                 override fun onException(error: Throwable) {
-                    Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)
+                    apiFailureResponse?.value = error.message
                 }
 
                 override fun onError(errorMsg: String) {
-                    Utils.printLog(REGISTRATION_API_TAG, ERROR_TAG)
+                    apiFailureResponse?.value = errorMsg
                 }
 
-                override fun onSuccess(t: String?) {
-                    if(isSocialLogin) callLoginApi() else FragmentUtils.addFragment(getApplication(), HomeFragment(), null, HomeFragment::class.java.name, false)
+                override fun onSuccess(response: RegisterDataClass.RegistrationResponse?) {
+                    if(isSocialLogin) callLoginApi() else apiDirectRegSuccessResponse?.value = response
                 }
 
             })
@@ -226,19 +226,17 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
-                Utils.printLog(LOGIN_API_TAG, ERROR_TAG)
                 apiFailureResponse?.value = Constants.UNKNOWN_ERROR
 
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog(LOGIN_API_TAG, ERROR_TAG)
                 apiFailureResponse?.value = errorMsg
             }
 
             override fun onSuccess(userToken: String?) {
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
-                //TODO - Move to Home screen
+                apiSocialRegResponse?.value = userToken
 
             }
         })
@@ -265,11 +263,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         }
     }
 
-
-
-
-
-    private fun isValidData(context: Context): Boolean {
+    fun isValidData(context: Context): Boolean {
         var isValid = true
 
         if (TextUtils.isEmpty(firstName.get())){
