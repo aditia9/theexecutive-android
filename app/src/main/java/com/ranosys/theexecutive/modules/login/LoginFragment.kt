@@ -176,21 +176,20 @@ class LoginFragment : BaseFragment() {
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
             SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
             FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
-
         })
 
     }
 
     private fun observeIsEmailAvailableResponse() {
         loginViewModel.isEmailNotAvailable?.observe(this, Observer { data ->
-            loginViewModel.isEmailNotAvailable = null
+           // loginViewModel.isEmailNotAvailable = null
 
             val bundle = Bundle()
             bundle.putBoolean(Constants.FROM_SOCIAL_LOGIN, true)
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME, data?.firstName)
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_LAST_NAME, data?.latsName)
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_EMAIL, data?.email)
-            FragmentUtils.addFragment(activity as Context, RegisterFragment(), bundle, RegisterFragment::class.java.name, false)
+            FragmentUtils.addFragment(activity as Context, RegisterFragment(), bundle, RegisterFragment::class.java.name, true)
         })
     }
 

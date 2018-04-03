@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
@@ -54,9 +55,9 @@ class ForgotPasswordFragment: BaseFragment() {
     }
 
     private fun observeApiFailure() {
-        hideLoading()
         forgotPassVM.apiFailureResponse?.observe(this, Observer { msg ->
-            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
+            hideLoading()
+            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback {
                 override fun setDone(done: Boolean) {
                 }
             })
@@ -64,9 +65,9 @@ class ForgotPasswordFragment: BaseFragment() {
     }
 
     private fun observeApiSuccess() {
-        hideLoading()
         forgotPassVM.apiSuccessResponse?.observe(this, Observer<Boolean> { isLinkSent ->
            if(isLinkSent!!) {
+               hideLoading()
                activity?.onBackPressed()
            }
         })
