@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/forty_dp"
-    android:layout_marginRight="@dimen/twenty_dp"
-    android:layout_marginLeft="@dimen/twenty_dp"
+    android:layout_marginTop="@dimen/thirty_six_dp"
+    android:layout_marginRight="@dimen/twenty_four_dp"
+    android:layout_marginLeft="@dimen/twenty_four_dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Button
@@ -12,12 +12,8 @@
         android:layout_width="@dimen/match_constraint"
         android:layout_height="wrap_content"
         android:text="@string/logout"
-        android:textSize="@dimen/sixteen_sp"
-        android:textColor="@color/colorText"
-        android:textAllCaps="false"
+        android:theme="@style/button_theme"
         android:background="@drawable/black_button_bg"
-        android:fontFamily="@font/dax_regular"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"/>
 </android.support.constraint.ConstraintLayout>
