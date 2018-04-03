@@ -26,6 +26,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
+import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.*
 import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
@@ -172,7 +173,9 @@ class LoginFragment : BaseFragment() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
-            activity?.onBackPressed()
+            SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
+            FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+
         })
 
     }

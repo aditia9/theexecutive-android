@@ -58,8 +58,20 @@ open class BaseActivity: RunTimePermissionActivity(){
         }
     }
 
+    fun redirectToHome(){
+
+    }
+
     fun setScreenTitle(title: String?){
         toolbarViewModel?.title?.set(title)
+    }
+
+    fun setTitleBackground(background: Int?){
+        toolbarViewModel?.titleBackground?.set(background)
+    }
+
+    fun setSubTitle(subTitle: String?){
+        toolbarViewModel?.subTitle?.set(subTitle)
     }
 
     fun setLeftIcon(icon: Int?){

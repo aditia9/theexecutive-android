@@ -36,9 +36,11 @@ abstract class BaseFragment : LifecycleFragment() {
         }
     }
 
-    fun setToolBarParams(title: String?, leftIcon : Int?, leftIconVisibility : Boolean,
+    fun setToolBarParams(title: String?, titleBackground : Int?, subTitle: String?, leftIcon : Int?, leftIconVisibility : Boolean,
                          rightIcon : Int?, rightIconVisibility : Boolean){
         setTitle(title)
+        setTitleBackground(titleBackground)
+        setSubTitle(subTitle)
         setLeftIcon(leftIcon)
         setLeftIconVisibilty(leftIconVisibility)
         setRightIcon(rightIcon)
@@ -52,6 +54,17 @@ abstract class BaseFragment : LifecycleFragment() {
 
     fun setTitle(title: String? = getString(R.string.app_name)){
         (activity as BaseActivity).setScreenTitle(title)
+    }
+
+    fun setTitleBackground(background: Int? = 0){
+        if(background == 0)
+            (activity as BaseActivity).setTitleBackground(android.R.color.transparent)
+        else
+            (activity as BaseActivity).setTitleBackground(background)
+    }
+
+    fun setSubTitle(subTitle: String?){
+        (activity as BaseActivity).setSubTitle(subTitle)
     }
 
     fun setLeftIcon(icon: Int? = R.drawable.ic_action_backward){

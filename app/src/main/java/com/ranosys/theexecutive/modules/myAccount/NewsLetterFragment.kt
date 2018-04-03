@@ -40,7 +40,7 @@ class NewsLetterFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.new_letter_title), 0, false, 0 , false)
+        setToolBarParams(getString(R.string.new_letter_title), 0, "", 0, false, 0 , false)
     }
 
     private fun observeApiFailure() {

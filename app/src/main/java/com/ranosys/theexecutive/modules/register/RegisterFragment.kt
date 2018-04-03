@@ -37,7 +37,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.title_register), 0, false, 0, false)
+        setToolBarParams(getString(R.string.title_register), 0, "", 0, false, 0, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

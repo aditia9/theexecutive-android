@@ -14,18 +14,22 @@ import com.ranosys.theexecutive.base.BaseViewModel
 class ToolbarViewModel(application: Application): BaseViewModel(application) {
 
     var title: ObservableField<String> = ObservableField<String>()
+    var subTitle: ObservableField<String> = ObservableField<String>()
     var leftIcon: ObservableField<Int> = ObservableField<Int>()
     var isLeftIconVisible : ObservableField<Boolean> = ObservableField()
     var rightIcon: ObservableField<Int> = ObservableField<Int>()
     var isRightIconVisible : ObservableField<Boolean> = ObservableField()
+    var titleBackground : ObservableField<Int> = ObservableField()
     var leftIconClicked: MutableLiveData<Int>? = MutableLiveData()
 
 
     init {
+        subTitle.set("")
         leftIcon.set(android.R.color.transparent)
         isLeftIconVisible.set(true)
         rightIcon.set(android.R.color.transparent)
         isRightIconVisible.set(true)
+        titleBackground.set(0)
     }
 
     fun onIconClick(view : View){

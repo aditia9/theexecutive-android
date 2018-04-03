@@ -19,13 +19,13 @@ import com.ranosys.theexecutive.utils.Utils
 class ForgotPasswordViewModel(application: Application): BaseViewModel(application) {
     var email: ObservableField<String> = ObservableField<String>()
     val emailError = ObservableField<String>()
-    var apiSuccessResponse: MutableLiveData<String>? = MutableLiveData()
+    var apiSuccessResponse: MutableLiveData<Boolean>? = MutableLiveData()
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
 
 
     fun callForgetPasswordApi(){
 
-        if(validateData(getApplication())){
+       // if(validateData(getApplication())){
             //showLoading()
             val websiteId = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)
             val request = ForgotPasswordDataClass.ForgotPasswordRequest(email = email.get(), websiteId = websiteId)
@@ -42,15 +42,14 @@ class ForgotPasswordViewModel(application: Application): BaseViewModel(applicati
                 }
 
                 override fun onSuccess(linkSent: Boolean?) {
-                    //show toast to of success
-                    if(linkSent!!) apiSuccessResponse?.value = "link sent" else apiSuccessResponse?.value = "link not sent"
+                    apiSuccessResponse?.value = linkSent
                 }
 
             })
-        }
+        //}
     }
 
-    private fun validateData(context: Context): Boolean {
+    fun validateData(context: Context): Boolean {
 
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))

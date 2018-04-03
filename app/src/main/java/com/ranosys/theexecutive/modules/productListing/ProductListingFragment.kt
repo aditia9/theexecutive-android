@@ -107,7 +107,7 @@ class ProductListingFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(category_name, R.drawable.back, true, R.drawable.bag, true)
+        setToolBarParams(category_name, 0, "", R.drawable.back, true, R.drawable.bag, true)
     }
 
     companion object {

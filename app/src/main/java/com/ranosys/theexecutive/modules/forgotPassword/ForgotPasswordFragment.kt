@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
@@ -39,7 +38,10 @@ class ForgotPasswordFragment: BaseFragment() {
 
         btn_submit?.setOnClickListener({
             if (Utils.isConnectionAvailable(activity as Context)) {
-                forgotPassVM.callForgetPasswordApi()
+                if(forgotPassVM.validateData(activity as Context)) {
+                    showLoading()
+                    forgotPassVM.callForgetPasswordApi()
+                }
 
             }else{
                 Utils.showDialog(activity, getString(R.string.network_err_text),getString(android.R.string.ok), "", object : DialogOkCallback{
@@ -53,18 +55,25 @@ class ForgotPasswordFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.forgot_password_title), R.drawable.back, true, 0, false )
+        setToolBarParams(getString(R.string.forgot_password_title), 0, "", R.drawable.back, true, 0, false )
     }
 
     private fun observeApiFailure() {
+        hideLoading()
         forgotPassVM.apiFailureResponse?.observe(this, Observer { msg ->
-            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
+                override fun setDone(done: Boolean) {
+                }
+            })
         })
     }
 
     private fun observeApiSuccess() {
-        forgotPassVM.apiSuccessResponse?.observe(this, Observer { msg ->
-            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+        hideLoading()
+        forgotPassVM.apiSuccessResponse?.observe(this, Observer<Boolean> { isLinkSent ->
+           if(isLinkSent!!) {
+               activity?.onBackPressed()
+           }
         })
     }
 }
