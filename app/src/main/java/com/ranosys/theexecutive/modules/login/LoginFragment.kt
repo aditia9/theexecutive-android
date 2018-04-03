@@ -35,6 +35,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
+/**
+ * Created by Nikhil Agarwal on 23/2/18.
+ */
 
 class LoginFragment : BaseFragment() {
 
@@ -59,12 +62,11 @@ class LoginFragment : BaseFragment() {
         callBackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().registerCallback(callBackManager, object : FacebookCallback<LoginResult>{
             override fun onError(error: FacebookException?) {
-                Utils.printLog("FB LOGIN", "some error occurred")
                 LoginManager.getInstance().logOut()
             }
 
             override fun onCancel() {
-                Utils.printLog("FB LOGIN", "login failed")
+                Utils.printLog("FB LOGIN", "login cancled")
             }
 
             override fun onSuccess(result: LoginResult) {
@@ -102,7 +104,6 @@ class LoginFragment : BaseFragment() {
         callBackManager.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_GMAIL_SIGN_IN) {
-
             val task :Task<GoogleSignInAccount> =  GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGmailSignInResult(task)
         }
@@ -114,7 +115,6 @@ class LoginFragment : BaseFragment() {
         loginViewModel.clickedBtnId?.observe(this, Observer<Int> { id ->
 
             when (id) {
-
                 btn_register.id -> {
                     FragmentUtils.addFragment(activity as Context, RegisterFragment(),null,  RegisterFragment::class.java.name, true)
                 }
@@ -122,8 +122,10 @@ class LoginFragment : BaseFragment() {
                 btn_login.id -> {
                     Utils.hideSoftKeypad(activity as Context)
                     if (Utils.isConnectionAvailable(activity as Context)) {
-                        showLoading()
-                        loginViewModel.login()
+                        if(loginViewModel.validateData(activity as Context)){
+                            showLoading()
+                            loginViewModel.login()
+                        }
 
                     } else {
                         showNetworkErrorDialog(activity as Context)
@@ -152,6 +154,7 @@ class LoginFragment : BaseFragment() {
                     FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), null, ForgotPasswordFragment::class.java.name, true)
 
                 }
+
             }
         })
     }
@@ -161,9 +164,7 @@ class LoginFragment : BaseFragment() {
             hideLoading()
             Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
                 override fun setDone(done: Boolean) {
-
                 }
-
             })
         })
 
@@ -189,7 +190,7 @@ class LoginFragment : BaseFragment() {
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME, data?.firstName)
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_LAST_NAME, data?.latsName)
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_EMAIL, data?.email)
-            FragmentUtils.addFragment(activity as Context, RegisterFragment(), bundle, RegisterFragment::class.java.name, true)
+            FragmentUtils.addFragment(activity as Context, RegisterFragment(), bundle, RegisterFragment::class.java.name, false)
         })
     }
 

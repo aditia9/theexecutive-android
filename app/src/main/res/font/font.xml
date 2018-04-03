@@ -8,4 +8,10 @@
         android:font="@font/dax_medium" />
     <font
         android:font="@font/dax_bold" />
+    <font
+        android:font="@font/opensans_bold" />
+    <font
+        android:font="@font/opensans_semibold" />
+    <font
+        android:font="@font/opensans_regular" />
 </font-family>

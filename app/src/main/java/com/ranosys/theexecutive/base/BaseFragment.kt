@@ -31,8 +31,10 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     fun hideLoading() {
-        if (mProgressDialog?.isShowing!!) {
-            mProgressDialog?.cancel()
+        mProgressDialog?.run {
+            if(isShowing){
+                cancel()
+            }
         }
     }
 

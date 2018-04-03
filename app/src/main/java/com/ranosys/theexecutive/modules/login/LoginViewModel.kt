@@ -35,10 +35,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     fun btnClicked(view: View){
         when(view.id){
             R.id.btn_login ->{
-
-                if(validateData(getApplication())){
-                    clickedBtnId?.value = R.id.btn_login
-                }
+                clickedBtnId?.value = R.id.btn_login
             }
 
             R.id.btn_register ->{
@@ -60,12 +57,16 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
                 clickedBtnId?.value = R.id.tv_forgot_password
             }
+
+            R.id.btn_register ->{
+
+                clickedBtnId?.value = R.id.btn_register
+            }
         }
     }
 
 
     fun login(){
-
         val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString())
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
@@ -89,12 +90,11 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         })
     }
 
-    private fun validateData(context: Context): Boolean {
+    fun validateData(context: Context): Boolean {
         var isValid = true
 
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))
-            isValid = false
         } else if (!Utils.isValidEmail(email.get())) {
             emailError.set(context.getString(R.string.provide_valid_email))
             isValid = false
@@ -103,8 +103,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         if (TextUtils.isEmpty(password.get())) {
             passwordError.set(context.getString(R.string.empty_password))
             isValid = false
+
         }else if(Utils.isValidPassword(password.get()).not()){
             passwordError.set(context.getString(R.string.password_validation_err))
+            isValid = false
         }
 
         return isValid
@@ -114,12 +116,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         val request = LoginDataClass.IsEmailAvailableRequest(userData.email, SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)?:  1)
         AppRepository.isEmailAvailable(request, object : ApiCallback<Boolean>{
             override fun onException(error: Throwable) {
-                Utils.printLog("Is Email Available Api", "error")
                 apiFailureResponse?.value = Constants.UNKNOWN_ERROR
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Is Email Available Api", "error")
                 apiFailureResponse?.value = errorMsg
             }
 
@@ -138,18 +138,17 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         val request = LoginDataClass.SocialLoginRequest(userData.email, userData.type, userData.token)
         AppRepository.socialLogin(request, object: ApiCallback<String>{
             override fun onException(error: Throwable) {
-                Utils.printLog("Socail Login Api", "error")
                 apiFailureResponse?.value = Constants.UNKNOWN_ERROR
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Socail Login Api", "error")
                 apiFailureResponse?.value = errorMsg
             }
 
             override fun onSuccess(userToken: String?) {
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
                 apiSuccessResponse?.value = userToken
+
             }
 
         })

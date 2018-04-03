@@ -47,6 +47,7 @@
                 android:textColor="@color/theme_black_color"
                 android:textStyle="bold"
                 android:textAllCaps="true"
+                android:theme="@style/heading_theme"
                 android:gravity="center|center_vertical"
                 android:text="@{toolbarViewModel.title}"
                 android:fontFamily="@font/dax_regular"

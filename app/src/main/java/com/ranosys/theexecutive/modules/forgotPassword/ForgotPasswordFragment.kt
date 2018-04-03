@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
-import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
@@ -38,17 +37,13 @@ class ForgotPasswordFragment: BaseFragment() {
 
         btn_submit?.setOnClickListener({
             if (Utils.isConnectionAvailable(activity as Context)) {
-                if(forgotPassVM.validateData(activity as Context)) {
+                if(forgotPassVM.validateData(activity as Context)){
                     showLoading()
                     forgotPassVM.callForgetPasswordApi()
                 }
 
             }else{
-                Utils.showDialog(activity, getString(R.string.network_err_text),getString(android.R.string.ok), "", object : DialogOkCallback{
-                    override fun setDone(done: Boolean) {
-
-                    }
-                })
+                Utils.showNetworkErrorDialog(activity as Context)
             }
         })
     }
