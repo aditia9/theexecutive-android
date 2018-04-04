@@ -119,6 +119,7 @@
     <string name="network_err_text">Network Error</string>
     <string name="verify_email_message">Please verify email</string>
     <string name="register_successfull">You have registered successfully.</string>
+    <string name="logout_success_message">Logout successfully</string>
 
 
 </resources>

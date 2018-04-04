@@ -67,7 +67,7 @@ class LoginFragment : BaseFragment() {
             }
 
             override fun onCancel() {
-                Utils.printLog("FB LOGIN", "login cancled")
+                LoginManager.getInstance().logOut()
             }
 
             override fun onSuccess(result: LoginResult) {

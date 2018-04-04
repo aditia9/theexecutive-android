@@ -17,7 +17,6 @@ import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.*
-import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -142,14 +141,12 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         dpd.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(activity as Context, R.color.black))
     }
 
-    override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-
+    override fun onDateSet(view: com.tsongkha.spinnerdatepicker.DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
         val calender: Calendar = Calendar.getInstance()
         calender.set(year, monthOfYear, dayOfMonth)
         val dob: Date = calender.time
         registerViewModel.dob.set(dob)
         val dateFormat = SimpleDateFormat(Constants.DD_MM_YY_DATE_FORMAT)
-        et_dob.setText(dateFormat.format(dob))
-    }
+        et_dob.setText(dateFormat.format(dob))    }
 
 }
