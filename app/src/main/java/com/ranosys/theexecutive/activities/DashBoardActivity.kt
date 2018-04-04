@@ -41,20 +41,20 @@ class DashBoardActivity: BaseActivity() {
                         if(fragment is HomeFragment) {
                             when(HomeFragment.fragmentPosition){
                                 0 -> {
-                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.app_title), 0, false, R.drawable.bag, true)
+                                    (fragment as BaseFragment).setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true)
                                 }
                                 1 -> {
-                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, false, 0, false)
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, "", 0, false, 0, false)
                                 }
                                 2 -> {
-                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, false, 0, false)
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", 0, false, 0, false)
                                 }
                             }
                         }
                         if(fragment is ProductListingFragment)
-                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.category_name,R.drawable.back, true, R.drawable.bag, true )
+                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.category_name, 0, "", R.drawable.back, true, R.drawable.bag, true )
                         if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, false, 0, false)
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false)
                         }
                     }
                 }

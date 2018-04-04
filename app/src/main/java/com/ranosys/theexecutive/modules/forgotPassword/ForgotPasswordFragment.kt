@@ -8,10 +8,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
@@ -51,20 +51,25 @@ class ForgotPasswordFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.forgot_password_title), R.drawable.back, true, 0, false )
+        setToolBarParams(getString(R.string.forgot_password_title), 0, "", R.drawable.back, true, 0, false )
     }
 
     private fun observeApiFailure() {
         forgotPassVM.apiFailureResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback {
+                override fun setDone(done: Boolean) {
+                }
+            })
         })
     }
 
     private fun observeApiSuccess() {
-        forgotPassVM.apiSuccessResponse?.observe(this, Observer { msg ->
-            hideLoading()
-            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+        forgotPassVM.apiSuccessResponse?.observe(this, Observer<Boolean> { isLinkSent ->
+           if(isLinkSent!!) {
+               hideLoading()
+               activity?.onBackPressed()
+           }
         })
     }
 }

@@ -45,7 +45,7 @@ class CategoryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarParams(getString(R.string.app_title),0, false, R.drawable.bag, true )
+        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true )
 
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
