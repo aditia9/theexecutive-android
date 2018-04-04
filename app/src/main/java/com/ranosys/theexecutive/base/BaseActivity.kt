@@ -58,10 +58,6 @@ open class BaseActivity: RunTimePermissionActivity(){
         }
     }
 
-    fun redirectToHome(){
-
-    }
-
     fun setScreenTitle(title: String?){
         toolbarViewModel?.title?.set(title)
     }

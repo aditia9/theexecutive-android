@@ -13,11 +13,11 @@ import com.ranosys.theexecutive.base.BaseViewModel
  */
 class ToolbarViewModel(application: Application): BaseViewModel(application) {
 
-    var title: ObservableField<String> = ObservableField<String>()
-    var subTitle: ObservableField<String> = ObservableField<String>()
-    var leftIcon: ObservableField<Int> = ObservableField<Int>()
+    var title: ObservableField<String> = ObservableField()
+    var subTitle: ObservableField<String> = ObservableField()
+    var leftIcon: ObservableField<Int> = ObservableField()
     var isLeftIconVisible : ObservableField<Boolean> = ObservableField()
-    var rightIcon: ObservableField<Int> = ObservableField<Int>()
+    var rightIcon: ObservableField<Int> = ObservableField()
     var isRightIconVisible : ObservableField<Boolean> = ObservableField()
     var titleBackground : ObservableField<Int> = ObservableField()
     var leftIconClicked: MutableLiveData<Int>? = MutableLiveData()
