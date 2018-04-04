@@ -12,8 +12,7 @@
         <com.ranosys.theexecutive.customViews.CustomViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tabLayout"
+            android:layout_height="match_parent"
             />
 
         <TextView
@@ -39,6 +38,7 @@
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             app:tabIndicatorHeight="0dp"
+            android:background="@color/white"
             />
 
 
