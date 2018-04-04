@@ -48,6 +48,14 @@ object Utils {
         return m.matches()
     }
 
+    fun isValidMobile(mobile: String): Boolean {
+       if(mobile.length >= 8 && mobile.length <=16){
+           return true
+       }
+        return false
+
+    }
+
 
     fun isConnectionAvailable(context: Context): Boolean{
         try {

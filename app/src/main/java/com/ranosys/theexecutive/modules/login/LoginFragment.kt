@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.gson.Gson
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
@@ -182,7 +183,7 @@ class LoginFragment : BaseFragment() {
 
     private fun observeIsEmailAvailableResponse() {
         loginViewModel.isEmailNotAvailable?.observe(this, Observer { data ->
-
+            hideLoading()
             val bundle = Bundle()
             bundle.putBoolean(Constants.FROM_SOCIAL_LOGIN, true)
             bundle.putString(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME, data?.firstName)
@@ -202,7 +203,12 @@ class LoginFragment : BaseFragment() {
         val request = GraphRequest.newMeRequest(fbLoginToken) { `object`, response ->
             val fbData = parseFbData(`object`)
             fbData.token = fbLoginToken.token
-            if(!TextUtils.isEmpty(fbData.email)) loginViewModel.isEmailAvailableApi(fbData) else Utils.printLog("Fb Uase Data", "error in fb data")
+            if(!TextUtils.isEmpty(fbData.email)){
+                showLoading()
+                loginViewModel.isEmailAvailableApi(fbData)
+            } else {
+                Utils.printLog("Fb User Data", "error in fb data")
+            }
         }
 
         val parameters = Bundle()
@@ -218,22 +224,15 @@ class LoginFragment : BaseFragment() {
         var email = ""
         var gender = ""
         try {
-            id = `object`.getString("id")
-
-            if (`object`.has("first_name")) {
-                firstName = `object`.getString("first_name")
-            }
-
-            if (`object`.has("last_name")) {
-                lastName = `object`.getString("last_name")
-            }
-
-            if (`object`.has("email")) {
-                email = `object`.getString("email")
-            }
-
-            if (`object`.has("gender")) {
-                gender = `object`.getString("gender")
+            val gson = Gson()
+            val fbDataResult : FbData?
+            fbDataResult = gson.fromJson(`object`.toString(), FbData::class.java)
+            fbDataResult?.run {
+                id = fbDataResult.id
+                firstName = fbDataResult.first_name
+                lastName = fbDataResult.last_name
+                email = fbDataResult.email
+                gender = fbDataResult.gender
             }
 
         } catch (e: JSONException) {
@@ -254,7 +253,12 @@ class LoginFragment : BaseFragment() {
             val gmailData = getGmailData(account)
             gmailData.token = gmailToken!!
 
-            if(!TextUtils.isEmpty(gmailData.email))loginViewModel.isEmailAvailableApi(gmailData)else Utils.printLog("Gmail User Data", "error in gmail data")
+            if(!TextUtils.isEmpty(gmailData.email)){
+                showLoading()
+                loginViewModel.isEmailAvailableApi(gmailData)
+            }else {
+                Utils.printLog("Gmail User Data", "error in gmail data")
+            }
 
         } catch (e : ApiException ) {
             AppLog.printStackTrace(e)

@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
@@ -43,7 +44,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val data = arguments
-        if(null != data) {
+        data?.run {
             isFromSocialLogin = (data.get(Constants.FROM_SOCIAL_LOGIN)) as Boolean
             socialLoginFirstName = data.get(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME).toString()
             socialLoginLastName = data.get(Constants.FROM_SOCIAL_LOGIN_LAST_NAME).toString()
@@ -84,7 +85,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel.apiSocialRegResponse?.observe(this, android.arch.lifecycle.Observer { token ->
             if(!TextUtils.isEmpty(token)){
                 hideLoading()
-                HomeFragment.fragmentPosition = 1
+                Toast.makeText(activity, getString(R.string.register_successfull), Toast.LENGTH_SHORT).show()
                 FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, false)
             }
         })
