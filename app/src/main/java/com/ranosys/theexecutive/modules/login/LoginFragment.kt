@@ -182,7 +182,6 @@ class LoginFragment : BaseFragment() {
 
     private fun observeIsEmailAvailableResponse() {
         loginViewModel.isEmailNotAvailable?.observe(this, Observer { data ->
-           // loginViewModel.isEmailNotAvailable = null
 
             val bundle = Bundle()
             bundle.putBoolean(Constants.FROM_SOCIAL_LOGIN, true)
