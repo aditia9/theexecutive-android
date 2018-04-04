@@ -24,35 +24,27 @@ class ForgotPasswordViewModel(application: Application): BaseViewModel(applicati
 
 
     fun callForgetPasswordApi(){
+        val websiteId = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)
+        val request = ForgotPasswordDataClass.ForgotPasswordRequest(email = email.get(), websiteId = websiteId)
 
-        if(validateData(getApplication())){
-            //showLoading()
-            val websiteId = SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)
-            val request = ForgotPasswordDataClass.ForgotPasswordRequest(email = email.get(), websiteId = websiteId)
+        AppRepository.forgotPassword(request, object: ApiCallback<Boolean>{
+            override fun onException(error: Throwable) {
+                apiFailureResponse?.value = error.message
+            }
 
-            AppRepository.forgotPassword(request, object: ApiCallback<Boolean>{
-                override fun onException(error: Throwable) {
-                    Utils.printLog("Forgot password Api", "error")
-                    apiFailureResponse?.value = error.message
-                }
+            override fun onError(errorMsg: String) {
+                apiFailureResponse?.value = errorMsg
+            }
 
-                override fun onError(errorMsg: String) {
-                    Utils.printLog("Forgot password Api", "error")
-                    apiFailureResponse?.value = errorMsg
-                }
+            override fun onSuccess(linkSent: Boolean?) {
+                //show toast to of success
+                if(linkSent!!) apiSuccessResponse?.value = "link sent" else apiSuccessResponse?.value = "link not sent"
+            }
 
-                override fun onSuccess(linkSent: Boolean?) {
-                    //show toast to of success
-                    if(linkSent!!) apiSuccessResponse?.value = "link sent" else apiSuccessResponse?.value = "link not sent"
-                }
-
-            })
-        }
-
-
+        })
     }
 
-    private fun validateData(context: Context): Boolean {
+     fun validateData(context: Context): Boolean {
 
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))

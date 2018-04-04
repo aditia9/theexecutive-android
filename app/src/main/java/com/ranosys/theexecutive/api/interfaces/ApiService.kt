@@ -7,6 +7,8 @@ import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import retrofit2.Call
@@ -23,6 +25,14 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body loginRequest: LoginDataClass.LoginRequest?): Call<String>
+    }
+
+    interface RegistrationService {
+        @POST("rest/{store_code}/V1/customers")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun registration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body registrationRequest: RegisterDataClass.RegisterRequest?): Call<RegisterDataClass.RegistrationResponse>
     }
 
     interface StoresService {
@@ -94,5 +104,29 @@ interface ApiService {
         fun getAllCategoryData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String, @QueryMap queryMap : HashMap<String,String>?): Call<AllCategoryDataResponse>
 
 
+    }
+
+    interface CountryListService {
+        @GET("rest/{store_code}/V1/directory/countries")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun countryList(@Path("store_code") storeCode:String): Call<List<RegisterDataClass.Country>>
+    }
+
+    interface CityListService {
+        @GET("rest/{store_code}/V1/custom/cities/{state_code}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun cityList(@Path("store_code") storeCode:String, @Path("state_code") stateCode:String): Call<List<RegisterDataClass.City>>
+    }
+
+    interface NewsLetterSubscription {
+        @POST("rest/{store_code}/V1/newsletter/subscribe")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun newsLetterSuscribe(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: MyAccountDataClass.NewsletterSubscriptionRequest?): Call<String>
     }
 }

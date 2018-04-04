@@ -6,6 +6,8 @@ import android.content.Context
 import android.databinding.ObservableField
 import android.text.TextUtils
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.utils.Utils
 
@@ -22,12 +24,23 @@ class NewsLetterViewModel(application: Application): BaseViewModel(application) 
 
 
     fun callNewsLetterSubscribeApi(){
-        //TODO - implement news letter api
-        validateData(getApplication())
+        AppRepository.subscribeNewsletterApi(MyAccountDataClass.NewsletterSubscriptionRequest(email.get()), object: ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                apiFailureResponse?.value = error.message
+            }
 
+            override fun onError(errorMsg: String) {
+                apiFailureResponse?.value = errorMsg
+            }
+
+            override fun onSuccess(message: String?) {
+                apiSuccessResponse?.value = message
+            }
+
+        })
     }
 
-    private fun validateData(context: Context): Boolean {
+    fun validateData(context: Context): Boolean {
 
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))

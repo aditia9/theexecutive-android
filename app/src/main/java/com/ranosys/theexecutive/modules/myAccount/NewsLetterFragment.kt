@@ -2,15 +2,16 @@ package com.ranosys.theexecutive.modules.myAccount
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentNewsLetterBinding
+import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_news_letter.*
 
 /**
@@ -34,7 +35,17 @@ class NewsLetterFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         btn_subscribe.setOnClickListener({
-            mViewModel.callNewsLetterSubscribeApi()
+            Utils.hideSoftKeypad(activity as Context)
+            if (Utils.isConnectionAvailable(activity as Context)) {
+                if(mViewModel.validateData(activity as Context)){
+                    showLoading()
+                    mViewModel.callNewsLetterSubscribeApi()
+                }
+
+            } else {
+                Utils.showNetworkErrorDialog(activity as Context)
+            }
+
         })
     }
 
@@ -45,13 +56,15 @@ class NewsLetterFragment: BaseFragment() {
 
     private fun observeApiFailure() {
         mViewModel.apiFailureResponse?.observe(this, Observer { msg ->
-            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", null)
         })
     }
 
     private fun observeApiSuccess() {
         mViewModel.apiSuccessResponse?.observe(this, Observer { msg ->
-            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+            hideLoading()
+            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", null)
         })
     }
 }

@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.change_language_fragment.*
 class ChangeLanguageFragment: BaseFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var selectedStore: StoreResponse
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -44,10 +45,13 @@ class ChangeLanguageFragment: BaseFragment() {
             SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)!!
         }
 
+        selectedStore = GlobalSingelton.instance?.storeList!!.first()
+
         val storeListAdapter = StoreListAdapter(GlobalSingelton.instance?.storeList, selectedStoreCode)
         storeListAdapter.setItemClickListener(object: StoreListAdapter.OnItemClickListener {
             override fun onItemClick(item: StoreResponse) {
-                storeListAdapter.selectedStore = item.code
+                storeListAdapter.selectedStoreCode = item.code
+                selectedStore = item
                 storeListAdapter.notifyDataSetChanged()
             }
 
@@ -56,7 +60,9 @@ class ChangeLanguageFragment: BaseFragment() {
 
         btn_continue.setOnClickListener {
             //store selected language code
-            SavedPreferences.getInstance()?.saveStringValue(storeListAdapter.selectedStore, Constants.SELECTED_STORE_CODE_KEY)
+            SavedPreferences.getInstance()?.saveStringValue(storeListAdapter.selectedStoreCode, Constants.SELECTED_STORE_CODE_KEY)
+            SavedPreferences.getInstance()?.saveIntValue(selectedStore.website_id, Constants.SELECTED_WEBSITE_ID_KEY)
+            SavedPreferences.getInstance()?.saveIntValue(selectedStore.id, Constants.SELECTED_STORE_ID_KEY)
             FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, true)
 
         }

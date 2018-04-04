@@ -26,6 +26,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
+import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.*
 import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -33,6 +34,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
+/**
+ * Created by Nikhil Agarwal on 23/2/18.
+ */
 
 class LoginFragment : BaseFragment() {
 
@@ -50,17 +54,18 @@ class LoginFragment : BaseFragment() {
         observeEvent()
         observeApiFailure()
         observeApiSuccess()
+        observeIsEmailAvailableResponse()
+
 
         //call backs for fb login
         callBackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().registerCallback(callBackManager, object : FacebookCallback<LoginResult>{
             override fun onError(error: FacebookException?) {
-                Utils.printLog("FB LOGIN", "some error occurred")
                 LoginManager.getInstance().logOut()
             }
 
             override fun onCancel() {
-                Utils.printLog("FB LOGIN", "login failed")
+                Utils.printLog("FB LOGIN", "login cancled")
             }
 
             override fun onSuccess(result: LoginResult) {
@@ -74,6 +79,7 @@ class LoginFragment : BaseFragment() {
 
         return mBinding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -97,7 +103,6 @@ class LoginFragment : BaseFragment() {
         callBackManager.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_GMAIL_SIGN_IN) {
-
             val task :Task<GoogleSignInAccount> =  GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGmailSignInResult(task)
         }
@@ -109,11 +114,17 @@ class LoginFragment : BaseFragment() {
         loginViewModel.clickedBtnId?.observe(this, Observer<Int> { id ->
 
             when (id) {
+                btn_register.id -> {
+                    FragmentUtils.addFragment(activity as Context, RegisterFragment(),null,  RegisterFragment::class.java.name, true)
+                }
+
                 btn_login.id -> {
                     Utils.hideSoftKeypad(activity as Context)
                     if (Utils.isConnectionAvailable(activity as Context)) {
-                        showLoading()
-                        loginViewModel.login()
+                        if(loginViewModel.validateData(activity as Context)){
+                            showLoading()
+                            loginViewModel.login()
+                        }
 
                     } else {
                         showNetworkErrorDialog(activity as Context)
@@ -142,6 +153,7 @@ class LoginFragment : BaseFragment() {
                     FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), null, ForgotPasswordFragment::class.java.name, true)
 
                 }
+
             }
         })
     }
@@ -151,9 +163,7 @@ class LoginFragment : BaseFragment() {
             hideLoading()
             Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
                 override fun setDone(done: Boolean) {
-
                 }
-
             })
         })
 
@@ -166,6 +176,18 @@ class LoginFragment : BaseFragment() {
             activity?.onBackPressed()
         })
 
+    }
+
+    private fun observeIsEmailAvailableResponse() {
+        loginViewModel.isEmailNotAvailable?.observe(this, Observer { data ->
+
+            val bundle = Bundle()
+            bundle.putBoolean(Constants.FROM_SOCIAL_LOGIN, true)
+            bundle.putString(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME, data?.firstName)
+            bundle.putString(Constants.FROM_SOCIAL_LOGIN_LAST_NAME, data?.latsName)
+            bundle.putString(Constants.FROM_SOCIAL_LOGIN_EMAIL, data?.email)
+            FragmentUtils.addFragment(activity as Context, RegisterFragment(), bundle, RegisterFragment::class.java.name, false)
+        })
     }
 
     private fun gmailSignIn() {
