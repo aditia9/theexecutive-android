@@ -10,13 +10,13 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.*
-import com.tsongkha.spinnerdatepicker.DatePicker
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -37,13 +37,13 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.title_register), 0, false, 0, false)
+        setToolBarParams(getString(R.string.create_account), 0, "", R.drawable.back, true, 0, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val data = arguments
-        if(null != data) {
+        data?.run {
             isFromSocialLogin = (data.get(Constants.FROM_SOCIAL_LOGIN)) as Boolean
             socialLoginFirstName = data.get(Constants.FROM_SOCIAL_LOGIN_FIRST_NAME).toString()
             socialLoginLastName = data.get(Constants.FROM_SOCIAL_LOGIN_LAST_NAME).toString()
@@ -84,7 +84,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel.apiSocialRegResponse?.observe(this, android.arch.lifecycle.Observer { token ->
             if(!TextUtils.isEmpty(token)){
                 hideLoading()
-                HomeFragment.fragmentPosition = 1
+                Toast.makeText(activity, getString(R.string.register_successfull), Toast.LENGTH_SHORT).show()
                 FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, false)
             }
         })
@@ -141,14 +141,12 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         dpd.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(activity as Context, R.color.black))
     }
 
-    override fun onDateSet(view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-
+    override fun onDateSet(view: com.tsongkha.spinnerdatepicker.DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
         val calender: Calendar = Calendar.getInstance()
         calender.set(year, monthOfYear, dayOfMonth)
         val dob: Date = calender.time
         registerViewModel.dob.set(dob)
         val dateFormat = SimpleDateFormat(Constants.DD_MM_YY_DATE_FORMAT)
-        et_dob.setText(dateFormat.format(dob))
-    }
+        et_dob.setText(dateFormat.format(dob))    }
 
 }

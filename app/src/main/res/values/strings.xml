@@ -83,6 +83,7 @@
     <string name="street_address_2">Street Address Line 2</string>
     <string name="postal_error">Please provide postal code</string>
     <string name="valid_password_error">Please provide valid password</string>
+    <string name="valid_mobile_error">Please provide valid mobile</string>
     <string name="confirm_password_error">Password mismatch</string>
     <string name="select_lang_title">Select Language</string>
     <string name="continue_btn">Continue</string>
@@ -91,7 +92,7 @@
     <string name="my_account_title">My Account</string>
     <string name="news_letter_option">Subscribe to Newsletter</string>
     <string name="subscribe_info">Subscribe to our newsletter to stay updated on the latest promotions, new arrivals and online exclusives</string>
-    <string name="new_letter_title">News Letter</string>
+    <string name="new_letter_title">NewsLetter</string>
     <string name="sort_by">Sort by</string>
     <string name="filter_by">Filter by</string>
     <string name="product_list">Product List</string>
@@ -114,9 +115,11 @@
     <string name="existing_user_label">Existing Customer</string>
     <string name="new_user_label">New Customer</string>
     <string name="chat">CHAT</string>
-    <string name="close_app_text">\"Are you sure you want to close application?\"</string>
+    <string name="close_app_text">Are you sure you want to close application?</string>
     <string name="network_err_text">Network Error</string>
     <string name="verify_email_message">Please verify email</string>
+    <string name="register_successfull">You have registered successfully.</string>
+    <string name="logout_success_message">Logout successfully</string>
 
 
 </resources>

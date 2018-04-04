@@ -124,7 +124,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             }
 
             override fun onSuccess(available: Boolean?) {
-                if(available!!){
+                if(available!!.not()){
                     callSocialLoginApi(userData)
                 }else{
                     isEmailNotAvailable?.value = userData
