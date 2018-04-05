@@ -7,6 +7,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/sixteen_dp"
+        android:paddingBottom="@dimen/sixteen_dp"
         android:background="@color/white">
 
         <android.support.constraint.Guideline
@@ -36,17 +38,13 @@
                 android:id="@+id/et_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search"
                 android:theme="@style/myAppTheme"
-                android:textColor="@color/theme_black_color"
-                android:fontFamily="@font/dax_regular"
                 android:paddingLeft="@dimen/ten_dp"
                 android:paddingRight="@dimen/ten_dp"
                 android:layout_marginLeft="@dimen/eight_dp"
                 android:layout_marginRight="@dimen/eight_dp"
                 android:drawableEnd="@drawable/search"
                 android:backgroundTint="@color/theme_accent_color"/>
-
         </android.support.design.widget.TextInputLayout>
 
         <View
@@ -66,9 +64,9 @@
             android:layout_height="wrap_content"
             android:text="@string/sort_by"
             android:gravity="center"
-            android:textColor="@color/theme_black_color"
-            android:textSize="@dimen/twenty_sp"
-            android:fontFamily="@font/dax_regular"
+            android:textSize="@dimen/eighteen_sp"
+            android:textAllCaps="true"
+            android:letterSpacing=".1"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
             app:layout_constraintRight_toLeftOf="@id/view_vertical"
             app:layout_constraintTop_toTopOf="@id/view_vertical"
@@ -79,10 +77,10 @@
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:text="@string/filter_by"
-            android:textColor="@color/theme_black_color"
-            android:textSize="@dimen/twenty_sp"
             android:gravity="center"
-            android:fontFamily="@font/dax_regular"
+            android:textSize="@dimen/eighteen_sp"
+            android:textAllCaps="true"
+            android:letterSpacing=".1"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintLeft_toRightOf="@id/view_vertical"
             app:layout_constraintTop_toTopOf="@id/view_vertical"
@@ -104,7 +102,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/sixteen_dp"
             android:contentDescription="@string/product_list"
-            android:paddingBottom="@dimen/sixteen_dp"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/view_horizontal"/>

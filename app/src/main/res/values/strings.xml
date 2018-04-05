@@ -117,6 +117,7 @@
     <string name="close_app_text">\"Are you sure you want to close application?\"</string>
     <string name="network_err_text">Network Error</string>
     <string name="verify_email_message">Please verify email</string>
+    <string name="non_breakable_apace">\u00A0</string>
 
 
 </resources>

@@ -10,6 +10,7 @@ import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
@@ -104,7 +105,6 @@ object AppRepository {
                 } else {
                     callBack.onSuccess(response.body())
                 }
-
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
@@ -361,6 +361,27 @@ object AppRepository {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun sortOptionApi(callBack: ApiCallback<ProductListingDataClass.SortOptionResponse>) {
+        val retrofit = ApiClient.retrofit
+        val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.sortOptionService>(ApiService.sortOptionService::class.java)?.getSortOptions(ApiConstants.BEARER + adminToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<ProductListingDataClass.SortOptionResponse> {
+            override fun onResponse(call: Call<ProductListingDataClass.SortOptionResponse>?, response: Response<ProductListingDataClass.SortOptionResponse>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<ProductListingDataClass.SortOptionResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

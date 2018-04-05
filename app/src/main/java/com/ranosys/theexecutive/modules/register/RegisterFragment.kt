@@ -62,6 +62,10 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel.emailAddress.set(socialLoginEmail)
         registerViewModel.callCountryApi()
 
+        if(isFromSocialLogin && !TextUtils.isEmpty(socialLoginEmail)){
+            et_email_address.isEnabled = false
+        }
+
         observeApiFailure()
         observeApiSuccess()
 
