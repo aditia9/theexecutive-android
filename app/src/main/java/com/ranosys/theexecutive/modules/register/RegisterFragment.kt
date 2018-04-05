@@ -62,10 +62,6 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel.emailAddress.set(socialLoginEmail)
         registerViewModel.callCountryApi()
 
-        if(isFromSocialLogin && !TextUtils.isEmpty(socialLoginEmail)){
-            et_email_address.isEnabled = false
-        }
-
         observeApiFailure()
         observeApiSuccess()
 
@@ -103,6 +99,10 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(isFromSocialLogin && !TextUtils.isEmpty(socialLoginEmail)){
+            et_email_address.isEnabled = false
+        }
 
         btn_create_account.setOnClickListener {
 
