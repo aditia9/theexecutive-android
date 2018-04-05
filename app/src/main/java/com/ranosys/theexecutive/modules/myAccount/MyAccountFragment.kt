@@ -12,7 +12,9 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_my_account.*
+import kotlinx.android.synthetic.main.logout_btn.view.*
 
 /**
  * Created by nikhil on 22/3/18.
@@ -65,7 +67,7 @@ class MyAccountFragment: BaseFragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             if(viewType == VIEW_TYPE_FOOTER){
                 val itemView = LayoutInflater.from(parent.context).inflate(R.layout.logout_btn, parent, false)
-                return MyAccountFooterHolder(itemView = itemView)
+                return MyAccountFooterHolder(itemView)
 
             }else{
                 val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent,false)
@@ -96,10 +98,13 @@ class MyAccountFragment: BaseFragment() {
             }
         }
 
-        class MyAccountFooterHolder(val itemView: View): RecyclerView.ViewHolder(itemView){
-
+        class MyAccountFooterHolder(val item: View): RecyclerView.ViewHolder(item){
+            init {
+                itemView.btn_logout.setOnClickListener({
+                    Utils.logout(item.context)
+                })
+            }
         }
-
     }
 }
 

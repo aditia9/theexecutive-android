@@ -14,8 +14,10 @@ import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.modules.home.HomeFragment
 import java.util.regex.Pattern
 
 
@@ -46,6 +48,14 @@ object Utils {
         val p = Pattern.compile("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#\$%^&+=])(?=\\S+\$).{8,}\$")
         val m = p.matcher(password)
         return m.matches()
+    }
+
+    fun isValidMobile(mobile: String): Boolean {
+       if(mobile.length >= 8 && mobile.length <=16){
+           return true
+       }
+        return false
+
     }
 
 
@@ -127,6 +137,12 @@ object Utils {
 
             }
         })
+    }
+
+    fun logout(context: Context){
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
+        Toast.makeText(context, context.getString(R.string.logout_success_message), Toast.LENGTH_SHORT).show()
+        FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
     }
 
 }

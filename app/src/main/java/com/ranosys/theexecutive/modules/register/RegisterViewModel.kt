@@ -287,6 +287,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         if (TextUtils.isEmpty(mobileNumber.get())){
             mobileNumberError.set(context.getString(R.string.mobile_error))
             isValid = false
+        }else if(!Utils.isValidMobile(mobileNumber.get())){
+            mobileNumberError.set(context.getString(R.string.valid_mobile_error))
+            isValid = false
         }
 
         if (TextUtils.isEmpty(dob.get()?.toString())){
@@ -301,15 +304,12 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         }
 
         if(selectedcountry.get() == countryHint){
-            //TODO - show an alert dialog to select country
             Toast.makeText(context, context.getString(R.string.empty_country_error), Toast.LENGTH_SHORT ).show()
             isValid = false
         }else if(selectedState.get() == stateHint){
-            //TODO - show an alert dialog to select state
             Toast.makeText(context, context.getString(R.string.empty_state_error), Toast.LENGTH_SHORT ).show()
             isValid = false
         }else if(selectedCity.get() == cityHint){
-            //TODO - show an alert dialog to select city
             Toast.makeText(context, context.getString(R.string.empty_city_error), Toast.LENGTH_SHORT ).show()
             isValid = false
         }

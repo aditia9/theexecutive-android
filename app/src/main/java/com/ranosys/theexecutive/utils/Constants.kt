@@ -43,5 +43,6 @@ object Constants {
         val COUNTRY_LABEL: String = "Country"
         val STATE_LABEL: String = "State"
         val CITY_LABEL: String = "City"
+        val USER_EMAIL: String = "user_email"
 
 }
