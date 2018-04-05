@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialog_outer_layout"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/one_fifty_dp"
+    android:layout_height="@dimen/one_sixty_dp"
     android:gravity="center"
     android:layout_gravity="center"
     android:background="@color/white"
@@ -18,6 +18,8 @@
             android:textSize="@dimen/eighteen_sp"
             android:layout_marginLeft="@dimen/thirty_dp"
             android:layout_marginRight="@dimen/thirty_dp"
+            android:layout_marginTop="@dimen/ten_dp"
+
             />
 
         <TextView

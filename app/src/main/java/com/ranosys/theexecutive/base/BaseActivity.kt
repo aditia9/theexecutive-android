@@ -62,6 +62,14 @@ open class BaseActivity: RunTimePermissionActivity(){
         toolbarViewModel?.title?.set(title)
     }
 
+    fun setTitleBackground(background: Int?){
+        toolbarViewModel?.titleBackground?.set(background)
+    }
+
+    fun setSubTitle(subTitle: String?){
+        toolbarViewModel?.subTitle?.set(subTitle)
+    }
+
     fun setLeftIcon(icon: Int?){
         toolbarViewModel?.leftIcon?.set(icon)
     }
