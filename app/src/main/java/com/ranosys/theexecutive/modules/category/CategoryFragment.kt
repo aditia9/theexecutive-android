@@ -82,21 +82,6 @@ class CategoryFragment : BaseFragment() {
             }
         })
 
-//        elv_parent_category.setOnScrollChangeListener(object :View.OnScrollChangeListener{
-//            override fun onScrollChange(p0: View?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
-//
-//                var diff= oldScrollY-scrollY
-//                if(diff >= 0) {
-//                    slideDown(p0!!.rootView.findViewById(R.id.tabLayout))
-//                }
-//                else{
-//                    slideUp(p0!!.rootView.findViewById(R.id.tabLayout))
-//                }
-//
-//            }
-//
-//        })
-
         elv_parent_category.setOnScrollListener(object: AbsListView.OnScrollListener{
             override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
             }
