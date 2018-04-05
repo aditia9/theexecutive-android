@@ -1,45 +1,47 @@
 package com.ranosys.theexecutive.modules.productDetail
 
 import android.content.Context
+import android.databinding.DataBindingUtil
 import android.support.v4.view.PagerAdapter
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
+
+
 
 /**
- * Created by Mohammad Sunny on 4/4/18.
+ * @Class An adapter class for all products showing in viewpager.
+ * @author Ranosys Technologies
+ * @Date 04-Apr-2018
  */
 class ProductViewPagerAdapter(context: Context) : PagerAdapter()  {
 
     private var mContext : Context? = null
+    private var layoutInflater : LayoutInflater? = null
 
     init {
         mContext = context
+        layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
     }
 
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return true
+        return view == `object` as View
     }
 
     override fun getCount(): Int {
-        return 0
-    }
-
-   /* override fun instantiateItem(container: ViewGroup?, position: Int): Any {
-        val itemView = mLayoutInflater!!.inflate(R.layout.product_detail_view, container, false)
-        return itemView
-
+        return 5
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as View?)
     }
 
-    override fun getItemPosition(`object`: Any?): Int {
-        val index = data!!.indexOf(`object`)
-        if (index == -1)
-            return PagerAdapter.POSITION_NONE
-        else
-            return index
-    }*/
-
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val listGroupBinding: ProductDetailViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.product_detail_view, container, false);
+        container.addView(listGroupBinding.root)
+        return listGroupBinding.root
+    }
 }

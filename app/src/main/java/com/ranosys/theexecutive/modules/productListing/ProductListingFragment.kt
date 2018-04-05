@@ -13,7 +13,9 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentProductListingBinding
+import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import kotlinx.android.synthetic.main.fragment_product_listing.*
 
 /**
@@ -89,7 +91,10 @@ class ProductListingFragment: BaseFragment() {
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.DummyResponse) {
                 Toast.makeText(activity, selectedProduct.name + " product selected", Toast.LENGTH_SHORT).show()
-                //TODO - geather necessary info and move to product details
+                val bundle = Bundle()
+                bundle.putString("product_sku",selectedProduct.sku)
+                FragmentUtils.addFragment(activity, ProductDetailFragment(), null, ProductDetailFragment::class.java.name, true)
+
             }
 
         })
