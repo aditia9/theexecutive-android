@@ -370,7 +370,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.sortOptionService>(ApiService.sortOptionService::class.java)?.getSortOptions(ApiConstants.BEARER + adminToken,  storeCode)
+        val callGet = retrofit?.create<ApiService.SortOptionService>(ApiService.SortOptionService::class.java)?.getSortOptions(ApiConstants.BEARER + adminToken,  storeCode)
 
         callGet?.enqueue(object : Callback<ProductListingDataClass.SortOptionResponse> {
             override fun onResponse(call: Call<ProductListingDataClass.SortOptionResponse>?, response: Response<ProductListingDataClass.SortOptionResponse>?) {
@@ -382,6 +382,27 @@ object AppRepository {
             }
 
             override fun onFailure(call: Call<ProductListingDataClass.SortOptionResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun filterOptionApi(categoryId: Int, callBack: ApiCallback<ProductListingDataClass.FilterOptionsResponse>) {
+        val retrofit = ApiClient.retrofit
+        val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.FilterOptionService>(ApiService.FilterOptionService::class.java)?.getFilterOptions(ApiConstants.BEARER + adminToken,  storeCode, categoryId = categoryId)
+
+        callGet?.enqueue(object : Callback<ProductListingDataClass.FilterOptionsResponse> {
+            override fun onResponse(call: Call<ProductListingDataClass.FilterOptionsResponse>?, response: Response<ProductListingDataClass.FilterOptionsResponse>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<ProductListingDataClass.FilterOptionsResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

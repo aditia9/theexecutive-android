@@ -35,7 +35,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     }
 
     fun getFilterOptions() {
-        AppRepository.sortOptionApi(object : ApiCallback<ProductListingDataClass.SortOptionResponse>{
+        AppRepository.sortOptionApi(object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("Sort option api", error.message?: "exception")
             }

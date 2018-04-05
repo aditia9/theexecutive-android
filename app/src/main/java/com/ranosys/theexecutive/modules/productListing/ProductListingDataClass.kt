@@ -23,4 +23,23 @@ class ProductListingDataClass {
     )
 
 
+    data class FilterOptionsResponse(
+            val total_count: Int,
+            val filters: List<Filter>,
+            val active_filters: List<Any>
+    )
+
+    data class Filter(
+            val name: String,
+            val code: String,
+            val options: List<Option>
+    )
+
+    data class Option(
+            val label: String,
+            val code: String,
+            val value: String
+    )
+
+
 }
