@@ -44,5 +44,6 @@ object Constants {
         val STATE_LABEL: String = "State"
         val CITY_LABEL: String = "City"
         val USER_EMAIL: String = "user_email"
+        val AIMATION_DURATION: Long = 300
 
 }

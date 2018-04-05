@@ -9,11 +9,12 @@ import android.os.Handler
 import android.os.Looper
 import android.support.annotation.Nullable
 import android.support.annotation.RequiresApi
+import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.TranslateAnimation
+import android.widget.AbsListView
 import android.widget.ExpandableListView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
@@ -81,18 +82,31 @@ class CategoryFragment : BaseFragment() {
             }
         })
 
-        elv_parent_category.setOnScrollChangeListener(object :View.OnScrollChangeListener{
-            override fun onScrollChange(p0: View?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
+//        elv_parent_category.setOnScrollChangeListener(object :View.OnScrollChangeListener{
+//            override fun onScrollChange(p0: View?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int) {
+//
+//                var diff= oldScrollY-scrollY
+//                if(diff >= 0) {
+//                    slideDown(p0!!.rootView.findViewById(R.id.tabLayout))
+//                }
+//                else{
+//                    slideUp(p0!!.rootView.findViewById(R.id.tabLayout))
+//                }
+//
+//            }
+//
+//        })
 
-                var diff= oldScrollY-scrollY
-                if(diff > 0) {
-                    slideDown(p0!!.rootView.findViewById(R.id.tabLayout))
+        elv_parent_category.setOnScrollListener(object: AbsListView.OnScrollListener{
+            override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+            }
+
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                if(scrollState != 0){
+                    slideDown(view.rootView.findViewById(R.id.tabLayout))
+                }else{
+                    slideUp(view.rootView.findViewById(R.id.tabLayout))
                 }
-                else{
-
-                    slideUp(p0!!.rootView.findViewById(R.id.tabLayout))
-                }
-
             }
 
         })
@@ -188,29 +202,13 @@ class CategoryFragment : BaseFragment() {
         return queryMap
     }
 
-    fun slideUp(view: View) {
-        view.visibility = View.VISIBLE
-        val animate = TranslateAnimation(
-                0f,
-                0f,
-                view.height.toFloat(),
-                0f)
-        animate.duration = 500
-        animate.fillAfter = true
-        view.startAnimation(animate)
+    private fun slideUp(child: TabLayout) {
+        child.clearAnimation()
+        child.animate().translationY(0f).duration = Constants.AIMATION_DURATION
     }
 
-    fun slideDown(view: View) {
-        view.visibility = View.INVISIBLE
-        val animate = TranslateAnimation(
-                0f,
-                0f,
-                0f,
-                view.height.toFloat())
-        animate.duration = 500
-        animate.fillAfter = true
-        view.startAnimation(animate)
+    private fun slideDown(child: TabLayout) {
+        child.clearAnimation()
+        child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
     }
-
-
 }
