@@ -56,6 +56,7 @@
             android:divider="@null"
             android:childDivider="@null"
             android:groupIndicator="@null"
+            android:choiceMode = "singleChoice"
             android:layout_marginTop="@dimen/twenty_four_dp"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
