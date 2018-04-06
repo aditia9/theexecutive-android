@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <variable name="productItemVM"
+            type="com.ranosys.theexecutive.modules.productDetail.ProductItemViewModel"/>
+    </data>
 
     <RelativeLayout
         android:id="@+id/relative"
@@ -207,10 +211,12 @@
         <RelativeLayout
             android:id="@+id/rl_add_to_box"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
+            android:layout_marginTop="@dimen/twenty_dp"
+            android:padding="@dimen/fifteen_dp"
             >
 
             <Button
@@ -218,10 +224,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_to_bag"
-                android:layout_marginTop="@dimen/twenty_dp"
-                android:layout_marginLeft="@dimen/twenty_dp"
+                android:layout_marginLeft="@dimen/five_dp"
                 android:padding="@dimen/ten_dp"
                 android:background="@drawable/button_border"
+                android:onClick="@{(view)-> productItemVM.btnClicked(view)}"
                 />
 
             <TextView
@@ -236,11 +242,6 @@
 
         </RelativeLayout>
 
-
-
-
     </RelativeLayout>
-
-
 
 </layout>

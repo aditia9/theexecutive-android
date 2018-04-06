@@ -90,10 +90,10 @@ class ProductListingFragment: BaseFragment() {
         val emptyList = ArrayList<ProductListingDataClass.DummyResponse>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.DummyResponse) {
-                Toast.makeText(activity, selectedProduct.name + " product selected", Toast.LENGTH_SHORT).show()
                 val bundle = Bundle()
                 bundle.putString("product_sku",selectedProduct.sku)
-                FragmentUtils.addFragment(activity, ProductDetailFragment(), null, ProductDetailFragment::class.java.name, true)
+                bundle.putString("product_name",selectedProduct.name)
+                FragmentUtils.addFragment(activity, ProductDetailFragment(), bundle, ProductDetailFragment::class.java.name, true)
 
             }
 

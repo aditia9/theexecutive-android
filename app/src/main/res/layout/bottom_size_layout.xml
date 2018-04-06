@@ -10,8 +10,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content"
+            android:background="#90ffffff"
             >
 
             <TextView
@@ -58,6 +58,7 @@
                 />
 
             <LinearLayout
+                android:id="@+id/ll_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -94,6 +95,38 @@
 
 
             </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_add_to_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_layout"
+                android:background="@color/white"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:padding="@dimen/fifteen_dp"
+                >
+
+                <Button
+                    android:id="@+id/btn_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done"
+                    android:padding="@dimen/ten_dp"
+                    android:background="@drawable/button_border"
+                    android:layout_marginLeft="@dimen/five_dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/twenty_dp"
+                    android:text="IDR  179,900"
+                    />
+
+            </RelativeLayout>
 
 
         </RelativeLayout>

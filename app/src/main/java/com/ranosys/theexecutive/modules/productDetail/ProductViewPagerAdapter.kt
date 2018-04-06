@@ -1,5 +1,7 @@
 package com.ranosys.theexecutive.modules.productDetail
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v4.view.PagerAdapter
@@ -16,14 +18,16 @@ import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
  * @author Ranosys Technologies
  * @Date 04-Apr-2018
  */
-class ProductViewPagerAdapter(context: Context) : PagerAdapter()  {
+class ProductViewPagerAdapter(context: ProductDetailFragment) : PagerAdapter()  {
 
-    private var mContext : Context? = null
-    private var layoutInflater : LayoutInflater? = null
+    private var mContext : ProductDetailFragment? = null
+    private var mLayoutInflater : LayoutInflater? = null
+    private var mProductItemViewModel: ProductItemViewModel? = null
 
     init {
         mContext = context
-        layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+        mLayoutInflater = context.activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+
     }
 
 
@@ -40,8 +44,23 @@ class ProductViewPagerAdapter(context: Context) : PagerAdapter()  {
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val listGroupBinding: ProductDetailViewBinding = DataBindingUtil.inflate(layoutInflater, R.layout.product_detail_view, container, false);
-        container.addView(listGroupBinding.root)
-        return listGroupBinding.root
+        val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(mLayoutInflater, R.layout.product_detail_view, container, false);
+        mProductItemViewModel = ViewModelProviders.of(mContext as ProductDetailFragment).get(ProductItemViewModel::class.java)
+        listGroupBinding?.btnAddToBag?.tag = position
+        listGroupBinding?.productItemVM = mProductItemViewModel
+        observeAddToBagEvent(position)
+        container.addView(listGroupBinding?.root)
+        return listGroupBinding!!.root
+    }
+
+    fun observeAddToBagEvent(position : Int){
+        mProductItemViewModel?.clickedAddBtnId?.observe(mContext as ProductDetailFragment, Observer<ProductItemViewModel.ViewClass> { viewClass ->
+            when(viewClass){
+                ProductItemViewModel.ViewClass(R.id.btn_add_to_bag, position) -> {
+                    (mContext as ProductDetailFragment).openBottomSheet()
+                }
+            }
+
+        })
     }
 }
