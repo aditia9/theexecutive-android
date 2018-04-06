@@ -16,6 +16,8 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var isLoading: Boolean = false
     var totalProductCount: Int = 0
 
+    var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData<MutableList<ProductListingDataClass.Filter>>()
+    var selectedFilterMap = hashMapOf<String, String>()
 
     fun getSortOptions() {
         AppRepository.sortOptionApi(object : ApiCallback<ProductListingDataClass.SortOptionResponse>{
@@ -35,19 +37,30 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     }
 
     fun getFilterOptions() {
-        AppRepository.sortOptionApi(object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
+        AppRepository.filterOptionApi(74, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
             override fun onException(error: Throwable) {
-                Utils.printLog("Sort option api", error.message?: "exception")
+                Utils.printLog("Filter option api", error.message?: "exception")
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Sort option api", errorMsg?: "error")
+                Utils.printLog("Filter option api", errorMsg?: "error")
             }
 
-            override fun onSuccess(sortOptions: ProductListingDataClass.SortOptionResponse?) {
-                //TODO - save sort options
-            }
+            override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
 
+                filterOptions?.run {
+                    for (filter in filterOptions.filters){
+                        selectedFilterMap.put(filter.name, "")
+                    }
+                }
+
+                val priceFilter = filterOptions?.filters?.filter { option -> option.name == "Price" }
+                val filters = filterOptions?.filters?.filterNot { option -> option.name == "Price" }
+
+                filterOptionList?.value = filters as MutableList<ProductListingDataClass.Filter>
+
+
+            }
         })
     }
 

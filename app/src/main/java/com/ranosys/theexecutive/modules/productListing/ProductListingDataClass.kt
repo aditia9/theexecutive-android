@@ -32,14 +32,17 @@ class ProductListingDataClass {
     data class Filter(
             val name: String,
             val code: String,
-            val options: List<Option>
+            val options: List<FilterChildOption>
     )
 
-    data class Option(
+    data class FilterChildOption(
             val label: String,
             val code: String,
             val value: String
     )
+
+    data class SelectedFilter(val filterName: String?,
+                              val filterValue: String?)
 
 
 }

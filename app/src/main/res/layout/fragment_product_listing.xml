@@ -79,6 +79,7 @@
             android:text="@string/filter_by"
             android:gravity="center"
             android:textSize="@dimen/eighteen_sp"
+            android:clickable="false"
             android:textAllCaps="true"
             android:letterSpacing=".1"
             app:layout_constraintRight_toRightOf="@id/guideline_right"

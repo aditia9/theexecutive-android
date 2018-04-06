@@ -1,17 +1,22 @@
 package com.ranosys.theexecutive.modules.productListing
 
+import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
+import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
 import com.ranosys.theexecutive.databinding.FragmentProductListingBinding
 import com.ranosys.theexecutive.utils.Constants
 import kotlinx.android.synthetic.main.fragment_product_listing.*
@@ -25,8 +30,12 @@ class ProductListingFragment: BaseFragment() {
 
 
     private lateinit var mBinding: FragmentProductListingBinding
+    private lateinit var filterOptionBinding: DialogFilterOptionBinding
     private lateinit var mViewModel: ProductListingViewModel
     private lateinit var productListAdapter: ProductListAdapter
+    private lateinit var filterOptionAdapter: FilterOptionAdapter
+
+    private lateinit var filterOptionDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,20 +45,47 @@ class ProductListingFragment: BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+
+
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_listing, container,  false)
         mViewModel = ViewModelProviders.of(this).get(ProductListingViewModel::class.java)
 
-        //TODO - call sort option api
-        mViewModel.getSortOptions()
-        //TODO - call filter option api
-        mViewModel.getFilterOptions()
-        //TODO - call product listing api
         mViewModel.getProductListing(category_id.toString())
+        mViewModel.getSortOptions()
+        mViewModel.getFilterOptions()
+
+        //filter screen binding
+        filterOptionBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_filter_option, container,  false)
+        filterOptionDialog = Dialog(activity as Context, R.style.MaterialDialogSheet)
+        filterOptionDialog.setContentView(filterOptionBinding.root)
+        filterOptionDialog.setCancelable(true)
+        filterOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        filterOptionDialog.window.setGravity(Gravity.BOTTOM)
+
+        filterOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
+        filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
 
         observeProductList()
+        observeFilterOptions()
 
         return mBinding.root
     }
+
+    private fun observeFilterOptions() {
+        mViewModel.filterOptionList?.observe(this, Observer { filterList ->
+            if(filterList?.isNotEmpty()!!){
+                mBinding.tvFilterOption.isClickable = true
+                filterOptionAdapter.optionsList = filterList
+                filterOptionAdapter.notifyDataSetChanged()
+            }else{
+                mBinding.tvFilterOption.isClickable = false
+
+            }
+
+        })
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,8 +129,12 @@ class ProductListingFragment: BaseFragment() {
             }
 
         })
+
         product_list.adapter = productListAdapter
 
+        tv_filter_option.setOnClickListener {
+            filterOptionDialog.show()
+        }
     }
 
     private fun observeProductList() {
