@@ -146,4 +146,12 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun getFilterOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Query("id")categoryId: Int): Call<ProductListingDataClass.FilterOptionsResponse>
     }
+
+    interface ProductListingService {
+        @GET("rest/{store_code}/V1/productslist/?id=5&product_list_limit=10&p=1&product_list_order=price&product_list_dir=")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getProductList(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Query("id")categoryId: Int): Call<ProductListingDataClass.ProductListingResponse>
+    }
 }

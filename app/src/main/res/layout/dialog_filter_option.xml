@@ -1,78 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:paddingBottom="@dimen/sixteen_dp"
-    android:paddingTop="@dimen/sixteen_dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
+    <android.support.constraint.ConstraintLayout
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
-
-    <TextView
-        android:id="@+id/tv_price_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/price_range_label"
-        android:theme="@style/sub_heading_theme"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-
-    <com.ranosys.theexecutive.RangeSeekBar
-        android:id="@+id/price_range_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:rsb_lineColorSelected="@color/theme_black_color"
-        app:rsb_lineColorEdge="@color/hint_color"
-        app:rsb_textPadding="@dimen/sixteen_dp"
-        app:rsb_min="1"
-        app:rsb_thumbPrimaryColor="@color/theme_black_color"
-        app:rsb_thumbSecondaryColor="@color/colorAccent"
-        app:rsb_seekBarHeight="5dp"
-        app:rsb_thumbResId="@drawable/mythumb"
-        app:rsb_cellMode="number"
-        app:rsb_seekBarMode="range"
-        app:rsb_progressHintMode="alwaysShow"/>
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/sixteen_dp"
+        android:paddingTop="@dimen/sixteen_dp">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
+
+        <TextView
+            android:id="@+id/title_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/heading_theme"
+            android:text="FILTER"
+            app:layout_constraintRight_toRightOf="@id/guideline_right"
+            app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/cancel_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cancel"
+            app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/title_filter"/>
 
 
-    <ExpandableListView
-        android:id="@+id/filter_list"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        android:childDivider="@null"
-        android:groupIndicator="@null"
-        android:choiceMode = "singleChoice"
-        android:layout_marginTop="@dimen/twenty_four_dp"
-        app:layout_constraintRight_toRightOf="@id/guideline_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_left"
-        app:layout_constraintTop_toBottomOf="@id/dummy_range_bar"/>
+        <TextView
+            android:id="@+id/tv_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            app:layout_constraintBaseline_toBaselineOf="@id/title_filter"
+            app:layout_constraintRight_toRightOf="@id/guideline_right"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
-        android:id="@+id/btn_apply"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="wrap_content"
-        android:text="@string/apply_filters"
-        android:theme="@style/button_theme"
-        android:background="@drawable/black_button_bg"
-        android:layout_marginTop="@dimen/twenty_four_dp"
-        app:layout_constraintEnd_toEndOf="@+id/guideline_right"
-        app:layout_constraintStart_toStartOf="@+id/guideline_left"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <TextView
+            android:id="@+id/tv_price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price_range_label"
+            android:theme="@style/sub_heading_theme"
+            android:layout_marginTop="@dimen/thirty_six_dp"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/title_filter"/>
 
-</android.support.constraint.ConstraintLayout>
+        <com.ranosys.theexecutive.RangeSeekBar
+            android:id="@+id/price_range_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:rsb_lineColorSelected="@color/theme_black_color"
+            app:rsb_lineColorEdge="@color/hint_color"
+            app:rsb_thumbPrimaryColor="@color/theme_black_color"
+            app:rsb_seekBarHeight="@dimen/four_dp"
+            app:rsb_thumbResId="@drawable/mythumb"
+            app:rsb_cellMode="number"
+            app:rsb_seekBarMode="range"
+            android:layout_marginLeft="@dimen/six_dp"
+            android:layout_marginRight="@dimen/six_dp"
+            app:layout_constraintRight_toRightOf="@id/guideline_right"
+            app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/tv_price_label"
+            android:layout_marginTop="@dimen/twelve_dp"
+            app:rsb_progressHintMode="alwaysShow"/>
+
+        <com.ranosys.theexecutive.PrefixEditText
+            android:id="@+id/et_min_price"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:tag="IDR "
+            android:textStyle="bold"
+            android:inputType="numberDecimal"
+            app:layout_constraintTop_toBottomOf="@id/price_range_bar"
+            app:layout_constraintRight_toLeftOf="@+id/et_max_price"
+            android:layout_marginRight="@dimen/six_dp"
+            app:layout_constraintLeft_toLeftOf="@id/guideline_left"/>
+
+        <com.ranosys.theexecutive.PrefixEditText
+            android:id="@+id/et_max_price"
+            android:tag="IDR "
+            android:gravity="bottom"
+            android:layout_width="@dimen/match_constraint"
+            android:inputType="numberDecimal"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/six_dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/et_min_price"
+            app:layout_constraintTop_toBottomOf="@id/price_range_bar"
+            app:layout_constraintLeft_toRightOf="@id/et_min_price"
+            app:layout_constraintRight_toRightOf="@id/guideline_right"/>
+
+
+        <ExpandableListView
+            android:id="@+id/filter_list"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:divider="@null"
+            android:childDivider="@null"
+            android:groupIndicator="@null"
+            android:choiceMode = "singleChoice"
+            android:scrollbars="none"
+            android:layout_marginTop="@dimen/twenty_four_dp"
+            app:layout_constraintRight_toRightOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/et_min_price"
+            app:layout_constraintBottom_toTopOf="@+id/btn_apply"/>
+
+        <Button
+            android:id="@+id/btn_apply"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:text="@string/apply_filters"
+            android:theme="@style/button_theme"
+            android:background="@drawable/black_button_bg"
+            android:layout_marginTop="@dimen/twenty_four_dp"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

@@ -57,23 +57,18 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
     override fun getChild(groupPosition: Int, childPosition: Int) = optionsList?.get(groupPosition)?.options?.get(childPosition)
 
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
+
         val layoutInflater = LayoutInflater.from(parent.context)
         val optionBinding: FilterOptionItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_item, parent, false);
         optionBinding.option = getChild(groupPosition, childPosition)
 
-        if(getChild(groupPosition, childPosition)?.value == productListVM.selectedFilterMap.get(getGroup(groupPosition)?.name)){
-            optionBinding.isSelectedIv.visibility = View.VISIBLE
-        }else{
-            optionBinding.isSelectedIv.visibility = View.GONE
-        }
-
         val filterList = parent as ExpandableListView
+
         filterList.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
             override fun onChildClick(list: ExpandableListView?, parent: View?, groupPos: Int, childPos: Int, id: Long): Boolean {
                 //store selected filter
                 val filter = productListVM.filterOptionList?.value?.get(groupPos)
                 productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
-                optionBinding.isSelectedIv.visibility = View.VISIBLE
                 return true
             }
         })

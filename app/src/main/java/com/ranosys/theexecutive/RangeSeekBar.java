@@ -820,13 +820,13 @@ public class RangeSeekBar extends View {
 
     public void setLeftProgressDescription(String progress){
         if (leftSB != null){
-            leftSB.setProgressHint(progress);
+            leftSB.setProgressHint("IDR " + progress);
         }
     }
 
     public void setRightProgressDescription(String progress){
         if (rightSB != null){
-            rightSB.setProgressHint(progress);
+            rightSB.setProgressHint("IDR " + progress);
         }
     }
 

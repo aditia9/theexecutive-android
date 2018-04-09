@@ -12,15 +12,15 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/six_dp"
-        android:paddingTop="@dimen/four_dp"
-        android:paddingBottom="@dimen/four_dp">
+        android:layout_marginTop="@dimen/twelve_dp"
+        android:paddingTop="@dimen/six_dp"
+        android:paddingBottom="@dimen/six_dp">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/list_group_theme"
+            android:theme="@style/sub_heading_theme"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:text="@{filter.name}"/>

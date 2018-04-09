@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View"/>
+
         <variable
             name="option"
             type="com.ranosys.theexecutive.modules.productListing.ProductListingDataClass.FilterChildOption"/>
@@ -14,8 +16,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/four_dp"
-        android:paddingBottom="@dimen/four_dp">
+        android:paddingTop="@dimen/six_dp"
+        android:paddingBottom="@dimen/six_dp">
 
         <TextView
             android:id="@+id/option_name_tv"
@@ -32,7 +34,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/select_option"
             android:layout_marginEnd="@dimen/thirtyTwo_dp"
-            android:visibility="gone"
+            android:visibility="@{option.isSelected ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/tick"
             app:layout_constraintBottom_toBottomOf="@+id/option_name_tv"
             app:layout_constraintRight_toRightOf="parent"
