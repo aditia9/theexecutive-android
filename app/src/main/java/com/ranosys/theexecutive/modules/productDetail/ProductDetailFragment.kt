@@ -33,6 +33,7 @@ class ProductDetailFragment : BaseFragment() {
     lateinit var productDetailViewModel : ProductDetailViewModel
     var bottomSheetBehavior = BottomSheetBehavior<View>()
     var sku = "5-BLWBBX417L014"
+    lateinit var sizeList : MutableList<Int>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentProductDetailBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container, false)
@@ -99,10 +100,9 @@ class ProductDetailFragment : BaseFragment() {
                 if (response is ProductDetailResponse) {
                     response.extension_attributes?.configurable_product_options?.run {
                         for(i in 0..size-1){
-                            when(get(i).label){
-                                "Color","Size" -> {
-                                    getProductOptions(get(i).attribute_id)
-                                }
+                            if(get(i).label.equals("Size")){
+                                getProductOptions(get(i).attribute_id)
+                                break
                             }
                         }
                     }
@@ -125,7 +125,7 @@ class ProductDetailFragment : BaseFragment() {
             override fun onChanged(apiResponse: ApiResponse<List<ProductOptionsResponse>>?) {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is List<*>) {
-                    ///////////////////////////
+
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
                 }
