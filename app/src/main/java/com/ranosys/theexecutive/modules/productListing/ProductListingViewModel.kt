@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 import java.util.*
 
@@ -13,7 +14,7 @@ import java.util.*
  */
 class ProductListingViewModel(application: Application): BaseViewModel(application) {
 
-    var partialProductList: MutableLiveData<ArrayList<ProductListingDataClass.DummyResponse>> = MutableLiveData()
+    var maskedProductList: MutableLiveData<ArrayList<ProductListingDataClass.ProductMaskedResponse>> = MutableLiveData()
     var isLoading: Boolean = false
     var totalProductCount: Int = 0
 
@@ -21,6 +22,8 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var priceFilter: MutableLiveData<ProductListingDataClass.Filter> = MutableLiveData()
     var selectedFilterMap = hashMapOf<String, String>()
     var selectedPriceRange = ProductListingDataClass.PriceRange()
+
+    var productListResponse: ProductListingDataClass.ProductListingResponse? = null
 
     fun getSortOptions() {
         AppRepository.sortOptionApi(object : ApiCallback<ProductListingDataClass.SortOptionResponse>{
@@ -57,11 +60,8 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                     }
                 }
 
-                val filters = filterOptions?.filters?.filterNot { option -> option.name == "Price" }
-
                 priceFilter.value = filterOptions?.filters?.filter { option -> option.name == "Price" }?.get(0)
-
-                filterOptionList?.value = filters as MutableList<ProductListingDataClass.Filter>
+                filterOptionList?.value = filterOptions?.filters?.toMutableList()
 
 
             }
@@ -71,36 +71,84 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     fun getProductListing(sku: String) {
         isLoading = true
 
-        AppRepository.getProductList(object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
+        AppRepository.getProductList(prepareProductListingRequest(sku), object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
             override fun onException(error: Throwable) {
-                Utils.printLog("product listing", error.message?: "exception")            }
+                Utils.printLog("product listing", error.message?: "exception")
+            }
 
             override fun onError(errorMsg: String) {
                 Utils.printLog("product listing", errorMsg)            }
 
-            override fun onSuccess(t: ProductListingDataClass.ProductListingResponse?) {
-                //TODO - modify data according to use and show list and pagination
+            override fun onSuccess(response: ProductListingDataClass.ProductListingResponse?) {
+
+                productListResponse = response
+                totalProductCount = productListResponse?.total_count ?: 0
+
+                val maskedResponse: ArrayList<ProductListingDataClass.ProductMaskedResponse> = ArrayList()
+                //TODO - modify data according to use and show list and pagination i.e create masked response
+                productListResponse?.items.let {
+                    for(product in productListResponse!!.items){
+                        val sku = product.sku
+                        val name = product.name
+                        val productType = product.type_id
+                        var price = 0.0
+                        var specialPrice = 0.0
+                        if(productType == "configurable"){
+                            price = product.extension_attributes.regular_price
+                            specialPrice = product.extension_attributes.final_price
+                        }else{
+                            price = 0.0
+                        }
+
+                        var type = ""
+                        var discount = (((price - specialPrice).div(price)).times(100)).toInt()
+
+                        var imgUrl = ""
+                        if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].label.toString()
+
+                        val product = ProductListingDataClass.ProductMaskedResponse(
+                                sku = sku,
+                                name = name,
+                                normalPrice = price.toString(),
+                                specialPrice = specialPrice.toString(),
+                                type = type,
+                                discountPer = discount,
+                                imageUrl = imgUrl)
+
+                        maskedResponse.add(product)
+
+                    }
+                }
+
+                var list = maskedProductList.value
+                if(null == list){
+                    list = arrayListOf<ProductListingDataClass.ProductMaskedResponse>()
+                }
+                list.addAll(maskedResponse)
+
+                maskedProductList.value = list
             }
-
         })
-        //dummy data
-        val response: ArrayList<ProductListingDataClass.DummyResponse> = ArrayList()
-
-        response.add(ProductListingDataClass.DummyResponse())
-        response.add(ProductListingDataClass.DummyResponse(normalPrice = "1,266.900", specialPrice = "193.600"))
-        response.add(ProductListingDataClass.DummyResponse())
-        response.add(ProductListingDataClass.DummyResponse(normalPrice = "100,266.900", specialPrice = "13.60"))
-        response.add(ProductListingDataClass.DummyResponse())
-        response.add(ProductListingDataClass.DummyResponse())
-        response.add(ProductListingDataClass.DummyResponse(normalPrice = "1,266.900", specialPrice = "193.600"))
-        response.add(ProductListingDataClass.DummyResponse())
-        response.add(ProductListingDataClass.DummyResponse())
-        response.add(ProductListingDataClass.DummyResponse(normalPrice = "1,200", specialPrice = "21"))
-
-        partialProductList.value = response
 
         // when data recieved
         isLoading = false
+    }
+
+    private fun prepareProductListingRequest(sku: String): Map<String, String> {
+        var requestMap: MutableMap<String, String> = mutableMapOf<String, String>()
+
+        requestMap.put("id", "74")
+        requestMap.put("product_list_limit", Constants.LIST_PAGE_ITEM_COUNT.toString())
+        var page = (maskedProductList.value?.size)?.div(10)?.plus(1) ?: 0
+        requestMap.put("p", page.toString()) // pageCout
+        //requestMap.put("product_list_order",) sort option
+        //requestMap.put("product_list_dir","asc/desc) sort option
+
+        for((key, value) in selectedFilterMap){
+            requestMap.put(key, value)
+        }
+
+        return requestMap
     }
 
 

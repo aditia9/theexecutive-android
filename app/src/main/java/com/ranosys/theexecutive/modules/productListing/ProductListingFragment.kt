@@ -17,11 +17,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.RangeSeekBar
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
 import com.ranosys.theexecutive.databinding.FragmentProductListingBinding
+import com.ranosys.theexecutive.rangeBar.RangeSeekBar
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.dialog_filter_option.*
 import kotlinx.android.synthetic.main.fragment_product_listing.*
 import java.text.NumberFormat
 import java.util.*
@@ -39,7 +41,6 @@ class ProductListingFragment: BaseFragment() {
     private lateinit var mViewModel: ProductListingViewModel
     private lateinit var productListAdapter: ProductListAdapter
     private lateinit var filterOptionAdapter: FilterOptionAdapter
-
     private lateinit var filterOptionDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,9 +57,7 @@ class ProductListingFragment: BaseFragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_listing, container,  false)
         mViewModel = ViewModelProviders.of(this).get(ProductListingViewModel::class.java)
 
-        mViewModel.getProductListing(category_id.toString())
-        mViewModel.getSortOptions()
-        mViewModel.getFilterOptions()
+        callInitialApis()
 
         //filter screen binding
         filterOptionBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_filter_option, container,  false)
@@ -78,27 +77,42 @@ class ProductListingFragment: BaseFragment() {
         return mBinding.root
     }
 
+    private fun callInitialApis() {
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            mViewModel.getProductListing(category_id.toString())
+            mViewModel.getSortOptions()
+            mViewModel.getFilterOptions()
+
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+    }
+
     private fun observePriceFilter() {
         mViewModel.priceFilter.observe(this, Observer { priceFilter ->
+            hideLoading()
+            filterOptionBinding.priceRangeBar.setCurrency(priceFilter?.options?.get(0)?.label)
             val range = priceFilter?.options?.get(0)?.value
             val min = range?.split("-")?.get(0)?.toFloat()
             val max = range?.split("-")?.get(1)?.toFloat()
             if(max == min){
-
+                filterOptionDialog.price_range_bar.visibility = View.GONE
             }else{
-                filterOptionBinding.priceRangeBar.setRange(min!!, max!!)
-                var myFormat = NumberFormat.getInstance()
-                filterOptionBinding.etMinPrice.setText(myFormat.format(min.toLong()))
-                filterOptionBinding.etMaxPrice.setText(myFormat.format(max.toLong()))
+                filterOptionDialog.price_range_bar.visibility = View.VISIBLE
+                filterOptionBinding.priceRangeBar.setRangeValues(min, max)
+                filterOptionBinding.etMinPrice.setText(min.toString())
+                filterOptionBinding.etMaxPrice.setText(max.toString())
             }
         })
     }
 
     private fun observeFilterOptions() {
         mViewModel.filterOptionList?.observe(this, Observer { filterList ->
+            hideLoading()
             if(filterList?.isNotEmpty()!!){
                 mBinding.tvFilterOption.isClickable = true
-                filterOptionAdapter.optionsList = filterList
+                filterOptionAdapter.optionsList = filterList.filterNot { it.name == "price" }
             }else{
                 mBinding.tvFilterOption.isClickable = false
             }
@@ -135,18 +149,18 @@ class ProductListingFragment: BaseFragment() {
 
                     if(mViewModel.isLoading.not() && allProductLoaded.not() && shouldPaging){
                         Toast.makeText(recyclerView?.context, "load data", Toast.LENGTH_SHORT).show()
-                        //TODO - call product listing api
+                        mViewModel.getProductListing(category_id.toString())
                     }
                 }
             }
         })
 
 
-        val emptyList = ArrayList<ProductListingDataClass.DummyResponse>()
+        val emptyList = ArrayList<ProductListingDataClass.ProductMaskedResponse>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
-            override fun onItemClick(selectedProduct: ProductListingDataClass.DummyResponse) {
+            override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
                 Toast.makeText(activity, selectedProduct.name + " product selected", Toast.LENGTH_SHORT).show()
-                //TODO - geather necessary info and move to product details
+                //FragmentUtils.addFragment(context!!, ProductDetailFragment.newInstance(mViewModel.productListResponse), null, ProductDetailFragment::class.java.name, true)
             }
 
         })
@@ -157,11 +171,9 @@ class ProductListingFragment: BaseFragment() {
             prepareFilterDialog()
             filterOptionDialog.show()
         }
-
-
-
-
     }
+
+
 
     private fun prepareFilterDialog() {
         //method holding all UI interaction of filter dialog
@@ -180,36 +192,21 @@ class ProductListingFragment: BaseFragment() {
             })
 
             filterOptionBinding.btnApply.setOnClickListener(View.OnClickListener {
-                //TODO - collect selected filter
-                mViewModel.selectedPriceRange.min = filterOptionBinding.priceRangeBar.min.toString()
-                mViewModel.selectedPriceRange.max = filterOptionBinding.priceRangeBar.max.toString()
-                //TODO - close dialog
+                showLoading()
+                mViewModel.selectedPriceRange.min = filterOptionBinding.priceRangeBar.selectedMinValue.toString()
+                mViewModel.selectedPriceRange.max = filterOptionBinding.priceRangeBar.selectedMaxValue.toString()
                 filterOptionDialog.dismiss()
-                //TODO - call listing api
-                mViewModel.getProductListing("dummy")
+                mViewModel.getProductListing(category_id.toString())
             })
 
             //price range bar listeners
             var myFormat = NumberFormat.getInstance()
-            filterOptionBinding.priceRangeBar.setOnRangeChangedListener(object: RangeSeekBar.OnRangeChangedListener{
-                override fun onRangeChanged(view: RangeSeekBar?, min: Float, max: Float, isFromUser: Boolean) {
-                    if (isFromUser) {
-                        val minimum = min.toInt()
-                        val maximum = max.toInt()
-
-                        filterOptionBinding.priceRangeBar.setLeftProgressDescription(myFormat.format(minimum.toLong()))
-                        filterOptionBinding.priceRangeBar.setRightProgressDescription(myFormat.format(maximum.toLong()))
-                        filterOptionBinding.etMinPrice.setText(myFormat.format(minimum.toLong()))
-                        filterOptionBinding.etMaxPrice.setText(myFormat.format(maximum.toLong()))
-
-                    }
+            filterOptionBinding.priceRangeBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Float>{
+                override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<Float>?, minValue: Float?, maxValue: Float?) {
+                    filterOptionBinding.etMinPrice.setText(minValue.toString())
+                    filterOptionBinding.etMaxPrice.setText(maxValue.toString())
                 }
 
-                override fun onStartTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
-                }
-
-                override fun onStopTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
-                }
 
             })
 
@@ -223,9 +220,13 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        if(s.toString().replace(",", "").toFloat() >=  filterOptionBinding.priceRangeBar.min){
-                            //filterOptionBinding.priceRangeBar.setValue(s.toString().replace(",", "").toFloat(), filterOptionBinding.priceRangeBar.max)
-                        }
+                        var input = s.toString().toFloat()
+                        val range = mViewModel.priceFilter.value?.options?.get(0)?.value
+                        val min = range?.split("-")?.get(0)?.toFloat()
+                        val max = range?.split("-")?.get(1)?.toFloat()
+
+                        if(input <= min!! && input >= max!!) input = min
+                        filterOptionBinding.priceRangeBar.selectedMinValue = input
                     }
                 }
             })
@@ -239,10 +240,12 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = s.toString().replace(",", "").toFloat()
-                        if(input <=  filterOptionBinding.priceRangeBar.max && input >  filterOptionBinding.priceRangeBar.min){
-                            //filterOptionBinding.priceRangeBar.setValue(filterOptionBinding.priceRangeBar.min, s.toString().replace(",", "").toFloat())
-                        }
+                        var input = s.toString().toFloat()
+                        val range = mViewModel.priceFilter.value?.options?.get(0)?.value
+                        val min = range?.split("-")?.get(0)?.toFloat()
+                        val max = range?.split("-")?.get(1)?.toFloat()
+                        if(input <=  min!! || input >= max!!) input = max!!
+                        filterOptionBinding.priceRangeBar.selectedMaxValue = input
                     }
                 }
             })
@@ -254,6 +257,9 @@ class ProductListingFragment: BaseFragment() {
         //reset price filter
         mViewModel.selectedPriceRange.min = ""
         mViewModel.selectedPriceRange.max = ""
+        filterOptionBinding.priceRangeBar.resetSelectedValues()
+        filterOptionDialog.et_max_price.setText(filterOptionBinding.priceRangeBar.selectedMaxValue.toString())
+        filterOptionDialog.et_min_price.setText(filterOptionBinding.priceRangeBar.selectedMinValue.toString())
 
         //reset other filters
         val keys = mViewModel.selectedFilterMap.keys
@@ -264,8 +270,9 @@ class ProductListingFragment: BaseFragment() {
     }
 
     private fun observeProductList() {
-        mViewModel.partialProductList.observe(this, Observer<ArrayList<ProductListingDataClass.DummyResponse>> { partialProductList ->
+        mViewModel.maskedProductList.observe(this, Observer<ArrayList<ProductListingDataClass.ProductMaskedResponse>> { partialProductList ->
             partialProductList?.run {
+                hideLoading()
                 productListAdapter.addProducts(partialProductList)
             }
         })

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{option.label}"
-            android:layout_marginStart="@dimen/field_start_padding"
+            android:layout_marginStart="@dimen/six_dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 

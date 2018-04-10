@@ -4,16 +4,15 @@ package com.ranosys.theexecutive.modules.productListing
  * Created by nikhil on 20/3/18.
  */
 class ProductListingDataClass {
-    class ProductListingRequest()
 
-    class DummyResponse(var sku: String = "0",
-                        var name: String = "Demo Longggg Naaaaame",
-                        var normalPrice: String = "6.9",
-                        var specialPrice: String = "2,42.900",
-                        var type: String = "New",
-                        var discountPer: Int = 40,
-                        var collectionTag: String = "Chinese Collections",
-                        var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
+    class ProductMaskedResponse(var sku: String = "0",
+                                var name: String = "Demo Longggg Naaaaame",
+                                var normalPrice: String = "6.9",
+                                var specialPrice: String = "2,42.900",
+                                var type: String = "New",
+                                var discountPer: Int = 40,
+                                var collectionTag: String = "Chinese Collections",
+                                var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
 
 
     data class SortOptionResponse(
@@ -41,8 +40,6 @@ class ProductListingDataClass {
             var isSelected: Boolean = false
     )
 
-    data class SelectedFilter(val filterName: String?,
-                              val filterValue: String?)
 
     data class PriceRange(var min: String = "",
                           var max: String = "")
@@ -58,13 +55,13 @@ class ProductListingDataClass {
             val sku: String,
             val name: String,
             val attribute_set_id: Int,
-            val price: Int,
+            val price: Double,
             val status: Int,
             val visibility: Int,
             val type_id: String,
             val created_at: String,
             val updated_at: String,
-            val weight: Int,
+            val weight: Double,
             val extension_attributes: ExtensionAttributes,
             val product_links: List<Any>,
             val options: List<Any>,
@@ -79,8 +76,8 @@ class ProductListingDataClass {
             val stock_item: StockItem,
             val configurable_product_options: List<ConfigurableProductOption>,
             val configurable_product_links: List<Int>,
-            val regular_price: Int,
-            val final_price: Int
+            val regular_price: Double,
+            val final_price: Double
     )
 
     data class ConfigurableProductOption(
@@ -142,7 +139,7 @@ class ProductListingDataClass {
 
     data class CustomAttribute(
             val attribute_code: String,
-            val value: String
+            val value: Any
     )
 
 

@@ -16,9 +16,10 @@ import com.ranosys.theexecutive.databinding.ProductListItemBinding
 /**
  * Created by nikhil on 20/3/18.
  */
-class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.DummyResponse>, var clickListener: OnItemClickListener): RecyclerView.Adapter<ProductListAdapter.Holder>() {
+class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.ProductMaskedResponse>, var clickListener: OnItemClickListener): RecyclerView.Adapter<ProductListAdapter.Holder>() {
+
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(productList[position], listener = clickListener)
+        holder?.bind(productList[position], position,  listener = clickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -29,7 +30,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Dumm
     override fun getItemCount() = productList.size
 
 
-    fun addProducts(products: ArrayList<ProductListingDataClass.DummyResponse>){
+    fun addProducts(products: ArrayList<ProductListingDataClass.ProductMaskedResponse>){
         val lastPos = productList.size
         productList.addAll(products)
         notifyItemRangeInserted(lastPos, products.size)
@@ -37,7 +38,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Dumm
 
     class Holder(val itemBinding: ProductListItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
 
-        fun bind(product: ProductListingDataClass.DummyResponse, listener: ProductListAdapter.OnItemClickListener){
+        fun bind(product: ProductListingDataClass.ProductMaskedResponse, position : Int, listener: ProductListAdapter.OnItemClickListener){
 
 
             val normalPrice = "IDR\u00A0" + product.normalPrice
@@ -53,12 +54,12 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Dumm
             itemBinding.tvNormalPrice.text = ss
 
             itemView.setOnClickListener {
-                listener.onItemClick(product)
+                listener.onItemClick(product, position)
             }
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClick(selectedProduct: ProductListingDataClass.DummyResponse)
+        fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int)
     }
 }

@@ -44,5 +44,7 @@ object Constants {
         val STATE_LABEL: String = "State"
         val CITY_LABEL: String = "City"
         val USER_EMAIL: String = "user_email"
+        val PRODUCT_LIST_RESPONSE: String = "product_list_response"
+        val LIST_PAGE_ITEM_COUNT: Int = 10
 
 }

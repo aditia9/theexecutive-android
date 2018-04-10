@@ -408,11 +408,11 @@ object AppRepository {
         })
     }
 
-    fun getProductList(callBack: ApiCallback<ProductListingDataClass.ProductListingResponse>) {
+    fun getProductList(requestMap: Map<String, String>, callBack: ApiCallback<ProductListingDataClass.ProductListingResponse>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.ProductListingService>(ApiService.ProductListingService::class.java)?.getProductList(ApiConstants.BEARER + adminToken,  storeCode, categoryId = 0)
+        val callGet = retrofit?.create<ApiService.ProductListingService>(ApiService.ProductListingService::class.java)?.getProductList(ApiConstants.BEARER + adminToken,  storeCode, requestMap)
 
         callGet?.enqueue(object : Callback<ProductListingDataClass.ProductListingResponse> {
             override fun onResponse(call: Call<ProductListingDataClass.ProductListingResponse>?, response: Response<ProductListingDataClass.ProductListingResponse>?) {
