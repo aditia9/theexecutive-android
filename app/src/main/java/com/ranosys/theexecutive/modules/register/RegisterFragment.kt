@@ -52,9 +52,9 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val mViewDataBinding : FragmentRegisterBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
+        val mViewDataBinding : FragmentRegisterBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
-        mViewDataBinding?.registerViewModel =  registerViewModel
+        mViewDataBinding.registerViewModel =  registerViewModel
 
         registerViewModel.isSocialLogin = isFromSocialLogin
         registerViewModel.firstName.set(socialLoginFirstName)
@@ -75,6 +75,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             Utils.showDialog(activity as Context, getString(R.string.verify_email_message), context?.getString(android.R.string.ok), "", object: DialogOkCallback{
                 override fun setDone(done: Boolean) {
                     FragmentUtils.addFragment(activity as Context, LoginFragment(), null, LoginFragment::class.java.name, false)
+
                 }
 
             } )
@@ -86,6 +87,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
                 hideLoading()
                 Toast.makeText(activity, getString(R.string.register_successfull), Toast.LENGTH_SHORT).show()
                 FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, false)
+                registerViewModel.apiDirectRegSuccessResponse?.value = null
             }
         })
     }
@@ -94,6 +96,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel.apiFailureResponse?.observe(this, android.arch.lifecycle.Observer { errorMsg ->
             hideLoading()
             Utils.showDialog(activity as Context, errorMsg, context?.getString(android.R.string.ok), "", null)
+            registerViewModel.apiDirectRegSuccessResponse?.value = null
         })
     }
 

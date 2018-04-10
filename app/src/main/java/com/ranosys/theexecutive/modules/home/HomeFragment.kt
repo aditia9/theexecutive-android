@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.home
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
@@ -50,6 +51,7 @@ class HomeFragment : BaseFragment() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
                 view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_accent_color))
+                view.setTypeface(null, Typeface.NORMAL);
                 when(tab.position){
                     0 ->{
                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home, 0, 0)
@@ -66,6 +68,7 @@ class HomeFragment : BaseFragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
                 view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_black_color))
+                view.setTypeface(null, Typeface.BOLD);
                 when(tab.position) {
                     0 -> {
                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
@@ -103,7 +106,7 @@ class HomeFragment : BaseFragment() {
                         val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                         if(TextUtils.isEmpty(isLogin)){
                             tabLayout.visibility = View.GONE
-                            setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false)
+                            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false)
                         }
                         else{
                            // homeViewPager.getItem(1)
@@ -131,6 +134,7 @@ class HomeFragment : BaseFragment() {
         tabOne.text = getString(R.string.home)
         fragmentPosition = 0
         tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
+        tabOne.setTypeface(null, Typeface.BOLD);
         tabLayout.getTabAt(0)?.customView = tabOne
 
         val tabTwo = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null) as TextView

@@ -19,7 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/myAppTheme">
         <activity android:name=".modules.splash.SplashActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>

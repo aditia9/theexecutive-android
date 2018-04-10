@@ -25,6 +25,7 @@ import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
 
@@ -55,6 +56,7 @@ class CategoryFragment : BaseFragment() {
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
+        promotionBinding?.root?.tv_subscriptin_text?.setText(SavedPreferences.getInstance()?.getStringValue(Constants.SUBS_MESSAGE))
         viewPager = promotionBinding?.root?.viewpager!!
         elv_parent_category.addHeaderView(promotionBinding.root)
 

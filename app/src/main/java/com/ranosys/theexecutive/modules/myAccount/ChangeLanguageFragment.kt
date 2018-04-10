@@ -33,6 +33,12 @@ class ChangeLanguageFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
+            setToolBarParams(getString(R.string.select_lang_title), 0, "", 0, false, 0, false)
+        } else {
+            setToolBarParams(getString(R.string.select_lang_title), 0, "",  R.drawable.back, true, 0, false)
+        }
+
         linearLayoutManager = LinearLayoutManager(activity as Context)
         language_list.layoutManager = linearLayoutManager
 
@@ -45,7 +51,9 @@ class ChangeLanguageFragment: BaseFragment() {
             SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)!!
         }
 
-        selectedStore = GlobalSingelton.instance?.storeList!!.first()
+        GlobalSingelton.instance?.storeList?.run {
+            selectedStore = GlobalSingelton.instance?.storeList!!.first()
+        }
 
         val storeListAdapter = StoreListAdapter(GlobalSingelton.instance?.storeList, selectedStoreCode)
         storeListAdapter.setItemClickListener(object: StoreListAdapter.OnItemClickListener {
@@ -70,10 +78,6 @@ class ChangeLanguageFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
-            setToolBarParams(getString(R.string.select_lang_title), 0, "", 0, false, 0, false)
-        } else {
-            setToolBarParams(getString(R.string.select_lang_title), 0, "",  R.drawable.back, true, 0, false)
-        }
+
     }
 }

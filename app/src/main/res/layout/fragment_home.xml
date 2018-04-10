@@ -28,7 +28,7 @@
             android:drawableLeft="@drawable/chat"
             android:padding="@dimen/ten_dp"
             android:drawablePadding="@dimen/ten_dp"
-            android:layout_margin="@dimen/ten_dp"
+            android:layout_margin="@dimen/twenty_dp"
             />
 
         <!-- our tablayout to display tabs  -->
