@@ -16,9 +16,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentProductDetailBinding
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductDetailResponse
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.utils.Constants
 import kotlinx.android.synthetic.main.bottom_size_layout.*
 import kotlinx.android.synthetic.main.fragment_product_detail.*
@@ -34,6 +32,10 @@ class ProductDetailFragment : BaseFragment() {
     var bottomSheetBehavior = BottomSheetBehavior<View>()
     var sku = "5-BLWBBX417L014"
     lateinit var sizeList : MutableList<Int>
+    lateinit var productList : MutableList<Any>
+    var position : Int = 0
+    lateinit var productSku : String
+    var pagerAdapter : ProductStatePagerAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentProductDetailBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container, false)
@@ -41,26 +43,45 @@ class ProductDetailFragment : BaseFragment() {
         mViewDataBinding?.productDetailVM = productDetailViewModel
         mViewDataBinding?.executePendingBindings()
 
+        if(null == productList){
+            productList = mutableListOf()
+            getProductDetail(productSku)
+        }else{
+            pagerAdapter = ProductStatePagerAdapter(activity?.supportFragmentManager, productList)
+            product_viewpager.adapter = pagerAdapter
+            product_viewpager.offscreenPageLimit = 2
+            product_viewpager.setCurrentItem(position)
+        }
+
         observeEvents()
-        getProductDetail(sku)
-        getProductChildren(sku)
-
-
         return mViewDataBinding?.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val homeViewPager = ProductViewPagerAdapter(this)
-        product_viewpager.adapter = homeViewPager
-        //product_viewpager.offscreenPageLimit = 2
-    //    homeViewPager.observeAddToBagEvent()
-
-
+        pagerAdapter = ProductStatePagerAdapter(activity?.supportFragmentManager,productList)
+        product_viewpager.adapter = pagerAdapter
+        product_viewpager.offscreenPageLimit = 2
+        product_viewpager.setCurrentItem(position)
     }
 
 
+    fun getProductDetail(productSku : String?){
+        productDetailViewModel.getProductDetail(productSku)
+    }
+
+    fun observeEvents() {
+        productDetailViewModel.productDetailResponse?.observe(this, object : Observer<ApiResponse<ProductDetailResponse>> {
+            override fun onChanged(apiResponse: ApiResponse<ProductDetailResponse>?) {
+                val response = apiResponse?.apiResponse ?: apiResponse?.error
+                if (response is ProductDetailResponse) {
+                } else {
+                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
 
     fun openBottomSheet ()
     {
@@ -81,57 +102,6 @@ class ProductDetailFragment : BaseFragment() {
         })
     }
 
-    fun getProductDetail(productSku : String?){
-        productDetailViewModel.getProductDetail(productSku)
-    }
-
-    fun getProductChildren(productSku : String?){
-        productDetailViewModel.getProductChildren(productSku)
-    }
-
-    fun getProductOptions(attributeId : String?){
-        productDetailViewModel.getProductOptions(attributeId)
-    }
-
-    fun observeEvents(){
-        productDetailViewModel.productDetailResponse?.observe(this, object : Observer<ApiResponse<ProductDetailResponse>>{
-            override fun onChanged(apiResponse: ApiResponse<ProductDetailResponse>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is ProductDetailResponse) {
-                    response.extension_attributes?.configurable_product_options?.run {
-                        for(i in 0..size-1){
-                            if(get(i).label.equals("Size")){
-                                getProductOptions(get(i).attribute_id)
-                                break
-                            }
-                        }
-                    }
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-        productDetailViewModel.productChildrenResponse?.observe(this, object : Observer<ApiResponse<ChildProductsResponse>>{
-            override fun onChanged(apiResponse: ApiResponse<ChildProductsResponse>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is ChildProductsResponse) {
-                    ///////////////////////////
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-        productDetailViewModel.productOptionResponse?.observe(this, object : Observer<ApiResponse<List<ProductOptionsResponse>>>{
-            override fun onChanged(apiResponse: ApiResponse<List<ProductOptionsResponse>>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is List<*>) {
-
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-    }
 
     fun toggleBottomSheet() {
         if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
@@ -139,5 +109,16 @@ class ProductDetailFragment : BaseFragment() {
         } else {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
         }
+    }
+
+    companion object {
+
+        fun getInstance(productList : MutableList<Any>, productSku : String, position : Int) =
+                ProductDetailFragment().apply {
+                    this.productList = productList
+                    this.productSku = productSku
+                    this.position = position
+                }
+
     }
 }

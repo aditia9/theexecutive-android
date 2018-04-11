@@ -18,15 +18,17 @@ import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
  * @author Ranosys Technologies
  * @Date 04-Apr-2018
  */
-class ProductViewPagerAdapter(context: ProductDetailFragment) : PagerAdapter()  {
+class ProductViewPagerAdapter(fragment: ProductDetailFragment, productList : List<Any>) : PagerAdapter()  {
 
     private var mContext : ProductDetailFragment? = null
+    private var mProductList : List<Any>?
     private var mLayoutInflater : LayoutInflater? = null
     private var mProductItemViewModel: ProductItemViewModel? = null
 
     init {
-        mContext = context
-        mLayoutInflater = context.activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+        mContext = fragment
+        mProductList = productList
+        mLayoutInflater = fragment.activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
 
     }
 
@@ -36,7 +38,10 @@ class ProductViewPagerAdapter(context: ProductDetailFragment) : PagerAdapter()  
     }
 
     override fun getCount(): Int {
-        return 5
+        mProductList?.run {
+            return size
+        }
+        return 0
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
@@ -46,9 +51,10 @@ class ProductViewPagerAdapter(context: ProductDetailFragment) : PagerAdapter()  
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(mLayoutInflater, R.layout.product_detail_view, container, false);
         mProductItemViewModel = ViewModelProviders.of(mContext as ProductDetailFragment).get(ProductItemViewModel::class.java)
-        listGroupBinding?.btnAddToBag?.tag = position
+        //listGroupBinding?.btnAddToBag?.tag = position
         listGroupBinding?.productItemVM = mProductItemViewModel
-        observeAddToBagEvent(position)
+
+        //observeAddToBagEvent(position)
         container.addView(listGroupBinding?.root)
         return listGroupBinding!!.root
     }
