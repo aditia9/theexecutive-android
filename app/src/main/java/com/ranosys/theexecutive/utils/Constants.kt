@@ -52,6 +52,5 @@ object Constants {
         val REQUEST_PAGE_LABEL: String = "p"
         val REQUEST_PAGE_LIMIT_LABEL: String = "product_list_limit"
         val REQUEST_ID_LABEL: String = "id"
-        val AIMATION_DURATION: Long = 300
 
 }
