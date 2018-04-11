@@ -40,7 +40,7 @@ class ProductListingFragment: BaseFragment() {
     private lateinit var mViewModel: ProductListingViewModel
     private lateinit var productListAdapter: ProductListAdapter
     private lateinit var filterOptionAdapter: FilterOptionAdapter
-    //private lateinit var sortOptionAdapter: SortOptionAdapter
+    private lateinit var sortOptionAdapter: SortOptionAdapter
     private lateinit var filterOptionDialog: Dialog
     private lateinit var sortOptionDialog: Dialog
 
@@ -68,8 +68,8 @@ class ProductListingFragment: BaseFragment() {
         sortOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         sortOptionDialog.window.setGravity(Gravity.BOTTOM)
 
-        //sortOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
-        //sortOptionBinding.filterList.setAdapter(filterOptionAdapter)
+        sortOptionAdapter = SortOptionAdapter(mViewModel.sortOptionList?.value)
+        sortOptionBinding.sortOptionList.setAdapter(sortOptionAdapter)
 
 
         //filter screen binding
@@ -96,7 +96,7 @@ class ProductListingFragment: BaseFragment() {
             hideLoading()
             if(sortOptionList?.isNotEmpty()!!){
                 mBinding.tvSortOption.isEnabled = true
-                //TODO - add sort option to adapter
+                sortOptionAdapter.sortOptions = sortOptionList
 
             }else{
                 mBinding.tvSortOption.isEnabled = false

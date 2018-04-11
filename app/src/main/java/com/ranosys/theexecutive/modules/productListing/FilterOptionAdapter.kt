@@ -69,8 +69,13 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
                 //store selected filter
                 val filter = getGroup(groupPosition)
                 productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
-                val temp = ProductListingDataClass.FilterChildOption("", "", "")
-                getChild(groupPos, childPos)?.isSelected?.set(true)
+
+                for (item in getGroup(groupPos)?.options!!){
+                    item._isSelected = false
+                }
+
+                getChild(groupPos, childPos)?._isSelected = true
+                notifyDataSetChanged()
                 return false
             }
         })

@@ -4,8 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout
+    <data></data>
 
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -56,11 +57,10 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/language_list"
+            android:id="@+id/sort_option_list"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/twenty_four_dp"
-            android:contentDescription="@string/select_lang_title"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/title_sort"/>

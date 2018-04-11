@@ -1,6 +1,8 @@
 package com.ranosys.theexecutive.modules.productListing
 
-import android.databinding.ObservableField
+import android.databinding.BaseObservable
+import android.databinding.Bindable
+import com.ranosys.theexecutive.BR
 
 /**
  * Created by nikhil on 20/3/18.
@@ -18,10 +20,10 @@ class ProductListingDataClass {
 
 
 
-data class SortOptionResponse(
-		val attribute_code: String,
-		val attribute_name: String
-)
+    data class SortOptionResponse(
+            val attribute_code: String,
+            val attribute_name: String
+    )
 
 
     data class FilterOptionsResponse(
@@ -40,8 +42,18 @@ data class SortOptionResponse(
             val label: String,
             val code: String,
             val value: String,
-            var isSelected: ObservableField<Boolean> = ObservableField(false)
-    )
+            var _isSelected: Boolean = false): BaseObservable(){
+        var isSelected = _isSelected
+
+            @Bindable
+            get() = _isSelected
+
+            set(value) {
+                field = value
+                notifyPropertyChanged(BR.selected);
+            }
+    }
+
 
 
     data class PriceRange(var min: String = "",
