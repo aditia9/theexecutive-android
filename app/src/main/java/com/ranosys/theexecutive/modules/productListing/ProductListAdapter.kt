@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.ProductListItemBinding
 
-
 /**
- * Created by nikhil on 20/3/18.
+ * @Class An adapter class for all products showing in viewpager.
+ * @author Ranosys Technologies
+ * @Date 20-Mar-2018
  */
+
 class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.ProductMaskedResponse>, var clickListener: OnItemClickListener): RecyclerView.Adapter<ProductListAdapter.Holder>() {
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
@@ -43,7 +45,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
 
             val normalPrice = "IDR\u00A0" + product.normalPrice
             val spPrice = " IDR\u00A0" + product.specialPrice
-            val price = normalPrice + " " + spPrice
+            val price = "$normalPrice $spPrice"
 
             val ss = SpannableStringBuilder(price)
             ss.setSpan(StrikethroughSpan(), 0, normalPrice.length, 0)
