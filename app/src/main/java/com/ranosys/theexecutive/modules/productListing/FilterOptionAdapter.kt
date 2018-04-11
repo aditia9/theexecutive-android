@@ -27,14 +27,14 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
 
     override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup): View {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val titleBinding: FilterOptionTitleBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_title, parent, false);
+        val titleBinding: FilterOptionTitleBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_title, parent, false)
         titleBinding.filter = getGroup(groupPosition)
 
 
         val filterList = parent as ExpandableListView
 
-        var previousGroup = -1
         filterList.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
+            var previousGroup = -1
             override fun onGroupExpand(groupPosition: Int) {
                 if(groupPosition != previousGroup){
                     filterList.collapseGroup(previousGroup)
@@ -59,9 +59,8 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup): View {
 
         val layoutInflater = LayoutInflater.from(parent.context)
-        val optionBinding: FilterOptionItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_item, parent, false);
+        val optionBinding: FilterOptionItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_item, parent, false)
         optionBinding.option = getChild(groupPosition, childPosition)
-        convertView?.setTag(childPosition, optionBinding)
 
         val filterList = parent as ExpandableListView
 
@@ -70,8 +69,6 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
                 //store selected filter
                 val filter = productListVM.filterOptionList?.value?.get(groupPos)
                 productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
-                getChild(groupPosition, childPosition)?.isSelected?.not()
-                notifyDataSetInvalidated()
                 return true
             }
         })

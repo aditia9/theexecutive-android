@@ -32,7 +32,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Sort option api", errorMsg?: "error")
+                Utils.printLog("Sort option api", message = errorMsg)
             }
 
             override fun onSuccess(sortOptions: ProductListingDataClass.SortOptionResponse?) {
@@ -42,14 +42,14 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         })
     }
 
-    fun getFilterOptions() {
-        AppRepository.filterOptionApi(74, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
+    fun getFilterOptions(categoryId: Int?) {
+        AppRepository.filterOptionApi(categoryId!!, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("Filter option api", error.message?: "exception")
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Filter option api", errorMsg?: "error")
+                Utils.printLog("Filter option api", errorMsg)
             }
 
             override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
@@ -60,7 +60,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                     }
                 }
 
-                priceFilter.value = filterOptions?.filters?.filter { option -> option.name == "Price" }?.get(0)
+                priceFilter.value = filterOptions?.filters?.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
                 filterOptionList?.value = filterOptions?.filters?.toMutableList()
 
 
@@ -81,11 +81,11 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
             override fun onSuccess(response: ProductListingDataClass.ProductListingResponse?) {
 
+                isLoading = false
                 productListResponse = response
                 totalProductCount = productListResponse?.total_count ?: 0
 
                 val maskedResponse: ArrayList<ProductListingDataClass.ProductMaskedResponse> = ArrayList()
-                //TODO - modify data according to use and show list and pagination i.e create masked response
                 productListResponse?.items.let {
                     for(product in productListResponse!!.items){
                         val sku = product.sku
@@ -93,16 +93,19 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                         val productType = product.type_id
                         var price = 0.0
                         var specialPrice = 0.0
-                        if(productType == "configurable"){
+                        if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
                             price = product.extension_attributes.regular_price
                             specialPrice = product.extension_attributes.final_price
                         }else{
-                            price = 0.0
+                            price = product.price
+                            val attributes = product.custom_attributes.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }.toList()
+                            if(attributes.isNotEmpty()){
+                                specialPrice = attributes.get(0).value.toString().toDouble()
+                            }
                         }
 
-                        var type = ""
-                        var discount = (((price - specialPrice).div(price)).times(100)).toInt()
-
+                        val type = ""
+                        val discount = (((price - specialPrice).div(price)).times(100)).toInt()
                         var imgUrl = ""
                         if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].label.toString()
 
@@ -122,27 +125,28 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
                 var list = maskedProductList.value
                 if(null == list){
-                    list = arrayListOf<ProductListingDataClass.ProductMaskedResponse>()
+                    list = arrayListOf()
                 }
                 list.addAll(maskedResponse)
 
                 maskedProductList.value = list
             }
         })
-
-        // when data recieved
-        isLoading = false
     }
 
     private fun prepareProductListingRequest(sku: String): Map<String, String> {
-        var requestMap: MutableMap<String, String> = mutableMapOf<String, String>()
+        val requestMap: MutableMap<String, String> = mutableMapOf()
 
-        requestMap.put("id", "74")
-        requestMap.put("product_list_limit", Constants.LIST_PAGE_ITEM_COUNT.toString())
-        var page = (maskedProductList.value?.size)?.div(10)?.plus(1) ?: 0
-        requestMap.put("p", page.toString()) // pageCout
+        requestMap.put(Constants.REQUEST_ID_LABEL, "81")
+        requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
+        val page = (maskedProductList.value?.size)?.div(10)?.plus(1) ?: 1
+        requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString()) // pageCout
         //requestMap.put("product_list_order",) sort option
         //requestMap.put("product_list_dir","asc/desc) sort option
+
+        if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
+            selectedFilterMap.put(Constants.FILTER_PRICE_LABEL, selectedPriceRange.min + "-" + selectedPriceRange.max)
+        }
 
         for((key, value) in selectedFilterMap){
             requestMap.put(key, value)

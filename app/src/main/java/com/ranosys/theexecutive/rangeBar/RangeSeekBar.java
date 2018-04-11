@@ -181,7 +181,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             thumbShadowXOffset = defaultShadowXOffset;
             thumbShadowYOffset = defaultShadowYOffset;
             thumbShadowBlur = defaultShadowBlur;
-            activateOnDefaultValues = false;
+            activateOnDefaultValues = true;
         } else {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, 0, 0);
             try {
@@ -191,7 +191,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                         extractNumericValueFromAttributes(a, R.styleable.RangeSeekBar_step, DEFAULT_STEP)
                 );
                 showTextAboveThumbs = a.getBoolean(R.styleable.RangeSeekBar_valuesAboveThumbs, true);
-                textAboveThumbsColor = a.getColor(R.styleable.RangeSeekBar_textAboveThumbsColor, Color.WHITE);
+                textAboveThumbsColor = a.getColor(R.styleable.RangeSeekBar_textAboveThumbsColor, HINT_COLOR);
                 singleThumb = a.getBoolean(R.styleable.RangeSeekBar_singleThumb, false);
                 showLabels = a.getBoolean(R.styleable.RangeSeekBar_showLabels, true);
                 internalPad = a.getDimensionPixelSize(R.styleable.RangeSeekBar_internalPadding, INITIAL_PADDING_IN_DP);
@@ -218,7 +218,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 thumbShadowYOffset = a.getDimensionPixelSize(R.styleable.RangeSeekBar_thumbShadowYOffset, defaultShadowYOffset);
                 thumbShadowBlur = a.getDimensionPixelSize(R.styleable.RangeSeekBar_thumbShadowBlur, defaultShadowBlur);
 
-                activateOnDefaultValues = a.getBoolean(R.styleable.RangeSeekBar_activateOnDefaultValues, false);
+                activateOnDefaultValues = a.getBoolean(R.styleable.RangeSeekBar_activateOnDefaultValues, true);
             } finally {
                 a.recycle();
             }
@@ -666,8 +666,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
             String minText = valueToString(getSelectedMinValue());
             String maxText = valueToString(getSelectedMaxValue());
-            float minTextWidth = paint.measureText(minText);
-            float maxTextWidth = paint.measureText(maxText);
+            float minTextWidth = paint.measureText(mCurrency + minText);
+            float maxTextWidth = paint.measureText(mCurrency + maxText);
             // keep the position so that the labels don't get cut off
             float minPosition = Math.max(0f, normalizedToScreen(normalizedMinValue) - minTextWidth * 0.5f);
             float maxPosition = Math.min(getWidth() - maxTextWidth, normalizedToScreen(normalizedMaxValue) - maxTextWidth * 0.5f);

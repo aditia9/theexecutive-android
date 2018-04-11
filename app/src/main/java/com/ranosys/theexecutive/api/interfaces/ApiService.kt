@@ -92,11 +92,11 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun getCategories(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String): Call<CategoryResponseDataClass>
 
-        @GET("rest/{store_code}/V1/categories/{category_id}")
+        @GET("rest/{store_code}/V1/categories/{categoryId}")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getCategoryData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String, @Path("category_id") categoryId : String): Call<CategoryDataResponse>
+        fun getCategoryData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String, @Path("categoryId") categoryId : String): Call<CategoryDataResponse>
 
         @GET("rest/{store_code}/V1/categories/list")
         @Headers(ApiConstants.CONTENT_TYPE,
