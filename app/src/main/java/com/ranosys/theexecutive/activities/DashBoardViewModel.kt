@@ -6,7 +6,6 @@ import com.ranosys.theexecutive.base.BaseViewModel
 
 
 /**
- * Created by Mohammad Sunny on 9/4/18.
  * @Class A ViewModel for DashBoardActivity so that on configuration change, view doesn't load again.
  * @author Ranosys Technologies
  * @Date 09-Apr-2018

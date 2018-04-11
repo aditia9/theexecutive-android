@@ -121,6 +121,7 @@
     <string name="register_successfull">You have registered successfully.</string>
     <string name="logout_success_message">Logout successfully</string>
     <string name="email_sent">Am email is sent to your registered email.</string>
+    <string name="logout_text">Are you sure you want to logout from application?</string>
 
 
 </resources>
