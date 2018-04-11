@@ -67,11 +67,11 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
         filterList.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
             override fun onChildClick(list: ExpandableListView?, parent: View?, groupPos: Int, childPos: Int, id: Long): Boolean {
                 //store selected filter
-                val filter = productListVM.filterOptionList?.value?.get(groupPos)
+                val filter = getGroup(groupPosition)
                 productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
-
-                getChild(groupPosition, childPosition)?.isSelected?.set(true)
-                return true
+                val temp = ProductListingDataClass.FilterChildOption("", "", "")
+                getChild(groupPos, childPos)?.isSelected?.set(true)
+                return false
             }
         })
         return optionBinding.root
