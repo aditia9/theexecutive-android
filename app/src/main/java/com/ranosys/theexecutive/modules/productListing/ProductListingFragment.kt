@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -19,6 +20,7 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
+import com.ranosys.theexecutive.databinding.DialogSortOptionBinding
 import com.ranosys.theexecutive.databinding.FragmentProductListingBinding
 import com.ranosys.theexecutive.rangeBar.RangeSeekBar
 import com.ranosys.theexecutive.utils.Constants
@@ -34,10 +36,13 @@ class ProductListingFragment: BaseFragment() {
 
     private lateinit var mBinding: FragmentProductListingBinding
     private lateinit var filterOptionBinding: DialogFilterOptionBinding
+    private lateinit var sortOptionBinding: DialogSortOptionBinding
     private lateinit var mViewModel: ProductListingViewModel
     private lateinit var productListAdapter: ProductListAdapter
     private lateinit var filterOptionAdapter: FilterOptionAdapter
+    //private lateinit var sortOptionAdapter: SortOptionAdapter
     private lateinit var filterOptionDialog: Dialog
+    private lateinit var sortOptionDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +60,18 @@ class ProductListingFragment: BaseFragment() {
 
         callInitialApis()
 
+        //sort screen binding
+        sortOptionBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_sort_option, container,  false)
+        sortOptionDialog = Dialog(activity as Context, R.style.MaterialDialogSheet)
+        sortOptionDialog.setContentView(sortOptionBinding.root)
+        sortOptionDialog.setCancelable(true)
+        sortOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        sortOptionDialog.window.setGravity(Gravity.BOTTOM)
+
+        //sortOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
+        //sortOptionBinding.filterList.setAdapter(filterOptionAdapter)
+
+
         //filter screen binding
         filterOptionBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_filter_option, container,  false)
         filterOptionDialog = Dialog(activity as Context, R.style.MaterialDialogSheet)
@@ -69,8 +86,22 @@ class ProductListingFragment: BaseFragment() {
         observeProductList()
         observeFilterOptions()
         observePriceFilter()
+        observeSortOptions()
 
         return mBinding.root
+    }
+
+    private fun observeSortOptions() {
+        mViewModel.sortOptionList?.observe(this, Observer { sortOptionList ->
+            hideLoading()
+            if(sortOptionList?.isNotEmpty()!!){
+                mBinding.tvSortOption.isEnabled = true
+                //TODO - add sort option to adapter
+
+            }else{
+                mBinding.tvSortOption.isEnabled = false
+            }
+        })
     }
 
     private fun callInitialApis() {
@@ -109,10 +140,13 @@ class ProductListingFragment: BaseFragment() {
         mViewModel.filterOptionList?.observe(this, Observer { filterList ->
             hideLoading()
             if(filterList?.isNotEmpty()!!){
-                mBinding.tvFilterOption.isClickable = true
+                mBinding.tvFilterOption.isEnabled = true
+                mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.theme_black_color))
                 filterOptionAdapter.optionsList = filterList.filterNot { it.name == Constants.FILTER_PRICE_LABEL }
             }else{
-                mBinding.tvFilterOption.isClickable = false
+                mBinding.tvFilterOption.isEnabled = false
+                mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.hint_color))
+
             }
 
         })

@@ -69,6 +69,8 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
                 //store selected filter
                 val filter = productListVM.filterOptionList?.value?.get(groupPos)
                 productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
+
+                getChild(groupPosition, childPosition)?.isSelected?.set(true)
                 return true
             }
         })

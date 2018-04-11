@@ -1,5 +1,7 @@
 package com.ranosys.theexecutive.modules.productListing
 
+import android.databinding.ObservableField
+
 /**
  * Created by nikhil on 20/3/18.
  */
@@ -15,10 +17,11 @@ class ProductListingDataClass {
                                 var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
 
 
-    data class SortOptionResponse(
-            val attribute_code: String,
-            val attribute_name: String
-    )
+
+data class SortOptionResponse(
+		val attribute_code: String,
+		val attribute_name: String
+)
 
 
     data class FilterOptionsResponse(
@@ -37,7 +40,7 @@ class ProductListingDataClass {
             val label: String,
             val code: String,
             val value: String,
-            var isSelected: Boolean = false
+            var isSelected: ObservableField<Boolean> = ObservableField(false)
     )
 
 

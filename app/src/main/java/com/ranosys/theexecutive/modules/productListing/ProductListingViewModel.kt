@@ -7,7 +7,6 @@ import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
-import java.util.*
 
 /**
  * Created by nikhil on 20/3/18.
@@ -18,6 +17,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var isLoading: Boolean = false
     var totalProductCount: Int = 0
 
+    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>()
     var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData<MutableList<ProductListingDataClass.Filter>>()
     var priceFilter: MutableLiveData<ProductListingDataClass.Filter> = MutableLiveData()
     var selectedFilterMap = hashMapOf<String, String>()
@@ -26,7 +26,30 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var productListResponse: ProductListingDataClass.ProductListingResponse? = null
 
     fun getSortOptions() {
-        AppRepository.sortOptionApi(object : ApiCallback<ProductListingDataClass.SortOptionResponse>{
+        AppRepository.sortOptionApi(object : ApiCallback<ArrayList<ProductListingDataClass.SortOptionResponse>>{
+            override fun onSuccess(sortOptions: ArrayList<ProductListingDataClass.SortOptionResponse>?) {
+                val tempOptions: ArrayList<ProductListingDataClass.SortOptionResponse> = ArrayList()
+                sortOptions?.let {
+                    for (option in it){
+                        if (option.attribute_code == "price"){
+                            tempOptions.add(ProductListingDataClass.SortOptionResponse(
+                                    attribute_code = option.attribute_code,
+                                    attribute_name = option.attribute_name + " (Low to High)"))
+
+                            tempOptions.add(ProductListingDataClass.SortOptionResponse(
+                                    attribute_code = option.attribute_code,
+                                    attribute_name = option.attribute_name + " (High to Low)"))
+
+                            continue
+                        }
+
+                        tempOptions.add(option)
+                    }
+                }
+
+                sortOptionList?.value = tempOptions
+            }
+
             override fun onException(error: Throwable) {
                 Utils.printLog("Sort option api", error.message?: "exception")
             }
@@ -35,9 +58,6 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                 Utils.printLog("Sort option api", message = errorMsg)
             }
 
-            override fun onSuccess(sortOptions: ProductListingDataClass.SortOptionResponse?) {
-                //TODO - save sort options
-            }
 
         })
     }
@@ -54,16 +74,16 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
             override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
 
-                filterOptions?.run {
-                    for (filter in filterOptions.filters){
-                        selectedFilterMap.put(filter.name, "")
+                if (filterOptions?.total_count!! > 0) {
+                    filterOptions?.run {
+                        for (filter in filterOptions.filters) {
+                            selectedFilterMap.put(filter.name, "")
+                        }
                     }
+
+                    priceFilter.value = filterOptions?.filters?.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
                 }
-
-                priceFilter.value = filterOptions?.filters?.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
                 filterOptionList?.value = filterOptions?.filters?.toMutableList()
-
-
             }
         })
     }
