@@ -12,8 +12,11 @@ import com.ranosys.theexecutive.databinding.FilterOptionItemBinding
 import com.ranosys.theexecutive.databinding.FilterOptionTitleBinding
 
 /**
- * Created by nikhil on 5/4/18.
+ * @Class An adapter class for all products showing in viewpager.
+ * @author Ranosys Technologies
+ * @Date 05-Apr-2018
  */
+
 class FilterOptionAdapter(val productListVM: ProductListingViewModel, var optionsList : List<ProductListingDataClass.Filter>?): BaseExpandableListAdapter() {
 
     override fun getGroupCount() = optionsList?.size ?: 0
@@ -48,7 +51,7 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
 
     override fun getGroupId(groupPosition: Int) = groupPosition.toLong()
 
-    override fun isEmpty() = if(groupCount == 0)  true else false
+    override fun isEmpty() = groupCount == 0
 
     override fun getChildId(groupPosition: Int, childPosition: Int) = childPosition.toLong()
 
