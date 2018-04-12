@@ -85,7 +85,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel.apiSocialRegResponse?.observe(this, android.arch.lifecycle.Observer { token ->
             if(!TextUtils.isEmpty(token)){
                 hideLoading()
-                Toast.makeText(activity, getString(R.string.register_successfull), Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.register_successful), Toast.LENGTH_SHORT).show()
                 FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, false)
                 registerViewModel.apiDirectRegSuccessResponse?.value = null
             }
