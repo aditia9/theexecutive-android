@@ -47,10 +47,19 @@ object Constants {
         val PRODUCT_LIST_RESPONSE: String = "product_list_response"
         val LIST_PAGE_ITEM_COUNT: Int = 10
         val FILTER_PRICE_LABEL: String = "Price"
+        val SORT_OPTION_LABEL: String = "product_list_order"
+        val SORT_OPTION_DIR: String = "product_list_dir"
         val FILTER_CONFIGURABLE_LABEL: String = "configurable"
         val FILTER_SPECIAL_PRICE_LABEL: String = "special_price"
+        val NEW_FROM_DATE_LABEL: String = "news_from_date"
+        val NEW_TO_DATE_LABEL: String = "news_to_date"
         val REQUEST_PAGE_LABEL: String = "p"
         val REQUEST_PAGE_LIMIT_LABEL: String = "product_list_limit"
         val REQUEST_ID_LABEL: String = "id"
+        val LOW_TO_HIGH: String = " (Low to High)"
+        val HIGH_TO_LOW: String = " (High to Low)"
+        val DESC: String = "desc"
+        val ASC: String = "asc"
+        val NEW_TAG: String = "New"
 
 }

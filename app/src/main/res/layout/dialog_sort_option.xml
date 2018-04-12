@@ -59,11 +59,12 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/sort_option_list"
             android:layout_width="@dimen/match_constraint"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/match_constraint"
             android:layout_marginTop="@dimen/twenty_four_dp"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@id/title_sort"/>
+            app:layout_constraintTop_toBottomOf="@id/title_sort"
+            app:layout_constraintBottom_toTopOf="@+id/btn_apply"/>
 
         <Button
             android:id="@+id/btn_apply"

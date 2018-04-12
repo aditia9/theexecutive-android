@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,6 +23,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
 import com.ranosys.theexecutive.databinding.DialogSortOptionBinding
 import com.ranosys.theexecutive.databinding.FragmentProductListingBinding
+import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.rangeBar.RangeSeekBar
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
@@ -43,6 +45,7 @@ class ProductListingFragment: BaseFragment() {
     private lateinit var sortOptionAdapter: SortOptionAdapter
     private lateinit var filterOptionDialog: Dialog
     private lateinit var sortOptionDialog: Dialog
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +70,9 @@ class ProductListingFragment: BaseFragment() {
         sortOptionDialog.setCancelable(true)
         sortOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         sortOptionDialog.window.setGravity(Gravity.BOTTOM)
+        prepareSortOptionDialog()
 
-        sortOptionAdapter = SortOptionAdapter(mViewModel.sortOptionList?.value)
-        sortOptionBinding.sortOptionList.setAdapter(sortOptionAdapter)
+
 
 
         //filter screen binding
@@ -79,7 +82,6 @@ class ProductListingFragment: BaseFragment() {
         filterOptionDialog.setCancelable(true)
         filterOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         filterOptionDialog.window.setGravity(Gravity.BOTTOM)
-
         filterOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
 
@@ -91,12 +93,60 @@ class ProductListingFragment: BaseFragment() {
         return mBinding.root
     }
 
+    private fun prepareSortOptionDialog() {
+        sortOptionBinding.sortOptionList
+
+        linearLayoutManager = LinearLayoutManager(activity as Context)
+        sortOptionBinding.sortOptionList.layoutManager = linearLayoutManager
+
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        sortOptionBinding.sortOptionList.addItemDecoration(itemDecor)
+
+        sortOptionAdapter = SortOptionAdapter(mViewModel, mViewModel.sortOptionList?.value)
+        sortOptionAdapter.setItemClickListener(object: SortOptionAdapter.OnItemClickListener {
+            override fun onItemClick(item: ProductListingDataClass.SortOptionResponse) {
+                mViewModel.selectedSortOption = item
+                sortOptionAdapter.notifyDataSetChanged()
+            }
+
+        })
+        sortOptionBinding.sortOptionList.setAdapter(sortOptionAdapter)
+
+        //method holding all UI interaction of filter dialog
+        sortOptionBinding.let {
+
+            sortOptionBinding.cancelIv.setOnClickListener({
+                sortOptionDialog.let {
+                    sortOptionDialog.dismiss()
+                }
+            })
+
+            sortOptionBinding.tvClear.setOnClickListener({
+                sortOptionDialog.let {
+                    mViewModel.selectedSortOption = ProductListingDataClass.SortOptionResponse("","")
+                    sortOptionAdapter.notifyDataSetChanged()
+                }
+            })
+
+            sortOptionBinding.btnApply.setOnClickListener({
+                showLoading()
+
+                sortOptionDialog.dismiss()
+                mViewModel.getProductListing(categoryId.toString())
+            })
+        }
+
+
+
+    }
+
     private fun observeSortOptions() {
         mViewModel.sortOptionList?.observe(this, Observer { sortOptionList ->
             hideLoading()
             if(sortOptionList?.isNotEmpty()!!){
                 mBinding.tvSortOption.isEnabled = true
                 sortOptionAdapter.sortOptions = sortOptionList
+                sortOptionAdapter.notifyDataSetChanged()
 
             }else{
                 mBinding.tvSortOption.isEnabled = false
@@ -202,6 +252,10 @@ class ProductListingFragment: BaseFragment() {
         tv_filter_option.setOnClickListener {
             prepareFilterDialog()
             filterOptionDialog.show()
+        }
+
+        tv_sort_option.setOnClickListener{
+            sortOptionDialog.show()
         }
     }
 
