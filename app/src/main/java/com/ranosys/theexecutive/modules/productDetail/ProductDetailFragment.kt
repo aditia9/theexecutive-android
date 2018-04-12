@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.v4.view.ViewPager
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -63,6 +64,20 @@ class ProductDetailFragment : BaseFragment() {
             product_viewpager.offscreenPageLimit = 2
             product_viewpager.setCurrentItem(position!!)
         }
+
+        product_viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                setToolBarParams(productList?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+            }
+
+            override fun onPageSelected(position: Int) {
+
+            }
+        })
 
     }
 

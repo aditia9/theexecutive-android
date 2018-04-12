@@ -32,8 +32,8 @@ class ProductViewFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false);
         productItemViewModel = ViewModelProviders.of(this).get(ProductItemViewModel::class.java)
-        productItemViewModel.productItem?.set(productItem)
-       // listGroupBinding?.productItemVM = productItemViewModel
+        productItemViewModel.productItem = productItem
+        listGroupBinding?.productItemVM = productItemViewModel
 
         observeEvents()
 

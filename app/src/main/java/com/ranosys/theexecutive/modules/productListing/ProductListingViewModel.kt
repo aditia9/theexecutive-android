@@ -113,7 +113,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                         val type = ""
                         val discount = (((price - specialPrice).div(price)).times(100)).toInt()
                         var imgUrl = ""
-                        if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].label.toString()
+                        if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].file
 
                         val product = ProductListingDataClass.ProductMaskedResponse(
                                 sku = sku,
