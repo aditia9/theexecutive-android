@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:text="@{childData.name}"
+            android:textStyle="bold"
             android:textSize="18sp" />
     </LinearLayout>
 
