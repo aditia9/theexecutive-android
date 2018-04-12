@@ -77,10 +77,17 @@ class BindingAdapters {
             view.setAdapter(adapter)
         }
 
+//        @JvmStatic
+//        @BindingAdapter("bind:filterOptions")
+//        fun setFilterOptions(view: ExpandableListView, response: MutableList<ProductListingDataClass.Filter>?) {
+//            val adapter = FilterOptionAdapter(view.context, response)
+//            view.setAdapter(adapter)
+//        }
+
         @JvmStatic
         @BindingAdapter("promotionData")
-        fun bindViewPager(view: ViewPager, response: ObservableField<List<PromotionsResponseDataClass>>?) {
-            val customViewPagerAdapter = CustomViewPageAdapter(view.context, response?.get())
+        fun bindViewPager(view: ViewPager, response: List<PromotionsResponseDataClass>?) {
+            val customViewPagerAdapter = CustomViewPageAdapter(view.context, response)
             view.adapter = customViewPagerAdapter
         }
 

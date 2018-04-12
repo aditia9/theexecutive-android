@@ -1,1 +1,1 @@
-include ':app', ':rtp', ':SpinnerDatePickerLib'
+include ':app', ':rtp', ':SpinnerDatePickerLib', ':RangeSeekBar'
