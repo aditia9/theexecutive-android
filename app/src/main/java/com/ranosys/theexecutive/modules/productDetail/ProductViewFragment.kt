@@ -28,6 +28,7 @@ class ProductViewFragment : BaseFragment() {
     var productItem : ProductListingDataClass.Item? = null
     var position : Int? = 0
     var productSku : String? = ""
+    var attribute : String? = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false);
@@ -37,7 +38,28 @@ class ProductViewFragment : BaseFragment() {
 
         observeEvents()
 
+        if(productItem?.type_id.equals("configurable")){
+            setData()
+            getProductChildren(productItem?.sku)
+        }
+
         return listGroupBinding!!.root
+    }
+
+    fun setData(){
+        val length = productItem?.extension_attributes?.configurable_product_options?.size!!
+        for(i in 0..length-1){
+            when(productItem?.extension_attributes?.configurable_product_options?.get(i)?.label){
+                "Color" -> {
+                    attribute = "Color"
+                    getProductOptions(productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id)
+                }
+                "Size" -> {
+                    attribute = "Color"
+                    getProductOptions(productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id)
+                }
+            }
+        }
     }
 
     fun getProductChildren(productSku : String?){
@@ -53,7 +75,7 @@ class ProductViewFragment : BaseFragment() {
             override fun onChanged(apiResponse: ApiResponse<ChildProductsResponse>?) {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is ChildProductsResponse) {
-                    ///////////////////////////
+
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
                 }

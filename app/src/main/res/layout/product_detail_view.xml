@@ -25,28 +25,27 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="@dimen/twenty_dp"
                 >
 
                 <ImageView
                     android:id="@+id/img_one"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/four_fifty_dp"
+                    android:layout_height="@dimen/six_hundred_dp"
                     android:src="@drawable/placeholder"
-                    android:layout_margin="@dimen/twenty_dp"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:contentDescription="@string/image_one_detail"
                     bind:baseUrlWithProductImageUrl="@{productItemVM.productItem.media_gallery_entries.get(0).file}"
                     />
 
                 <ImageView
                     android:id="@+id/img_two"
-                    android:layout_height="@dimen/four_fifty_dp"
-                    android:layout_marginRight="@dimen/twenty_dp"
-                    android:layout_marginLeft="@dimen/twenty_dp"
+                    android:layout_height="@dimen/six_hundred_dp"
                     android:layout_width="match_parent"
                     android:layout_below="@id/img_one"
+                    android:layout_marginTop="@dimen/twenty_dp"
                     android:src="@drawable/placeholder"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:contentDescription="@string/image_two_detail"
                     bind:baseUrlWithProductImageUrl="@{productItemVM.productItem.media_gallery_entries.get(0).file}"
                     />
@@ -56,8 +55,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/img_two"
-                    android:layout_marginTop="@dimen/fifty_dp"
+                    android:layout_marginTop="@dimen/forty_dp"
                     android:textAlignment="center"
+                    android:paddingRight="@dimen/forty_dp"
+                    android:paddingLeft="@dimen/forty_dp"
                     android:textStyle="bold"
                     android:text="@{Html.fromHtml(productItemVM.productItem.custom_attributes.get(1).value.toString())}"
                     />
@@ -86,8 +87,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="450dp"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:layout_marginRight="@dimen/twenty_dp"
-                    android:layout_marginLeft="@dimen/twenty_dp"
                     android:layout_below="@id/ll_color_choice"
                     android:scaleType="centerCrop"
                     android:src="@drawable/one"
@@ -182,14 +181,15 @@
                     />
 
                 <RelativeLayout
-                    android:layout_below="@id/tv_wishlist"
                     android:id="@+id/rl_add_to_box"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:background="@color/white"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:padding="@dimen/fifteen_dp"
+                    android:paddingTop="@dimen/fifteen_dp"
+                    android:paddingBottom="@dimen/fifteen_dp"
+                    android:layout_below="@id/tv_wishlist"
                     >
 
                     <Button
@@ -197,7 +197,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/add_to_bag"
-                        android:layout_marginLeft="@dimen/five_dp"
                         android:padding="@dimen/ten_dp"
                         android:background="@drawable/button_border"
                         />
@@ -208,7 +207,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/twenty_dp"
                         android:text="IDR 179,900"
                         />
 

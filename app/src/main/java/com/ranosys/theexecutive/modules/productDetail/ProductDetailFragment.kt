@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.view.ViewPager
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -31,9 +30,6 @@ import kotlinx.android.synthetic.main.fragment_product_detail.*
 class ProductDetailFragment : BaseFragment() {
 
     lateinit var productDetailViewModel : ProductDetailViewModel
-    var bottomSheetBehavior = BottomSheetBehavior<View>()
-    var sku = "5-BLWBBX417L014"
-    lateinit var sizeList : MutableList<Int>
     var productList : List<ProductListingDataClass.Item>? = null
     var position : Int? = 0
     var productSku : String? = ""
@@ -102,7 +98,7 @@ class ProductDetailFragment : BaseFragment() {
         })
     }
 
-    fun openBottomSheet ()
+    fun openBottomSizeSheet ()
     {
         val view = layoutInflater.inflate(R.layout.bottom_size_layout, null)
         val mBottomSheetDialog = Dialog(activity, R.style.MaterialDialogSheet)
@@ -119,15 +115,6 @@ class ProductDetailFragment : BaseFragment() {
                 }
             }
         })
-    }
-
-
-    fun toggleBottomSheet() {
-        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-        } else {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
-        }
     }
 
     companion object {
