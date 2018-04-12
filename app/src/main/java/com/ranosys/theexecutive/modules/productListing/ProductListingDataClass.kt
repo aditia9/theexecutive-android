@@ -1,7 +1,9 @@
 package com.ranosys.theexecutive.modules.productListing
 
+import android.databinding.ObservableField
+
 /**
- * @Class An adapter class for all products showing in viewpager.
+ * @Class An data class collection fro product listing
  * @author Ranosys Technologies
  * @Date 20-Mar-2018
  */
@@ -16,6 +18,7 @@ class ProductListingDataClass {
                                 var discountPer: Int = 40,
                                 var collectionTag: String = "Chinese Collections",
                                 var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
+
 
 
     data class SortOptionResponse(
@@ -39,9 +42,13 @@ class ProductListingDataClass {
     data class FilterChildOption(
             val label: String,
             val code: String,
-            val value: String,
-            var isSelected: Boolean = false
-    )
+            val value: String){
+        var _isSelected: ObservableField<Boolean>
+        init {
+            _isSelected = ObservableField<Boolean>()
+        }
+    }
+
 
 
     data class PriceRange(var min: String = "",

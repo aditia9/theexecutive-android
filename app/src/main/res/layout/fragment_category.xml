@@ -31,7 +31,6 @@
                 android:fontFamily="@font/dax_regular"
                 android:paddingLeft="@dimen/ten_dp"
                 android:paddingRight="@dimen/ten_dp"
-                android:maxLines="1"
                 android:layout_marginLeft="@dimen/sixteen_dp"
                 android:layout_marginRight="@dimen/sixteen_dp"
                 android:drawableEnd="@drawable/search"

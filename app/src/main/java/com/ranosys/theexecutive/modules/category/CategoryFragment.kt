@@ -3,18 +3,14 @@ package com.ranosys.theexecutive.modules.category
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.annotation.Nullable
-import android.support.annotation.RequiresApi
-import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
 import android.widget.ExpandableListView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
@@ -47,7 +43,6 @@ class CategoryFragment : BaseFragment() {
         return mViewDataBinding?.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true )
@@ -80,20 +75,6 @@ class CategoryFragment : BaseFragment() {
                 }
                 return false
             }
-        })
-
-        elv_parent_category.setOnScrollListener(object: AbsListView.OnScrollListener{
-            override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-            }
-
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                if(scrollState != 0){
-                    slideDown(view.rootView.findViewById(R.id.tabLayout))
-                }else{
-                    slideUp(view.rootView.findViewById(R.id.tabLayout))
-                }
-            }
-
         })
 
         observePromotionsApiResponse()
@@ -187,13 +168,4 @@ class CategoryFragment : BaseFragment() {
         return queryMap
     }
 
-    private fun slideUp(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(0f).duration = Constants.AIMATION_DURATION
-    }
-
-    private fun slideDown(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
-    }
 }

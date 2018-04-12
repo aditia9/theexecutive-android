@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.productListing
 
 import android.database.DataSetObserver
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableField
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.ranosys.theexecutive.databinding.FilterOptionItemBinding
 import com.ranosys.theexecutive.databinding.FilterOptionTitleBinding
 
 /**
- * @Class An adapter class for all products showing in viewpager.
+ * @Class An adapter class for filter option.
  * @author Ranosys Technologies
  * @Date 05-Apr-2018
  */
@@ -63,6 +64,10 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
 
         val layoutInflater = LayoutInflater.from(parent.context)
         val optionBinding: FilterOptionItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_item, parent, false)
+        val option = getChild(groupPosition, childPosition)
+        if(option?._isSelected == null){
+            option?._isSelected = ObservableField(false)
+        }
         optionBinding.option = getChild(groupPosition, childPosition)
 
         val filterList = parent as ExpandableListView
@@ -70,9 +75,16 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
         filterList.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
             override fun onChildClick(list: ExpandableListView?, parent: View?, groupPos: Int, childPos: Int, id: Long): Boolean {
                 //store selected filter
-                val filter = productListVM.filterOptionList?.value?.get(groupPos)
+                val filter = getGroup(groupPosition)
                 productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
-                return true
+
+                for (item in getGroup(groupPos)?.options!!){
+                    item._isSelected.set(false)
+                }
+
+                getChild(groupPos, childPos)?._isSelected?.set(true)
+                notifyDataSetChanged()
+                return false
             }
         })
         return optionBinding.root

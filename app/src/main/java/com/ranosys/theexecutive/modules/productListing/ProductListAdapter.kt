@@ -13,7 +13,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.ProductListItemBinding
 
 /**
- * @Class An adapter class for all products showing in viewpager.
+ * @Class An adapter class for all products listing
  * @author Ranosys Technologies
  * @Date 20-Mar-2018
  */

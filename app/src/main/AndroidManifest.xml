@@ -37,7 +37,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize"
             />
         <activity android:name=".activities.DashBoardActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan"
             />
 
         <!--fb integration-->

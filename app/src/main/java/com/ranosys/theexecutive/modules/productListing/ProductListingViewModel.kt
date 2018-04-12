@@ -7,6 +7,7 @@ import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -18,15 +19,40 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var isLoading: Boolean = false
     var totalProductCount: Int = 0
 
+    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>()
     var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData<MutableList<ProductListingDataClass.Filter>>()
     var priceFilter: MutableLiveData<ProductListingDataClass.Filter> = MutableLiveData()
     var selectedFilterMap = hashMapOf<String, String>()
     var selectedPriceRange = ProductListingDataClass.PriceRange()
+    var selectedSortOption = ProductListingDataClass.SortOptionResponse("", "")
 
     var productListResponse: ProductListingDataClass.ProductListingResponse? = null
 
     fun getSortOptions() {
-        AppRepository.sortOptionApi(object : ApiCallback<ProductListingDataClass.SortOptionResponse>{
+        AppRepository.sortOptionApi(object : ApiCallback<ArrayList<ProductListingDataClass.SortOptionResponse>>{
+            override fun onSuccess(sortOptions: ArrayList<ProductListingDataClass.SortOptionResponse>?) {
+                val tempOptions: ArrayList<ProductListingDataClass.SortOptionResponse> = ArrayList()
+                sortOptions?.let {
+                    for (option in it){
+                        if (option.attribute_code == "price"){
+                            tempOptions.add(ProductListingDataClass.SortOptionResponse(
+                                    attribute_code = option.attribute_code,
+                                    attribute_name = option.attribute_name + Constants.LOW_TO_HIGH))
+
+                            tempOptions.add(ProductListingDataClass.SortOptionResponse(
+                                    attribute_code = option.attribute_code,
+                                    attribute_name = option.attribute_name + Constants.HIGH_TO_LOW))
+
+                            continue
+                        }
+
+                        tempOptions.add(option)
+                    }
+                }
+
+                sortOptionList?.value = tempOptions
+            }
+
             override fun onException(error: Throwable) {
                 Utils.printLog("Sort option api", error.message?: "exception")
             }
@@ -35,9 +61,6 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                 Utils.printLog("Sort option api", message = errorMsg)
             }
 
-            override fun onSuccess(sortOptions: ProductListingDataClass.SortOptionResponse?) {
-                //TODO - save sort options
-            }
 
         })
     }
@@ -54,24 +77,24 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
             override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
 
-                filterOptions?.run {
-                    for (filter in filterOptions.filters){
-                        selectedFilterMap.put(filter.name, "")
+                if (filterOptions?.total_count!! > 0) {
+                    filterOptions?.run {
+                        for (filter in filterOptions.filters) {
+                            selectedFilterMap.put(filter.name, "")
+                        }
                     }
+
+                    priceFilter.value = filterOptions?.filters?.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
                 }
-
-                priceFilter.value = filterOptions?.filters?.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
                 filterOptionList?.value = filterOptions?.filters?.toMutableList()
-
-
             }
         })
     }
 
-    fun getProductListing(sku: String) {
+    fun getProductListing(catId: String) {
         isLoading = true
 
-        AppRepository.getProductList(prepareProductListingRequest(sku), object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
+        AppRepository.getProductList(prepareProductListingRequest(catId), object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("product listing", error.message?: "exception")
             }
@@ -104,10 +127,23 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                             }
                         }
 
-                        val type = ""
+
+                        var toDate = ""
+                        var fromDate = ""
+                        var attributes = product.custom_attributes.filter { it.attribute_code == Constants.NEW_FROM_DATE_LABEL }.toList()
+                        if(attributes.isNotEmpty()){
+                            fromDate = attributes.get(0).value.toString()
+                        }
+
+                        attributes = product.custom_attributes.filter { it.attribute_code == Constants.NEW_TO_DATE_LABEL }.toList()
+                        if(attributes.isNotEmpty()){
+                            toDate = attributes.get(0).value.toString()
+                        }
+                        val type = if(toDate.isNotBlank() && fromDate.isNotBlank()) isNewProduct(fromDate, toDate) else ""
+
                         val discount = (((price - specialPrice).div(price)).times(100)).toInt()
                         var imgUrl = ""
-                        if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].label.toString()
+                        if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].file
 
                         val product = ProductListingDataClass.ProductMaskedResponse(
                                 sku = sku,
@@ -134,15 +170,38 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         })
     }
 
-    private fun prepareProductListingRequest(sku: String): Map<String, String> {
+    private fun isNewProduct(fromDate: String, toDate: String): String {
+
+        val sdf = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT)
+        val d = Date()
+        var currentDate= sdf.format(d)
+        var cDate=sdf.parse(currentDate)
+        var sDtate=sdf.parse(fromDate)
+        var eDate=sdf.parse(toDate)
+
+        if(cDate.compareTo(sDtate) >= 0 && cDate.compareTo(eDate) <= 0) return Constants.NEW_TAG else  return ""
+    }
+
+    private fun prepareProductListingRequest(catId: String): Map<String, String> {
         val requestMap: MutableMap<String, String> = mutableMapOf()
 
-        requestMap.put(Constants.REQUEST_ID_LABEL, "81")
+        requestMap.put(Constants.REQUEST_ID_LABEL, catId)
         requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
         val page = (maskedProductList.value?.size)?.div(10)?.plus(1) ?: 1
-        requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString()) // pageCout
-        //requestMap.put("product_list_order",) sort option
-        //requestMap.put("product_list_dir","asc/desc) sort option
+        requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString())
+
+        if(selectedSortOption.attribute_code.isNotBlank()){
+            requestMap.put(Constants.SORT_OPTION_LABEL, selectedSortOption.attribute_code)
+            val dir = when{
+                selectedSortOption.attribute_name.contains(Constants.HIGH_TO_LOW, true) -> Constants.DESC
+                selectedSortOption.attribute_name.contains(Constants.LOW_TO_HIGH, true) -> Constants.ASC
+                else -> ""
+            }
+
+            if(dir.isNotBlank()){
+                requestMap.put(Constants.SORT_OPTION_DIR, dir)
+            }
+        }
 
         if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
             selectedFilterMap.put(Constants.FILTER_PRICE_LABEL, selectedPriceRange.min + "-" + selectedPriceRange.max)
