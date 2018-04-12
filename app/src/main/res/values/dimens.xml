@@ -6,6 +6,7 @@
     <dimen name="text_size_sub_heading">20sp</dimen>
     <dimen name="btn_text_size">16sp</dimen>
     <dimen name="field_start_padding">8dp</dimen>
+    <dimen name="date_picker_font_size">22sp</dimen>
 
     <dimen name="match_constraint">0dp</dimen>
     <dimen name="ten_dp">10dp</dimen>

@@ -27,8 +27,8 @@ object Constants {
         val UNKNOWN_ERROR: String = "Something went wrong"
         val PRODUCT_MEDIA_URL: String = "product_media_url"
         val CATEGORY_MEDIA_URL: String = "category_media_url"
-        val CATEGORY_ID: String = "category_id"
-        val CATEGORY_NAME: String = "category_name"
+        val CATEGORY_ID: String = "categoryId"
+        val CATEGORY_NAME: String = "categoryName"
         val VOUCHER_AMT: String = "voucher_amount"
         val SUBS_MESSAGE: String = "subscription_message"
         val DEFAULT_GROUP_ID: Int = 1
@@ -44,6 +44,14 @@ object Constants {
         val STATE_LABEL: String = "State"
         val CITY_LABEL: String = "City"
         val USER_EMAIL: String = "user_email"
+        val PRODUCT_LIST_RESPONSE: String = "product_list_response"
+        val LIST_PAGE_ITEM_COUNT: Int = 10
+        val FILTER_PRICE_LABEL: String = "Price"
+        val FILTER_CONFIGURABLE_LABEL: String = "configurable"
+        val FILTER_SPECIAL_PRICE_LABEL: String = "special_price"
+        val REQUEST_PAGE_LABEL: String = "p"
+        val REQUEST_PAGE_LIMIT_LABEL: String = "product_list_limit"
+        val REQUEST_ID_LABEL: String = "id"
         val AIMATION_DURATION: Long = 300
 
 }
