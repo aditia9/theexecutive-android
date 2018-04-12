@@ -118,7 +118,6 @@ class LoginFragment : BaseFragment() {
             when (id) {
                 btn_register.id -> {
                     FragmentUtils.addFragment(activity as Context, RegisterFragment(),null,  RegisterFragment::class.java.name, true)
-                    loginViewModel.clickedBtnId?.value = null
                 }
 
                 btn_login.id -> {
@@ -132,7 +131,6 @@ class LoginFragment : BaseFragment() {
                     } else {
                         showNetworkErrorDialog(activity as Context)
                     }
-                    loginViewModel.clickedBtnId?.value = null
                 }
 
                 btn_fb_login.id -> {
@@ -142,7 +140,6 @@ class LoginFragment : BaseFragment() {
                     } else {
                         showNetworkErrorDialog(activity as Context)
                     }
-                    loginViewModel.clickedBtnId?.value = null
                 }
 
                 btn_gmail_login.id -> {
@@ -151,15 +148,13 @@ class LoginFragment : BaseFragment() {
                     } else {
                         showNetworkErrorDialog(activity as Context)
                     }
-                    loginViewModel.clickedBtnId?.value = null
                 }
 
                 tv_forgot_password.id -> {
                     Utils.hideSoftKeypad(activity as Context)
                     FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), null, ForgotPasswordFragment::class.java.name, true)
-                    loginViewModel.clickedBtnId?.value = null
-                }
 
+                }
 
             }
         })

@@ -6,11 +6,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 /**
- * @Class An adapter class for all products showing in viewpager.
  * @author Ranosys Technologies
- * @Date 10-Apr-2018
+ * @date 10/4/18.
  */
-
 public class BitmapUtil {
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {

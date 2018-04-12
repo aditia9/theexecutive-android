@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
@@ -69,7 +68,6 @@ class ForgotPasswordFragment: BaseFragment() {
         forgotPassVM.apiSuccessResponse?.observe(this, Observer<Boolean> { isLinkSent ->
            if(isLinkSent!!) {
                hideLoading()
-               Toast.makeText(activity,getString(R.string.email_sent),Toast.LENGTH_SHORT).show()
                activity?.onBackPressed()
            }
         })
