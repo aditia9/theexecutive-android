@@ -51,7 +51,7 @@ class HomeFragment : BaseFragment() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
                 view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_accent_color))
-                view.setTypeface(null, Typeface.NORMAL);
+                view.setTypeface(null, Typeface.NORMAL)
                 when(tab.position){
                     0 ->{
                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home, 0, 0)
@@ -68,7 +68,7 @@ class HomeFragment : BaseFragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
                 view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_black_color))
-                view.setTypeface(null, Typeface.BOLD);
+                view.setTypeface(null, Typeface.BOLD)
                 when(tab.position) {
                     0 -> {
                         view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
@@ -134,7 +134,7 @@ class HomeFragment : BaseFragment() {
         tabOne.text = getString(R.string.home)
         fragmentPosition = 0
         tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
-        tabOne.setTypeface(null, Typeface.BOLD);
+        tabOne.setTypeface(Typeface.DEFAULT, Typeface.BOLD)
         tabLayout.getTabAt(0)?.customView = tabOne
 
         val tabTwo = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null) as TextView
