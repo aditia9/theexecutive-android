@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
+import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
 
 /**
@@ -24,11 +25,15 @@ import com.ranosys.theexecutive.utils.Constants
 class ProductViewFragment : BaseFragment() {
 
     lateinit var productItemViewModel : ProductItemViewModel
+    var productItem : ProductListingDataClass.Item? = null
+    var position : Int? = 0
+    var productSku : String? = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false);
-        val productItemViewModel = ViewModelProviders.of(this).get(ProductItemViewModel::class.java)
-        listGroupBinding?.productItemVM = productItemViewModel
+        productItemViewModel = ViewModelProviders.of(this).get(ProductItemViewModel::class.java)
+        productItemViewModel.productItem?.set(productItem)
+       // listGroupBinding?.productItemVM = productItemViewModel
 
         observeEvents()
 
@@ -64,6 +69,17 @@ class ProductViewFragment : BaseFragment() {
                 }
             }
         })
+    }
+
+    companion object {
+
+        fun getInstance(productItem : ProductListingDataClass.Item?, productSku : String?, position : Int?) =
+                ProductViewFragment().apply {
+                    this.productItem = productItem
+                    this.productSku = productSku
+                    this.position = position
+                }
+
     }
 
 }

@@ -90,7 +90,7 @@
         <item name="colorControlNormal">@color/hint_color</item>
     </style>
 
-    <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">
+   <!-- <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -104,6 +104,6 @@
         <item name="android:windowEnterAnimation">@anim/popup_show</item>
         <item name="android:windowExitAnimation">@anim/popup_hide</item>
     </style>
-
+-->
 
 </resources>

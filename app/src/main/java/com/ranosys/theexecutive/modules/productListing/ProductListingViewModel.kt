@@ -7,7 +7,6 @@ import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
-import java.util.*
 
 /**
  * Created by nikhil on 20/3/18.
@@ -54,15 +53,16 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
             override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
 
-                filterOptions?.run {
-                    for (filter in filterOptions.filters){
-                        selectedFilterMap.put(filter.name, "")
+                if (filterOptions?.total_count!! > 0) {
+                    filterOptions.run {
+                        for (filter in filterOptions.filters) {
+                            selectedFilterMap.put(filter.name, "")
+                        }
                     }
+
+                    priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
                 }
-
-                priceFilter.value = filterOptions?.filters?.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
-                filterOptionList?.value = filterOptions?.filters?.toMutableList()
-
+                filterOptionList?.value = filterOptions.filters.toMutableList()
 
             }
         })
@@ -82,7 +82,13 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
             override fun onSuccess(response: ProductListingDataClass.ProductListingResponse?) {
 
                 isLoading = false
-                productListResponse = response
+
+                if(null == productListResponse){
+                    productListResponse = response
+
+                }else{
+                    productListResponse?.items?.addAll(response?.items as ArrayList)
+                }
                 totalProductCount = productListResponse?.total_count ?: 0
 
                 val maskedResponse: ArrayList<ProductListingDataClass.ProductMaskedResponse> = ArrayList()

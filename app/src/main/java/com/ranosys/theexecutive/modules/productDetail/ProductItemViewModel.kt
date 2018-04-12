@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.productDetail
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import android.databinding.ObservableField
 import android.view.View
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
@@ -10,6 +11,7 @@ import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
+import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 
 /**
  * @Class ViewModel for product item.
@@ -18,6 +20,7 @@ import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOption
  */
 class ProductItemViewModel(application: Application) : BaseViewModel(application){
 
+    var productItem :  ObservableField<ProductListingDataClass.Item>? = ObservableField()
     var productChildrenResponse: MutableLiveData<ApiResponse<ChildProductsResponse>>? = MutableLiveData()
     var productOptionResponse: MutableLiveData<ApiResponse<List<ProductOptionsResponse>>>? = MutableLiveData()
 

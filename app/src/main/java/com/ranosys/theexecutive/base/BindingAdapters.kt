@@ -123,5 +123,22 @@ class BindingAdapters {
                         .into(imageView)
             }
         }
+
+        @JvmStatic
+        @BindingAdapter("bind:baseUrlWithProductImageUrl")
+        fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
+            val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.PRODUCT_MEDIA_URL)
+            imageUrl?.run {
+                GlideApp.with(imageView.context)
+                        .load(baseUrl+imageUrl)
+                        .placeholder(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .centerCrop()
+                        .into(imageView)
+            }
+        }
     }
 }

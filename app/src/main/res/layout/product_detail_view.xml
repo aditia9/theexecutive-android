@@ -3,7 +3,7 @@
 
     <data>
         <variable name="productItemVM"
-            type="com.ranosys.theexecutive.modules.productDetail.ProductItemViewModel"/>
+            type="com.ranosys.theexecutive.modules.productListing.ProductListingDataClass.Item"/>
     </data>
 
     <RelativeLayout
@@ -56,7 +56,7 @@
                     android:textAlignment="center"
                     android:maxLines="10"
                     android:textStyle="bold"
-                    android:text="Polo Shirt, Shirt coller,Short sleeve, Slim Fit Materail: Tetoron,Rayon Model Height : 186 CM Model wearing size M,Color: Grey"
+                    android:text="@{productItemVM.custom_attributes.get(1).value}"
                     />
 
                 <TextView
@@ -228,7 +228,6 @@
                 android:layout_marginLeft="@dimen/five_dp"
                 android:padding="@dimen/ten_dp"
                 android:background="@drawable/button_border"
-                android:onClick="@{(view)-> productItemVM.btnClicked(view)}"
                 />
 
             <TextView

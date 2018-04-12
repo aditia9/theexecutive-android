@@ -50,7 +50,7 @@ class ProductListingDataClass {
 
     data class ProductListingResponse(
             val total_count: Int,
-            val items: List<Item>
+            val items: MutableList<Item>
     )
 
     data class Item(

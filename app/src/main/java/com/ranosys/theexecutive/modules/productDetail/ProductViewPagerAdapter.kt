@@ -52,7 +52,7 @@ class ProductViewPagerAdapter(fragment: ProductDetailFragment, productList : Lis
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(mLayoutInflater, R.layout.product_detail_view, container, false);
         mProductItemViewModel = ViewModelProviders.of(mContext as ProductDetailFragment).get(ProductItemViewModel::class.java)
         //listGroupBinding?.btnAddToBag?.tag = position
-        listGroupBinding?.productItemVM = mProductItemViewModel
+        //listGroupBinding?.productItemVM = mProductItemViewModel
 
         //observeAddToBagEvent(position)
         container.addView(listGroupBinding?.root)
