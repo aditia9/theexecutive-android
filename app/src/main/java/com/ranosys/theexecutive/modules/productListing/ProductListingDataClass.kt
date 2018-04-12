@@ -1,8 +1,6 @@
 package com.ranosys.theexecutive.modules.productListing
 
-import android.databinding.BaseObservable
-import android.databinding.Bindable
-import com.ranosys.theexecutive.BR
+import android.databinding.ObservableField
 
 /**
  * Created by nikhil on 20/3/18.
@@ -41,17 +39,11 @@ class ProductListingDataClass {
     data class FilterChildOption(
             val label: String,
             val code: String,
-            val value: String,
-            var _isSelected: Boolean = false): BaseObservable(){
-        var isSelected = _isSelected
-
-            @Bindable
-            get() = _isSelected
-
-            set(value) {
-                field = value
-                notifyPropertyChanged(BR.selected);
-            }
+            val value: String){
+        var _isSelected: ObservableField<Boolean>
+        init {
+            _isSelected = ObservableField<Boolean>()
+        }
     }
 
 

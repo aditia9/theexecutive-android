@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.productListing
 
 import android.database.DataSetObserver
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableField
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,6 +61,10 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
 
         val layoutInflater = LayoutInflater.from(parent.context)
         val optionBinding: FilterOptionItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_item, parent, false)
+        val option = getChild(groupPosition, childPosition)
+        if(option?._isSelected == null){
+            option?._isSelected = ObservableField(false)
+        }
         optionBinding.option = getChild(groupPosition, childPosition)
 
         val filterList = parent as ExpandableListView
@@ -71,10 +76,10 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
                 productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
 
                 for (item in getGroup(groupPos)?.options!!){
-                    item._isSelected = false
+                    item._isSelected.set(false)
                 }
 
-                getChild(groupPos, childPos)?._isSelected = true
+                getChild(groupPos, childPos)?._isSelected?.set(true)
                 notifyDataSetChanged()
                 return false
             }
