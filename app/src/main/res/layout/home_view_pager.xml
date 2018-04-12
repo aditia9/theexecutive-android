@@ -21,16 +21,5 @@
                     >
                 </android.support.v4.view.ViewPager>
 
-                <TextView
-                    android:id="@+id/tv_subscriptin_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/viewpager"
-                    android:gravity="center"
-                    android:textSize="@dimen/twenty_sp"
-                    android:padding="@dimen/fifteen_dp"
-                    android:textStyle="bold"
-                    />
-
         </RelativeLayout>
 </layout>

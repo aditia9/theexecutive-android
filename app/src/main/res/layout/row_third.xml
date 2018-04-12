@@ -11,16 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/ten_dp">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/rowThirdText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/forty_dp"
+            android:layout_marginLeft="40dp"
             android:text="@{childData.name}"
-            android:textStyle="bold"
-            android:textSize="@dimen/eighteen_sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
 </layout>

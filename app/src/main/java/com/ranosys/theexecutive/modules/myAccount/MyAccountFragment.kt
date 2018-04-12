@@ -3,7 +3,6 @@ package com.ranosys.theexecutive.modules.myAccount
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.TabLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,8 +11,6 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_my_account.*
@@ -40,33 +37,6 @@ class MyAccountFragment: BaseFragment() {
         my_account_options_list.addItemDecoration(itemDecor)
         my_account_options_list.adapter = MyAccountAdapter(getAccountOptions(), activity as Context)
 
-        my_account_options_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                if (dy < 0) {
-                    // hide the layout here
-                }
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                if(newState != 0){
-                    slideDown(view.rootView.findViewById(R.id.tabLayout))
-                }else{
-                    slideUp(view.rootView.findViewById(R.id.tabLayout))
-                }
-            }
-        })
-
-
-    }
-
-    private fun slideUp(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(0f).duration = Constants.AIMATION_DURATION
-    }
-
-    private fun slideDown(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
     }
 
     private fun getAccountOptions(): List<MyAccountDataClass.MyAccountOption> {
@@ -97,7 +67,7 @@ class MyAccountFragment: BaseFragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             if(viewType == VIEW_TYPE_FOOTER){
                 val itemView = LayoutInflater.from(parent.context).inflate(R.layout.logout_btn, parent, false)
-                return MyAccountFooterHolder(itemView,context)
+                return MyAccountFooterHolder(itemView)
 
             }else{
                 val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent,false)
@@ -128,15 +98,10 @@ class MyAccountFragment: BaseFragment() {
             }
         }
 
-        class MyAccountFooterHolder(val item: View, context: Context): RecyclerView.ViewHolder(item){
+        class MyAccountFooterHolder(val item: View): RecyclerView.ViewHolder(item){
             init {
                 itemView.btn_logout.setOnClickListener({
-                    Utils.showDialog(context, context.getString(R.string.logout_text),
-                            context.getString(R.string.yes), context.getString(R.string.no), object : DialogOkCallback {
-                        override fun setDone(done: Boolean) {
-                            Utils.logout(item.context)
-                        }
-                    })
+                    Utils.logout(item.context)
                 })
             }
         }

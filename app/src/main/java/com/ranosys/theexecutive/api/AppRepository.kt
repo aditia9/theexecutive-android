@@ -366,14 +366,14 @@ object AppRepository {
         })
     }
 
-    fun sortOptionApi(callBack: ApiCallback<ProductListingDataClass.SortOptionResponse>) {
+    fun sortOptionApi(callBack: ApiCallback<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
         val callGet = retrofit?.create<ApiService.SortOptionService>(ApiService.SortOptionService::class.java)?.getSortOptions(ApiConstants.BEARER + adminToken,  storeCode)
 
-        callGet?.enqueue(object : Callback<ProductListingDataClass.SortOptionResponse> {
-            override fun onResponse(call: Call<ProductListingDataClass.SortOptionResponse>?, response: Response<ProductListingDataClass.SortOptionResponse>?) {
+        callGet?.enqueue(object : Callback<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>> {
+            override fun onResponse(call: Call<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>?, response: Response<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>?) {
                 if(!response!!.isSuccessful){
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                 } else {
@@ -381,7 +381,7 @@ object AppRepository {
                 }
             }
 
-            override fun onFailure(call: Call<ProductListingDataClass.SortOptionResponse>, t: Throwable) {
+            override fun onFailure(call: Call<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

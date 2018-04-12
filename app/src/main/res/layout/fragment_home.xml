@@ -12,7 +12,8 @@
         <com.ranosys.theexecutive.customViews.CustomViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tabLayout"
             />
 
         <TextView
@@ -28,20 +29,16 @@
             android:drawableLeft="@drawable/chat"
             android:padding="@dimen/ten_dp"
             android:drawablePadding="@dimen/ten_dp"
-            android:layout_margin="@dimen/twenty_dp"
+            android:layout_margin="@dimen/ten_dp"
             />
 
         <!-- our tablayout to display tabs  -->
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
-            app:tabMode="fixed"
-            app:tabMaxWidth="0dp"
-            app:tabGravity="fill"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             app:tabIndicatorHeight="0dp"
-            android:background="@color/white"
             />
 
 

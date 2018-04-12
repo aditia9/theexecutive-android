@@ -6,7 +6,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
 /**
- * @Class An adapter class for all products showing in viewpager.
+ * @Class Custom edit text with prefix
  * @author Ranosys Technologies
  * @Date 09-Apr-2018
  */
