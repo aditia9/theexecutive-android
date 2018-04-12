@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/heading_theme"
-            android:text="SORT BY"
+            android:text="@string/sort_dialog_title"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -42,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/cancel"
+            android:contentDescription="@string/cancel"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/title_filter"/>
@@ -51,7 +52,7 @@
             android:id="@+id/tv_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clear"
+            android:text="@string/clear"
             app:layout_constraintBaseline_toBaselineOf="@id/title_filter"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintTop_toTopOf="parent"/>

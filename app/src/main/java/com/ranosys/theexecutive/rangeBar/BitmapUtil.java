@@ -4,11 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
 /**
+ * @Class helper for range bar class
  * @author Ranosys Technologies
- * @date 10/4/18.
+ * @Date 10-Apr-2018
  */
+
 public class BitmapUtil {
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {

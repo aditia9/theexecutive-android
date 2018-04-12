@@ -124,6 +124,10 @@
     <string name="non_breakable_apace">\u00A0</string>
     <string name="price_range_label">Price Range</string>
     <string name="apply_filters">apply</string>
+    <string name="filter_dialog_title">FILTER</string>
+    <string name="sort_dialog_title">SORT BY</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">cancel</string>
 
 
 </resources>

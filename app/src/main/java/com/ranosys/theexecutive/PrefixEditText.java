@@ -6,7 +6,9 @@ import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
 /**
- * Created by nikhil on 9/4/18.
+ * @Class Custom edit text with prefix
+ * @author Ranosys Technologies
+ * @Date 09-Apr-2018
  */
 
 public class PrefixEditText extends AppCompatEditText {
