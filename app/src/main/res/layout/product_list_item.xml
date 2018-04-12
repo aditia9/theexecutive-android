@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/two_fifty_dp"
             android:scaleType="centerCrop"
-            bind:imageUrl="@{productItem.imageUrl}"
+            bind:baseUrlWithProductImageUrl="@{productItem.imageUrl}"
             android:layout_marginTop="@dimen/four_dp"
             android:contentDescription="@string/product_image"
             app:layout_constraintRight_toRightOf="parent"
