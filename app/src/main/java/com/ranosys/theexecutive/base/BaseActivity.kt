@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.base
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModelProviders
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -25,6 +26,13 @@ open class BaseActivity: RunTimePermissionActivity(){
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if(Utils.isTablet(this)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         toolbarViewModel = ViewModelProviders.of(this).get(ToolbarViewModel::class.java)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)

@@ -6,7 +6,9 @@ import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
 /**
- * Created by nikhil on 9/4/18.
+ * @Class An adapter class for all products showing in viewpager.
+ * @author Ranosys Technologies
+ * @Date 09-Apr-2018
  */
 
 public class PrefixEditText extends AppCompatEditText {

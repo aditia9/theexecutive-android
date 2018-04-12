@@ -14,6 +14,8 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:background="@color/white"
+        android:paddingLeft="@dimen/fifteen_dp"
+        android:paddingRight="@dimen/fifteen_dp"
         >
 
         <android.support.design.widget.TextInputLayout
@@ -29,10 +31,7 @@
                 android:theme="@style/myAppTheme"
                 android:textColor="@color/theme_black_color"
                 android:fontFamily="@font/dax_regular"
-                android:paddingLeft="@dimen/ten_dp"
-                android:paddingRight="@dimen/ten_dp"
-                android:layout_marginLeft="@dimen/sixteen_dp"
-                android:layout_marginRight="@dimen/sixteen_dp"
+                android:maxLines="1"
                 android:drawableEnd="@drawable/search"
                 android:backgroundTint="@color/theme_accent_color"
                 />

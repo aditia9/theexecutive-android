@@ -3,8 +3,11 @@ package com.ranosys.theexecutive.modules.productListing
 import android.databinding.ObservableField
 
 /**
- * Created by nikhil on 20/3/18.
+ * @Class An adapter class for all products showing in viewpager.
+ * @author Ranosys Technologies
+ * @Date 20-Mar-2018
  */
+
 class ProductListingDataClass {
 
     class ProductMaskedResponse(var sku: String = "0",

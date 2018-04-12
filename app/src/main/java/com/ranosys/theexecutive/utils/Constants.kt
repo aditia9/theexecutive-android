@@ -61,5 +61,6 @@ object Constants {
         val DESC: String = "desc"
         val ASC: String = "asc"
         val NEW_TAG: String = "New"
+        val AIMATION_DURATION: Long = 300
 
 }

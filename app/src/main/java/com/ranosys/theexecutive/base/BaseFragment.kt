@@ -22,9 +22,12 @@ abstract class BaseFragment : LifecycleFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = activity
-        observeLeftIconClick()
     }
 
+    override fun onResume() {
+        super.onResume()
+        observeLeftIconClick()
+    }
 
     fun showLoading() {
         mProgressDialog = Utils.showProgressDialog(mContext)

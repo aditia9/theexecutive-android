@@ -24,7 +24,7 @@ import java.util.*
 /**
  * Created by Mohammad Sunny on 31/1/18.
  */
-class RegisterViewModel(application: Application): BaseViewModel(application) {
+class  RegisterViewModel(application: Application): BaseViewModel(application) {
     var firstName: ObservableField<String> = ObservableField()
     var firstNameError: ObservableField<String> = ObservableField()
     var lastName: ObservableField<String> = ObservableField()

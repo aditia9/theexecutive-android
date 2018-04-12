@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.utils
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
@@ -132,7 +133,7 @@ object Utils {
     }
 
     fun showNetworkErrorDialog(context: Context){
-        Utils.showDialog(context, context.getString(R.string.network_err_text),context.getString(android.R.string.ok), "", object : DialogOkCallback{
+        showDialog(context, context.getString(R.string.network_err_text),context.getString(android.R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
 
             }
@@ -143,6 +144,12 @@ object Utils {
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
         Toast.makeText(context, context.getString(R.string.logout_success_message), Toast.LENGTH_SHORT).show()
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
+    }
+
+    fun isTablet(context: Context): Boolean {
+        val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
+        val large = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
+        return xlarge || large
     }
 
 }

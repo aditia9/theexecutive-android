@@ -56,5 +56,7 @@
     <dimen name="one_fifty_dp">150dp</dimen>
     <dimen name="one_sixty_dp">160dp</dimen>
     <dimen name="twenty_eight_dp">28dp</dimen>
+    <dimen name="fifteen_dp">15dp</dimen>
+    <dimen name="eighty_dp">80dp</dimen>
 
 </resources>
