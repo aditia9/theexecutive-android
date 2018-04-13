@@ -77,10 +77,17 @@ class BindingAdapters {
             view.setAdapter(adapter)
         }
 
+//        @JvmStatic
+//        @BindingAdapter("bind:filterOptions")
+//        fun setFilterOptions(view: ExpandableListView, response: MutableList<ProductListingDataClass.Filter>?) {
+//            val adapter = FilterOptionAdapter(view.context, response)
+//            view.setAdapter(adapter)
+//        }
+
         @JvmStatic
         @BindingAdapter("promotionData")
-        fun bindViewPager(view: ViewPager, response: ObservableField<List<PromotionsResponseDataClass>>?) {
-            val customViewPagerAdapter = CustomViewPageAdapter(view.context, response?.get())
+        fun bindViewPager(view: ViewPager, response: List<PromotionsResponseDataClass>?) {
+            val customViewPagerAdapter = CustomViewPageAdapter(view.context, response)
             view.adapter = customViewPagerAdapter
         }
 
@@ -113,6 +120,22 @@ class BindingAdapters {
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .centerCrop()
+                        .into(imageView)
+            }
+        }
+
+        @JvmStatic
+        @BindingAdapter("bind:baseUrlWithProductImageUrl")
+        fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
+            val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.PRODUCT_MEDIA_URL)
+            imageUrl?.run {
+                GlideApp.with(imageView.context)
+                        .load(baseUrl+imageUrl)
+                        .placeholder(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .into(imageView)
             }
         }

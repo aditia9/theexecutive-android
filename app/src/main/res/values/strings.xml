@@ -86,6 +86,7 @@
     <string name="valid_mobile_error">Please provide valid mobile</string>
     <string name="confirm_password_error">Password mismatch</string>
     <string name="select_lang_title">Select Language</string>
+    <string name="select_option">Select Option</string>
     <string name="continue_btn">Continue</string>
     <string name="language_hint">Language</string>
     <string name="my_account_option_icon">My account option icon</string>
@@ -120,6 +121,12 @@
     <string name="verify_email_message">Please verify email</string>
     <string name="register_successfull">You have registered successfully.</string>
     <string name="logout_success_message">Logout successfully</string>
+    <string name="non_breakable_apace">\u00A0</string>
+    <string name="price_range_label">Price Range</string>
+    <string name="apply_filters">apply</string>
+    <string name="filter_dialog_title">FILTER</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
     <string name="image_one_detail">Product first image showing at top</string>
     <string name="image_two_detail">Product second image is showing</string>
     <string name="composition">Composition and Care</string>
