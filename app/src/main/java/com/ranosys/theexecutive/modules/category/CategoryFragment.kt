@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.annotation.Nullable
+import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.ExpandableListView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
@@ -21,6 +23,7 @@ import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
 
@@ -45,11 +48,12 @@ class CategoryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true )
+        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
 
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
+        promotionBinding?.root?.tv_promotion_text?.text = SavedPreferences.getInstance()?.getStringValue(Constants.PROMOTION_MESSAGE)
         viewPager = promotionBinding?.root?.viewpager!!
         elv_parent_category.addHeaderView(promotionBinding.root)
 
@@ -75,6 +79,20 @@ class CategoryFragment : BaseFragment() {
                 }
                 return false
             }
+        })
+
+        elv_parent_category.setOnScrollListener(object: AbsListView.OnScrollListener{
+            override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+            }
+
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                if(scrollState != 0){
+                    slideDown(view.rootView.findViewById(R.id.tabLayout))
+                }else{
+                    slideUp(view.rootView.findViewById(R.id.tabLayout))
+                }
+            }
+
         })
 
         observePromotionsApiResponse()
@@ -141,7 +159,6 @@ class CategoryFragment : BaseFragment() {
         handler.postDelayed(runnable, 3000)
     }
 
-
     // It will use in future
     fun getQueryMap(childrenDataList: ArrayList<ChildrenData>?): HashMap<String, String> {
 
@@ -166,6 +183,16 @@ class CategoryFragment : BaseFragment() {
         }
 
         return queryMap
+    }
+
+    private fun slideUp(child: TabLayout) {
+        child.clearAnimation()
+        child.animate().translationY(0f).duration = Constants.AIMATION_DURATION
+    }
+
+    private fun slideDown(child: TabLayout) {
+        child.clearAnimation()
+        child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
     }
 
 }

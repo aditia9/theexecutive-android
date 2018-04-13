@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/twenty_dp"
-        android:paddingBottom="@dimen/twenty_dp">
+        android:paddingBottom="@dimen/twenty_dp"
+        android:background="?selectableItemBackground">
 
         <TextView
             android:id="@+id/store_name_tv"

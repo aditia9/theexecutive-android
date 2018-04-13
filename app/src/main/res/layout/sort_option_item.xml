@@ -14,14 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/twenty_dp"
-        android:paddingBottom="@dimen/twenty_dp">
+        android:paddingBottom="@dimen/twenty_dp"
+        android:background="?selectableItemBackground">
 
         <TextView
             android:id="@+id/sort_option_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{option.attribute_name}"
-            android:layout_marginStart="@dimen/thirtyTwo_dp"
+            android:layout_marginStart="@dimen/twenty_four_dp"
+            android:textSize="@dimen/eighteen_sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 

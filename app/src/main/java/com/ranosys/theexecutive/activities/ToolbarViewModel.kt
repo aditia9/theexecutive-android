@@ -19,6 +19,7 @@ class ToolbarViewModel(application: Application): BaseViewModel(application) {
     var isLeftIconVisible : ObservableField<Boolean> = ObservableField()
     var rightIcon: ObservableField<Int> = ObservableField()
     var isRightIconVisible : ObservableField<Boolean> = ObservableField()
+    var showLogo : ObservableField<Boolean> = ObservableField()
     var titleBackground : ObservableField<Int> = ObservableField()
     var leftIconClicked: MutableLiveData<Int>? = MutableLiveData()
 
@@ -30,6 +31,7 @@ class ToolbarViewModel(application: Application): BaseViewModel(application) {
         rightIcon.set(android.R.color.transparent)
         isRightIconVisible.set(true)
         titleBackground.set(0)
+        showLogo.set(false)
     }
 
     fun onIconClick(view : View){

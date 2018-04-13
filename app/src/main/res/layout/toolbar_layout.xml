@@ -31,41 +31,49 @@
             android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
             />
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center|center_vertical"
-            android:gravity="center"
-            >
+            android:layout_gravity="center|center_vertical">
 
-            <TextView
-                android:id="@+id/toolbar_title"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/twenty_sp"
-                android:textColor="@color/theme_black_color"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:theme="@style/heading_theme"
-                android:gravity="center|center_vertical"
-                android:text="@{toolbarViewModel.title}"
-                android:fontFamily="@font/dax_regular"
-                android:background="@{ContextCompat.getDrawable(context, toolbarViewModel.titleBackground)}"
-                />
+                android:visibility="@{toolbarViewModel.showLogo ? View.VISIBLE: View.GONE }"
+                android:src="@drawable/home_logo"/>
 
-            <TextView
-                android:id="@+id/toolbar_sub_title"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/sixteen_sp"
-                android:textColor="@color/theme_black_color"
-                android:text="@{toolbarViewModel.subTitle}"
+                android:orientation="vertical"
                 android:layout_gravity="center|center_vertical"
-                android:fontFamily="@font/dax_regular"
-                android:visibility="@{TextUtils.isEmpty(toolbarViewModel.subTitle) ? View.GONE : View.VISIBLE,  default = gone}"
-                />
-        </LinearLayout>
+                android:visibility="@{toolbarViewModel.showLogo ? View.GONE: View.VISIBLE }"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{toolbarViewModel.showLogo ? View.GONE: View.VISIBLE }"
+                    android:theme="@style/heading_theme"
+                    android:gravity="center|center_vertical"
+                    android:text="@{toolbarViewModel.title}"
+                    />
+
+                <TextView
+                    android:id="@+id/toolbar_sub_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sixteen_sp"
+                    android:textColor="@color/theme_black_color"
+                    android:text="@{toolbarViewModel.subTitle}"
+                    android:layout_gravity="center|center_vertical"
+                    android:visibility="@{TextUtils.isEmpty(toolbarViewModel.subTitle) ? View.GONE : View.VISIBLE,  default = gone}"
+                    />
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/toolbar_right_icon"

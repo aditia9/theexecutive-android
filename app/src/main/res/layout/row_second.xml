@@ -18,6 +18,7 @@
             android:layout_toLeftOf="@+id/img_expand_collapse"
             android:textAllCaps="true"
             android:padding="10dp"
+            android:textStyle="bold"
             android:layout_marginLeft="20dp"
             android:text="@{childData.name}"
             android:textSize="18sp"/>

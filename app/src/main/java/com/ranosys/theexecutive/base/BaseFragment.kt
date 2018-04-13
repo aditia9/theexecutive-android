@@ -39,7 +39,7 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     fun setToolBarParams(title: String?, titleBackground : Int?, subTitle: String?, leftIcon : Int?, leftIconVisibility : Boolean,
-                         rightIcon : Int?, rightIconVisibility : Boolean){
+                         rightIcon : Int?, rightIconVisibility : Boolean, showLogo: Boolean = false){
         setTitle(title)
         setTitleBackground(titleBackground)
         setSubTitle(subTitle)
@@ -47,7 +47,12 @@ abstract class BaseFragment : LifecycleFragment() {
         setLeftIconVisibilty(leftIconVisibility)
         setRightIcon(rightIcon)
         setRightIconVisibilty(rightIconVisibility)
+        setShowLogo(showLogo)
 
+    }
+
+    private fun setShowLogo(showLogo: Boolean) {
+        (activity as BaseActivity).setShowLogo(showLogo)
     }
 
     protected fun getToolBarViewModel() : ToolbarViewModel?{

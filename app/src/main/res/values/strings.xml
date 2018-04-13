@@ -68,19 +68,19 @@
     <string name="create_account">Create an Account</string>
     <string name="gmail_server_client_id">818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com</string>
     <string name="password_validation_err">Password should contain 8 characters, one digit, one special character</string>
-    <string name="first_name">First name</string>
-    <string name="last_name">Last name</string>
-    <string name="email">Email address</string>
-    <string name="mobile_number">Mobile number</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email Address</string>
+    <string name="mobile_number">Mobile Number</string>
     <string name="address">Address</string>
-    <string name="postcode">Zip/ Postcode</string>
-    <string name="confirm_password">Confirm password</string>
+    <string name="postcode">Zip/ Postal Code</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="subscribe">Suscribe to get IDR %1$s Voucher</string>
     <string name="term_and_condition"><![CDATA[By creating your account, you agree to our Terms & Conditions and Privacy Policy]]></string>
     <string name="dob_hint">DD/MM/YYYY</string>
-    <string name="street_address_1">Street Address Line 1</string>
+    <string name="street_address_1">Street Address Line 1 </string>
     <string name="street_address_error">Please provide Street address</string>
-    <string name="street_address_2">Street Address Line 2</string>
+    <string name="street_address_2">Street Address Line 2 </string>
     <string name="postal_error">Please provide postal code</string>
     <string name="valid_password_error">Please provide valid password</string>
     <string name="valid_mobile_error">Please provide valid mobile</string>
@@ -128,6 +128,9 @@
     <string name="sort_dialog_title">SORT BY</string>
     <string name="clear">Clear</string>
     <string name="cancel">cancel</string>
+    <string name="email_sent">An email is sent to your registered email.</string>
+    <string name="logout_text">Are you sure you want to logout from application?</string>
+
 
 
 </resources>

@@ -51,6 +51,7 @@
     <style name="heading_theme" parent="myAppTheme">
         <item name="android:textSize">@dimen/text_size_heading</item>
         <item name="android:fontFamily">@font/opensans_semibold</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="sub_heading_theme" parent="myAppTheme">

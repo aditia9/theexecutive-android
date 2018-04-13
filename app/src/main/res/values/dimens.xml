@@ -2,8 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <dimen name="text_size_regular">16sp</dimen>
-    <dimen name="text_size_heading">24sp</dimen>
-    <dimen name="text_size_sub_heading">20sp</dimen>
+    <dimen name="text_size_heading">20sp</dimen>
+    <dimen name="text_size_sub_heading">18sp</dimen>
     <dimen name="btn_text_size">16sp</dimen>
     <dimen name="field_start_padding">8dp</dimen>
     <dimen name="date_picker_font_size">22sp</dimen>
@@ -56,5 +56,7 @@
     <dimen name="one_fifty_dp">150dp</dimen>
     <dimen name="one_sixty_dp">160dp</dimen>
     <dimen name="twenty_eight_dp">28dp</dimen>
+    <dimen name="fifteen_dp">15dp</dimen>
+    <dimen name="eighty_dp">80dp</dimen>
 
 </resources>

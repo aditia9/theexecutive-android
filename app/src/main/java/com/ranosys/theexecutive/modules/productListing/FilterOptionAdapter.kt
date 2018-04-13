@@ -33,20 +33,6 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
         val layoutInflater = LayoutInflater.from(parent.context)
         val titleBinding: FilterOptionTitleBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_title, parent, false)
         titleBinding.filter = getGroup(groupPosition)
-
-
-        val filterList = parent as ExpandableListView
-
-        filterList.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
-            var previousGroup = -1
-            override fun onGroupExpand(groupPosition: Int) {
-                if(groupPosition != previousGroup){
-                    filterList.collapseGroup(previousGroup)
-                }
-                previousGroup = groupPosition
-            }
-        })
-
         return titleBinding.root
     }
 
@@ -79,7 +65,7 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
                 productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
 
                 for (item in getGroup(groupPos)?.options!!){
-                    item._isSelected.set(false)
+                    item._isSelected?.set(false)
                 }
 
                 getChild(groupPos, childPos)?._isSelected?.set(true)

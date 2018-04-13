@@ -12,5 +12,6 @@ data class ConfigurationResponse(
 		val product_media_url: String,
 		val category_media_url: String,
 		val voucher_amount: String,
-		val subscription_message: String
+		val subscription_message: String,
+		val home_promotion_message: String
 )
