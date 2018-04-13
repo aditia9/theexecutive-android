@@ -101,6 +101,7 @@
                     android:textStyle="bold"
                     android:text="@string/composition"
                     android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
                 <TextView
@@ -112,6 +113,7 @@
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
                 <TextView
@@ -123,6 +125,7 @@
                     android:text="@string/shipping"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
                 <TextView
@@ -134,6 +137,7 @@
                     android:text="@string/returns"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
                 <TextView
@@ -145,6 +149,7 @@
                     android:text="@string/share"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
                 <TextView
@@ -156,6 +161,7 @@
                     android:text="@string/buying_guideline"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
                 <TextView
@@ -167,6 +173,7 @@
                     android:text="@string/chat"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
                 <TextView
@@ -178,6 +185,7 @@
                     android:text="@string/add_to_wishlist"
                     android:textStyle="bold"
                     android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
                 <RelativeLayout

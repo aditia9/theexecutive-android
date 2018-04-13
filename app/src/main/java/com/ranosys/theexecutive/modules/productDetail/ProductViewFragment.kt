@@ -48,6 +48,7 @@ class ProductViewFragment : BaseFragment() {
         listGroupBinding?.productItemVM = productItemViewModel
 
         observeEvents()
+        getStaticPagesUrl()
 
         if(productItem?.type_id.equals("configurable")){
             setData()
@@ -97,11 +98,39 @@ class ProductViewFragment : BaseFragment() {
         productItemViewModel.getProductOptions(attributeId, label)
     }
 
+    fun getStaticPagesUrl(){
+        productItemViewModel.getStaticPagesUrl()
+    }
+
     fun observeEvents(){
         productItemViewModel.clickedAddBtnId?.observe(this, Observer<Int> { id ->
             when (id){
                 R.id.btn_add_to_bag -> {
                     openBottomSizeSheet ()
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_composition_and_care -> {
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_size_guideline -> {
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_shipping -> {
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_return -> {
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_share -> {
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_buying_guidelinie -> {
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_chat -> {
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_wishlist -> {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
             }
