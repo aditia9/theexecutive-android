@@ -48,12 +48,12 @@ class CategoryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true )
+        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
 
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
-        promotionBinding?.root?.tv_subscriptin_text?.text = SavedPreferences.getInstance()?.getStringValue(Constants.SUBS_MESSAGE)
+        promotionBinding?.root?.tv_promotion_text?.text = SavedPreferences.getInstance()?.getStringValue(Constants.PROMOTION_MESSAGE)
         viewPager = promotionBinding?.root?.viewpager!!
         elv_parent_category.addHeaderView(promotionBinding.root)
 

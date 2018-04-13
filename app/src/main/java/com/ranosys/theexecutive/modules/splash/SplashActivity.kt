@@ -81,6 +81,7 @@ class SplashActivity : BaseActivity() {
             SavedPreferences.getInstance()?.saveStringValue(configuration.category_media_url, Constants.CATEGORY_MEDIA_URL)
             SavedPreferences.getInstance()?.saveStringValue(configuration.voucher_amount, Constants.VOUCHER_AMT)
             SavedPreferences.getInstance()?.saveStringValue(configuration.subscription_message, Constants.SUBS_MESSAGE)
+            SavedPreferences.getInstance()?.saveStringValue(configuration.home_promotion_message, Constants.PROMOTION_MESSAGE)
 
             //call store api
             getStoresApi()

@@ -48,12 +48,12 @@ class DashBoardActivity: BaseActivity() {
                         if(fragment is HomeFragment) {
                             when(HomeFragment.fragmentPosition){
                                 0 -> {
-                                    (fragment as BaseFragment).setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true)
+                                    (fragment as BaseFragment).setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true, true)
                                 }
                                 1 -> {
                                     val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                                     if(TextUtils.isEmpty(isLogin)){
-                                        (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false)
+                                        (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
                                     }else{
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, "", 0, false, 0, false)
                                     }

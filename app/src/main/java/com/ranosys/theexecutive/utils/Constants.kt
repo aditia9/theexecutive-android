@@ -31,6 +31,7 @@ object Constants {
         val CATEGORY_NAME: String = "categoryName"
         val VOUCHER_AMT: String = "voucher_amount"
         val SUBS_MESSAGE: String = "subscription_message"
+        val PROMOTION_MESSAGE: String = "home_promotion_message"
         val DEFAULT_GROUP_ID: Int = 1
         val SOCIAL_LOGIN_CONFIRMATION: String = "social"
         val MINIMUM_AGE: Int = 13
@@ -41,12 +42,13 @@ object Constants {
         val DD_MM_YY_DATE_FORMAT: String = "dd/MM/yyyy"
         val YY_MM__DD_DATE_FORMAT: String = "yyyy-MM-dd"
         val COUNTRY_LABEL: String = "Country"
-        val STATE_LABEL: String = "State"
+        val STATE_LABEL: String = "State/ Province"
         val CITY_LABEL: String = "City"
         val USER_EMAIL: String = "user_email"
         val PRODUCT_LIST_RESPONSE: String = "product_list_response"
         val LIST_PAGE_ITEM_COUNT: Int = 10
         val FILTER_PRICE_LABEL: String = "Price"
+        val FILTER_PRICE_KEY: String = "price"
         val SORT_OPTION_LABEL: String = "product_list_order"
         val SORT_OPTION_DIR: String = "product_list_dir"
         val FILTER_CONFIGURABLE_LABEL: String = "configurable"

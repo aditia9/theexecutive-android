@@ -147,6 +147,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
             override fun onSuccess(userToken: String?) {
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+                email.set(userData.email)
                 apiSuccessResponse?.value = userToken
 
             }

@@ -34,7 +34,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                 val tempOptions: ArrayList<ProductListingDataClass.SortOptionResponse> = ArrayList()
                 sortOptions?.let {
                     for (option in it){
-                        if (option.attribute_code == "price"){
+                        if (option.attribute_code == Constants.FILTER_PRICE_KEY){
                             tempOptions.add(ProductListingDataClass.SortOptionResponse(
                                     attribute_code = option.attribute_code,
                                     attribute_name = option.attribute_name + Constants.LOW_TO_HIGH))
@@ -78,15 +78,15 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
             override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
 
                 if (filterOptions?.total_count!! > 0) {
-                    filterOptions?.run {
+                    filterOptions.run {
                         for (filter in filterOptions.filters) {
                             selectedFilterMap.put(filter.name, "")
                         }
                     }
 
-                    priceFilter.value = filterOptions?.filters?.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
+                    priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
                 }
-                filterOptionList?.value = filterOptions?.filters?.toMutableList()
+                filterOptionList?.value = filterOptions.filters.toMutableList()
             }
         })
     }

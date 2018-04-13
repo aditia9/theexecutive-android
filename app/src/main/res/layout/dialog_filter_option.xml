@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.constraint.ConstraintLayout
@@ -30,21 +29,22 @@
             android:id="@+id/title_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/heading_theme"
+            android:layout_marginTop="@dimen/four_dp"
             android:text="@string/filter_dialog_title"
-            app:layout_constraintRight_toRightOf="@id/guideline_right"
-            app:layout_constraintLeft_toLeftOf="@id/guideline_left"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:theme="@style/heading_theme"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/cancel_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/cancel"
             android:contentDescription="@string/cancel"
+            android:src="@drawable/cancel"
+            android:padding="@dimen/six_dp"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/title_filter"/>
+            app:layout_constraintBottom_toBottomOf="@+id/title_filter" />
 
 
         <TextView
@@ -52,9 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/clear"
-            app:layout_constraintBaseline_toBaselineOf="@id/title_filter"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="@+id/title_filter" />
 
         <TextView
             android:id="@+id/tv_price_label"
@@ -71,6 +70,7 @@
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="@dimen/eight_dp"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/tv_price_label">
@@ -91,7 +91,7 @@
             android:inputType="numberDecimal"
             app:layout_constraintRight_toLeftOf="@+id/et_max_price"
             android:layout_marginRight="@dimen/twelve_dp"
-            android:layout_marginTop="@dimen/six_dp"
+            android:layout_marginTop="@dimen/sixteen_dp"
             app:layout_constraintTop_toBottomOf="@+id/range_bar_container"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"/>
 
@@ -103,7 +103,7 @@
             android:textStyle="bold"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/six_dp"
-            android:layout_marginTop="@dimen/twelve_dp"
+            android:layout_marginTop="@dimen/sixteen_dp"
             app:layout_constraintBaseline_toBaselineOf="@id/et_min_price"
             app:layout_constraintLeft_toRightOf="@id/et_min_price"
             app:layout_constraintTop_toBottomOf="@+id/range_bar_container"
@@ -120,6 +120,9 @@
             android:choiceMode = "singleChoice"
             android:scrollbars="none"
             android:layout_marginTop="@dimen/twenty_four_dp"
+            android:layout_marginBottom="@dimen/twenty_four_dp"
+            android:paddingTop="@dimen/eight_dp"
+            android:paddingBottom="@dimen/eight_dp"
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/et_min_price"

@@ -85,6 +85,7 @@ class ProductListingFragment: BaseFragment() {
         filterOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
 
+
         observeProductList()
         observeFilterOptions()
         observePriceFilter()
@@ -150,6 +151,8 @@ class ProductListingFragment: BaseFragment() {
 
             }else{
                 mBinding.tvSortOption.isEnabled = false
+                mBinding.tvSortOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.hint_color))
+
             }
         })
     }
@@ -193,6 +196,7 @@ class ProductListingFragment: BaseFragment() {
                 mBinding.tvFilterOption.isEnabled = true
                 mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.theme_black_color))
                 filterOptionAdapter.optionsList = filterList.filterNot { it.name == Constants.FILTER_PRICE_LABEL }
+                filterOptionBinding.filterList.expandGroup(0, true)
             }else{
                 mBinding.tvFilterOption.isEnabled = false
                 mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.hint_color))
@@ -230,7 +234,6 @@ class ProductListingFragment: BaseFragment() {
                     val shouldPaging = (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold)
 
                     if(mViewModel.isLoading.not() && allProductLoaded.not() && shouldPaging){
-                        Toast.makeText(recyclerView?.context, "load data", Toast.LENGTH_SHORT).show()
                         mViewModel.getProductListing(categoryId.toString())
                     }
                 }

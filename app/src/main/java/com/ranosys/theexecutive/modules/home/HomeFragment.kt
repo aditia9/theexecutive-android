@@ -84,7 +84,7 @@ class HomeFragment : BaseFragment() {
                         fragmentPosition = 0
                         tabLayout.visibility = View.VISIBLE
                         tv_chat.visibility = View.VISIBLE
-                        setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true)
+                        setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true, true)
                     }
                     1 -> {
                         fragmentPosition = 1
@@ -92,7 +92,7 @@ class HomeFragment : BaseFragment() {
                         val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                         if(TextUtils.isEmpty(isLogin)){
                             tabLayout.visibility = View.GONE
-                            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false)
+                            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
                         }
                         else{
                             // homeViewPager.getItem(1)

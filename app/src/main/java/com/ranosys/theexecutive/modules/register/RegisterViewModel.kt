@@ -299,7 +299,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
 
         if (TextUtils.isEmpty(streetAddress1.get()) && TextUtils.isEmpty(streetAddress2.get())){
-            streetAddress1Error.set(context.getString(R.string.street_address_1))
+            streetAddress1Error.set(context.getString(R.string.street_address_error))
             isValid = false
         }
 
