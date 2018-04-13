@@ -60,6 +60,8 @@
     <dimen name="four_fifty_dp">450dp</dimen>
     <dimen name="three_hundred_dp">300dp</dimen>
     <dimen name="eight_hundred_dp">800dp</dimen>
+    <dimen name="five_hundred_dp">500dp</dimen>
     <dimen name="six_hundred_dp">600dp</dimen>
+    <dimen name="four_hundred_dp">400dp</dimen>
 
 </resources>

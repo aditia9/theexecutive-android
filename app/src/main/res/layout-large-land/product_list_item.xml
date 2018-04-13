@@ -24,7 +24,7 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/two_fifty_dp"
+            android:layout_height="@dimen/five_hundred_dp"
             android:scaleType="fitXY"
             bind:baseUrlWithProductImageUrl="@{productItem.imageUrl}"
             android:layout_marginTop="@dimen/four_dp"
@@ -59,8 +59,8 @@
             android:text='@{productItem.discountPer + "%"}'
             android:paddingTop="@dimen/four_dp"
             android:paddingBottom="@dimen/eight_dp"
-            android:paddingRight="@dimen/four_dp"
-            android:paddingLeft="@dimen/eight_dp"
+            android:paddingStart="@dimen/four_dp"
+            android:paddingEnd="@dimen/eight_dp"
             android:textSize="@dimen/eight_sp"
             android:textColor="@color/white"
             android:background="@drawable/discount_banner"
