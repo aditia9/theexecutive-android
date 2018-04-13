@@ -41,7 +41,7 @@ public class StickyScrollPresenter {
         if(footerId != 0){
             mStickyScrollPresentation.initFooterView(footerId);
         }
-        mTypedArrayResourceProvider.recycle();
+        //mTypedArrayResourceProvider.recycle();
     }
 
     public void initStickyFooter(int measuredHeight, int initialStickyFooterLocation) {

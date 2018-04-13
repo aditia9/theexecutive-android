@@ -71,6 +71,14 @@ class ProductViewFragment : BaseFragment() {
     }
 
     fun observeEvents(){
+
+        productItemViewModel.clickedAddBtnId?.observe(this, Observer<ProductItemViewModel.ViewClass> { id ->
+            when (id){
+
+            }
+
+        })
+
         productItemViewModel.productChildrenResponse?.observe(this, object : Observer<ApiResponse<ChildProductsResponse>> {
             override fun onChanged(apiResponse: ApiResponse<ChildProductsResponse>?) {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
