@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.category
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
@@ -20,10 +21,12 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
 import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
+import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
 
@@ -36,6 +39,7 @@ class CategoryFragment : BaseFragment() {
     var categoryModelView: CategoryModelView? = null
     var handler = Handler(Looper.getMainLooper())
     lateinit var viewPager : ViewPager
+    lateinit var pagerAdapter:CustomViewPageAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,6 +59,32 @@ class CategoryFragment : BaseFragment() {
         promotionBinding?.categoryModel = categoryModelView
         promotionBinding?.root?.tv_promotion_text?.text = SavedPreferences.getInstance()?.getStringValue(Constants.PROMOTION_MESSAGE)
         viewPager = promotionBinding?.root?.viewpager!!
+
+        pagerAdapter = CustomViewPageAdapter(view.context, categoryModelView?.promotionResponse?.get())
+        promotionBinding.viewpager.adapter = pagerAdapter
+        pagerAdapter.setItemClickListener(listener = object: CustomViewPageAdapter.OnItemClickListener{
+            override fun onItemClick(item: PromotionsResponseDataClass?) {
+                when(item?.type){
+                    Constants.PROMOTION_TYPE_CATEGORY -> {
+                        val bundle = Bundle()
+                        bundle.putInt(Constants.CATEGORY_ID, item.value.toInt())
+                        bundle.putString(Constants.CATEGORY_NAME, item.title)
+                        FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+                    }
+
+                    Constants.PROMOTION_TYPE_PRODUCT -> {
+                        Toast.makeText(activity as Context, "GO TO DETAILS", Toast.LENGTH_SHORT).show()
+//                        val fragment = ProductDetailFragment.getInstance(null, item.value, 0)
+//                        FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                    }
+
+                    Constants.PROMOTION_TYPE_CMS_PAGE -> {
+                        Utils.openCmsPage(activity as Context, item.value)
+
+                    }
+                }
+            }
+        })
         elv_parent_category.addHeaderView(promotionBinding.root)
 
         elv_parent_category.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
@@ -101,6 +131,7 @@ class CategoryFragment : BaseFragment() {
         getCategories()
     }
 
+
     override fun onPause() {
         super.onPause()
         handler.removeCallbacksAndMessages(null)
@@ -123,6 +154,8 @@ class CategoryFragment : BaseFragment() {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is List<*>) {
                     categoryModelView?.promotionResponse?.set(response as List<PromotionsResponseDataClass>?)
+                    pagerAdapter.promotionList = categoryModelView?.promotionResponse?.get()
+                    pagerAdapter.notifyDataSetChanged()
                     startScrollViewPager(viewPager, response.size)
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
@@ -137,7 +170,30 @@ class CategoryFragment : BaseFragment() {
                 hideLoading()
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is CategoryResponseDataClass) {
+
+                    response?.children_data = response?.children_data?.filter { it.is_active == true } as ArrayList<ChildrenData>
+
+                    //add view all category and remove inactive sub categories
+                    for(cat in response.children_data){
+                        when(cat.name){
+                            "MEN" -> {
+                                val viewAll = ChildrenData(id = cat.id, name = "View All", is_active = true)
+                                cat.children_data?.add(0, viewAll)
+                                cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
+                            }
+
+                            "WOMEN" -> {
+                                val viewAll = ChildrenData(id = cat.id, name = "View All", is_active = true)
+                                cat.children_data?.add(0, viewAll)
+                                cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
+                            }
+
+                            else -> cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
+                        }
+                    }
+
                     categoryModelView?.categoryResponse?.set(response)
+
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
                 }

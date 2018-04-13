@@ -16,9 +16,9 @@ import kotlinx.android.synthetic.main.row_second.view.*
 /**
  * Created by Mohammad Sunny on 12/3/18.
  */
-class CategoryTwoLevelAdapter(context: Context?, list :ArrayList<ChildrenData>?) : ExpandableListAdapter {
+class CategoryTwoLevelAdapter(context: Context?, list :MutableList<ChildrenData>?) : ExpandableListAdapter {
 
-    var categoryList: ArrayList<ChildrenData>?
+    var categoryList: MutableList<ChildrenData>?
 
     init {
         categoryList = list
@@ -35,15 +35,18 @@ class CategoryTwoLevelAdapter(context: Context?, list :ArrayList<ChildrenData>?)
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowSecondBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_second, p3, false);
         listGroupBinding.childData = getGroup(p0)
-        if(categoryList?.get(p0)?.children_data?.size!! > 0) {
-            if (isExpanded) {
-                listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.dropdown)
-            } else {
-                listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.forward)
+        categoryList?.get(p0)?.children_data?.let {
+            if(categoryList?.get(p0)?.children_data?.size!! > 0) {
+                if (isExpanded) {
+                    listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.dropdown)
+                } else {
+                    listGroupBinding.root.img_expand_collapse.setImageResource(R.drawable.forward)
+                }
+            }else{
+                listGroupBinding.root.img_expand_collapse.setImageResource(0)
             }
-        }else{
-            listGroupBinding.root.img_expand_collapse.setImageResource(0)
         }
+
         return listGroupBinding.root
     }
 
@@ -56,7 +59,7 @@ class CategoryTwoLevelAdapter(context: Context?, list :ArrayList<ChildrenData>?)
 
     override fun getChildrenCount(p0: Int): Int {
         categoryList?.run {
-            return get(p0).children_data.size
+            return get(p0).children_data?.size ?: 0
         }
         return 0
     }

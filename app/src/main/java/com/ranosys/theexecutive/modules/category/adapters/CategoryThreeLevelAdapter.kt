@@ -20,10 +20,10 @@ import com.ranosys.theexecutive.utils.FragmentUtils
 /**
  * Created by Mohammad Sunny on 9/3/18.
  */
-class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData>?) : ExpandableListAdapter{
+class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenData>?) : ExpandableListAdapter{
 
     var context: Context? = null
-    var categoryList: ArrayList<ChildrenData>?
+    var categoryList: MutableList<ChildrenData>?
 
     init {
         this.context = context
@@ -72,12 +72,21 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
 
         expandableListView.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
             override fun onGroupClick(expandableListView: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
-                if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
+                if(null != categoryList?.get(group)?.children_data?.get(p2)?.children_data){
+                    if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
+                        val bundle = Bundle()
+                        bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
+                        bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
+                        FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+                    }
+                }else if((categoryList?.get(group)?.children_data?.get(p2) as ChildrenData).name == "View All"){
                     val bundle = Bundle()
                     bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
                     bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
                     FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 }
+
+
                 return false
             }
         })

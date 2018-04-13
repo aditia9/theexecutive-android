@@ -15,9 +15,18 @@ import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
  */
 class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDataClass>?) : PagerAdapter() {
 
+    interface OnItemClickListener {
+        fun onItemClick(item : PromotionsResponseDataClass?)
+    }
+
+    var clickListener: OnItemClickListener? = null
     var context : Context? = null
     var layoutInflater : LayoutInflater? = null
     var promotionList : List<PromotionsResponseDataClass>? = null
+
+    fun setItemClickListener(listener: OnItemClickListener){
+        clickListener = listener
+    }
 
     init {
         this.context = context
@@ -39,6 +48,11 @@ class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDat
     override fun instantiateItem(container: ViewGroup, position: Int): View {
         val listGroupBinding: PromotionViewBinding? = DataBindingUtil.inflate(layoutInflater, R.layout.promotion_view, container, false);
         listGroupBinding?.promotionResponse = promotionList?.get(position)
+
+        listGroupBinding?.imgPromotion?.setOnClickListener {
+            clickListener?.onItemClick(promotionList?.get(position))
+
+        }
         container.addView(listGroupBinding?.root)
         return listGroupBinding?.root!!
     }

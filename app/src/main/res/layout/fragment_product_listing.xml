@@ -7,7 +7,6 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/sixteen_dp"
         android:paddingBottom="@dimen/sixteen_dp"
         android:background="@color/white">
 
