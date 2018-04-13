@@ -23,7 +23,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var productChildrenResponse: MutableLiveData<ApiResponse<ChildProductsResponse>>? = MutableLiveData()
     var productOptionResponse: MutableLiveData<ApiResponse<List<ProductOptionsResponse>>>? = MutableLiveData()
 
-    var clickedAddBtnId: MutableLiveData<ViewClass>? = null
+    var clickedAddBtnId: MutableLiveData<Int>? = null
         get() {
             field =  field ?: MutableLiveData()
             return field
@@ -32,12 +32,12 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     fun btnClicked(view: View) {
         when (view.id) {
             R.id.btn_add_to_bag -> {
-                clickedAddBtnId?.value = ViewClass(R.id.btn_add_to_bag, view.tag as Int)
+                clickedAddBtnId?.value = R.id.btn_add_to_bag
             }
         }
     }
 
-    data class ViewClass( var id : Int,var tag : Int)
+   // data class ViewClass( var id : Int,var tag : Int)
 
     fun getProductChildren(productSku : String?){
         val apiResponse = ApiResponse<ChildProductsResponse>()
@@ -57,7 +57,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         })
     }
 
-    fun getProductOptions(attributeId : String?){
+    fun getProductOptions(attributeId : String?, label : String?){
         val apiResponse = ApiResponse<List<ProductOptionsResponse>>()
         AppRepository.getProductOptions(attributeId, object : ApiCallback<List<ProductOptionsResponse>> {
             override fun onException(error: Throwable) {
@@ -69,6 +69,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
             }
 
             override fun onSuccess(t: List<ProductOptionsResponse>?) {
+                t?.get(0)?.label = label
                 apiResponse.apiResponse = t
                 productOptionResponse?.value = apiResponse
             }

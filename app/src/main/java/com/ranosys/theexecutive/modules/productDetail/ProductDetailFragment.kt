@@ -1,16 +1,13 @@
 package com.ranosys.theexecutive.modules.productDetail
 
-import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
@@ -19,7 +16,6 @@ import com.ranosys.theexecutive.databinding.FragmentProductDetailBinding
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductDetailResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
-import kotlinx.android.synthetic.main.bottom_size_layout.*
 import kotlinx.android.synthetic.main.fragment_product_detail.*
 
 /**
@@ -93,25 +89,6 @@ class ProductDetailFragment : BaseFragment() {
                     product_viewpager.setCurrentItem(position!!)
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-    }
-
-    fun openBottomSizeSheet ()
-    {
-        val view = layoutInflater.inflate(R.layout.bottom_size_layout, null)
-        val mBottomSheetDialog = Dialog(activity, R.style.MaterialDialogSheet)
-        mBottomSheetDialog.setContentView(view)
-        mBottomSheetDialog.setCancelable(true)
-        mBottomSheetDialog.getWindow()!!.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
-        mBottomSheetDialog.getWindow()!!.setGravity(Gravity.BOTTOM)
-        mBottomSheetDialog.show()
-
-        mBottomSheetDialog.btn_done.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                if(mBottomSheetDialog.isShowing){
-                    mBottomSheetDialog.dismiss()
                 }
             }
         })

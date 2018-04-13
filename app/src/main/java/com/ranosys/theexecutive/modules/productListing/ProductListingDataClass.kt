@@ -66,7 +66,7 @@ class ProductListingDataClass {
             val updated_at: String,
             val weight: Double,
             val extension_attributes: ExtensionAttributes,
-            val product_links: List<Any>,
+            val product_links: List<ProductLinks>,
             val options: List<Any>,
             val media_gallery_entries: List<MediaGalleryEntry>,
             val tier_prices: List<Any>,
@@ -144,6 +144,23 @@ class ProductListingDataClass {
             val attribute_code: String,
             val value: Any
     )
+
+
+    data class ProductLinks(
+            val sku: String,
+            val link_type: String,
+            val linked_product_sku: String,
+            val linked_product_type: String,
+            val position: Int,
+            val extension_attributes: ProductExtensionAttributes
+    )
+
+    data class ProductExtensionAttributes (
+
+        var linked_product_name : String,
+        var linked_product_image : String,
+        var linkedProductRegularprice : Int,
+        var linked_product_finalprice  : Int)
 
 
 }

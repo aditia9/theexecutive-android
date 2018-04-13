@@ -236,8 +236,9 @@
                     />
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_wear_with_products"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="@dimen/three_hundred_dp"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:layout_below="@id/view_line"
                     />

@@ -11,6 +11,7 @@ import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductDetailResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
@@ -177,6 +178,11 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun getProductOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?, @Path("attribute_id") attributeId : String?): Call<List<ProductOptionsResponse>>
 
+        @GET("rest/{store_code}/V1/productcontent/url")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getStaticPagesUrl(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?): Call<StaticPagesUrlResponse>
 
     }
 }
