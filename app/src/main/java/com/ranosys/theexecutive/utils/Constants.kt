@@ -65,6 +65,7 @@ object Constants {
         val ASC: String = "asc"
         val NEW_TAG: String = "New"
         val AIMATION_DURATION: Long = 300
+        val IDR: String = "IDR "
     val PROMOTION_TYPE_CATEGORY: String = "Category"
     val PROMOTION_TYPE_PRODUCT: String = "Product"
     val PROMOTION_TYPE_CMS_PAGE: String = "CMS"

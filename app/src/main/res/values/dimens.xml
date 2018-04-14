@@ -57,6 +57,10 @@
     <dimen name="one_sixty_dp">160dp</dimen>
     <dimen name="twenty_eight_dp">28dp</dimen>
     <dimen name="fifteen_dp">15dp</dimen>
+    <dimen name="four_fifty_dp">450dp</dimen>
+    <dimen name="three_hundred_dp">300dp</dimen>
+    <dimen name="eight_hundred_dp">800dp</dimen>
+    <dimen name="six_hundred_dp">600dp</dimen>
     <dimen name="eighty_dp">80dp</dimen>
 
 </resources>

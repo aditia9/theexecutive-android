@@ -8,6 +8,10 @@ import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductDetailResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
@@ -153,5 +157,32 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getProductList(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Path("list_from", encoded = true) listFrom:String, @QueryMap requestMap: Map<String, String>): Call<ProductListingDataClass.ProductListingResponse>
+    }
+
+    interface ProductDetailService{
+        @GET("rest/{store_code}/V1/products/{product_sku}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getProductDetail(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?, @Path("product_sku") productSku : String?): Call<ProductDetailResponse>
+
+        @GET("rest/{store_code}/V1/configurable-products/{product_sku}/children")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getProductChildren(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?, @Path("product_sku") productSku : String?): Call<ChildProductsResponse>
+
+        @GET("rest/{store_code}/V1/products/attributes/{attribute_id}/options")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getProductOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?, @Path("attribute_id") attributeId : String?): Call<List<ProductOptionsResponse>>
+
+        @GET("rest/{store_code}/V1/productcontent/url")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getStaticPagesUrl(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?): Call<StaticPagesUrlResponse>
+
     }
 }

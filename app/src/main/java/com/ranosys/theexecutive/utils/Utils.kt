@@ -3,8 +3,8 @@ package com.ranosys.theexecutive.utils
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -13,15 +13,19 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import java.util.regex.Pattern
 
@@ -137,7 +141,7 @@ object Utils {
     }
 
     fun showNetworkErrorDialog(context: Context){
-        Utils.showDialog(context, context.getString(R.string.network_err_text),context.getString(android.R.string.ok), "", object : DialogOkCallback{
+        showDialog(context, context.getString(R.string.network_err_text),context.getString(android.R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
 
             }
@@ -164,6 +168,38 @@ object Utils {
 
     fun compareDrawable(context: Context, d1: Drawable, d2: Drawable): Boolean{
         return (d1 as BitmapDrawable).bitmap.equals((d2 as BitmapDrawable).bitmap)
+    }
+
+    fun getDeviceWidth(context: Context) : Int{
+        val displayMetrics = DisplayMetrics()
+        (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.widthPixels
+    }
+
+    fun getDeviceHeight(context: Context?) : Int{
+        val displayMetrics = DisplayMetrics()
+        (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.heightPixels
+    }
+
+    fun convertDpIntoPx(context: Context?, dp : Float) : Int{
+        val r = context?.resources
+        val px = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, r?.displayMetrics))
+        return px
+    }
+
+    fun setImageViewHeight(context: Context?, imageView : ImageView?, percentage : Int?){
+        val height = getDeviceHeight(context)
+        val removeHeight = height.times(percentage!!).div(100)
+        imageView?.layoutParams?.height = height - removeHeight
+    }
+
+
+    fun openPages(context: Context, url: String?) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        context.startActivity(intent)
     }
 
 }

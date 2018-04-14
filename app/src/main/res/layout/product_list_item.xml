@@ -28,11 +28,13 @@
             bind:baseUrlWithProductImageUrl="@{productItem.imageUrl}"
             android:layout_marginTop="@dimen/four_dp"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:contentDescription="@string/product_image"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
 
         <TextView
             android:id="@+id/tv_label"

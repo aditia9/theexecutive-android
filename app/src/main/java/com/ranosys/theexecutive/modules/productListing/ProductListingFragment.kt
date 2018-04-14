@@ -23,8 +23,10 @@ import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
 import com.ranosys.theexecutive.databinding.DialogSortOptionBinding
 import com.ranosys.theexecutive.databinding.FragmentProductListingBinding
 import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
+import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.rangeBar.RangeSeekBar
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.dialog_filter_option.*
 import kotlinx.android.synthetic.main.fragment_product_listing.*
@@ -261,8 +263,8 @@ class ProductListingFragment: BaseFragment() {
         val emptyList = ArrayList<ProductListingDataClass.ProductMaskedResponse>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
-                Toast.makeText(activity, selectedProduct.name + " product selected", Toast.LENGTH_SHORT).show()
-                //FragmentUtils.addFragment(context!!, ProductDetailFragment.newInstance(mViewModel.productListResponse), null, ProductDetailFragment::class.java.name, true)
+                val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, position)
+                FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
             }
 
         })
