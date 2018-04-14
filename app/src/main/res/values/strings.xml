@@ -130,7 +130,8 @@
     <string name="cancel">cancel</string>
     <string name="email_sent">An email is sent to your registered email.</string>
     <string name="logout_text">Are you sure you want to logout from application?</string>
-
+    <string name="enter_search_error">Please enter search keyword</string>
+    <string name="redundent_search_error">you are already at this category</string>
 
 
 </resources>

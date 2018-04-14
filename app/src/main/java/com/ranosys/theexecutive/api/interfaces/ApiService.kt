@@ -148,10 +148,10 @@ interface ApiService {
     }
 
     interface ProductListingService {
-        @GET("rest/{store_code}/V1/productslist/")
+        @GET("rest/{store_code}/V1/{list_from}/")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getProductList(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @QueryMap requestMap: Map<String, String>): Call<ProductListingDataClass.ProductListingResponse>
+        fun getProductList(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Path("list_from", encoded = true) listFrom:String, @QueryMap requestMap: Map<String, String>): Call<ProductListingDataClass.ProductListingResponse>
     }
 }

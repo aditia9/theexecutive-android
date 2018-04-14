@@ -5,7 +5,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Build
 import android.text.TextUtils
@@ -150,6 +152,10 @@ object Utils {
         val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
         val large = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
         return xlarge || large
+    }
+
+    fun compareDrawable(context: Context, d1: Drawable, d2: Drawable): Boolean{
+        return (d1 as BitmapDrawable).bitmap.equals((d2 as BitmapDrawable).bitmap)
     }
 
 }

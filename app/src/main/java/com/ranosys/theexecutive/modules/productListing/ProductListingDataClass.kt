@@ -56,8 +56,8 @@ class ProductListingDataClass {
 
 
     data class ProductListingResponse(
-            val total_count: Int,
-            val items: List<Item>
+            var total_count: Int,
+            var items: MutableList<Item>
     )
 
     data class Item(
