@@ -159,7 +159,7 @@ class ProductListingDataClass {
 
         var linked_product_name : String,
         var linked_product_image : String,
-        var linkedProductRegularprice : Int,
+        var linked_product_regularprice : Int,
         var linked_product_finalprice  : Int)
 
 

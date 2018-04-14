@@ -24,6 +24,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var productChildrenResponse: MutableLiveData<ApiResponse<ChildProductsResponse>>? = MutableLiveData()
     var productOptionResponse: MutableLiveData<ApiResponse<List<ProductOptionsResponse>>>? = MutableLiveData()
     var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
+    var staticPages : StaticPagesUrlResponse? = null
 
     var clickedAddBtnId: MutableLiveData<Int>? = null
         get() {

@@ -47,7 +47,7 @@
                     android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_two_detail"
-                    bind:baseUrlWithProductImageUrl="@{productItemVM.productItem.media_gallery_entries.get(0).file}"
+                    bind:baseUrlWithProductImageUrl="@{productItemVM.productItem.media_gallery_entries.get(1).file}"
                     />
 
                 <TextView
@@ -60,7 +60,6 @@
                     android:paddingRight="@dimen/forty_dp"
                     android:paddingLeft="@dimen/forty_dp"
                     android:textStyle="bold"
-                    android:text="@{Html.fromHtml(productItemVM.productItem.custom_attributes.get(1).value.toString())}"
                     />
 
                 <TextView
@@ -76,27 +75,18 @@
                 <LinearLayout
                     android:id="@+id/ll_color_choice"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/tv_colors"
                     android:layout_marginTop="@dimen/ten_dp"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     />
 
-                <ImageView
-                    android:id="@+id/img_random"
-                    android:layout_width="match_parent"
-                    android:layout_height="450dp"
-                    android:layout_marginTop="@dimen/twenty_dp"
-                    android:layout_below="@id/ll_color_choice"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/one"
-                    />
 
                 <TextView
                     android:id="@+id/tv_composition_and_care"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/img_random"
+                    android:layout_below="@id/ll_color_choice"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:textStyle="bold"
                     android:text="@string/composition"
@@ -206,6 +196,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/add_to_bag"
                         android:padding="@dimen/ten_dp"
+                        android:textStyle="bold"
                         android:background="@drawable/button_border"
                         android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                         />
@@ -216,19 +207,26 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:text="IDR 179,900"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/sixteen_sp"
+                        android:text='@{"IDR " + Double.toString(productItemVM.productItem.price)}'
                         />
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/rl_wear_with_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_add_to_box"
 
+                    >
 
                 <View
                     android:id="@+id/view_line"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/one_dp"
                     android:background="@color/theme_black_color"
-                    android:layout_below="@id/rl_add_to_box"
                     android:layout_marginTop="@dimen/twenty_dp"
                     />
                 <TextView
@@ -245,11 +243,13 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/list_wear_with_products"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/three_hundred_dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:layout_below="@id/view_line"
+                    android:layout_below="@id/tv_like"
                     />
+
+                </RelativeLayout>
 
             </RelativeLayout>
 
