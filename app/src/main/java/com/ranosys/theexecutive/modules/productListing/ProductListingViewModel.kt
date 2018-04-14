@@ -17,11 +17,15 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
     var maskedProductList: MutableLiveData<ArrayList<ProductListingDataClass.ProductMaskedResponse>> = MutableLiveData()
     var isLoading: Boolean = false
+    var isFiltered: Boolean = false
+    var isSorted: Boolean = false
     var totalProductCount: Int = 0
+
 
     var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>()
     var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData<MutableList<ProductListingDataClass.Filter>>()
     var priceFilter: MutableLiveData<ProductListingDataClass.Filter> = MutableLiveData()
+    var noProductAvailable: MutableLiveData<Int> = MutableLiveData()
     var selectedFilterMap = hashMapOf<String, String>()
     var selectedPriceRange = ProductListingDataClass.PriceRange()
     var selectedSortOption = ProductListingDataClass.SortOptionResponse("", "")
@@ -100,72 +104,81 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("product listing", errorMsg)            }
+                Utils.printLog("product listing", errorMsg)
+            }
 
             override fun onSuccess(response: ProductListingDataClass.ProductListingResponse?) {
 
                 isLoading = false
                 productListResponse = response
+
                 totalProductCount = productListResponse?.total_count ?: 0
 
-                val maskedResponse: ArrayList<ProductListingDataClass.ProductMaskedResponse> = ArrayList()
-                productListResponse?.items.let {
-                    for(product in productListResponse!!.items){
-                        val sku = product.sku
-                        val name = product.name
-                        val productType = product.type_id
-                        var price = 0.0
-                        var specialPrice = 0.0
-                        if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
-                            price = product.extension_attributes.regular_price
-                            specialPrice = product.extension_attributes.final_price
-                        }else{
-                            price = product.price
-                            val attributes = product.custom_attributes.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }.toList()
-                            if(attributes.isNotEmpty()){
-                                specialPrice = attributes.get(0).value.toString().toDouble()
+                if(totalProductCount > 0){
+
+                    val maskedResponse: ArrayList<ProductListingDataClass.ProductMaskedResponse> = ArrayList()
+                    productListResponse?.items.let {
+                        for(product in productListResponse!!.items){
+                            val sku = product.sku
+                            val name = product.name
+                            val productType = product.type_id
+                            var price = 0.0
+                            var specialPrice = 0.0
+                            if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
+                                price = product.extension_attributes.regular_price
+                                specialPrice = product.extension_attributes.final_price
+                            }else{
+                                price = product.price
+                                val attributes = product.custom_attributes.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }.toList()
+                                if(attributes.isNotEmpty()){
+                                    specialPrice = attributes.get(0).value.toString().toDouble()
+                                }
                             }
+
+
+                            var toDate = ""
+                            var fromDate = ""
+                            var attributes = product.custom_attributes.filter { it.attribute_code == Constants.NEW_FROM_DATE_LABEL }.toList()
+                            if(attributes.isNotEmpty()){
+                                fromDate = attributes.single().value.toString()
+                            }
+
+                            attributes = product.custom_attributes.filter { it.attribute_code == Constants.NEW_TO_DATE_LABEL }.toList()
+                            if(attributes.isNotEmpty()){
+                                toDate = attributes.single().value.toString()
+                            }
+                            val type = if(toDate.isNotBlank() && fromDate.isNotBlank()) isNewProduct(fromDate, toDate) else ""
+
+                            val discount = (((price - specialPrice).div(price)).times(100)).toInt()
+                            var imgUrl = ""
+                            if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].file
+
+                            val product = ProductListingDataClass.ProductMaskedResponse(
+                                    sku = sku,
+                                    name = name,
+                                    normalPrice = price.toString(),
+                                    specialPrice = specialPrice.toString(),
+                                    type = type,
+                                    discountPer = discount,
+                                    imageUrl = imgUrl)
+
+                            maskedResponse.add(product)
+
                         }
-
-
-                        var toDate = ""
-                        var fromDate = ""
-                        var attributes = product.custom_attributes.filter { it.attribute_code == Constants.NEW_FROM_DATE_LABEL }.toList()
-                        if(attributes.isNotEmpty()){
-                            fromDate = attributes.get(0).value.toString()
-                        }
-
-                        attributes = product.custom_attributes.filter { it.attribute_code == Constants.NEW_TO_DATE_LABEL }.toList()
-                        if(attributes.isNotEmpty()){
-                            toDate = attributes.get(0).value.toString()
-                        }
-                        val type = if(toDate.isNotBlank() && fromDate.isNotBlank()) isNewProduct(fromDate, toDate) else ""
-
-                        val discount = (((price - specialPrice).div(price)).times(100)).toInt()
-                        var imgUrl = ""
-                        if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].file
-
-                        val product = ProductListingDataClass.ProductMaskedResponse(
-                                sku = sku,
-                                name = name,
-                                normalPrice = price.toString(),
-                                specialPrice = specialPrice.toString(),
-                                type = type,
-                                discountPer = discount,
-                                imageUrl = imgUrl)
-
-                        maskedResponse.add(product)
-
                     }
+
+                    var list = maskedProductList.value
+                    if(null == list){
+                        list = arrayListOf()
+                    }
+                    list.addAll(maskedResponse)
+
+                    maskedProductList.value = list
+
                 }
 
-                var list = maskedProductList.value
-                if(null == list){
-                    list = arrayListOf()
-                }
-                list.addAll(maskedResponse)
+                noProductAvailable.value = totalProductCount
 
-                maskedProductList.value = list
             }
         })
     }

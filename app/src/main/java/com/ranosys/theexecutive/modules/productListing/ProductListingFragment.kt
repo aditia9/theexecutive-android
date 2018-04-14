@@ -56,8 +56,6 @@ class ProductListingFragment: BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-
-
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_listing, container,  false)
         mViewModel = ViewModelProviders.of(this).get(ProductListingViewModel::class.java)
 
@@ -87,11 +85,29 @@ class ProductListingFragment: BaseFragment() {
 
 
         observeProductList()
+        observeNoProductAvailable()
         observeFilterOptions()
         observePriceFilter()
         observeSortOptions()
 
         return mBinding.root
+    }
+
+    private fun observeNoProductAvailable() {
+        mViewModel.noProductAvailable.observe(this, Observer { count ->
+            count?.let {
+                if(count <= 0){
+
+                    mBinding.listingContainer.visibility = View.GONE
+                    mBinding.tvNoProductAvailable.visibility = View.VISIBLE
+                    mBinding.tvNoProductAvailable.text = "Sorry \n No product available"
+                }else{
+                    mBinding.listingContainer.visibility = View.VISIBLE
+                    mBinding.tvNoProductAvailable.visibility = View.GONE
+                    mBinding.tvNoProductAvailable.text = ""
+                }
+            }
+        })
     }
 
     private fun prepareSortOptionDialog() {
@@ -130,15 +146,17 @@ class ProductListingFragment: BaseFragment() {
             })
 
             sortOptionBinding.btnApply.setOnClickListener({
-                showLoading()
 
-                sortOptionDialog.dismiss()
-                mViewModel.getProductListing(categoryId.toString())
+                if(mViewModel.isSorted.not() && mViewModel.selectedSortOption.attribute_code.isEmpty()){
+                    Toast.makeText(activity as Context, getString(R.string.empty_sort_option_selection_error), Toast.LENGTH_SHORT).show()
+                }else{
+                    showLoading()
+                    sortOptionDialog.dismiss()
+                    mViewModel.getProductListing(categoryId.toString())
+                    mViewModel.isSorted = !(mViewModel.isSorted && mViewModel.selectedSortOption.attribute_code.isEmpty())
+                }
             })
         }
-
-
-
     }
 
     private fun observeSortOptions() {
@@ -257,6 +275,7 @@ class ProductListingFragment: BaseFragment() {
             filterOptionDialog.show()
         }
 
+
         tv_sort_option.setOnClickListener{
             sortOptionDialog.show()
         }
@@ -281,11 +300,18 @@ class ProductListingFragment: BaseFragment() {
             })
 
             filterOptionBinding.btnApply.setOnClickListener({
-                showLoading()
-                mViewModel.selectedPriceRange.min = filterOptionBinding.priceRangeBar.selectedMinValue.toString()
-                mViewModel.selectedPriceRange.max = filterOptionBinding.priceRangeBar.selectedMaxValue.toString()
-                filterOptionDialog.dismiss()
-                mViewModel.getProductListing(categoryId.toString())
+                if(mViewModel.isFiltered.not() && (isPriceRangeAltered() || isFilterSelected()).not()){
+                    Toast.makeText(activity as Context, getString(R.string.empty_sort_option_selection_error), Toast.LENGTH_SHORT).show()
+                }else{
+                    showLoading()
+                    mViewModel.selectedPriceRange.min = filterOptionBinding.priceRangeBar.selectedMinValue.toString()
+                    mViewModel.selectedPriceRange.max = filterOptionBinding.priceRangeBar.selectedMaxValue.toString()
+                    filterOptionDialog.dismiss()
+                    mViewModel.getProductListing(categoryId.toString())
+
+
+                    mViewModel.isFiltered = !(mViewModel.isFiltered && (isPriceRangeAltered() || isFilterSelected()).not())
+                }
             })
 
             //price range bar listeners
@@ -298,7 +324,6 @@ class ProductListingFragment: BaseFragment() {
                 }
 
             })
-
 
             filterOptionBinding.etMinPrice.addTextChangedListener(object: TextWatcher{
                 override fun afterTextChanged(s: Editable?) {
@@ -333,6 +358,17 @@ class ProductListingFragment: BaseFragment() {
         }
     }
 
+    private fun isFilterSelected(): Boolean {
+
+        return mViewModel.selectedFilterMap.values.count { it.isNotBlank() } > 0
+    }
+
+    private fun isPriceRangeAltered(): Boolean {
+        return (filterOptionBinding.priceRangeBar.absoluteMaxValue != filterOptionBinding.priceRangeBar.selectedMaxValue
+                || filterOptionBinding.priceRangeBar.absoluteMinValue != filterOptionBinding.priceRangeBar.selectedMinValue)
+
+    }
+
     private fun resetFilters() {
 
         //reset price filter
@@ -346,6 +382,10 @@ class ProductListingFragment: BaseFragment() {
         val keys = mViewModel.selectedFilterMap.keys
         for (key in keys){
             mViewModel.selectedFilterMap.put(key, "")
+        }
+
+        filterOptionAdapter.let {
+            it.resetFilter()
         }
 
     }
