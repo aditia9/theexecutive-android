@@ -57,6 +57,7 @@ object Constants {
         val NEW_TO_DATE_LABEL: String = "news_to_date"
         val REQUEST_PAGE_LABEL: String = "p"
         val REQUEST_PAGE_LIMIT_LABEL: String = "product_list_limit"
+        val REQUEST_SEARCH_LABEL: String = "q"
         val REQUEST_ID_LABEL: String = "id"
         val LOW_TO_HIGH: String = " (Low to High)"
         val HIGH_TO_LOW: String = " (High to Low)"

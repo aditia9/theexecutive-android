@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
@@ -158,6 +160,10 @@ object Utils {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         context.startActivity(intent)
+    }
+
+    fun compareDrawable(context: Context, d1: Drawable, d2: Drawable): Boolean{
+        return (d1 as BitmapDrawable).bitmap.equals((d2 as BitmapDrawable).bitmap)
     }
 
 }

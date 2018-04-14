@@ -9,6 +9,7 @@ import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by nikhil on 20/3/18.
@@ -20,6 +21,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var isFiltered: Boolean = false
     var isSorted: Boolean = false
     var totalProductCount: Int = 0
+    var lastSearchQuery: String = ""
 
 
     var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>()
@@ -95,10 +97,14 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         })
     }
 
-    fun getProductListing(catId: String) {
+    fun getProductListing(catId: Int, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false) {
         isLoading = true
 
-        AppRepository.getProductList(prepareProductListingRequest(catId), object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
+        if(fromSearch && fromPagination.not()){
+            clearExistingList()
+        }
+
+        AppRepository.getProductList(prepareProductListingRequest(catId, query,fromSearch), fromSearch,  object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("product listing", error.message?: "exception")
             }
@@ -110,8 +116,13 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
             override fun onSuccess(response: ProductListingDataClass.ProductListingResponse?) {
 
                 isLoading = false
-                productListResponse = response
+                if(null == productListResponse){
+                    productListResponse = response
 
+                }else{
+                    productListResponse?.items?.addAll(response?.items as ArrayList)
+                    productListResponse?.total_count = response?.total_count ?: 0
+                }
                 totalProductCount = productListResponse?.total_count ?: 0
 
                 if(totalProductCount > 0){
@@ -167,20 +178,17 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                         }
                     }
 
-                    var list = maskedProductList.value
-                    if(null == list){
-                        list = arrayListOf()
-                    }
-                    list.addAll(maskedResponse)
-
-                    maskedProductList.value = list
-
+                    maskedProductList.value = maskedResponse
                 }
-
                 noProductAvailable.value = totalProductCount
-
             }
         })
+    }
+
+    fun clearExistingList() {
+        productListResponse?.total_count = 0
+        productListResponse?.items?.clear()
+        maskedProductList.value?.clear()
     }
 
     private fun isNewProduct(fromDate: String, toDate: String): String {
@@ -195,10 +203,14 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         if(cDate.compareTo(sDtate) >= 0 && cDate.compareTo(eDate) <= 0) return Constants.NEW_TAG else  return ""
     }
 
-    private fun prepareProductListingRequest(catId: String): Map<String, String> {
+    private fun prepareProductListingRequest(catId: Int, query: String, fromSearch: Boolean): Map<String, String> {
         val requestMap: MutableMap<String, String> = mutableMapOf()
 
-        requestMap.put(Constants.REQUEST_ID_LABEL, catId)
+        if(fromSearch){
+            requestMap.put(Constants.REQUEST_SEARCH_LABEL, query)
+        }
+
+        requestMap.put(Constants.REQUEST_ID_LABEL, catId.toString())
         requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
         val page = (maskedProductList.value?.size)?.div(10)?.plus(1) ?: 1
         requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString())

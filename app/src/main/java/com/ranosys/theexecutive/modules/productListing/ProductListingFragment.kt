@@ -12,11 +12,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
@@ -152,7 +151,7 @@ class ProductListingFragment: BaseFragment() {
                 }else{
                     showLoading()
                     sortOptionDialog.dismiss()
-                    mViewModel.getProductListing(categoryId.toString())
+                    mViewModel.getProductListing(categoryId?: 0)
                     mViewModel.isSorted = !(mViewModel.isSorted && mViewModel.selectedSortOption.attribute_code.isEmpty())
                 }
             })
@@ -178,7 +177,7 @@ class ProductListingFragment: BaseFragment() {
     private fun callInitialApis() {
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
-            mViewModel.getProductListing(categoryId.toString())
+            mViewModel.getProductListing(categoryId ?: 0)
             mViewModel.getSortOptions()
             mViewModel.getFilterOptions(categoryId)
 
@@ -252,7 +251,7 @@ class ProductListingFragment: BaseFragment() {
                     val shouldPaging = (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold)
 
                     if(mViewModel.isLoading.not() && allProductLoaded.not() && shouldPaging){
-                        mViewModel.getProductListing(categoryId.toString())
+                        mViewModel.getProductListing(categoryId?:0, mViewModel.lastSearchQuery, mViewModel.lastSearchQuery.isEmpty().not(), true)
                     }
                 }
             }
@@ -279,8 +278,63 @@ class ProductListingFragment: BaseFragment() {
         tv_sort_option.setOnClickListener{
             sortOptionDialog.show()
         }
+
+        et_search.setOnTouchListener(object: View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent): Boolean {
+                val DRAWABLE_LEFT = 0
+                val DRAWABLE_TOP = 1
+                val DRAWABLE_RIGHT = 2
+                val DRAWABLE_BOTTOM = 3
+
+                if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
+                    if(event.getAction() == MotionEvent.ACTION_UP) {
+                        if(event.getRawX() >= (et_search.getRight() - et_search.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                            showLoading()
+                            et_search.setText("")
+                            et_search.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0);
+                            mViewModel.clearExistingList()
+                            mViewModel.lastSearchQuery = ""
+                            mViewModel.getProductListing(categoryId?:0)
+
+                            return true
+                        }
+                    }
+                }
+                return false
+            }
+        })
+
+
+        et_search.setOnEditorActionListener(object :TextView.OnEditorActionListener{
+            override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if(v.text.toString().isEmpty().not()){
+                        if(v.text.toString().equals(mViewModel.lastSearchQuery).not()){
+                            performSearch(v.text.toString())
+                            Utils.hideSoftKeypad(activity as Context)
+                            et_search.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0);
+                        }else{
+                            Toast.makeText(activity as Context, getString(R.string.redundent_search_error), Toast.LENGTH_SHORT).show()
+                        }
+
+                    }else{
+
+                        Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
+                    }
+
+                    return true
+                }
+                return false
+            }
+
+        })
     }
 
+    private fun performSearch(searchQuery: String) {
+        showLoading()
+        mViewModel.lastSearchQuery = searchQuery
+        mViewModel.getProductListing(categoryId?:0, searchQuery, true)
+    }
 
 
     private fun prepareFilterDialog() {
@@ -307,7 +361,7 @@ class ProductListingFragment: BaseFragment() {
                     mViewModel.selectedPriceRange.min = filterOptionBinding.priceRangeBar.selectedMinValue.toString()
                     mViewModel.selectedPriceRange.max = filterOptionBinding.priceRangeBar.selectedMaxValue.toString()
                     filterOptionDialog.dismiss()
-                    mViewModel.getProductListing(categoryId.toString())
+                    mViewModel.getProductListing(categoryId?: 0)
 
 
                     mViewModel.isFiltered = !(mViewModel.isFiltered && (isPriceRangeAltered() || isFilterSelected()).not())
@@ -394,7 +448,8 @@ class ProductListingFragment: BaseFragment() {
         mViewModel.maskedProductList.observe(this, Observer<ArrayList<ProductListingDataClass.ProductMaskedResponse>> { partialProductList ->
             partialProductList?.run {
                 hideLoading()
-                productListAdapter.addProducts(partialProductList)
+                productListAdapter.productList = partialProductList
+                productListAdapter.notifyDataSetChanged()
             }
         })
     }
