@@ -201,6 +201,12 @@ object Utils {
         imageView.layoutParams?.height = height.toInt()
     }
 
+    fun setViewHeightWrtDeviceHeight(context: Context, view: View, times: Double){
+        val width = getDeviceHeight(context)
+        val height = width.times(times)
+        view.layoutParams?.height = height.toInt()
+    }
+
 
     fun openPages(context: Context, url: String?) {
         val intent = Intent(Intent.ACTION_VIEW)

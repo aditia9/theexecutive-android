@@ -91,6 +91,7 @@ class BindingAdapters {
             view.adapter = customViewPagerAdapter
         }
 
+        //for images at home promotion
         @JvmStatic
         @BindingAdapter("bind:imageUrl")
         fun loadImage(imageView: ImageView, imageUrl: String?) {
@@ -102,11 +103,12 @@ class BindingAdapters {
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .centerCrop()
+                        .override(imageView.width, imageView.height)
                         .into(imageView)
             }
         }
 
+        //for images at home category
         @JvmStatic
         @BindingAdapter("bind:baseWithimageUrl")
         fun loadImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
@@ -119,11 +121,13 @@ class BindingAdapters {
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .centerCrop()
+                        .override(imageView.width.times(2), imageView.height.times(2))
                         .into(imageView)
             }
         }
 
+
+        //for images in product listing
         @JvmStatic
         @BindingAdapter("bind:baseUrlWithProductImageUrl")
         fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
