@@ -72,7 +72,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     }
 
     fun getFilterOptions(categoryId: Int?) {
-        AppRepository.filterOptionApi(categoryId!!, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
+        AppRepository.filterOptionApi(categoryId ?: Constants.UNIVERSAL_CAT_ID, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("Filter option api", error.message?: "exception")
             }
@@ -90,27 +90,29 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                         }
                     }
 
-                    priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
+                    priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }[0]
                 }
                 filterOptionList?.value = filterOptions.filters.toMutableList()
             }
         })
     }
 
-    fun getProductListing(catId: Int, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false) {
+    fun getProductListing(catId: Int?, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false) {
         isLoading = true
 
         if(fromSearch && fromPagination.not()){
             clearExistingList()
         }
 
-        AppRepository.getProductList(prepareProductListingRequest(catId, query,fromSearch), fromSearch,  object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
+        AppRepository.getProductList(prepareProductListingRequest(catId ?: Constants.UNIVERSAL_CAT_ID, query,fromSearch), fromSearch,  object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("product listing", error.message?: "exception")
+                noProductAvailable.value = 0
             }
 
             override fun onError(errorMsg: String) {
                 Utils.printLog("product listing", errorMsg)
+                noProductAvailable.value = 0
             }
 
             override fun onSuccess(response: ProductListingDataClass.ProductListingResponse?) {
@@ -133,7 +135,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                             val sku = product.sku
                             val name = product.name
                             val productType = product.type_id
-                            var price = 0.0
+                            var price: Double
                             var specialPrice = 0.0
                             if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
                                 price = product.extension_attributes.regular_price
@@ -141,8 +143,8 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                             }else{
                                 price = product.price
                                 val attributes = product.custom_attributes.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }.toList()
-                                if(attributes.isNotEmpty()){
-                                    specialPrice = attributes.get(0).value.toString().toDouble()
+                                if(attributes.isNotEmpty()) {
+                                    specialPrice = attributes[0].value.toString().toDouble()
                                 }
                             }
 
@@ -195,12 +197,14 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
         val sdf = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT)
         val d = Date()
-        var currentDate= sdf.format(d)
-        var cDate=sdf.parse(currentDate)
-        var sDtate=sdf.parse(fromDate)
-        var eDate=sdf.parse(toDate)
+        val currentDate= sdf.format(d)
+        val cDate=sdf.parse(currentDate)
+        val sDtate=sdf.parse(fromDate)
+        val eDate=sdf.parse(toDate)
 
-        if(cDate.compareTo(sDtate) >= 0 && cDate.compareTo(eDate) <= 0) return Constants.NEW_TAG else  return ""
+        if(!(cDate.compareTo(sDtate) < 0 || cDate.compareTo(eDate) > 0)) {
+            return Constants.NEW_TAG
+        } else  return ""
     }
 
     private fun prepareProductListingRequest(catId: Int, query: String, fromSearch: Boolean): Map<String, String> {

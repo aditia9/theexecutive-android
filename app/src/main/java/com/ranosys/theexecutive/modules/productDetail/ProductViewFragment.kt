@@ -20,11 +20,14 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
 import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
+import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.bottom_size_layout.*
 import kotlinx.android.synthetic.main.bottom_size_layout.view.*
@@ -172,6 +175,8 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_share -> {
+                    val url = ""
+                    Utils.shareUrl(activity as Context, url)
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_buying_guidelinie -> {
@@ -182,6 +187,23 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_wishlist -> {
+
+                    if (Utils.isConnectionAvailable(activity as Context)) {
+                        //check for logged in user
+                        if((SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY) ?: "").isBlank()){
+                            //show toast to user to login
+                            Toast.makeText(activity as Context, getString(R.string.login_required_error), Toast.LENGTH_SHORT).show()
+                            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
+                            val bundle = Bundle()
+                            bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
+                            FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+                        }else{
+                            showLoading()
+                            productItemViewModel.callAddToWishListApi()
+                        }
+                    } else {
+                        Utils.showNetworkErrorDialog(activity as Context)
+                    }
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
             }
@@ -226,6 +248,12 @@ class ProductViewFragment : BaseFragment() {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
                 }
             }
+        })
+
+        productItemViewModel.addToWIshListResponse?.observe(this, Observer { apiResponse ->
+            hideLoading()
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            Toast.makeText(activity as Context, response, Toast.LENGTH_SHORT).show()
         })
     }
 

@@ -60,9 +60,9 @@ object Utils {
     }
 
     fun isValidMobile(mobile: String): Boolean {
-       if(mobile.length >= 8 && mobile.length <=16){
-           return true
-       }
+        if(mobile.length >= 8 && mobile.length <=16){
+            return true
+        }
         return false
 
     }
@@ -160,7 +160,7 @@ object Utils {
         return xlarge || large
     }
 
-     fun openCmsPage(context: Context, url: String) {
+    fun openCmsPage(context: Context, url: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         context.startActivity(intent)
@@ -195,11 +195,25 @@ object Utils {
         imageView?.layoutParams?.height = height - removeHeight
     }
 
+    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double){
+        val width = getDeviceWidth(context)
+        val height = width.times(times)
+        imageView.layoutParams?.height = height.toInt()
+    }
+
 
     fun openPages(context: Context, url: String?) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         context.startActivity(intent)
+    }
+
+    fun shareUrl(context: Context, url: String?) {
+        val intent = Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Sharing Product links");
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        context.startActivity(Intent.createChooser(intent, "Share Product"));
     }
 
 }

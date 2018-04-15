@@ -130,5 +130,6 @@ dependencies {
     implementation project(':SpinnerDatePickerLib')
     //implementation 'com.github.amarjain07:StickyScrollView:1.0.2'
     implementation project(':stickyscrollview')
+
 }
 

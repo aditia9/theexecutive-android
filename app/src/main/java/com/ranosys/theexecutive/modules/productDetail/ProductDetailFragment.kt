@@ -74,7 +74,9 @@ class ProductDetailFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+        productList?.let {
+            setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+        }
     }
 
 

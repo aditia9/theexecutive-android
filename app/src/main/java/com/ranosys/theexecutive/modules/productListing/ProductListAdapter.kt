@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.ProductListItemBinding
+import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Class An adapter class for all products listing
@@ -26,6 +27,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding: ProductListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.product_list_item, parent,false)
+        Utils.setImageViewHeightWrtDeviceWidth(parent.context, binding.image, .65)
         return ProductListAdapter.Holder(binding)
     }
 

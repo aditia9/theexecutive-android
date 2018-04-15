@@ -24,6 +24,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var productChildrenResponse: MutableLiveData<ApiResponse<ChildProductsResponse>>? = MutableLiveData()
     var productOptionResponse: MutableLiveData<ApiResponse<List<ProductOptionsResponse>>>? = MutableLiveData()
     var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
+    var addToWIshListResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
 
     var clickedAddBtnId: MutableLiveData<Int>? = null
@@ -117,6 +118,32 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
                 staticPagesUrlResponse?.value = apiResponse
             }
         })
+    }
+
+    fun callAddToWishListApi(){
+        val apiResponse = ApiResponse<String>()
+
+        //prepare request
+        val requestMap: MutableMap<String, Int> = mutableMapOf()
+
+        requestMap.put("productId", productItem?.id!!)
+        //further add options
+
+        AppRepository.addToWishList(requestMap, object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                addToWIshListResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                addToWIshListResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                addToWIshListResponse?.value = apiResponse
+            }
+        })
+
     }
 
 }

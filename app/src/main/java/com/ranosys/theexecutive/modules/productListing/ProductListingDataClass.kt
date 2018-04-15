@@ -83,7 +83,7 @@ class ProductListingDataClass {
     data class ExtensionAttributes(
             val website_ids: List<Int>,
             val category_links: List<CategoryLink>,
-            val stock_item: StockItem,
+            val stock_item: StockItem?,
             val configurable_product_options: List<ConfigurableProductOption>,
             val configurable_product_links: List<Int>,
             val regular_price: Double,

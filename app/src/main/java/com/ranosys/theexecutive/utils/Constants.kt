@@ -28,6 +28,7 @@ object Constants {
         val PRODUCT_MEDIA_URL: String = "product_media_url"
         val CATEGORY_MEDIA_URL: String = "category_media_url"
         val CATEGORY_ID: String = "categoryId"
+        val LOGIN_REQUIRED_PROMPT: String = "login_required_prompt"
         val CATEGORY_NAME: String = "categoryName"
         val VOUCHER_AMT: String = "voucher_amount"
         val SUBS_MESSAGE: String = "subscription_message"
@@ -66,8 +67,10 @@ object Constants {
         val NEW_TAG: String = "New"
         val AIMATION_DURATION: Long = 300
         val IDR: String = "IDR "
-    val PROMOTION_TYPE_CATEGORY: String = "Category"
-    val PROMOTION_TYPE_PRODUCT: String = "Product"
-    val PROMOTION_TYPE_CMS_PAGE: String = "CMS"
+        val PROMOTION_TYPE_CATEGORY: String = "Category"
+        val PROMOTION_TYPE_PRODUCT: String = "Product"
+        val PROMOTION_TYPE_CMS_PAGE: String = "CMS"
+        val SEARCH_FROM_HOME_QUERY: String? = "search_from_home_query"
+        val UNIVERSAL_CAT_ID: Int = 0
 
 }

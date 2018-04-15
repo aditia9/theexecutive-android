@@ -43,8 +43,8 @@ interface ApiService {
     interface StoresService {
         @GET("rest/all/V1/store/storeViews")
         @Headers(ApiConstants.CONTENT_TYPE,
-            ApiConstants.X_REQUESTED_WITH,
-            ApiConstants.CACHE_CONTROL)
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
         fun getStores(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?): Call<ArrayList<StoreResponse>>
     }
 
@@ -183,6 +183,13 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getStaticPagesUrl(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?): Call<StaticPagesUrlResponse>
+
+
+        @POST("rest/{store_code}/V1/wishlist/mine/addproduct")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun addToWishList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body request: Map<String, Int>): Call<String>
 
     }
 }
