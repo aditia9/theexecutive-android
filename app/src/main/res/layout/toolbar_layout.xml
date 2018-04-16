@@ -39,7 +39,7 @@
                 android:id="@+id/toolbar_right_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="@{Integer.toString(toolbarViewModel.cartCount)}"
                 android:layout_marginRight="@dimen/sixteen_dp"
                 android:paddingTop="@dimen/five_dp"
                 android:gravity="center_vertical|center_horizontal"

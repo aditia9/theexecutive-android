@@ -178,7 +178,6 @@ class LoginFragment() : BaseFragment() {
                 }
             })
         })
-
     }
 
     private fun observeApiSuccess() {
