@@ -26,6 +26,7 @@ import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
 import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.MediaGalleryEntryChild
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
@@ -50,10 +51,16 @@ class ProductViewFragment : BaseFragment() {
     var productItem : ProductListingDataClass.Item? = null
     var position : Int? = 0
     var productSku : String? = ""
-    var attribute : String? = ""
-    var colorList = mutableListOf<String>()
-    var sizeList = mutableListOf<String>()
-    val colorMap: HashMap<Int, String>? = null
+    var colorAttrId : String? = ""
+    var sizeAttrId : String? = ""
+    var colorMap = HashMap<String, String>()
+    var sizeMap = HashMap<String, String>()
+    var childProductsMap = HashMap<String, List<MediaGalleryEntryChild>>()
+    var colorOptionList : List<ProductOptionsResponse>? = null
+    var sizeOptionList : List<ProductOptionsResponse>? = null
+    var colorsViewList : MutableList<ColorsView>? = null
+    var sizeViewList : List<ColorsView>? = null
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false);
@@ -72,6 +79,7 @@ class ProductViewFragment : BaseFragment() {
         if(productItem?.type_id.equals("configurable")){
             setData()
             getProductChildren(productItem?.sku)
+
         }
         img_one.setOnClickListener{
             val drawable=img_one.drawable as BitmapDrawable
@@ -91,7 +99,8 @@ class ProductViewFragment : BaseFragment() {
     fun setData(){
 
         setDescription()
-        setProductImages()
+        setProductImages(productItem?.media_gallery_entries)
+            setColorImagesList()
         setWearWithProductsData()
     }
 
@@ -125,15 +134,15 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setProductImages(){
+    fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
         Utils.setImageViewHeight(activity as Context, img_one, 27)
         Utils.setImageViewHeight(activity as Context, img_two, 27)
-        val listSize = productItem?.media_gallery_entries?.size
+        val listSize = mediaGalleryList?.size
         for(i in 2..listSize!!.minus(1)){
             val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
             productImagesBinding?.mediaGalleryEntry = productItem?.media_gallery_entries?.get(i)
             Utils.setImageViewHeight(activity as Context, productImagesBinding?.imgProductImage, 27)
-           var view= productImagesBinding!!.root.img_product_image
+            var view= productImagesBinding!!.root.img_product_image
             view.setOnClickListener {
                 val drawable=view.drawable as BitmapDrawable
                 var bitmap=drawable.bitmap
@@ -149,15 +158,20 @@ class ProductViewFragment : BaseFragment() {
             val option = productItem?.extension_attributes?.configurable_product_options?.get(i)
             when(option?.label){
                 "Color" -> {
-                    option.values.forEach { value -> colorList.add(value.value_index.toString()) }
-                    //option.values.forEach { value -> colorMap?.put() }
-                    AppLog.e("ColorList : " +colorList.toString())
-                    getProductOptions(productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id, "color")
+                    option.values.forEachIndexed {index, value ->
+                        colorMap.put(index.toString(), value = value.value_index.toString())
+                    }
+                    AppLog.e("ColorList : " +colorMap.toString())
+                    colorAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
+                    getProductOptions(colorAttrId, "color")
                 }
                 "Size" -> {
-                    option.values.forEach { value -> sizeList.add(value.value_index.toString()) }
-                    AppLog.e("Sizelist : " + sizeList.toString())
-                    getProductOptions(productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id, "size")
+                    option.values.forEachIndexed {index, value ->
+                        sizeMap.put(index.toString(), value = value.value_index.toString())
+                    }
+                    AppLog.e("Sizelist : " + sizeMap.toString())
+                    sizeAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
+                    getProductOptions(sizeAttrId, "size")
                 }
             }
         }
@@ -233,10 +247,24 @@ class ProductViewFragment : BaseFragment() {
 
         })
 
-        productItemViewModel.productChildrenResponse?.observe(this, object : Observer<ApiResponse<ChildProductsResponse>> {
-            override fun onChanged(apiResponse: ApiResponse<ChildProductsResponse>?) {
+        productItemViewModel.productChildrenResponse?.observe(this, object : Observer<ApiResponse<List<ChildProductsResponse>>> {
+            override fun onChanged(apiResponse: ApiResponse<List<ChildProductsResponse>>?) {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is ChildProductsResponse) {
+                if (response is List<*>) {
+                    val list = response as List<ChildProductsResponse>
+
+                    list.forEach {
+                        val value =it.custom_attributes.filter { s ->
+                            s.attribute_code == "color"
+                        }.single().value.toString()
+                        if(!childProductsMap.containsKey(value))
+                            childProductsMap.put(value, it.media_gallery_entries)
+                    }
+
+                    setColorViewList()
+
+                    AppLog.e("ChildProductsMap : " + childProductsMap.toString())
+
 
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
@@ -251,8 +279,20 @@ class ProductViewFragment : BaseFragment() {
                     val list = response as List<ProductOptionsResponse>
                     list.get(0).label
                     when(list.get(0).label){
-                        "color" -> AppLog.e("color index : " + (response.get(1) as ProductOptionsResponse).label!!)
-                        "size" -> AppLog.e("size index : " + (response.get(1) as ProductOptionsResponse).label!!)
+                        "color" -> {
+                            AppLog.e("color index : " + (response.get(0) as ProductOptionsResponse).label!!)
+                            colorOptionList = list.filter {
+                                it.value in colorMap.values
+                            }
+                            AppLog.e("New color list : " + colorOptionList.toString())
+                        }
+                        "size" -> {
+                            AppLog.e("size index : " + (response.get(0) as ProductOptionsResponse).label!!)
+                            sizeOptionList = list.filter {
+                                it.value in sizeMap.values
+                            }
+                            AppLog.e("New size list : " + sizeOptionList.toString())
+                        }
                     }
 
                 } else {
@@ -287,6 +327,14 @@ class ProductViewFragment : BaseFragment() {
         if(url.isNotBlank()){
             Utils.shareUrl(activity as Context, "$baseUrl$url$urlSuffix")
         }
+
+    }
+
+    fun setColorViewList(){
+        colorOptionList?.forEach {
+            colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value)))
+        }
+        AppLog.e("colorsViewList : " + colorsViewList.toString())
 
     }
 
@@ -333,13 +381,15 @@ class ProductViewFragment : BaseFragment() {
         mImageDialog.window.setGravity(Gravity.BOTTOM)
         var imageView=view.rootView.product_imageview
         imageView.setImageBitmap(bitmap)
-        mImageDialog.show()
-
         var backImageView=view.rootView.cancel_img
         backImageView.setOnClickListener {
 
             mImageDialog.dismiss()
         }
+        mImageDialog.show()
     }
+
+    data class ColorsView(var label: String?, var attr_id:String?, var value : String?,
+                          var list : List<MediaGalleryEntryChild>?)
 
 }

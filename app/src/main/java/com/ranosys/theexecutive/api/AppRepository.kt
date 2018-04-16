@@ -407,14 +407,14 @@ object AppRepository {
         })
     }
 
-    fun getProductChildern(productSku : String?, callBack: ApiCallback<ChildProductsResponse>) {
+    fun getProductChildern(productSku : String?, callBack: ApiCallback<List<ChildProductsResponse>>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
         val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getProductChildren(ApiConstants.BEARER + adminToken, storeCode, productSku)
 
-        callGet?.enqueue(object : Callback<ChildProductsResponse> {
-            override fun onResponse(call: Call<ChildProductsResponse>?, response: Response<ChildProductsResponse>?) {
+        callGet?.enqueue(object : Callback<List<ChildProductsResponse>> {
+            override fun onResponse(call: Call<List<ChildProductsResponse>>?, response: Response<List<ChildProductsResponse>>?) {
                 if (!response!!.isSuccessful) {
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
 
@@ -424,7 +424,7 @@ object AppRepository {
 
             }
 
-            override fun onFailure(call: Call<ChildProductsResponse>, t: Throwable) {
+            override fun onFailure(call: Call<List<ChildProductsResponse>>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })
