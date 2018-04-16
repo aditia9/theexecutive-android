@@ -13,7 +13,7 @@
     <string name="empty_user_id">Please provide NRIC /FIN /Passport.</string>
     <string name="empty_password">Password is required.</string>
     <string name="mobile_error">Mobile Number is required.</string>
-    <string name="dob_error">"Date of birth" is required / Date of birth cannot be greater than current date.</string>
+    <string name="dob_error">Date of birth is required.</string>
     <string name="city_error">Please provide city.</string>
     <string name="state_error">Please provide state</string>
     <string name="first_name_error">First Name is required.</string>
@@ -149,7 +149,6 @@
     <string name="no_product_available_error">Oops.. we couldn\'t find what you need.</string>
     <string name="empty_filter_option_selection_error">Please select at least one option.</string>
     <string name="enter_search_error">Please enter search keyword</string>
-    <string name="redundent_search_error">you are already at this category</string>
     <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app.</string>
 
 

@@ -323,13 +323,9 @@ class ProductListingFragment: BaseFragment() {
 
     private fun handleSearchAction(searchQuery: String) {
         if(searchQuery.isEmpty().not()){
-            if((searchQuery == mViewModel.lastSearchQuery).not()){
-                performSearch(searchQuery)
-                Utils.hideSoftKeypad(activity as Context)
-                mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0)
-            }else{
-                Toast.makeText(activity as Context, getString(R.string.redundent_search_error), Toast.LENGTH_SHORT).show()
-            }
+            performSearch(searchQuery)
+            Utils.hideSoftKeypad(activity as Context)
+            mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0)
         }else{
             Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
         }
