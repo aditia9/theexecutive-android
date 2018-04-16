@@ -136,7 +136,7 @@ class BindingAdapters {
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .dontTransform()
+                        .override(250*(2/3),250*(3/2))
                         .into(imageView)
             }
         }
