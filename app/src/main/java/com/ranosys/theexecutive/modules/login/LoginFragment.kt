@@ -24,12 +24,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
-import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.modules.register.RegisterFragment
 import com.ranosys.theexecutive.utils.*
 import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
@@ -188,12 +186,13 @@ class LoginFragment() : BaseFragment() {
             hideLoading()
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
             SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
-            if(loginRequiredPrompt){
-                activity?.onBackPressed()
-            }else{
-
             FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
-            }
+//            if(loginRequiredPrompt){
+//                activity?.onBackPressed()
+//            }else{
+//
+//            FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+//            }
         })
 
     }

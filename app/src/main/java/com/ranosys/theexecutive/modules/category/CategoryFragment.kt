@@ -63,7 +63,7 @@ class CategoryFragment : BaseFragment() {
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
         promotionBinding?.root?.tv_promotion_text?.text = SavedPreferences.getInstance()?.getStringValue(Constants.PROMOTION_MESSAGE)
-        Utils.setViewHeightWrtDeviceHeight(activity as Context, promotionBinding?.viewpager!!, .4)
+        Utils.setViewHeightWrtDeviceHeight(activity as Context, promotionBinding?.viewpager!!, .6)
         viewPager = promotionBinding?.root?.viewpager!!
 
         pagerAdapter = CustomViewPageAdapter(view.context, categoryModelView?.promotionResponse?.get())

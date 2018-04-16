@@ -104,6 +104,7 @@ class BindingAdapters {
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
+                        .fitCenter()
                         .into(imageView)
             }
         }
@@ -122,6 +123,7 @@ class BindingAdapters {
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width.times(2), imageView.height.times(2))
+                        .fitCenter()
                         .into(imageView)
             }
         }
