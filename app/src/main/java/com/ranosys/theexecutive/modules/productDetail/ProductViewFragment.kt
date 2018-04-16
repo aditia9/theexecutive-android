@@ -22,6 +22,7 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
+import com.ranosys.theexecutive.databinding.BottomSizeLayoutBinding
 import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
 import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
@@ -35,7 +36,6 @@ import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.bottom_size_layout.*
-import kotlinx.android.synthetic.main.bottom_size_layout.view.*
 import kotlinx.android.synthetic.main.dialog_product_image.view.*
 import kotlinx.android.synthetic.main.product_detail_view.*
 import kotlinx.android.synthetic.main.product_images_layout.view.*
@@ -60,6 +60,8 @@ class ProductViewFragment : BaseFragment() {
     var sizeOptionList : List<ProductOptionsResponse>? = null
     var colorsViewList : MutableList<ColorsView>? = null
     var sizeViewList : List<ColorsView>? = null
+    private lateinit var sizeDilaogBinding: BottomSizeLayoutBinding
+    private lateinit var sizeDilaog: Dialog
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -68,10 +70,52 @@ class ProductViewFragment : BaseFragment() {
         productItemViewModel.productItem = productItem
         listGroupBinding?.productItemVM = productItemViewModel
 
+        sizeDilaogBinding = DataBindingUtil.inflate(inflater, R.layout.bottom_size_layout, container,  false)
+        prepareSizeDialog()
+
+
         observeEvents()
         getStaticPagesUrl()
 
         return listGroupBinding!!.root
+    }
+
+    private fun prepareSizeDialog() {
+        sizeDilaog = Dialog(activity, R.style.MaterialDialogSheet)
+        sizeDilaog.setContentView(sizeDilaogBinding.root)
+        sizeDilaog.setCancelable(true)
+        sizeDilaog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
+        sizeDilaog.window.setGravity(Gravity.BOTTOM)
+
+        sizeDilaog.tv_price_dialog.setText(Constants.IDR + productItem?.price.toString())
+
+        sizeDilaog.btn_done.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                if(sizeDilaog.isShowing){
+                    sizeDilaog.dismiss()
+                }
+            }
+        })
+
+        val itemQty = productItem?.extension_attributes?.stock_item?.qty ?: 0
+        val selectedQty = 0
+
+        sizeDilaog.tv_quantity.text = selectedQty.toString()
+        sizeDilaog.img_forward.setOnClickListener {
+            if(selectedQty < itemQty){
+                selectedQty.plus(1)
+                sizeDilaog.tv_quantity.text = selectedQty.toString()
+            }else{
+                Toast.makeText(activity as Context, "No more product available", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        sizeDilaog.img_back.setOnClickListener {
+            if(selectedQty > 0){
+                selectedQty.minus(1)
+                sizeDilaog.tv_quantity.text = selectedQty.toString()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -193,7 +237,7 @@ class ProductViewFragment : BaseFragment() {
         productItemViewModel.clickedAddBtnId?.observe(this, Observer<Int> { id ->
             when (id){
                 R.id.btn_add_to_bag -> {
-                    openBottomSizeSheet ()
+                    openBottomSizeSheet()
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_composition_and_care -> {
@@ -340,23 +384,7 @@ class ProductViewFragment : BaseFragment() {
 
     fun openBottomSizeSheet()
     {
-        val view = layoutInflater.inflate(R.layout.bottom_size_layout, null)
-        val mBottomSheetDialog = Dialog(activity, R.style.MaterialDialogSheet)
-        mBottomSheetDialog.setContentView(view)
-        mBottomSheetDialog.setCancelable(true)
-        mBottomSheetDialog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
-        mBottomSheetDialog.window.setGravity(Gravity.BOTTOM)
-        view.tv_price.setText(Constants.IDR + productItem?.price.toString())
-        mBottomSheetDialog.show()
-
-        mBottomSheetDialog.btn_done.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                if(mBottomSheetDialog.isShowing){
-                    mBottomSheetDialog.dismiss()
-                }
-            }
-        })
-
+        sizeDilaog.show()
 
     }
 
