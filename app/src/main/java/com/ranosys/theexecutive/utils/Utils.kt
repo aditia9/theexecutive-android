@@ -227,19 +227,4 @@ object Utils {
         intent.putExtra(Intent.EXTRA_TEXT, url);
         context.startActivity(Intent.createChooser(intent, "Share Product"));
     }
-
-    /*fun getScreenOrientation(context : Context): String{
-        val screenOrientation = ((context as WindowManager).getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation()
-        when (screenOrientation) {
-            Surface.ROTATION_0->
-                return "android portrait screen";
-             Surface.ROTATION_90->
-                return "android landscape screen";
-             Surface.ROTATION_180->
-                return "android reverse portrait screen";
-            default->
-                return "android reverse landscape screen";
-        }
-    }*/
-
 }
