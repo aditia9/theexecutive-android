@@ -21,7 +21,7 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 class ProductItemViewModel(application: Application) : BaseViewModel(application){
 
     var productItem :  ProductListingDataClass.Item? = null
-    var productChildrenResponse: MutableLiveData<ApiResponse<ChildProductsResponse>>? = MutableLiveData()
+    var productChildrenResponse: MutableLiveData<ApiResponse<List<ChildProductsResponse>>>? = MutableLiveData()
     var productOptionResponse: MutableLiveData<ApiResponse<List<ProductOptionsResponse>>>? = MutableLiveData()
     var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
@@ -65,8 +65,8 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     }
 
     fun getProductChildren(productSku : String?){
-        val apiResponse = ApiResponse<ChildProductsResponse>()
-        AppRepository.getProductChildern(productSku, object : ApiCallback<ChildProductsResponse> {
+        val apiResponse = ApiResponse<List<ChildProductsResponse>>()
+        AppRepository.getProductChildern(productSku, object : ApiCallback<List<ChildProductsResponse>> {
             override fun onException(error: Throwable) {
                 productChildrenResponse?.value?.throwable = error
             }
@@ -75,7 +75,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
                 productChildrenResponse?.value?.error = errorMsg
             }
 
-            override fun onSuccess(t: ChildProductsResponse?) {
+            override fun onSuccess(t: List<ChildProductsResponse>?) {
                 apiResponse.apiResponse = t
                 productChildrenResponse?.value = apiResponse
             }
