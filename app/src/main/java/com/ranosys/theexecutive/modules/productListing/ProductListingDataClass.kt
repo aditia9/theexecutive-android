@@ -73,9 +73,9 @@ class ProductListingDataClass {
             val updated_at: String,
             val weight: Double,
             val extension_attributes: ExtensionAttributes,
-            val product_links: List<ProductLinks>,
+            val product_links: List<ProductLinks?>?,
             val options: List<Any>,
-            val media_gallery_entries: List<MediaGalleryEntry>,
+            val media_gallery_entries: MutableList<MediaGalleryEntry>?,
             val tier_prices: List<Any>,
             val custom_attributes: List<CustomAttribute>
     )

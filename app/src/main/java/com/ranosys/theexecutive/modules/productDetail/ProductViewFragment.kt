@@ -26,7 +26,6 @@ import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
 import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.MediaGalleryEntryChild
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
@@ -53,13 +52,14 @@ class ProductViewFragment : BaseFragment() {
     var productSku : String? = ""
     var colorAttrId : String? = ""
     var sizeAttrId : String? = ""
+    var productColorValue : String? = ""
     var colorMap = HashMap<String, String>()
     var sizeMap = HashMap<String, String>()
-    var childProductsMap = HashMap<String, List<MediaGalleryEntryChild>>()
+    var childProductsMap = HashMap<String, MutableList<ProductListingDataClass.MediaGalleryEntry>?>()
     var colorOptionList : List<ProductOptionsResponse>? = null
     var sizeOptionList : List<ProductOptionsResponse>? = null
-    var colorsViewList : MutableList<ColorsView>? = null
-    var sizeViewList : List<ColorsView>? = null
+    var colorsViewList : MutableList<ColorsView>? = mutableListOf()
+    var sizeViewList : MutableList<SizeView>? = mutableListOf()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -76,20 +76,22 @@ class ProductViewFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(productItem?.type_id.equals("configurable")){
-            setData()
-            getProductChildren(productItem?.sku)
 
+        setData()
+
+        if(productItem?.type_id.equals("configurable")){
+            getProductChildren(productItem?.sku)
         }
+
         img_one.setOnClickListener{
             val drawable=img_one.drawable as BitmapDrawable
-            var bitmap=drawable.bitmap
+            val bitmap=drawable.bitmap
             openProdcutImage(bitmap)
         }
 
         img_two.setOnClickListener {
             val drawable=img_two.drawable as BitmapDrawable
-            var bitmap=drawable.bitmap
+            val bitmap=drawable.bitmap
             openProdcutImage(bitmap)
         }
 
@@ -100,7 +102,7 @@ class ProductViewFragment : BaseFragment() {
 
         setDescription()
         setProductImages(productItem?.media_gallery_entries)
-            setColorImagesList()
+        setColorImagesList()
         setWearWithProductsData()
     }
 
@@ -134,7 +136,7 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
+    fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry?>?){
         Utils.setImageViewHeight(activity as Context, img_one, 27)
         Utils.setImageViewHeight(activity as Context, img_two, 27)
         val listSize = mediaGalleryList?.size
@@ -142,10 +144,10 @@ class ProductViewFragment : BaseFragment() {
             val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
             productImagesBinding?.mediaGalleryEntry = productItem?.media_gallery_entries?.get(i)
             Utils.setImageViewHeight(activity as Context, productImagesBinding?.imgProductImage, 27)
-            var view= productImagesBinding!!.root.img_product_image
+            val view = productImagesBinding!!.root.img_product_image
             view.setOnClickListener {
                 val drawable=view.drawable as BitmapDrawable
-                var bitmap=drawable.bitmap
+                val bitmap=drawable.bitmap
                 openProdcutImage(bitmap)
             }
             ll_color_choice.addView(productImagesBinding?.root)
@@ -153,25 +155,28 @@ class ProductViewFragment : BaseFragment() {
     }
 
     fun setColorImagesList(){
-        val length = productItem?.extension_attributes?.configurable_product_options?.size!!
-        for(i in 0..length-1){
-            val option = productItem?.extension_attributes?.configurable_product_options?.get(i)
-            when(option?.label){
-                "Color" -> {
-                    option.values.forEachIndexed {index, value ->
-                        colorMap.put(index.toString(), value = value.value_index.toString())
+        productItem?.extension_attributes?.configurable_product_options?.run{
+            val length = productItem?.extension_attributes?.configurable_product_options?.size!!
+            for(i in 0..length-1) {
+                val option = productItem?.extension_attributes?.configurable_product_options?.get(i)
+                when (option?.label) {
+                    "Color" -> {
+                        option.values.forEachIndexed { index, value ->
+                            if(index == 0) { productColorValue = value.value_index.toString() }
+                            colorMap.put(index.toString(), value = value.value_index.toString())
+                        }
+                        AppLog.e("ColorList : " + colorMap.toString())
+                        colorAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
+                        getProductOptions(colorAttrId, "color")
                     }
-                    AppLog.e("ColorList : " +colorMap.toString())
-                    colorAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
-                    getProductOptions(colorAttrId, "color")
-                }
-                "Size" -> {
-                    option.values.forEachIndexed {index, value ->
-                        sizeMap.put(index.toString(), value = value.value_index.toString())
+                    "Size" -> {
+                        option.values.forEachIndexed { index, value ->
+                            sizeMap.put(index.toString(), value = value.value_index.toString())
+                        }
+                        AppLog.e("Sizelist : " + sizeMap.toString())
+                        sizeAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
+                        getProductOptions(sizeAttrId, "size")
                     }
-                    AppLog.e("Sizelist : " + sizeMap.toString())
-                    sizeAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
-                    getProductOptions(sizeAttrId, "size")
                 }
             }
         }
@@ -223,6 +228,10 @@ class ProductViewFragment : BaseFragment() {
                 R.id.tv_chat -> {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
+                R.id.tv_size_guide->{
+                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
                 R.id.tv_wishlist -> {
 
                     if (Utils.isConnectionAvailable(activity as Context)) {
@@ -258,10 +267,15 @@ class ProductViewFragment : BaseFragment() {
                             s.attribute_code == "color"
                         }.single().value.toString()
                         if(!childProductsMap.containsKey(value))
-                            childProductsMap.put(value, it.media_gallery_entries)
+                            if(value.equals(productColorValue)){
+                                childProductsMap.put(value, productItem?.media_gallery_entries)
+                            }else {
+                                childProductsMap.put(value, it.media_gallery_entries)
+                            }
                     }
 
                     setColorViewList()
+                    setSizeViewList()
 
                     AppLog.e("ChildProductsMap : " + childProductsMap.toString())
 
@@ -322,7 +336,7 @@ class ProductViewFragment : BaseFragment() {
 
     private fun shareProductUrl() {
         val baseUrl = BuildConfig.API_URL
-        val url = productItem?.custom_attributes?.find { it.attribute_code == Constants.URL_KEY }.let { it?.value }.toString()
+        val url = productItem?.custom_attributes?.find { it?.attribute_code == Constants.URL_KEY }.let { it?.value }.toString()
         val urlSuffix = Constants.URL_SUFFIX
         if(url.isNotBlank()){
             Utils.shareUrl(activity as Context, "$baseUrl$url$urlSuffix")
@@ -336,6 +350,25 @@ class ProductViewFragment : BaseFragment() {
         }
         AppLog.e("colorsViewList : " + colorsViewList.toString())
 
+        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
+        rv_color_view.layoutManager = linearLayoutManager
+        if(colorsViewList?.size!! > 0) {
+            val colorViewAdapter = ColorRecyclerAdapter(activity as Context, colorsViewList)
+            rv_color_view.adapter = colorViewAdapter
+            colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(item: ProductViewFragment.ColorsView?) {
+
+                }
+            })
+        }
+
+    }
+
+    fun setSizeViewList(){
+        sizeOptionList?.forEach {
+            sizeViewList?.add(SizeView(it.label, colorAttrId, it.value))
+        }
+        AppLog.e("sizeViewList : " + sizeViewList.toString())
     }
 
     fun openBottomSizeSheet()
@@ -349,6 +382,25 @@ class ProductViewFragment : BaseFragment() {
         view.tv_price.setText(Constants.IDR + productItem?.price.toString())
         mBottomSheetDialog.show()
 
+        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
+        view.rv_size_view.layoutManager = linearLayoutManager
+        if(sizeViewList?.size!! > 0) {
+            val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList)
+            view.rv_size_view.adapter = sizeViewAdapter
+            sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(item: ProductViewFragment.SizeView?) {
+
+                }
+            })
+        }
+
+        view.tv_size_guide.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
+            }
+        })
+
+
         mBottomSheetDialog.btn_done.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
                 if(mBottomSheetDialog.isShowing){
@@ -360,6 +412,29 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
+    fun openProdcutImage(bitmap: Bitmap)
+    {
+        val view = layoutInflater.inflate(R.layout.dialog_product_image, null)
+        val mImageDialog = Dialog(activity, R.style.MaterialDialogSheet)
+        mImageDialog.setContentView(view)
+        mImageDialog.setCancelable(true)
+        mImageDialog.window.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+        mImageDialog.window.setGravity(Gravity.BOTTOM)
+        val imageView=view.rootView.product_imageview
+        imageView.setImageBitmap(bitmap)
+        val backImageView=view.rootView.cancel_img
+        backImageView.setOnClickListener {
+
+            mImageDialog.dismiss()
+        }
+        mImageDialog.show()
+    }
+
+    data class ColorsView(var label: String?, var attr_id:String?, var value : String?,
+                          var list : List<ProductListingDataClass.MediaGalleryEntry?>?)
+
+    data class SizeView(var label: String?, var attr_id:String?, var value : String?)
+
     companion object {
 
         fun getInstance(productItem : ProductListingDataClass.Item?, productSku : String?, position : Int?) =
@@ -370,26 +445,5 @@ class ProductViewFragment : BaseFragment() {
                 }
 
     }
-
-    fun openProdcutImage(bitmap: Bitmap)
-    {
-        val view = layoutInflater.inflate(R.layout.dialog_product_image, null)
-        val mImageDialog = Dialog(activity, R.style.MaterialDialogSheet)
-        mImageDialog.setContentView(view)
-        mImageDialog.setCancelable(true)
-        mImageDialog.window.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
-        mImageDialog.window.setGravity(Gravity.BOTTOM)
-        var imageView=view.rootView.product_imageview
-        imageView.setImageBitmap(bitmap)
-        var backImageView=view.rootView.cancel_img
-        backImageView.setOnClickListener {
-
-            mImageDialog.dismiss()
-        }
-        mImageDialog.show()
-    }
-
-    data class ColorsView(var label: String?, var attr_id:String?, var value : String?,
-                          var list : List<MediaGalleryEntryChild>?)
 
 }

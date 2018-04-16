@@ -2,6 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
+    <data>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
+        <variable
+            name="sizeView"
+            type="com.ranosys.theexecutive.modules.productDetail.ProductViewFragment.SizeView"/>
+    </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,9 +44,9 @@
                 />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_size"
+                android:id="@+id/rv_size_view"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_select_size"
                 android:layout_marginTop="@dimen/ten_dp"
                 android:layout_marginLeft="@dimen/twenty_dp"
@@ -54,7 +62,7 @@
                 android:theme="@style/sub_heading_theme"
                 android:layout_marginTop="@dimen/thirty_dp"
                 android:layout_marginLeft="@dimen/twenty_dp"
-                android:layout_below="@+id/rv_size"
+                android:layout_below="@+id/rv_size_view"
                 />
 
             <LinearLayout

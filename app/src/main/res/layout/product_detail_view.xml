@@ -35,7 +35,7 @@
                     android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_one_detail"
-                    bind:baseUrlWithProductImageUrl="@{productItemVM.productItem.media_gallery_entries.get(0).file}"
+                    bind:baseUrlWithProductImageUrl='@{productItemVM.productItem.media_gallery_entries.size > 0 ? productItemVM.productItem.media_gallery_entries.get(0).file : ""}'
                     />
 
                 <ImageView
@@ -47,7 +47,7 @@
                     android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_two_detail"
-                    bind:baseUrlWithProductImageUrl="@{productItemVM.productItem.media_gallery_entries.get(1).file}"
+                    bind:baseUrlWithProductImageUrl='@{productItemVM.productItem.media_gallery_entries.size > 1 ? productItemVM.productItem.media_gallery_entries.get(1).file : ""}'
                     />
 
                 <TextView
@@ -72,12 +72,21 @@
                     android:layout_below="@id/tv_description"
                     />
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_color_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:layout_below="@id/tv_colors"
+                    android:gravity="center"
+                    />
+
                 <LinearLayout
                     android:id="@+id/ll_color_choice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_colors"
-                    android:layout_marginTop="@dimen/ten_dp"
+                    android:layout_below="@id/rv_color_view"
+                    android:layout_marginTop="@dimen/twenty_dp"
                     android:orientation="vertical"
                     />
 
