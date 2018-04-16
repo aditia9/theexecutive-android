@@ -5,19 +5,19 @@
     <string name="user_id">User ID</string>
     <string name="empty_user_name">Please provide User Name.</string>
     <string name="empty_user_mobile">Please provide Mobile Number.</string>
-    <string name="provide_valid_email">Please provide valid Email.</string>
+    <string name="provide_valid_email">Email address is required in valid format.</string>
     <string name="privacy_policy_error">Please accept Privacy Policy.</string>
     <string name="terms_condition_error">Please accept Terms and Conditions.</string>
     <string name="empty_email">Email Address is required.</string>
     <string name="empty_full_name">Please provide Full Name.</string>
     <string name="empty_user_id">Please provide NRIC /FIN /Passport.</string>
     <string name="empty_password">Password is required.</string>
-    <string name="mobile_error">Please provide Mobile.</string>
-    <string name="dob_error">Please provide DOB.</string>
+    <string name="mobile_error">Mobile Number is required.</string>
+    <string name="dob_error">"Date of birth" is required / Date of birth cannot be greater than current date.</string>
     <string name="city_error">Please provide city.</string>
     <string name="state_error">Please provide state</string>
-    <string name="first_name_error">Please provide first name</string>
-    <string name="last_name_error">Please provide last name</string>
+    <string name="first_name_error">First Name is required.</string>
+    <string name="last_name_error">Last Name is required.</string>
     <string name="empty_description">Please provide Description.</string>
     <string name="name">Name</string>
     <string name="male">Male</string>
@@ -79,12 +79,12 @@
     <string name="term_and_condition"><![CDATA[By creating your account, you agree to our Terms & Conditions and Privacy Policy]]></string>
     <string name="dob_hint">DD/MM/YYYY</string>
     <string name="street_address_1">Street Address Line 1 </string>
-    <string name="street_address_error">Please provide Street address</string>
+    <string name="street_address_error">Street Address Line 1 is required.</string>
     <string name="street_address_2">Street Address Line 2 </string>
-    <string name="postal_error">Please provide postal code</string>
-    <string name="valid_password_error">Please provide valid password</string>
-    <string name="valid_mobile_error">Please provide valid mobile</string>
-    <string name="confirm_password_error">Password mismatch</string>
+    <string name="postal_error">Zip/ Postal code is required.</string>
+    <string name="valid_password_error">Paasword must contain 8 or more characters, special character and number.</string>
+    <string name="valid_mobile_error">Kindly enter numbers only (0–9).</string>
+    <string name="confirm_password_error">The password does not match, kindly enter the same password as above.</string>
     <string name="select_lang_title">Select Language</string>
     <string name="select_option">Select Option</string>
     <string name="continue_btn">Continue</string>
@@ -107,9 +107,9 @@
     <string name="select_gender_label">Select Gender</string>
     <string name="no_state_available_error">No state available for this country</string>
     <string name="no_cities_available_error">No cities available</string>
-    <string name="empty_country_error">Please select country</string>
-    <string name="empty_city_error">Please select city</string>
-    <string name="empty_state_error">Please select State</string>
+    <string name="empty_country_error">Country Code is required.</string>
+    <string name="empty_city_error">City is required.</string>
+    <string name="empty_state_error">State is required.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="logout">Logout</string>
@@ -119,7 +119,7 @@
     <string name="close_app_text">Are you sure you want to close application?</string>
     <string name="network_err_text">Network Error</string>
     <string name="verify_email_message">Please verify email</string>
-    <string name="register_successfull">You have registered successfully.</string>
+    <string name="register_successfull">Welcome aboard, you are now a member of The Executive.</string>
     <string name="logout_success_message">Logout successfully</string>
     <string name="non_breakable_apace">\u00A0</string>
     <string name="price_range_label">Price Range</string>
@@ -143,14 +143,14 @@
     <string name="select_quantity">Select Quantity</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
-    <string name="email_sent">An email is sent to your registered email.</string>
+    <string name="email_sent">We have sent you an email, please follow the instruction to reset password.</string>
     <string name="logout_text">Are you sure you want to logout from application?</string>
-    <string name="empty_sort_option_selection_error">Please select sort option</string>
-    <string name="no_product_available_error">Sorry \n No product available</string>
-    <string name="empty_filter_option_selection_error">Please select filter option</string>
+    <string name="empty_sort_option_selection_error">Please select at least one option.</string>
+    <string name="no_product_available_error">Oops.. we couldn\'t find what you need.</string>
+    <string name="empty_filter_option_selection_error">Please select at least one option.</string>
     <string name="enter_search_error">Please enter search keyword</string>
     <string name="redundent_search_error">you are already at this category</string>
-    <string name="login_required_error">Please login to perform this actions</string>
+    <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app.</string>
 
 
 </resources>

@@ -50,6 +50,7 @@
                     app:errorText="@{registerViewModel.firstNameError}"
                     android:theme="@style/tilTheme"
                     android:layout_marginTop="@dimen/sixteen_dp"
+                    android:maxLength="50"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left">
@@ -59,6 +60,7 @@
                         android:onTextChanged='@{() -> registerViewModel.onTextChanged(etFirstName)}'
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxLength="50"
                         android:inputType="text|textCapWords"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
