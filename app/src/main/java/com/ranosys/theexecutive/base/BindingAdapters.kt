@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter
 import android.widget.ExpandableListView
 import android.widget.ImageView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
@@ -101,10 +100,8 @@ class BindingAdapters {
                         .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
-                        .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
-                        .fitCenter()
                         .into(imageView)
             }
         }
@@ -120,10 +117,8 @@ class BindingAdapters {
                         .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
-                        .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .override(imageView.width.times(2), imageView.height.times(2))
-                        .fitCenter()
+                        .override(imageView.width, imageView.height)
                         .into(imageView)
             }
         }
@@ -136,13 +131,12 @@ class BindingAdapters {
             val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.PRODUCT_MEDIA_URL)
             imageUrl?.run {
                 GlideApp.with(imageView.context)
+                        .asBitmap()
                         .load(baseUrl+imageUrl)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
-                        .transition(DrawableTransitionOptions.withCrossFade(500))
-                        .fitCenter()
                         .into(imageView)
             }
         }

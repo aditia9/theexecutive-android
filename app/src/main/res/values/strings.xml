@@ -8,10 +8,10 @@
     <string name="provide_valid_email">Please provide valid Email.</string>
     <string name="privacy_policy_error">Please accept Privacy Policy.</string>
     <string name="terms_condition_error">Please accept Terms and Conditions.</string>
-    <string name="empty_email">Please provide Email.</string>
+    <string name="empty_email">Email Address is required.</string>
     <string name="empty_full_name">Please provide Full Name.</string>
     <string name="empty_user_id">Please provide NRIC /FIN /Passport.</string>
-    <string name="empty_password">Please provide Password.</string>
+    <string name="empty_password">Password is required.</string>
     <string name="mobile_error">Please provide Mobile.</string>
     <string name="dob_error">Please provide DOB.</string>
     <string name="city_error">Please provide city.</string>

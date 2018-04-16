@@ -27,7 +27,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding: ProductListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.product_list_item, parent,false)
-        Utils.setImageViewHeightWrtDeviceWidth(parent.context, binding.image, .65)
+        Utils.setImageViewHeightWrtDeviceWidth(parent.context, binding.image, .6)
         return ProductListAdapter.Holder(binding)
     }
 

@@ -103,10 +103,6 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         if (TextUtils.isEmpty(password.get())) {
             passwordError.set(context.getString(R.string.empty_password))
             isValid = false
-
-        }else if(Utils.isValidPassword(password.get()).not()){
-            passwordError.set(context.getString(R.string.password_validation_err))
-            isValid = false
         }
 
         return isValid

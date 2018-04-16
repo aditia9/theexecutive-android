@@ -6,7 +6,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.view.Gravity
@@ -15,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
@@ -31,7 +35,9 @@ import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.bottom_size_layout.*
 import kotlinx.android.synthetic.main.bottom_size_layout.view.*
+import kotlinx.android.synthetic.main.dialog_product_image.view.*
 import kotlinx.android.synthetic.main.product_detail_view.*
+import kotlinx.android.synthetic.main.product_images_layout.view.*
 
 /**
  * @Details
@@ -67,6 +73,18 @@ class ProductViewFragment : BaseFragment() {
             setData()
             getProductChildren(productItem?.sku)
         }
+        img_one.setOnClickListener{
+            val drawable=img_one.drawable as BitmapDrawable
+            var bitmap=drawable.bitmap
+            openProdcutImage(bitmap)
+        }
+
+        img_two.setOnClickListener {
+            val drawable=img_two.drawable as BitmapDrawable
+            var bitmap=drawable.bitmap
+            openProdcutImage(bitmap)
+        }
+
 
     }
 
@@ -115,6 +133,12 @@ class ProductViewFragment : BaseFragment() {
             val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
             productImagesBinding?.mediaGalleryEntry = productItem?.media_gallery_entries?.get(i)
             Utils.setImageViewHeight(activity as Context, productImagesBinding?.imgProductImage, 27)
+           var view= productImagesBinding!!.root.img_product_image
+            view.setOnClickListener {
+                val drawable=view.drawable as BitmapDrawable
+                var bitmap=drawable.bitmap
+                openProdcutImage(bitmap)
+            }
             ll_color_choice.addView(productImagesBinding?.root)
         }
     }
@@ -175,8 +199,7 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_share -> {
-                    val url = ""
-                    Utils.shareUrl(activity as Context, url)
+                    shareProductUrl()
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_buying_guidelinie -> {
@@ -257,6 +280,16 @@ class ProductViewFragment : BaseFragment() {
         })
     }
 
+    private fun shareProductUrl() {
+        val baseUrl = BuildConfig.API_URL
+        val url = productItem?.custom_attributes?.find { it.attribute_code == Constants.URL_KEY }.let { it?.value }.toString()
+        val urlSuffix = Constants.URL_SUFFIX
+        if(url.isNotBlank()){
+            Utils.shareUrl(activity as Context, "$baseUrl$url$urlSuffix")
+        }
+
+    }
+
     fun openBottomSizeSheet()
     {
         val view = layoutInflater.inflate(R.layout.bottom_size_layout, null)
@@ -290,6 +323,23 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
+    fun openProdcutImage(bitmap: Bitmap)
+    {
+        val view = layoutInflater.inflate(R.layout.dialog_product_image, null)
+        val mImageDialog = Dialog(activity, R.style.MaterialDialogSheet)
+        mImageDialog.setContentView(view)
+        mImageDialog.setCancelable(true)
+        mImageDialog.window.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+        mImageDialog.window.setGravity(Gravity.BOTTOM)
+        var imageView=view.rootView.product_imageview
+        imageView.setImageBitmap(bitmap)
+        mImageDialog.show()
 
+        var backImageView=view.rootView.cancel_img
+        backImageView.setOnClickListener {
+
+            mImageDialog.dismiss()
+        }
+    }
 
 }

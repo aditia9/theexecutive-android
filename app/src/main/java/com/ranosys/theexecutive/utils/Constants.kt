@@ -72,5 +72,7 @@ object Constants {
         val PROMOTION_TYPE_CMS_PAGE: String = "CMS"
         val SEARCH_FROM_HOME_QUERY: String? = "search_from_home_query"
         val UNIVERSAL_CAT_ID: Int = 0
+        val URL_KEY: String = "url_key"
+        val URL_SUFFIX: String = ".html"
 
 }

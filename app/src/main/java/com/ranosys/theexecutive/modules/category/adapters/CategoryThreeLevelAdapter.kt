@@ -17,7 +17,6 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
-import okhttp3.internal.Util
 
 /**
  * Created by Mohammad Sunny on 9/3/18.
@@ -35,7 +34,7 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
     override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View? {
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false)
-        Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, .6)
+        Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, 1.2)
         listGroupBinding.childData = getGroup(p0)
         return listGroupBinding.root
 

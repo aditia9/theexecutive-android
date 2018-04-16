@@ -126,7 +126,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         //prepare request
         val requestMap: MutableMap<String, Int> = mutableMapOf()
 
-        requestMap.put("productId", productItem?.id!!)
+        requestMap["productId"] = productItem?.id!!
         //further add options
 
         AppRepository.addToWishList(requestMap, object : ApiCallback<String> {
