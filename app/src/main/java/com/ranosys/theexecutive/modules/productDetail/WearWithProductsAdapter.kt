@@ -20,10 +20,10 @@ import com.ranosys.theexecutive.utils.Utils
  * @Author Ranosys Technologies
  * @Date 13,Apr,2018
  */
-class WearWithProductsAdapter(var context : Context, var list : List<ProductListingDataClass.ProductLinks>?) : RecyclerView.Adapter<WearWithProductsAdapter.Holder>() {
+class WearWithProductsAdapter(var context : Context, var list : List<ProductListingDataClass.ProductLinks?>?) : RecyclerView.Adapter<WearWithProductsAdapter.Holder>() {
 
     var mContext : Context? = null
-    var wearWithList : List<ProductListingDataClass.ProductLinks>? = null
+    var wearWithList : List<ProductListingDataClass.ProductLinks?>? = null
     var clickListener: WearWithProductsAdapter.OnItemClickListener? = null
 
     init {

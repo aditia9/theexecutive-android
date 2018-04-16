@@ -1,5 +1,7 @@
 package com.ranosys.theexecutive.modules.productDetail.dataClassess
 
+import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
+
 /**
  * Created by Mohammad Sunny on 4/4/18.
  */
@@ -18,7 +20,7 @@ data class ProductDetailResponse(
 		val extension_attributes: ExtensionAttributes?,
 		val product_links: List<Any>?,
 		val options: List<Any>?,
-		val media_gallery_entries: List<MediaGalleryEntry>?,
+		val media_gallery_entries: List<ProductListingDataClass.MediaGalleryEntry>?,
 		val tier_prices: List<Any>?,
 		val custom_attributes: List<CustomAttribute>?
 )
@@ -51,14 +53,4 @@ data class CategoryLink(
 data class CustomAttribute(
 		val attribute_code: String,
 		val value: Any
-)
-
-data class MediaGalleryEntry(
-		val id: Int,
-		val media_type: String,
-		val label: String,
-		val position: Int,
-		val disabled: Boolean,
-		val types: List<String>,
-		val file: String
 )

@@ -97,7 +97,6 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(imageUrl)
-                        .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -114,7 +113,6 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(baseUrl+imageUrl)
-                        .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)

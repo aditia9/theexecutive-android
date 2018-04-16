@@ -150,6 +150,7 @@
     <string name="empty_filter_option_selection_error">Please select at least one option.</string>
     <string name="enter_search_error">Please enter search keyword</string>
     <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app.</string>
+    <string name="loading_data">Loading data ...</string>
 
 
 </resources>

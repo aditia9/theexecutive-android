@@ -1,5 +1,7 @@
 package com.ranosys.theexecutive.modules.productDetail.dataClassess
 
+import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
+
 /**
  * Created by Mohammad Sunny on 9/4/18.
  */
@@ -32,7 +34,7 @@ data class ChildProductsResponse(
 		val sku: String,
 		val name: String,
 		val attribute_set_id: Int,
-		val price: Int,
+		val price: Float,
 		val status: Int,
 		val visibility: Int,
 		val type_id: String,
@@ -42,7 +44,7 @@ data class ChildProductsResponse(
 		val extension_attributes: ExtensionAttributesChild,
 		val product_links: List<Any>,
 		val options: List<Any>,
-		val media_gallery_entries: List<MediaGalleryEntryChild>,
+		val media_gallery_entries: MutableList<ProductListingDataClass.MediaGalleryEntry>,
 		val tier_prices: List<Any>,
 		val custom_attributes: List<CustomAttributeChild>
 )
@@ -87,15 +89,6 @@ data class StockItem(
 		val stock_status_changed_auto: Int
 )
 
-data class MediaGalleryEntryChild(
-		val id: Int,
-		val media_type: String,
-		val label: Any,
-		val position: Int,
-		val disabled: Boolean,
-		val types: List<String>,
-		val file: String
-)
 
 data class CustomAttributeChild(
 		val attribute_code: String,

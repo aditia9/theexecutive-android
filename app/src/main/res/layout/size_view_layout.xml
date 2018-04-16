@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <data>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
+        <variable
+            name="sizeView"
+            type="com.ranosys.theexecutive.modules.productDetail.ProductViewFragment.SizeView"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:id="@+id/tv_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/twenty_sp"
+            android:layout_centerHorizontal="true"
+            android:text="@{sizeView.label}"
+            android:padding="20dp"
+            android:background="@color/white"
+            android:layout_marginRight="@dimen/ten_dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_out_of_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_size"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="out of stock"
+            android:textSize="10sp"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+
+
+</layout>

@@ -262,6 +262,7 @@ class ProductListingFragment: BaseFragment() {
 
                     if(mViewModel.isLoading.not() && allProductLoaded.not() && shouldPaging){
                         callProductListingApi(categoryId, mViewModel.lastSearchQuery, mViewModel.lastSearchQuery.isEmpty().not(), true)
+                        Toast.makeText(activity as Context, getString(R.string.loading_data), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
