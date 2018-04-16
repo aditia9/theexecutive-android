@@ -24,7 +24,7 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/two_fifty_dp"
+            android:layout_height="@dimen/four_hundred_dp"
             android:scaleType="fitXY"
             bind:baseUrlWithProductImageUrl="@{productItem.imageUrl}"
             android:layout_marginTop="@dimen/four_dp"
@@ -33,6 +33,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+
             />
 
         <TextView
@@ -58,8 +59,8 @@
             android:text='@{productItem.discountPer + "%"}'
             android:paddingTop="@dimen/four_dp"
             android:paddingBottom="@dimen/eight_dp"
-            android:paddingRight="@dimen/four_dp"
-            android:paddingLeft="@dimen/eight_dp"
+            android:paddingStart="@dimen/four_dp"
+            android:paddingEnd="@dimen/eight_dp"
             android:textSize="@dimen/eight_sp"
             android:textColor="@color/white"
             android:background="@drawable/discount_banner"
@@ -78,7 +79,7 @@
             android:paddingBottom="@dimen/three_dp"
             android:visibility="@{TextUtils.isEmpty(productItem.collectionTag)? View.GONE : View.VISIBLE}"
             android:ellipsize="end"
-            app:layout_constraintVertical_bias=".9"
+            app:layout_constraintVertical_bias=".8"
             app:layout_constraintTop_toTopOf="@id/image"
             app:layout_constraintBottom_toBottomOf="@id/image"
             app:layout_constraintRight_toRightOf="parent"
