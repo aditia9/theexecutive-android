@@ -9,7 +9,6 @@ import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductDetailResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
@@ -384,14 +383,14 @@ object AppRepository {
         })
     }
 
-    fun getProductDetail(productSku : String?, callBack: ApiCallback<ProductDetailResponse>) {
+    fun getProductDetail(productSku : String?, callBack: ApiCallback<ProductListingDataClass.Item>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
         val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getProductDetail(ApiConstants.BEARER + adminToken, storeCode, productSku)
 
-        callGet?.enqueue(object : Callback<ProductDetailResponse> {
-            override fun onResponse(call: Call<ProductDetailResponse>?, response: Response<ProductDetailResponse>?) {
+        callGet?.enqueue(object : Callback<ProductListingDataClass.Item> {
+            override fun onResponse(call: Call<ProductListingDataClass.Item>?, response: Response<ProductListingDataClass.Item>?) {
                 if (!response!!.isSuccessful) {
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
 
@@ -401,7 +400,7 @@ object AppRepository {
 
             }
 
-            override fun onFailure(call: Call<ProductDetailResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ProductListingDataClass.Item>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

@@ -7,7 +7,6 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductDetailResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 
 /**
@@ -16,11 +15,11 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 class ProductDetailViewModel(application: Application): BaseViewModel(application) {
 
     var productList :  ObservableField<List<ProductListingDataClass.Item>>? = ObservableField()
-    var productDetailResponse: MutableLiveData<ApiResponse<ProductDetailResponse>>? = MutableLiveData()
+    var productDetailResponse: MutableLiveData<ApiResponse<ProductListingDataClass.Item>>? = MutableLiveData()
 
     fun getProductDetail(productSku : String?){
-        val apiResponse = ApiResponse<ProductDetailResponse>()
-        AppRepository.getProductDetail(productSku, object : ApiCallback<ProductDetailResponse> {
+        val apiResponse = ApiResponse<ProductListingDataClass.Item>()
+        AppRepository.getProductDetail(productSku, object : ApiCallback<ProductListingDataClass.Item> {
             override fun onException(error: Throwable) {
                 productDetailResponse?.value?.throwable = error
             }
@@ -29,7 +28,7 @@ class ProductDetailViewModel(application: Application): BaseViewModel(applicatio
                 productDetailResponse?.value?.error = errorMsg
             }
 
-            override fun onSuccess(t: ProductDetailResponse?) {
+            override fun onSuccess(t: ProductListingDataClass.Item?) {
                 apiResponse.apiResponse = t
                 productDetailResponse?.value = apiResponse
             }

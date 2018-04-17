@@ -79,8 +79,6 @@ class CategoryFragment : BaseFragment() {
                     }
 
                     Constants.PROMOTION_TYPE_PRODUCT -> {
-                        Toast.makeText(activity as Context, "GO TO DETAILS", Toast.LENGTH_SHORT).show()
-                        //val fragment = ProductDetailFragment.getInstance(prepareProductList(item), item.value, 0)
                         val fragment = ProductDetailFragment.getInstance(null, item.value, 0)
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
