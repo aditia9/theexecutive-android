@@ -25,6 +25,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
 import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
+import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
@@ -78,10 +79,8 @@ class CategoryFragment : BaseFragment() {
                     }
 
                     Constants.PROMOTION_TYPE_PRODUCT -> {
-                        Toast.makeText(activity as Context, "Redirect to Product detail", Toast.LENGTH_SHORT).show()
-                        //val fragment = ProductDetailFragment.getInstance(prepareProductList(item), item.value, 0)
-                        /*val fragment = ProductDetailFragment.getInstance(null, item.value, 0)
-                        FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)*/
+                        val fragment = ProductDetailFragment.getInstance(null, item.value, 0)
+                        FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
 
                     Constants.PROMOTION_TYPE_CMS_PAGE -> {

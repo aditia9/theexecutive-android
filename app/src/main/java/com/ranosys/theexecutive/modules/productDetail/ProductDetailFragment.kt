@@ -13,7 +13,6 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentProductDetailBinding
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductDetailResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
 import kotlinx.android.synthetic.main.fragment_product_detail.*
@@ -26,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_product_detail.*
 class ProductDetailFragment : BaseFragment() {
 
     lateinit var productDetailViewModel : ProductDetailViewModel
-    var productList : List<ProductListingDataClass.Item>? = null
+    var productList : MutableList<ProductListingDataClass.Item>? = null
     var position : Int? = 0
     var productSku : String? = ""
     var pagerAdapter : ProductStatePagerAdapter? = null
@@ -47,7 +46,6 @@ class ProductDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(null == productList){
-            productList = listOf()
             getProductDetail(productSku)
         }else{
             pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productList)
@@ -85,10 +83,13 @@ class ProductDetailFragment : BaseFragment() {
     }
 
     fun observeEvents() {
-        productDetailViewModel.productDetailResponse?.observe(this, object : Observer<ApiResponse<ProductDetailResponse>> {
-            override fun onChanged(apiResponse: ApiResponse<ProductDetailResponse>?) {
+        productDetailViewModel.productDetailResponse?.observe(this, object : Observer<ApiResponse<ProductListingDataClass.Item>> {
+            override fun onChanged(apiResponse: ApiResponse<ProductListingDataClass.Item>?) {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is ProductDetailResponse) {
+                if (response is ProductListingDataClass.Item) {
+                    productList = mutableListOf()
+                    productList?.add(response)
+                    setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
                     pagerAdapter = ProductStatePagerAdapter(activity?.supportFragmentManager,productList)
                     product_viewpager.adapter = pagerAdapter
                     product_viewpager.offscreenPageLimit = 2
@@ -102,7 +103,7 @@ class ProductDetailFragment : BaseFragment() {
 
     companion object {
 
-        fun getInstance(productList : List<ProductListingDataClass.Item>?, productSku : String?, position : Int?) =
+        fun getInstance(productList : MutableList<ProductListingDataClass.Item>?, productSku : String?, position : Int?) =
                 ProductDetailFragment().apply {
                     this.productList = productList
                     this.productSku = productSku
