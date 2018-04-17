@@ -52,7 +52,9 @@ class ProductViewFragment : BaseFragment() {
     var colorValue : String? = ""
     var sizeAttrId : String? = ""
     var sizeValue : String? = ""
+    var itemQty : Int? = 1
     var productColorValue : String? = ""
+    var productSizeValue : String? = ""
     var selectedQty : Int = 0
     var colorMap = HashMap<String, String>()
     var sizeMap = HashMap<String, String>()
@@ -63,6 +65,7 @@ class ProductViewFragment : BaseFragment() {
     private lateinit var sizeDilaog: Dialog
     var colorsViewList : MutableList<ColorsView>? = mutableListOf()
     var sizeViewList : MutableList<SizeView>? = mutableListOf()
+    var maxQuantityList : MutableList<MaxQuantity>? = mutableListOf()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -90,7 +93,11 @@ class ProductViewFragment : BaseFragment() {
         setData()
 
         if(productItem?.type_id.equals("configurable")){
+            rl_color_view.visibility = View.VISIBLE
             getProductChildren(productItem?.sku)
+        }
+        else{
+            rl_color_view.visibility = View.GONE
         }
 
         img_one.setOnClickListener{
@@ -177,7 +184,10 @@ class ProductViewFragment : BaseFragment() {
                 when (option?.label) {
                     "Color" -> {
                         option.values.forEachIndexed { index, value ->
-                            if(index == 0) { productColorValue = value.value_index.toString() }
+                            if(index == 0) {
+                                productColorValue = value.value_index.toString()
+                                colorValue = productColorValue
+                            }
                             colorMap.put(index.toString(), value = value.value_index.toString())
                         }
                         AppLog.e("ColorList : " + colorMap.toString())
@@ -186,6 +196,10 @@ class ProductViewFragment : BaseFragment() {
                     }
                     "Size" -> {
                         option.values.forEachIndexed { index, value ->
+                            if(index == 0) {
+                                productSizeValue = value.value_index.toString()
+                                sizeValue = productSizeValue
+                            }
                             sizeMap.put(index.toString(), value = value.value_index.toString())
                         }
                         AppLog.e("Sizelist : " + sizeMap.toString())
@@ -286,16 +300,23 @@ class ProductViewFragment : BaseFragment() {
                     val list = response as List<ChildProductsResponse>
 
                     list.forEach {
-                        val value = it.custom_attributes.filter { s ->
+                        val colorValue = it.custom_attributes.filter { s ->
                             s.attribute_code == "color"
                         }.single().value.toString()
-                        if (!childProductsMap.containsKey(value))
-                            if (value.equals(productColorValue)) {
-                                childProductsMap.put(value, productItem?.media_gallery_entries)
+                        if (!childProductsMap.containsKey(colorValue)) {
+                            if (colorValue.equals(productColorValue)) {
+                                childProductsMap.put(colorValue, productItem?.media_gallery_entries)
                             } else {
-                                childProductsMap.put(value, it.media_gallery_entries)
+                                childProductsMap.put(colorValue, it.media_gallery_entries)
                             }
+                        }
+                        val sizeValue = it.custom_attributes.filter { s ->
+                            s.attribute_code == "size"
+                        }.single().value.toString()
+                        maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty))
                     }
+
+                    AppLog.e("maxQuantityList : " + maxQuantityList.toString())
 
                     setColorViewList()
                     setSizeViewList()
@@ -365,7 +386,6 @@ class ProductViewFragment : BaseFragment() {
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             if(response is AddToCartResponse){
                 val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-                var cartCount = "0"
 
                 if(userToken.isNullOrBlank().not()){
                     productItemViewModel.getUserCartCount()
@@ -498,7 +518,12 @@ class ProductViewFragment : BaseFragment() {
         sizeDilaog.setCancelable(true)
         sizeDilaog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
         sizeDilaog.window.setGravity(Gravity.BOTTOM)
-
+        if(productItem?.type_id.equals("simple")){
+            sizeDilaog.rv_size_view.visibility = View.GONE
+        }
+        else{
+            sizeDilaog.rv_size_view.visibility = View.VISIBLE
+        }
         sizeDilaog.tv_price_dialog.setText(Constants.IDR + productItem?.price.toString())
 
         sizeDilaog.btn_done.setOnClickListener(View.OnClickListener {
@@ -515,12 +540,10 @@ class ProductViewFragment : BaseFragment() {
             }
         })
 
-        val itemQty = productItem?.extension_attributes?.stock_item?.qty ?: 0
-
         sizeDilaog.tv_quantity.text = selectedQty.toString()
         sizeDilaog.img_forward.setOnClickListener {
-            if(selectedQty < itemQty){
-                selectedQty.plus(1)
+            if(selectedQty <= itemQty!!){
+                selectedQty++
                 sizeDilaog.tv_quantity.text = selectedQty.toString()
             }else{
                 Toast.makeText(activity as Context, "No more product available", Toast.LENGTH_SHORT).show()
@@ -529,8 +552,8 @@ class ProductViewFragment : BaseFragment() {
 
         sizeDilaog.img_back.setOnClickListener {
             if(selectedQty > 0){
-                selectedQty.minus(1)
-                sizeDilaog.tv_quantity.text = selectedQty.toString()
+                selectedQty--
+                sizeDilaog.tv_quantity.text =  selectedQty.toString()
             }
         }
 
@@ -555,7 +578,7 @@ class ProductViewFragment : BaseFragment() {
         val productOption = ProductOption(cart_ext_attrs)
 
         val cartItem = CartItem(sku = productSku,
-                qty = 2,
+                qty = selectedQty,
                 quote_id = quoteId,
                 product_option = productOption,
                 extension_attributes = null
@@ -575,6 +598,8 @@ class ProductViewFragment : BaseFragment() {
             sizeDilaog.rv_size_view.adapter = sizeViewAdapter
             sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(sizeView: ProductViewFragment.SizeView?, position: Int) {
+                    selectedQty = 0
+                    sizeDilaog.tv_quantity.text =  selectedQty.toString()
                     sizeViewList?.forEachIndexed { index,it ->
                         if(index == position){
                             sizeViewList?.get(index)?.isSelected = true
@@ -583,6 +608,21 @@ class ProductViewFragment : BaseFragment() {
                         }
                     }
                     sizeValue = sizeView?.value
+                    if(productItem?.type_id.equals("simple")) {
+                        itemQty = productItem?.extension_attributes?.stock_item?.qty ?: 0
+                    }
+                    else{
+                        try {
+                            if(maxQuantityList?.size!! > 0) {
+                                itemQty = maxQuantityList?.filter { s ->
+                                    s.colorValue == colorValue && s.sizeValue == sizeValue
+                                }?.single()?.maxQuantity
+                            }
+                        }
+                        catch (e : NoSuchElementException){
+                            AppLog.printStackTrace(e)
+                        }
+                    }
                     sizeViewAdapter.notifyDataSetChanged()
                 }
             })
@@ -612,6 +652,8 @@ class ProductViewFragment : BaseFragment() {
                           var list : List<ProductListingDataClass.MediaGalleryEntry>?, var isSelected : Boolean?)
 
     data class SizeView(var label: String?, var attr_id:String?, var value : String?, var isSelected : Boolean?)
+
+    data class MaxQuantity(var colorValue : String?, var sizeValue : String?, var maxQuantity : Int?)
 
     companion object {
 

@@ -42,6 +42,8 @@
                 android:layout_marginRight="@dimen/twenty_dp"
                 android:layout_alignParentRight="true"
                 android:drawableLeft="@drawable/size_info"
+                android:drawablePadding="@dimen/five_dp"
+                android:gravity="center_vertical"
                 />
 
             <android.support.v7.widget.RecyclerView
@@ -82,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/back"
-                    android:padding="@dimen/ten_dp"
+                    android:padding="@dimen/fifteen_dp"
                     />
 
                 <TextView
@@ -90,6 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
+                    android:textStyle="bold"
                     android:layout_marginLeft="@dimen/thirty_dp"
                     />
 
@@ -99,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/forward"
                     android:layout_marginLeft="@dimen/thirty_dp"
-                    android:padding="@dimen/ten_dp"
+                    android:padding="@dimen/fifteen_dp"
                     />
 
 
