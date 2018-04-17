@@ -2,16 +2,15 @@ package com.ranosys.theexecutive.modules.splash
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
-import android.widget.Toast
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
+import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
@@ -36,7 +35,7 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        observeEvent()
+       // observeEvent()
 
         //check for auth token in SP if not get from assets
         if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
@@ -57,7 +56,7 @@ class SplashActivity : BaseActivity() {
         //if user logged in get his cart count and cart id
         val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         if(userToken.isNullOrBlank().not()){
-            baseViewModel.getCartIdForUser(userToken)
+            getCartIdForUser(userToken)
         }
 
 
@@ -69,31 +68,6 @@ class SplashActivity : BaseActivity() {
 
     }
 
-    private fun observeEvent() {
-        baseViewModel.userCartIdResponse?.observe(this, Observer {
-            response ->
-            val userCartId = response?.apiResponse ?: response?.error
-            if(userCartId is String){
-                baseViewModel.getUserCartCount()
-            }
-            else {
-                Toast.makeText(this, Constants.ERROR, Toast.LENGTH_LONG).show()
-            }
-
-        })
-
-        baseViewModel.userCartCountResponse?.observe(this, Observer {
-            response ->
-            val userCount = response?.apiResponse ?: response?.error
-            if(userCount is String){
-                Utils.updateCartCount(userCount.toInt())
-            }
-            else {
-                Toast.makeText(this, Constants.ERROR, Toast.LENGTH_LONG).show()
-            }
-
-        })
-    }
 
     private fun getConfigurationApi() {
         AppRepository.getConfiguration(object: ApiCallback<ConfigurationResponse>{
@@ -231,4 +205,44 @@ class SplashActivity : BaseActivity() {
                     Settings.Secure.ANDROID_ID), Constants.ANDROID_DEVICE_ID_KEY)
         }
     }
+
+    fun getCartIdForUser(userToken: String?){
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createUserCart(object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+            }
+
+            override fun onError(errorMsg: String) {
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
+                getUserCartCount()
+            }
+
+        })
+    }
+
+    fun getUserCartCount() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountUser(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+
+            }
+
+            override fun onError(errorMsg: String) {
+
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                Utils.updateCartCount(t?.toInt()?:0)
+
+            }
+
+        })
+
+    }
+
 }

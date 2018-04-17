@@ -11,6 +11,8 @@ import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.SavedPreferences
 
 /**
  * @Class ViewModel for product item.
@@ -28,6 +30,10 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var staticPages : StaticPagesUrlResponse? = null
     var url_one : ObservableField<String> = ObservableField()
     var url_two : ObservableField<String> = ObservableField()
+    var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var guestCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var guestCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
 
     var clickedAddBtnId: MutableLiveData<Int>? = null
         get() {
@@ -182,6 +188,84 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
             override fun onSuccess(t: AddToCartResponse?) {
                 apiResponse.apiResponse = t
                 addToCartResponse?.value = apiResponse
+            }
+
+        })
+    }
+
+    fun getCartIdForUser(userToken: String?){
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createUserCart(object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                userCartIdResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartIdResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
+                userCartIdResponse?.value = apiResponse
+            }
+
+        })
+    }
+
+    fun getUserCartCount() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountUser(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                userCartCountResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartCountResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                userCartCountResponse?.value = apiResponse
+            }
+
+        })
+
+    }
+
+    fun getGuestCartCount(cartId: String) {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountGuest(cartId, object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                guestCartCountResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                guestCartCountResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                guestCartCountResponse?.value = apiResponse
+            }
+        })
+    }
+
+    fun getCartIdForGuest() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createGuestCart(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                guestCartIdResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                guestCartIdResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                guestCartIdResponse?.value = apiResponse
+
             }
 
         })

@@ -25,7 +25,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
@@ -171,11 +170,11 @@ class LoginFragment() : BaseFragment() {
             }
         })
 
-        (activity as BaseActivity).baseViewModel.userCartIdResponse?.observe(this, Observer {
+        loginViewModel.userCartIdResponse?.observe(this, Observer {
             response ->
             val userCartId = response?.apiResponse ?: response?.error
             if(userCartId is String){
-                   (activity as BaseActivity).baseViewModel.getUserCartCount()
+                loginViewModel.getUserCartCount()
             }
             else {
                 Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
@@ -183,7 +182,7 @@ class LoginFragment() : BaseFragment() {
 
         })
 
-        (activity as BaseActivity).baseViewModel.userCartCountResponse?.observe(this, Observer {
+        loginViewModel.userCartCountResponse?.observe(this, Observer {
             response ->
             val userCount = response?.apiResponse ?: response?.error
             if(userCount is String){
@@ -210,7 +209,7 @@ class LoginFragment() : BaseFragment() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
             //api to get cart id
-           (activity as BaseActivity).baseViewModel.getCartIdForUser(token)
+            loginViewModel.getCartIdForUser(token)
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
             SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
             FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)

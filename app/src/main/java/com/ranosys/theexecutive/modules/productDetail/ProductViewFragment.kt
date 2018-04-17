@@ -21,7 +21,6 @@ import android.widget.Toast
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
-import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.BottomSizeLayoutBinding
 import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
@@ -369,12 +368,12 @@ class ProductViewFragment : BaseFragment() {
                 var cartCount = "0"
 
                 if(userToken.isNullOrBlank().not()){
-                    (activity as BaseActivity).baseViewModel.getUserCartCount()
+                    productItemViewModel.getUserCartCount()
 
                 }else{
                     val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
                     if(guestCartId.isNullOrBlank().not()){
-                        (activity as BaseActivity).baseViewModel.getGuestCartCount(guestCartId ?: "")
+                        productItemViewModel.getGuestCartCount(guestCartId ?: "")
                     }
                 }
 
@@ -385,7 +384,7 @@ class ProductViewFragment : BaseFragment() {
             }
         })
 
-        (activity as BaseActivity).baseViewModel.userCartIdResponse?.observe(this, Observer {
+        productItemViewModel.userCartIdResponse?.observe(this, Observer {
            response ->
             val userCartId = response?.apiResponse ?: response?.error
             if(userCartId is String){
@@ -397,7 +396,7 @@ class ProductViewFragment : BaseFragment() {
 
         })
 
-        (activity as BaseActivity).baseViewModel.userCartCountResponse?.observe(this, Observer {
+        productItemViewModel.userCartCountResponse?.observe(this, Observer {
             response ->
             val userCount = response?.apiResponse ?: response?.error
             if(userCount is String){
@@ -409,7 +408,7 @@ class ProductViewFragment : BaseFragment() {
 
         })
 
-        (activity as BaseActivity).baseViewModel.guestCartIdResponse?.observe(this, Observer {
+        productItemViewModel.guestCartIdResponse?.observe(this, Observer {
             response ->
             val guestCartId = response?.apiResponse ?: response?.error
             if(guestCartId is String){
@@ -421,7 +420,7 @@ class ProductViewFragment : BaseFragment() {
 
         })
 
-        (activity as BaseActivity).baseViewModel.guestCartCountResponse?.observe(this, Observer {
+        productItemViewModel.guestCartCountResponse?.observe(this, Observer {
             response ->
             val guestCount = response?.apiResponse ?: response?.error
             if(guestCount is String){
@@ -510,9 +509,9 @@ class ProductViewFragment : BaseFragment() {
             val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
 
             if(userToken.isNullOrBlank().not()){
-                (activity as BaseActivity).baseViewModel.getCartIdForUser(userToken)
+                productItemViewModel.getCartIdForUser(userToken)
             }else{
-                (activity as BaseActivity).baseViewModel.getCartIdForGuest()
+                productItemViewModel.getCartIdForGuest()
             }
         })
 
