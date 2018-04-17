@@ -46,6 +46,19 @@ class SplashActivity : BaseActivity() {
         //fetch device id
         getDeviceID()
 
+        //if user logged in get his cart count and cart id
+        val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        if(userToken.isNullOrBlank()){
+            baseViewModel.let {
+                val cartId = it.getCartIdForUser(userToken)
+                if(cartId.isBlank().not()){
+
+                    val cartCount = baseViewModel.getUserCartCount()
+                    Utils.updateCartCount(cartCount.toInt())
+                }
+            }
+        }
+
 
         handler.postDelayed({
             kotlin.run {

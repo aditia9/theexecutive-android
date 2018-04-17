@@ -21,14 +21,13 @@ import android.widget.Toast
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.BottomSizeLayoutBinding
 import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
 import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -89,11 +88,39 @@ class ProductViewFragment : BaseFragment() {
 
         sizeDilaog.tv_price_dialog.setText(Constants.IDR + productItem?.price.toString())
 
-        sizeDilaog.btn_done.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                if(sizeDilaog.isShowing){
-                    sizeDilaog.dismiss()
+        sizeDilaog.btn_done.setOnClickListener(View.OnClickListener {
+            if(sizeDilaog.isShowing){
+                sizeDilaog.dismiss()
+            }
+
+
+            val item = CartItem(sku = "5-BLWBBX417L014",
+                    qty = 2,
+                    quote_id = "48",
+                    extension_attributes = null,
+                    product_option = null
+            )
+            val dummy = AddTOCartRequest(item)
+
+            val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+
+            if(userToken.isNullOrBlank().not()){
+
+                var cartId = SavedPreferences.getInstance()?.getStringValue(Constants.USER_CART_ID_KEY)
+
+                if(cartId.isNullOrBlank()){
+                    (activity as BaseActivity).baseViewModel.let {
+                        it.getCartIdForUser(userToken)
+                    }
                 }
+                productItemViewModel.addToUserCart(dummy)
+
+            }else{
+                val cartId = (activity as BaseActivity).baseViewModel.let {
+                    it.getCartIdForGuest()
+                }
+
+                productItemViewModel.addToGuestCart(cartId, dummy)
             }
         })
 
@@ -391,11 +418,33 @@ class ProductViewFragment : BaseFragment() {
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             Toast.makeText(activity as Context, response, Toast.LENGTH_SHORT).show()
         })
+
+        productItemViewModel.addToCartSuccess?.observe(this, Observer {
+            val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+            var cartCount = "0"
+
+            if(userToken.isNullOrBlank().not()){
+
+                cartCount = (activity as BaseActivity).baseViewModel.getUserCartCount()
+
+            }else{
+                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
+                if(guestCartId.isNullOrBlank().not()){
+                    cartCount = (activity as BaseActivity).baseViewModel.getGuestCartCount(guestCartId ?: "")
+                }
+            }
+            Utils.updateCartCount(cartCount.toInt())
+            Toast.makeText(activity as Context, getString(R.string.add_to_cart_success_msg),Toast.LENGTH_SHORT).show()
+        })
+
+        productItemViewModel.addToCartFailure?.observe(this, Observer {
+            Toast.makeText(activity as Context, "Please try again",Toast.LENGTH_SHORT).show()
+        })
     }
 
     private fun shareProductUrl() {
         val baseUrl = BuildConfig.API_URL
-        val url = productItem?.custom_attributes?.find { it?.attribute_code == Constants.URL_KEY }.let { it?.value }.toString()
+        val url = productItem?.custom_attributes?.find { it.attribute_code == Constants.URL_KEY }.let { it?.value }.toString()
         val urlSuffix = Constants.URL_SUFFIX
         if(url.isNotBlank()){
             Utils.shareUrl(activity as Context, "$baseUrl$url$urlSuffix")

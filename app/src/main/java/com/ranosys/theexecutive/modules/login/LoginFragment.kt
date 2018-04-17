@@ -24,6 +24,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
@@ -183,15 +184,21 @@ class LoginFragment() : BaseFragment() {
     private fun observeApiSuccess() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
+            //api to get cart id
+            val cartId = (activity as BaseActivity).baseViewModel?.let {
+                it.getCartIdForUser(token)
+            }
+
+            if(cartId.isNullOrBlank().not()){
+                val cartCount = (activity as BaseActivity).baseViewModel?.let {
+                    it.getUserCartCount()
+                }
+                Utils.updateCartCount(cartCount.toInt())
+            }
+
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
             SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
             FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
-//            if(loginRequiredPrompt){
-//                activity?.onBackPressed()
-//            }else{
-//
-//            FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
-//            }
         })
 
     }

@@ -84,29 +84,12 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             override fun onSuccess(userToken: String?) {
                 //save customer token
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
-                getCartIdForUser(userToken)
                 apiSuccessResponse?.value = userToken
 
             }
         })
     }
 
-    private fun getCartIdForUser(userToken: String?) {
-        AppRepository.createUserCart(object : ApiCallback<String>{
-            override fun onException(error: Throwable) {
-                Utils.printLog("get user cart Api", "error")
-            }
-
-            override fun onError(errorMsg: String) {
-                Utils.printLog("get user cart Api", "error")
-            }
-
-            override fun onSuccess(t: String?) {
-                SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_CART_ID_KEY)
-            }
-
-        })
-    }
 
     fun validateData(context: Context): Boolean {
         var isValid = true

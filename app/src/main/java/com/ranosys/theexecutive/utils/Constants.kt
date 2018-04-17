@@ -11,6 +11,7 @@ object Constants {
         val ACCESS_TOKEN_KEY = "access_token"
         val USER_ACCESS_TOKEN_KEY = "user_access_token"
         val USER_CART_ID_KEY = "user_cart_id_key"
+        val GUEST_CART_ID_KEY = "guest_cart_id_key"
         val DEFAULT_STORE_CODE = "en"
         val SELECTED_STORE_CODE_KEY = "selected_store_code"
         val SELECTED_STORE_ID_KEY = "selected_store_id"

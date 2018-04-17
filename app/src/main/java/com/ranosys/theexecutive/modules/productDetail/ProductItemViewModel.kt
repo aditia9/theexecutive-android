@@ -8,10 +8,9 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
+import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Class ViewModel for product item.
@@ -25,6 +24,8 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var productOptionResponse: MutableLiveData<ApiResponse<List<ProductOptionsResponse>>>? = MutableLiveData()
     var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
     var addToWIshListResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var addToCartSuccess: MutableLiveData<String>? = MutableLiveData()
+    var addToCartFailure: MutableLiveData<String>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
 
     var clickedAddBtnId: MutableLiveData<Int>? = null
@@ -146,4 +147,38 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
 
     }
 
+    fun addToUserCart(addTOCartRequest: AddTOCartRequest) {
+        AppRepository.addToCartUser(addTOCartRequest, object: ApiCallback<AddTOCartResponse>{
+            override fun onException(error: Throwable) {
+                Utils.printLog("add to cart Api", "error")
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog("add to cart Api", "error")
+            }
+
+            override fun onSuccess(t: AddTOCartResponse?) {
+                //TODO - get and update cart count
+            }
+
+        })
+    }
+
+    fun addToGuestCart(guestCartId: String, addTOCartRequest: AddTOCartRequest) {
+
+        AppRepository.addToCartGuest(guestCartId, addTOCartRequest, object: ApiCallback<AddTOCartResponse>{
+            override fun onException(error: Throwable) {
+                Utils.printLog("add to cart Api", "error")
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog("add to cart Api", "error")
+            }
+
+            override fun onSuccess(t: AddTOCartResponse?) {
+                //TODO - get and update cart count
+            }
+
+        })
+    }
 }
