@@ -156,6 +156,7 @@ class ProductListingFragment: BaseFragment() {
                 }else{
                     showLoading()
                     sortOptionDialog.dismiss()
+                    mViewModel.clearExistingList()
                     callProductListingApi(categoryId)
                     mViewModel.isSorted = !(mViewModel.isSorted && mViewModel.selectedSortOption.attribute_code.isEmpty())
                 }
@@ -359,14 +360,15 @@ class ProductListingFragment: BaseFragment() {
                 val isFilterChanged = (isPriceRangeAltered() || isFilterSelected())
                 if (isFilterChanged || mViewModel.isFiltered){
                     filterOptionDialog.dismiss()
-                    callProductListingApi(categoryId)
+                    mViewModel.clearExistingList()
                     if(isFilterChanged){
                         mViewModel.isFiltered = true
-                        mViewModel.selectedPriceRange.min = filterOptionBinding.priceRangeBar.selectedMinValue.toString()
-                        mViewModel.selectedPriceRange.max = filterOptionBinding.priceRangeBar.selectedMaxValue.toString()
+                        mViewModel.selectedPriceRange.min = filterOptionBinding.etMinPrice.text.toString()
+                        mViewModel.selectedPriceRange.max = filterOptionBinding.etMaxPrice.text.toString()
                     }else{
                         mViewModel.isFiltered = false
                     }
+                    callProductListingApi(categoryId)
                 }else{
                     Toast.makeText(activity as Context, getString(R.string.empty_filter_option_selection_error), Toast.LENGTH_SHORT).show()
                 }
