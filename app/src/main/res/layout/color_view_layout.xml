@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/img_color"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="80dp"
+            android:layout_height="110dp"
             android:src="@drawable/placeholder"
             android:padding="@dimen/two_dp"
             android:scaleType="centerCrop"
