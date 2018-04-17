@@ -44,18 +44,27 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
 
         fun bind(product: ProductListingDataClass.ProductMaskedResponse, position : Int, listener: ProductListAdapter.OnItemClickListener){
 
-
+            itemBinding.productItem = product
             val normalPrice = "IDR\u00A0" + product.normalPrice
             val spPrice = " IDR\u00A0" + product.specialPrice
-            val price = "$normalPrice $spPrice"
+            var price = ""
 
-            val ss = SpannableStringBuilder(price)
-            ss.setSpan(StrikethroughSpan(), 0, normalPrice.length, 0)
-            ss.setSpan(ForegroundColorSpan(Color.RED), normalPrice.length, price.length, 0)
-            ss.setSpan(RelativeSizeSpan(1.1f), normalPrice.length, price.length, 0)
+            if(product.normalPrice == product.specialPrice){
+                price = "$normalPrice"
+                itemBinding.tvNormalPrice.text = price
+            }else{
+                price = "$normalPrice $spPrice"
+                val ss = SpannableStringBuilder(price)
+                ss.setSpan(StrikethroughSpan(), 0, normalPrice.length, 0)
+                ss.setSpan(ForegroundColorSpan(Color.RED), normalPrice.length, price.length, 0)
+                ss.setSpan(RelativeSizeSpan(1.1f), normalPrice.length, price.length, 0)
+                itemBinding.tvNormalPrice.text = ss
+            }
 
-            itemBinding.productItem = product
-            itemBinding.tvNormalPrice.text = ss
+
+
+
+
 
             itemView.setOnClickListener {
                 listener.onItemClick(product, position)

@@ -63,7 +63,7 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
             override fun onChildClick(list: ExpandableListView?, parent: View?, groupPos: Int, childPos: Int, id: Long): Boolean {
                 //store selected filter
                 val filter = getGroup(groupPosition)
-                productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
+                productListVM.selectedFilterMap.put(filter!!.code, filter.options.get(childPos).value)
 
                 for (item in getGroup(groupPos)?.options!!){
                     item._isSelected?.set(false)

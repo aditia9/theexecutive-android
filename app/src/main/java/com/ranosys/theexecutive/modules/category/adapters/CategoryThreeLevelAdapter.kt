@@ -34,7 +34,7 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
     override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View? {
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false)
-        Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, 1.2)
+        Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, .37)
         listGroupBinding.childData = getGroup(p0)
         return listGroupBinding.root
 

@@ -235,4 +235,8 @@ object Utils {
         intent.putExtra(Intent.EXTRA_TEXT, url);
         context.startActivity(Intent.createChooser(intent, "Share Product"));
     }
+
+    fun updateCartCount(count: Int) {
+        GlobalSingelton.instance?.cartCount?.value = count
+    }
 }

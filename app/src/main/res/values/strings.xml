@@ -151,6 +151,7 @@
     <string name="enter_search_error">Please enter search keyword</string>
     <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app.</string>
     <string name="loading_data">Loading data ...</string>
+    <string name="add_to_cart_success_msg">Product added to bag/ cart</string>
     <string name="available_colors">Available Colors</string>
 
 

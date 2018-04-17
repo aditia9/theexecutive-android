@@ -86,7 +86,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                 if (filterOptions?.total_count!! > 0) {
                     filterOptions.run {
                         for (filter in filterOptions.filters) {
-                            selectedFilterMap.put(filter.name, "")
+                            selectedFilterMap.put(filter.code, "")
                         }
                     }
 
@@ -233,11 +233,13 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         }
 
         if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
-            selectedFilterMap.put(Constants.FILTER_PRICE_LABEL, selectedPriceRange.min + "-" + selectedPriceRange.max)
+            selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.toFloat().toInt().toString() + "-" + selectedPriceRange.max.toFloat().toInt().toString())
         }
 
         for((key, value) in selectedFilterMap){
-            requestMap.put(key, value)
+            if(value.isNotBlank()){
+                requestMap.put(key, value)
+            }
         }
 
         return requestMap
