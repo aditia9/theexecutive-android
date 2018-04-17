@@ -117,7 +117,7 @@
     <string name="new_user_label">New Customer</string>
     <string name="chat">CHAT</string>
     <string name="close_app_text">Are you sure you want to close application?</string>
-    <string name="network_err_text">Network Error</string>
+    <string name="network_err_text">No Internet Connection</string>
     <string name="verify_email_message">Please verify email</string>
     <string name="register_successfull">Welcome aboard, you are now a member of The Executive.</string>
     <string name="logout_success_message">Logout successfully</string>
@@ -151,6 +151,7 @@
     <string name="enter_search_error">Please enter search keyword</string>
     <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app.</string>
     <string name="loading_data">Loading data ...</string>
+    <string name="available_colors">Available Colors</string>
 
 
 </resources>

@@ -40,7 +40,7 @@ data class ChildProductsResponse(
 		val type_id: String,
 		val created_at: String,
 		val updated_at: String,
-		val weight: Int,
+		val weight: Float,
 		val extension_attributes: ExtensionAttributesChild,
 		val product_links: List<Any>,
 		val options: List<Any>,

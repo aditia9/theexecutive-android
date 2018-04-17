@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.productDetail
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFra
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item : ProductViewFragment.SizeView?)
+        fun onItemClick(item : ProductViewFragment.SizeView?, position: Int)
     }
 
     fun setItemClickListener(listener: OnItemClickListener){
@@ -45,7 +46,7 @@ class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFra
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(getItem(position), clickListener)
+        holder?.bind(mContext, getItem(position), clickListener, position)
     }
 
     fun getItem(position: Int) : ProductViewFragment.SizeView?{
@@ -54,10 +55,18 @@ class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFra
 
     class Holder(var itemBinding: SizeViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(colorView : ProductViewFragment.SizeView?, listener: OnItemClickListener?){
+        fun bind(context : Context?, colorView : ProductViewFragment.SizeView?, listener: OnItemClickListener?, position: Int){
             itemBinding?.sizeView = colorView
+            if(colorView?.isSelected!!){
+                itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.drawable.size_border)
+                itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT_BOLD)
+            }
+            else{
+                itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
+                itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
+            }
             itemView.setOnClickListener {
-                listener?.onItemClick(colorView)
+                listener?.onItemClick(colorView, position)
             }
         }
     }

@@ -3,7 +3,7 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-            <import type = "android.text.Html"/>
+        <import type = "android.text.Html"/>
         <variable name="productItemVM"
             type="com.ranosys.theexecutive.modules.productDetail.ProductItemViewModel"/>
     </data>
@@ -26,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/twenty_dp"
+                android:gravity="center"
                 >
 
                 <ImageView
@@ -35,7 +36,7 @@
                     android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_one_detail"
-                    bind:baseUrlWithProductImageUrl='@{productItemVM.productItem.media_gallery_entries.size > 0 ? productItemVM.productItem.media_gallery_entries.get(0).file : ""}'
+                    bind:baseUrlWithProductImageUrl='@{productItemVM.url_one}'
                     />
 
                 <ImageView
@@ -47,7 +48,7 @@
                     android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_two_detail"
-                    bind:baseUrlWithProductImageUrl='@{productItemVM.productItem.media_gallery_entries.size > 1 ? productItemVM.productItem.media_gallery_entries.get(1).file : ""}'
+                    bind:baseUrlWithProductImageUrl='@{productItemVM.url_two}'
                     />
 
                 <TextView
@@ -62,30 +63,44 @@
                     android:textStyle="bold"
                     />
 
-                <TextView
-                    android:id="@+id/tv_colors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:text="Available colors"
-                    android:layout_below="@id/tv_description"
-                    />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_color_view"
+
+
+                <LinearLayout
+                    android:id="@+id/rl_color_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/twenty_dp"
-                    android:layout_below="@id/tv_colors"
                     android:gravity="center"
-                    />
+                    android:orientation="vertical"
+                    android:layout_below="@id/tv_description"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_colors"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="bold"
+                        android:text="@string/available_colors"
+                        />
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_color_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_below="@id/tv_colors"
+                        />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/ll_color_choice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/rv_color_view"
+                    android:layout_below="@id/rl_color_view"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:orientation="vertical"
                     />
@@ -231,32 +246,32 @@
 
                     >
 
-                <View
-                    android:id="@+id/view_line"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/one_dp"
-                    android:background="@color/theme_black_color"
-                    android:layout_marginTop="@dimen/twenty_dp"
-                    />
-                <TextView
-                    android:id="@+id/tv_like"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:text="@string/might_like"
-                    android:gravity="center"
-                    android:textSize="@dimen/twenty_dp"
-                    android:layout_marginTop="@dimen/twenty_dp"
-                    android:layout_below="@id/view_line"
-                    />
+                    <View
+                        android:id="@+id/view_line"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/one_dp"
+                        android:background="@color/theme_black_color"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_like"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/might_like"
+                        android:gravity="center"
+                        android:textSize="@dimen/twenty_dp"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        android:layout_below="@id/view_line"
+                        />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/list_wear_with_products"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/twenty_dp"
-                    android:layout_below="@id/tv_like"
-                    />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list_wear_with_products"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        android:layout_below="@id/tv_like"
+                        />
 
                 </RelativeLayout>
 

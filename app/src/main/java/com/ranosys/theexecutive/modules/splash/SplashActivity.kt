@@ -40,12 +40,15 @@ class SplashActivity : BaseActivity() {
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
         }
 
-        //call configuration API
-        getConfigurationApi()
+        if (Utils.isConnectionAvailable(this)) {
+           //call configuration API
+            getConfigurationApi()
+        } else {
+            Utils.showNetworkErrorDialog(this)
+        }
 
         //fetch device id
         getDeviceID()
-
 
         handler.postDelayed({
             kotlin.run {

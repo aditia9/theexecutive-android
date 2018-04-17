@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 apply plugin: 'kotlin-android'
 
@@ -68,12 +69,12 @@ android {
         }
 
         production {
-            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             dimension "server"
         }
 
         UAT {
-            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             dimension "server"
         }
         dev {
@@ -81,7 +82,7 @@ android {
             dimension "server"
         }
         QAT {
-            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             dimension "server"
         }
     }
@@ -130,6 +131,9 @@ dependencies {
     implementation project(':SpinnerDatePickerLib')
     //implementation 'com.github.amarjain07:StickyScrollView:1.0.2'
     implementation project(':stickyscrollview')
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+        transitive = true;
+    }
 
 }
 

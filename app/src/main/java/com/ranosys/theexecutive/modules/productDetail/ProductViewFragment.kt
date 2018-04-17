@@ -73,68 +73,14 @@ class ProductViewFragment : BaseFragment() {
         sizeDilaogBinding = DataBindingUtil.inflate(inflater, R.layout.bottom_size_layout, container,  false)
         prepareSizeDialog()
 
-
         observeEvents()
-        getStaticPagesUrl()
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            getStaticPagesUrl()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
 
         return listGroupBinding!!.root
-    }
-
-    private fun prepareSizeDialog() {
-        sizeDilaog = Dialog(activity, R.style.MaterialDialogSheet)
-        sizeDilaog.setContentView(sizeDilaogBinding.root)
-        sizeDilaog.setCancelable(true)
-        sizeDilaog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
-        sizeDilaog.window.setGravity(Gravity.BOTTOM)
-
-        sizeDilaog.tv_price_dialog.setText(Constants.IDR + productItem?.price.toString())
-
-        sizeDilaog.btn_done.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                if(sizeDilaog.isShowing){
-                    sizeDilaog.dismiss()
-                }
-            }
-        })
-
-        val itemQty = productItem?.extension_attributes?.stock_item?.qty ?: 0
-        val selectedQty = 0
-
-        sizeDilaog.tv_quantity.text = selectedQty.toString()
-        sizeDilaog.img_forward.setOnClickListener {
-            if(selectedQty < itemQty){
-                selectedQty.plus(1)
-                sizeDilaog.tv_quantity.text = selectedQty.toString()
-            }else{
-                Toast.makeText(activity as Context, "No more product available", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        sizeDilaog.img_back.setOnClickListener {
-            if(selectedQty > 0){
-                selectedQty.minus(1)
-                sizeDilaog.tv_quantity.text = selectedQty.toString()
-            }
-        }
-
-        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
-        sizeDilaog.rv_size_view.layoutManager = linearLayoutManager
-        if(sizeViewList?.size!! > 0) {
-            val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList)
-            sizeDilaog.rv_size_view.adapter = sizeViewAdapter
-            sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(item: ProductViewFragment.SizeView?) {
-
-                }
-            })
-        }
-
-        sizeDilaog.tv_size_guide.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
-            }
-        })
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -199,13 +145,18 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry?>?){
+    fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
         Utils.setImageViewHeight(activity as Context, img_one, 27)
         Utils.setImageViewHeight(activity as Context, img_two, 27)
-        val listSize = mediaGalleryList?.size
-        for(i in 2..listSize!!.minus(1)){
+        if(mediaGalleryList?.size!! > 0)
+            productItemViewModel.url_one.set(mediaGalleryList.get(0).file)
+        if(mediaGalleryList.size > 1)
+            productItemViewModel.url_two.set(mediaGalleryList.get(1).file)
+
+        val listSize = mediaGalleryList.size
+        for(i in 2..listSize.minus(1)){
             val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
-            productImagesBinding?.mediaGalleryEntry = productItem?.media_gallery_entries?.get(i)
+            productImagesBinding?.mediaGalleryEntry = mediaGalleryList.get(i)
             Utils.setImageViewHeight(activity as Context, productImagesBinding?.imgProductImage, 27)
             val view = productImagesBinding!!.root.img_product_image
             view.setOnClickListener {
@@ -213,7 +164,7 @@ class ProductViewFragment : BaseFragment() {
                 val bitmap=drawable.bitmap
                 openProdcutImage(bitmap)
             }
-            ll_color_choice.addView(productImagesBinding?.root)
+            ll_color_choice.addView(productImagesBinding.root)
         }
     }
 
@@ -246,15 +197,27 @@ class ProductViewFragment : BaseFragment() {
     }
 
     fun getProductChildren(productSku : String?){
-        productItemViewModel.getProductChildren(productSku)
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            productItemViewModel.getProductChildren(productSku)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
     }
 
     fun getProductOptions(attributeId : String?, label : String?){
-        productItemViewModel.getProductOptions(attributeId, label)
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            productItemViewModel.getProductOptions(attributeId, label)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
     }
 
     fun getStaticPagesUrl(){
-        productItemViewModel.getStaticPagesUrl()
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            productItemViewModel.getStaticPagesUrl()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
     }
 
     fun observeEvents(){
@@ -322,13 +285,13 @@ class ProductViewFragment : BaseFragment() {
                     val list = response as List<ChildProductsResponse>
 
                     list.forEach {
-                        val value =it.custom_attributes.filter { s ->
+                        val value = it.custom_attributes.filter { s ->
                             s.attribute_code == "color"
                         }.single().value.toString()
-                        if(!childProductsMap.containsKey(value))
-                            if(value.equals(productColorValue)){
+                        if (!childProductsMap.containsKey(value))
+                            if (value.equals(productColorValue)) {
                                 childProductsMap.put(value, productItem?.media_gallery_entries)
-                            }else {
+                            } else {
                                 childProductsMap.put(value, it.media_gallery_entries)
                             }
                     }
@@ -337,7 +300,6 @@ class ProductViewFragment : BaseFragment() {
                     setSizeViewList()
 
                     AppLog.e("ChildProductsMap : " + childProductsMap.toString())
-
 
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
@@ -404,19 +366,35 @@ class ProductViewFragment : BaseFragment() {
     }
 
     fun setColorViewList(){
-        colorOptionList?.forEach {
-            colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value)))
+        colorOptionList?.forEachIndexed { index, it ->
+            if(index == 0)
+                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value), true))
+            else
+                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value), false))
+
         }
         AppLog.e("colorsViewList : " + colorsViewList.toString())
 
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         rv_color_view.layoutManager = linearLayoutManager
-        if(colorsViewList?.size!! > 0) {
+        if (colorsViewList?.size!! > 0) {
             val colorViewAdapter = ColorRecyclerAdapter(activity as Context, colorsViewList)
             rv_color_view.adapter = colorViewAdapter
             colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(item: ProductViewFragment.ColorsView?) {
+                override fun onItemClick(colorView: ProductViewFragment.ColorsView?, position: Int) {
+                    colorsViewList?.forEachIndexed { index,it ->
+                        if(index == position){
+                            colorsViewList?.get(index)?.isSelected = true
+                        }else{
+                            colorsViewList?.get(index)?.isSelected = false
+                        }
+                    }
+                    colorViewAdapter.notifyDataSetChanged()
 
+                    colorView?.list?.let {
+                        ll_color_choice.removeAllViews()
+                        setProductImages(it)
+                    }
                 }
             })
         }
@@ -424,14 +402,80 @@ class ProductViewFragment : BaseFragment() {
     }
 
     fun setSizeViewList(){
-        sizeOptionList?.forEach {
-            sizeViewList?.add(SizeView(it.label, colorAttrId, it.value))
+        sizeOptionList?.forEachIndexed { index, it ->
+            if(index == 0)
+                sizeViewList?.add(SizeView(it.label, colorAttrId, it.value,true))
+            else
+                sizeViewList?.add(SizeView(it.label, colorAttrId, it.value,false))
         }
         AppLog.e("sizeViewList : " + sizeViewList.toString())
     }
 
+    private fun prepareSizeDialog() {
+        sizeDilaog = Dialog(activity, R.style.MaterialDialogSheet)
+        sizeDilaog.setContentView(sizeDilaogBinding.root)
+        sizeDilaog.setCancelable(true)
+        sizeDilaog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
+        sizeDilaog.window.setGravity(Gravity.BOTTOM)
+
+        sizeDilaog.tv_price_dialog.setText(Constants.IDR + productItem?.price.toString())
+
+        sizeDilaog.btn_done.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                if(sizeDilaog.isShowing){
+                    sizeDilaog.dismiss()
+                }
+            }
+        })
+
+        val itemQty = productItem?.extension_attributes?.stock_item?.qty ?: 0
+        val selectedQty = 0
+
+        sizeDilaog.tv_quantity.text = selectedQty.toString()
+        sizeDilaog.img_forward.setOnClickListener {
+            if(selectedQty < itemQty){
+                selectedQty.plus(1)
+                sizeDilaog.tv_quantity.text = selectedQty.toString()
+            }else{
+                Toast.makeText(activity as Context, "No more product available", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        sizeDilaog.img_back.setOnClickListener {
+            if(selectedQty > 0){
+                selectedQty.minus(1)
+                sizeDilaog.tv_quantity.text = selectedQty.toString()
+            }
+        }
+
+        sizeDilaog.tv_size_guide.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(p0: View?) {
+                Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
+            }
+        })
+
+    }
+
     fun openBottomSizeSheet()
     {
+        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
+        sizeDilaog.rv_size_view.layoutManager = linearLayoutManager
+        if(sizeViewList?.size!! > 0) {
+            val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList)
+            sizeDilaog.rv_size_view.adapter = sizeViewAdapter
+            sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(item: ProductViewFragment.SizeView?, position: Int) {
+                    sizeViewList?.forEachIndexed { index,it ->
+                        if(index == position){
+                            sizeViewList?.get(index)?.isSelected = true
+                        }else{
+                            sizeViewList?.get(index)?.isSelected = false
+                        }
+                    }
+                    sizeViewAdapter.notifyDataSetChanged()
+                }
+            })
+        }
         sizeDilaog.show()
     }
 
@@ -454,9 +498,9 @@ class ProductViewFragment : BaseFragment() {
     }
 
     data class ColorsView(var label: String?, var attr_id:String?, var value : String?,
-                          var list : List<ProductListingDataClass.MediaGalleryEntry?>?)
+                          var list : List<ProductListingDataClass.MediaGalleryEntry>?, var isSelected : Boolean?)
 
-    data class SizeView(var label: String?, var attr_id:String?, var value : String?)
+    data class SizeView(var label: String?, var attr_id:String?, var value : String?, var isSelected : Boolean?)
 
     companion object {
 

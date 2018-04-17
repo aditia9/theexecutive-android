@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.productDetail
 
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import android.databinding.ObservableField
 import android.view.View
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
@@ -26,6 +27,8 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
     var addToWIshListResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
+    var url_one : ObservableField<String> = ObservableField()
+    var url_two : ObservableField<String> = ObservableField()
 
     var clickedAddBtnId: MutableLiveData<Int>? = null
         get() {

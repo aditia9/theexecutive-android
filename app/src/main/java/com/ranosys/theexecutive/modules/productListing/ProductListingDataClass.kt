@@ -144,7 +144,7 @@ class ProductListingDataClass {
             val position: Int,
             val disabled: Boolean,
             val types: List<String>,
-            val file: String
+            var file: String
     )
 
     data class CustomAttribute(

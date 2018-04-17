@@ -41,6 +41,7 @@
                 android:layout_marginTop="@dimen/thirty_dp"
                 android:layout_marginRight="@dimen/twenty_dp"
                 android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/size_info"
                 />
 
             <android.support.v7.widget.RecyclerView

@@ -12,16 +12,20 @@
     </data>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginRight="@dimen/ten_dp"
+
         >
 
         <ImageView
             android:id="@+id/img_color"
-            android:layout_width="150dp"
+            android:layout_width="100dp"
             android:layout_height="150dp"
             android:src="@drawable/placeholder"
+            android:padding="@dimen/two_dp"
+            android:scaleType="centerCrop"
             android:layout_centerHorizontal="true"
             bind:baseUrlWithProductImageUrl='@{colorView.list.size() > 0 ? colorView.list.get(0).file : ""}'
             />

@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.productDetail
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ class ColorRecyclerAdapter(var context : Context, var list : List<ProductViewFra
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item : ProductViewFragment.ColorsView?)
+        fun onItemClick(item : ProductViewFragment.ColorsView?, position: Int)
     }
 
     fun setItemClickListener(listener: OnItemClickListener){
@@ -46,7 +47,7 @@ class ColorRecyclerAdapter(var context : Context, var list : List<ProductViewFra
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(getItem(position), clickListener)
+        holder?.bind(mContext, getItem(position), clickListener, position)
     }
 
     fun getItem(position: Int) : ProductViewFragment.ColorsView?{
@@ -55,10 +56,18 @@ class ColorRecyclerAdapter(var context : Context, var list : List<ProductViewFra
 
     class Holder(var itemBinding: ColorViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(colorView : ProductViewFragment.ColorsView?, listener: OnItemClickListener?){
+        fun bind(context : Context?, colorView : ProductViewFragment.ColorsView?, listener: OnItemClickListener?, position: Int){
             itemBinding?.colorView = colorView
+            if(colorView?.isSelected!!){
+                itemBinding?.imgColor?.background = context?.resources?.getDrawable(R.drawable.color_border)
+                itemBinding?.tvLabel?.setTypeface(Typeface.DEFAULT_BOLD)
+            }
+            else{
+                itemBinding?.imgColor?.background = null
+                itemBinding?.tvLabel?.setTypeface(Typeface.DEFAULT)
+            }
             itemView.setOnClickListener {
-                listener?.onItemClick(colorView)
+                listener?.onItemClick(colorView,position)
             }
         }
     }

@@ -148,6 +148,14 @@ object Utils {
         })
     }
 
+    fun showErrorDialog(context: Context, error : String){
+        showDialog(context, error, context.getString(android.R.string.ok), "", object : DialogOkCallback{
+            override fun setDone(done: Boolean) {
+
+            }
+        })
+    }
+
     fun logout(context: Context){
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
         Toast.makeText(context, context.getString(R.string.logout_success_message), Toast.LENGTH_SHORT).show()

@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.modules.productDetail
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.view.ViewPager
@@ -15,6 +16,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentProductDetailBinding
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_product_detail.*
 
 /**
@@ -46,7 +48,12 @@ class ProductDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(null == productList){
-            getProductDetail(productSku)
+            if (Utils.isConnectionAvailable(activity as Context)) {
+                getProductDetail(productSku)
+            } else {
+                Utils.showNetworkErrorDialog(activity as Context)
+            }
+
         }else{
             pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productList)
             product_viewpager.adapter = pagerAdapter

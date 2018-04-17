@@ -151,8 +151,13 @@ class CategoryFragment : BaseFragment() {
 
         observePromotionsApiResponse()
         observeCategoryApiResponse()
-        getPromotions()
-        getCategories()
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            getPromotions()
+            getCategories()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+
     }
 
 
