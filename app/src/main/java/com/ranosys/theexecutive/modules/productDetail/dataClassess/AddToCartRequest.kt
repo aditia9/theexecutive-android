@@ -6,31 +6,35 @@ package com.ranosys.theexecutive.modules.productDetail.dataClassess
  * @Date 17-Apr-2018
  */
 
-data class AddTOCartRequest(
+data class AddToCartRequest(
         val cartItem: CartItem? = null
 )
 
 data class CartItem(
-        val sku: String = "",
+        val sku: String? = "",
         val qty: Int = 0,
-        val quote_id: String = "",
+        val quote_id: String? = "",
         val product_option: ProductOption? = null,
         val extension_attributes: ExtensionAttributes? = null
 )
 
 data class ProductOption(
-        val extension_attributes: ExtensionAttributes? = null
+        val extension_attributes: CartExtensionAttributes? = null
+)
+
+data class CartExtensionAttributes(
+		val Configurable_item_options: MutableList<ConfigurableItemOption>
 )
 
 
 
 data class ConfigurableItemOption(
-        val option_id: String = "",
-        val option_value: String = ""
+        val option_id: String? = "",
+        val option_value: String? = ""
 )
 
 
-data class AddTOCartResponse(
+data class AddToCartResponse(
 		val item_id: Int,
 		val sku: String,
 		val qty: Int,
@@ -39,4 +43,3 @@ data class AddTOCartResponse(
 		val quote_id: String,
 		val product_option: ProductOption
 )
-

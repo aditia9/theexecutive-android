@@ -2,11 +2,13 @@ package com.ranosys.theexecutive.modules.splash
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
+import android.widget.Toast
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
@@ -34,6 +36,8 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        observeEvent()
+
         //check for auth token in SP if not get from assets
         if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
             val token: String = getAuthToken()
@@ -52,15 +56,8 @@ class SplashActivity : BaseActivity() {
 
         //if user logged in get his cart count and cart id
         val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-        if(userToken.isNullOrBlank()){
-            baseViewModel.let {
-                val cartId = it.getCartIdForUser(userToken)
-                if(cartId.isBlank().not()){
-
-                    val cartCount = baseViewModel.getUserCartCount()
-                    Utils.updateCartCount(cartCount.toInt())
-                }
-            }
+        if(userToken.isNullOrBlank().not()){
+            baseViewModel.getCartIdForUser(userToken)
         }
 
 
@@ -70,6 +67,32 @@ class SplashActivity : BaseActivity() {
             }
         }, SPLASH_TIMEOUT.toLong())
 
+    }
+
+    private fun observeEvent() {
+        baseViewModel.userCartIdResponse?.observe(this, Observer {
+            response ->
+            val userCartId = response?.apiResponse ?: response?.error
+            if(userCartId is String){
+                baseViewModel.getUserCartCount()
+            }
+            else {
+                Toast.makeText(this, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        baseViewModel.userCartCountResponse?.observe(this, Observer {
+            response ->
+            val userCount = response?.apiResponse ?: response?.error
+            if(userCount is String){
+                Utils.updateCartCount(userCount.toInt())
+            }
+            else {
+                Toast.makeText(this, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
     }
 
     private fun getConfigurationApi() {

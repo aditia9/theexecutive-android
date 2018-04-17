@@ -50,8 +50,11 @@ class ProductViewFragment : BaseFragment() {
     var position : Int? = 0
     var productSku : String? = ""
     var colorAttrId : String? = ""
+    var colorValue : String? = ""
     var sizeAttrId : String? = ""
+    var sizeValue : String? = ""
     var productColorValue : String? = ""
+    var selectedQty : Int = 0
     var colorMap = HashMap<String, String>()
     var sizeMap = HashMap<String, String>()
     var childProductsMap = HashMap<String, MutableList<ProductListingDataClass.MediaGalleryEntry>?>()
@@ -266,7 +269,7 @@ class ProductViewFragment : BaseFragment() {
                             FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
                         }else{
                             showLoading()
-                            productItemViewModel.callAddToWishListApi()
+                            productItemViewModel.callAddToWishListApi(colorAttrId, colorValue, sizeAttrId, sizeValue)
                         }
                     } else {
                         Utils.showNetworkErrorDialog(activity as Context)
@@ -350,30 +353,87 @@ class ProductViewFragment : BaseFragment() {
         productItemViewModel.addToWIshListResponse?.observe(this, Observer { apiResponse ->
             hideLoading()
             val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if(response is String){
+
+            }else{
+
+            }
             Toast.makeText(activity as Context, response, Toast.LENGTH_SHORT).show()
         })
 
-        productItemViewModel.addToCartSuccess?.observe(this, Observer {
-            val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-            var cartCount = "0"
+        productItemViewModel.addToCartResponse?.observe (this, Observer<ApiResponse<AddToCartResponse>> { apiResponse ->
 
-            if(userToken.isNullOrBlank().not()){
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if(response is AddToCartResponse){
+                val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                var cartCount = "0"
 
-                cartCount = (activity as BaseActivity).baseViewModel.getUserCartCount()
+                if(userToken.isNullOrBlank().not()){
+                    (activity as BaseActivity).baseViewModel.getUserCartCount()
 
-            }else{
-                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
-                if(guestCartId.isNullOrBlank().not()){
-                    cartCount = (activity as BaseActivity).baseViewModel.getGuestCartCount(guestCartId ?: "")
+                }else{
+                    val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
+                    if(guestCartId.isNullOrBlank().not()){
+                        (activity as BaseActivity).baseViewModel.getGuestCartCount(guestCartId ?: "")
+                    }
                 }
+
+                Toast.makeText(activity as Context, getString(R.string.add_to_cart_success_msg),Toast.LENGTH_SHORT).show()
+
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
-            Utils.updateCartCount(cartCount.toInt())
-            Toast.makeText(activity as Context, getString(R.string.add_to_cart_success_msg),Toast.LENGTH_SHORT).show()
         })
 
-        productItemViewModel.addToCartFailure?.observe(this, Observer {
-            Toast.makeText(activity as Context, "Please try again",Toast.LENGTH_SHORT).show()
+        (activity as BaseActivity).baseViewModel.userCartIdResponse?.observe(this, Observer {
+           response ->
+            val userCartId = response?.apiResponse ?: response?.error
+            if(userCartId is String){
+                productItemViewModel.addToUserCart(prepareAddToCartRequest(userCartId))
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
         })
+
+        (activity as BaseActivity).baseViewModel.userCartCountResponse?.observe(this, Observer {
+            response ->
+            val userCount = response?.apiResponse ?: response?.error
+            if(userCount is String){
+                Utils.updateCartCount(userCount.toInt())
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        (activity as BaseActivity).baseViewModel.guestCartIdResponse?.observe(this, Observer {
+            response ->
+            val guestCartId = response?.apiResponse ?: response?.error
+            if(guestCartId is String){
+                productItemViewModel.addToGuestCart(prepareAddToCartRequest(guestCartId))
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        (activity as BaseActivity).baseViewModel.guestCartCountResponse?.observe(this, Observer {
+            response ->
+            val guestCount = response?.apiResponse ?: response?.error
+            if(guestCount is String){
+                Utils.updateCartCount(guestCount.toInt())
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+
     }
 
     private fun shareProductUrl() {
@@ -410,6 +470,7 @@ class ProductViewFragment : BaseFragment() {
                             colorsViewList?.get(index)?.isSelected = false
                         }
                     }
+                    colorValue = colorView?.value
                     colorViewAdapter.notifyDataSetChanged()
 
                     colorView?.list?.let {
@@ -441,16 +502,21 @@ class ProductViewFragment : BaseFragment() {
 
         sizeDilaog.tv_price_dialog.setText(Constants.IDR + productItem?.price.toString())
 
-        sizeDilaog.btn_done.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                if(sizeDilaog.isShowing){
-                    sizeDilaog.dismiss()
-                }
+        sizeDilaog.btn_done.setOnClickListener(View.OnClickListener {
+            if(sizeDilaog.isShowing){
+                sizeDilaog.dismiss()
+            }
+
+            val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+
+            if(userToken.isNullOrBlank().not()){
+                (activity as BaseActivity).baseViewModel.getCartIdForUser(userToken)
+            }else{
+                (activity as BaseActivity).baseViewModel.getCartIdForGuest()
             }
         })
 
         val itemQty = productItem?.extension_attributes?.stock_item?.qty ?: 0
-        val selectedQty = 0
 
         sizeDilaog.tv_quantity.text = selectedQty.toString()
         sizeDilaog.img_forward.setOnClickListener {
@@ -477,6 +543,30 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
+    fun prepareAddToCartRequest(quoteId :  String?) : AddToCartRequest{
+        val colorOption = ConfigurableItemOption(colorAttrId, colorValue)
+        val sizeOption = ConfigurableItemOption(sizeAttrId, sizeValue)
+
+        val optionList : MutableList<ConfigurableItemOption> = mutableListOf()
+        optionList.add(colorOption)
+        optionList.add(sizeOption)
+
+        val cart_ext_attrs = CartExtensionAttributes( optionList)
+
+        val productOption = ProductOption(cart_ext_attrs)
+
+        val cartItem = CartItem(sku = productSku,
+                qty = 2,
+                quote_id = quoteId,
+                product_option = productOption,
+                extension_attributes = null
+        )
+
+        val request = AddToCartRequest(cartItem)
+
+        return request
+    }
+
     fun openBottomSizeSheet()
     {
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
@@ -485,7 +575,7 @@ class ProductViewFragment : BaseFragment() {
             val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList)
             sizeDilaog.rv_size_view.adapter = sizeViewAdapter
             sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(item: ProductViewFragment.SizeView?, position: Int) {
+                override fun onItemClick(sizeView: ProductViewFragment.SizeView?, position: Int) {
                     sizeViewList?.forEachIndexed { index,it ->
                         if(index == position){
                             sizeViewList?.get(index)?.isSelected = true
@@ -493,6 +583,7 @@ class ProductViewFragment : BaseFragment() {
                             sizeViewList?.get(index)?.isSelected = false
                         }
                     }
+                    sizeValue = sizeView?.value
                     sizeViewAdapter.notifyDataSetChanged()
                 }
             })

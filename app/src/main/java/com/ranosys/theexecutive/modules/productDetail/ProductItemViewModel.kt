@@ -11,7 +11,6 @@ import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
-import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Class ViewModel for product item.
@@ -25,8 +24,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var productOptionResponse: MutableLiveData<ApiResponse<List<ProductOptionsResponse>>>? = MutableLiveData()
     var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
     var addToWIshListResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
-    var addToCartSuccess: MutableLiveData<String>? = MutableLiveData()
-    var addToCartFailure: MutableLiveData<String>? = MutableLiveData()
+    var addToCartResponse: MutableLiveData<ApiResponse<AddToCartResponse>>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
     var url_one : ObservableField<String> = ObservableField()
     var url_two : ObservableField<String> = ObservableField()
@@ -124,14 +122,15 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         })
     }
 
-    fun callAddToWishListApi(){
+    fun callAddToWishListApi(colorAttr : String?, colorValue : String?, sizeAttr : String?, sizeValue : String?){
         val apiResponse = ApiResponse<String>()
 
         //prepare request
-        val requestMap: MutableMap<String, Int> = mutableMapOf()
+        val requestMap: MutableMap<String, String?> = mutableMapOf()
 
-        requestMap["productId"] = productItem?.id!!
-        //further add options
+        requestMap["productId"] = productItem?.id.toString()
+        requestMap["options[$colorAttr]"] = colorValue
+        requestMap["options[$sizeAttr]"] = sizeValue
 
         AppRepository.addToWishList(requestMap, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
@@ -150,36 +149,39 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
 
     }
 
-    fun addToUserCart(addTOCartRequest: AddTOCartRequest) {
-        AppRepository.addToCartUser(addTOCartRequest, object: ApiCallback<AddTOCartResponse>{
+    fun addToUserCart(addToCartRequest: AddToCartRequest) {
+        val apiResponse = ApiResponse<AddToCartResponse>()
+        AppRepository.addToCartUser(addToCartRequest, object: ApiCallback<AddToCartResponse>{
             override fun onException(error: Throwable) {
-                Utils.printLog("add to cart Api", "error")
+                addToCartResponse?.value?.throwable = error
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("add to cart Api", "error")
+                addToCartResponse?.value?.error = errorMsg
             }
 
-            override fun onSuccess(t: AddTOCartResponse?) {
-                //TODO - get and update cart count
+            override fun onSuccess(t: AddToCartResponse?) {
+                apiResponse.apiResponse = t
+                addToCartResponse?.value = apiResponse
             }
 
         })
     }
 
-    fun addToGuestCart(guestCartId: String, addTOCartRequest: AddTOCartRequest) {
-
-        AppRepository.addToCartGuest(guestCartId, addTOCartRequest, object: ApiCallback<AddTOCartResponse>{
+    fun addToGuestCart(addToCartRequest: AddToCartRequest) {
+        val apiResponse = ApiResponse<AddToCartResponse>()
+        AppRepository.addToCartGuest(addToCartRequest.cartItem?.quote_id!!, addToCartRequest, object: ApiCallback<AddToCartResponse>{
             override fun onException(error: Throwable) {
-                Utils.printLog("add to cart Api", "error")
+                addToCartResponse?.value?.throwable = error
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("add to cart Api", "error")
+                addToCartResponse?.value?.error = errorMsg
             }
 
-            override fun onSuccess(t: AddTOCartResponse?) {
-                //TODO - get and update cart count
+            override fun onSuccess(t: AddToCartResponse?) {
+                apiResponse.apiResponse = t
+                addToCartResponse?.value = apiResponse
             }
 
         })

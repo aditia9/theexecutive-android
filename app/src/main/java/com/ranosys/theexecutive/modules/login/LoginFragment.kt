@@ -13,6 +13,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -169,6 +170,30 @@ class LoginFragment() : BaseFragment() {
 
             }
         })
+
+        (activity as BaseActivity).baseViewModel.userCartIdResponse?.observe(this, Observer {
+            response ->
+            val userCartId = response?.apiResponse ?: response?.error
+            if(userCartId is String){
+                   (activity as BaseActivity).baseViewModel.getUserCartCount()
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        (activity as BaseActivity).baseViewModel.userCartCountResponse?.observe(this, Observer {
+            response ->
+            val userCount = response?.apiResponse ?: response?.error
+            if(userCount is String){
+                Utils.updateCartCount(userCount.toInt())
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
     }
 
     private fun observeApiFailure() {
@@ -185,17 +210,7 @@ class LoginFragment() : BaseFragment() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
             //api to get cart id
-            val cartId = (activity as BaseActivity).baseViewModel?.let {
-                it.getCartIdForUser(token)
-            }
-
-            if(cartId.isNullOrBlank().not()){
-                val cartCount = (activity as BaseActivity).baseViewModel?.let {
-                    it.getUserCartCount()
-                }
-                Utils.updateCartCount(cartCount.toInt())
-            }
-
+           (activity as BaseActivity).baseViewModel.getCartIdForUser(token)
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
             SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
             FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
