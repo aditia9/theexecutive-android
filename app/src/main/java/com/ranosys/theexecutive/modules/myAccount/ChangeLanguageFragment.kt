@@ -50,7 +50,7 @@ class ChangeLanguageFragment: BaseFragment() {
             SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)!!
         }
 
-        selectedStore = GlobalSingelton.instance?.storeList!!.first()
+        selectedStore = GlobalSingelton.instance?.storeList?.first() ?: getDefaultStore()
 
         val storeListAdapter = StoreListAdapter(GlobalSingelton.instance?.storeList, selectedStoreCode)
         storeListAdapter.setItemClickListener(object: StoreListAdapter.OnItemClickListener {
@@ -71,6 +71,14 @@ class ChangeLanguageFragment: BaseFragment() {
             FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, true)
 
         }
+    }
+
+    private fun getDefaultStore(): StoreResponse {
+        return  StoreResponse(id = 1,
+                name = "English",
+                code = Constants.DEFAULT_STORE_CODE,
+                store_group_id = 1,
+                website_id = 1)
     }
 
     override fun onResume() {

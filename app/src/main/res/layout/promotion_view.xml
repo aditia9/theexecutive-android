@@ -16,7 +16,6 @@
         <ImageView
             android:id="@+id/img_promotion"
             android:layout_width="match_parent"
-            android:background="@color/hint_color"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:contentDescription="@string/promotion_image"

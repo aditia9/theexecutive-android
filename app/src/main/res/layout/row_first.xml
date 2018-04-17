@@ -29,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/parent_category_image_height"
             android:adjustViewBounds="true"
-            android:background="@color/hint_color"
             android:scaleType="centerCrop"
             bind:baseWithimageUrl="@{childData.image}"
             android:contentDescription="@string/category_image"
