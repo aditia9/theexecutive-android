@@ -107,10 +107,11 @@ class SplashActivity : BaseActivity() {
                 showExitApplicationDialog(getString(R.string.force_update_msg), {
                     //redirect to play store
                 })
-            }else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
-                //soft update
-                Utils.printLog("Config Api", "Soft Update")
             }
+//            else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
+//                //soft update
+//                Utils.printLog("Config Api", "Soft Update")
+//            }
         }else{
             //stop app with maintenance message
             Utils.printLog("Config Api", "Maintance Mode")
