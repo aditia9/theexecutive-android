@@ -258,7 +258,7 @@ class ProductListingFragment: BaseFragment() {
                     val totalItemCount = gridLayoutManager.itemCount
                     val firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition()
 
-                    val allProductLoaded = productListAdapter.itemCount >= mViewModel.totalProductCount
+                    val allProductLoaded = productListAdapter.itemCount >= mViewModel.productListResponse?.total_count?:0
                     val shouldPaging = (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold)
 
                     if(mViewModel.isLoading.not() && allProductLoaded.not() && shouldPaging){
@@ -270,7 +270,7 @@ class ProductListingFragment: BaseFragment() {
         })
 
 
-        val emptyList = ArrayList<ProductListingDataClass.ProductMaskedResponse>()
+        val emptyList = ArrayList<ProductListingDataClass.Item>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
                 val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, position)
@@ -292,24 +292,22 @@ class ProductListingFragment: BaseFragment() {
 
         et_search.setOnTouchListener(View.OnTouchListener { v, event ->
             val DRAWABLE_RIGHT = 2
-            if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.rawX >= et_search.right - et_search.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
-                        et_search.setText("")
-                        et_search.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
-                        mViewModel.clearExistingList()
-                        mViewModel.lastSearchQuery = ""
 
-                        if(homeSearchQuery.isNotBlank()){
-                            //activity?.onBackPressed()
-                            homeSearchQuery = ""
-                        }else{
-                            callProductListingApi(categoryId)
-                        }
+            if(event.getAction() == MotionEvent.ACTION_UP) {
+                if(event.rawX >= et_search.right - et_search.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
+                    if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
+                        et_search.setText("")
                         return@OnTouchListener true
+                    }else if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.search))){
+                        //todo call search api
+                        callProductListingApi(categoryId, et_search.text.toString(), true)
                     }
+
+
                 }
             }
+
+
             false
         })
 
@@ -448,7 +446,7 @@ class ProductListingFragment: BaseFragment() {
     }
 
     private fun observeProductList() {
-        mViewModel.maskedProductList.observe(this, Observer<ArrayList<ProductListingDataClass.ProductMaskedResponse>> { partialProductList ->
+        mViewModel.productList.observe(this, Observer<MutableList<ProductListingDataClass.Item>> { partialProductList ->
             partialProductList?.run {
                 productListAdapter.productList = partialProductList
                 productListAdapter.notifyDataSetChanged()
@@ -467,6 +465,7 @@ class ProductListingFragment: BaseFragment() {
             Utils.showNetworkErrorDialog(activity as Context)
         }
     }
+
     override fun onResume() {
         super.onResume()
         setToolBarParams(categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)

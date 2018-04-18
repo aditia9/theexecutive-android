@@ -146,6 +146,12 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getFilterOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Query("id")categoryId: Int): Call<ProductListingDataClass.FilterOptionsResponse>
+
+        @GET("rest/{store_code}/V1/layerednavigation/searchfilters/")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getSearchFilters(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Query("q")searchQuery: String): Call<ProductListingDataClass.FilterOptionsResponse>
     }
 
     interface ProductListingService {

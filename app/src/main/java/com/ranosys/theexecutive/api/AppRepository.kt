@@ -629,6 +629,27 @@ object AppRepository {
     }
 
 
+    fun searchFilterApi(searchQuery: String, callBack: ApiCallback<ProductListingDataClass.FilterOptionsResponse>) {
+        val retrofit = ApiClient.retrofit
+        val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.FilterOptionService>(ApiService.FilterOptionService::class.java)?.getSearchFilters(ApiConstants.BEARER + adminToken,  storeCode, searchQuery = searchQuery)
+
+        callGet?.enqueue(object : Callback<ProductListingDataClass.FilterOptionsResponse> {
+            override fun onResponse(call: Call<ProductListingDataClass.FilterOptionsResponse>?, response: Response<ProductListingDataClass.FilterOptionsResponse>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<ProductListingDataClass.FilterOptionsResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
 
 
 
