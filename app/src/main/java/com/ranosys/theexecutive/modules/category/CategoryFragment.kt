@@ -200,7 +200,7 @@ class CategoryFragment : BaseFragment() {
                 val response = apiResponse?.apiResponse ?: apiResponse?.error
                 if (response is CategoryResponseDataClass) {
 
-                    response?.children_data = response?.children_data?.filter { it.is_active == true } as ArrayList<ChildrenData>
+                    response.children_data = response?.children_data?.filter { it.is_active == true } as ArrayList<ChildrenData>
 
                     //add view all category and remove inactive sub categories
                     for(cat in response.children_data){

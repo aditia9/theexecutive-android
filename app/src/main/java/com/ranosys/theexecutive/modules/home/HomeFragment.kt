@@ -95,7 +95,6 @@ class HomeFragment : BaseFragment() {
                             setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
                         }
                         else{
-                            // homeViewPager.getItem(1)
                             tabLayout.visibility = View.VISIBLE
                             val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
                             setToolBarParams(getString(R.string.my_account_title), 0, email, 0, false, 0, false)

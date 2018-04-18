@@ -264,8 +264,8 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.GUEST_CART_ID_KEY)
                 guestCartIdResponse?.value = apiResponse
-
             }
 
         })

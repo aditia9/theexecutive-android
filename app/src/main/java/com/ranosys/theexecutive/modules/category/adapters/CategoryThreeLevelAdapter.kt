@@ -62,11 +62,6 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
         expandableListView.setDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
         expandableListView.setChildDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
 
-        if(categoryList?.get(group)?.children_data?.size!! != 0)
-        {
-            expandableListView.expandGroup(child,true)
-        }
-
         expandableListView.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
             var previousGroup = -1
             override fun onGroupExpand(p0: Int) {

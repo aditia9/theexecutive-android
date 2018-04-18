@@ -55,7 +55,8 @@ class DashBoardActivity: BaseActivity() {
                                     if(TextUtils.isEmpty(isLogin)){
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
                                     }else{
-                                        (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, "", 0, false, 0, false)
+                                        val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
+                                        (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, email, 0, false, 0, false)
                                     }
                                 }
                                 2 -> {

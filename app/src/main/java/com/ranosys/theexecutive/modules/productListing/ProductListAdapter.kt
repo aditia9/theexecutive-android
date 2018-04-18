@@ -61,11 +61,6 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
                 itemBinding.tvNormalPrice.text = ss
             }
 
-
-
-
-
-
             itemView.setOnClickListener {
                 listener.onItemClick(product, position)
             }

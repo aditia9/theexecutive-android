@@ -56,6 +56,8 @@ class ProductViewFragment : BaseFragment() {
     var productColorValue : String? = ""
     var productSizeValue : String? = ""
     var selectedQty : Int = 0
+    var price : Double? = 0.0
+    var specialPrice : Double? = 0.0
     var colorMap = HashMap<String, String>()
     var sizeMap = HashMap<String, String>()
     var childProductsMap = HashMap<String, MutableList<ProductListingDataClass.MediaGalleryEntry>?>()
@@ -75,7 +77,6 @@ class ProductViewFragment : BaseFragment() {
         listGroupBinding?.productItemVM = productItemViewModel
 
         sizeDilaogBinding = DataBindingUtil.inflate(inflater, R.layout.bottom_size_layout, container,  false)
-        prepareSizeDialog()
 
         observeEvents()
         if (Utils.isConnectionAvailable(activity as Context)) {
@@ -118,6 +119,7 @@ class ProductViewFragment : BaseFragment() {
     fun setData(){
 
         setDescription()
+        setPrice()
         setProductImages(productItem?.media_gallery_entries)
         setColorImagesList()
         setWearWithProductsData()
@@ -133,6 +135,24 @@ class ProductViewFragment : BaseFragment() {
             AppLog.printStackTrace(e)
         }
 
+    }
+
+    fun setPrice(){
+        if(productItem?.type_id.equals(Constants.FILTER_CONFIGURABLE_LABEL)){
+            price = productItem?.extension_attributes?.regular_price
+            specialPrice = productItem?.extension_attributes?.final_price
+        }else{
+            price = productItem?.price
+            val attributes = productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
+            if(attributes?.isNotEmpty()!!) {
+                specialPrice = attributes[0].value.toString().toDouble()
+            }
+        }
+        if(price == specialPrice){
+            tv_price.setText(Constants.IDR + price)
+        }else {
+            tv_price.setText(Constants.IDR + specialPrice)
+        }
     }
 
     fun setWearWithProductsData(){
@@ -405,7 +425,7 @@ class ProductViewFragment : BaseFragment() {
         })
 
         productItemViewModel.userCartIdResponse?.observe(this, Observer {
-           response ->
+            response ->
             val userCartId = response?.apiResponse ?: response?.error
             if(userCartId is String){
                 productItemViewModel.addToUserCart(prepareAddToCartRequest(userCartId))
@@ -524,7 +544,12 @@ class ProductViewFragment : BaseFragment() {
         else{
             sizeDilaog.rv_size_view.visibility = View.VISIBLE
         }
-        sizeDilaog.tv_price_dialog.setText(Constants.IDR + productItem?.price.toString())
+
+        if(price == specialPrice){
+            sizeDilaog.tv_product_price.setText(Constants.IDR + price)
+        }else {
+            sizeDilaog.tv_product_price.setText(Constants.IDR + specialPrice)
+        }
 
         sizeDilaog.btn_done.setOnClickListener(View.OnClickListener {
             if(sizeDilaog.isShowing){
@@ -591,6 +616,7 @@ class ProductViewFragment : BaseFragment() {
 
     fun openBottomSizeSheet()
     {
+        prepareSizeDialog()
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         sizeDilaog.rv_size_view.layoutManager = linearLayoutManager
         if(sizeViewList?.size!! > 0) {
