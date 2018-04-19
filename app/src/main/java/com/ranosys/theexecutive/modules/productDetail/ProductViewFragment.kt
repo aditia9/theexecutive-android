@@ -169,7 +169,7 @@ class ProductViewFragment : BaseFragment() {
             list_wear_with_products.adapter = wearWithAdapter
             wearWithAdapter.setItemClickListener(object : WearWithProductsAdapter.OnItemClickListener {
                 override fun onItemClick(item: ProductListingDataClass.ProductLinks?) {
-                    val fragment = ProductDetailFragment.getInstance(null, item?.linked_product_sku , 0)
+                    val fragment = ProductDetailFragment.getInstance(null, item?.linked_product_sku , item?.extension_attributes?.linked_product_name, 0)
                     FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                 }
             })

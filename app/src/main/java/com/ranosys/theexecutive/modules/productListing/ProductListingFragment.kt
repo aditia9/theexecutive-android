@@ -287,7 +287,7 @@ class ProductListingFragment: BaseFragment() {
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
                 ApiClient.client?.dispatcher()?.cancelAll()
                 mViewModel.isLoading = false
-                val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, position)
+                val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
                 FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
             }
 

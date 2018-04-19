@@ -78,7 +78,7 @@ class CategoryFragment : BaseFragment() {
                     }
 
                     Constants.PROMOTION_TYPE_PRODUCT -> {
-                        val fragment = ProductDetailFragment.getInstance(null, item.value, 0)
+                        val fragment = ProductDetailFragment.getInstance(null, item.value, item.title, 0)
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
 

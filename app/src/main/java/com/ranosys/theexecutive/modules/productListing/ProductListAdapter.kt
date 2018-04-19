@@ -75,7 +75,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val sku = product.sku
             val name = product.name
             val productType = product.type_id
-            var price: Double
+            val price: Double
             var specialPrice = 0.0
             if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
                 price = product.extension_attributes.regular_price

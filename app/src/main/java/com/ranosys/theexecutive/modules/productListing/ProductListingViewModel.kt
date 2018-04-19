@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.modules.productListing
 
-import AppLog
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import com.ranosys.theexecutive.api.AppRepository
@@ -130,12 +129,10 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         AppRepository.getProductList(prepareProductListingRequest(catId ?: Constants.UNIVERSAL_CAT_ID, query,fromSearch), fromSearch,  object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("product listing", error.message?: "exception")
-               // noProductAvailable.value = 0
             }
 
             override fun onError(errorMsg: String) {
                 Utils.printLog("product listing", errorMsg)
-               // noProductAvailable.value = 0
             }
 
             override fun onSuccess(response: ProductListingDataClass.ProductListingResponse?) {

@@ -30,6 +30,7 @@ class ProductDetailFragment : BaseFragment() {
     var productList : MutableList<ProductListingDataClass.Item>? = null
     var position : Int? = 0
     var productSku : String? = ""
+    var productName : String? = ""
     var pagerAdapter : ProductStatePagerAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -49,6 +50,7 @@ class ProductDetailFragment : BaseFragment() {
         if(null == productList){
             if (Utils.isConnectionAvailable(activity as Context)) {
                 showLoading()
+                setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
                 getProductDetail(productSku)
             } else {
                 Utils.showNetworkErrorDialog(activity as Context)
@@ -79,9 +81,7 @@ class ProductDetailFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        productList?.let {
-            setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-        }
+        setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
     }
 
 
@@ -111,10 +111,11 @@ class ProductDetailFragment : BaseFragment() {
 
     companion object {
 
-        fun getInstance(productList : MutableList<ProductListingDataClass.Item>?, productSku : String?, position : Int?) =
+        fun getInstance(productList : MutableList<ProductListingDataClass.Item>?, productSku : String?, productName : String?, position : Int?) =
                 ProductDetailFragment().apply {
                     this.productList = productList
                     this.productSku = productSku
+                    this.productName = productName
                     this.position = position
                 }
 
