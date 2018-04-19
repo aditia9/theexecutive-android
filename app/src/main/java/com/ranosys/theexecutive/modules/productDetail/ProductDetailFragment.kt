@@ -39,7 +39,6 @@ class ProductDetailFragment : BaseFragment() {
         mViewDataBinding?.productDetailVM = productDetailViewModel
         mViewDataBinding?.executePendingBindings()
 
-
         observeEvents()
         return mViewDataBinding?.root
 
@@ -49,6 +48,7 @@ class ProductDetailFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         if(null == productList){
             if (Utils.isConnectionAvailable(activity as Context)) {
+                showLoading()
                 getProductDetail(productSku)
             } else {
                 Utils.showNetworkErrorDialog(activity as Context)
@@ -97,10 +97,11 @@ class ProductDetailFragment : BaseFragment() {
                     productList = mutableListOf()
                     productList?.add(response)
                     setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-                    pagerAdapter = ProductStatePagerAdapter(activity?.supportFragmentManager,productList)
+                    pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productList)
                     product_viewpager.adapter = pagerAdapter
                     product_viewpager.offscreenPageLimit = 2
                     product_viewpager.setCurrentItem(position!!)
+                    hideLoading()
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
                 }

@@ -55,7 +55,7 @@ class ProductViewFragment : BaseFragment() {
     var itemQty : Int? = 1
     var productColorValue : String? = ""
     var productSizeValue : String? = ""
-    var selectedQty : Int = 0
+    var selectedQty : Int = 1
     var price : Double? = 0.0
     var specialPrice : Double? = 0.0
     var colorMap = HashMap<String, String>()
@@ -77,6 +77,7 @@ class ProductViewFragment : BaseFragment() {
         listGroupBinding?.productItemVM = productItemViewModel
 
         sizeDilaogBinding = DataBindingUtil.inflate(inflater, R.layout.bottom_size_layout, container,  false)
+        prepareSizeDialog()
 
         observeEvents()
         if (Utils.isConnectionAvailable(activity as Context)) {
@@ -102,15 +103,19 @@ class ProductViewFragment : BaseFragment() {
         }
 
         img_one.setOnClickListener{
-            val drawable=img_one.drawable as BitmapDrawable
-            val bitmap=drawable.bitmap
-            openProdcutImage(bitmap)
+            img_one.drawable?.run {
+                val drawable = img_one.drawable as BitmapDrawable
+                val bitmap = drawable.bitmap
+                openProdcutImage(bitmap)
+            }
         }
 
         img_two.setOnClickListener {
-            val drawable=img_two.drawable as BitmapDrawable
-            val bitmap=drawable.bitmap
-            openProdcutImage(bitmap)
+            img_two.drawable?.run {
+                val drawable = img_two.drawable as BitmapDrawable
+                val bitmap = drawable.bitmap
+                openProdcutImage(bitmap)
+            }
         }
 
 
@@ -164,7 +169,8 @@ class ProductViewFragment : BaseFragment() {
             list_wear_with_products.adapter = wearWithAdapter
             wearWithAdapter.setItemClickListener(object : WearWithProductsAdapter.OnItemClickListener {
                 override fun onItemClick(item: ProductListingDataClass.ProductLinks?) {
-
+                    val fragment = ProductDetailFragment.getInstance(null, item?.linked_product_sku , 0)
+                    FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                 }
             })
         }else {
@@ -394,11 +400,10 @@ class ProductViewFragment : BaseFragment() {
             hideLoading()
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             if(response is String){
-
+                Toast.makeText(activity as Context, getString(R.string.wishlist_success_msg), Toast.LENGTH_SHORT).show()
             }else{
-
+                Toast.makeText(activity as Context, Constants.ERROR, Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(activity as Context, response, Toast.LENGTH_SHORT).show()
         })
 
         productItemViewModel.addToCartResponse?.observe (this, Observer<ApiResponse<AddToCartResponse>> { apiResponse ->
@@ -538,18 +543,6 @@ class ProductViewFragment : BaseFragment() {
         sizeDilaog.setCancelable(true)
         sizeDilaog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
         sizeDilaog.window.setGravity(Gravity.BOTTOM)
-        if(productItem?.type_id.equals("simple")){
-            sizeDilaog.rv_size_view.visibility = View.GONE
-        }
-        else{
-            sizeDilaog.rv_size_view.visibility = View.VISIBLE
-        }
-
-        if(price == specialPrice){
-            sizeDilaog.tv_product_price.setText(Constants.IDR + price)
-        }else {
-            sizeDilaog.tv_product_price.setText(Constants.IDR + specialPrice)
-        }
 
         sizeDilaog.btn_done.setOnClickListener(View.OnClickListener {
             if(sizeDilaog.isShowing){
@@ -565,7 +558,6 @@ class ProductViewFragment : BaseFragment() {
             }
         })
 
-        sizeDilaog.tv_quantity.text = selectedQty.toString()
         sizeDilaog.img_forward.setOnClickListener {
             if(selectedQty <= itemQty!!){
                 selectedQty++
@@ -576,7 +568,7 @@ class ProductViewFragment : BaseFragment() {
         }
 
         sizeDilaog.img_back.setOnClickListener {
-            if(selectedQty > 0){
+            if(selectedQty > 1){
                 selectedQty--
                 sizeDilaog.tv_quantity.text =  selectedQty.toString()
             }
@@ -591,16 +583,16 @@ class ProductViewFragment : BaseFragment() {
     }
 
     fun prepareAddToCartRequest(quoteId :  String?) : AddToCartRequest{
-        val colorOption = ConfigurableItemOption(colorAttrId, colorValue)
-        val sizeOption = ConfigurableItemOption(sizeAttrId, sizeValue)
-
-        val optionList : MutableList<ConfigurableItemOption> = mutableListOf()
-        optionList.add(colorOption)
-        optionList.add(sizeOption)
-
-        val cart_ext_attrs = CartExtensionAttributes( optionList)
-
-        val productOption = ProductOption(cart_ext_attrs)
+        var productOption : ProductOption? = null
+        if(productItem?.type_id.equals("configurable")){
+            val colorOption = ConfigurableItemOption(colorAttrId, colorValue)
+            val sizeOption = ConfigurableItemOption(sizeAttrId, sizeValue)
+            val optionList : MutableList<ConfigurableItemOption> = mutableListOf()
+            optionList.add(colorOption)
+            optionList.add(sizeOption)
+            val cart_ext_attrs = CartExtensionAttributes( optionList)
+            productOption = ProductOption(cart_ext_attrs)
+        }
 
         val cartItem = CartItem(sku = productSku,
                 qty = selectedQty,
@@ -616,7 +608,20 @@ class ProductViewFragment : BaseFragment() {
 
     fun openBottomSizeSheet()
     {
-        prepareSizeDialog()
+        if(productItem?.type_id.equals("simple")){
+            sizeDilaog.rv_size_view.visibility = View.GONE
+        }
+        else{
+            sizeDilaog.rv_size_view.visibility = View.VISIBLE
+        }
+
+        if(price == specialPrice){
+            sizeDilaog.tv_product_price.setText(Constants.IDR + price)
+        }else {
+            sizeDilaog.tv_product_price.setText(Constants.IDR + specialPrice)
+        }
+        sizeDilaog.tv_quantity.text = selectedQty.toString()
+
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         sizeDilaog.rv_size_view.layoutManager = linearLayoutManager
         if(sizeViewList?.size!! > 0) {
@@ -624,7 +629,7 @@ class ProductViewFragment : BaseFragment() {
             sizeDilaog.rv_size_view.adapter = sizeViewAdapter
             sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(sizeView: ProductViewFragment.SizeView?, position: Int) {
-                    selectedQty = 0
+                    selectedQty = 1
                     sizeDilaog.tv_quantity.text =  selectedQty.toString()
                     sizeViewList?.forEachIndexed { index,it ->
                         if(index == position){
@@ -668,7 +673,6 @@ class ProductViewFragment : BaseFragment() {
         imageView.setImageBitmap(bitmap)
         val backImageView=view.rootView.cancel_img
         backImageView.setOnClickListener {
-
             mImageDialog.dismiss()
         }
         mImageDialog.show()

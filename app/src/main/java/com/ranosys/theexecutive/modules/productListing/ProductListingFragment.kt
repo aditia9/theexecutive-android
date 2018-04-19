@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiClient
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
 import com.ranosys.theexecutive.databinding.DialogSortOptionBinding
@@ -100,7 +101,6 @@ class ProductListingFragment: BaseFragment() {
         mViewModel.noProductAvailable.observe(this, Observer { count ->
             count?.let {
                 if(count <= 0){
-
                     mBinding.listingContainer.visibility = View.GONE
                     mBinding.tvNoProductAvailable.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.text = getString(R.string.no_product_available_error)
@@ -109,6 +109,7 @@ class ProductListingFragment: BaseFragment() {
                     mBinding.tvNoProductAvailable.visibility = View.GONE
                     mBinding.tvNoProductAvailable.text = ""
                 }
+                mViewModel.noProductAvailable.value = null
             }
             hideLoading()
         })
@@ -202,15 +203,15 @@ class ProductListingFragment: BaseFragment() {
 
             filterOptionBinding.priceRangeBar.setCurrency(priceFilter?.options?.get(0)?.label)
             val range = priceFilter?.options?.get(0)?.value
-            val min = range?.split("-")?.get(0)?.toFloat()
-            val max = range?.split("-")?.get(1)?.toFloat()
+            val min = range?.split("-")?.get(0)?.toLong()
+            val max = range?.split("-")?.get(1)?.toLong()
             if(max == min){
                 filterOptionDialog.price_range_bar.visibility = View.GONE
             }else{
                 filterOptionDialog.price_range_bar.visibility = View.VISIBLE
                 filterOptionBinding.priceRangeBar.setRangeValues(min, max)
                 filterOptionBinding.priceRangeBar.selectedMinValue = min
-                filterOptionBinding.priceRangeBar.selectedMaxValue =  max
+                filterOptionBinding.priceRangeBar.selectedMaxValue = max
                 filterOptionBinding.etMinPrice.setText(min.toString())
                 filterOptionBinding.etMaxPrice.setText(max.toString())
             }
@@ -273,6 +274,8 @@ class ProductListingFragment: BaseFragment() {
         val emptyList = ArrayList<ProductListingDataClass.ProductMaskedResponse>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
+                ApiClient.client?.dispatcher()?.cancelAll()
+                mViewModel.isLoading = false
                 val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, position)
                 FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
             }
