@@ -166,9 +166,6 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     }
 
 
-
-
-
     fun callRegisterApi() {
         if(isValidData(getApplication())){
             val address = RegisterDataClass.Address(region_id = selectedState.get().id,
@@ -213,7 +210,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                 }
 
                 override fun onSuccess(response: RegisterDataClass.RegistrationResponse?) {
-                    if(isSocialLogin) callLoginApi() else apiDirectRegSuccessResponse?.value = response
+                    callLoginApi()
                 }
 
             })

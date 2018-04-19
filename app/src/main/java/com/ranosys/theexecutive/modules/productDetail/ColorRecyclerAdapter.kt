@@ -47,7 +47,7 @@ class ColorRecyclerAdapter(var context : Context, var list : List<ProductViewFra
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(mContext, getItem(position), clickListener, position)
+        holder?.bind(context, getItem(position), clickListener, position)
     }
 
     fun getItem(position: Int) : ProductViewFragment.ColorsView?{

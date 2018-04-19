@@ -11,7 +11,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.ProductListItemBinding
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @Class An adapter class for all products listing
@@ -19,7 +22,7 @@ import com.ranosys.theexecutive.utils.Utils
  * @Date 20-Mar-2018
  */
 
-class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.ProductMaskedResponse>, var clickListener: OnItemClickListener): RecyclerView.Adapter<ProductListAdapter.Holder>() {
+class ProductListAdapter(var productList: MutableList<ProductListingDataClass.Item>, var clickListener: OnItemClickListener): RecyclerView.Adapter<ProductListAdapter.Holder>() {
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
         holder?.bind(productList[position], position,  listener = clickListener)
@@ -34,7 +37,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
     override fun getItemCount() = productList.size
 
 
-    fun addProducts(products: ArrayList<ProductListingDataClass.ProductMaskedResponse>){
+    fun addProducts(products: ArrayList<ProductListingDataClass.Item>){
         val lastPos = productList.size
         productList.addAll(products)
         notifyItemRangeInserted(lastPos, products.size)
@@ -42,7 +45,9 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
 
     class Holder(val itemBinding: ProductListItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
 
-        fun bind(product: ProductListingDataClass.ProductMaskedResponse, position : Int, listener: ProductListAdapter.OnItemClickListener){
+        fun bind(productItem: ProductListingDataClass.Item, position : Int, listener: ProductListAdapter.OnItemClickListener){
+
+            val product = prepareMaskedResponse(productItem)
 
             itemBinding.productItem = product
             val normalPrice = "IDR\u00A0" + product.normalPrice
@@ -64,6 +69,67 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
             itemView.setOnClickListener {
                 listener.onItemClick(product, position)
             }
+        }
+
+        private fun prepareMaskedResponse(product: ProductListingDataClass.Item): ProductListingDataClass.ProductMaskedResponse {
+            val sku = product.sku
+            val name = product.name
+            val productType = product.type_id
+            var price: Double
+            var specialPrice = 0.0
+            if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
+                price = product.extension_attributes.regular_price
+                specialPrice = product.extension_attributes.final_price
+            }else{
+                price = product.price
+                val attributes = product.custom_attributes.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }.toList()
+                if(attributes.isNotEmpty()) {
+                    specialPrice = attributes[0].value.toString().toDouble()
+                }
+            }
+
+
+            var toDate = ""
+            var fromDate = ""
+            var attributes = product.custom_attributes.filter { it.attribute_code == Constants.NEW_FROM_DATE_LABEL }.toList()
+            if(attributes.isNotEmpty()){
+                fromDate = attributes.single().value.toString()
+            }
+
+            attributes = product.custom_attributes.filter { it.attribute_code == Constants.NEW_TO_DATE_LABEL }.toList()
+            if(attributes.isNotEmpty()){
+                toDate = attributes.single().value.toString()
+            }
+            val type = if(toDate.isNotBlank() && fromDate.isNotBlank()) isNewProduct(fromDate, toDate) else ""
+
+            val discount = (((price - specialPrice).div(price)).times(100)).toInt()
+            var imgUrl = ""
+            if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0]?.file.toString()
+
+            val product = ProductListingDataClass.ProductMaskedResponse(
+                    sku = sku,
+                    name = name,
+                    normalPrice = price.toString(),
+                    specialPrice = specialPrice.toString(),
+                    type = type,
+                    discountPer = discount,
+                    imageUrl = imgUrl)
+
+            return product
+        }
+
+        private fun isNewProduct(fromDate: String, toDate: String): String {
+
+            val sdf = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT)
+            val d = Date()
+            val currentDate= sdf.format(d)
+            val cDate=sdf.parse(currentDate)
+            val sDtate=sdf.parse(fromDate)
+            val eDate=sdf.parse(toDate)
+
+            if(!(cDate.compareTo(sDtate) < 0 || cDate.compareTo(eDate) > 0)) {
+                return Constants.NEW_TAG
+            } else  return ""
         }
     }
 
