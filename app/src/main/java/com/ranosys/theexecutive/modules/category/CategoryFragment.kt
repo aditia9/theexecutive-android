@@ -10,10 +10,9 @@ import android.os.Looper
 import android.support.annotation.Nullable
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.AbsListView
 import android.widget.ExpandableListView
@@ -128,6 +127,41 @@ class CategoryFragment : BaseFragment() {
                 }
             }
 
+        })
+
+        et_search_home.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.isNullOrBlank().not()){
+                    et_search_home.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
+                }
+            }
+
+        })
+        et_search_home.setOnTouchListener(View.OnTouchListener { v, event ->
+            val DRAWABLE_RIGHT = 2
+            if(event.getAction() == MotionEvent.ACTION_UP) {
+                if(event.rawX >= et_search_home.right - et_search_home.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
+                    if(Utils.compareDrawable(activity as Context, et_search_home.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
+                        et_search_home.setText("")
+                        return@OnTouchListener true
+                    }else if(Utils.compareDrawable(activity as Context, et_search_home.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.search))){
+                        if(et_search_home.text.isNotBlank()){
+                            Utils.hideSoftKeypad(activity as Context)
+                            val bundle = Bundle()
+                            bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, et_search_home.text.toString())
+                            FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+                        }else{
+                            Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+
+            false
         })
 
         et_search_home.setOnEditorActionListener(object : TextView.OnEditorActionListener{

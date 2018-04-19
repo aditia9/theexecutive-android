@@ -76,5 +76,7 @@ object Constants {
         val UNIVERSAL_CAT_ID: Int = 0
         val URL_KEY: String = "url_key"
         val URL_SUFFIX: String = ".html"
+        val SORT_TYPE_CATALOG: String = "catalog"
+        val SORT_TYPE_SEARCH: String = "search"
 
 }

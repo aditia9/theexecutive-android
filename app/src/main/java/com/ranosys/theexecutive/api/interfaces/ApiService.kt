@@ -133,11 +133,11 @@ interface ApiService {
     }
 
     interface SortOptionService {
-        @GET("rest/{store_code}/V1/attributes/sort")
+        @GET("rest/{store_code}/V1/attributes/sort/")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getSortOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String): Call<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>
+        fun getSortOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Query("type")type: String): Call<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>
     }
 
     interface FilterOptionService {

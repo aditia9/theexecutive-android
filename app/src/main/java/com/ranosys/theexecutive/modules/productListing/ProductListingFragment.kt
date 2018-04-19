@@ -64,8 +64,6 @@ class ProductListingFragment: BaseFragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_listing, container,  false)
         mViewModel = ViewModelProviders.of(this).get(ProductListingViewModel::class.java)
 
-        callInitialApis()
-
         //sort screen binding
         sortOptionBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_sort_option, container,  false)
         sortOptionDialog = Dialog(activity as Context, R.style.MaterialDialogSheet)
@@ -73,6 +71,8 @@ class ProductListingFragment: BaseFragment() {
         sortOptionDialog.setCancelable(true)
         sortOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         sortOptionDialog.window.setGravity(Gravity.BOTTOM)
+        sortOptionAdapter = SortOptionAdapter(mViewModel, mViewModel.sortOptionList?.value)
+        sortOptionBinding.sortOptionList.setAdapter(sortOptionAdapter)
         prepareSortOptionDialog()
 
         //filter screen binding
@@ -85,6 +85,8 @@ class ProductListingFragment: BaseFragment() {
         filterOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
         prepareFilterDialog()
+
+        callInitialApis()
 
 
         observeProductList()
@@ -123,7 +125,6 @@ class ProductListingFragment: BaseFragment() {
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
         sortOptionBinding.sortOptionList.addItemDecoration(itemDecor)
 
-        sortOptionAdapter = SortOptionAdapter(mViewModel, mViewModel.sortOptionList?.value)
         sortOptionAdapter.setItemClickListener(object: SortOptionAdapter.OnItemClickListener {
             override fun onItemClick(item: ProductListingDataClass.SortOptionResponse) {
                 mViewModel.selectedSortOption = item
@@ -131,7 +132,6 @@ class ProductListingFragment: BaseFragment() {
             }
 
         })
-        sortOptionBinding.sortOptionList.setAdapter(sortOptionAdapter)
 
         //method holding all UI interaction of filter dialog
         sortOptionBinding.let {
@@ -144,8 +144,8 @@ class ProductListingFragment: BaseFragment() {
 
             sortOptionBinding.tvClear.setOnClickListener({
                 sortOptionDialog.let {
-                    mViewModel.selectedSortOption = ProductListingDataClass.SortOptionResponse("","")
-                    sortOptionAdapter.notifyDataSetChanged()
+                    clearSelectedSortOption()
+
                 }
             })
 
@@ -157,11 +157,20 @@ class ProductListingFragment: BaseFragment() {
                     showLoading()
                     sortOptionDialog.dismiss()
                     mViewModel.clearExistingList()
-                    callProductListingApi(categoryId)
+                    if(mViewModel.lastSearchQuery.isNotBlank()){
+                        callProductListingApi(query = mViewModel.lastSearchQuery, fromSearch = true)
+                    }else{
+                        callProductListingApi(categoryId)
+                    }
                     mViewModel.isSorted = !(mViewModel.isSorted && mViewModel.selectedSortOption.attribute_code.isEmpty())
                 }
             })
         }
+    }
+
+    private fun clearSelectedSortOption() {
+        mViewModel.selectedSortOption = ProductListingDataClass.SortOptionResponse("","")
+        sortOptionAdapter?.let { it.notifyDataSetChanged()}
     }
 
     private fun observeSortOptions() {
@@ -183,13 +192,13 @@ class ProductListingFragment: BaseFragment() {
 
     private fun callInitialApis() {
         if (Utils.isConnectionAvailable(activity as Context)) {
-            mViewModel.getFilterOptions(categoryId)
-            mViewModel.getSortOptions()
 
             if(homeSearchQuery.isNotBlank()){
                 mBinding.etSearch.setText(homeSearchQuery)
                 handleSearchAction(homeSearchQuery)
             }else{
+                mViewModel.getFilterOptions(categoryId)
+                mViewModel.getSortOptions(Constants.SORT_TYPE_CATALOG)
                 callProductListingApi(categoryId)
             }
         } else {
@@ -224,7 +233,8 @@ class ProductListingFragment: BaseFragment() {
                 mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.theme_black_color))
                 mBinding.tvFilterOption.isEnabled = true
                 filterOptionAdapter.optionsList = filterList.filterNot { it.name == Constants.FILTER_PRICE_LABEL }
-                filterOptionBinding.filterList.expandGroup(0, true)
+                filterOptionAdapter.notifyDataSetChanged()
+                //filterOptionBinding.filterList.expandGroup(0, true)
             }else{
                 mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.hint_color))
                 mBinding.tvFilterOption.isEnabled = false
@@ -237,6 +247,7 @@ class ProductListingFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val gridLayoutManager = GridLayoutManager(view.context, COLUMN_TWO)
         gridLayoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup(){
@@ -290,23 +301,37 @@ class ProductListingFragment: BaseFragment() {
             sortOptionDialog.show()
         }
 
+
+        et_search.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.isNullOrBlank().not()){
+                    mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
+                }
+            }
+
+        })
+
         et_search.setOnTouchListener(View.OnTouchListener { v, event ->
             val DRAWABLE_RIGHT = 2
-
             if(event.getAction() == MotionEvent.ACTION_UP) {
                 if(event.rawX >= et_search.right - et_search.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
                     if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
                         et_search.setText("")
                         return@OnTouchListener true
                     }else if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.search))){
-                        //todo call search api
-                        callProductListingApi(categoryId, et_search.text.toString(), true)
+                        if(et_search.text.isNotBlank()){
+                            handleSearchAction(et_search.text.toString())
+                            mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0)
+                        }else{
+                            Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
+                        }
                     }
-
-
                 }
             }
-
 
             false
         })
@@ -323,6 +348,10 @@ class ProductListingFragment: BaseFragment() {
 
     private fun handleSearchAction(searchQuery: String) {
         if(searchQuery.isEmpty().not()){
+            clearSelectedSortOption()
+            resetFilters()
+            mViewModel.getSearchFilterOptions(searchQuery)
+            mViewModel.getSortOptions(Constants.SORT_TYPE_SEARCH)
             performSearch(searchQuery)
             Utils.hideSoftKeypad(activity as Context)
             mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0)
@@ -366,7 +395,12 @@ class ProductListingFragment: BaseFragment() {
                     }else{
                         mViewModel.isFiltered = false
                     }
-                    callProductListingApi(categoryId)
+
+                    if(mViewModel.lastSearchQuery.isNotBlank()){
+                        callProductListingApi(query = mViewModel.lastSearchQuery, fromSearch = true)
+                    }else{
+                        callProductListingApi(categoryId)
+                    }
                 }else{
                     Toast.makeText(activity as Context, getString(R.string.empty_filter_option_selection_error), Toast.LENGTH_SHORT).show()
                 }
@@ -455,12 +489,15 @@ class ProductListingFragment: BaseFragment() {
         })
     }
 
-    fun callProductListingApi(catId: Int?, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false){
+    fun callProductListingApi(catId: Int? = 0, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false){
         if (Utils.isConnectionAvailable(activity as Context)) {
+
             if(fromPagination.not()){
                 showLoading()
             }
             mViewModel.getProductListing(catId, query, fromSearch, fromPagination)
+
+
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }

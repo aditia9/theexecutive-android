@@ -30,8 +30,8 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
     var productListResponse: ProductListingDataClass.ProductListingResponse? = null
 
-    fun getSortOptions() {
-        AppRepository.sortOptionApi(object : ApiCallback<ArrayList<ProductListingDataClass.SortOptionResponse>>{
+    fun getSortOptions(type: String) {
+        AppRepository.sortOptionApi(type, object : ApiCallback<ArrayList<ProductListingDataClass.SortOptionResponse>>{
             override fun onSuccess(sortOptions: ArrayList<ProductListingDataClass.SortOptionResponse>?) {
                 val tempOptions: ArrayList<ProductListingDataClass.SortOptionResponse> = ArrayList()
                 sortOptions?.let {
@@ -93,6 +93,32 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         })
     }
 
+    fun getSearchFilterOptions(query: String) {
+        AppRepository.searchFilterOptionApi(query, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
+            override fun onException(error: Throwable) {
+                Utils.printLog("search Filter option api", error.message?: "exception")
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog("search Filter option api", errorMsg)
+            }
+
+            override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
+
+                if (filterOptions?.total_count!! > 0) {
+                    filterOptions.run {
+                        for (filter in filterOptions.filters) {
+                            selectedFilterMap.put(filter.code, "")
+                        }
+                    }
+
+                    priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }[0]
+                }
+                filterOptionList?.value = filterOptions.filters.toMutableList()
+            }
+        })
+    }
+
     fun getProductListing(catId: Int?, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false) {
         isLoading = true
 
@@ -119,10 +145,11 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
                 }else{
                     productListResponse?.items?.addAll(response?.items as ArrayList)
+                    productListResponse?.total_count = response?.total_count ?: 0
                 }
 
                 productList.value = productListResponse?.items
-                noProductAvailable.value = productListResponse?.total_count
+                noProductAvailable.value = productListResponse?.items?.size
             }
         })
     }
@@ -140,32 +167,33 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
         if(fromSearch){
             requestMap.put(Constants.REQUEST_SEARCH_LABEL, query)
-        }else{
+        }else {
             requestMap.put(Constants.REQUEST_ID_LABEL, catId.toString())
+        }
 
-            if(selectedSortOption.attribute_code.isNotBlank()){
-                requestMap.put(Constants.SORT_OPTION_LABEL, selectedSortOption.attribute_code)
-                val dir = when{
-                    selectedSortOption.attribute_name.contains(Constants.HIGH_TO_LOW, true) -> Constants.DESC
-                    selectedSortOption.attribute_name.contains(Constants.LOW_TO_HIGH, true) -> Constants.ASC
-                    else -> ""
-                }
-
-                if(dir.isNotBlank()){
-                    requestMap.put(Constants.SORT_OPTION_DIR, dir)
-                }
+        if(selectedSortOption.attribute_code.isNotBlank()){
+            requestMap.put(Constants.SORT_OPTION_LABEL, selectedSortOption.attribute_code)
+            val dir = when{
+                selectedSortOption.attribute_name.contains(Constants.HIGH_TO_LOW, true) -> Constants.DESC
+                selectedSortOption.attribute_name.contains(Constants.LOW_TO_HIGH, true) -> Constants.ASC
+                else -> ""
             }
 
-            if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
-                selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.toFloat().toInt().toString() + "-" + selectedPriceRange.max.toFloat().toInt().toString())
-            }
-
-            for((key, value) in selectedFilterMap){
-                if(value.isNotBlank()){
-                    requestMap.put(key, value)
-                }
+            if(dir.isNotBlank()){
+                requestMap.put(Constants.SORT_OPTION_DIR, dir)
             }
         }
+
+        if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
+            selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.toFloat().toInt().toString() + "-" + selectedPriceRange.max.toFloat().toInt().toString())
+        }
+
+        for((key, value) in selectedFilterMap){
+            if(value.isNotBlank()){
+                requestMap.put(key, value)
+            }
+        }
+
 
         requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
         val page = (productList.value?.size)?.div(10)?.plus(1) ?: 1
