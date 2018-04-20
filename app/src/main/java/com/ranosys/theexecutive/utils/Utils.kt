@@ -159,6 +159,8 @@ object Utils {
     fun logout(context: Context){
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
         Toast.makeText(context, context.getString(R.string.logout_success_message), Toast.LENGTH_SHORT).show()
+        updateCartCount(0)
+        SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
     }
 

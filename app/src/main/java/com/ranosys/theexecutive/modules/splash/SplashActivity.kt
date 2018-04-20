@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.splash
 
+import AppLog
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
@@ -238,7 +239,11 @@ class SplashActivity : BaseActivity() {
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
-                Utils.updateCartCount(t?.toInt()?:0)
+                try {
+                    Utils.updateCartCount(t?.toInt() ?: 0)
+                }catch (e: NumberFormatException){
+                    AppLog.printStackTrace(e)
+                }
 
             }
 
