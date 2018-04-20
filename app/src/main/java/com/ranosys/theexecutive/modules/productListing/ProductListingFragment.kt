@@ -211,8 +211,8 @@ class ProductListingFragment: BaseFragment() {
 
             filterOptionBinding.priceRangeBar.setCurrency(priceFilter?.options?.get(0)?.label)
             val range = priceFilter?.options?.get(0)?.value
-            val min = range?.split("-")?.get(0)?.toFloat()
-            val max = range?.split("-")?.get(1)?.toFloat()
+            val min = range?.split("-")?.get(0)?.toLong()
+            val max = range?.split("-")?.get(1)?.toLong()
             if(max == min){
                 filterOptionDialog.price_range_bar.visibility = View.GONE
             }else{
@@ -407,8 +407,8 @@ class ProductListingFragment: BaseFragment() {
             })
 
             //price range bar listeners
-            filterOptionBinding.priceRangeBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Float>{
-                override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<Float>?, minValue: Float, maxValue: Float) {
+            filterOptionBinding.priceRangeBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Long>{
+                override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<Long>?, minValue: Long, maxValue: Long) {
                     if(minValue <= maxValue ){
                         filterOptionBinding.etMinPrice.setText(minValue.toString())
                         filterOptionBinding.etMaxPrice.setText(maxValue.toString())
@@ -426,7 +426,7 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = s.toString().toFloat()
+                        val input = s.toString().toLong()
                         filterOptionBinding.priceRangeBar.selectedMinValue = input
 
                     }
@@ -442,7 +442,7 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = s.toString().toFloat()
+                        val input = s.toString().toLong()
                         filterOptionBinding.priceRangeBar.selectedMaxValue = input
                     }
                 }

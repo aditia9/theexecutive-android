@@ -65,7 +65,7 @@ class ProductListingDataClass {
             val sku: String,
             val name: String,
             val attribute_set_id: Int,
-            val price: Double,
+            val price: String,
             val status: Int,
             val visibility: Int,
             val type_id: String,
@@ -86,8 +86,8 @@ class ProductListingDataClass {
             val stock_item: StockItem?,
             val configurable_product_options: List<ConfigurableProductOption>,
             val configurable_product_links: List<Int>,
-            val regular_price: Double,
-            val final_price: Double
+            val regular_price: String,
+            val final_price: String
     )
 
     data class ConfigurableProductOption(

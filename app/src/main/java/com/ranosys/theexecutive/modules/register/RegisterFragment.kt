@@ -78,7 +78,6 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
                 }
 
             } )
-
         })
 
         registerViewModel.apiSocialRegResponse?.observe(this, android.arch.lifecycle.Observer { token ->

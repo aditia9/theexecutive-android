@@ -233,7 +233,7 @@
                         android:layout_centerVertical="true"
                         android:textStyle="bold"
                         android:textSize="@dimen/sixteen_sp"
-                        android:text='@{"IDR " + Double.toString(productItemVM.productItem.price)}'
+                        android:text='@{"IDR " + productItemVM.productItem.price}'
                         />
 
                 </RelativeLayout>
