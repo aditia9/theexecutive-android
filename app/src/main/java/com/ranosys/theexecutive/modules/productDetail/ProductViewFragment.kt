@@ -56,8 +56,8 @@ class ProductViewFragment : BaseFragment() {
     var productColorValue : String? = ""
     var productSizeValue : String? = ""
     var selectedQty : Int = 1
-    var price : Double? = 0.0
-    var specialPrice : Double? = 0.0
+    var price : String? = "0.0"
+    var specialPrice : String? = "0.0"
     var colorMap = HashMap<String, String>()
     var sizeMap = HashMap<String, String>()
     var childProductsMap = HashMap<String, MutableList<ProductListingDataClass.MediaGalleryEntry>?>()
@@ -149,13 +149,11 @@ class ProductViewFragment : BaseFragment() {
             price = productItemViewModel.productItem?.extension_attributes?.regular_price
             specialPrice = productItemViewModel.productItem?.extension_attributes?.final_price
         }else{
-           // productItemViewModel.productItem?.run {
-                price = productItemViewModel.productItem?.price!!
-                val attributes = productItemViewModel.productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
-                if (attributes?.isNotEmpty()!!) {
-                    specialPrice = attributes[0].value.toString().toDouble()
-                }
-           // }
+            price = productItemViewModel.productItem?.price!!
+            val attributes = productItemViewModel.productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
+            if (attributes?.isNotEmpty()!!) {
+                specialPrice = attributes[0].value.toString()
+            }
         }
         if(price == specialPrice){
             tv_price.setText(Constants.IDR + price)
