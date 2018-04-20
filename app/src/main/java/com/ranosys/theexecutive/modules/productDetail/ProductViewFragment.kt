@@ -92,11 +92,13 @@ class ProductViewFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setData()
+        productItemViewModel.productItem?.run {
+            setData()
+        }
 
-        if(productItem?.type_id.equals("configurable")){
+        if(productItemViewModel.productItem?.type_id.equals("configurable")){
             rl_color_view.visibility = View.VISIBLE
-            getProductChildren(productItem?.sku)
+            getProductChildren(productItemViewModel.productItem?.sku)
         }
         else{
             rl_color_view.visibility = View.GONE
@@ -125,14 +127,14 @@ class ProductViewFragment : BaseFragment() {
 
         setDescription()
         setPrice()
-        setProductImages(productItem?.media_gallery_entries)
+        setProductImages(productItemViewModel.productItem?.media_gallery_entries)
         setColorImagesList()
         setWearWithProductsData()
     }
 
     fun setDescription(){
         try {
-            val productDescription = productItem?.custom_attributes?.filter { s ->
+            val productDescription = productItemViewModel.productItem?.custom_attributes?.filter { s ->
                 s.attribute_code == "short_description"
             }?.single()
             tv_description.setText(Html.fromHtml(productDescription?.value.toString()))
@@ -143,15 +145,17 @@ class ProductViewFragment : BaseFragment() {
     }
 
     fun setPrice(){
-        if(productItem?.type_id.equals(Constants.FILTER_CONFIGURABLE_LABEL)){
-            price = productItem?.extension_attributes?.regular_price
-            specialPrice = productItem?.extension_attributes?.final_price
+        if(productItemViewModel.productItem?.type_id.equals(Constants.FILTER_CONFIGURABLE_LABEL)){
+            price = productItemViewModel.productItem?.extension_attributes?.regular_price
+            specialPrice = productItemViewModel.productItem?.extension_attributes?.final_price
         }else{
-            price = productItem?.price
-            val attributes = productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
-            if(attributes?.isNotEmpty()!!) {
-                specialPrice = attributes[0].value.toString().toDouble()
-            }
+           // productItemViewModel.productItem?.run {
+                price = productItemViewModel.productItem?.price!!
+                val attributes = productItemViewModel.productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
+                if (attributes?.isNotEmpty()!!) {
+                    specialPrice = attributes[0].value.toString().toDouble()
+                }
+           // }
         }
         if(price == specialPrice){
             tv_price.setText(Constants.IDR + price)
@@ -164,8 +168,8 @@ class ProductViewFragment : BaseFragment() {
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         list_wear_with_products.layoutManager = linearLayoutManager
 
-        if(productItem?.product_links?.size!! > 0) {
-            val wearWithAdapter = WearWithProductsAdapter(activity as Context, productItem?.product_links)
+        if(productItemViewModel.productItem?.product_links?.size!! > 0) {
+            val wearWithAdapter = WearWithProductsAdapter(activity as Context, productItemViewModel.productItem?.product_links)
             list_wear_with_products.adapter = wearWithAdapter
             wearWithAdapter.setItemClickListener(object : WearWithProductsAdapter.OnItemClickListener {
                 override fun onItemClick(item: ProductListingDataClass.ProductLinks?) {
@@ -203,10 +207,10 @@ class ProductViewFragment : BaseFragment() {
     }
 
     fun setColorImagesList(){
-        productItem?.extension_attributes?.configurable_product_options?.run{
-            val length = productItem?.extension_attributes?.configurable_product_options?.size!!
+        productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.run{
+            val length = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.size!!
             for(i in 0..length-1) {
-                val option = productItem?.extension_attributes?.configurable_product_options?.get(i)
+                val option = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)
                 when (option?.label) {
                     "Color" -> {
                         option.values.forEachIndexed { index, value ->
@@ -217,7 +221,7 @@ class ProductViewFragment : BaseFragment() {
                             colorMap.put(index.toString(), value = value.value_index.toString())
                         }
                         AppLog.e("ColorList : " + colorMap.toString())
-                        colorAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
+                        colorAttrId = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
                         getProductOptions(colorAttrId, "color")
                     }
                     "Size" -> {
@@ -229,7 +233,7 @@ class ProductViewFragment : BaseFragment() {
                             sizeMap.put(index.toString(), value = value.value_index.toString())
                         }
                         AppLog.e("Sizelist : " + sizeMap.toString())
-                        sizeAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
+                        sizeAttrId = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
                         getProductOptions(sizeAttrId, "size")
                     }
                 }
@@ -331,7 +335,7 @@ class ProductViewFragment : BaseFragment() {
                         }.single().value.toString()
                         if (!childProductsMap.containsKey(colorValue)) {
                             if (colorValue.equals(productColorValue)) {
-                                childProductsMap.put(colorValue, productItem?.media_gallery_entries)
+                                childProductsMap.put(colorValue, productItemViewModel.productItem?.media_gallery_entries)
                             } else {
                                 childProductsMap.put(colorValue, it.media_gallery_entries)
                             }
@@ -482,7 +486,7 @@ class ProductViewFragment : BaseFragment() {
 
     private fun shareProductUrl() {
         val baseUrl = BuildConfig.API_URL
-        val url = productItem?.custom_attributes?.find { it.attribute_code == Constants.URL_KEY }.let { it?.value }.toString()
+        val url = productItemViewModel.productItem?.custom_attributes?.find { it.attribute_code == Constants.URL_KEY }.let { it?.value }.toString()
         val urlSuffix = Constants.URL_SUFFIX
         if(url.isNotBlank()){
             Utils.shareUrl(activity as Context, "$baseUrl$url$urlSuffix")
@@ -584,7 +588,7 @@ class ProductViewFragment : BaseFragment() {
 
     fun prepareAddToCartRequest(quoteId :  String?) : AddToCartRequest{
         var productOption : ProductOption? = null
-        if(productItem?.type_id.equals("configurable")){
+        if(productItemViewModel.productItem?.type_id.equals("configurable")){
             val colorOption = ConfigurableItemOption(colorAttrId, colorValue)
             val sizeOption = ConfigurableItemOption(sizeAttrId, sizeValue)
             val optionList : MutableList<ConfigurableItemOption> = mutableListOf()
@@ -608,7 +612,7 @@ class ProductViewFragment : BaseFragment() {
 
     fun openBottomSizeSheet()
     {
-        if(productItem?.type_id.equals("simple")){
+        if(productItemViewModel.productItem?.type_id.equals("simple")){
             sizeDilaog.rv_size_view.visibility = View.GONE
         }
         else{
@@ -639,8 +643,8 @@ class ProductViewFragment : BaseFragment() {
                         }
                     }
                     sizeValue = sizeView?.value
-                    if(productItem?.type_id.equals("simple")) {
-                        itemQty = productItem?.extension_attributes?.stock_item?.qty ?: 0
+                    if(productItemViewModel.productItem?.type_id.equals("simple")) {
+                        itemQty = productItemViewModel.productItem?.extension_attributes?.stock_item?.qty ?: 0
                     }
                     else{
                         try {

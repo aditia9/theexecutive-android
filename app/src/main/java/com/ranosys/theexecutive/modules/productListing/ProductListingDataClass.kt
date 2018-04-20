@@ -65,7 +65,7 @@ class ProductListingDataClass {
             val sku: String,
             val name: String,
             val attribute_set_id: Int,
-            val price: Double,
+            var price: Double,
             val status: Int,
             val visibility: Int,
             val type_id: String,

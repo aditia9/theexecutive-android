@@ -47,7 +47,7 @@ class ProductDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(null == productList){
+        if(null == productDetailViewModel.productList){
             if (Utils.isConnectionAvailable(activity as Context)) {
                 showLoading()
                 setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
@@ -57,7 +57,7 @@ class ProductDetailFragment : BaseFragment() {
             }
 
         }else{
-            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productList)
+            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList!!.get())
             product_viewpager.adapter = pagerAdapter
             product_viewpager.offscreenPageLimit = 2
             product_viewpager.setCurrentItem(position!!)
@@ -69,7 +69,7 @@ class ProductDetailFragment : BaseFragment() {
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                setToolBarParams(productList?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+                setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
             }
 
             override fun onPageSelected(position: Int) {
