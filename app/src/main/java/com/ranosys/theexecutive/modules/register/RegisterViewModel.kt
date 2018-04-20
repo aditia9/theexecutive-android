@@ -210,7 +210,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                 }
 
                 override fun onSuccess(response: RegisterDataClass.RegistrationResponse?) {
-                    callLoginApi()
+                    if(isSocialLogin) callLoginApi() else apiDirectRegSuccessResponse?.value = response
                 }
 
             })

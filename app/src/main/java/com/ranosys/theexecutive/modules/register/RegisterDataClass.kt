@@ -73,7 +73,7 @@ class RegisterDataClass {
             val telephone: String,
             val postcode: String,
             val city: String,
-            val prefix: String = "Mr.",
+            val prefix: String = "",
             val firstname: String,
             val lastname: String,
             val default_shipping: Boolean,

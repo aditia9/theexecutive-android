@@ -35,10 +35,13 @@
             android:layout_below="@+id/tv_size"
             android:layout_marginTop="10dp"
             android:gravity="center"
+            android:layout_alignLeft="@+id/tv_size"
+            android:layout_alignRight="@+id/tv_size"
             android:layout_centerHorizontal="true"
-            android:text="out of stock"
+            android:text="@string/out_of_stock"
             android:textSize="10sp"
             android:visibility="gone"
+            android:textColor="@android:color/holo_red_dark"
             />
 
     </RelativeLayout>

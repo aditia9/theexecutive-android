@@ -118,7 +118,7 @@
     <string name="chat">CHAT</string>
     <string name="close_app_text">Are you sure you want to close application?</string>
     <string name="network_err_text">No Internet Connection</string>
-    <string name="verify_email_message">Please verify email</string>
+    <string name="verify_email_message">Welcome aboard, you are now a member of The Executive. Kindly Verify your email.</string>
     <string name="register_successfull">Welcome aboard, you are now a member of The Executive.</string>
     <string name="logout_success_message">Logout successfully</string>
     <string name="non_breakable_apace">\u00A0</string>
@@ -154,6 +154,7 @@
     <string name="add_to_cart_success_msg">Product added to bag</string>
     <string name="available_colors">Available Colors</string>
     <string name="wishlist_success_msg">Product added to wishlist</string>
+    <string name="out_of_stock">Out of stock</string>
 
 
 </resources>
