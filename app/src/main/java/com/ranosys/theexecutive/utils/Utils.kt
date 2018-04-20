@@ -27,6 +27,8 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import java.text.NumberFormat
+import java.util.*
 import java.util.regex.Pattern
 
 
@@ -238,5 +240,19 @@ object Utils {
 
     fun updateCartCount(count: Int) {
         GlobalSingelton.instance?.cartCount?.value = count
+    }
+
+    fun getFromattedPrice(price: String): String {
+        val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
+        val p = price.toDouble()
+        return numberFormatter.format(p)
+    }
+
+    fun getDoubleFromFormattedPrice(price: String): Double {
+        return price.replace(",", "").toDouble()
+    }
+
+    fun getStringFromFormattedPrice(price: String): String {
+        return price.replace(",", "")
     }
 }

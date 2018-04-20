@@ -16,7 +16,7 @@ class ProductListingDataClass {
                                 var specialPrice: String = "2,42.900",
                                 var type: String = "New",
                                 var discountPer: Int = 40,
-                                var collectionTag: String = "Chinese Collections",
+                                var collectionTag: String = "",
                                 var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
 
 
@@ -87,7 +87,8 @@ class ProductListingDataClass {
             val configurable_product_options: List<ConfigurableProductOption>,
             val configurable_product_links: List<Int>,
             val regular_price: String,
-            val final_price: String
+            val final_price: String,
+            val tag_text: String = ""
     )
 
     data class ConfigurableProductOption(

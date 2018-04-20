@@ -78,5 +78,6 @@ object Constants {
         val URL_SUFFIX: String = ".html"
         val SORT_TYPE_CATALOG: String = "catalog"
         val SORT_TYPE_SEARCH: String = "search"
+        val LIST_TAG_KEY: String = "tag_text"
 
 }

@@ -75,16 +75,17 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val sku = product.sku
             val name = product.name
             val productType = product.type_id
+            val tag: String? = product.extension_attributes.tag_text ?: ""
             var price: String
             var specialPrice = "0.0"
             if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
-                price = product.extension_attributes.regular_price
-                specialPrice = product.extension_attributes.final_price
+                price = Utils.getFromattedPrice(product.extension_attributes.regular_price)
+                specialPrice = Utils.getFromattedPrice(product.extension_attributes.final_price)
             }else{
-                price = product.price
+                price = Utils.getFromattedPrice(product.price)
                 val attributes = product.custom_attributes.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }.toList()
                 if(attributes.isNotEmpty()) {
-                    specialPrice = attributes[0].value.toString()
+                    specialPrice = Utils.getFromattedPrice(attributes[0].value.toString())
                 }
             }
 
@@ -102,7 +103,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             }
             val type = if(toDate.isNotBlank() && fromDate.isNotBlank()) isNewProduct(fromDate, toDate) else ""
 
-            val discount = (((price.toDouble() - specialPrice.toDouble()).div(price.toDouble())).times(100)).toInt()
+            val discount = (((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100)).toInt()
             var imgUrl = ""
             if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0]?.file.toString()
 
@@ -112,6 +113,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
                     normalPrice = price,
                     specialPrice = specialPrice,
                     type = type,
+                    collectionTag = tag ?:  "",
                     discountPer = discount,
                     imageUrl = imgUrl)
 

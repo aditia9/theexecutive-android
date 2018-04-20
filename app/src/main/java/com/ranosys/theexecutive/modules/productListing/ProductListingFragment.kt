@@ -49,6 +49,7 @@ class ProductListingFragment: BaseFragment() {
     private lateinit var sortOptionDialog: Dialog
     private lateinit var linearLayoutManager: LinearLayoutManager
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val data = arguments
@@ -221,8 +222,8 @@ class ProductListingFragment: BaseFragment() {
                 filterOptionBinding.priceRangeBar.setRangeValues(min, max)
                 filterOptionBinding.priceRangeBar.selectedMinValue = min
                 filterOptionBinding.priceRangeBar.selectedMaxValue = max
-                filterOptionBinding.etMinPrice.setText(min.toString())
-                filterOptionBinding.etMaxPrice.setText(max.toString())
+                filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
+                filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
             }
         })
     }
@@ -393,8 +394,8 @@ class ProductListingFragment: BaseFragment() {
                     mViewModel.clearExistingList()
                     if(isFilterChanged){
                         mViewModel.isFiltered = true
-                        mViewModel.selectedPriceRange.min = filterOptionBinding.etMinPrice.text.toString()
-                        mViewModel.selectedPriceRange.max = filterOptionBinding.etMaxPrice.text.toString()
+                        mViewModel.selectedPriceRange.min = Utils.getStringFromFormattedPrice(filterOptionBinding.etMinPrice.text.toString())
+                        mViewModel.selectedPriceRange.max = Utils.getStringFromFormattedPrice(filterOptionBinding.etMaxPrice.text.toString())
                     }else{
                         mViewModel.isFiltered = false
                     }
@@ -413,8 +414,8 @@ class ProductListingFragment: BaseFragment() {
             filterOptionBinding.priceRangeBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Long>{
                 override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<Long>?, minValue: Long, maxValue: Long) {
                     if(minValue <= maxValue ){
-                        filterOptionBinding.etMinPrice.setText(minValue.toString())
-                        filterOptionBinding.etMaxPrice.setText(maxValue.toString())
+                        filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(minValue.toString()))
+                        filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(maxValue.toString()))
                     }
                 }
 
@@ -429,7 +430,7 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = s.toString().toLong()
+                        val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
                         filterOptionBinding.priceRangeBar.selectedMinValue = input
 
                     }
@@ -445,7 +446,7 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = s.toString().toLong()
+                        val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
                         filterOptionBinding.priceRangeBar.selectedMaxValue = input
                     }
                 }
