@@ -75,8 +75,8 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val sku = product.sku
             val name = product.name
             val productType = product.type_id
-            val price: Double
-            var specialPrice = 0.0
+            var price: String
+            var specialPrice = "0.0"
             if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
                 price = product.extension_attributes.regular_price
                 specialPrice = product.extension_attributes.final_price
@@ -84,7 +84,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
                 price = product.price
                 val attributes = product.custom_attributes.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }.toList()
                 if(attributes.isNotEmpty()) {
-                    specialPrice = attributes[0].value.toString().toDouble()
+                    specialPrice = attributes[0].value.toString()
                 }
             }
 
@@ -102,15 +102,15 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             }
             val type = if(toDate.isNotBlank() && fromDate.isNotBlank()) isNewProduct(fromDate, toDate) else ""
 
-            val discount = (((price - specialPrice).div(price)).times(100)).toInt()
+            val discount = (((price.toDouble() - specialPrice.toDouble()).div(price.toDouble())).times(100)).toInt()
             var imgUrl = ""
             if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0]?.file.toString()
 
             val product = ProductListingDataClass.ProductMaskedResponse(
                     sku = sku,
                     name = name,
-                    normalPrice = price.toString(),
-                    specialPrice = specialPrice.toString(),
+                    normalPrice = price,
+                    specialPrice = specialPrice,
                     type = type,
                     discountPer = discount,
                     imageUrl = imgUrl)

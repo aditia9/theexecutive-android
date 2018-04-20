@@ -25,7 +25,6 @@ import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
 import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
-import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -312,50 +311,6 @@ class CategoryFragment : BaseFragment() {
     private fun slideDown(child: TabLayout) {
         child.clearAnimation()
         child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
-    }
-
-    private fun prepareProductList(item: PromotionsResponseDataClass): List<ProductListingDataClass.Item>? {
-        val media = ProductListingDataClass.MediaGalleryEntry(id = 0,
-                disabled = false,
-                file = item.image!!,
-                label = "",
-                media_type = "",
-                position = 0,
-                types = mutableListOf())
-
-        val mediaEntries = mutableListOf<ProductListingDataClass.MediaGalleryEntry>()
-        mediaEntries.add(media)
-
-        val ext_attr = ProductListingDataClass.ExtensionAttributes( website_ids = mutableListOf(),
-                category_links = mutableListOf(),
-                configurable_product_links = mutableListOf(),
-                final_price = 0.0,
-                regular_price = 0.0,
-                configurable_product_options = mutableListOf(),
-                stock_item = null)
-        val product = ProductListingDataClass.Item(id = 0,
-                name = item.title ?: "",
-                sku = item.value,
-                attribute_set_id = 0,
-                created_at = item.created_at!!,
-                price = 0.0,
-                visibility = 0,
-                updated_at = item.created_at,
-                weight = 0.0,
-                type_id = item.type!! ,
-                status = 0,
-                options = mutableListOf(),
-                custom_attributes = mutableListOf(),
-                tier_prices = mutableListOf(),
-                product_links = mutableListOf(),
-                extension_attributes = ext_attr,
-                media_gallery_entries = mediaEntries
-        )
-
-        val productList = mutableListOf<ProductListingDataClass.Item>()
-        productList.add(product)
-
-        return productList
     }
 
 }
