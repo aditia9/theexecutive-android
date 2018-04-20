@@ -447,7 +447,11 @@ class ProductViewFragment : BaseFragment() {
             response ->
             val userCount = response?.apiResponse ?: response?.error
             if(userCount is String){
-                Utils.updateCartCount(userCount.toInt())
+                try {
+                    Utils.updateCartCount(userCount.toInt())
+                }catch (e : NumberFormatException){
+                    AppLog.printStackTrace(e)
+                }
             }
             else {
                 Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
@@ -471,7 +475,11 @@ class ProductViewFragment : BaseFragment() {
             response ->
             val guestCount = response?.apiResponse ?: response?.error
             if(guestCount is String){
-                Utils.updateCartCount(guestCount.toInt())
+                try {
+                    Utils.updateCartCount(guestCount.toInt())
+                }catch (e: NumberFormatException){
+                    AppLog.printStackTrace(e)
+                }
             }
             else {
                 Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()

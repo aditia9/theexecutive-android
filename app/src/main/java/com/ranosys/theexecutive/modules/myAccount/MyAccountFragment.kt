@@ -106,6 +106,7 @@ class MyAccountFragment: BaseFragment() {
                             context.getString(R.string.yes), context.getString(R.string.no), object : DialogOkCallback {
                         override fun setDone(done: Boolean) {
                             Utils.logout(item.context)
+
                         }
                     })
                 })

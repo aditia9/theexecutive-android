@@ -186,7 +186,11 @@ class LoginFragment() : BaseFragment() {
             response ->
             val userCount = response?.apiResponse ?: response?.error
             if(userCount is String){
-                Utils.updateCartCount(userCount.toInt())
+                try {
+                    Utils.updateCartCount(userCount.toInt())
+                }catch (e : NumberFormatException){
+                    AppLog.printStackTrace(e)
+                }
             }
             else {
                 Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
