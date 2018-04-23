@@ -120,7 +120,6 @@
             android:layout_height="@dimen/match_constraint"
             android:divider="@null"
             android:childDivider="@null"
-            android:groupIndicator="@null"
             android:choiceMode = "singleChoice"
             android:scrollbars="none"
             android:layout_marginTop="@dimen/twenty_four_dp"

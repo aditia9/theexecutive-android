@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.SoftKeyboardStateWatcher
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
 import com.ranosys.theexecutive.utils.DialogOkCallback
@@ -28,6 +29,7 @@ class ForgotPasswordFragment: BaseFragment() {
         forgotPassVM = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         mBinding.vm = forgotPassVM
 
+        handleKeyboard(mBinding.root)
         observeApiSuccess()
         observeApiFailure()
         return mBinding.root
@@ -75,6 +77,19 @@ class ForgotPasswordFragment: BaseFragment() {
 
                 })
 
+            }
+        })
+    }
+
+    fun handleKeyboard(view: View) {
+        val keyboardStateListener = SoftKeyboardStateWatcher(view)
+        keyboardStateListener.addSoftKeyboardStateListener(object : SoftKeyboardStateWatcher.SoftKeyboardStateListener {
+            override fun onSoftKeyboardOpened(keyboardHeightInPx: Int) {
+                mBinding.btnSubmit.visibility = View.INVISIBLE
+            }
+
+            override fun onSoftKeyboardClosed() {
+                mBinding.btnSubmit.visibility = View.VISIBLE
             }
         })
     }

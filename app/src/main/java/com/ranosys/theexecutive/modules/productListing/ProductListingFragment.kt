@@ -471,8 +471,8 @@ class ProductListingFragment: BaseFragment() {
         mViewModel.selectedPriceRange.min = ""
         mViewModel.selectedPriceRange.max = ""
         filterOptionBinding.priceRangeBar.resetSelectedValues()
-        filterOptionDialog.et_max_price.setText(filterOptionBinding.priceRangeBar.selectedMaxValue.toString())
-        filterOptionDialog.et_min_price.setText(filterOptionBinding.priceRangeBar.selectedMinValue.toString())
+        filterOptionDialog.et_max_price.setText(Utils.getFromattedPrice(filterOptionBinding.priceRangeBar.selectedMaxValue.toString()))
+        filterOptionDialog.et_min_price.setText(Utils.getFromattedPrice(filterOptionBinding.priceRangeBar.selectedMinValue.toString()))
 
         //reset other filters
         val keys = mViewModel.selectedFilterMap.keys

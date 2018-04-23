@@ -32,6 +32,7 @@
                 android:theme="@style/myAppTheme"
                 android:singleLine="true"
                 android:inputType="text"
+                android:hint="@string/search"
                 android:imeOptions="actionSearch"
                 android:drawableEnd="@drawable/search"
                 android:backgroundTint="@color/theme_accent_color"/>

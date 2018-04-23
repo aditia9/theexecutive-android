@@ -156,9 +156,9 @@ class ProductViewFragment : BaseFragment() {
             }
         }
         if(price == specialPrice){
-            tv_price.setText(Constants.IDR + price)
+            tv_price.setText(Constants.IDR + Utils.getFromattedPrice(price ?: ""))
         }else {
-            tv_price.setText(Constants.IDR + specialPrice)
+            tv_price.setText(Constants.IDR + Utils.getFromattedPrice(specialPrice ?: ""))
         }
     }
 
@@ -575,7 +575,7 @@ class ProductViewFragment : BaseFragment() {
         })
 
         sizeDilaog.img_forward.setOnClickListener {
-            if(selectedQty <= itemQty!!){
+            if(selectedQty < itemQty!!){
                 selectedQty++
                 sizeDilaog.tv_quantity.text = selectedQty.toString()
             }else{
@@ -632,10 +632,11 @@ class ProductViewFragment : BaseFragment() {
         }
 
         if(price == specialPrice){
-            sizeDilaog.tv_product_price.setText(Constants.IDR + price)
+            sizeDilaog.tv_product_price.setText(Constants.IDR + Utils.getFromattedPrice(price ?: ""))
         }else {
-            sizeDilaog.tv_product_price.setText(Constants.IDR + specialPrice)
+            sizeDilaog.tv_product_price.setText(Constants.IDR + Utils.getFromattedPrice(specialPrice ?: ""))
         }
+
         sizeDilaog.tv_quantity.text = selectedQty.toString()
 
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)

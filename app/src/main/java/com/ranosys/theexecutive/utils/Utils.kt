@@ -247,8 +247,12 @@ object Utils {
 
     fun getFromattedPrice(price: String): String {
         val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
-        val p = price.toDouble()
-        return numberFormatter.format(p)
+        if(price.isNotBlank()){
+            val p = price.toDouble()
+            return numberFormatter.format(p)
+        }else{
+            return price
+        }
     }
 
     fun getDoubleFromFormattedPrice(price: String): Double {

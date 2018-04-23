@@ -105,7 +105,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
             override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
 
-                if (filterOptions?.total_count!! > 0) {
+                if (filterOptions?.filters?.isNotEmpty()!!) {
                     filterOptions.run {
                         for (filter in filterOptions.filters) {
                             selectedFilterMap.put(filter.code, "")
