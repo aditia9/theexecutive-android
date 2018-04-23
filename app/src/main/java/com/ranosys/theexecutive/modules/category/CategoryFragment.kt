@@ -8,13 +8,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.annotation.Nullable
-import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
-import android.widget.AbsListView
 import android.widget.ExpandableListView
 import android.widget.TextView
 import android.widget.Toast
@@ -116,19 +114,19 @@ class CategoryFragment : BaseFragment() {
             }
         })
 
-        elv_parent_category.setOnScrollListener(object: AbsListView.OnScrollListener{
-            override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-            }
-
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                if(scrollState != 0){
-                    slideDown(view.rootView.findViewById(R.id.tabLayout))
-                }else{
-                    slideUp(view.rootView.findViewById(R.id.tabLayout))
-                }
-            }
-
-        })
+//        elv_parent_category.setOnScrollListener(object: AbsListView.OnScrollListener{
+//            override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+//            }
+//
+//            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+//                if(scrollState != 0){
+//                    slideDown(view.rootView.findViewById(R.id.tabLayout))
+//                }else{
+//                    slideUp(view.rootView.findViewById(R.id.tabLayout))
+//                }
+//            }
+//
+//        })
 
         et_search_home.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
@@ -305,14 +303,14 @@ class CategoryFragment : BaseFragment() {
         return queryMap
     }
 
-    private fun slideUp(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(0f).duration = Constants.AIMATION_DURATION
-    }
-
-    private fun slideDown(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
-    }
+//    private fun slideUp(child: TabLayout) {
+//        child.clearAnimation()
+//        child.animate().translationY(0f).duration = Constants.AIMATION_DURATION
+//    }
+//
+//    private fun slideDown(child: TabLayout) {
+//        child.clearAnimation()
+//        child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
+//    }
 
 }
