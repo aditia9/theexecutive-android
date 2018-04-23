@@ -47,7 +47,7 @@ class ProductDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(null == productDetailViewModel.productList){
+        if(null == productDetailViewModel.productList?.get()){
             if (Utils.isConnectionAvailable(activity as Context)) {
                 showLoading()
                 setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
@@ -99,8 +99,8 @@ class ProductDetailFragment : BaseFragment() {
                     setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
                     pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productList)
                     product_viewpager.adapter = pagerAdapter
-                    product_viewpager.offscreenPageLimit = 2
-                    product_viewpager.setCurrentItem(position!!)
+                   // product_viewpager.offscreenPageLimit = 2
+                   // product_viewpager.setCurrentItem(position!!)
                     hideLoading()
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()

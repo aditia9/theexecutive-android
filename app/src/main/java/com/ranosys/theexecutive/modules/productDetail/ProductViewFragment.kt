@@ -102,6 +102,8 @@ class ProductViewFragment : BaseFragment() {
         }
         else{
             rl_color_view.visibility = View.GONE
+          //  maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty))
+
         }
 
         img_one.setOnClickListener{
@@ -298,7 +300,6 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_wishlist -> {
-
                     if (Utils.isConnectionAvailable(activity as Context)) {
                         //check for logged in user
                         if((SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY) ?: "").isBlank()){
@@ -341,7 +342,7 @@ class ProductViewFragment : BaseFragment() {
                         val sizeValue = it.custom_attributes.filter { s ->
                             s.attribute_code == "size"
                         }.single().value.toString()
-                        maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty))
+                        maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty, it.extension_attributes.stock_item.is_in_stock))
                     }
 
                     AppLog.e("maxQuantityList : " + maxQuantityList.toString())
@@ -540,9 +541,9 @@ class ProductViewFragment : BaseFragment() {
     fun setSizeViewList(){
         sizeOptionList?.forEachIndexed { index, it ->
             if(index == 0)
-                sizeViewList?.add(SizeView(it.label, colorAttrId, it.value,true))
+                sizeViewList?.add(SizeView(it.label, sizeAttrId, it.value,true))
             else
-                sizeViewList?.add(SizeView(it.label, colorAttrId, it.value,false))
+                sizeViewList?.add(SizeView(it.label, sizeAttrId, it.value,false))
         }
         AppLog.e("sizeViewList : " + sizeViewList.toString())
     }
@@ -642,7 +643,7 @@ class ProductViewFragment : BaseFragment() {
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         sizeDilaog.rv_size_view.layoutManager = linearLayoutManager
         if(sizeViewList?.size!! > 0) {
-            val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList)
+            val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList, colorValue, maxQuantityList)
             sizeDilaog.rv_size_view.adapter = sizeViewAdapter
             sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(sizeView: ProductViewFragment.SizeView?, position: Int) {
@@ -675,6 +676,11 @@ class ProductViewFragment : BaseFragment() {
                 }
             })
         }
+        else{
+            if(productItemViewModel.productItem?.type_id.equals("simple")) {
+                itemQty = productItemViewModel.productItem?.extension_attributes?.stock_item?.qty ?: 0
+            }
+        }
         sizeDilaog.show()
     }
 
@@ -700,7 +706,7 @@ class ProductViewFragment : BaseFragment() {
 
     data class SizeView(var label: String?, var attr_id:String?, var value : String?, var isSelected : Boolean?)
 
-    data class MaxQuantity(var colorValue : String?, var sizeValue : String?, var maxQuantity : Int?)
+    data class MaxQuantity(var colorValue : String?, var sizeValue : String?, var maxQuantity : Int?, var isInStock : Boolean = true)
 
     companion object {
 

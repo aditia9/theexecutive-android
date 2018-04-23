@@ -56,16 +56,19 @@ android {
             dimension "client"
             resValue "string", 'app_name', "U-The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
+            resValue "string", 'gmail_server_client_id', "818064356485-10k3t4advim6o7q6va6sp2871qav62cb.apps.googleusercontent.com"
         }
         devClient {
             dimension "client"
             resValue "string", 'app_name', "D-The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
+            resValue "string", 'gmail_server_client_id', "818064356485-qngnpc7p61h2mmdj9g4m06pqkkrgfj17.apps.googleusercontent.com"
         }
         qatClient {
             dimension "client"
             resValue "string", 'app_name', "Q-The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
+            resValue "string", 'gmail_server_client_id', "818064356485-luk874vpg4hs0k563g9pdca87me1krc0.apps.googleusercontent.com"
         }
 
         production {
