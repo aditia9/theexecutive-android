@@ -44,6 +44,7 @@
                 android:text="@{Integer.toString(toolbarViewModel.cartCount)}"
                 android:layout_marginRight="@dimen/sixteen_dp"
                 android:paddingTop="@dimen/five_dp"
+                android:textSize="@dimen/twelve_sp"
                 android:gravity="center_vertical|center_horizontal"
                 android:contentDescription="@string/toolbar_right_icon"
                 android:visibility="@{toolbarViewModel.isRightIconVisible() ? View.VISIBLE : View.GONE,  default = visible}"

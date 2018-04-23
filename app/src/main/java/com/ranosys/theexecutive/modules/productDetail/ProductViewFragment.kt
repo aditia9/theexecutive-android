@@ -564,7 +564,13 @@ class ProductViewFragment : BaseFragment() {
             if(userToken.isNullOrBlank().not()){
                 productItemViewModel.getCartIdForUser(userToken)
             }else{
+                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY) ?: ""
+                if(guestCartId.isNotBlank()){
+                    productItemViewModel.addToGuestCart(prepareAddToCartRequest(guestCartId))
+                }else{
+
                 productItemViewModel.getCartIdForGuest()
+                }
             }
         })
 

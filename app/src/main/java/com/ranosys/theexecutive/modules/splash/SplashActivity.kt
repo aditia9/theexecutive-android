@@ -56,8 +56,11 @@ class SplashActivity : BaseActivity() {
 
         //if user logged in get his cart count and cart id
         val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val guestCardId= SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY) ?: ""
         if(userToken.isNullOrBlank().not()){
             getCartIdForUser(userToken)
+        }else if(guestCardId.isNotBlank()){
+            getGuestCartCount(guestCardId)
         }
 
 
@@ -247,6 +250,27 @@ class SplashActivity : BaseActivity() {
 
             }
 
+        })
+
+    }
+
+    fun getGuestCartCount(cartId: String) {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountGuest(cartId, object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+            }
+
+            override fun onError(errorMsg: String) {
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                try {
+                    Utils.updateCartCount(t?.toInt() ?: 0)
+                }catch (e: NumberFormatException){
+                    AppLog.printStackTrace(e)
+                }
+            }
         })
 
     }
