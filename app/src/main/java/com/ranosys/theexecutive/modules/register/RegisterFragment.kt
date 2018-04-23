@@ -15,7 +15,6 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
-import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.*
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
@@ -74,7 +73,8 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             hideLoading()
             Utils.showDialog(activity as Context, getString(R.string.verify_email_message), context?.getString(android.R.string.ok), "", object: DialogOkCallback{
                 override fun setDone(done: Boolean) {
-                    FragmentUtils.addFragment(activity as Context, LoginFragment(), null, LoginFragment::class.java.name, false)
+                    //FragmentUtils.addFragment(activity as Context, LoginFragment(), null, LoginFragment::class.java.name, false)
+                    activity?.onBackPressed()
                 }
 
             } )

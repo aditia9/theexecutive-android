@@ -107,7 +107,7 @@
     <string name="select_gender_label">Select Gender</string>
     <string name="no_state_available_error">No state available for this country</string>
     <string name="no_cities_available_error">No cities available</string>
-    <string name="empty_country_error">Country Code is required.</string>
+    <string name="empty_country_error">Country is required.</string>
     <string name="empty_city_error">City is required.</string>
     <string name="empty_state_error">State is required.</string>
     <string name="yes">Yes</string>
@@ -115,7 +115,7 @@
     <string name="logout">Logout</string>
     <string name="existing_user_label">Existing Customer</string>
     <string name="new_user_label">New Customer</string>
-    <string name="chat">CHAT</string>
+    <string name="chat">Chat</string>
     <string name="close_app_text">Are you sure you want to close application?</string>
     <string name="network_err_text">No Internet Connection</string>
     <string name="verify_email_message">Welcome aboard, you are now a member of The Executive. Kindly Verify your email.</string>

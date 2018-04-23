@@ -82,7 +82,9 @@ class CategoryFragment : BaseFragment() {
                     }
 
                     Constants.PROMOTION_TYPE_CMS_PAGE -> {
-                        Utils.openCmsPage(activity as Context, item.value)
+                        if(item.value.isNotBlank()){
+                            Utils.openCmsPage(activity as Context, item.value)
+                        }
 
                     }
                 }

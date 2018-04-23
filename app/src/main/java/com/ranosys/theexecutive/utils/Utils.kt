@@ -22,7 +22,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
@@ -160,7 +159,6 @@ object Utils {
 
     fun logout(context: Context){
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
-        Toast.makeText(context, context.getString(R.string.logout_success_message), Toast.LENGTH_SHORT).show()
         updateCartCount(0)
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
@@ -227,9 +225,12 @@ object Utils {
 
 
     fun openPages(context: Context, url: String?) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(url)
-        context.startActivity(intent)
+        if((url ?: "").isNotBlank()){
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            context.startActivity(intent)
+        }
+
     }
 
     fun shareUrl(context: Context, url: String?) {

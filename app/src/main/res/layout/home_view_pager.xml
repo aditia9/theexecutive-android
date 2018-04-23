@@ -30,8 +30,6 @@
                     android:paddingTop="@dimen/fifteen_dp"
                     android:paddingBottom="@dimen/fifteen_dp"
                     android:textStyle="bold"
-                    android:ellipsize="end"
-                    android:maxLines="1"
                     />
 
         </RelativeLayout>

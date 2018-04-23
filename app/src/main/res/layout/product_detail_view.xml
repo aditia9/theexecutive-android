@@ -209,8 +209,8 @@
                     android:orientation="horizontal"
                     android:background="@color/white"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:paddingTop="@dimen/fifteen_dp"
-                    android:paddingBottom="@dimen/fifteen_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    android:paddingBottom="@dimen/ten_dp"
                     android:layout_below="@id/tv_wishlist"
                     >
 
@@ -222,7 +222,6 @@
                         android:padding="@dimen/ten_dp"
                         android:textStyle="bold"
                         android:background="@drawable/button_border"
-                        android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                         />
 
                     <TextView

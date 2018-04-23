@@ -100,7 +100,12 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    if(response.code() == 401){
+                        val errorBody = "The email address or password do not match with our system, Kindly enter the valid credentials"
+                        callBack.onError(errorBody)
+                    }else{
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }
                 } else {
                     callBack.onSuccess(response.body())
                 }
