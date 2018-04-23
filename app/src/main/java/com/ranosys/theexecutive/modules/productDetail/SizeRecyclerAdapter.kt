@@ -1,10 +1,12 @@
 package com.ranosys.theexecutive.modules.productDetail
 
+import AppLog
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.SizeViewLayoutBinding
@@ -14,15 +16,19 @@ import com.ranosys.theexecutive.databinding.SizeViewLayoutBinding
  * @Author Ranosys Technologies
  * @Date 16,Apr,2018
  */
-class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFragment.SizeView>?) : RecyclerView.Adapter<SizeRecyclerAdapter.Holder>() {
+class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragment.SizeView>?, colorValue: String?, maxQuantityList: MutableList<ProductViewFragment.MaxQuantity>?) : RecyclerView.Adapter<SizeRecyclerAdapter.Holder>() {
 
     var mContext : Context? = null
     var sizeViewList : List<ProductViewFragment.SizeView>? = null
     var clickListener: SizeRecyclerAdapter.OnItemClickListener? = null
+    var colorValue: String? = ""
+    var isInStockList: MutableList<ProductViewFragment.MaxQuantity>? = null
 
     init {
         mContext = context
         sizeViewList = list
+        this.colorValue = colorValue
+        isInStockList = maxQuantityList
     }
 
     interface OnItemClickListener {
@@ -46,7 +52,7 @@ class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFra
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(mContext, getItem(position), clickListener, position)
+        holder?.bind(mContext, getItem(position), clickListener, position, colorValue, isInStockList)
     }
 
     fun getItem(position: Int) : ProductViewFragment.SizeView?{
@@ -55,9 +61,9 @@ class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFra
 
     class Holder(var itemBinding: SizeViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context : Context?, colorView : ProductViewFragment.SizeView?, listener: OnItemClickListener?, position: Int){
-            itemBinding?.sizeView = colorView
-            if(colorView?.isSelected!!){
+        fun bind(context: Context?, sizeView: ProductViewFragment.SizeView?, listener: OnItemClickListener?, position: Int, colorValue: String?, inStockList: MutableList<ProductViewFragment.MaxQuantity>?){
+            itemBinding?.sizeView = sizeView
+            if(sizeView?.isSelected!!){
                 itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.drawable.size_border)
                 itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT_BOLD)
             }
@@ -65,8 +71,24 @@ class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFra
                 itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
                 itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
             }
+            try {
+               val inStock = inStockList?.filter {
+                    it.colorValue == colorValue && it.sizeValue == sizeView.value
+                }?.single()?.isInStock
+                if(inStock!!){
+                    itemBinding?.tvOutOfStock?.visibility = View.GONE
+                }else{
+                    itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
+                    itemBinding?.tvSize?.isEnabled = false
+                    itemBinding?.tvSize?.isClickable = false
+                    itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
+                    itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
+                }
+            }catch (e : Exception){
+                AppLog.printStackTrace(e)
+            }
             itemView.setOnClickListener {
-                listener?.onItemClick(colorView, position)
+                listener?.onItemClick(sizeView, position)
             }
         }
     }
