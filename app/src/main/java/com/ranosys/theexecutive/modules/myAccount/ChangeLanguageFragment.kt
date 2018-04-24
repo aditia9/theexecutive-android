@@ -18,8 +18,11 @@ import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.change_language_fragment.*
 
 /**
- * Created by nikhil on 16/3/18.
+ * @Details Fragment to show language selection
+ * @Author Ranosys Technologies
+ * @Date 16,Mar,2018
  */
+
 class ChangeLanguageFragment: BaseFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -50,7 +53,7 @@ class ChangeLanguageFragment: BaseFragment() {
             SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)!!
         }
 
-        selectedStore = GlobalSingelton.instance?.storeList!!.first()
+        selectedStore = GlobalSingelton.instance?.storeList?.first() ?: getDefaultStore()
 
         val storeListAdapter = StoreListAdapter(GlobalSingelton.instance?.storeList, selectedStoreCode)
         storeListAdapter.setItemClickListener(object: StoreListAdapter.OnItemClickListener {
@@ -73,8 +76,12 @@ class ChangeLanguageFragment: BaseFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
+    private fun getDefaultStore(): StoreResponse {
+        return  StoreResponse(id = 1,
+                name = Constants.DEFAULT_STORE_LANGUAGE,
+                code = Constants.DEFAULT_STORE_CODE,
+                store_group_id = 1,
+                website_id = 1)
     }
+
 }

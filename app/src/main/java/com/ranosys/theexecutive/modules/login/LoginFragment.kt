@@ -13,6 +13,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -37,7 +38,9 @@ import org.json.JSONObject
 import java.util.*
 
 /**
- * Created by Nikhil Agarwal on 23/2/18.
+ * @Details Fragment for login functionality
+ * @Author Ranosys Technologies
+ * @Date 02,March,2018
  */
 
 class LoginFragment : BaseFragment() {
@@ -46,6 +49,16 @@ class LoginFragment : BaseFragment() {
     private lateinit var mBinding: FragmentLoginBinding
     private lateinit var callBackManager: CallbackManager
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private var loginRequiredPrompt: Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val data = arguments
+        data?.let {
+            loginRequiredPrompt = data.get(Constants.LOGIN_REQUIRED_PROMPT) as Boolean
+        }
+
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -158,6 +171,30 @@ class LoginFragment : BaseFragment() {
 
             }
         })
+
+        loginViewModel.userCartIdResponse?.observe(this, Observer {
+            response ->
+            val userCartId = response?.apiResponse ?: response?.error
+            if(userCartId is String){
+                loginViewModel.getUserCartCount()
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        loginViewModel.userCartCountResponse?.observe(this, Observer {
+            response ->
+            val userCount = response?.apiResponse ?: response?.error
+            if(userCount is String){
+                Utils.updateCartCount(userCount.toInt())
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
     }
 
     private fun observeApiFailure() {
@@ -168,12 +205,13 @@ class LoginFragment : BaseFragment() {
                 }
             })
         })
-
     }
 
     private fun observeApiSuccess() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
+            //api to get cart id
+            loginViewModel.getCartIdForUser(token)
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
             SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
             FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)

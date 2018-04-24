@@ -1,0 +1,648 @@
+package com.ranosys.theexecutive.modules.productDetail
+
+import AppLog
+import android.app.Dialog
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.databinding.DataBindingUtil
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.support.v7.widget.LinearLayoutManager
+import android.text.Html
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.RelativeLayout
+import android.widget.Toast
+import com.ranosys.theexecutive.BuildConfig
+import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiResponse
+import com.ranosys.theexecutive.base.BaseFragment
+import com.ranosys.theexecutive.databinding.BottomSizeLayoutBinding
+import com.ranosys.theexecutive.databinding.ProductDetailViewBinding
+import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
+import com.ranosys.theexecutive.modules.login.LoginFragment
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
+import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.bottom_size_layout.*
+import kotlinx.android.synthetic.main.dialog_product_image.view.*
+import kotlinx.android.synthetic.main.product_detail_view.*
+import kotlinx.android.synthetic.main.product_images_layout.view.*
+
+/**
+ * @Details Fragment to show product description
+ * @Author Ranosys Technologies
+ * @Date 11,Apr,2018
+ */
+class ProductViewFragment : BaseFragment() {
+
+    lateinit var productItemViewModel : ProductItemViewModel
+    var productItem : ProductListingDataClass.Item? = null
+    var position : Int? = 0
+    var productSku : String? = ""
+    private var colorAttrId : String? = ""
+    var colorValue : String? = ""
+    private var sizeAttrId : String? = ""
+    var sizeValue : String? = ""
+    var itemQty : Int? = 1
+    private var productColorValue : String? = ""
+    private var productSizeValue : String? = ""
+    var selectedQty : Int = 0
+    var colorMap = HashMap<String, String>()
+    var sizeMap = HashMap<String, String>()
+    private var childProductsMap = HashMap<String, MutableList<ProductListingDataClass.MediaGalleryEntry>?>()
+    var colorOptionList : List<ProductOptionsResponse>? = null
+    var sizeOptionList : List<ProductOptionsResponse>? = null
+    private lateinit var sizeDilaogBinding: BottomSizeLayoutBinding
+    private lateinit var sizeDilaog: Dialog
+    var colorsViewList : MutableList<ColorsView>? = mutableListOf()
+    var sizeViewList : MutableList<SizeView>? = mutableListOf()
+    var maxQuantityList : MutableList<MaxQuantity>? = mutableListOf()
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false)
+        productItemViewModel = ViewModelProviders.of(this).get(ProductItemViewModel::class.java)
+        productItemViewModel.productItem = productItem
+        listGroupBinding?.productItemVM = productItemViewModel
+
+        sizeDilaogBinding = DataBindingUtil.inflate(inflater, R.layout.bottom_size_layout, container,  false)
+        prepareSizeDialog()
+
+        observeEvents()
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            getStaticPagesUrl()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+
+        return listGroupBinding!!.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setData()
+
+        if(productItem?.type_id.equals("configurable")){
+            rl_color_view.visibility = View.VISIBLE
+            getProductChildren(productItem?.sku)
+        }
+        else{
+            rl_color_view.visibility = View.GONE
+        }
+
+        img_one.setOnClickListener{
+            val drawable=img_one.drawable as BitmapDrawable
+            val bitmap=drawable.bitmap
+            openProdcutImage(bitmap)
+        }
+
+        img_two.setOnClickListener {
+            val drawable=img_two.drawable as BitmapDrawable
+            val bitmap=drawable.bitmap
+            openProdcutImage(bitmap)
+        }
+
+
+    }
+
+    private fun setData(){
+
+        setDescription()
+        setProductImages(productItem?.media_gallery_entries)
+        setColorImagesList()
+        setWearWithProductsData()
+    }
+
+    private fun setDescription(){
+        try {
+            val productDescription = productItem?.custom_attributes?.single { s ->
+                s.attribute_code == "short_description"
+            }
+            tv_description.text = Html.fromHtml(productDescription?.value.toString())
+        }catch (e : NoSuchElementException){
+            AppLog.printStackTrace(e)
+        }
+
+    }
+
+    private fun setWearWithProductsData(){
+        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
+        list_wear_with_products.layoutManager = linearLayoutManager
+
+        if(productItem?.product_links?.size!! > 0) {
+            val wearWithAdapter = WearWithProductsAdapter(activity as Context, productItem?.product_links)
+            list_wear_with_products.adapter = wearWithAdapter
+            wearWithAdapter.setItemClickListener(object : WearWithProductsAdapter.OnItemClickListener {
+                override fun onItemClick(item: ProductListingDataClass.ProductLinks?) {
+
+                }
+            })
+        }else {
+            rl_wear_with_layout.visibility = View.GONE
+        }
+
+    }
+
+    fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
+        Utils.setImageViewHeight(activity as Context, img_one, 27)
+        Utils.setImageViewHeight(activity as Context, img_two, 27)
+        if(mediaGalleryList?.size!! > 0)
+            productItemViewModel.urlOne.set(mediaGalleryList[0].file)
+        if(mediaGalleryList.size > 1)
+            productItemViewModel.urlTwo.set(mediaGalleryList[1].file)
+
+        val listSize = mediaGalleryList.size
+        for(i in 2..listSize.minus(1)){
+            val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
+            productImagesBinding?.mediaGalleryEntry = mediaGalleryList[i]
+            Utils.setImageViewHeight(activity as Context, productImagesBinding?.imgProductImage, 27)
+            val view = productImagesBinding!!.root.img_product_image
+            view.setOnClickListener {
+                val drawable=view.drawable as BitmapDrawable
+                val bitmap=drawable.bitmap
+                openProdcutImage(bitmap)
+            }
+            ll_color_choice.addView(productImagesBinding.root)
+        }
+    }
+
+    private fun setColorImagesList(){
+        productItem?.extension_attributes?.configurable_product_options?.run{
+            val length = productItem?.extension_attributes?.configurable_product_options?.size!!
+            for(i in 0 until length) {
+                val option = productItem?.extension_attributes?.configurable_product_options?.get(i)
+                when (option?.label) {
+                    Constants.COLOR -> {
+                        option.values.forEachIndexed { index, value ->
+                            if(index == 0) {
+                                productColorValue = value.value_index.toString()
+                                colorValue = productColorValue
+                            }
+                            colorMap[index.toString()] = value.value_index.toString()
+                        }
+                        AppLog.e("ColorList : " + colorMap.toString())
+                        colorAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
+                        getProductOptions(colorAttrId, "color")
+                    }
+                    Constants.SIZE -> {
+                        option.values.forEachIndexed { index, value ->
+                            if(index == 0) {
+                                productSizeValue = value.value_index.toString()
+                                sizeValue = productSizeValue
+                            }
+                            sizeMap[index.toString()] = value.value_index.toString()
+                        }
+                        AppLog.e("Sizelist : " + sizeMap.toString())
+                        sizeAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
+                        getProductOptions(sizeAttrId, "size")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getProductChildren(productSku : String?){
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            productItemViewModel.getProductChildren(productSku)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+    }
+
+    private fun getProductOptions(attributeId : String?, label : String?){
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            productItemViewModel.getProductOptions(attributeId, label)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+    }
+
+    private fun getStaticPagesUrl(){
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            productItemViewModel.getStaticPagesUrl()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+    }
+
+    private fun observeEvents(){
+        productItemViewModel.clickedAddBtnId?.observe(this, Observer<Int> { id ->
+            when (id){
+                R.id.btn_add_to_bag -> {
+                    openBottomSizeSheet()
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_composition_and_care -> {
+                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.composition_and_care)
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_size_guideline -> {
+                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_shipping -> {
+                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.shipping)
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_return -> {
+                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.returns)
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_share -> {
+                    shareProductUrl()
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_buying_guidelinie -> {
+                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.buying_guideline)
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_chat -> {
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+                R.id.tv_wishlist -> {
+
+                    if (Utils.isConnectionAvailable(activity as Context)) {
+                        //check for logged in user
+                        if((SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY) ?: "").isBlank()){
+                            //show toast to user to login
+                            Toast.makeText(activity as Context, getString(R.string.login_required_error), Toast.LENGTH_SHORT).show()
+                            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
+                            val bundle = Bundle()
+                            bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
+                            FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+                        }else{
+                            showLoading()
+                            productItemViewModel.callAddToWishListApi(colorAttrId, colorValue, sizeAttrId, sizeValue)
+                        }
+                    } else {
+                        Utils.showNetworkErrorDialog(activity as Context)
+                    }
+                    productItemViewModel.clickedAddBtnId?.value = null
+                }
+            }
+
+        })
+
+        productItemViewModel.productChildrenResponse?.observe(this, Observer<ApiResponse<List<ChildProductsResponse>>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if (response is List<*>) {
+                val list = response as List<ChildProductsResponse>
+
+                list.forEach {
+                    val colorValue = it.custom_attributes.single { s ->
+                        s.attribute_code == "color"
+                    }.value.toString()
+                    if (!childProductsMap.containsKey(colorValue)) {
+                        if (colorValue == productColorValue) {
+                            childProductsMap[colorValue] = productItem?.media_gallery_entries
+                        } else {
+                            childProductsMap[colorValue] = it.media_gallery_entries
+                        }
+                    }
+                    val sizeValue = it.custom_attributes.single { s ->
+                        s.attribute_code == "size"
+                    }.value.toString()
+                    maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty))
+                }
+
+                AppLog.e("maxQuantityList : " + maxQuantityList.toString())
+
+                setColorViewList()
+                setSizeViewList()
+
+                AppLog.e("ChildProductsMap : " + childProductsMap.toString())
+
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+        })
+
+        productItemViewModel.productOptionResponse?.observe(this, Observer<ApiResponse<List<ProductOptionsResponse>>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if (response is List<*>) {
+                val list = response as List<ProductOptionsResponse>
+                list[0].label
+                when(list[0].label){
+                    "color" -> {
+                        AppLog.e("color index : " + response[0].label!!)
+                        colorOptionList = list.filter {
+                            it.value in colorMap.values
+                        }
+                        AppLog.e("New color list : " + colorOptionList.toString())
+                    }
+                    "size" -> {
+                        AppLog.e("size index : " + response[0].label!!)
+                        sizeOptionList = list.filter {
+                            it.value in sizeMap.values
+                        }
+                        AppLog.e("New size list : " + sizeOptionList.toString())
+                    }
+                }
+
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+        })
+
+        productItemViewModel.staticPagesUrlResponse?.observe( this, Observer<ApiResponse<StaticPagesUrlResponse>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if(response is StaticPagesUrlResponse){
+                productItemViewModel.staticPages = response
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+        })
+
+        productItemViewModel.addToWIshListResponse?.observe(this, Observer { apiResponse ->
+            hideLoading()
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if(response is String){
+
+            }else{
+
+            }
+            Toast.makeText(activity as Context, response, Toast.LENGTH_SHORT).show()
+        })
+
+        productItemViewModel.addToCartResponse?.observe (this, Observer<ApiResponse<AddToCartResponse>> { apiResponse ->
+
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if(response is AddToCartResponse){
+                val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+
+                if(userToken.isNullOrBlank().not()){
+                    productItemViewModel.getUserCartCount()
+
+                }else{
+                    val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
+                    if(guestCartId.isNullOrBlank().not()){
+                        productItemViewModel.getGuestCartCount(guestCartId ?: "")
+                    }
+                }
+
+                Toast.makeText(activity as Context, getString(R.string.add_to_cart_success_msg),Toast.LENGTH_SHORT).show()
+
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+        })
+
+        productItemViewModel.userCartIdResponse?.observe(this, Observer {
+           response ->
+            val userCartId = response?.apiResponse ?: response?.error
+            if(userCartId is String){
+                productItemViewModel.addToUserCart(prepareAddToCartRequest(userCartId))
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        productItemViewModel.userCartCountResponse?.observe(this, Observer {
+            response ->
+            val userCount = response?.apiResponse ?: response?.error
+            if(userCount is String){
+                Utils.updateCartCount(userCount.toInt())
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        productItemViewModel.guestCartIdResponse?.observe(this, Observer {
+            response ->
+            val guestCartId = response?.apiResponse ?: response?.error
+            if(guestCartId is String){
+                productItemViewModel.addToGuestCart(prepareAddToCartRequest(guestCartId))
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        productItemViewModel.guestCartCountResponse?.observe(this, Observer {
+            response ->
+            val guestCount = response?.apiResponse ?: response?.error
+            if(guestCount is String){
+                Utils.updateCartCount(guestCount.toInt())
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+
+    }
+
+    private fun shareProductUrl() {
+        val baseUrl = BuildConfig.API_URL
+        val url = productItem?.custom_attributes?.find { it.attribute_code == Constants.URL_KEY }.let { it?.value }.toString()
+        val urlSuffix = Constants.URL_SUFFIX
+        if(url.isNotBlank()){
+            Utils.shareUrl(activity as Context, "$baseUrl$url$urlSuffix")
+        }
+
+    }
+
+    private fun setColorViewList(){
+        colorOptionList?.forEachIndexed { index, it ->
+            if(index == 0)
+                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap[it.value], true))
+            else
+                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap[it.value], false))
+
+        }
+        AppLog.e("colorsViewList : " + colorsViewList.toString())
+
+        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
+        rv_color_view.layoutManager = linearLayoutManager
+        if (colorsViewList?.size!! > 0) {
+            val colorViewAdapter = ColorRecyclerAdapter(activity as Context, colorsViewList)
+            rv_color_view.adapter = colorViewAdapter
+            colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(colorView: ProductViewFragment.ColorsView?, position: Int) {
+                    colorsViewList?.forEachIndexed { index,it ->
+                        colorsViewList?.get(index)?.isSelected = index == position
+                    }
+                    colorValue = colorView?.value
+                    colorViewAdapter.notifyDataSetChanged()
+
+                    colorView?.list?.let {
+                        ll_color_choice.removeAllViews()
+                        setProductImages(it)
+                    }
+                }
+            })
+        }
+
+    }
+
+    private fun setSizeViewList(){
+        sizeOptionList?.forEachIndexed { index, it ->
+            if(index == 0)
+                sizeViewList?.add(SizeView(it.label, colorAttrId, it.value,true))
+            else
+                sizeViewList?.add(SizeView(it.label, colorAttrId, it.value,false))
+        }
+        AppLog.e("sizeViewList : " + sizeViewList.toString())
+    }
+
+    private fun prepareSizeDialog() {
+        sizeDilaog = Dialog(activity, R.style.MaterialDialogSheet)
+        sizeDilaog.setContentView(sizeDilaogBinding.root)
+        sizeDilaog.setCancelable(true)
+        sizeDilaog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
+        sizeDilaog.window.setGravity(Gravity.BOTTOM)
+        if(productItem?.type_id.equals("simple")){
+            sizeDilaog.rv_size_view.visibility = View.GONE
+        }
+        else{
+            sizeDilaog.rv_size_view.visibility = View.VISIBLE
+        }
+        sizeDilaog.tv_price_dialog.text = Constants.IDR + productItem?.price.toString()
+
+        sizeDilaog.btn_done.setOnClickListener({
+            if(sizeDilaog.isShowing){
+                sizeDilaog.dismiss()
+            }
+
+            val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+
+            if(userToken.isNullOrBlank().not()){
+                productItemViewModel.getCartIdForUser()
+            }else{
+                productItemViewModel.getCartIdForGuest()
+            }
+        })
+
+        sizeDilaog.tv_quantity.text = selectedQty.toString()
+        sizeDilaog.img_forward.setOnClickListener {
+            if(selectedQty <= itemQty!!){
+                selectedQty++
+                sizeDilaog.tv_quantity.text = selectedQty.toString()
+            }else{
+                Toast.makeText(activity as Context, "No more product available", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        sizeDilaog.img_back.setOnClickListener {
+            if(selectedQty > 0){
+                selectedQty--
+                sizeDilaog.tv_quantity.text =  selectedQty.toString()
+            }
+        }
+
+        sizeDilaog.tv_size_guide.setOnClickListener { Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline) }
+
+    }
+
+    private fun prepareAddToCartRequest(quoteId :  String?) : AddToCartRequest{
+        val colorOption = ConfigurableItemOption(colorAttrId, colorValue)
+        val sizeOption = ConfigurableItemOption(sizeAttrId, sizeValue)
+
+        val optionList : MutableList<ConfigurableItemOption> = mutableListOf()
+        optionList.add(colorOption)
+        optionList.add(sizeOption)
+
+        val cartExtensionAttributes = CartExtensionAttributes( optionList)
+
+        val productOption = ProductOption(cartExtensionAttributes)
+
+        val cartItem = CartItem(sku = productSku,
+                qty = selectedQty,
+                quote_id = quoteId,
+                product_option = productOption,
+                extension_attributes = null
+        )
+
+        return AddToCartRequest(cartItem)
+    }
+
+    private fun openBottomSizeSheet()
+    {
+        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
+        sizeDilaog.rv_size_view.layoutManager = linearLayoutManager
+        if(sizeViewList?.size!! > 0) {
+            val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList)
+            sizeDilaog.rv_size_view.adapter = sizeViewAdapter
+            sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
+                override fun onItemClick(sizeView: ProductViewFragment.SizeView?, position: Int) {
+                    selectedQty = 0
+                    sizeDilaog.tv_quantity.text =  selectedQty.toString()
+                    sizeViewList?.forEachIndexed { index,it ->
+                        sizeViewList?.get(index)?.isSelected = index == position
+                    }
+                    sizeValue = sizeView?.value
+                    if(productItem?.type_id.equals("simple")) {
+                        itemQty = productItem?.extension_attributes?.stock_item?.qty ?: 0
+                    }
+                    else{
+                        try {
+                            if(maxQuantityList?.size!! > 0) {
+                                itemQty = maxQuantityList?.single { s ->
+                                    s.colorValue == colorValue && s.sizeValue == sizeValue
+                                }?.maxQuantity
+                            }
+                        }
+                        catch (e : NoSuchElementException){
+                            AppLog.printStackTrace(e)
+                        }
+                    }
+                    sizeViewAdapter.notifyDataSetChanged()
+                }
+            })
+        }
+        sizeDilaog.show()
+    }
+
+    private fun openProdcutImage(bitmap: Bitmap)
+    {
+        val view = layoutInflater.inflate(R.layout.dialog_product_image, null)
+        val mImageDialog = Dialog(activity, R.style.MaterialDialogSheet)
+        mImageDialog.setContentView(view)
+        mImageDialog.setCancelable(true)
+        mImageDialog.window.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+        mImageDialog.window.setGravity(Gravity.BOTTOM)
+        val imageView=view.rootView.product_imageview
+        imageView.setImageBitmap(bitmap)
+        val backImageView=view.rootView.cancel_img
+        backImageView.setOnClickListener {
+
+            mImageDialog.dismiss()
+        }
+        mImageDialog.show()
+    }
+
+    data class ColorsView(var label: String?, var attr_id:String?, var value : String?,
+                          var list : List<ProductListingDataClass.MediaGalleryEntry>?, var isSelected : Boolean?)
+
+    data class SizeView(var label: String?, var attr_id:String?, var value : String?, var isSelected : Boolean?)
+
+    data class MaxQuantity(var colorValue : String?, var sizeValue : String?, var maxQuantity : Int?)
+
+    companion object {
+
+        fun getInstance(productItem : ProductListingDataClass.Item?, productSku : String?, position : Int?) =
+                ProductViewFragment().apply {
+                    this.productItem = productItem
+                    this.productSku = productSku
+                    this.position = position
+                }
+
+    }
+
+}

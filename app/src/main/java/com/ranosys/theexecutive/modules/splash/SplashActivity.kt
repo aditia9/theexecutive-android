@@ -10,6 +10,7 @@ import android.text.TextUtils
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
+import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
@@ -23,7 +24,9 @@ import java.io.InputStreamReader
 
 
 /**
- * Created by nikhil on 2/3/18.
+ * @Details Splash activity
+ * @Author Ranosys Technologies
+ * @Date 02,March,2018
  */
 class SplashActivity : BaseActivity() {
 
@@ -34,17 +37,29 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+       // observeEvent()
+
         //check for auth token in SP if not get from assets
         if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
             val token: String = getAuthToken()
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
         }
 
-        //call configuration API
-        getConfigurationApi()
+        if (Utils.isConnectionAvailable(this)) {
+           //call configuration API
+            getConfigurationApi()
+        } else {
+            Utils.showNetworkErrorDialog(this)
+        }
 
         //fetch device id
         getDeviceID()
+
+        //if user logged in get his cart count and cart id
+        val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        if(userToken.isNullOrBlank().not()){
+            getCartIdForUser(userToken)
+        }
 
 
         handler.postDelayed({
@@ -54,6 +69,7 @@ class SplashActivity : BaseActivity() {
         }, SPLASH_TIMEOUT.toLong())
 
     }
+
 
     private fun getConfigurationApi() {
         AppRepository.getConfiguration(object: ApiCallback<ConfigurationResponse>{
@@ -93,10 +109,11 @@ class SplashActivity : BaseActivity() {
                 showExitApplicationDialog(getString(R.string.force_update_msg), {
                     //redirect to play store
                 })
-            }else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
-                //soft update
-                Utils.printLog("Config Api", "Soft Update")
             }
+//            else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
+//                //soft update
+//                Utils.printLog("Config Api", "Soft Update")
+//            }
         }else{
             //stop app with maintenance message
             Utils.printLog("Config Api", "Maintance Mode")
@@ -191,4 +208,44 @@ class SplashActivity : BaseActivity() {
                     Settings.Secure.ANDROID_ID), Constants.ANDROID_DEVICE_ID_KEY)
         }
     }
+
+    fun getCartIdForUser(userToken: String?){
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createUserCart(object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+            }
+
+            override fun onError(errorMsg: String) {
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
+                getUserCartCount()
+            }
+
+        })
+    }
+
+    fun getUserCartCount() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountUser(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+
+            }
+
+            override fun onError(errorMsg: String) {
+
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                Utils.updateCartCount(t?.toInt()?:0)
+
+            }
+
+        })
+
+    }
+
 }

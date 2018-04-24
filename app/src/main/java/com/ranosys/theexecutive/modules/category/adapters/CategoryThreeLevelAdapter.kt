@@ -16,14 +16,18 @@ import com.ranosys.theexecutive.modules.category.SecondLevelExpandableListView
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.Utils
 
 /**
- * Created by Mohammad Sunny on 9/3/18.
+ * @Details Adapter for categories
+ * @Author Ranosys Technologies
+ * @Date 02,March,2018
  */
-class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData>?) : ExpandableListAdapter{
+
+class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenData>?) : ExpandableListAdapter{
 
     var context: Context? = null
-    var categoryList: ArrayList<ChildrenData>?
+    var categoryList: MutableList<ChildrenData>?
 
     init {
         this.context = context
@@ -32,7 +36,8 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
 
     override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View? {
         val layoutInflater = LayoutInflater.from(p3?.context)
-        val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false);
+        val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false)
+        Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, .37)
         listGroupBinding.childData = getGroup(p0)
         return listGroupBinding.root
 
@@ -57,8 +62,14 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
         expandableListView.setAdapter(CategoryTwoLevelAdapter(context, categoryList?.get(group)?.children_data))
         expandableListView.setGroupIndicator(null)
         expandableListView.setChildIndicator(null)
-        expandableListView.setDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
+        expandableListView.divider = context?.resources?.getDrawable(android.R.color.transparent)
         expandableListView.setChildDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
+
+        if(categoryList?.get(group)?.children_data?.size!! != 0)
+        {
+            expandableListView.expandGroup(child,true)
+        }
+
         expandableListView.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
             var previousGroup = -1
             override fun onGroupExpand(p0: Int) {
@@ -72,12 +83,21 @@ class CategoryThreeLevelAdapter(context: Context?, list : ArrayList<ChildrenData
 
         expandableListView.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
             override fun onGroupClick(expandableListView: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
-                if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
+                if(null != categoryList?.get(group)?.children_data?.get(p2)?.children_data){
+                    if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
+                        val bundle = Bundle()
+                        bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
+                        bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
+                        FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+                    }
+                }else if((categoryList?.get(group)?.children_data?.get(p2) as ChildrenData).name == "View All"){
                     val bundle = Bundle()
                     bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
                     bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
                     FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 }
+
+
                 return false
             }
         })

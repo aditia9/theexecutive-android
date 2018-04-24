@@ -25,9 +25,11 @@ abstract class BaseFragment : LifecycleFragment() {
         observeLeftIconClick()
     }
 
-
     fun showLoading() {
-        mProgressDialog = Utils.showProgressDialog(mContext)
+        if(null == mProgressDialog || mProgressDialog?.isShowing?.not()!!){
+            mProgressDialog = Utils.showProgressDialog(mContext)
+        }
+
     }
 
     fun hideLoading() {

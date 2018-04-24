@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 apply plugin: 'kotlin-android'
 
@@ -12,7 +13,7 @@ android {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -58,7 +59,7 @@ android {
         }
         devClient {
             dimension "client"
-            resValue "string", 'app_name', "D-The Executive" //app name to be shown in device
+            resValue "string", 'app_name', "Q-The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
         }
         qatClient {
@@ -68,12 +69,12 @@ android {
         }
 
         production {
-            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             dimension "server"
         }
 
         UAT {
-            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             dimension "server"
         }
         dev {
@@ -81,7 +82,7 @@ android {
             dimension "server"
         }
         QAT {
-            buildConfigField 'String', 'API_URL', '"http://192.168.10.126/delami/"'
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             dimension "server"
         }
     }
@@ -128,5 +129,10 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:${rootProject.glideVersion}"
     kapt "com.github.bumptech.glide:compiler:${rootProject.glideVersion}"
     implementation project(':SpinnerDatePickerLib')
+    implementation project(':stickyscrollview')
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
+        transitive = true;
+    }
+
 }
 

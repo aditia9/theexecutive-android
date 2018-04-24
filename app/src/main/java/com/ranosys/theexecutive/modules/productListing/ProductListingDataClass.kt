@@ -56,8 +56,8 @@ class ProductListingDataClass {
 
 
     data class ProductListingResponse(
-            val total_count: Int,
-            val items: List<Item>
+            var total_count: Int,
+            var items: MutableList<Item>
     )
 
     data class Item(
@@ -73,9 +73,9 @@ class ProductListingDataClass {
             val updated_at: String,
             val weight: Double,
             val extension_attributes: ExtensionAttributes,
-            val product_links: List<Any>,
+            val product_links: List<ProductLinks?>?,
             val options: List<Any>,
-            val media_gallery_entries: List<MediaGalleryEntry>,
+            val media_gallery_entries: MutableList<MediaGalleryEntry>?,
             val tier_prices: List<Any>,
             val custom_attributes: List<CustomAttribute>
     )
@@ -83,7 +83,7 @@ class ProductListingDataClass {
     data class ExtensionAttributes(
             val website_ids: List<Int>,
             val category_links: List<CategoryLink>,
-            val stock_item: StockItem,
+            val stock_item: StockItem?,
             val configurable_product_options: List<ConfigurableProductOption>,
             val configurable_product_links: List<Int>,
             val regular_price: Double,
@@ -144,13 +144,30 @@ class ProductListingDataClass {
             val position: Int,
             val disabled: Boolean,
             val types: List<String>,
-            val file: String
+            var file: String
     )
 
     data class CustomAttribute(
             val attribute_code: String,
             val value: Any
     )
+
+
+    data class ProductLinks(
+            val sku: String,
+            val link_type: String,
+            val linked_product_sku: String,
+            val linked_product_type: String,
+            val position: Int,
+            val extension_attributes: ProductExtensionAttributes
+    )
+
+    data class ProductExtensionAttributes (
+
+        var linked_product_name : String,
+        var linked_product_image : String,
+        var linked_product_regularprice : Int,
+        var linked_product_finalprice  : Int)
 
 
 }

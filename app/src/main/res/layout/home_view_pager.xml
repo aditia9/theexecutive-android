@@ -15,9 +15,8 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
+                    android:layout_height="300dp"
                     android:scrollbars="none"
-                    promotionData="@{categoryModel.promotionResponse}"
                     >
                 </android.support.v4.view.ViewPager>
 
@@ -27,11 +26,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/viewpager"
                     android:gravity="center"
-                    android:textSize="@dimen/twenty_sp"
+                    android:textSize="@dimen/eighteen_sp"
                     android:paddingTop="@dimen/fifteen_dp"
                     android:paddingBottom="@dimen/fifteen_dp"
-                    android:paddingRight="@dimen/ten_dp"
-                    android:paddingLeft="@dimen/ten_dp"
+                    android:paddingRight="@dimen/eight_dp"
+                    android:paddingLeft="@dimen/eight_dp"
                     android:textStyle="bold"
                     />
 

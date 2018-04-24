@@ -11,13 +11,25 @@ import com.ranosys.theexecutive.databinding.PromotionViewBinding
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 
 /**
- * Created by Mohammad Sunny on 26/3/18.
+ * @Details adapter for promotion banners
+ * @Author Ranosys Technologies
+ * @Date 21,Feb,2018
  */
+
 class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDataClass>?) : PagerAdapter() {
 
+    interface OnItemClickListener {
+        fun onItemClick(item : PromotionsResponseDataClass?)
+    }
+
+    private var clickListener: OnItemClickListener? = null
     var context : Context? = null
-    var layoutInflater : LayoutInflater? = null
+    private var layoutInflater : LayoutInflater? = null
     var promotionList : List<PromotionsResponseDataClass>? = null
+
+    fun setItemClickListener(listener: OnItemClickListener){
+        clickListener = listener
+    }
 
     init {
         this.context = context
@@ -37,8 +49,13 @@ class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDat
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): View {
-        val listGroupBinding: PromotionViewBinding? = DataBindingUtil.inflate(layoutInflater, R.layout.promotion_view, container, false);
+        val listGroupBinding: PromotionViewBinding? = DataBindingUtil.inflate(layoutInflater, R.layout.promotion_view, container, false)
         listGroupBinding?.promotionResponse = promotionList?.get(position)
+
+        listGroupBinding?.imgPromotion?.setOnClickListener {
+            clickListener?.onItemClick(promotionList?.get(position))
+
+        }
         container.addView(listGroupBinding?.root)
         return listGroupBinding?.root!!
     }

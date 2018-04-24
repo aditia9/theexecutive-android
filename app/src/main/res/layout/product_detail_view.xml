@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type = "android.text.Html"/>
+        <variable name="productItemVM"
+            type="com.ranosys.theexecutive.modules.productDetail.ProductItemViewModel"/>
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <com.amar.library.ui.StickyScrollView
+            android:id="@+id/product_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            bind:stickyFooter="@id/rl_add_to_box"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/twenty_dp"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/img_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/six_hundred_dp"
+                    android:src="@drawable/placeholder"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/image_one_detail"
+                    bind:baseUrlWithProductImageUrl="@{productItemVM.urlOne}"
+                    />
+
+                <ImageView
+                    android:id="@+id/img_two"
+                    android:layout_height="@dimen/six_hundred_dp"
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/img_one"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:src="@drawable/placeholder"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/image_two_detail"
+                    bind:baseUrlWithProductImageUrl="@{productItemVM.urlTwo}"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/img_two"
+                    android:layout_marginTop="@dimen/forty_dp"
+                    android:textAlignment="center"
+                    android:paddingRight="@dimen/forty_dp"
+                    android:paddingLeft="@dimen/forty_dp"
+                    android:textStyle="bold"
+                    />
+
+
+
+
+                <LinearLayout
+                    android:id="@+id/rl_color_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:layout_below="@id/tv_description"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_colors"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="bold"
+                        android:text="@string/available_colors"
+                        />
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_color_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_below="@id/tv_colors"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_color_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_color_view"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:orientation="vertical"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_composition_and_care"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_color_choice"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:textStyle="bold"
+                    android:text="@string/composition"
+                    android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_size_guideline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_composition_and_care"
+                    android:text="@string/size_guideline"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_shipping"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_size_guideline"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:text="@string/shipping"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_return"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_shipping"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:text="@string/returns"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_share"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_return"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:text="@string/share"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_buying_guidelinie"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_share"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:text="@string/buying_guideline"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_buying_guidelinie"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:text="@string/chat"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_wishlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_chat"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:text="@string/add_to_wishlist"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/rl_add_to_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/white"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:paddingTop="@dimen/fifteen_dp"
+                    android:paddingBottom="@dimen/fifteen_dp"
+                    android:layout_below="@id/tv_wishlist"
+                    >
+
+                    <Button
+                        android:id="@+id/btn_add_to_bag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_to_bag"
+                        android:padding="@dimen/ten_dp"
+                        android:textStyle="bold"
+                        android:background="@drawable/button_border"
+                        android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/sixteen_sp"
+                        android:text='@{"IDR " + Double.toString(productItemVM.productItem.price)}'
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_wear_with_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_add_to_box"
+
+                    >
+
+                    <View
+                        android:id="@+id/view_line"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/one_dp"
+                        android:background="@color/theme_black_color"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_like"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="@string/might_like"
+                        android:gravity="center"
+                        android:textSize="@dimen/twenty_dp"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        android:layout_below="@id/view_line"
+                        />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list_wear_with_products"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/twenty_dp"
+                        android:layout_below="@id/tv_like"
+                        />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </com.amar.library.ui.StickyScrollView>
+
+
+
+    </RelativeLayout>
+
+</layout>

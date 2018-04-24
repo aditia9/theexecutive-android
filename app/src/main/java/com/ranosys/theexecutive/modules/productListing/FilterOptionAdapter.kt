@@ -20,6 +20,7 @@ import com.ranosys.theexecutive.databinding.FilterOptionTitleBinding
 
 class FilterOptionAdapter(val productListVM: ProductListingViewModel, var optionsList : List<ProductListingDataClass.Filter>?): BaseExpandableListAdapter() {
 
+    var sl: MutableList<ObservableField<Boolean>> = mutableListOf()
     override fun getGroupCount() = optionsList?.size ?: 0
 
     override fun getGroup(groupPosition: Int): ProductListingDataClass.Filter? {
@@ -62,13 +63,19 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
             override fun onChildClick(list: ExpandableListView?, parent: View?, groupPos: Int, childPos: Int, id: Long): Boolean {
                 //store selected filter
                 val filter = getGroup(groupPosition)
-                productListVM.selectedFilterMap.put(filter!!.name, filter.options.get(childPos).value)
+                productListVM.selectedFilterMap.put(filter!!.code, filter.options.get(childPos).value)
 
                 for (item in getGroup(groupPos)?.options!!){
                     item._isSelected?.set(false)
                 }
 
-                getChild(groupPos, childPos)?._isSelected?.set(true)
+                val op= getChild(groupPos, childPos)
+                op?._isSelected?.set(true)
+                //getChild(groupPos, childPos)?._isSelected?.set(true)
+                sl.let{
+                  it.add(op?._isSelected!!)
+                }
+
                 notifyDataSetChanged()
                 return false
             }
@@ -86,5 +93,12 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
     override fun onGroupCollapsed(groupPosition: Int) {}
     override fun unregisterDataSetObserver(observer: DataSetObserver?) {}
     override fun registerDataSetObserver(observer: DataSetObserver?) {}
+
+    fun resetFilter(){
+        sl.forEach {
+            it.set(false)
+        }
+        notifyDataSetChanged()
+    }
 
 }

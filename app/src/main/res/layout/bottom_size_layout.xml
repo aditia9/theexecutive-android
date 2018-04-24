@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <data>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
+        <variable
+            name="sizeView"
+            type="com.ranosys.theexecutive.modules.productDetail.ProductViewFragment.SizeView"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent_white"
+            >
+
+            <TextView
+                android:id="@+id/tv_select_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_size"
+                android:theme="@style/sub_heading_theme"
+                android:layout_marginTop="@dimen/thirty_dp"
+                android:layout_marginLeft="@dimen/twenty_dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_size_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/size_guide"
+                android:theme="@style/sub_heading_theme"
+                android:layout_marginTop="@dimen/thirty_dp"
+                android:layout_marginRight="@dimen/twenty_dp"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/size_info"
+                android:drawablePadding="@dimen/five_dp"
+                android:gravity="center_vertical"
+                />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_size_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_select_size"
+                android:layout_marginTop="@dimen/ten_dp"
+                android:layout_marginLeft="@dimen/twenty_dp"
+                >
+
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/tv_select_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_quantity"
+                android:theme="@style/sub_heading_theme"
+                android:layout_marginTop="@dimen/thirty_dp"
+                android:layout_marginLeft="@dimen/twenty_dp"
+                android:layout_below="@+id/rv_size_view"
+                />
+
+            <LinearLayout
+                android:id="@+id/ll_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/tv_select_quantity"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:layout_marginLeft="@dimen/twenty_dp"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/back"
+                    android:padding="@dimen/fifteen_dp"
+                    android:contentDescription="@string/back"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="@dimen/thirty_dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/img_forward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/forward"
+                    android:layout_marginLeft="@dimen/thirty_dp"
+                    android:padding="@dimen/fifteen_dp"
+                    android:contentDescription="@string/forward"
+                    />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_add_to_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_layout"
+                android:background="@color/white"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:padding="@dimen/fifteen_dp"
+                >
+
+                <Button
+                    android:id="@+id/btn_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done"
+                    android:padding="@dimen/ten_dp"
+                    android:background="@drawable/button_border"
+                    android:layout_marginLeft="@dimen/five_dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_price_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/twenty_dp"
+                    />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

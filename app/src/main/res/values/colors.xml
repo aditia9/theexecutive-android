@@ -19,7 +19,7 @@
     <color name="theme_black_color">#232021</color>
     <color name="hint_color">#999999</color>
     <color name="divider_color">#DDDDDD</color>
-
+    <color name="transparent_white">#90ffffff</color>
 
 
 </resources>

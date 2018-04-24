@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.utils
 
+import android.arch.lifecycle.MutableLiveData
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 
 /**
@@ -8,6 +9,7 @@ import com.ranosys.theexecutive.modules.splash.StoreResponse
 class GlobalSingelton private constructor(){
 
     var storeList: List<StoreResponse>? = null
+    var cartCount: MutableLiveData<Int> = MutableLiveData()
 
     companion object {
         var instance: GlobalSingelton? = null

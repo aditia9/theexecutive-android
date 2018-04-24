@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter
 import android.widget.ExpandableListView
 import android.widget.ImageView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
@@ -91,22 +90,22 @@ class BindingAdapters {
             view.adapter = customViewPagerAdapter
         }
 
+        //for images at home promotion
         @JvmStatic
         @BindingAdapter("bind:imageUrl")
         fun loadImage(imageView: ImageView, imageUrl: String?) {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(imageUrl)
-                        .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
-                        .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .centerCrop()
+                        .override(imageView.width, imageView.height)
                         .into(imageView)
             }
         }
 
+        //for images at home category
         @JvmStatic
         @BindingAdapter("bind:baseWithimageUrl")
         fun loadImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
@@ -114,31 +113,30 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(baseUrl+imageUrl)
-                        .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
-                        .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .centerCrop()
+                        .override(imageView.width, imageView.height)
                         .into(imageView)
             }
         }
 
+
+        //for images in product listing
         @JvmStatic
         @BindingAdapter("bind:baseUrlWithProductImageUrl")
         fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
             val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.PRODUCT_MEDIA_URL)
             imageUrl?.run {
                 GlideApp.with(imageView.context)
+                        .asBitmap()
                         .load(baseUrl+imageUrl)
-                        .placeholder(R.drawable.placeholder)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
-                        .transition(DrawableTransitionOptions.withCrossFade())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(imageView.width, imageView.height)
                         .into(imageView)
             }
         }
-
     }
 }
