@@ -15,6 +15,7 @@
             android:layout_width="@dimen/match_constraint"
             android:theme="@style/tilTheme"
             android:labelFor="@+id/et_search"
+            android:hint="@string/search"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/eight_dp"
             android:layout_marginLeft="@dimen/eight_dp"

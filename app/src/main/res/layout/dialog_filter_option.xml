@@ -122,7 +122,7 @@
             android:childDivider="@null"
             android:choiceMode = "singleChoice"
             android:scrollbars="none"
-            android:layout_marginTop="@dimen/twenty_four_dp"
+            android:layout_marginTop="@dimen/sixteen_dp"
             android:layout_marginBottom="@dimen/twenty_four_dp"
             android:paddingTop="@dimen/eight_dp"
             android:paddingBottom="@dimen/eight_dp"

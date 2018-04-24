@@ -22,6 +22,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
@@ -157,11 +159,15 @@ object Utils {
         })
     }
 
-    fun logout(context: Context){
+    fun logout(context: Context, mGoogleSignInClient: GoogleSignInClient){
+        //fb and g mail logout
+        LoginManager.getInstance().logOut()
+        mGoogleSignInClient.signOut()
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
         updateCartCount(0)
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
+
     }
 
     fun isTablet(context: Context): Boolean {
