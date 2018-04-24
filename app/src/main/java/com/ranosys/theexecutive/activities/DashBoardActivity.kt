@@ -13,6 +13,7 @@ import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -67,7 +68,9 @@ class DashBoardActivity: BaseActivity() {
                         if(fragment is ProductListingFragment)
                             (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true )
                         if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true)
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
+                        if(fragment is ProductDetailFragment) {
+                            (fragment as ProductDetailFragment).onResume()
                         }
                     }
                 }
