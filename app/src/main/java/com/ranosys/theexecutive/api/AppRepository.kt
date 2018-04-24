@@ -22,13 +22,15 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-
 /**
- * Created by Mohammad Sunny on 23/2/18.
+ * @Details Repository class for api calling
+ * @Author Ranosys Technologies
+ * @Date 23,Feb,2018
  */
+
 object AppRepository {
 
-    private fun parseError(response: Response<Any>?, callBack: ApiCallback<Any>) {
+    private fun parseError(response: Response<*>?, callBack: ApiCallback<*>) {
         try {
             val jobError = JSONObject(response?.errorBody()?.string())
             val errorBody = jobError.getString(Constants.MESSAGE)
@@ -53,7 +55,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<ArrayList<StoreResponse>> {
             override fun onResponse(call: Call<ArrayList<StoreResponse>>?, response: Response<ArrayList<StoreResponse>>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -77,7 +79,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<ConfigurationResponse> {
             override fun onResponse(call: Call<ConfigurationResponse>?, response: Response<ConfigurationResponse>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -100,7 +102,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 } else {
                     callBack.onSuccess(response.body())
                 }
@@ -121,7 +123,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<List<PromotionsResponseDataClass>> {
             override fun onResponse(call: Call<List<PromotionsResponseDataClass>>?, response: Response<List<PromotionsResponseDataClass>>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -144,7 +146,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<CategoryResponseDataClass> {
             override fun onResponse(call: Call<CategoryResponseDataClass>?, response: Response<CategoryResponseDataClass>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -167,7 +169,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 }else{
                     callBack.onSuccess(response.body())
 
@@ -192,7 +194,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 } else {
                     callBack.onSuccess(response.body())
 
@@ -212,12 +214,12 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPut = retrofit?.create<ApiService.ForgotPasswordService>(ApiService.ForgotPasswordService::class.java!!)?.forgotPasswordApi(ApiConstants.BEARER + adminToken, storeCode, request)
+        val callPut = retrofit?.create<ApiService.ForgotPasswordService>(ApiService.ForgotPasswordService::class.java)?.forgotPasswordApi(ApiConstants.BEARER + adminToken, storeCode, request)
 
         callPut?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -241,7 +243,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<List<RegisterDataClass.Country>> {
             override fun onResponse(call: Call<List<RegisterDataClass.Country>>?, response: Response<List<RegisterDataClass.Country>>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 }else{
                     callBack.onSuccess(response.body())
                 }
@@ -262,7 +264,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<List<RegisterDataClass.City>> {
             override fun onResponse(call: Call<List<RegisterDataClass.City>>?, response: Response<List<RegisterDataClass.City>>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 }else{
                     callBack.onSuccess(response.body())
                 }
@@ -284,7 +286,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<RegisterDataClass.RegistrationResponse> {
             override fun onResponse(call: Call<RegisterDataClass.RegistrationResponse>?, response: Response<RegisterDataClass.RegistrationResponse>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 }else{
                     callBack.onSuccess(response.body())
                 }
@@ -305,7 +307,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 }else{
                     callBack.onSuccess(response.body())
                 }
@@ -326,7 +328,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>> {
             override fun onResponse(call: Call<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>?, response: Response<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 } else {
                     callBack.onSuccess(response.body())
                 }
@@ -347,7 +349,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<ProductListingDataClass.FilterOptionsResponse> {
             override fun onResponse(call: Call<ProductListingDataClass.FilterOptionsResponse>?, response: Response<ProductListingDataClass.FilterOptionsResponse>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 } else {
                     callBack.onSuccess(response.body())
                 }
@@ -369,7 +371,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<ProductListingDataClass.ProductListingResponse> {
             override fun onResponse(call: Call<ProductListingDataClass.ProductListingResponse>?, response: Response<ProductListingDataClass.ProductListingResponse>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
                 } else {
                     callBack.onSuccess(response.body())
                 }
@@ -390,7 +392,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<ProductListingDataClass.Item> {
             override fun onResponse(call: Call<ProductListingDataClass.Item>?, response: Response<ProductListingDataClass.Item>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -404,7 +406,7 @@ object AppRepository {
         })
     }
 
-    fun getProductChildern(productSku : String?, callBack: ApiCallback<List<ChildProductsResponse>>) {
+    fun getProductChildren(productSku : String?, callBack: ApiCallback<List<ChildProductsResponse>>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
@@ -413,7 +415,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<List<ChildProductsResponse>> {
             override fun onResponse(call: Call<List<ChildProductsResponse>>?, response: Response<List<ChildProductsResponse>>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -436,7 +438,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<List<ProductOptionsResponse>> {
             override fun onResponse(call: Call<List<ProductOptionsResponse>>?, response: Response<List<ProductOptionsResponse>>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -459,7 +461,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<StaticPagesUrlResponse> {
             override fun onResponse(call: Call<StaticPagesUrlResponse>?, response: Response<StaticPagesUrlResponse>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -482,7 +484,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -504,7 +506,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -526,7 +528,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -548,7 +550,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -570,7 +572,7 @@ object AppRepository {
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -592,7 +594,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<AddToCartResponse> {
             override fun onResponse(call: Call<AddToCartResponse>?, response: Response<AddToCartResponse>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -615,7 +617,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<AddToCartResponse> {
             override fun onResponse(call: Call<AddToCartResponse>?, response: Response<AddToCartResponse>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    parseError(response as Response<*>, callBack as ApiCallback<*>)
 
                 } else {
                     callBack.onSuccess(response.body())

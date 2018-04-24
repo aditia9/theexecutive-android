@@ -76,5 +76,8 @@ object Constants {
         val UNIVERSAL_CAT_ID: Int = 0
         val URL_KEY: String = "url_key"
         val URL_SUFFIX: String = ".html"
+        val CATEGORY_IMAGE_HEIGHT_RATIO: Double = 1.5
+        val MEN: String = "MEN"
+        val WOMEN: String = "WOMEN"
 
 }

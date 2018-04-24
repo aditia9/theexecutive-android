@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.product_detail_view.*
 import kotlinx.android.synthetic.main.product_images_layout.view.*
 
 /**
- * @Details
+ * @Details Fragment to show product description
  * @Author Ranosys Technologies
  * @Date 11,Apr,2018
  */

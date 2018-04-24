@@ -11,6 +11,12 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
 
+/**
+ * @Details Library for zoom in and zoom out for image
+ * @Author Ranosys Technologies
+ * @Date 02,March,2018
+ */
+
 @SuppressLint("AppCompatCustomView")
 public class ZoomableImageView extends ImageView
 {

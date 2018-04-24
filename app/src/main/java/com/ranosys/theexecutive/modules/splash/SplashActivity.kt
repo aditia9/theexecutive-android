@@ -24,7 +24,9 @@ import java.io.InputStreamReader
 
 
 /**
- * Created by nikhil on 2/3/18.
+ * @Details Splash activity
+ * @Author Ranosys Technologies
+ * @Date 02,March,2018
  */
 class SplashActivity : BaseActivity() {
 

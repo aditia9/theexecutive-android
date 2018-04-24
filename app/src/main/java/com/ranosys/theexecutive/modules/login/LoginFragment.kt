@@ -38,7 +38,9 @@ import org.json.JSONObject
 import java.util.*
 
 /**
- * Created by Nikhil Agarwal on 23/2/18.
+ * @Details Fragment for login functionality
+ * @Author Ranosys Technologies
+ * @Date 02,March,2018
  */
 
 class LoginFragment() : BaseFragment() {

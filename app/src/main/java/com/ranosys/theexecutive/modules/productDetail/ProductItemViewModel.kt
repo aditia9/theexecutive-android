@@ -75,7 +75,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
 
     fun getProductChildren(productSku : String?){
         val apiResponse = ApiResponse<List<ChildProductsResponse>>()
-        AppRepository.getProductChildern(productSku, object : ApiCallback<List<ChildProductsResponse>> {
+        AppRepository.getProductChildren(productSku, object : ApiCallback<List<ChildProductsResponse>> {
             override fun onException(error: Throwable) {
                 productChildrenResponse?.value?.throwable = error
             }
