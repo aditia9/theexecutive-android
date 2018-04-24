@@ -43,7 +43,7 @@ import java.util.*
  * @Date 02,March,2018
  */
 
-class LoginFragment() : BaseFragment() {
+class LoginFragment : BaseFragment() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var mBinding: FragmentLoginBinding

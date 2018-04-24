@@ -28,8 +28,8 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var addToWIshListResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var addToCartResponse: MutableLiveData<ApiResponse<AddToCartResponse>>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
-    var url_one : ObservableField<String> = ObservableField()
-    var url_two : ObservableField<String> = ObservableField()
+    var urlOne : ObservableField<String> = ObservableField()
+    var urlTwo : ObservableField<String> = ObservableField()
     var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var guestCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
@@ -193,7 +193,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         })
     }
 
-    fun getCartIdForUser(userToken: String?){
+    fun getCartIdForUser() {
         val apiResponse = ApiResponse<String>()
         AppRepository.createUserCart(object : ApiCallback<String> {
             override fun onException(error: Throwable) {

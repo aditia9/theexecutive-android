@@ -36,7 +36,7 @@
                     android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_one_detail"
-                    bind:baseUrlWithProductImageUrl='@{productItemVM.url_one}'
+                    bind:baseUrlWithProductImageUrl="@{productItemVM.urlOne}"
                     />
 
                 <ImageView
@@ -48,7 +48,7 @@
                     android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_two_detail"
-                    bind:baseUrlWithProductImageUrl='@{productItemVM.url_two}'
+                    bind:baseUrlWithProductImageUrl="@{productItemVM.urlTwo}"
                     />
 
                 <TextView

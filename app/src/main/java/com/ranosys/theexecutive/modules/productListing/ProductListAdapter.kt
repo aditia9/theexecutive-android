@@ -50,7 +50,7 @@ class ProductListAdapter(var productList: ArrayList<ProductListingDataClass.Prod
             var price = ""
 
             if(product.normalPrice == product.specialPrice){
-                price = "$normalPrice"
+                price = normalPrice
                 itemBinding.tvNormalPrice.text = price
             }else{
                 price = "$normalPrice $spPrice"

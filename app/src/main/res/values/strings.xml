@@ -119,7 +119,7 @@
     <string name="close_app_text">Are you sure you want to close application?</string>
     <string name="network_err_text">No Internet Connection</string>
     <string name="verify_email_message">Please verify email</string>
-    <string name="register_successfull">Welcome aboard, you are now a member of The Executive.</string>
+    <string name="register_successful">Welcome aboard, you are now a member of The Executive.</string>
     <string name="logout_success_message">Logout successfully</string>
     <string name="non_breakable_apace">\u00A0</string>
     <string name="price_range_label">Price Range</string>
@@ -150,9 +150,12 @@
     <string name="empty_filter_option_selection_error">Please select at least one option.</string>
     <string name="enter_search_error">Please enter search keyword</string>
     <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app.</string>
-    <string name="loading_data">Loading data ...</string>
+    <string name="loading_data">Loading data …</string>
     <string name="add_to_cart_success_msg">Product added to bag/ cart</string>
     <string name="available_colors">Available Colors</string>
+    <string name="view_all">View All</string>
+    <string name="back">back</string>
+    <string name="forward">forward</string>
 
 
 </resources>

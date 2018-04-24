@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.modules.productDetail
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.graphics.Typeface
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,18 +11,16 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.SizeViewLayoutBinding
 
 /**
- * @Details
+ * @Details Adapter to show size options of product
  * @Author Ranosys Technologies
  * @Date 16,Apr,2018
  */
 class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFragment.SizeView>?) : RecyclerView.Adapter<SizeRecyclerAdapter.Holder>() {
 
-    var mContext : Context? = null
-    var sizeViewList : List<ProductViewFragment.SizeView>? = null
-    var clickListener: SizeRecyclerAdapter.OnItemClickListener? = null
+    private var sizeViewList : List<ProductViewFragment.SizeView>? = null
+    private var clickListener: SizeRecyclerAdapter.OnItemClickListener? = null
 
     init {
-        mContext = context
         sizeViewList = list
     }
 
@@ -46,24 +45,24 @@ class SizeRecyclerAdapter (var context : Context, var list : List<ProductViewFra
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(mContext, getItem(position), clickListener, position)
+        holder?.bind(context, getItem(position), clickListener, position)
     }
 
-    fun getItem(position: Int) : ProductViewFragment.SizeView?{
+    private fun getItem(position: Int) : ProductViewFragment.SizeView?{
         return sizeViewList?.get(position)
     }
 
-    class Holder(var itemBinding: SizeViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
+    class Holder(private var itemBinding: SizeViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
         fun bind(context : Context?, colorView : ProductViewFragment.SizeView?, listener: OnItemClickListener?, position: Int){
             itemBinding?.sizeView = colorView
             if(colorView?.isSelected!!){
-                itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.drawable.size_border)
-                itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT_BOLD)
+                itemBinding?.tvSize?.background = ContextCompat.getDrawable(context!!, R.drawable.size_border)
+                itemBinding?.tvSize?.typeface = Typeface.DEFAULT_BOLD
             }
             else{
-                itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
-                itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
+                itemBinding?.tvSize?.background = ContextCompat.getDrawable(context!!, R.color.white)
+                itemBinding?.tvSize?.typeface = Typeface.DEFAULT
             }
             itemView.setOnClickListener {
                 listener?.onItemClick(colorView, position)

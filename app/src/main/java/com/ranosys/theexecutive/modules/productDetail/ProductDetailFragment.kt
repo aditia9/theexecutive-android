@@ -26,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_product_detail.*
  */
 class ProductDetailFragment : BaseFragment() {
 
-    lateinit var productDetailViewModel : ProductDetailViewModel
+    private lateinit var productDetailViewModel : ProductDetailViewModel
     var productList : MutableList<ProductListingDataClass.Item>? = null
     var position : Int? = 0
     var productSku : String? = ""
@@ -58,7 +58,7 @@ class ProductDetailFragment : BaseFragment() {
             pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productList)
             product_viewpager.adapter = pagerAdapter
             product_viewpager.offscreenPageLimit = 2
-            product_viewpager.setCurrentItem(position!!)
+            product_viewpager.currentItem = position!!
         }
 
         product_viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
@@ -85,25 +85,23 @@ class ProductDetailFragment : BaseFragment() {
     }
 
 
-    fun getProductDetail(productSku : String?){
+    private fun getProductDetail(productSku : String?){
         productDetailViewModel.getProductDetail(productSku)
     }
 
-    fun observeEvents() {
-        productDetailViewModel.productDetailResponse?.observe(this, object : Observer<ApiResponse<ProductListingDataClass.Item>> {
-            override fun onChanged(apiResponse: ApiResponse<ProductListingDataClass.Item>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is ProductListingDataClass.Item) {
-                    productList = mutableListOf()
-                    productList?.add(response)
-                    setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-                    pagerAdapter = ProductStatePagerAdapter(activity?.supportFragmentManager,productList)
-                    product_viewpager.adapter = pagerAdapter
-                    product_viewpager.offscreenPageLimit = 2
-                    product_viewpager.setCurrentItem(position!!)
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
-                }
+    private fun observeEvents() {
+        productDetailViewModel.productDetailResponse?.observe(this, Observer<ApiResponse<ProductListingDataClass.Item>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if (response is ProductListingDataClass.Item) {
+                productList = mutableListOf()
+                productList?.add(response)
+                setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+                pagerAdapter = ProductStatePagerAdapter(activity?.supportFragmentManager,productList)
+                product_viewpager.adapter = pagerAdapter
+                product_viewpager.offscreenPageLimit = 2
+                product_viewpager.currentItem = position!!
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
         })
     }

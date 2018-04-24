@@ -24,8 +24,8 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var lastSearchQuery: String = ""
 
 
-    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>()
-    var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData<MutableList<ProductListingDataClass.Filter>>()
+    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData()
+    var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData()
     var priceFilter: MutableLiveData<ProductListingDataClass.Filter> = MutableLiveData()
     var noProductAvailable: MutableLiveData<Int> = MutableLiveData()
     var selectedFilterMap = hashMapOf<String, String>()
@@ -86,7 +86,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                 if (filterOptions?.total_count!! > 0) {
                     filterOptions.run {
                         for (filter in filterOptions.filters) {
-                            selectedFilterMap.put(filter.code, "")
+                            selectedFilterMap[filter.code] = ""
                         }
                     }
 
@@ -164,7 +164,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
                             val discount = (((price - specialPrice).div(price)).times(100)).toInt()
                             var imgUrl = ""
-                            if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0]?.file.toString()
+                            if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0].file.toString()
 
                             val product = ProductListingDataClass.ProductMaskedResponse(
                                     sku = sku,
@@ -202,25 +202,25 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         val sDtate=sdf.parse(fromDate)
         val eDate=sdf.parse(toDate)
 
-        if(!(cDate.compareTo(sDtate) < 0 || cDate.compareTo(eDate) > 0)) {
-            return Constants.NEW_TAG
-        } else  return ""
+        return if(!(cDate < sDtate || cDate > eDate)) {
+            Constants.NEW_TAG
+        } else ""
     }
 
     private fun prepareProductListingRequest(catId: Int, query: String, fromSearch: Boolean): Map<String, String> {
         val requestMap: MutableMap<String, String> = mutableMapOf()
 
         if(fromSearch){
-            requestMap.put(Constants.REQUEST_SEARCH_LABEL, query)
+            requestMap[Constants.REQUEST_SEARCH_LABEL] = query
         }
 
-        requestMap.put(Constants.REQUEST_ID_LABEL, catId.toString())
-        requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
+        requestMap[Constants.REQUEST_ID_LABEL] = catId.toString()
+        requestMap[Constants.REQUEST_PAGE_LIMIT_LABEL] = Constants.LIST_PAGE_ITEM_COUNT.toString()
         val page = (maskedProductList.value?.size)?.div(10)?.plus(1) ?: 1
-        requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString())
+        requestMap[Constants.REQUEST_PAGE_LABEL] = page.toString()
 
         if(selectedSortOption.attribute_code.isNotBlank()){
-            requestMap.put(Constants.SORT_OPTION_LABEL, selectedSortOption.attribute_code)
+            requestMap[Constants.SORT_OPTION_LABEL] = selectedSortOption.attribute_code
             val dir = when{
                 selectedSortOption.attribute_name.contains(Constants.HIGH_TO_LOW, true) -> Constants.DESC
                 selectedSortOption.attribute_name.contains(Constants.LOW_TO_HIGH, true) -> Constants.ASC
@@ -228,17 +228,17 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
             }
 
             if(dir.isNotBlank()){
-                requestMap.put(Constants.SORT_OPTION_DIR, dir)
+                requestMap[Constants.SORT_OPTION_DIR] = dir
             }
         }
 
         if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
-            selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.toFloat().toInt().toString() + "-" + selectedPriceRange.max.toFloat().toInt().toString())
+            selectedFilterMap[Constants.FILTER_PRICE_KEY] = selectedPriceRange.min.toFloat().toInt().toString() + "-" + selectedPriceRange.max.toFloat().toInt().toString()
         }
 
         for((key, value) in selectedFilterMap){
             if(value.isNotBlank()){
-                requestMap.put(key, value)
+                requestMap[key] = value
             }
         }
 

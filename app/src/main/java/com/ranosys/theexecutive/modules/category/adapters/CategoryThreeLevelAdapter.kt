@@ -19,8 +19,11 @@ import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 
 /**
- * Created by Mohammad Sunny on 9/3/18.
+ * @Details Adapter for categories
+ * @Author Ranosys Technologies
+ * @Date 02,March,2018
  */
+
 class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenData>?) : ExpandableListAdapter{
 
     var context: Context? = null
@@ -59,7 +62,7 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
         expandableListView.setAdapter(CategoryTwoLevelAdapter(context, categoryList?.get(group)?.children_data))
         expandableListView.setGroupIndicator(null)
         expandableListView.setChildIndicator(null)
-        expandableListView.setDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
+        expandableListView.divider = context?.resources?.getDrawable(android.R.color.transparent)
         expandableListView.setChildDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
 
         if(categoryList?.get(group)?.children_data?.size!! != 0)

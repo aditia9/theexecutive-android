@@ -48,17 +48,17 @@ class ProductViewFragment : BaseFragment() {
     var productItem : ProductListingDataClass.Item? = null
     var position : Int? = 0
     var productSku : String? = ""
-    var colorAttrId : String? = ""
+    private var colorAttrId : String? = ""
     var colorValue : String? = ""
-    var sizeAttrId : String? = ""
+    private var sizeAttrId : String? = ""
     var sizeValue : String? = ""
     var itemQty : Int? = 1
-    var productColorValue : String? = ""
-    var productSizeValue : String? = ""
+    private var productColorValue : String? = ""
+    private var productSizeValue : String? = ""
     var selectedQty : Int = 0
     var colorMap = HashMap<String, String>()
     var sizeMap = HashMap<String, String>()
-    var childProductsMap = HashMap<String, MutableList<ProductListingDataClass.MediaGalleryEntry>?>()
+    private var childProductsMap = HashMap<String, MutableList<ProductListingDataClass.MediaGalleryEntry>?>()
     var colorOptionList : List<ProductOptionsResponse>? = null
     var sizeOptionList : List<ProductOptionsResponse>? = null
     private lateinit var sizeDilaogBinding: BottomSizeLayoutBinding
@@ -69,7 +69,7 @@ class ProductViewFragment : BaseFragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false);
+        val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false)
         productItemViewModel = ViewModelProviders.of(this).get(ProductItemViewModel::class.java)
         productItemViewModel.productItem = productItem
         listGroupBinding?.productItemVM = productItemViewModel
@@ -115,7 +115,7 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setData(){
+    private fun setData(){
 
         setDescription()
         setProductImages(productItem?.media_gallery_entries)
@@ -123,19 +123,19 @@ class ProductViewFragment : BaseFragment() {
         setWearWithProductsData()
     }
 
-    fun setDescription(){
+    private fun setDescription(){
         try {
-            val productDescription = productItem?.custom_attributes?.filter { s ->
+            val productDescription = productItem?.custom_attributes?.single { s ->
                 s.attribute_code == "short_description"
-            }?.single()
-            tv_description.setText(Html.fromHtml(productDescription?.value.toString()))
+            }
+            tv_description.text = Html.fromHtml(productDescription?.value.toString())
         }catch (e : NoSuchElementException){
             AppLog.printStackTrace(e)
         }
 
     }
 
-    fun setWearWithProductsData(){
+    private fun setWearWithProductsData(){
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         list_wear_with_products.layoutManager = linearLayoutManager
 
@@ -157,14 +157,14 @@ class ProductViewFragment : BaseFragment() {
         Utils.setImageViewHeight(activity as Context, img_one, 27)
         Utils.setImageViewHeight(activity as Context, img_two, 27)
         if(mediaGalleryList?.size!! > 0)
-            productItemViewModel.url_one.set(mediaGalleryList.get(0).file)
+            productItemViewModel.urlOne.set(mediaGalleryList[0].file)
         if(mediaGalleryList.size > 1)
-            productItemViewModel.url_two.set(mediaGalleryList.get(1).file)
+            productItemViewModel.urlTwo.set(mediaGalleryList[1].file)
 
         val listSize = mediaGalleryList.size
         for(i in 2..listSize.minus(1)){
             val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
-            productImagesBinding?.mediaGalleryEntry = mediaGalleryList.get(i)
+            productImagesBinding?.mediaGalleryEntry = mediaGalleryList[i]
             Utils.setImageViewHeight(activity as Context, productImagesBinding?.imgProductImage, 27)
             val view = productImagesBinding!!.root.img_product_image
             view.setOnClickListener {
@@ -176,31 +176,31 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun setColorImagesList(){
+    private fun setColorImagesList(){
         productItem?.extension_attributes?.configurable_product_options?.run{
             val length = productItem?.extension_attributes?.configurable_product_options?.size!!
-            for(i in 0..length-1) {
+            for(i in 0 until length) {
                 val option = productItem?.extension_attributes?.configurable_product_options?.get(i)
                 when (option?.label) {
-                    "Color" -> {
+                    Constants.COLOR -> {
                         option.values.forEachIndexed { index, value ->
                             if(index == 0) {
                                 productColorValue = value.value_index.toString()
                                 colorValue = productColorValue
                             }
-                            colorMap.put(index.toString(), value = value.value_index.toString())
+                            colorMap[index.toString()] = value.value_index.toString()
                         }
                         AppLog.e("ColorList : " + colorMap.toString())
                         colorAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
                         getProductOptions(colorAttrId, "color")
                     }
-                    "Size" -> {
+                    Constants.SIZE -> {
                         option.values.forEachIndexed { index, value ->
                             if(index == 0) {
                                 productSizeValue = value.value_index.toString()
                                 sizeValue = productSizeValue
                             }
-                            sizeMap.put(index.toString(), value = value.value_index.toString())
+                            sizeMap[index.toString()] = value.value_index.toString()
                         }
                         AppLog.e("Sizelist : " + sizeMap.toString())
                         sizeAttrId = productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
@@ -211,7 +211,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun getProductChildren(productSku : String?){
+    private fun getProductChildren(productSku : String?){
         if (Utils.isConnectionAvailable(activity as Context)) {
             productItemViewModel.getProductChildren(productSku)
         } else {
@@ -219,7 +219,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun getProductOptions(attributeId : String?, label : String?){
+    private fun getProductOptions(attributeId : String?, label : String?){
         if (Utils.isConnectionAvailable(activity as Context)) {
             productItemViewModel.getProductOptions(attributeId, label)
         } else {
@@ -227,7 +227,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun getStaticPagesUrl(){
+    private fun getStaticPagesUrl(){
         if (Utils.isConnectionAvailable(activity as Context)) {
             productItemViewModel.getStaticPagesUrl()
         } else {
@@ -235,7 +235,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun observeEvents(){
+    private fun observeEvents(){
         productItemViewModel.clickedAddBtnId?.observe(this, Observer<Int> { id ->
             when (id){
                 R.id.btn_add_to_bag -> {
@@ -293,80 +293,73 @@ class ProductViewFragment : BaseFragment() {
 
         })
 
-        productItemViewModel.productChildrenResponse?.observe(this, object : Observer<ApiResponse<List<ChildProductsResponse>>> {
-            override fun onChanged(apiResponse: ApiResponse<List<ChildProductsResponse>>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is List<*>) {
-                    val list = response as List<ChildProductsResponse>
+        productItemViewModel.productChildrenResponse?.observe(this, Observer<ApiResponse<List<ChildProductsResponse>>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if (response is List<*>) {
+                val list = response as List<ChildProductsResponse>
 
-                    list.forEach {
-                        val colorValue = it.custom_attributes.filter { s ->
-                            s.attribute_code == "color"
-                        }.single().value.toString()
-                        if (!childProductsMap.containsKey(colorValue)) {
-                            if (colorValue.equals(productColorValue)) {
-                                childProductsMap.put(colorValue, productItem?.media_gallery_entries)
-                            } else {
-                                childProductsMap.put(colorValue, it.media_gallery_entries)
-                            }
+                list.forEach {
+                    val colorValue = it.custom_attributes.single { s ->
+                        s.attribute_code == "color"
+                    }.value.toString()
+                    if (!childProductsMap.containsKey(colorValue)) {
+                        if (colorValue == productColorValue) {
+                            childProductsMap[colorValue] = productItem?.media_gallery_entries
+                        } else {
+                            childProductsMap[colorValue] = it.media_gallery_entries
                         }
-                        val sizeValue = it.custom_attributes.filter { s ->
-                            s.attribute_code == "size"
-                        }.single().value.toString()
-                        maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty))
                     }
-
-                    AppLog.e("maxQuantityList : " + maxQuantityList.toString())
-
-                    setColorViewList()
-                    setSizeViewList()
-
-                    AppLog.e("ChildProductsMap : " + childProductsMap.toString())
-
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                    val sizeValue = it.custom_attributes.single { s ->
+                        s.attribute_code == "size"
+                    }.value.toString()
+                    maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty))
                 }
+
+                AppLog.e("maxQuantityList : " + maxQuantityList.toString())
+
+                setColorViewList()
+                setSizeViewList()
+
+                AppLog.e("ChildProductsMap : " + childProductsMap.toString())
+
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
         })
 
-        productItemViewModel.productOptionResponse?.observe(this, object : Observer<ApiResponse<List<ProductOptionsResponse>>> {
-            override fun onChanged(apiResponse: ApiResponse<List<ProductOptionsResponse>>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is List<*>) {
-                    val list = response as List<ProductOptionsResponse>
-                    list.get(0).label
-                    when(list.get(0).label){
-                        "color" -> {
-                            AppLog.e("color index : " + (response.get(0) as ProductOptionsResponse).label!!)
-                            colorOptionList = list.filter {
-                                it.value in colorMap.values
-                            }
-                            AppLog.e("New color list : " + colorOptionList.toString())
+        productItemViewModel.productOptionResponse?.observe(this, Observer<ApiResponse<List<ProductOptionsResponse>>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if (response is List<*>) {
+                val list = response as List<ProductOptionsResponse>
+                list[0].label
+                when(list[0].label){
+                    "color" -> {
+                        AppLog.e("color index : " + response[0].label!!)
+                        colorOptionList = list.filter {
+                            it.value in colorMap.values
                         }
-                        "size" -> {
-                            AppLog.e("size index : " + (response.get(0) as ProductOptionsResponse).label!!)
-                            sizeOptionList = list.filter {
-                                it.value in sizeMap.values
-                            }
-                            AppLog.e("New size list : " + sizeOptionList.toString())
-                        }
+                        AppLog.e("New color list : " + colorOptionList.toString())
                     }
-
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                    "size" -> {
+                        AppLog.e("size index : " + response[0].label!!)
+                        sizeOptionList = list.filter {
+                            it.value in sizeMap.values
+                        }
+                        AppLog.e("New size list : " + sizeOptionList.toString())
+                    }
                 }
+
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
         })
 
-        productItemViewModel.staticPagesUrlResponse?.observe( this, object : Observer<ApiResponse<StaticPagesUrlResponse>> {
-            override fun onChanged(apiResponse: ApiResponse<StaticPagesUrlResponse>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if(response is StaticPagesUrlResponse){
-                    productItemViewModel.staticPages = response
-                }
-                else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
-                }
+        productItemViewModel.staticPagesUrlResponse?.observe( this, Observer<ApiResponse<StaticPagesUrlResponse>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if(response is StaticPagesUrlResponse){
+                productItemViewModel.staticPages = response
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
         })
 
@@ -465,12 +458,12 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setColorViewList(){
+    private fun setColorViewList(){
         colorOptionList?.forEachIndexed { index, it ->
             if(index == 0)
-                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value), true))
+                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap[it.value], true))
             else
-                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value), false))
+                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap[it.value], false))
 
         }
         AppLog.e("colorsViewList : " + colorsViewList.toString())
@@ -483,11 +476,7 @@ class ProductViewFragment : BaseFragment() {
             colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(colorView: ProductViewFragment.ColorsView?, position: Int) {
                     colorsViewList?.forEachIndexed { index,it ->
-                        if(index == position){
-                            colorsViewList?.get(index)?.isSelected = true
-                        }else{
-                            colorsViewList?.get(index)?.isSelected = false
-                        }
+                        colorsViewList?.get(index)?.isSelected = index == position
                     }
                     colorValue = colorView?.value
                     colorViewAdapter.notifyDataSetChanged()
@@ -502,7 +491,7 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setSizeViewList(){
+    private fun setSizeViewList(){
         sizeOptionList?.forEachIndexed { index, it ->
             if(index == 0)
                 sizeViewList?.add(SizeView(it.label, colorAttrId, it.value,true))
@@ -524,9 +513,9 @@ class ProductViewFragment : BaseFragment() {
         else{
             sizeDilaog.rv_size_view.visibility = View.VISIBLE
         }
-        sizeDilaog.tv_price_dialog.setText(Constants.IDR + productItem?.price.toString())
+        sizeDilaog.tv_price_dialog.text = Constants.IDR + productItem?.price.toString()
 
-        sizeDilaog.btn_done.setOnClickListener(View.OnClickListener {
+        sizeDilaog.btn_done.setOnClickListener({
             if(sizeDilaog.isShowing){
                 sizeDilaog.dismiss()
             }
@@ -534,7 +523,7 @@ class ProductViewFragment : BaseFragment() {
             val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
 
             if(userToken.isNullOrBlank().not()){
-                productItemViewModel.getCartIdForUser(userToken)
+                productItemViewModel.getCartIdForUser()
             }else{
                 productItemViewModel.getCartIdForGuest()
             }
@@ -557,15 +546,11 @@ class ProductViewFragment : BaseFragment() {
             }
         }
 
-        sizeDilaog.tv_size_guide.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(p0: View?) {
-                Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
-            }
-        })
+        sizeDilaog.tv_size_guide.setOnClickListener { Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline) }
 
     }
 
-    fun prepareAddToCartRequest(quoteId :  String?) : AddToCartRequest{
+    private fun prepareAddToCartRequest(quoteId :  String?) : AddToCartRequest{
         val colorOption = ConfigurableItemOption(colorAttrId, colorValue)
         val sizeOption = ConfigurableItemOption(sizeAttrId, sizeValue)
 
@@ -573,9 +558,9 @@ class ProductViewFragment : BaseFragment() {
         optionList.add(colorOption)
         optionList.add(sizeOption)
 
-        val cart_ext_attrs = CartExtensionAttributes( optionList)
+        val cartExtensionAttributes = CartExtensionAttributes( optionList)
 
-        val productOption = ProductOption(cart_ext_attrs)
+        val productOption = ProductOption(cartExtensionAttributes)
 
         val cartItem = CartItem(sku = productSku,
                 qty = selectedQty,
@@ -584,12 +569,10 @@ class ProductViewFragment : BaseFragment() {
                 extension_attributes = null
         )
 
-        val request = AddToCartRequest(cartItem)
-
-        return request
+        return AddToCartRequest(cartItem)
     }
 
-    fun openBottomSizeSheet()
+    private fun openBottomSizeSheet()
     {
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         sizeDilaog.rv_size_view.layoutManager = linearLayoutManager
@@ -601,11 +584,7 @@ class ProductViewFragment : BaseFragment() {
                     selectedQty = 0
                     sizeDilaog.tv_quantity.text =  selectedQty.toString()
                     sizeViewList?.forEachIndexed { index,it ->
-                        if(index == position){
-                            sizeViewList?.get(index)?.isSelected = true
-                        }else{
-                            sizeViewList?.get(index)?.isSelected = false
-                        }
+                        sizeViewList?.get(index)?.isSelected = index == position
                     }
                     sizeValue = sizeView?.value
                     if(productItem?.type_id.equals("simple")) {
@@ -614,9 +593,9 @@ class ProductViewFragment : BaseFragment() {
                     else{
                         try {
                             if(maxQuantityList?.size!! > 0) {
-                                itemQty = maxQuantityList?.filter { s ->
+                                itemQty = maxQuantityList?.single { s ->
                                     s.colorValue == colorValue && s.sizeValue == sizeValue
-                                }?.single()?.maxQuantity
+                                }?.maxQuantity
                             }
                         }
                         catch (e : NoSuchElementException){
@@ -630,7 +609,7 @@ class ProductViewFragment : BaseFragment() {
         sizeDilaog.show()
     }
 
-    fun openProdcutImage(bitmap: Bitmap)
+    private fun openProdcutImage(bitmap: Bitmap)
     {
         val view = layoutInflater.inflate(R.layout.dialog_product_image, null)
         val mImageDialog = Dialog(activity, R.style.MaterialDialogSheet)

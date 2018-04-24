@@ -33,7 +33,9 @@ import kotlinx.android.synthetic.main.fragment_product_listing.*
 import java.util.*
 
 /**
- * Created by nikhil on 20/3/18.
+ * @Details fragment shows product listing
+ * @Author Ranosys Technologies
+ * @Date 16,Apr,2018
  */
 class ProductListingFragment: BaseFragment() {
 
@@ -131,7 +133,7 @@ class ProductListingFragment: BaseFragment() {
             }
 
         })
-        sortOptionBinding.sortOptionList.setAdapter(sortOptionAdapter)
+        sortOptionBinding.sortOptionList.adapter = sortOptionAdapter
 
         //method holding all UI interaction of filter dialog
         sortOptionBinding.let {
@@ -291,23 +293,20 @@ class ProductListingFragment: BaseFragment() {
         }
 
         et_search.setOnTouchListener(View.OnTouchListener { v, event ->
-            val DRAWABLE_RIGHT = 2
-            if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    if(event.rawX >= et_search.right - et_search.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
-                        et_search.setText("")
-                        et_search.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
-                        mViewModel.clearExistingList()
-                        mViewModel.lastSearchQuery = ""
+            val drawableRight = 2
+            if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[drawableRight], (activity as Context).getDrawable(R.drawable.cancel))){
+                if(event.action == MotionEvent.ACTION_UP && event.rawX >= et_search.right - et_search.compoundDrawables[drawableRight].bounds.width()) {
+                    et_search.setText("")
+                    et_search.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
+                    mViewModel.clearExistingList()
+                    mViewModel.lastSearchQuery = ""
 
-                        if(homeSearchQuery.isNotBlank()){
-                            //activity?.onBackPressed()
-                            homeSearchQuery = ""
-                        }else{
-                            callProductListingApi(categoryId)
-                        }
-                        return@OnTouchListener true
+                    if(homeSearchQuery.isNotBlank()){
+                        homeSearchQuery = ""
+                    }else{
+                        callProductListingApi(categoryId)
                     }
+                    return@OnTouchListener true
                 }
             }
             false
@@ -441,7 +440,7 @@ class ProductListingFragment: BaseFragment() {
         //reset other filters
         val keys = mViewModel.selectedFilterMap.keys
         for (key in keys){
-            mViewModel.selectedFilterMap.put(key, "")
+            mViewModel.selectedFilterMap[key] = ""
         }
 
         filterOptionAdapter.resetFilter()
