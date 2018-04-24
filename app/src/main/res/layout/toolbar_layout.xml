@@ -41,7 +41,7 @@
                 android:id="@+id/toolbar_right_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{Integer.toString(toolbarViewModel.cartCount)}"
+                android:text='@{toolbarViewModel.cartCount == 0 ? "" : Integer.toString(toolbarViewModel.cartCount)}'
                 android:layout_marginRight="@dimen/sixteen_dp"
                 android:paddingTop="@dimen/five_dp"
                 android:textSize="@dimen/twelve_sp"

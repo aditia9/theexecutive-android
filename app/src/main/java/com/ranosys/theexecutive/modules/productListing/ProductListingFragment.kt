@@ -236,6 +236,7 @@ class ProductListingFragment: BaseFragment() {
                 mBinding.tvFilterOption.isEnabled = true
                 filterOptionAdapter.optionsList = filterList.filterNot { it.name == Constants.FILTER_PRICE_LABEL }
                 filterOptionAdapter.notifyDataSetChanged()
+
                 //filterOptionBinding.filterList.expandGroup(0, true)
             }else{
                 mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.hint_color))

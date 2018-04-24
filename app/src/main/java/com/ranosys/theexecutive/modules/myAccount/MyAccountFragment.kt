@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.myAccount
 
+import android.app.Activity
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
@@ -105,7 +108,15 @@ class MyAccountFragment: BaseFragment() {
                     Utils.showDialog(context, context.getString(R.string.logout_text),
                             context.getString(R.string.yes), context.getString(R.string.no), object : DialogOkCallback {
                         override fun setDone(done: Boolean) {
-                            Utils.logout(item.context)
+
+                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                    .requestIdToken(context.getString(R.string.gmail_server_client_id))
+                                    .requestEmail()
+                                    .requestProfile()
+                                    .build()
+
+                            val mGoogleSignInClient = GoogleSignIn.getClient(context as Activity, gso)
+                            Utils.logout(item.context, mGoogleSignInClient)
 
                         }
                     })
