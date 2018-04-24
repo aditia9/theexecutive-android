@@ -222,7 +222,13 @@ object AppRepository {
         callPut?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if (!response!!.isSuccessful) {
+                    if(response.code() == 404){
+                        val errorBody = "No user exists with this email id."
+                        callBack.onError(errorBody)
+                    }else{
+
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }
 
                 } else {
                     callBack.onSuccess(response.body())
@@ -310,7 +316,13 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    if(response.code() == 404){
+                        val errorBody = "No user exists with this email id."
+                        callBack.onError(errorBody)
+                    }else{
+
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }
                 }else{
                     callBack.onSuccess(response.body())
                 }
