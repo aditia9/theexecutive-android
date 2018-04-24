@@ -174,7 +174,7 @@ class ProductViewFragment : BaseFragment() {
             wearWithAdapter.setItemClickListener(object : WearWithProductsAdapter.OnItemClickListener {
                 override fun onItemClick(item: ProductListingDataClass.ProductLinks?) {
                     val fragment = ProductDetailFragment.getInstance(null, item?.linked_product_sku , item?.extension_attributes?.linked_product_name, 0)
-                    FragmentUtils.replaceFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                    FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                 }
             })
         }else {
@@ -627,9 +627,11 @@ class ProductViewFragment : BaseFragment() {
     {
         if(productItemViewModel.productItem?.type_id.equals("simple")){
             sizeDilaog.rv_size_view.visibility = View.GONE
+            sizeDilaog.tv_select_size.visibility = View.GONE
         }
         else{
             sizeDilaog.rv_size_view.visibility = View.VISIBLE
+            sizeDilaog.tv_select_size.visibility = View.VISIBLE
         }
 
         if(price == specialPrice){

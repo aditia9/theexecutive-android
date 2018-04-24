@@ -31,6 +31,7 @@
                 android:paddingRight="@dimen/ten_dp"
                 android:singleLine="true"
                 android:inputType="text"
+                android:hint="@string/search"
                 android:imeOptions="actionSearch"
                 android:layout_marginLeft="@dimen/eight_dp"
                 android:layout_marginRight="@dimen/eight_dp"

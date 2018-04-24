@@ -57,15 +57,15 @@ class ProductDetailFragment : BaseFragment() {
             }
 
         }else{
-            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList!!.get())
+            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get())
             product_viewpager.adapter = pagerAdapter
+            product_viewpager.adapter?.notifyDataSetChanged()
             product_viewpager.offscreenPageLimit = 2
             product_viewpager.setCurrentItem(position!!)
         }
 
         product_viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
-
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -73,7 +73,6 @@ class ProductDetailFragment : BaseFragment() {
             }
 
             override fun onPageSelected(position: Int) {
-
             }
         })
 
@@ -96,11 +95,11 @@ class ProductDetailFragment : BaseFragment() {
                 if (response is ProductListingDataClass.Item) {
                     productList = mutableListOf()
                     productList?.add(response)
+                    productDetailViewModel.productList?.set(productList)
                     setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-                    pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productList)
+                    pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get())
                     product_viewpager.adapter = pagerAdapter
-                   // product_viewpager.offscreenPageLimit = 2
-                   // product_viewpager.setCurrentItem(position!!)
+                    product_viewpager.adapter?.notifyDataSetChanged()
                     hideLoading()
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
