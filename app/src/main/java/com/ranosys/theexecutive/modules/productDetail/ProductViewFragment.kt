@@ -95,13 +95,11 @@ class ProductViewFragment : BaseFragment() {
             setData()
         }
 
-        if(productItemViewModel.productItem?.sku.equals("5-BLWBBX417L014")) {
-            if (productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
-                rl_color_view.visibility = View.VISIBLE
-                getProductChildren(productItemViewModel.productItem?.sku)
-            } else {
-                rl_color_view.visibility = View.GONE
-            }
+        if (productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
+            rl_color_view.visibility = View.VISIBLE
+            getProductChildren(productItemViewModel.productItem?.sku)
+        } else {
+            rl_color_view.visibility = View.GONE
         }
 
         img_one.setOnClickListener{
@@ -131,7 +129,7 @@ class ProductViewFragment : BaseFragment() {
             setProductImages(productItemViewModel.productItem?.media_gallery_entries)
         }
         setWearWithProductsData()
-        if(productItemViewModel.productItem?.sku.equals("5-BLWBBX417L014")) {
+        if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
             setColorImagesList()
         }
     }
@@ -149,17 +147,6 @@ class ProductViewFragment : BaseFragment() {
     }
 
     private fun setPrice(){
-        /* if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
-             price = productItemViewModel.productItem?.extension_attributes?.regular_price
-             specialPrice = productItemViewModel.productItem?.extension_attributes?.final_price
-         }else{
-             price = productItemViewModel.productItem?.price!!
-             val attributes = productItemViewModel.productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
-             if (attributes?.isNotEmpty()!!) {
-                 specialPrice = attributes[0].value.toString()
-             }
-         }
- */
         if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)){
             price = productItemViewModel.productItem?.price!!
             val attributes = productItemViewModel.productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
