@@ -29,14 +29,13 @@ import java.io.InputStreamReader
  */
 class SplashActivity : BaseActivity() {
 
-    private val SPLASH_TIMEOUT = 3000
     private val handler = Handler()
     private var canNavigateToHome: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       // observeEvent()
+        // observeEvent()
 
         //check for auth token in SP if not get from assets
         if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
@@ -45,7 +44,7 @@ class SplashActivity : BaseActivity() {
         }
 
         if (Utils.isConnectionAvailable(this)) {
-           //call configuration API
+            //call configuration API
             getConfigurationApi()
         } else {
             Utils.showNetworkErrorDialog(this)
@@ -54,21 +53,11 @@ class SplashActivity : BaseActivity() {
         //fetch device id
         getDeviceID()
 
-        //if user logged in get his cart count and cart id
-        val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-        val guestCardId= SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY) ?: ""
-        if(userToken.isNullOrBlank().not()){
-            getCartIdForUser(userToken)
-        }else if(guestCardId.isNotBlank()){
-            getGuestCartCount(guestCardId)
-        }
-
-
         handler.postDelayed({
             kotlin.run {
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
-        }, SPLASH_TIMEOUT.toLong())
+        }, Constants.SPLASH_TIMEOUT)
 
     }
 
@@ -76,13 +65,13 @@ class SplashActivity : BaseActivity() {
     private fun getConfigurationApi() {
         AppRepository.getConfiguration(object: ApiCallback<ConfigurationResponse>{
             override fun onException(error: Throwable) {
-                Utils.printLog("Config Api", "Error")
-                getStoresApi()
+                AppLog.d("Config Api : ${error.message}")
+                showExitApplicationDialog(getString(R.string.common_error), pAction = {getConfigurationApi()}, nAction = {finish()})
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Config Api", errorMsg)
-                getStoresApi()
+                AppLog.e("Config Api : $errorMsg")
+                showExitApplicationDialog(getString(R.string.common_error), pAction = {getConfigurationApi()}, nAction = {finish()})
             }
 
             override fun onSuccess(configuration: ConfigurationResponse?) {
@@ -95,32 +84,43 @@ class SplashActivity : BaseActivity() {
     private fun manageConfiguration(configuration: ConfigurationResponse?) {
         if(configuration?.maintenance == Constants.MAINTENENCE_OFF){
 
-            SavedPreferences.getInstance()?.saveStringValue(configuration.product_media_url, Constants.PRODUCT_MEDIA_URL)
-            SavedPreferences.getInstance()?.saveStringValue(configuration.category_media_url, Constants.CATEGORY_MEDIA_URL)
-            SavedPreferences.getInstance()?.saveStringValue(configuration.voucher_amount, Constants.VOUCHER_AMT)
-            SavedPreferences.getInstance()?.saveStringValue(configuration.subscription_message, Constants.SUBS_MESSAGE)
-            SavedPreferences.getInstance()?.saveStringValue(configuration.home_promotion_message, Constants.PROMOTION_MESSAGE)
+            GlobalSingelton.instance?.configuration = configuration
 
             //call store api
             getStoresApi()
 
+            //get cart id and count
+            getCartIdAndCount()
+
             //check version
             if(configuration.version.toFloat() >= BuildConfig.VERSION_CODE + 1){
                 //force update
-                Utils.printLog("Config Api", "Force Update")
-                showExitApplicationDialog(getString(R.string.force_update_msg), {
+                AppLog.d("Config Api : FORCE UPDATE")
+                showExitApplicationDialog(getString(R.string.force_update_msg), pAction =  {
                     //redirect to play store
                 })
             }
-//            else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
-//                //soft update
-//                Utils.printLog("Config Api", "Soft Update")
-//            }
+            else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
+                //soft update
+                AppLog.d("Config Api : SOFT UPDATE")
+            }
         }else{
             //stop app with maintenance message
-            Utils.printLog("Config Api", "Maintance Mode")
-            showExitApplicationDialog(getString(R.string.maintenance_msg), {finish()})
+            AppLog.d("Config Api : MAINTENANCE MODE")
+            showExitApplicationDialog(getString(R.string.maintenance_msg), pAction = {finish()})
 
+        }
+    }
+
+    private fun getCartIdAndCount() {
+        //if user logged in get his cart count and cart id
+        val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val guestCardId= SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY) ?: ""
+
+        if(userToken.isNullOrBlank().not()){
+            getCartIdForUser()
+        }else if(guestCardId.isNotBlank()){
+            getGuestCartCount(guestCardId)
         }
     }
 
@@ -142,13 +142,13 @@ class SplashActivity : BaseActivity() {
             }
 
             override fun onException(error: Throwable) {
-                Utils.printLog("Store Api", "error")
+                AppLog.e("Store Api : ${error.message}")
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
 
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("Store Api", errorMsg)
+                AppLog.e("Store Api : $errorMsg")
                 if(canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
@@ -156,13 +156,17 @@ class SplashActivity : BaseActivity() {
         })
     }
 
-    private fun showExitApplicationDialog(message: String, action:() -> Unit = {}) {
+    private fun showExitApplicationDialog(message: String, pText: String = "OK", pAction:() -> Unit = {}, nText: String = "CALCEL", nAction:() -> Unit = {}) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(message)
-                .setPositiveButton(android.R.string.ok) {
-                    dialog, id -> dialog.cancel()
-                    action()}
+                .setPositiveButton(pText) {
+                    dialog, _ -> dialog.cancel()
+                    pAction()}
 
+                .setNegativeButton(nText){
+                    dialog, _ -> dialog.cancel()
+                    nAction()
+                }
         val alert = builder.create()
         alert.show()
     }
@@ -211,13 +215,15 @@ class SplashActivity : BaseActivity() {
         }
     }
 
-    fun getCartIdForUser(userToken: String?){
+    private fun getCartIdForUser(){
         val apiResponse = ApiResponse<String>()
         AppRepository.createUserCart(object : ApiCallback<String> {
             override fun onException(error: Throwable) {
+                AppLog.e("User Cart Id: ${error.message}")
             }
 
             override fun onError(errorMsg: String) {
+                AppLog.e("User Cart Id: $errorMsg")
             }
 
             override fun onSuccess(t: String?) {
@@ -233,11 +239,11 @@ class SplashActivity : BaseActivity() {
         val apiResponse = ApiResponse<String>()
         AppRepository.cartCountUser(object : ApiCallback<String>{
             override fun onException(error: Throwable) {
-
+                AppLog.e("User Cart count: ${error.message}")
             }
 
             override fun onError(errorMsg: String) {
-
+                AppLog.e("User Cart count: $errorMsg")
             }
 
             override fun onSuccess(t: String?) {
@@ -254,13 +260,15 @@ class SplashActivity : BaseActivity() {
 
     }
 
-    fun getGuestCartCount(cartId: String) {
+    private fun getGuestCartCount(cartId: String) {
         val apiResponse = ApiResponse<String>()
         AppRepository.cartCountGuest(cartId, object : ApiCallback<String>{
             override fun onException(error: Throwable) {
+                AppLog.e("Guest Cart count: ${error.message}")
             }
 
             override fun onError(errorMsg: String) {
+                AppLog.e("Guest Cart count: $errorMsg")
             }
 
             override fun onSuccess(t: String?) {

@@ -19,9 +19,8 @@ import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
-import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlideApp
-import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.GlobalSingelton
 
 
 /**
@@ -105,7 +104,7 @@ class BindingAdapters {
         @JvmStatic
         @BindingAdapter("bind:baseWithimageUrl")
         fun loadImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
-            val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.CATEGORY_MEDIA_URL)
+            val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(baseUrl+imageUrl)
@@ -122,7 +121,7 @@ class BindingAdapters {
         @JvmStatic
         @BindingAdapter("bind:baseUrlWithProductImageUrl")
         fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
-            val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.PRODUCT_MEDIA_URL)
+            val baseUrl = GlobalSingelton.instance?.configuration?.product_media_url
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .asBitmap()

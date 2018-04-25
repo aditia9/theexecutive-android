@@ -121,7 +121,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             showDate(Calendar.getInstance().get(Calendar.YEAR) - Constants.MINIMUM_AGE, 0, 1, R.style.DatePickerSpinner)
         }
 
-        cb_subscribe.text = SavedPreferences.getInstance()?.getStringValue(Constants.SUBS_MESSAGE)
+        cb_subscribe.text = GlobalSingelton.instance?.configuration?.subscription_message
 
         cb_subscribe.setOnCheckedChangeListener { buttonView, isChecked ->
             registerViewModel.isSubscribed.set(isChecked)

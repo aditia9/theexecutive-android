@@ -155,6 +155,7 @@
     <string name="available_colors">Available Colors</string>
     <string name="wishlist_success_msg">Product added to wishlist</string>
     <string name="out_of_stock">Out of stock</string>
+    <string name="common_error">Something went wrong, Please try again</string>
 
 
 </resources>
