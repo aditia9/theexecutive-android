@@ -89,7 +89,7 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
                     FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 }
 
-
+                expandableListView?.smoothScrollToPosition(group)
                 return false
             }
         })

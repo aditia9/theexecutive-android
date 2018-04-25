@@ -24,16 +24,16 @@ import kotlinx.android.synthetic.main.toolbar_layout.*
 open class BaseActivity: RunTimePermissionActivity(){
 
     var toolbarViewModel: ToolbarViewModel? = null
-    lateinit var baseViewModel: BaseViewModel
+    private lateinit var baseViewModel: BaseViewModel
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(Utils.isTablet(this)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        requestedOrientation = if(Utils.isTablet(this)){
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }else{
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         baseViewModel = ViewModelProviders.of(this).get(BaseViewModel::class.java)

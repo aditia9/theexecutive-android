@@ -34,25 +34,21 @@ class BindingAdapters {
         @BindingAdapter("app:errorText")
         fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
             view.error = errorMessage
-            if (TextUtils.isEmpty(errorMessage)) {
-                view.isErrorEnabled = false
-            } else {
-                view.isErrorEnabled = true
-            }
+            view.isErrorEnabled = !TextUtils.isEmpty(errorMessage)
         }
 
         @JvmStatic
         @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
         fun bindSpinnerData(pAppCompatSpinner: AppCompatSpinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
-            pAppCompatSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                     newTextAttrChanged.onChange()
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {}
-            })
+            }
             if (newSelectedValue != null) {
-                val pos = (pAppCompatSpinner.getAdapter() as ArrayAdapter<String>).getPosition(newSelectedValue)
+                val pos = (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
                 pAppCompatSpinner.setSelection(pos, true)
             }
         }

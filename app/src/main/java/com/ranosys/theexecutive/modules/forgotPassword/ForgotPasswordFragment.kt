@@ -29,7 +29,7 @@ class ForgotPasswordFragment: BaseFragment() {
         forgotPassVM = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         mBinding.vm = forgotPassVM
 
-        handleKeyboard(mBinding.root)
+       // handleKeyboard(mBinding.root)
         observeApiSuccess()
         observeApiFailure()
         return mBinding.root

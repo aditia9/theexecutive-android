@@ -41,7 +41,7 @@ import java.util.*
  * Created by Nikhil Agarwal on 23/2/18.
  */
 
-class LoginFragment() : BaseFragment() {
+class LoginFragment: BaseFragment() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var mBinding: FragmentLoginBinding
