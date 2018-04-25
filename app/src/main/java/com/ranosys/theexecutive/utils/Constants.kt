@@ -83,5 +83,6 @@ object Constants {
     const val ERROR_CODE_404: Int = 404
     const val ERROR_CODE_401: Int = 401
     const val ERROR_CODE_400: Int = 400
+    const val ZENDESK_CHAT: String = "5eqiIZLxn9cEhPESVqDlhr6J0tdAM0Jg"
 
 }

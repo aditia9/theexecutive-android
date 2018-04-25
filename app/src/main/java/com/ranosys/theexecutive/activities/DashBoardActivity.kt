@@ -18,6 +18,7 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.zopim.android.sdk.api.ZopimChat
 
 /**
  * Created by Mohammad Sunny on 19/2/18.
@@ -28,6 +29,9 @@ class DashBoardActivity: BaseActivity() {
         super.onCreate(savedInstanceState)
         val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding?.toolbarViewModel = toolbarViewModel
+
+        //initialize Zendesk cha setup
+        setUpZendeskChat()
         val model = ViewModelProviders.of(this).get(DashBoardViewModel::class.java)
         model.manageFragments().observe(this, Observer { isCreated ->
             if(isCreated!!){
@@ -78,5 +82,9 @@ class DashBoardActivity: BaseActivity() {
 
         })
 
+    }
+
+    private fun setUpZendeskChat() {
+        ZopimChat.init(Constants.ZENDESK_CHAT)
     }
 }

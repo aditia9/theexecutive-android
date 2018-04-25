@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.home
 import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Typeface
 import android.os.Bundle
@@ -11,12 +12,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.facebook.FacebookSdk.getApplicationContext
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.fragment_home.*
+
+
 /**
  * Created by Mohammad Sunny on 19/3/18.
  */
@@ -29,6 +34,10 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setPagerAdapter()
+
+        tv_chat.setOnClickListener {
+            startActivity(Intent(getApplicationContext(), ZopimChatActivity::class.java))
+        }
     }
     private fun setPagerAdapter(){
         val homeViewPager = HomeViewPager(childFragmentManager)
