@@ -184,7 +184,7 @@ class LoginFragment: BaseFragment() {
 
         loginViewModel.userCartCountResponse?.observe(this, Observer {
             response ->
-            val userCount = response?.apiResponse ?: response?.error
+            val userCount = response?.apiResponse
             if(userCount is String){
                 try {
                     Utils.updateCartCount(userCount.toInt())

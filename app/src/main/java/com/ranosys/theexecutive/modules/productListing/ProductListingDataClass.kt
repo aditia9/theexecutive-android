@@ -15,7 +15,7 @@ class ProductListingDataClass {
                                 var normalPrice: String = "6.9",
                                 var specialPrice: String = "2,42.900",
                                 var type: String = "New",
-                                var discountPer: Int = 40,
+                                var discountPer: Int = 0,
                                 var collectionTag: String = "",
                                 var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
 

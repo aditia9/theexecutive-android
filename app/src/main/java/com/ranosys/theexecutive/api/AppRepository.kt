@@ -100,7 +100,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if(!response!!.isSuccessful){
-                    if(response.code() == 401){
+                    if(response.code() == Constants.ERROR_CODE_401){
                         val errorBody = "The email address or password do not match with our system, Kindly enter the valid credentials"
                         callBack.onError(errorBody)
                     }else{
@@ -222,7 +222,7 @@ object AppRepository {
         callPut?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if (!response!!.isSuccessful) {
-                    if(response.code() == 404){
+                    if(response.code() == Constants.ERROR_CODE_404){
                         val errorBody = "No user exists with this email id."
                         callBack.onError(errorBody)
                     }else{
@@ -295,7 +295,13 @@ object AppRepository {
         callPost?.enqueue(object : Callback<RegisterDataClass.RegistrationResponse> {
             override fun onResponse(call: Call<RegisterDataClass.RegistrationResponse>?, response: Response<RegisterDataClass.RegistrationResponse>?) {
                 if(!response!!.isSuccessful){
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    if(response.code() == Constants.ERROR_CODE_400){
+                        val errorBody = "It seems like you are already registered with us, kindly login."
+                        callBack.onError(errorBody)
+
+                    }else{
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }
                 }else{
                     callBack.onSuccess(response.body())
                 }

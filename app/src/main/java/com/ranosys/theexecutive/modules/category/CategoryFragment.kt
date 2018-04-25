@@ -26,7 +26,7 @@ import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
@@ -58,7 +58,7 @@ class CategoryFragment : BaseFragment() {
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
-        promotionBinding?.root?.tv_promotion_text?.text = SavedPreferences.getInstance()?.getStringValue(Constants.PROMOTION_MESSAGE)
+        promotionBinding?.root?.tv_promotion_text?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
         Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, 1.5)
         viewPager = promotionBinding?.root?.viewpager!!
 
@@ -140,18 +140,20 @@ class CategoryFragment : BaseFragment() {
             }
 
         })
+
         et_search_home.setOnTouchListener(View.OnTouchListener { v, event ->
             val DRAWABLE_RIGHT = 2
             if(event.getAction() == MotionEvent.ACTION_UP) {
                 if(event.rawX >= et_search_home.right - et_search_home.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
                     if(Utils.compareDrawable(activity as Context, et_search_home.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
-                        et_search_home.setText("")
                         return@OnTouchListener true
                     }else if(Utils.compareDrawable(activity as Context, et_search_home.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.search))){
                         if(et_search_home.text.isNotBlank()){
+                            val query = et_search_home.text.toString()
+                            et_search_home.setText("")
                             Utils.hideSoftKeypad(activity as Context)
                             val bundle = Bundle()
-                            bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, et_search_home.text.toString())
+                            bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, query)
                             FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                         }else{
                             Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
