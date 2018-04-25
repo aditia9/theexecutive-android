@@ -73,7 +73,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
             }
             try {
                val inStock = inStockList?.filter {
-                    it.colorValue == colorValue && it.sizeValue == sizeView.value
+                    it.coloCHAT featurerValue == colorValue && it.sizeValue == sizeView.value
                 }?.single()?.isInStock
                 if(inStock!!){
                     itemBinding?.tvOutOfStock?.visibility = View.GONE
