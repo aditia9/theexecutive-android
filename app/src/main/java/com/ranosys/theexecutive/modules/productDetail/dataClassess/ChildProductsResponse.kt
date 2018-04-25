@@ -34,7 +34,7 @@ data class ChildProductsResponse(
 		val sku: String,
 		val name: String,
 		val attribute_set_id: Int,
-		val price: Float,
+		val price: String,
 		val status: Int,
 		val visibility: Int,
 		val type_id: String,

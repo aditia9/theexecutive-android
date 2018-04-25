@@ -78,7 +78,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val tag: String? = product.extension_attributes.tag_text ?: ""
             var price: String
             var specialPrice = "0.0"
-            if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
+            if(productType == Constants.CONFIGURABLE){
                 price = Utils.getFromattedPrice(product.extension_attributes.regular_price)
                 specialPrice = Utils.getFromattedPrice(product.extension_attributes.final_price)
             }else{
