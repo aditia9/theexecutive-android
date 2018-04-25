@@ -129,7 +129,8 @@ class ProductViewFragment : BaseFragment() {
             setProductImages(productItemViewModel.productItem?.media_gallery_entries)
         }
         setWearWithProductsData()
-        if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
+        if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
+            //showLoading()
             setColorImagesList()
         }
     }
@@ -372,6 +373,7 @@ class ProductViewFragment : BaseFragment() {
                     setSizeViewList()
 
                     AppLog.e("ChildProductsMap : " + childProductsMap.toString())
+                   // hideLoading()
 
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
