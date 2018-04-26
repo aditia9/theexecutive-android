@@ -92,8 +92,8 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(imageUrl)
-                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
@@ -108,8 +108,8 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
@@ -126,8 +126,8 @@ class BindingAdapters {
                 GlideApp.with(imageView.context)
                         .asBitmap()
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
