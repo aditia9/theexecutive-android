@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -18,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.facebook.FacebookSdk
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
@@ -32,8 +34,10 @@ import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
+import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.bottom_size_layout.*
 import kotlinx.android.synthetic.main.dialog_product_image.view.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.product_detail_view.*
 import kotlinx.android.synthetic.main.product_images_layout.view.*
 
@@ -297,6 +301,7 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_chat -> {
+                    startActivity(Intent(FacebookSdk.getApplicationContext(), ZopimChatActivity::class.java))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_wishlist -> {

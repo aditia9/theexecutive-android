@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.SoftKeyboardStateWatcher
 import com.ranosys.theexecutive.base.BaseFragment
@@ -30,6 +31,7 @@ class ForgotPasswordFragment: BaseFragment() {
         mBinding.vm = forgotPassVM
 
         //handleKeyboard(mBinding.root)
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         observeApiSuccess()
         observeApiFailure()
         return mBinding.root
@@ -53,6 +55,7 @@ class ForgotPasswordFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         setToolBarParams(getString(R.string.forgot_password_title), 0, "", R.drawable.back, true, 0, false )
     }
 
@@ -92,5 +95,12 @@ class ForgotPasswordFragment: BaseFragment() {
                 mBinding.btnSubmit.visibility = View.VISIBLE
             }
         })
+
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 }
