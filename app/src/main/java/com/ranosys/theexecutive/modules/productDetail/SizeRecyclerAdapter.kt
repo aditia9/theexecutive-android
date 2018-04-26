@@ -32,7 +32,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item: ProductViewFragment.SizeView?, position: Int, priceList : List<ProductViewFragment.MaxQuantity>?)
+        fun onItemClick(item: ProductViewFragment.SizeView?, position: Int, priceList : List<ProductViewFragment.MaxQuantity>?, inStock : Boolean?)
     }
 
     fun setItemClickListener(listener: OnItemClickListener){
@@ -63,8 +63,9 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
 
         fun bind(context: Context?, sizeView: ProductViewFragment.SizeView?, listener: OnItemClickListener?, position: Int, colorValue: String?, inStockList: MutableList<ProductViewFragment.MaxQuantity>?){
             var priceList : List<ProductViewFragment.MaxQuantity>? = listOf<ProductViewFragment.MaxQuantity>()
+            var inStock : Boolean? = true
             itemBinding?.sizeView = sizeView
-            if(sizeView?.isSelected!! && inStockList?.get(position)?.isInStock!!){
+            if(sizeView?.isSelected!!){
                 itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.drawable.size_border)
                 itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT_BOLD)
             }
@@ -73,7 +74,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                 itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
             }
             try {
-               val inStock = inStockList?.filter {
+                inStock = inStockList?.filter {
                     it.colorValue == colorValue && it.sizeValue == sizeView.value
                 }?.single()?.isInStock
                 priceList = inStockList?.filter {
@@ -87,12 +88,13 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                     itemBinding?.tvSize?.isClickable = false
                     itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
                     itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
+
                 }
             }catch (e : Exception){
                 AppLog.printStackTrace(e)
             }
             itemView.setOnClickListener {
-                listener?.onItemClick(sizeView, position, priceList)
+                listener?.onItemClick(sizeView, position, priceList, inStock)
             }
         }
     }

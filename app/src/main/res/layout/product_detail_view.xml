@@ -248,10 +248,14 @@
                         android:id="@+id/tv_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:textStyle="bold"
-                        android:textSize="@dimen/sixteen_sp"
+                        android:maxLines="2"
+                        android:gravity="right"
+                        android:layout_marginLeft="@dimen/twelve_dp"
+                        android:layout_toRightOf="@id/btn_add_to_bag"
+                        android:textSize="@dimen/fourteen_sp"
                         />
 
                 </RelativeLayout>

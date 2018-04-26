@@ -59,6 +59,11 @@ object Constants {
     val FILTER_SPECIAL_PRICE_LABEL: String = "special_price"
     val NEW_FROM_DATE_LABEL: String = "news_from_date"
     val NEW_TO_DATE_LABEL: String = "news_to_date"
+    val SHORT_DESCRIPTION: String = "short_description"
+    val COLOR: String = "color"
+    val COLOR_: String = "Color"
+    val SIZE: String = "size"
+    val SIZE_: String = "Size"
     val REQUEST_PAGE_LABEL: String = "p"
     val REQUEST_PAGE_LIMIT_LABEL: String = "product_list_limit"
     val REQUEST_SEARCH_LABEL: String = "q"
@@ -85,5 +90,6 @@ object Constants {
     const val ERROR_CODE_401: Int = 401
     const val ERROR_CODE_400: Int = 400
     const val ZENDESK_CHAT: String = "5eqiIZLxn9cEhPESVqDlhr6J0tdAM0Jg"
+    const val ZERO: String = "0.0"
 
 }
