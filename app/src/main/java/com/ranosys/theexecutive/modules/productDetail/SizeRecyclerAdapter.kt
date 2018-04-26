@@ -32,7 +32,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item : ProductViewFragment.SizeView?, position: Int)
+        fun onItemClick(item: ProductViewFragment.SizeView?, position: Int, priceList : List<ProductViewFragment.MaxQuantity>?)
     }
 
     fun setItemClickListener(listener: OnItemClickListener){
@@ -62,8 +62,9 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
     class Holder(var itemBinding: SizeViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
         fun bind(context: Context?, sizeView: ProductViewFragment.SizeView?, listener: OnItemClickListener?, position: Int, colorValue: String?, inStockList: MutableList<ProductViewFragment.MaxQuantity>?){
+            var priceList : List<ProductViewFragment.MaxQuantity>? = listOf<ProductViewFragment.MaxQuantity>()
             itemBinding?.sizeView = sizeView
-            if(sizeView?.isSelected!!){
+            if(sizeView?.isSelected!! && inStockList?.get(position)?.isInStock!!){
                 itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.drawable.size_border)
                 itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT_BOLD)
             }
@@ -75,6 +76,9 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                val inStock = inStockList?.filter {
                     it.colorValue == colorValue && it.sizeValue == sizeView.value
                 }?.single()?.isInStock
+                priceList = inStockList?.filter {
+                    it.colorValue == colorValue
+                }?.toList()
                 if(inStock!!){
                     itemBinding?.tvOutOfStock?.visibility = View.GONE
                 }else{
@@ -88,7 +92,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                 AppLog.printStackTrace(e)
             }
             itemView.setOnClickListener {
-                listener?.onItemClick(sizeView, position)
+                listener?.onItemClick(sizeView, position, priceList)
             }
         }
     }

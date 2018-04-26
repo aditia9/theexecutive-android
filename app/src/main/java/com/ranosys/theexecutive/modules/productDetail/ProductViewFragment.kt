@@ -1,6 +1,7 @@
 package com.ranosys.theexecutive.modules.productDetail
 
 import AppLog
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -57,14 +58,12 @@ class ProductViewFragment : BaseFragment() {
     var sizeAttrId : String? = ""
     var sizeValue : String? = ""
     var itemQty : Int? = 1
-    var productColorValue : String? = ""
-    var productSizeValue : String? = ""
     var selectedQty : Int = 1
     var price : String? = "0.0"
     var specialPrice : String? = "0.0"
     var colorMap = HashMap<String, String>()
     var sizeMap = HashMap<String, String>()
-    var childProductsMap = HashMap<String, MutableList<ProductListingDataClass.MediaGalleryEntry>?>()
+    var childProductsMap = HashMap<String, ImagesWithPrice?>()
     var colorOptionList : List<ProductOptionsResponse>? = null
     var sizeOptionList : List<ProductOptionsResponse>? = null
     private lateinit var sizeDilaogBinding: BottomSizeLayoutBinding
@@ -100,14 +99,11 @@ class ProductViewFragment : BaseFragment() {
             setData()
         }
 
-        if(productItemViewModel.productItem?.type_id.equals("configurable")){
+        if (productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
             rl_color_view.visibility = View.VISIBLE
             getProductChildren(productItemViewModel.productItem?.sku)
-        }
-        else{
+        } else {
             rl_color_view.visibility = View.GONE
-          //  maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty))
-
         }
 
         img_one.setOnClickListener{
@@ -129,13 +125,18 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setData(){
+    private fun setData(){
 
         setDescription()
-        setPrice()
-        setProductImages(productItemViewModel.productItem?.media_gallery_entries)
-        setColorImagesList()
+        if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
+            setPrice()
+            setProductImages(productItemViewModel.productItem?.media_gallery_entries)
+        }
         setWearWithProductsData()
+        if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
+            //showLoading()
+            setColorImagesList()
+        }
     }
 
     fun setDescription(){
@@ -150,29 +151,28 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setPrice(){
-        if(productItemViewModel.productItem?.type_id.equals(Constants.FILTER_CONFIGURABLE_LABEL)){
-            price = productItemViewModel.productItem?.extension_attributes?.regular_price
-            specialPrice = productItemViewModel.productItem?.extension_attributes?.final_price
-        }else{
+    private fun setPrice(){
+        if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)){
             price = productItemViewModel.productItem?.price!!
             val attributes = productItemViewModel.productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
             if (attributes?.isNotEmpty()!!) {
                 specialPrice = attributes[0].value.toString()
             }
-        }
-        if(price == specialPrice){
+            if(price?.toDouble()!! >= specialPrice?.toDouble()!! && !specialPrice.equals("0.0")){
+                price = specialPrice
+            }
             tv_price.setText(Constants.IDR + Utils.getFromattedPrice(price ?: ""))
-        }else {
-            tv_price.setText(Constants.IDR + Utils.getFromattedPrice(specialPrice ?: ""))
         }
+
+
     }
 
-    fun setWearWithProductsData(){
+    private fun setWearWithProductsData(){
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         list_wear_with_products.layoutManager = linearLayoutManager
 
         if(productItemViewModel.productItem?.product_links?.size!! > 0) {
+            rl_wear_with_layout.visibility = View.VISIBLE
             val wearWithAdapter = WearWithProductsAdapter(activity as Context, productItemViewModel.productItem?.product_links)
             list_wear_with_products.adapter = wearWithAdapter
             wearWithAdapter.setItemClickListener(object : WearWithProductsAdapter.OnItemClickListener {
@@ -187,7 +187,7 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
+    private fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
         Utils.setImageViewHeight(activity as Context, img_one, 27)
         Utils.setImageViewHeight(activity as Context, img_two, 27)
         if(mediaGalleryList?.size!! > 0)
@@ -210,7 +210,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun setColorImagesList(){
+    private fun setColorImagesList(){
         productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.run{
             val length = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.size!!
             for(i in 0..length-1) {
@@ -219,8 +219,7 @@ class ProductViewFragment : BaseFragment() {
                     "Color" -> {
                         option.values.forEachIndexed { index, value ->
                             if(index == 0) {
-                                productColorValue = value.value_index.toString()
-                                colorValue = productColorValue
+                                colorValue = value.value_index.toString()
                             }
                             colorMap.put(index.toString(), value = value.value_index.toString())
                         }
@@ -231,8 +230,7 @@ class ProductViewFragment : BaseFragment() {
                     "Size" -> {
                         option.values.forEachIndexed { index, value ->
                             if(index == 0) {
-                                productSizeValue = value.value_index.toString()
-                                sizeValue = productSizeValue
+                                sizeValue = value.value_index.toString()
                             }
                             sizeMap.put(index.toString(), value = value.value_index.toString())
                         }
@@ -245,7 +243,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun getProductChildren(productSku : String?){
+    private fun getProductChildren(productSku : String?){
         if (Utils.isConnectionAvailable(activity as Context)) {
             productItemViewModel.getProductChildren(productSku)
         } else {
@@ -253,7 +251,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun getProductOptions(attributeId : String?, label : String?){
+    private fun getProductOptions(attributeId : String?, label : String?){
         if (Utils.isConnectionAvailable(activity as Context)) {
             productItemViewModel.getProductOptions(attributeId, label)
         } else {
@@ -261,7 +259,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun getStaticPagesUrl(){
+    private fun getStaticPagesUrl(){
         if (Utils.isConnectionAvailable(activity as Context)) {
             productItemViewModel.getStaticPagesUrl()
         } else {
@@ -269,7 +267,7 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    fun observeEvents(){
+    private fun observeEvents(){
         productItemViewModel.clickedAddBtnId?.observe(this, Observer<Int> { id ->
             when (id){
                 R.id.btn_add_to_bag -> {
@@ -333,21 +331,45 @@ class ProductViewFragment : BaseFragment() {
                 if (response is List<*>) {
                     val list = response as List<ChildProductsResponse>
 
-                    list.forEach {
-                        val colorValue = it.custom_attributes.filter { s ->
-                            s.attribute_code == "color"
-                        }.single().value.toString()
-                        if (!childProductsMap.containsKey(colorValue)) {
-                            if (colorValue.equals(productColorValue)) {
-                                childProductsMap.put(colorValue, productItemViewModel.productItem?.media_gallery_entries)
-                            } else {
-                                childProductsMap.put(colorValue, it.media_gallery_entries)
+                    list.forEachIndexed { index, it ->
+                        try {
+                            val colorValue = it.custom_attributes.filter { s ->
+                                s.attribute_code == "color"
+                            }.single().value.toString()
+                            if (!childProductsMap.containsKey(colorValue)) {
+                                var configurePrice = it.price
+                                var configureSpecialPrice = "0.0"
+                                val attributes = it.custom_attributes.filter {
+                                    it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL
+                                }.toList()
+                                if (attributes.isNotEmpty()) {
+                                    configureSpecialPrice = attributes[0].value.toString()
+                                }
+                                if(configurePrice.toDouble() >= configureSpecialPrice.toDouble() && !configureSpecialPrice.equals("0.0")){
+                                    configurePrice = configureSpecialPrice
+                                }
+                                childProductsMap.put(colorValue, ImagesWithPrice(configurePrice, it.media_gallery_entries))
                             }
+
+                            val sizeValue = it.custom_attributes.filter { s ->
+                                s.attribute_code == "size"
+                            }.single().value.toString()
+                            var configSimplePrice = it.price
+                            var configSpecialPrice = "0.0"
+                            val sp = it.custom_attributes.filter { s ->
+                                s.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL
+                            }.toList()
+                            if(sp.isNotEmpty()){
+                                configSpecialPrice = sp[0].value.toString()
+                            }
+                            if(configSimplePrice.toDouble() >= configSpecialPrice.toDouble()  && !configSpecialPrice.equals("0.0")){
+                                configSimplePrice = configSpecialPrice
+                            }
+                            maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty,
+                                    it.extension_attributes.stock_item.is_in_stock, configSimplePrice))
+                        }catch (e : Exception){
+                            AppLog.printStackTrace(e)
                         }
-                        val sizeValue = it.custom_attributes.filter { s ->
-                            s.attribute_code == "size"
-                        }.single().value.toString()
-                        maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty, it.extension_attributes.stock_item.is_in_stock))
                     }
 
                     AppLog.e("maxQuantityList : " + maxQuantityList.toString())
@@ -356,6 +378,7 @@ class ProductViewFragment : BaseFragment() {
                     setSizeViewList()
 
                     AppLog.e("ChildProductsMap : " + childProductsMap.toString())
+                   // hideLoading()
 
                 } else {
                     Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
@@ -508,12 +531,19 @@ class ProductViewFragment : BaseFragment() {
 
     fun setColorViewList(){
         colorOptionList?.forEachIndexed { index, it ->
-            if(index == 0)
-                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value), true))
-            else
-                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value), false))
+            if(index == 0) {
+                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value)?.list, childProductsMap.get(it.value)?.price, true))
+                setProductImages(childProductsMap.get(it.value)?.list)
+                price = childProductsMap.get(it.value)?.price
+                tv_price.setText(Constants.IDR + Utils.getFromattedPrice(childProductsMap.get(it.value)?.price ?: ""))
+
+            }
+            else {
+                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value)?.list, childProductsMap.get(it.value)?.price, false))
+            }
 
         }
+
         AppLog.e("colorsViewList : " + colorsViewList.toString())
 
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
@@ -522,7 +552,7 @@ class ProductViewFragment : BaseFragment() {
             val colorViewAdapter = ColorRecyclerAdapter(activity as Context, colorsViewList)
             rv_color_view.adapter = colorViewAdapter
             colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(colorView: ProductViewFragment.ColorsView?, position: Int) {
+                override fun onItemClick(item: ProductViewFragment.ColorsView?, position: Int) {
                     colorsViewList?.forEachIndexed { index,it ->
                         if(index == position){
                             colorsViewList?.get(index)?.isSelected = true
@@ -530,10 +560,11 @@ class ProductViewFragment : BaseFragment() {
                             colorsViewList?.get(index)?.isSelected = false
                         }
                     }
-                    colorValue = colorView?.value
+                    colorValue = item?.value
+                    price = item?.price
+                    tv_price.setText(Constants.IDR + Utils.getFromattedPrice(item?.price ?: ""))
                     colorViewAdapter.notifyDataSetChanged()
-
-                    colorView?.list?.let {
+                    item?.list?.let {
                         ll_color_choice.removeAllViews()
                         setProductImages(it)
                     }
@@ -546,7 +577,7 @@ class ProductViewFragment : BaseFragment() {
     fun setSizeViewList(){
         sizeOptionList?.forEachIndexed { index, it ->
             if(index == 0)
-                sizeViewList?.add(SizeView(it.label, sizeAttrId, it.value,true))
+                sizeViewList?.add(SizeView(it.label, sizeAttrId, it.value,false))
             else
                 sizeViewList?.add(SizeView(it.label, sizeAttrId, it.value,false))
         }
@@ -575,7 +606,7 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.addToGuestCart(prepareAddToCartRequest(guestCartId))
                 }else{
 
-                productItemViewModel.getCartIdForGuest()
+                    productItemViewModel.getCartIdForGuest()
                 }
             }
         })
@@ -628,8 +659,8 @@ class ProductViewFragment : BaseFragment() {
         return request
     }
 
-    fun openBottomSizeSheet()
-    {
+    @SuppressLint("SetTextI18n")
+    fun openBottomSizeSheet() {
         if(productItemViewModel.productItem?.type_id.equals("simple")){
             sizeDilaog.rv_size_view.visibility = View.GONE
             sizeDilaog.tv_select_size.visibility = View.GONE
@@ -639,21 +670,19 @@ class ProductViewFragment : BaseFragment() {
             sizeDilaog.tv_select_size.visibility = View.VISIBLE
         }
 
-        if(price == specialPrice){
-            sizeDilaog.tv_product_price.setText(Constants.IDR + Utils.getFromattedPrice(price ?: ""))
-        }else {
-            sizeDilaog.tv_product_price.setText(Constants.IDR + Utils.getFromattedPrice(specialPrice ?: ""))
-        }
-
+        sizeDilaog.tv_product_price.setText(Constants.IDR + Utils.getFromattedPrice(price ?: ""))
         sizeDilaog.tv_quantity.text = selectedQty.toString()
 
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         sizeDilaog.rv_size_view.layoutManager = linearLayoutManager
         if(sizeViewList?.size!! > 0) {
+            sizeViewList?.forEach {
+                s-> s.isSelected = false
+            }
             val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList, colorValue, maxQuantityList)
             sizeDilaog.rv_size_view.adapter = sizeViewAdapter
             sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(sizeView: ProductViewFragment.SizeView?, position: Int) {
+                override fun onItemClick(sizeView: SizeView?, position: Int, priceList: List<ProductViewFragment.MaxQuantity>?) {
                     selectedQty = 1
                     sizeDilaog.tv_quantity.text =  selectedQty.toString()
                     sizeViewList?.forEachIndexed { index,it ->
@@ -664,6 +693,11 @@ class ProductViewFragment : BaseFragment() {
                         }
                     }
                     sizeValue = sizeView?.value
+                    val selectedSizePrice = priceList?.filter {
+                        it.colorValue == colorValue && it.sizeValue == sizeValue
+                    }?.single()?.price
+                    sizeDilaog.tv_product_price.setText(Constants.IDR + Utils.getFromattedPrice(selectedSizePrice!!))
+
                     if(productItemViewModel.productItem?.type_id.equals("simple")) {
                         itemQty = productItemViewModel.productItem?.extension_attributes?.stock_item?.qty ?: 0
                     }
@@ -709,11 +743,13 @@ class ProductViewFragment : BaseFragment() {
     }
 
     data class ColorsView(var label: String?, var attr_id:String?, var value : String?,
-                          var list : List<ProductListingDataClass.MediaGalleryEntry>?, var isSelected : Boolean?)
+                          var list : List<ProductListingDataClass.MediaGalleryEntry>?, var price: String?, var isSelected : Boolean?)
 
     data class SizeView(var label: String?, var attr_id:String?, var value : String?, var isSelected : Boolean?)
 
-    data class MaxQuantity(var colorValue : String?, var sizeValue : String?, var maxQuantity : Int?, var isInStock : Boolean = true)
+    data class ImagesWithPrice(var price: String?, var list : List<ProductListingDataClass.MediaGalleryEntry>?)
+
+    data class MaxQuantity(var colorValue: String?, var sizeValue: String?, var maxQuantity: Int?, var isInStock: Boolean = true, var price: String)
 
     companion object {
 
