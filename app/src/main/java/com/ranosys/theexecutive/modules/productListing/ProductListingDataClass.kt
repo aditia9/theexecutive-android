@@ -10,14 +10,15 @@ import android.databinding.ObservableField
 
 class ProductListingDataClass {
 
-    class ProductMaskedResponse(var sku: String = "0",
-                                var name: String = "Demo Longggg Naaaaame",
-                                var normalPrice: String = "6.9",
-                                var specialPrice: String = "2,42.900",
-                                var type: String = "New",
+    class ProductMaskedResponse(var sku: String = "",
+                                var name: String = "",
+                                var normalPrice: String = "",
+                                var specialPrice: String = "",
+                                var displayPrice: String = "",
+                                var type: String = "",
                                 var discountPer: Int = 0,
                                 var collectionTag: String = "",
-                                var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
+                                var imageUrl: String = "")
 
 
 

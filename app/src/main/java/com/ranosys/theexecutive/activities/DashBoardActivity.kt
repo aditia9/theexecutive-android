@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.activities
 
+import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -24,6 +25,8 @@ import com.zopim.android.sdk.api.ZopimChat
  * Created by Mohammad Sunny on 19/2/18.
  */
 class DashBoardActivity: BaseActivity() {
+
+    lateinit var webPagesDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

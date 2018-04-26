@@ -274,19 +274,19 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_composition_and_care -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.composition_and_care)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.composition_and_care ,getString(R.string.composition))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_size_guideline -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.size_guideline ,getString(R.string.size_guideline))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_shipping -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.shipping)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.shipping ,getString(R.string.shipping))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_return -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.returns)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.returns ,getString(R.string.returns))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_share -> {
@@ -294,7 +294,7 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_buying_guidelinie -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.buying_guideline)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.buying_guideline ,getString(R.string.buying_guideline))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_chat -> {
