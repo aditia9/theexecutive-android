@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -24,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.facebook.FacebookSdk
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
@@ -38,6 +40,7 @@ import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
+import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.bottom_size_layout.*
 import kotlinx.android.synthetic.main.dialog_product_image.view.*
 import kotlinx.android.synthetic.main.product_detail_view.*
@@ -270,19 +273,19 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_composition_and_care -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.composition_and_care)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.composition_and_care ,getString(R.string.composition))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_size_guideline -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.size_guideline ,getString(R.string.size_guideline))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_shipping -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.shipping)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.shipping ,getString(R.string.shipping))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_return -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.returns)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.returns ,getString(R.string.returns))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_share -> {
@@ -290,10 +293,11 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_buying_guidelinie -> {
-                    Utils.openPages(activity as Context, productItemViewModel.staticPages?.buying_guideline)
+                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.buying_guideline ,getString(R.string.buying_guideline))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_chat -> {
+                    startActivity(Intent(FacebookSdk.getApplicationContext(), ZopimChatActivity::class.java))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_wishlist -> {

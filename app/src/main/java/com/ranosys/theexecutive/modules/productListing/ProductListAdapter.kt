@@ -36,35 +36,28 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
     override fun getItemCount() = productList.size
 
-
-    fun addProducts(products: ArrayList<ProductListingDataClass.Item>){
-        val lastPos = productList.size
-        productList.addAll(products)
-        notifyItemRangeInserted(lastPos, products.size)
-    }
-
     class Holder(val itemBinding: ProductListItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(productItem: ProductListingDataClass.Item, position : Int, listener: ProductListAdapter.OnItemClickListener){
 
             val product = prepareMaskedResponse(productItem)
-
             itemBinding.productItem = product
             val normalPrice = "IDR\u00A0" + product.normalPrice
             val spPrice = " IDR\u00A0" + product.specialPrice
-            var price = ""
 
             if(product.normalPrice == product.specialPrice){
-                price = "$normalPrice"
-                itemBinding.tvNormalPrice.text = price
+                product.displayPrice = normalPrice
+                itemBinding.tvDisplayPrice?.text = normalPrice
             }else{
-                price = "$normalPrice $spPrice"
+                val price = "$normalPrice $spPrice"
                 val ss = SpannableStringBuilder(price)
                 ss.setSpan(StrikethroughSpan(), 0, normalPrice.length, 0)
                 ss.setSpan(ForegroundColorSpan(Color.RED), normalPrice.length, price.length, 0)
                 ss.setSpan(RelativeSizeSpan(1.1f), normalPrice.length, price.length, 0)
-                itemBinding.tvNormalPrice.text = ss
+                product.displayPrice = ss.toString()
+                itemBinding.tvDisplayPrice?.text = ss
             }
+
 
             itemView.setOnClickListener {
                 listener.onItemClick(product, position)
@@ -75,7 +68,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val sku = product.sku
             val name = product.name
             val productType = product.type_id
-            val tag: String? = product.extension_attributes.tag_text ?: ""
+            val tag: String? = product.extension_attributes.tag_text
             var price: String
             var specialPrice = "0.0"
             if(productType == Constants.CONFIGURABLE){
@@ -105,7 +98,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
             val discount = (((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100)).toInt()
             var imgUrl = ""
-            if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0]?.file.toString()
+            if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0].file
 
             val product = ProductListingDataClass.ProductMaskedResponse(
                     sku = sku,
@@ -129,9 +122,9 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val sDtate=sdf.parse(fromDate)
             val eDate=sdf.parse(toDate)
 
-            if(!(cDate.compareTo(sDtate) < 0 || cDate.compareTo(eDate) > 0)) {
-                return Constants.NEW_TAG
-            } else  return ""
+            return if(!(cDate.compareTo(sDtate) < 0 || cDate.compareTo(eDate) > 0)) {
+                Constants.NEW_TAG
+            } else ""
         }
     }
 
