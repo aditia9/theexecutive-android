@@ -29,6 +29,7 @@ class ProductDetailFragment : BaseFragment() {
     lateinit var productDetailViewModel : ProductDetailViewModel
     var productList : MutableList<ProductListingDataClass.Item>? = null
     var position : Int? = 0
+    var pagerPosition : Int? = 0
     var productSku : String? = ""
     var productName : String? = ""
     var pagerAdapter : ProductStatePagerAdapter? = null
@@ -57,7 +58,7 @@ class ProductDetailFragment : BaseFragment() {
             }
 
         }else{
-            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get())
+            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get(), pagerPosition)
             product_viewpager.adapter = pagerAdapter
             product_viewpager.adapter?.notifyDataSetChanged()
             product_viewpager.offscreenPageLimit = 2
@@ -69,6 +70,7 @@ class ProductDetailFragment : BaseFragment() {
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                pagerPosition = position
                 setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
             }
 
@@ -97,7 +99,7 @@ class ProductDetailFragment : BaseFragment() {
                     productList?.add(response)
                     productDetailViewModel.productList?.set(productList)
                     setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-                    pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get())
+                    pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get(), pagerPosition)
                     product_viewpager.adapter = pagerAdapter
                     product_viewpager.adapter?.notifyDataSetChanged()
                     hideLoading()

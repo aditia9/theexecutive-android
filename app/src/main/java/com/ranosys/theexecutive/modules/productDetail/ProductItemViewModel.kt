@@ -77,11 +77,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<List<ChildProductsResponse>>()
         AppRepository.getProductChildern(productSku, object : ApiCallback<List<ChildProductsResponse>> {
             override fun onException(error: Throwable) {
-                productChildrenResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                productChildrenResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                productChildrenResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                productChildrenResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: List<ChildProductsResponse>?) {
@@ -95,11 +97,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<List<ProductOptionsResponse>>()
         AppRepository.getProductOptions(attributeId, object : ApiCallback<List<ProductOptionsResponse>> {
             override fun onException(error: Throwable) {
-                productOptionResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                productOptionResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                productOptionResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                productOptionResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: List<ProductOptionsResponse>?) {
@@ -114,11 +118,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<StaticPagesUrlResponse>()
         AppRepository.getStaticPagesUrl(object : ApiCallback<StaticPagesUrlResponse> {
             override fun onException(error: Throwable) {
-                staticPagesUrlResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                staticPagesUrlResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                staticPagesUrlResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                staticPagesUrlResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: StaticPagesUrlResponse?) {
@@ -140,11 +146,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
 
         AppRepository.addToWishList(requestMap, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
-                addToWIshListResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                addToWIshListResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                addToWIshListResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                addToWIshListResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
@@ -159,11 +167,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<AddToCartResponse>()
         AppRepository.addToCartUser(addToCartRequest, object: ApiCallback<AddToCartResponse>{
             override fun onException(error: Throwable) {
-                addToCartResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                addToCartResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                addToCartResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                addToCartResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: AddToCartResponse?) {
@@ -178,11 +188,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<AddToCartResponse>()
         AppRepository.addToCartGuest(addToCartRequest.cartItem?.quote_id!!, addToCartRequest, object: ApiCallback<AddToCartResponse>{
             override fun onException(error: Throwable) {
-                addToCartResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                addToCartResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                addToCartResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                addToCartResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: AddToCartResponse?) {
@@ -197,11 +209,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<String>()
         AppRepository.createUserCart(object : ApiCallback<String> {
             override fun onException(error: Throwable) {
-                userCartIdResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                userCartIdResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                userCartIdResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                userCartIdResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
@@ -217,11 +231,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<String>()
         AppRepository.cartCountUser(object : ApiCallback<String>{
             override fun onException(error: Throwable) {
-                userCartCountResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                userCartCountResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                userCartCountResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                userCartCountResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
@@ -237,11 +253,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<String>()
         AppRepository.cartCountGuest(cartId, object : ApiCallback<String>{
             override fun onException(error: Throwable) {
-                guestCartCountResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                guestCartCountResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                guestCartCountResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                guestCartCountResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
@@ -255,11 +273,13 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<String>()
         AppRepository.createGuestCart(object : ApiCallback<String>{
             override fun onException(error: Throwable) {
-                guestCartIdResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                guestCartIdResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                guestCartIdResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                guestCartIdResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {

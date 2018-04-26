@@ -60,7 +60,7 @@ class CategoryFragment : BaseFragment() {
         promotionBinding?.categoryModel = categoryModelView
         promotionBinding?.root?.tv_promotion_text?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
         Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, 1.5)
-        viewPager = promotionBinding?.root?.viewpager!!
+        viewPager = promotionBinding.root?.viewpager!!
 
         pagerAdapter = CustomViewPageAdapter(view.context, categoryModelView?.promotionResponse?.get())
         promotionBinding.viewpager.adapter = pagerAdapter

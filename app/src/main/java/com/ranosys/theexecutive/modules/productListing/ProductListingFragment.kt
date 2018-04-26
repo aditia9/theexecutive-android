@@ -259,7 +259,7 @@ class ProductListingFragment: BaseFragment() {
             }
         }
 
-        val threshold = 2
+        val threshold = 5
         product_list.layoutManager = gridLayoutManager
 
         product_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {

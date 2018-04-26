@@ -49,7 +49,7 @@ object Constants {
     val CITY_LABEL: String = "City"
     val USER_EMAIL: String = "user_email"
     val PRODUCT_LIST_RESPONSE: String = "product_list_response"
-    val LIST_PAGE_ITEM_COUNT: Int = 10
+    val LIST_PAGE_ITEM_COUNT: Int = 20
     val FILTER_PRICE_LABEL: String = "Price"
     val FILTER_PRICE_KEY: String = "price"
     val SORT_OPTION_LABEL: String = "product_list_order"

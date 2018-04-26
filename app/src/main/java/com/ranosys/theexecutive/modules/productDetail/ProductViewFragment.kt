@@ -56,6 +56,7 @@ class ProductViewFragment : BaseFragment() {
     lateinit var productItemViewModel : ProductItemViewModel
     var productItem : ProductListingDataClass.Item? = null
     var position : Int? = 0
+    var pagerPosition : Int? = 0
     var productSku : String? = ""
     var colorAttrId : String? = ""
     var colorValue : String? = ""
@@ -137,7 +138,9 @@ class ProductViewFragment : BaseFragment() {
         }
         setWearWithProductsData()
         if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
-            //showLoading()
+          //  if(position == pagerPosition) {
+                showLoading()
+          //  }
             setColorImagesList()
         }
     }
@@ -173,6 +176,7 @@ class ProductViewFragment : BaseFragment() {
         list_wear_with_products.layoutManager = linearLayoutManager
 
         if(productItemViewModel.productItem?.product_links?.size!! > 0) {
+            val list : MutableList<ProductListingDataClass.ProductListingResponse>? = mutableListOf()
             rl_wear_with_layout.visibility = View.VISIBLE
             val wearWithAdapter = WearWithProductsAdapter(activity as Context, productItemViewModel.productItem?.product_links)
             list_wear_with_products.adapter = wearWithAdapter
@@ -335,7 +339,7 @@ class ProductViewFragment : BaseFragment() {
                                 s.attribute_code == Constants.COLOR
                             }.single().value.toString()
                             if (!childProductsMap.containsKey(colorValue)) {
-                                var configurePrice = it.price
+                                val configurePrice = it.price
                                 var configureSpecialPrice = Constants.ZERO
                                 val attributes = it.custom_attributes.filter {
                                     it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL
@@ -374,17 +378,17 @@ class ProductViewFragment : BaseFragment() {
                     setSizeViewList()
 
                     AppLog.e("ChildProductsMap : " + childProductsMap.toString())
-                    // hideLoading()
+                    hideLoading()
 
                 } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
                 }
             }
         })
 
         productItemViewModel.productOptionResponse?.observe(this, object : Observer<ApiResponse<List<ProductOptionsResponse>>> {
             override fun onChanged(apiResponse: ApiResponse<List<ProductOptionsResponse>>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
+                val response = apiResponse?.apiResponse
                 if (response is List<*>) {
                     val list = response as List<ProductOptionsResponse>
                     list[0].label
@@ -404,65 +408,69 @@ class ProductViewFragment : BaseFragment() {
                     }
 
                 } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
                 }
             }
         })
 
         productItemViewModel.staticPagesUrlResponse?.observe( this, object : Observer<ApiResponse<StaticPagesUrlResponse>> {
             override fun onChanged(apiResponse: ApiResponse<StaticPagesUrlResponse>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
+                val response = apiResponse?.apiResponse
                 if(response is StaticPagesUrlResponse){
                     productItemViewModel.staticPages = response
                 }
                 else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
                 }
             }
         })
 
         productItemViewModel.addToWIshListResponse?.observe(this, Observer { apiResponse ->
             hideLoading()
-            val response = apiResponse?.apiResponse ?: apiResponse?.error
-            if(response is String){
-                Toast.makeText(activity as Context, getString(R.string.wishlist_success_msg), Toast.LENGTH_SHORT).show()
+            if(apiResponse?.error.isNullOrEmpty()) {
+                val response = apiResponse?.apiResponse
+                if (response is String) {
+                    Toast.makeText(activity as Context, getString(R.string.wishlist_success_msg), Toast.LENGTH_SHORT).show()
+                }
             }else{
-                Toast.makeText(activity as Context, Constants.ERROR, Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity as Context, apiResponse?.error, Toast.LENGTH_SHORT).show()
             }
         })
 
         productItemViewModel.addToCartResponse?.observe (this, Observer<ApiResponse<AddToCartResponse>> { apiResponse ->
 
-            val response = apiResponse?.apiResponse ?: apiResponse?.error
-            if(response is AddToCartResponse){
-                val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+            if(apiResponse?.error.isNullOrEmpty()) {
+                val response = apiResponse?.apiResponse
+                if (response is AddToCartResponse) {
+                    val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                    if (userToken.isNullOrBlank().not()) {
+                        productItemViewModel.getUserCartCount()
 
-                if(userToken.isNullOrBlank().not()){
-                    productItemViewModel.getUserCartCount()
-
-                }else{
-                    val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
-                    if(guestCartId.isNullOrBlank().not()){
-                        productItemViewModel.getGuestCartCount(guestCartId ?: "")
+                    } else {
+                        val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
+                        if (guestCartId.isNullOrBlank().not()) {
+                            productItemViewModel.getGuestCartCount(guestCartId ?: "")
+                        }
                     }
+                    Toast.makeText(activity as Context, getString(R.string.add_to_cart_success_msg), Toast.LENGTH_SHORT).show()
                 }
-
-                Toast.makeText(activity as Context, getString(R.string.add_to_cart_success_msg),Toast.LENGTH_SHORT).show()
-
-            } else {
+            }else {
                 hideLoading()
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                //Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
         })
 
         productItemViewModel.userCartIdResponse?.observe(this, Observer {
             response ->
-            val userCartId = response?.apiResponse ?: response?.error
-            if(userCartId is String){
-                productItemViewModel.addToUserCart(prepareAddToCartRequest(userCartId))
-            }
-            else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            if(response?.error.isNullOrEmpty()){
+                val userCartId = response?.apiResponse
+                if(userCartId is String){
+                    productItemViewModel.addToUserCart(prepareAddToCartRequest(userCartId))
+                }
+            }else {
+                hideLoading()
+                Toast.makeText(activity, response?.error, Toast.LENGTH_LONG).show()
             }
 
         })
@@ -470,29 +478,33 @@ class ProductViewFragment : BaseFragment() {
         productItemViewModel.userCartCountResponse?.observe(this, Observer {
             response ->
             hideLoading()
-            val userCount = response?.apiResponse ?: response?.error
-            if(userCount is String){
-                try {
-                    Utils.updateCartCount(userCount.toInt())
-                }catch (e : NumberFormatException){
-                    AppLog.printStackTrace(e)
+            if(response?.error.isNullOrEmpty()) {
+                val userCount = response?.apiResponse
+                if (userCount is String) {
+                    try {
+                        Utils.updateCartCount(userCount.toInt())
+                    } catch (e: NumberFormatException) {
+                        AppLog.printStackTrace(e)
+                    }
                 }
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, response?.error, Toast.LENGTH_LONG).show()
             }
 
         })
 
         productItemViewModel.guestCartIdResponse?.observe(this, Observer {
             response ->
-            val guestCartId = response?.apiResponse ?: response?.error
-            if(guestCartId is String){
-                productItemViewModel.addToGuestCart(prepareAddToCartRequest(guestCartId))
+            if(response?.error.isNullOrEmpty()) {
+                val guestCartId = response?.apiResponse
+                if (guestCartId is String) {
+                    productItemViewModel.addToGuestCart(prepareAddToCartRequest(guestCartId))
+                }
             }
             else {
                 hideLoading()
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity,response?.error, Toast.LENGTH_LONG).show()
             }
 
         })
@@ -500,16 +512,18 @@ class ProductViewFragment : BaseFragment() {
         productItemViewModel.guestCartCountResponse?.observe(this, Observer {
             response ->
             hideLoading()
-            val guestCount = response?.apiResponse ?: response?.error
-            if(guestCount is String){
-                try {
-                    Utils.updateCartCount(guestCount.toInt())
-                }catch (e: NumberFormatException){
-                    AppLog.printStackTrace(e)
+            if(response?.error.isNullOrEmpty()) {
+                val guestCount = response?.apiResponse
+                if (guestCount is String) {
+                    try {
+                        Utils.updateCartCount(guestCount.toInt())
+                    } catch (e: NumberFormatException) {
+                        AppLog.printStackTrace(e)
+                    }
                 }
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, response?.error, Toast.LENGTH_LONG).show()
             }
 
         })
@@ -569,7 +583,7 @@ class ProductViewFragment : BaseFragment() {
             rv_color_view.adapter = colorViewAdapter
             colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
                 override fun onItemClick(item: ProductViewFragment.ColorsView?, position: Int) {
-                   // product_scroll_view.stickFooter(50)
+                    // product_scroll_view.stickFooter(50)
 
                     colorsViewList?.forEachIndexed { index,it ->
                         if(index == position){
@@ -790,11 +804,12 @@ class ProductViewFragment : BaseFragment() {
 
     companion object {
 
-        fun getInstance(productItem : ProductListingDataClass.Item?, productSku : String?, position : Int?) =
+        fun getInstance(productItem : ProductListingDataClass.Item?, productSku : String?, position : Int?, pagerPosition : Int?) =
                 ProductViewFragment().apply {
                     this.productItem = productItem
                     this.productSku = productSku
                     this.position = position
+                    this.pagerPosition = pagerPosition
                 }
 
     }
