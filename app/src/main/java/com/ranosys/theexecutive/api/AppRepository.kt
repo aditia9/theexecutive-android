@@ -694,6 +694,29 @@ object AppRepository {
         })
     }
 
+    fun getUserInfo(callBack: ApiCallback<MyAccountDataClass.UserInfoResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.MyAccount>(ApiService.MyAccount::class.java)?.getUserInfo(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<MyAccountDataClass.UserInfoResponse> {
+            override fun onResponse(call: Call<MyAccountDataClass.UserInfoResponse>?, response: Response<MyAccountDataClass.UserInfoResponse>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<MyAccountDataClass.UserInfoResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+
 
 
 

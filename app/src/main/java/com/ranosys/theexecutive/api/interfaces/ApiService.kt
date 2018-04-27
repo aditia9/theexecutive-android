@@ -234,4 +234,12 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun addTOCartGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode:String, @Path("cart_id") cartId: String,  @Body request: AddToCartRequest): Call<AddToCartResponse>
     }
+
+    interface MyAccount {
+        @GET("rest/{store_code}/V1/customers/me")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getUserInfo(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String): Call<MyAccountDataClass.UserInfoResponse>
+    }
 }

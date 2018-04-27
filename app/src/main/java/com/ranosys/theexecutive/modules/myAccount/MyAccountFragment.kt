@@ -97,6 +97,10 @@ class MyAccountFragment: BaseFragment() {
                         context.getString(R.string.news_letter_option) -> {
                             FragmentUtils.addFragment(context, NewsLetterFragment(),null, NewsLetterFragment::class.java.name, true )
                         }
+
+                        context.getString(R.string.my_information_option) ->{
+                            FragmentUtils.addFragment(context, MyInformationFragment(),null, MyInformationFragment::class.java.name, true )
+                        }
                     }
                 }
             }

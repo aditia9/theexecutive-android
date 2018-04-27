@@ -92,6 +92,7 @@
     <string name="my_account_option_icon">My account option icon</string>
     <string name="my_account_title">My Account</string>
     <string name="news_letter_option">Subscribe to Newsletter</string>
+    <string name="my_information_option">My Information</string>
     <string name="subscribe_info">Subscribe to our newsletter to stay updated on the latest promotions, new arrivals and online exclusives.</string>
     <string name="new_letter_title">NewsLetter</string>
     <string name="sort_by">Sort by</string>
@@ -158,6 +159,8 @@
     <string name="common_error">Something went wrong, Please try again</string>
     <string name="select_size_err">Please select size</string>
     <string name="no_more_products">No more product available</string>
+    <string name="country">Country</string>
+    <string name="save">save</string>
 
 
 </resources>

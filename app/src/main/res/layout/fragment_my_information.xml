@@ -1,0 +1,296 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="info"
+            type="com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass.UserInfoResponse"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_main_layout"
+        android:paddingTop="@dimen/sixteen_dp"
+        android:paddingBottom="@dimen/sixteen_dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl_inside_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_right"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_left"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_first_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/first_name"
+                    android:text="@{info.firstname}"
+                    android:labelFor="@+id/et_first_name"
+                    android:theme="@style/tilTheme"
+                    android:layout_marginTop="@dimen/sixteen_dp"
+                    android:maxLength="50"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_first_name"
+                        android:text="@={registerViewModel.firstName}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:maxLength="50"
+                        android:inputType="none"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_last_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/last_name"
+                    android:labelFor="@+id/et_last_name"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintTop_toBottomOf="@id/til_first_name"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_last_name"
+                        android:text="@={registerViewModel.lastName}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:focusable="true"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_email_address"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:theme="@style/tilTheme"
+                    android:hint="@string/email"
+                    android:labelFor="@+id/et_email_address"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_last_name">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_email_address"
+                        android:layout_width="match_parent"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={registerViewModel.emailAddress}"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinner_country_code"
+                    android:layout_height="@dimen/match_constraint"
+                    android:layout_width="wrap_content"
+                    android:minWidth="@dimen/match_constraint"
+                    android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
+                    android:entries="@array/country_code"
+                    android:background="@drawable/spinner"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toTopOf="@id/til_mobile_no"
+                    app:layout_constraintEnd_toStartOf="@id/til_mobile_no"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_mobile_no"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/mobile_number"
+                    android:labelFor="@+id/et_mobile_number"
+                    app:errorText="@{registerViewModel.mobileNumberError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
+                    app:layout_constraintTop_toBottomOf="@id/til_email_address"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_mobile_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={registerViewModel.mobileNumber}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etMobileNumber)}'
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_address_1"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/street_address_1"
+                    android:labelFor="@+id/et_address_1"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_mobile_no">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_address_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress1}"
+                        android:inputType="none"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_address_2"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/street_address_2"
+                    android:labelFor="@+id/et_address_2"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_address_1">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_address_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress2}"
+                        android:inputType="none"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_country"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/country"
+                    android:labelFor="@+id/et_country"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_address_2">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_country"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress2}"
+                        android:inputType="none"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_state"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/state"
+                    android:labelFor="@+id/et_state"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_country">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress2}"
+                        android:inputType="none"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_city"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/city"
+                    android:labelFor="@+id/et_city"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_state">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={registerViewModel.streetAddress2}"
+                        android:inputType="none"
+                        android:paddingStart="@dimen/field_start_padding"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_postcode"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/postcode"
+                    android:labelFor="@+id/et_postcode"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_city">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_postcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={registerViewModel.postalCode}"
+                        android:onTextChanged='@{() -> registerViewModel.onTextChanged(etPostcode)}'
+                        android:inputType="none" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btn_create_account"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/black_button_bg"
+                    android:text="@string/save"
+                    android:theme="@style/button_theme"
+                    android:layout_marginTop="@dimen/forty_dp"
+                    android:layout_marginRight="@dimen/twenty_four_dp"
+                    android:layout_marginLeft="@dimen/twenty_four_dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_postcode"/>
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
