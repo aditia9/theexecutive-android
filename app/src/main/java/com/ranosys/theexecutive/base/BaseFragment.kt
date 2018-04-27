@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.base
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Dialog
 import android.arch.lifecycle.LifecycleFragment
@@ -8,10 +9,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
-import android.webkit.WebResourceError
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.ranosys.rtp.IsPermissionGrantedInterface
@@ -124,7 +122,8 @@ abstract class BaseFragment : LifecycleFragment() {
         })
     }
 
-    fun prepareWebPageDialog(context : Context?, url : String? , title : String?) {
+    @SuppressLint("SetJavaScriptEnabled")
+    fun prepareWebPageDialog(context : Context?, url : String?, title : String?) {
         val webPagesDialog = Dialog(context, R.style.MaterialDialogSheet)
         webPagesDialog.setContentView(R.layout.web_pages_layout)
         webPagesDialog.setCancelable(true)
@@ -132,7 +131,9 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.window.setGravity(Gravity.BOTTOM)
         webPagesDialog.tv_web_title.text = title
         webPagesDialog.webview.getSettings().setJavaScriptEnabled(true) // enable javascript
-
+        webPagesDialog.webview.getSettings().defaultZoom = WebSettings.ZoomDensity.FAR
+        webPagesDialog.webview.getSettings().builtInZoomControls = true
+        webPagesDialog.webview.getSettings().displayZoomControls = false
         webPagesDialog.webview.setWebViewClient(object : WebViewClient() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 Toast.makeText(activity, description, Toast.LENGTH_SHORT).show()

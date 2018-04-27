@@ -532,7 +532,7 @@ class ProductViewFragment : BaseFragment() {
     }
 
     private fun getDisplayPrice(configurePrice: String, configureSpecialPrice: String): SpannableStringBuilder {
-        if(configurePrice.toDouble() >= configureSpecialPrice.toDouble() && !configureSpecialPrice.equals(Constants.ZERO)){
+        if(configurePrice.toDouble() > configureSpecialPrice.toDouble() && !configureSpecialPrice.equals(Constants.ZERO)){
             val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
             val specialP = "IDR\u00A0" + Utils.getFromattedPrice(configureSpecialPrice)
             val displayPrice = "$normalP $specialP"
@@ -720,6 +720,8 @@ class ProductViewFragment : BaseFragment() {
 
 
         sizeDilaog.tv_product_price.setText(price)
+        selectedQty = 1
+        itemQty = 1
         sizeDilaog.tv_quantity.text = selectedQty.toString()
 
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
@@ -728,6 +730,8 @@ class ProductViewFragment : BaseFragment() {
             sizeViewList?.forEach {
                 s-> s.isSelected = false
             }
+
+            sizeValue = ""
             val sizeViewAdapter = SizeRecyclerAdapter(activity as Context, sizeViewList, colorValue, maxQuantityList)
             sizeDilaog.rv_size_view.adapter = sizeViewAdapter
             sizeViewAdapter.setItemClickListener(object : SizeRecyclerAdapter.OnItemClickListener {
