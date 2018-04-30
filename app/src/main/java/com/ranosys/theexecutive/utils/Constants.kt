@@ -56,6 +56,7 @@ object Constants {
     val SORT_OPTION_DIR: String = "product_list_dir"
     val CONFIGURABLE: String = "configurable"
     val SIMPLE: String = "simple"
+    val RELATED: String = "related"
     val FILTER_SPECIAL_PRICE_LABEL: String = "special_price"
     val NEW_FROM_DATE_LABEL: String = "news_from_date"
     val NEW_TO_DATE_LABEL: String = "news_to_date"
