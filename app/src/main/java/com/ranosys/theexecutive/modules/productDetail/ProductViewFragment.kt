@@ -64,6 +64,9 @@ class ProductViewFragment : BaseFragment() {
     var sizeValue : String? = ""
     var itemQty : Int? = 1
     var selectedQty : Int = 1
+    var relatedSku : String = ""
+    var relatedName : String = ""
+    var relatedPosition : Int = 0
     var price : SpannableStringBuilder? = SpannableStringBuilder(Constants.ZERO)
     var specialPrice : String? = Constants.ZERO
     var colorMap = HashMap<String, String>()
@@ -76,7 +79,8 @@ class ProductViewFragment : BaseFragment() {
     var colorsViewList : MutableList<ColorsView>? = mutableListOf()
     var sizeViewList : MutableList<SizeView>? = mutableListOf()
     var maxQuantityList : MutableList<MaxQuantity>? = mutableListOf()
-
+    var relatedProductList : MutableList<ProductListingDataClass.Item>? = mutableListOf()
+    var productLinksList : List<ProductListingDataClass.ProductLinks?>? = listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false);
@@ -138,9 +142,9 @@ class ProductViewFragment : BaseFragment() {
         }
         setWearWithProductsData()
         if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
-          //  if(position == pagerPosition) {
+            if(position == pagerPosition) {
                 showLoading()
-          //  }
+            }
             setColorImagesList()
         }
     }
@@ -174,20 +178,36 @@ class ProductViewFragment : BaseFragment() {
     private fun setWearWithProductsData(){
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         list_wear_with_products.layoutManager = linearLayoutManager
+        productLinksList = productItemViewModel.productItem?.product_links?.filter {
+            it -> it?.link_type == "related"
+        }
 
-        if(productItemViewModel.productItem?.product_links?.size!! > 0) {
-            val list : MutableList<ProductListingDataClass.ProductListingResponse>? = mutableListOf()
+        if(productLinksList?.size!! > 0) {
             rl_wear_with_layout.visibility = View.VISIBLE
-            val wearWithAdapter = WearWithProductsAdapter(activity as Context, productItemViewModel.productItem?.product_links)
+            val wearWithAdapter = WearWithProductsAdapter(activity as Context, productLinksList)
             list_wear_with_products.adapter = wearWithAdapter
             wearWithAdapter.setItemClickListener(object : WearWithProductsAdapter.OnItemClickListener {
-                override fun onItemClick(item: ProductListingDataClass.ProductLinks?) {
-                    val fragment = ProductDetailFragment.getInstance(null, item?.linked_product_sku , item?.extension_attributes?.linked_product_name, 0)
-                    FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                override fun onItemClick(item: ProductListingDataClass.ProductLinks?, position: Int) {
+                    productLinksList?.forEach {
+                        showLoading()
+                        relatedSku = item?.linked_product_sku!!
+                        relatedName = item.extension_attributes.linked_product_name
+                        relatedPosition = position
+                        getProductDetail(it?.linked_product_sku)
+                    }
                 }
             })
         }else {
             rl_wear_with_layout.visibility = View.GONE
+        }
+
+    }
+
+    private fun getProductDetail(productSku : String?){
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            productItemViewModel.getProductDetail(productSku)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
         }
 
     }
@@ -197,8 +217,12 @@ class ProductViewFragment : BaseFragment() {
         Utils.setImageViewHeight(activity as Context, img_two, 27)
         if(mediaGalleryList?.size!! > 0)
             productItemViewModel.url_one.set(mediaGalleryList.get(0).file)
-        if(mediaGalleryList.size > 1)
+        if(mediaGalleryList.size > 1) {
+            img_two.visibility = View.VISIBLE
             productItemViewModel.url_two.set(mediaGalleryList.get(1).file)
+        }else{
+            img_two.visibility = View.GONE
+        }
 
         val listSize = mediaGalleryList.size
         for(i in 2..listSize.minus(1)){
@@ -528,6 +552,23 @@ class ProductViewFragment : BaseFragment() {
 
         })
 
+        productItemViewModel.productDetailResponse?.observe(this, object : Observer<ApiResponse<ProductListingDataClass.Item>> {
+            override fun onChanged(apiResponse: ApiResponse<ProductListingDataClass.Item>?) {
+                val response = apiResponse?.apiResponse ?: apiResponse?.error
+                if (response is ProductListingDataClass.Item) {
+                    relatedProductList?.add(response)
+                    if(productLinksList?.size == relatedProductList?.size){
+                        hideLoading()
+                        val fragment = ProductDetailFragment.getInstance(relatedProductList, relatedSku , relatedName, relatedPosition)
+                        FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                    }
+                } else {
+                    hideLoading()
+                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+
 
     }
 
@@ -561,47 +602,55 @@ class ProductViewFragment : BaseFragment() {
 
     @SuppressLint("SetTextI18n")
     fun setColorViewList(){
-        colorOptionList?.forEachIndexed { index, it ->
-            if(index == 0) {
-                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value)?.list, childProductsMap.get(it.value)?.price, true))
-                setProductImages(childProductsMap.get(it.value)?.list)
-                price = childProductsMap.get(it.value)?.price
-                tv_price.setText(childProductsMap.get(it.value)?.price)
+        colorOptionList?.run {
+            if (colorOptionList?.size!! > 0) {
+                colorOptionList?.forEachIndexed { index, it ->
+                    if (index == 0) {
+                        colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value)?.list, childProductsMap.get(it.value)?.price, true))
+                        setProductImages(childProductsMap.get(it.value)?.list)
+                        price = childProductsMap.get(it.value)?.price
+                        tv_price.setText(childProductsMap.get(it.value)?.price)
+                    } else {
+                        colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value)?.list, childProductsMap.get(it.value)?.price, false))
+                    }
+
+                }
+            } else {
+                childProductsMap.get(colorValue)?.run {
+                    price = childProductsMap.get(colorValue)?.price
+                    tv_price.setText(childProductsMap.get(colorValue)?.price)
+                }
             }
-            else {
-                colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap.get(it.value)?.list, childProductsMap.get(it.value)?.price, false))
-            }
 
-        }
+            AppLog.e("colorsViewList : " + productItemViewModel.productItem?.sku + " " + colorsViewList.toString())
 
-        AppLog.e("colorsViewList : " + colorsViewList.toString())
+            val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
+            rv_color_view.layoutManager = linearLayoutManager
+            if (colorsViewList?.size!! > 0) {
+                val colorViewAdapter = ColorRecyclerAdapter(activity as Context, colorsViewList)
+                rv_color_view.adapter = colorViewAdapter
+                colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
+                    override fun onItemClick(item: ProductViewFragment.ColorsView?, position: Int) {
+                        // product_scroll_view.stickFooter(50)
 
-        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
-        rv_color_view.layoutManager = linearLayoutManager
-        if (colorsViewList?.size!! > 0) {
-            val colorViewAdapter = ColorRecyclerAdapter(activity as Context, colorsViewList)
-            rv_color_view.adapter = colorViewAdapter
-            colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
-                override fun onItemClick(item: ProductViewFragment.ColorsView?, position: Int) {
-                    // product_scroll_view.stickFooter(50)
-
-                    colorsViewList?.forEachIndexed { index,it ->
-                        if(index == position){
-                            colorsViewList?.get(index)?.isSelected = true
-                        }else{
-                            colorsViewList?.get(index)?.isSelected = false
+                        colorsViewList?.forEachIndexed { index, it ->
+                            if (index == position) {
+                                colorsViewList?.get(index)?.isSelected = true
+                            } else {
+                                colorsViewList?.get(index)?.isSelected = false
+                            }
+                        }
+                        colorValue = item?.value
+                        price = item?.price
+                        tv_price.setText(item?.price)
+                        colorViewAdapter.notifyDataSetChanged()
+                        item?.list?.let {
+                            ll_color_choice.removeAllViews()
+                            setProductImages(it)
                         }
                     }
-                    colorValue = item?.value
-                    price = item?.price
-                    tv_price.setText(item?.price)
-                    colorViewAdapter.notifyDataSetChanged()
-                    item?.list?.let {
-                        ll_color_choice.removeAllViews()
-                        setProductImages(it)
-                    }
-                }
-            })
+                })
+            }
         }
 
     }
@@ -780,8 +829,7 @@ class ProductViewFragment : BaseFragment() {
         sizeDilaog.show()
     }
 
-    fun openProdcutImage(bitmap: Bitmap)
-    {
+    private fun openProdcutImage(bitmap: Bitmap) {
         val view = layoutInflater.inflate(R.layout.dialog_product_image, null)
         val mImageDialog = Dialog(activity, R.style.MaterialDialogSheet)
         mImageDialog.setContentView(view)
@@ -807,7 +855,6 @@ class ProductViewFragment : BaseFragment() {
     data class MaxQuantity(var colorValue: String?, var sizeValue: String?, var maxQuantity: Int?, var isInStock: Boolean = true, var price: SpannableStringBuilder?)
 
     companion object {
-
         fun getInstance(productItem : ProductListingDataClass.Item?, productSku : String?, position : Int?, pagerPosition : Int?) =
                 ProductViewFragment().apply {
                     this.productItem = productItem
@@ -815,7 +862,6 @@ class ProductViewFragment : BaseFragment() {
                     this.position = position
                     this.pagerPosition = pagerPosition
                 }
-
     }
 
 }

@@ -34,6 +34,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var guestCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var guestCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var productDetailResponse: MutableLiveData<ApiResponse<ProductListingDataClass.Item>>? = MutableLiveData()
 
     var clickedAddBtnId: MutableLiveData<Int>? = null
         get() {
@@ -288,6 +289,24 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
                 guestCartIdResponse?.value = apiResponse
             }
 
+        })
+    }
+
+    fun getProductDetail(productSku : String?){
+        val apiResponse = ApiResponse<ProductListingDataClass.Item>()
+        AppRepository.getProductDetail(productSku, object : ApiCallback<ProductListingDataClass.Item> {
+            override fun onException(error: Throwable) {
+                productDetailResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                productDetailResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: ProductListingDataClass.Item?) {
+                apiResponse.apiResponse = t
+                productDetailResponse?.value = apiResponse
+            }
         })
     }
 }

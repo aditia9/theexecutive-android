@@ -82,7 +82,7 @@
     <string name="street_address_error">Street Address Line 1 is required.</string>
     <string name="street_address_2">Street Address Line 2 </string>
     <string name="postal_error">Zip/ Postal code is required.</string>
-    <string name="valid_password_error">Paasword must contain 8 or more characters, special character and number.</string>
+    <string name="valid_password_error">Password must contain 8 or more characters, special character and number.</string>
     <string name="valid_mobile_error">Kindly enter numbers only (0–9).</string>
     <string name="confirm_password_error">The password does not match, kindly enter the same password as above.</string>
     <string name="select_lang_title">Select Language</string>

@@ -49,6 +49,7 @@
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_two_detail"
                     bind:baseUrlWithProductImageUrl='@{productItemVM.url_two}'
+                    android:visibility="gone"
                     />
 
                 <TextView

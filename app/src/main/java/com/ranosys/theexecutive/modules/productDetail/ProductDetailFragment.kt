@@ -58,10 +58,10 @@ class ProductDetailFragment : BaseFragment() {
             }
 
         }else{
-            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get(), pagerPosition)
+            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get(), position)
             product_viewpager.adapter = pagerAdapter
             product_viewpager.adapter?.notifyDataSetChanged()
-            product_viewpager.offscreenPageLimit = 2
+            product_viewpager.offscreenPageLimit = 5
             product_viewpager.setCurrentItem(position!!)
         }
 
@@ -99,8 +99,9 @@ class ProductDetailFragment : BaseFragment() {
                     productList?.add(response)
                     productDetailViewModel.productList?.set(productList)
                     setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-                    pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get(), pagerPosition)
+                    pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get(), position)
                     product_viewpager.adapter = pagerAdapter
+                    product_viewpager.offscreenPageLimit = 3
                     product_viewpager.adapter?.notifyDataSetChanged()
                     hideLoading()
                 } else {
