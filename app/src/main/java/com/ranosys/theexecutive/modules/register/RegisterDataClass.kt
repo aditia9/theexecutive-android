@@ -66,6 +66,8 @@ class RegisterDataClass {
     )
 
     data class Address(
+            var id: String = "",
+            var customer_id: String = "",
             val region: Region,
             val region_id: String,
             val country_id: String,

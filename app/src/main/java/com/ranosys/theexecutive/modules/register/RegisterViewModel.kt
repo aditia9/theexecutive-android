@@ -32,6 +32,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var emailAddress: ObservableField<String> = ObservableField()
     var emailAddressError: ObservableField<String> = ObservableField()
     var mobileNumber: ObservableField<String> = ObservableField()
+    var countryCode: ObservableField<String> = ObservableField()
     var mobileNumberError: ObservableField<String> = ObservableField()
     var selectedGender: ObservableField<Int> = ObservableField(MALE)
     var dob: ObservableField<Date> = ObservableField()
@@ -141,6 +142,10 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         }
     }
 
+    fun onCountryCodeSelection(countryCodeSpinner: View, position: Int){
+        countryCode.set((countryCodeSpinner as Spinner).selectedItem.toString())
+    }
+
     private fun callCityApi(stateCode: String) {
         AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>>{
             override fun onException(error: Throwable) {
@@ -171,7 +176,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             val address = RegisterDataClass.Address(region_id = selectedState.get().id,
                     firstname = firstName.get(),
                     lastname = lastName.get(),
-                    telephone = mobileNumber.get(),
+                    telephone = "${countryCode.get()}-${ mobileNumber.get()}",
                     city =      selectedCity.get().name ,
                     postcode = postalCode.get(),
                     default_billing = true,
