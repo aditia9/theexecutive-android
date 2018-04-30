@@ -709,7 +709,7 @@ class ProductViewFragment : BaseFragment() {
 
         sizeDilaog.tv_size_guide.setOnClickListener(object : View.OnClickListener{
             override fun onClick(p0: View?) {
-                Utils.openPages(activity as Context, productItemViewModel.staticPages?.size_guideline)
+                prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.size_guideline ,getString(R.string.size_guideline))
             }
         })
 
@@ -829,7 +829,7 @@ class ProductViewFragment : BaseFragment() {
         sizeDilaog.show()
     }
 
-    private fun openProdcutImage(bitmap: Bitmap) {
+    fun openProdcutImage(bitmap: Bitmap) {
         val view = layoutInflater.inflate(R.layout.dialog_product_image, null)
         val mImageDialog = Dialog(activity, R.style.MaterialDialogSheet)
         mImageDialog.setContentView(view)

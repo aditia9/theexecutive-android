@@ -14,6 +14,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.ExpandableListView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -84,6 +85,16 @@ class ProductListingFragment: BaseFragment() {
         filterOptionDialog.setCancelable(true)
         filterOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         filterOptionDialog.window.setGravity(Gravity.BOTTOM)
+        filterOptionBinding.filterList.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
+            var previousGroup = -1
+            override fun onGroupExpand(groupPosition: Int) {
+                if(groupPosition != previousGroup){
+                    filterOptionBinding.filterList.collapseGroup(previousGroup)
+                }
+                previousGroup = groupPosition
+            }
+
+        })
         filterOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
         prepareFilterDialog()
