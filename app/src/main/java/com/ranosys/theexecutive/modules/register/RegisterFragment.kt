@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
@@ -82,7 +83,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel.apiSocialRegResponse?.observe(this, android.arch.lifecycle.Observer { token ->
             if(!TextUtils.isEmpty(token)){
                 hideLoading()
-                Toast.makeText(activity, getString(R.string.register_successful), Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.register_successfull), Toast.LENGTH_SHORT).show()
                 FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, false)
             }
         })

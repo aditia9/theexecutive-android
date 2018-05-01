@@ -10,6 +10,7 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.WearWithLayoutBinding
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Utils

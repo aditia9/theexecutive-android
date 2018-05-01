@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import android.widget.ExpandableListView
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.FilterOptionItemBinding
 import com.ranosys.theexecutive.databinding.FilterOptionTitleBinding
 import kotlinx.android.synthetic.main.row_second.view.*

@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import com.ranosys.rtp.RunTimePermissionActivity
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback

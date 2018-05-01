@@ -6,6 +6,7 @@ import android.content.Context
 import android.databinding.ObservableField
 import android.text.TextUtils
 import android.view.View
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback

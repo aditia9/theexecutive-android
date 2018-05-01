@@ -9,6 +9,7 @@ import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
 import com.ranosys.theexecutive.BuildConfig
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository

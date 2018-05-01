@@ -14,6 +14,7 @@ import android.webkit.*
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.ranosys.rtp.IsPermissionGrantedInterface
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.web_pages_layout.*
