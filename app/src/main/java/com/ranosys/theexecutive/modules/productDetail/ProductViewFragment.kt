@@ -50,34 +50,34 @@ import kotlinx.android.synthetic.main.product_images_layout.view.*
  */
 class ProductViewFragment : BaseFragment() {
 
-    lateinit var productItemViewModel : ProductItemViewModel
-    var productItem : ProductListingDataClass.Item? = null
-    var position : Int? = 0
-    var pagerPosition : Int? = 0
-    var productSku : String? = ""
+    private lateinit var productItemViewModel : ProductItemViewModel
+    private var productItem : ProductListingDataClass.Item? = null
+    private var position : Int? = 0
+    private var pagerPosition : Int? = 0
+    private var productSku : String? = ""
     private var colorAttrId : String? = ""
-    var colorValue : String? = ""
+    private var colorValue : String? = ""
     private var sizeAttrId : String? = ""
-    var sizeValue : String? = ""
-    var itemQty : Int? = 1
-    var selectedQty : Int = 1
-    var relatedSku : String = ""
-    var relatedName : String = ""
-    var relatedPosition : Int = 0
-    var price : SpannableStringBuilder? = SpannableStringBuilder(Constants.ZERO)
-    var specialPrice : String? = Constants.ZERO
-    var colorMap = HashMap<String, String>()
-    var sizeMap = HashMap<String, String>()
+    private var sizeValue : String? = ""
+    private var itemQty : Int? = 1
+    private var selectedQty : Int = 1
+    private var relatedSku : String = ""
+    private var relatedName : String = ""
+    private var relatedPosition : Int = 0
+    private var price : SpannableStringBuilder? = SpannableStringBuilder(Constants.ZERO)
+    private var specialPrice : String? = Constants.ZERO
+    private var colorMap = HashMap<String, String>()
+    private var sizeMap = HashMap<String, String>()
     private var childProductsMap = HashMap<String, ImagesWithPrice?>()
-    var colorOptionList : List<ProductOptionsResponse>? = null
-    var sizeOptionList : List<ProductOptionsResponse>? = null
+    private var colorOptionList : List<ProductOptionsResponse>? = null
+    private var sizeOptionList : List<ProductOptionsResponse>? = null
     private lateinit var sizeDilaogBinding: BottomSizeLayoutBinding
     private lateinit var sizeDilaog: Dialog
-    var colorsViewList : MutableList<ColorsView>? = mutableListOf()
-    var sizeViewList : MutableList<SizeView>? = mutableListOf()
-    var maxQuantityList : MutableList<MaxQuantity>? = mutableListOf()
+    private var colorsViewList : MutableList<ColorsView>? = mutableListOf()
+    private var sizeViewList : MutableList<SizeView>? = mutableListOf()
+    private var maxQuantityList : MutableList<MaxQuantity>? = mutableListOf()
     private var relatedProductList : MutableList<ProductListingDataClass.Item>? = mutableListOf()
-    var productLinksList : List<ProductListingDataClass.ProductLinks?>? = listOf()
+    private var productLinksList : List<ProductListingDataClass.ProductLinks?>? = listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false)
