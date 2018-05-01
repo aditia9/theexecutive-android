@@ -115,11 +115,11 @@ class ProductListingFragment: BaseFragment() {
         mViewModel.noProductAvailable.observe(this, Observer { count ->
             count?.let {
                 if(count <= 0){
-                    mBinding.listingContainer.visibility = View.GONE
+                    mBinding.productList.visibility = View.GONE
                     mBinding.tvNoProductAvailable.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.text = getString(R.string.no_product_available_error)
                 }else{
-                    mBinding.listingContainer.visibility = View.VISIBLE
+                    mBinding.productList.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.visibility = View.GONE
                     mBinding.tvNoProductAvailable.text = ""
                 }

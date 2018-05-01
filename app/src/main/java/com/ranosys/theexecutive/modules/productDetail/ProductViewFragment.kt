@@ -36,10 +36,7 @@ import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.SavedPreferences
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.bottom_size_layout.*
 import kotlinx.android.synthetic.main.dialog_product_image.view.*
@@ -92,11 +89,6 @@ class ProductViewFragment : BaseFragment() {
         prepareSizeDialog()
 
         observeEvents()
-        if (Utils.isConnectionAvailable(activity as Context)) {
-            getStaticPagesUrl()
-        } else {
-            Utils.showNetworkErrorDialog(activity as Context)
-        }
 
         return listGroupBinding!!.root
     }
@@ -286,14 +278,6 @@ class ProductViewFragment : BaseFragment() {
         }
     }
 
-    private fun getStaticPagesUrl(){
-        if (Utils.isConnectionAvailable(activity as Context)) {
-            productItemViewModel.getStaticPagesUrl()
-        } else {
-            Utils.showNetworkErrorDialog(activity as Context)
-        }
-    }
-
     private fun observeEvents(){
         productItemViewModel.clickedAddBtnId?.observe(this, Observer<Int> { id ->
             when (id){
@@ -302,19 +286,19 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_composition_and_care -> {
-                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.composition_and_care ,getString(R.string.composition))
+                    prepareWebPageDialog(activity as Context, GlobalSingelton.instance?.staticPagesResponse?.composition_and_care ,getString(R.string.composition))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_size_guideline -> {
-                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.size_guideline ,getString(R.string.size_guideline))
+                    prepareWebPageDialog(activity as Context, GlobalSingelton.instance?.staticPagesResponse?.size_guideline ,getString(R.string.size_guideline))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_shipping -> {
-                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.shipping ,getString(R.string.shipping))
+                    prepareWebPageDialog(activity as Context, GlobalSingelton.instance?.staticPagesResponse?.shipping ,getString(R.string.shipping))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_return -> {
-                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.returns ,getString(R.string.returns))
+                    prepareWebPageDialog(activity as Context, GlobalSingelton.instance?.staticPagesResponse?.returns ,getString(R.string.returns))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_share -> {
@@ -322,7 +306,7 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_buying_guidelinie -> {
-                    prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.buying_guideline ,getString(R.string.buying_guideline))
+                    prepareWebPageDialog(activity as Context, GlobalSingelton.instance?.staticPagesResponse?.buying_guideline ,getString(R.string.buying_guideline))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_chat -> {
@@ -409,35 +393,24 @@ class ProductViewFragment : BaseFragment() {
             }
         })
 
-        productItemViewModel.productOptionResponse?.observe(this, object : Observer<ApiResponse<List<ProductOptionsResponse>>> {
-            override fun onChanged(apiResponse: ApiResponse<List<ProductOptionsResponse>>?) {
-                val response = apiResponse?.apiResponse
-                if (response is List<*>) {
-                    when(response[0].label){
-                        Constants.COLOR -> {
-                            colorOptionList = response.filter {
-                                it.value in colorMap.values
-                            }
-                            AppLog.e("New color list : $colorOptionList")
-                        }
-                        Constants.SIZE -> {
-                            sizeOptionList = response.filter {
-                                it.value in sizeMap.values
-                            }
-                            AppLog.e("New size list : $sizeOptionList")
-                        }
-                    }
-
-                } else {
-                    Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
-                }
-            }
-        })
-
-        productItemViewModel.staticPagesUrlResponse?.observe( this, Observer<ApiResponse<StaticPagesUrlResponse>> { apiResponse ->
+        productItemViewModel.productOptionResponse?.observe(this, Observer<ApiResponse<List<ProductOptionsResponse>>> { apiResponse ->
             val response = apiResponse?.apiResponse
-            if(response is StaticPagesUrlResponse){
-                productItemViewModel.staticPages = response
+            if (response is List<*>) {
+                when(response[0].label){
+                    Constants.COLOR -> {
+                        colorOptionList = response.filter {
+                            it.value in colorMap.values
+                        }
+                        AppLog.e("New color list : $colorOptionList")
+                    }
+                    Constants.SIZE -> {
+                        sizeOptionList = response.filter {
+                            it.value in sizeMap.values
+                        }
+                        AppLog.e("New size list : $sizeOptionList")
+                    }
+                }
+
             } else {
                 Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
             }

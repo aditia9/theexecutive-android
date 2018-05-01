@@ -14,8 +14,10 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentProductDetailBinding
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_product_detail.*
 
@@ -42,6 +44,13 @@ class ProductDetailFragment : BaseFragment() {
         mViewDataBinding?.executePendingBindings()
 
         observeEvents()
+
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            getStaticPagesUrl()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+
         return mViewDataBinding?.root
 
     }
@@ -62,7 +71,7 @@ class ProductDetailFragment : BaseFragment() {
             product_viewpager.adapter = pagerAdapter
             product_viewpager.adapter?.notifyDataSetChanged()
             product_viewpager.offscreenPageLimit = 5
-            product_viewpager.setCurrentItem(position!!)
+            product_viewpager.currentItem = position!!
         }
 
         product_viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
@@ -85,28 +94,39 @@ class ProductDetailFragment : BaseFragment() {
         setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
     }
 
+    private fun getStaticPagesUrl(){
+        productDetailViewModel.getStaticPagesUrl()
+    }
 
-    fun getProductDetail(productSku : String?){
+    private fun getProductDetail(productSku : String?){
         productDetailViewModel.getProductDetail(productSku)
     }
 
-    fun observeEvents() {
-        productDetailViewModel.productDetailResponse?.observe(this, object : Observer<ApiResponse<ProductListingDataClass.Item>> {
-            override fun onChanged(apiResponse: ApiResponse<ProductListingDataClass.Item>?) {
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is ProductListingDataClass.Item) {
-                    productList = mutableListOf()
-                    productList?.add(response)
-                    productDetailViewModel.productList?.set(productList)
-                    setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-                    pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get(), position)
-                    product_viewpager.adapter = pagerAdapter
-                    product_viewpager.offscreenPageLimit = 3
-                    product_viewpager.adapter?.notifyDataSetChanged()
-                    hideLoading()
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
-                }
+    private fun observeEvents() {
+        productDetailViewModel.productDetailResponse?.observe(this, Observer<ApiResponse<ProductListingDataClass.Item>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if (response is ProductListingDataClass.Item) {
+                productList = mutableListOf()
+                productList?.add(response)
+                productDetailViewModel.productList?.set(productList)
+                setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+                pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get(), position)
+                product_viewpager.adapter = pagerAdapter
+                product_viewpager.offscreenPageLimit = 3
+                product_viewpager.adapter?.notifyDataSetChanged()
+                hideLoading()
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+        })
+
+        productDetailViewModel.staticPagesUrlResponse?.observe( this, Observer<ApiResponse<StaticPagesUrlResponse>> { apiResponse ->
+            val response = apiResponse?.apiResponse
+            if(response is StaticPagesUrlResponse){
+                productDetailViewModel.staticPages = response
+                GlobalSingelton.instance?.staticPagesResponse = response
+            } else {
+                Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
             }
         })
     }
