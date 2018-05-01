@@ -51,7 +51,7 @@ class RegisterDataClass {
             val confirmation: String,
             val dob: String,
             val email: String,
-            val prefix: String = "Mr.",
+            val prefix: String = "",
             val firstname: String,
             val lastname: String,
             val gender: Int,
