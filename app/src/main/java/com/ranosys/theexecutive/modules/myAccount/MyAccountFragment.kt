@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
 import com.ranosys.theexecutive.utils.DialogOkCallback

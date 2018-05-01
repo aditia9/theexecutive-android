@@ -18,7 +18,6 @@ import android.widget.ExpandableListView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiClient
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding

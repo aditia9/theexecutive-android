@@ -25,7 +25,6 @@ import android.widget.TextView
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.ranosys.theexecutive.BuildConfig
-import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment

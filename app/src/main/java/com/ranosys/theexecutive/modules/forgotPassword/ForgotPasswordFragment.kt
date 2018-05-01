@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.SoftKeyboardStateWatcher
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding

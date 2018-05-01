@@ -27,7 +27,6 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import com.facebook.FacebookSdk
 import com.ranosys.theexecutive.BuildConfig
-import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.BottomSizeLayoutBinding
@@ -39,7 +38,6 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.*
 import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.bottom_size_layout.*
-import kotlinx.android.synthetic.main.dialog_product_image.view.*
 import kotlinx.android.synthetic.main.product_detail_view.*
 import kotlinx.android.synthetic.main.product_images_layout.view.*
 

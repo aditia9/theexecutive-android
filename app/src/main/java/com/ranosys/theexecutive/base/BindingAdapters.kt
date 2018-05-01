@@ -14,12 +14,10 @@ import android.widget.ArrayAdapter
 import android.widget.ExpandableListView
 import android.widget.ImageView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
-import com.ranosys.theexecutive.utils.GlideApp
 import com.ranosys.theexecutive.utils.GlobalSingelton
 
 

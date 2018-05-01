@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.facebook.FacebookSdk.getApplicationContext
-import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
 import com.ranosys.theexecutive.utils.Constants
