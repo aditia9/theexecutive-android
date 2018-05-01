@@ -16,7 +16,7 @@ import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_my_information.*
 
 /**
- * @Details
+ * @Details Fragment showing my information screen
  * @Author Ranosys Technologies
  * @Date 27-Apr-2018
  */

@@ -270,4 +270,9 @@ object Utils {
     fun getStringFromFormattedPrice(price: String): String {
         return price.replace(",", "")
     }
+
+    fun getCountryName(id: String): String{
+        return GlobalSingelton.instance?.storeList?.single { it.code.toString() == id }.let { it?.name } ?: ""
+
+    }
 }

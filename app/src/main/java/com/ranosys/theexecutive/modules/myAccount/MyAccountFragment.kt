@@ -105,6 +105,10 @@ class MyAccountFragment: BaseFragment() {
                         context.getString(R.string.select_lang_title) ->{
                             FragmentUtils.addFragment(context, ChangeLanguageFragment(),null, ChangeLanguageFragment::class.java.name, true )
                         }
+
+                        context.getString(R.string.shipping_address) ->{
+                            FragmentUtils.addFragment(context, AddressBookFragment(),null, AddressBookFragment::class.java.name, true )
+                        }
                     }
                 }
             }

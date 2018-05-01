@@ -161,6 +161,11 @@
     <string name="no_more_products">No more product available</string>
     <string name="country">Country</string>
     <string name="save">save</string>
+    <string name="address_book">Address Book</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="set_as_default">Set as Default</string>
+    <string name="mobile_number_label">Mobile Number : </string>
+    <string name="remove">Remove</string>
 
 
 </resources>
