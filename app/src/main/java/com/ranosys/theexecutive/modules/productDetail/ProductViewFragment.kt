@@ -817,6 +817,18 @@ class ProductViewFragment : BaseFragment() {
                                 AppLog.printStackTrace(e)
                             }
                         }
+                    }else{
+                        if(isFromWishList){
+                            sizeViewList?.forEachIndexed { index, _ ->
+                                sizeViewList?.get(index)?.isSelected = index == position
+                            }
+                            sizeValue = item?.value
+
+                            val selectedSizePrice = priceList?.single {
+                                it.colorValue == colorValue && it.sizeValue == sizeValue
+                            }?.price
+                            sizeDilaog.tv_product_price.text = selectedSizePrice
+                        }
                     }
                     sizeViewAdapter.notifyDataSetChanged()
                 }
