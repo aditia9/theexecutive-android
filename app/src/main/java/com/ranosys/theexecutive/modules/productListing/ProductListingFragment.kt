@@ -14,10 +14,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.ExpandableListView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiClient
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
 import com.ranosys.theexecutive.databinding.DialogSortOptionBinding
@@ -33,9 +35,7 @@ import kotlinx.android.synthetic.main.fragment_product_listing.*
 import java.util.*
 
 /**
- * @Details fragment shows product listing
- * @Author Ranosys Technologies
- * @Date 16,Apr,2018
+ * Created by nikhil on 20/3/18.
  */
 class ProductListingFragment: BaseFragment() {
 
@@ -49,6 +49,7 @@ class ProductListingFragment: BaseFragment() {
     private lateinit var filterOptionDialog: Dialog
     private lateinit var sortOptionDialog: Dialog
     private lateinit var linearLayoutManager: LinearLayoutManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,8 +67,6 @@ class ProductListingFragment: BaseFragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_listing, container,  false)
         mViewModel = ViewModelProviders.of(this).get(ProductListingViewModel::class.java)
 
-        callInitialApis()
-
         //sort screen binding
         sortOptionBinding = DataBindingUtil.inflate(inflater, R.layout.dialog_sort_option, container,  false)
         sortOptionDialog = Dialog(activity as Context, R.style.MaterialDialogSheet)
@@ -75,6 +74,8 @@ class ProductListingFragment: BaseFragment() {
         sortOptionDialog.setCancelable(true)
         sortOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         sortOptionDialog.window.setGravity(Gravity.BOTTOM)
+        sortOptionAdapter = SortOptionAdapter(mViewModel, mViewModel.sortOptionList?.value)
+        sortOptionBinding.sortOptionList.setAdapter(sortOptionAdapter)
         prepareSortOptionDialog()
 
         //filter screen binding
@@ -84,9 +85,21 @@ class ProductListingFragment: BaseFragment() {
         filterOptionDialog.setCancelable(true)
         filterOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         filterOptionDialog.window.setGravity(Gravity.BOTTOM)
+        filterOptionBinding.filterList.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
+            var previousGroup = -1
+            override fun onGroupExpand(groupPosition: Int) {
+                if(groupPosition != previousGroup){
+                    filterOptionBinding.filterList.collapseGroup(previousGroup)
+                }
+                previousGroup = groupPosition
+            }
+
+        })
         filterOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
         prepareFilterDialog()
+
+        callInitialApis()
 
 
         observeProductList()
@@ -102,15 +115,15 @@ class ProductListingFragment: BaseFragment() {
         mViewModel.noProductAvailable.observe(this, Observer { count ->
             count?.let {
                 if(count <= 0){
-
-                    mBinding.listingContainer.visibility = View.GONE
+                    mBinding.productList.visibility = View.GONE
                     mBinding.tvNoProductAvailable.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.text = getString(R.string.no_product_available_error)
                 }else{
-                    mBinding.listingContainer.visibility = View.VISIBLE
+                    mBinding.productList.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.visibility = View.GONE
                     mBinding.tvNoProductAvailable.text = ""
                 }
+                mViewModel.noProductAvailable.value = null
             }
             hideLoading()
         })
@@ -125,7 +138,6 @@ class ProductListingFragment: BaseFragment() {
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
         sortOptionBinding.sortOptionList.addItemDecoration(itemDecor)
 
-        sortOptionAdapter = SortOptionAdapter(mViewModel, mViewModel.sortOptionList?.value)
         sortOptionAdapter.setItemClickListener(object: SortOptionAdapter.OnItemClickListener {
             override fun onItemClick(item: ProductListingDataClass.SortOptionResponse) {
                 mViewModel.selectedSortOption = item
@@ -133,7 +145,6 @@ class ProductListingFragment: BaseFragment() {
             }
 
         })
-        sortOptionBinding.sortOptionList.adapter = sortOptionAdapter
 
         //method holding all UI interaction of filter dialog
         sortOptionBinding.let {
@@ -146,8 +157,8 @@ class ProductListingFragment: BaseFragment() {
 
             sortOptionBinding.tvClear.setOnClickListener({
                 sortOptionDialog.let {
-                    mViewModel.selectedSortOption = ProductListingDataClass.SortOptionResponse("","")
-                    sortOptionAdapter.notifyDataSetChanged()
+                    clearSelectedSortOption()
+
                 }
             })
 
@@ -159,11 +170,20 @@ class ProductListingFragment: BaseFragment() {
                     showLoading()
                     sortOptionDialog.dismiss()
                     mViewModel.clearExistingList()
-                    callProductListingApi(categoryId)
+                    if(mViewModel.lastSearchQuery.isNotBlank()){
+                        callProductListingApi(query = mViewModel.lastSearchQuery, fromSearch = true)
+                    }else{
+                        callProductListingApi(categoryId)
+                    }
                     mViewModel.isSorted = !(mViewModel.isSorted && mViewModel.selectedSortOption.attribute_code.isEmpty())
                 }
             })
         }
+    }
+
+    private fun clearSelectedSortOption() {
+        mViewModel.selectedSortOption = ProductListingDataClass.SortOptionResponse("","")
+        sortOptionAdapter?.let { it.notifyDataSetChanged()}
     }
 
     private fun observeSortOptions() {
@@ -185,13 +205,13 @@ class ProductListingFragment: BaseFragment() {
 
     private fun callInitialApis() {
         if (Utils.isConnectionAvailable(activity as Context)) {
-            mViewModel.getFilterOptions(categoryId)
-            mViewModel.getSortOptions()
 
             if(homeSearchQuery.isNotBlank()){
                 mBinding.etSearch.setText(homeSearchQuery)
                 handleSearchAction(homeSearchQuery)
             }else{
+                mViewModel.getFilterOptions(categoryId)
+                mViewModel.getSortOptions(Constants.SORT_TYPE_CATALOG)
                 callProductListingApi(categoryId)
             }
         } else {
@@ -204,17 +224,17 @@ class ProductListingFragment: BaseFragment() {
 
             filterOptionBinding.priceRangeBar.setCurrency(priceFilter?.options?.get(0)?.label)
             val range = priceFilter?.options?.get(0)?.value
-            val min = range?.split("-")?.get(0)?.toFloat()
-            val max = range?.split("-")?.get(1)?.toFloat()
+            val min = range?.split("-")?.get(0)?.toLong()
+            val max = range?.split("-")?.get(1)?.toLong()
             if(max == min){
                 filterOptionDialog.price_range_bar.visibility = View.GONE
             }else{
                 filterOptionDialog.price_range_bar.visibility = View.VISIBLE
                 filterOptionBinding.priceRangeBar.setRangeValues(min, max)
                 filterOptionBinding.priceRangeBar.selectedMinValue = min
-                filterOptionBinding.priceRangeBar.selectedMaxValue =  max
-                filterOptionBinding.etMinPrice.setText(min.toString())
-                filterOptionBinding.etMaxPrice.setText(max.toString())
+                filterOptionBinding.priceRangeBar.selectedMaxValue = max
+                filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
+                filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
             }
         })
     }
@@ -226,7 +246,9 @@ class ProductListingFragment: BaseFragment() {
                 mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.theme_black_color))
                 mBinding.tvFilterOption.isEnabled = true
                 filterOptionAdapter.optionsList = filterList.filterNot { it.name == Constants.FILTER_PRICE_LABEL }
-                filterOptionBinding.filterList.expandGroup(0, true)
+                filterOptionAdapter.notifyDataSetChanged()
+
+                //filterOptionBinding.filterList.expandGroup(0, true)
             }else{
                 mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.hint_color))
                 mBinding.tvFilterOption.isEnabled = false
@@ -240,6 +262,7 @@ class ProductListingFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         val gridLayoutManager = GridLayoutManager(view.context, COLUMN_TWO)
         gridLayoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup(){
             override fun getSpanSize(position: Int): Int {
@@ -247,7 +270,7 @@ class ProductListingFragment: BaseFragment() {
             }
         }
 
-        val threshold = 2
+        val threshold = 5
         product_list.layoutManager = gridLayoutManager
 
         product_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -260,7 +283,7 @@ class ProductListingFragment: BaseFragment() {
                     val totalItemCount = gridLayoutManager.itemCount
                     val firstVisibleItemPosition = gridLayoutManager.findFirstVisibleItemPosition()
 
-                    val allProductLoaded = productListAdapter.itemCount >= mViewModel.totalProductCount
+                    val allProductLoaded = productListAdapter.itemCount >= mViewModel.productListResponse?.total_count?:0
                     val shouldPaging = (visibleItemCount + firstVisibleItemPosition) >= (totalItemCount - threshold)
 
                     if(mViewModel.isLoading.not() && allProductLoaded.not() && shouldPaging){
@@ -272,10 +295,12 @@ class ProductListingFragment: BaseFragment() {
         })
 
 
-        val emptyList = ArrayList<ProductListingDataClass.ProductMaskedResponse>()
+        val emptyList = ArrayList<ProductListingDataClass.Item>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
-                val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, position)
+                ApiClient.client?.dispatcher()?.cancelAll()
+                mViewModel.isLoading = false
+                val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
                 FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
             }
 
@@ -292,23 +317,38 @@ class ProductListingFragment: BaseFragment() {
             sortOptionDialog.show()
         }
 
-        et_search.setOnTouchListener(View.OnTouchListener { v, event ->
-            val drawableRight = 2
-            if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[drawableRight], (activity as Context).getDrawable(R.drawable.cancel))){
-                if(event.action == MotionEvent.ACTION_UP && event.rawX >= et_search.right - et_search.compoundDrawables[drawableRight].bounds.width()) {
-                    et_search.setText("")
-                    et_search.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
-                    mViewModel.clearExistingList()
-                    mViewModel.lastSearchQuery = ""
 
-                    if(homeSearchQuery.isNotBlank()){
-                        homeSearchQuery = ""
-                    }else{
-                        callProductListingApi(categoryId)
-                    }
-                    return@OnTouchListener true
+        et_search.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.isNullOrBlank().not()){
+                    mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
                 }
             }
+
+        })
+
+        et_search.setOnTouchListener(View.OnTouchListener { v, event ->
+            val DRAWABLE_RIGHT = 2
+            if(event.getAction() == MotionEvent.ACTION_UP) {
+                if(event.rawX >= et_search.right - et_search.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
+                    if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
+                        et_search.setText("")
+                        return@OnTouchListener true
+                    }else if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.search))){
+                        if(et_search.text.isNotBlank()){
+                            handleSearchAction(et_search.text.toString())
+                            mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0)
+                        }else{
+                            Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+
             false
         })
 
@@ -324,6 +364,10 @@ class ProductListingFragment: BaseFragment() {
 
     private fun handleSearchAction(searchQuery: String) {
         if(searchQuery.isEmpty().not()){
+            clearSelectedSortOption()
+            resetFilters()
+            mViewModel.getSearchFilterOptions(searchQuery)
+            mViewModel.getSortOptions(Constants.SORT_TYPE_SEARCH)
             performSearch(searchQuery)
             Utils.hideSoftKeypad(activity as Context)
             mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0)
@@ -362,23 +406,28 @@ class ProductListingFragment: BaseFragment() {
                     mViewModel.clearExistingList()
                     if(isFilterChanged){
                         mViewModel.isFiltered = true
-                        mViewModel.selectedPriceRange.min = filterOptionBinding.etMinPrice.text.toString()
-                        mViewModel.selectedPriceRange.max = filterOptionBinding.etMaxPrice.text.toString()
+                        mViewModel.selectedPriceRange.min = Utils.getStringFromFormattedPrice(filterOptionBinding.etMinPrice.text.toString())
+                        mViewModel.selectedPriceRange.max = Utils.getStringFromFormattedPrice(filterOptionBinding.etMaxPrice.text.toString())
                     }else{
                         mViewModel.isFiltered = false
                     }
-                    callProductListingApi(categoryId)
+
+                    if(mViewModel.lastSearchQuery.isNotBlank()){
+                        callProductListingApi(query = mViewModel.lastSearchQuery, fromSearch = true)
+                    }else{
+                        callProductListingApi(categoryId)
+                    }
                 }else{
                     Toast.makeText(activity as Context, getString(R.string.empty_filter_option_selection_error), Toast.LENGTH_SHORT).show()
                 }
             })
 
             //price range bar listeners
-            filterOptionBinding.priceRangeBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Float>{
-                override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<Float>?, minValue: Float, maxValue: Float) {
+            filterOptionBinding.priceRangeBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Long>{
+                override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<Long>?, minValue: Long, maxValue: Long) {
                     if(minValue <= maxValue ){
-                        filterOptionBinding.etMinPrice.setText(minValue.toString())
-                        filterOptionBinding.etMaxPrice.setText(maxValue.toString())
+                        filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(minValue.toString()))
+                        filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(maxValue.toString()))
                     }
                 }
 
@@ -393,7 +442,7 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = s.toString().toFloat()
+                        val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
                         filterOptionBinding.priceRangeBar.selectedMinValue = input
 
                     }
@@ -409,7 +458,7 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = s.toString().toFloat()
+                        val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
                         filterOptionBinding.priceRangeBar.selectedMaxValue = input
                     }
                 }
@@ -434,20 +483,20 @@ class ProductListingFragment: BaseFragment() {
         mViewModel.selectedPriceRange.min = ""
         mViewModel.selectedPriceRange.max = ""
         filterOptionBinding.priceRangeBar.resetSelectedValues()
-        filterOptionDialog.et_max_price.setText(filterOptionBinding.priceRangeBar.selectedMaxValue.toString())
-        filterOptionDialog.et_min_price.setText(filterOptionBinding.priceRangeBar.selectedMinValue.toString())
+        filterOptionDialog.et_max_price.setText(Utils.getFromattedPrice(filterOptionBinding.priceRangeBar.selectedMaxValue.toString()))
+        filterOptionDialog.et_min_price.setText(Utils.getFromattedPrice(filterOptionBinding.priceRangeBar.selectedMinValue.toString()))
 
         //reset other filters
         val keys = mViewModel.selectedFilterMap.keys
         for (key in keys){
-            mViewModel.selectedFilterMap[key] = ""
+            mViewModel.selectedFilterMap.put(key, "")
         }
 
         filterOptionAdapter.resetFilter()
     }
 
     private fun observeProductList() {
-        mViewModel.maskedProductList.observe(this, Observer<ArrayList<ProductListingDataClass.ProductMaskedResponse>> { partialProductList ->
+        mViewModel.productList.observe(this, Observer<MutableList<ProductListingDataClass.Item>> { partialProductList ->
             partialProductList?.run {
                 productListAdapter.productList = partialProductList
                 productListAdapter.notifyDataSetChanged()
@@ -456,16 +505,20 @@ class ProductListingFragment: BaseFragment() {
         })
     }
 
-    fun callProductListingApi(catId: Int?, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false){
+    fun callProductListingApi(catId: Int? = 0, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false){
         if (Utils.isConnectionAvailable(activity as Context)) {
+
             if(fromPagination.not()){
                 showLoading()
             }
             mViewModel.getProductListing(catId, query, fromSearch, fromPagination)
+
+
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
     }
+
     override fun onResume() {
         super.onResume()
         setToolBarParams(categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)

@@ -22,11 +22,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import java.text.NumberFormat
+import java.util.*
 import java.util.regex.Pattern
 
 
@@ -47,7 +51,8 @@ object Utils {
         }
 
     fun isValidEmail(email: String?): Boolean {
-        val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
+       // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
+        val p = Pattern.compile( "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
         val m = p.matcher(email)
         return m.matches()
     }
@@ -152,10 +157,15 @@ object Utils {
         })
     }
 
-    fun logout(context: Context){
+    fun logout(context: Context, mGoogleSignInClient: GoogleSignInClient){
+        //fb and g mail logout
+        LoginManager.getInstance().logOut()
+        mGoogleSignInClient.signOut()
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
-        Toast.makeText(context, context.getString(R.string.logout_success_message), Toast.LENGTH_SHORT).show()
+        updateCartCount(0)
+        SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
+
     }
 
     fun isTablet(context: Context): Boolean {
@@ -219,9 +229,13 @@ object Utils {
 
 
     fun openPages(context: Context, url: String?) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(url)
-        context.startActivity(intent)
+        (context as DashBoardActivity).webPagesDialog.show()
+//        if((url ?: "").isNotBlank()){
+//            val intent = Intent(Intent.ACTION_VIEW)
+//            intent.data = Uri.parse(url)
+//            context.startActivity(intent)
+//        }
+
     }
 
     fun shareUrl(context: Context, url: String?) {
@@ -234,5 +248,23 @@ object Utils {
 
     fun updateCartCount(count: Int) {
         GlobalSingelton.instance?.cartCount?.value = count
+    }
+
+    fun getFromattedPrice(price: String): String {
+        val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
+        if(price.isNotBlank()){
+            val p = price.toDouble()
+            return numberFormatter.format(p)
+        }else{
+            return price
+        }
+    }
+
+    fun getDoubleFromFormattedPrice(price: String): Double {
+        return price.replace(",", "").toDouble()
+    }
+
+    fun getStringFromFormattedPrice(price: String): String {
+        return price.replace(",", "")
     }
 }

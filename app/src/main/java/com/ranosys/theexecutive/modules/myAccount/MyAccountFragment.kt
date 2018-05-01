@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.myAccount
 
+import android.app.Activity
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -8,9 +9,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_my_account.*
@@ -67,7 +71,7 @@ class MyAccountFragment: BaseFragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             if(viewType == VIEW_TYPE_FOOTER){
                 val itemView = LayoutInflater.from(parent.context).inflate(R.layout.logout_btn, parent, false)
-                return MyAccountFooterHolder(itemView)
+                return MyAccountFooterHolder(itemView,context)
 
             }else{
                 val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent,false)
@@ -98,10 +102,24 @@ class MyAccountFragment: BaseFragment() {
             }
         }
 
-        class MyAccountFooterHolder(val item: View): RecyclerView.ViewHolder(item){
+        class MyAccountFooterHolder(val item: View, context: Context): RecyclerView.ViewHolder(item){
             init {
                 itemView.btn_logout.setOnClickListener({
-                    Utils.logout(item.context)
+                    Utils.showDialog(context, context.getString(R.string.logout_text),
+                            context.getString(R.string.yes), context.getString(R.string.no), object : DialogOkCallback {
+                        override fun setDone(done: Boolean) {
+
+                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                    .requestIdToken(context.getString(R.string.gmail_server_client_id))
+                                    .requestEmail()
+                                    .requestProfile()
+                                    .build()
+
+                            val mGoogleSignInClient = GoogleSignIn.getClient(context as Activity, gso)
+                            Utils.logout(item.context, mGoogleSignInClient)
+
+                        }
+                    })
                 })
             }
         }

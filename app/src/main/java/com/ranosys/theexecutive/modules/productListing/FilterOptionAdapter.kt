@@ -11,6 +11,7 @@ import android.widget.ExpandableListView
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.FilterOptionItemBinding
 import com.ranosys.theexecutive.databinding.FilterOptionTitleBinding
+import kotlinx.android.synthetic.main.row_second.view.*
 
 /**
  * @Class An adapter class for filter option.
@@ -34,6 +35,19 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
         val layoutInflater = LayoutInflater.from(parent.context)
         val titleBinding: FilterOptionTitleBinding = DataBindingUtil.inflate(layoutInflater, R.layout.filter_option_title, parent, false)
         titleBinding.filter = getGroup(groupPosition)
+
+        optionsList?.let {
+            if(optionsList?.size!! > 0) {
+                if (isExpanded) {
+                    titleBinding.root.img_expand_collapse.setImageResource(R.drawable.dropdown)
+                } else {
+                    titleBinding.root.img_expand_collapse.setImageResource(R.drawable.forward)
+                }
+            }else{
+                titleBinding.root.img_expand_collapse.setImageResource(0)
+            }
+        }
+
         return titleBinding.root
     }
 

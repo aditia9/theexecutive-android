@@ -65,11 +65,6 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
         expandableListView.divider = context?.resources?.getDrawable(android.R.color.transparent)
         expandableListView.setChildDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
 
-        if(categoryList?.get(group)?.children_data?.size!! != 0)
-        {
-            expandableListView.expandGroup(child,true)
-        }
-
         expandableListView.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
             var previousGroup = -1
             override fun onGroupExpand(p0: Int) {
@@ -97,7 +92,7 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
                     FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 }
 
-
+                expandableListView?.smoothScrollToPosition(group)
                 return false
             }
         })

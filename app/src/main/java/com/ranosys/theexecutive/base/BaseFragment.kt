@@ -1,14 +1,23 @@
 package com.ranosys.theexecutive.base
 
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Dialog
 import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.Gravity
+import android.view.View
+import android.webkit.*
+import android.widget.RelativeLayout
+import android.widget.Toast
 import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.web_pages_layout.*
 
 
 /**
@@ -113,5 +122,54 @@ abstract class BaseFragment : LifecycleFragment() {
             }
         })
     }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    fun prepareWebPageDialog(context : Context?, url : String?, title : String?) {
+        val webPagesDialog = Dialog(context, R.style.MaterialDialogSheet)
+        webPagesDialog.setContentView(R.layout.web_pages_layout)
+        webPagesDialog.setCancelable(true)
+        webPagesDialog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT /*+ rl_add_to_box.height*/)
+        webPagesDialog.window.setGravity(Gravity.BOTTOM)
+        webPagesDialog.tv_web_title.text = title
+        webPagesDialog.webview.getSettings().setJavaScriptEnabled(true) // enable javascript
+        webPagesDialog.webview.getSettings().defaultZoom = WebSettings.ZoomDensity.FAR
+        webPagesDialog.webview.getSettings().builtInZoomControls = true
+        webPagesDialog.webview.getSettings().displayZoomControls = false
+        webPagesDialog.webview.setWebViewClient(object : WebViewClient() {
+            override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
+                Toast.makeText(activity, description, Toast.LENGTH_SHORT).show()
+            }
+
+            @TargetApi(android.os.Build.VERSION_CODES.M)
+            override fun onReceivedError(view: WebView, req: WebResourceRequest, rerr: WebResourceError) {
+                // Redirect to deprecated method, so you can use it in all SDK versions
+                onReceivedError(view, rerr.errorCode, rerr.description.toString(), req.url.toString())
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                view?.loadUrl(request?.url.toString())
+                return super.shouldOverrideUrlLoading(view, request)
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                showLoading()
+                super.onPageStarted(view, url, favicon)
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                hideLoading()
+                super.onPageFinished(view, url)
+            }
+        })
+
+        webPagesDialog.webview.loadUrl(url)
+        webPagesDialog.img_back.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                webPagesDialog.dismiss()
+            }
+        })
+        webPagesDialog.show()
+    }
+
 
 }

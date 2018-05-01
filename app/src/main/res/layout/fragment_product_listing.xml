@@ -2,8 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data></data>
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,6 +13,7 @@
             android:layout_width="@dimen/match_constraint"
             android:theme="@style/tilTheme"
             android:labelFor="@+id/et_search"
+            android:hint="@string/search"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/eight_dp"
             android:layout_marginLeft="@dimen/eight_dp"
@@ -30,6 +29,7 @@
                 android:paddingRight="@dimen/ten_dp"
                 android:singleLine="true"
                 android:inputType="text"
+                android:hint="@string/search"
                 android:imeOptions="actionSearch"
                 android:layout_marginLeft="@dimen/eight_dp"
                 android:layout_marginRight="@dimen/eight_dp"

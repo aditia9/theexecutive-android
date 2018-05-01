@@ -33,10 +33,10 @@
                     android:id="@+id/img_one"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/six_hundred_dp"
-                    android:src="@drawable/placeholder"
+                    android:src="@drawable/placeholder2"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_one_detail"
-                    bind:baseUrlWithProductImageUrl="@{productItemVM.urlOne}"
+                    bind:baseUrlWithProductImageUrl='@{productItemVM.url_one}'
                     />
 
                 <ImageView
@@ -45,10 +45,11 @@
                     android:layout_width="match_parent"
                     android:layout_below="@id/img_one"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:src="@drawable/placeholder"
+                    android:src="@drawable/placeholder2"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_two_detail"
-                    bind:baseUrlWithProductImageUrl="@{productItemVM.urlTwo}"
+                    bind:baseUrlWithProductImageUrl='@{productItemVM.url_two}'
+                    android:visibility="gone"
                     />
 
                 <TextView
@@ -115,6 +116,8 @@
                     android:textStyle="bold"
                     android:text="@string/composition"
                     android:gravity="center"
+                    android:padding="@dimen/four_dp"
+                    android:background="?selectableItemBackground"
                     android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
 
@@ -125,6 +128,8 @@
                     android:layout_below="@id/tv_composition_and_care"
                     android:text="@string/size_guideline"
                     android:layout_marginTop="@dimen/twenty_dp"
+                    android:padding="@dimen/four_dp"
+                    android:background="?selectableItemBackground"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
@@ -161,6 +166,8 @@
                     android:layout_below="@id/tv_return"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:text="@string/share"
+                    android:padding="@dimen/four_dp"
+                    android:background="?selectableItemBackground"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
@@ -173,6 +180,8 @@
                     android:layout_below="@id/tv_share"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:text="@string/buying_guideline"
+                    android:padding="@dimen/four_dp"
+                    android:background="?selectableItemBackground"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
@@ -197,10 +206,14 @@
                     android:layout_below="@id/tv_chat"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:text="@string/add_to_wishlist"
+                    android:padding="@dimen/four_dp"
+                    android:background="?selectableItemBackground"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                     />
+
+
 
                 <RelativeLayout
                     android:id="@+id/rl_add_to_box"
@@ -209,8 +222,8 @@
                     android:orientation="horizontal"
                     android:background="@color/white"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:paddingTop="@dimen/fifteen_dp"
-                    android:paddingBottom="@dimen/fifteen_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    android:paddingBottom="@dimen/ten_dp"
                     android:layout_below="@id/tv_wishlist"
                     >
 
@@ -219,8 +232,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/add_to_bag"
-                        android:padding="@dimen/ten_dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingBottom="@dimen/ten_dp"
+                        android:paddingTop="@dimen/ten_dp"
+                        android:paddingLeft="@dimen/twelve_dp"
+                        android:paddingRight="@dimen/twelve_dp"
+                        android:textSize="@dimen/fourteen_sp"
                         android:textStyle="bold"
+                        android:letterSpacing=".09"
                         android:background="@drawable/button_border"
                         android:onClick="@{(view) -> productItemVM.btnClicked(view)}"
                         />
@@ -229,11 +249,14 @@
                         android:id="@+id/tv_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:textStyle="bold"
-                        android:textSize="@dimen/sixteen_sp"
-                        android:text='@{"IDR " + Double.toString(productItemVM.productItem.price)}'
+                        android:maxLines="2"
+                        android:gravity="right"
+                        android:layout_marginLeft="@dimen/twelve_dp"
+                        android:layout_toRightOf="@id/btn_add_to_bag"
+                        android:textSize="@dimen/fourteen_sp"
                         />
 
                 </RelativeLayout>
@@ -243,16 +266,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/rl_add_to_box"
-
                     >
 
                     <View
                         android:id="@+id/view_line"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/one_dp"
-                        android:background="@color/theme_black_color"
+                        android:layout_height="@dimen/one_dip"
+                        android:background="@color/hint_color"
                         android:layout_marginTop="@dimen/twenty_dp"
                         />
+
                     <TextView
                         android:id="@+id/tv_like"
                         android:layout_width="match_parent"
@@ -260,7 +283,7 @@
                         android:textStyle="bold"
                         android:text="@string/might_like"
                         android:gravity="center"
-                        android:textSize="@dimen/twenty_dp"
+                        android:textSize="@dimen/twenty_sp"
                         android:layout_marginTop="@dimen/twenty_dp"
                         android:layout_below="@id/view_line"
                         />
@@ -278,8 +301,6 @@
             </RelativeLayout>
 
         </com.amar.library.ui.StickyScrollView>
-
-
 
     </RelativeLayout>
 

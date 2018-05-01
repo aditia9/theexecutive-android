@@ -19,9 +19,8 @@ import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
-import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlideApp
-import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.GlobalSingelton
 
 
 /**
@@ -34,25 +33,21 @@ class BindingAdapters {
         @BindingAdapter("app:errorText")
         fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
             view.error = errorMessage
-            if (TextUtils.isEmpty(errorMessage)) {
-                view.isErrorEnabled = false
-            } else {
-                view.isErrorEnabled = true
-            }
+            view.isErrorEnabled = !TextUtils.isEmpty(errorMessage)
         }
 
         @JvmStatic
         @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
         fun bindSpinnerData(pAppCompatSpinner: AppCompatSpinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
-            pAppCompatSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                     newTextAttrChanged.onChange()
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {}
-            })
+            }
             if (newSelectedValue != null) {
-                val pos = (pAppCompatSpinner.getAdapter() as ArrayAdapter<String>).getPosition(newSelectedValue)
+                val pos = (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
                 pAppCompatSpinner.setSelection(pos, true)
             }
         }
@@ -97,8 +92,8 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(imageUrl)
-                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
@@ -109,12 +104,12 @@ class BindingAdapters {
         @JvmStatic
         @BindingAdapter("bind:baseWithimageUrl")
         fun loadImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
-            val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.CATEGORY_MEDIA_URL)
+            val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
@@ -126,13 +121,13 @@ class BindingAdapters {
         @JvmStatic
         @BindingAdapter("bind:baseUrlWithProductImageUrl")
         fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
-            val baseUrl = SavedPreferences.getInstance()?.getStringValue(Constants.PRODUCT_MEDIA_URL)
+            val baseUrl = GlobalSingelton.instance?.configuration?.product_media_url
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .asBitmap()
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
