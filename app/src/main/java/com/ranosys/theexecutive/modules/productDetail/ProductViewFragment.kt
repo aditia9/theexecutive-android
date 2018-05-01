@@ -64,6 +64,7 @@ class ProductViewFragment : BaseFragment() {
     private var relatedSku : String = ""
     private var relatedName : String = ""
     private var relatedPosition : Int = 0
+    private var isFromWishList : Boolean = false
     private var price : SpannableStringBuilder? = SpannableStringBuilder(Constants.ZERO)
     private var specialPrice : String? = Constants.ZERO
     private var colorMap = HashMap<String, String>()
@@ -297,7 +298,7 @@ class ProductViewFragment : BaseFragment() {
         productItemViewModel.clickedAddBtnId?.observe(this, Observer<Int> { id ->
             when (id){
                 R.id.btn_add_to_bag -> {
-                    openBottomSizeSheet()
+                    openBottomSizeSheet(false)
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_composition_and_care -> {
@@ -329,22 +330,7 @@ class ProductViewFragment : BaseFragment() {
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_wishlist -> {
-                    if (Utils.isConnectionAvailable(activity as Context)) {
-                        //check for logged in user
-                        if((SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY) ?: "").isBlank()){
-                            //show toast to user to login
-                            Toast.makeText(activity as Context, getString(R.string.login_required_error), Toast.LENGTH_SHORT).show()
-                            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
-                            val bundle = Bundle()
-                            bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
-                            FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
-                        }else{
-                            showLoading()
-                            productItemViewModel.callAddToWishListApi(colorAttrId, colorValue, sizeAttrId, sizeValue)
-                        }
-                    } else {
-                        Utils.showNetworkErrorDialog(activity as Context)
-                    }
+                    manageWishListPopUp()
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
             }
@@ -550,6 +536,35 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
+    private fun manageWishListPopUp(){
+        //check for logged in user
+        if((SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY) ?: "").isBlank()){
+            //show toast to user to login
+            Toast.makeText(activity as Context, getString(R.string.login_required_error), Toast.LENGTH_SHORT).show()
+            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
+            val bundle = Bundle()
+            bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
+            FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+        }else{
+            if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
+                openBottomSizeSheet(true)
+            }
+            else{
+                callWishListApi()
+            }
+        }
+
+    }
+
+    private fun callWishListApi(){
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            productItemViewModel.callAddToWishListApi(colorAttrId, colorValue, sizeAttrId, sizeValue)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+    }
+
     private fun getDisplayPrice(configurePrice: String, configureSpecialPrice: String): SpannableStringBuilder {
         return if(configurePrice.toDouble() > configureSpecialPrice.toDouble() && !configureSpecialPrice.equals(Constants.ZERO)){
             val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
@@ -642,22 +657,25 @@ class ProductViewFragment : BaseFragment() {
         sizeDilaog.window.setGravity(Gravity.BOTTOM)
 
         sizeDilaog.btn_done.setOnClickListener({
-            if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
-                if(!sizeValue.isNullOrEmpty()) {
+            if (productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
+                if (!sizeValue.isNullOrEmpty()) {
                     if (sizeDilaog.isShowing) {
                         sizeDilaog.dismiss()
                     }
-                    addToCartCall()
-                }else{
-                    Toast.makeText(activity,getString(R.string.select_size_err),Toast.LENGTH_SHORT).show()
+                    if(isFromWishList) {
+                        callWishListApi()
+                    }else{
+                        addToCartCall()
+                    }
+                } else {
+                    Toast.makeText(activity, getString(R.string.select_size_err), Toast.LENGTH_SHORT).show()
                 }
-            }else{
+            } else {
                 if (sizeDilaog.isShowing) {
                     sizeDilaog.dismiss()
                 }
                 addToCartCall()
             }
-
         })
 
         sizeDilaog.img_forward.setOnClickListener {
@@ -733,7 +751,19 @@ class ProductViewFragment : BaseFragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun openBottomSizeSheet() {
+    private fun openBottomSizeSheet(fromWishList : Boolean) {
+        isFromWishList = fromWishList
+
+        if(isFromWishList){
+            sizeDilaog.btn_done.text = getString(R.string.add_to_wishlist)
+            sizeDilaog.tv_select_quantity.visibility = View.GONE
+            sizeDilaog.ll_layout.visibility = View.GONE
+        }else{
+            sizeDilaog.btn_done.text = getString(R.string.add_to_bag)
+            sizeDilaog.tv_select_quantity.visibility = View.VISIBLE
+            sizeDilaog.ll_layout.visibility = View.VISIBLE
+        }
+
         if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)){
             sizeDilaog.rv_size_view.visibility = View.GONE
             sizeDilaog.tv_select_size.visibility = View.GONE
@@ -742,7 +772,6 @@ class ProductViewFragment : BaseFragment() {
             sizeDilaog.rv_size_view.visibility = View.VISIBLE
             sizeDilaog.tv_select_size.visibility = View.VISIBLE
         }
-
 
         sizeDilaog.tv_product_price.text = price
         selectedQty = 1
