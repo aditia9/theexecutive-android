@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -143,6 +144,21 @@ abstract class BaseFragment : LifecycleFragment() {
             override fun onReceivedError(view: WebView, req: WebResourceRequest, rerr: WebResourceError) {
                 // Redirect to deprecated method, so you can use it in all SDK versions
                 onReceivedError(view, rerr.errorCode, rerr.description.toString(), req.url.toString())
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                view?.loadUrl(request?.url.toString())
+                return super.shouldOverrideUrlLoading(view, request)
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                showLoading()
+                super.onPageStarted(view, url, favicon)
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                hideLoading()
+                super.onPageFinished(view, url)
             }
         })
 

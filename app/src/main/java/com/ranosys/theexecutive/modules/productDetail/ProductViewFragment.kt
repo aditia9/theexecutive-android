@@ -181,6 +181,7 @@ class ProductViewFragment : BaseFragment() {
             list_wear_with_products.adapter = wearWithAdapter
             wearWithAdapter.setItemClickListener(object : WearWithProductsAdapter.OnItemClickListener {
                 override fun onItemClick(item: ProductListingDataClass.ProductLinks?, position: Int) {
+                    relatedProductList?.clear()
                     productLinksList?.forEach {
                         showLoading()
                         relatedSku = item?.linked_product_sku!!
@@ -235,7 +236,7 @@ class ProductViewFragment : BaseFragment() {
     private fun setColorImagesList(){
         productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.run{
             val length = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.size!!
-            for(i in 0 until length-1) {
+            for(i in 0 .. length-1) {
                 val option = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)
                 when (option?.label) {
                     Constants.COLOR_ -> {
@@ -247,7 +248,14 @@ class ProductViewFragment : BaseFragment() {
                         }
                         AppLog.e("ColorList : $colorMap")
                         colorAttrId = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
-                        getProductOptions(colorAttrId, Constants.COLOR)
+                        if(null == GlobalSingelton.instance?.colorList) {
+                            getProductOptions(colorAttrId, Constants.COLOR)
+                        }else{
+                            colorOptionList = GlobalSingelton.instance?.colorList!!.filter {
+                                it.value in colorMap.values
+                            }
+                            AppLog.e("New color list : $colorOptionList")
+                        }
                     }
                     Constants.SIZE_ -> {
                         option.values.forEachIndexed({ index, value ->
@@ -255,7 +263,14 @@ class ProductViewFragment : BaseFragment() {
                         })
                         AppLog.e("Sizelist :  $sizeMap")
                         sizeAttrId = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
-                        getProductOptions(sizeAttrId, Constants.SIZE)
+                        if(null == GlobalSingelton.instance?.sizeList) {
+                            getProductOptions(sizeAttrId, Constants.SIZE)
+                        }else{
+                            sizeOptionList = GlobalSingelton.instance?.sizeList!!.filter {
+                                it.value in sizeMap.values
+                            }
+                            AppLog.e("New size list : $sizeOptionList")
+                        }
                     }
                 }
             }
@@ -646,11 +661,24 @@ class ProductViewFragment : BaseFragment() {
         })
 
         sizeDilaog.img_forward.setOnClickListener {
-            if(selectedQty < itemQty!!){
-                selectedQty++
-                sizeDilaog.tv_quantity.text = selectedQty.toString()
+            if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
+                if (!sizeValue.isNullOrEmpty()) {
+                    if (selectedQty < itemQty!!) {
+                        selectedQty++
+                        sizeDilaog.tv_quantity.text = selectedQty.toString()
+                    } else {
+                        Toast.makeText(activity as Context, getString(R.string.no_more_products), Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(activity, getString(R.string.select_size_err), Toast.LENGTH_SHORT).show()
+                }
             }else{
-                Toast.makeText(activity as Context, getString(R.string.no_more_products), Toast.LENGTH_SHORT).show()
+                if (selectedQty < itemQty!!) {
+                    selectedQty++
+                    sizeDilaog.tv_quantity.text = selectedQty.toString()
+                } else {
+                    Toast.makeText(activity as Context, getString(R.string.no_more_products), Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -661,7 +689,7 @@ class ProductViewFragment : BaseFragment() {
             }
         }
 
-        sizeDilaog.tv_size_guide.setOnClickListener { prepareWebPageDialog(activity as Context, productItemViewModel.staticPages?.size_guideline ,getString(R.string.size_guideline)) }
+        sizeDilaog.tv_size_guide.setOnClickListener { prepareWebPageDialog(activity as Context, GlobalSingelton.instance?.staticPagesResponse?.size_guideline ,getString(R.string.size_guideline)) }
 
     }
 
