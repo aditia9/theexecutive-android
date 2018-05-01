@@ -40,26 +40,32 @@ class MyInformationFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         btn_save.setOnClickListener {
-
             //check if info updated
             val newMobileNo = et_mobile_number.text.toString()
             if((mViewModel.maskedUserInfo.get()._mobile == newMobileNo).not()){
                 mViewModel.maskedUserInfo.get()._mobile = newMobileNo
                 if(mViewModel.infoUpdated.not()) mViewModel.infoUpdated = true
             }
-        }
 
-        //call api
-        if (Utils.isConnectionAvailable(activity as Context)) {
-            showLoading()
-
-            if(mViewModel.infoUpdated && mViewModel.isValidData(this as Context)){
-                mViewModel.UpdateUserInfo()
-            }else{
-                Utils.showDialog(activity,"Field not updated", getString(android.R.string.ok), "", null)
+            val countryCode = spinner_country_code.selectedItem.toString()
+            if((mViewModel.maskedUserInfo.get()._countryCode == countryCode).not()){
+                mViewModel.maskedUserInfo.get()._countryCode = countryCode
+                if(mViewModel.infoUpdated.not()) mViewModel.infoUpdated = true
             }
-        } else {
-            Utils.showNetworkErrorDialog(activity as Context)
+
+            //call api
+            if (Utils.isConnectionAvailable(activity as Context)) {
+                if(mViewModel.infoUpdated){
+                    if(mViewModel.isValidData(activity as Context)){
+                        showLoading()
+                        mViewModel.updateUserInfo()
+                    }
+                }else{
+                    Utils.showDialog(activity,"Field not updated", getString(android.R.string.ok), "", null)
+                }
+            } else {
+                Utils.showNetworkErrorDialog(activity as Context)
+            }
         }
 
 
@@ -74,7 +80,7 @@ class MyInformationFragment: BaseFragment() {
         mViewModel.userInfoApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             mBinding.info = mViewModel.maskedUserInfo.get()
-            (mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode)
+            mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode))
             if(apiResponse?.error.isNullOrBlank().not()){
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }

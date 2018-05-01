@@ -51,7 +51,7 @@ class RegisterDataClass {
             val confirmation: String,
             val dob: String,
             val email: String,
-            val prefix: String = "Mr.",
+            val prefix: String ="",
             val firstname: String,
             val lastname: String,
             val gender: Int,
@@ -66,13 +66,11 @@ class RegisterDataClass {
     )
 
     data class Address(
-            var id: String = "",
-            var customer_id: String = "",
             val region: Region,
             val region_id: String,
             val country_id: String,
             val street: List<String>,
-            val telephone: String,
+            var telephone: String,
             val postcode: String,
             val city: String,
             val prefix: String = "",

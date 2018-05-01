@@ -101,6 +101,10 @@ class MyAccountFragment: BaseFragment() {
                         context.getString(R.string.my_information_option) ->{
                             FragmentUtils.addFragment(context, MyInformationFragment(),null, MyInformationFragment::class.java.name, true )
                         }
+
+                        context.getString(R.string.select_lang_title) ->{
+                            FragmentUtils.addFragment(context, ChangeLanguageFragment(),null, ChangeLanguageFragment::class.java.name, true )
+                        }
                     }
                 }
             }
