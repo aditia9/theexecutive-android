@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.AddressListItemBinding
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_address_book.*
@@ -50,7 +51,8 @@ class AddressBookFragment: BaseFragment() {
             if(apiResponse?.error.isNullOrEmpty()){
                 //update list in adapter
                 addressBookAdapter.let {
-                    addressBookAdapter.addressList = apiResponse?.apiResponse
+                    addressList = apiResponse?.apiResponse
+                    addressBookAdapter.addressList = addressList
                     addressBookAdapter.notifyDataSetChanged()
                 }
 
@@ -118,7 +120,13 @@ class AddressBookFragment: BaseFragment() {
 
     private fun removeAddress(addressPostion: Int) {
         Toast.makeText(activity as Context, "Remove item: $addressPostion", Toast.LENGTH_SHORT).show()
-        mViewModel.removeAddress(addressList?.get(addressPostion))
+        Utils.showDialog(activity, "You want to remove this address", getString(android.R.string.ok), "", object: DialogOkCallback{
+            override fun setDone(done: Boolean) {
+                mViewModel.removeAddress(addressList?.get(addressPostion))
+            }
+
+        })
+
     }
 
 }

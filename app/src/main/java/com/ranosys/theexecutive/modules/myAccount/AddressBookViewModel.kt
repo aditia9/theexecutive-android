@@ -46,6 +46,10 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
     }
 
     fun removeAddress(address: MyAccountDataClass.Address?) {
+        var addList = addressList.value?.apiResponse?.toMutableList()
+        addList?.remove(address)
+        addList.toString()
 
+        var request : MyAccountDataClass.UserInfoResponse? =  GlobalSingelton.instance?.userInfo!!.copy(addList)
     }
 }
