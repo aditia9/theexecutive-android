@@ -158,6 +158,7 @@
     <string name="common_error">Something went wrong, Please try again</string>
     <string name="select_size_err">Please select size</string>
     <string name="no_more_products">No more product available</string>
+    <string name="wishlist_items_count">Total %1$d items in your wishlist.</string>
 
 
 </resources>

@@ -68,7 +68,7 @@ class DashBoardActivity: BaseActivity() {
                                     }
                                 }
                                 2 -> {
-                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", 0, false, 0, false)
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", R.drawable.back, true, 0, false)
                                 }
                             }
                         }
