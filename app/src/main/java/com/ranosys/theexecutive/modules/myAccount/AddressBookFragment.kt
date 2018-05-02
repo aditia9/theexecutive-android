@@ -68,22 +68,57 @@ class AddressBookFragment: BaseFragment() {
         address_list.layoutManager = linearLayoutManager
 
         //get stored
-        addressBookAdapter = AddressBookAdapter(addressList, addressItemBinding)
+        addressBookAdapter = AddressBookAdapter(addressList, addressItemBinding, action = {id: Int, pos: Int ->
+            handleAddressEvents(id, pos)
+        })
         address_list.adapter = addressBookAdapter
 
-        addressItemBinding.tvEditAddress.setOnClickListener {
-            Toast.makeText(activity as Context, "edit address", Toast.LENGTH_SHORT).show()
-        }
 
-        addressItemBinding.tvRemoveAddress.setOnClickListener {
-            Toast.makeText(activity as Context, "edit address", Toast.LENGTH_SHORT).show()
-        }
+
+//        addressItemBinding.tvEditAddress.setOnClickListener {
+//            Toast.makeText(activity as Context, "edit address", Toast.LENGTH_SHORT).show()
+//        }
+//
+//        addressItemBinding.tvRemoveAddress.setOnClickListener {
+//            //Toast.makeText(activity as Context, "remove address", Toast.LENGTH_SHORT).show()
+//
+//        }
+//
+//        addressItemBinding.chkDefault.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if(isChecked){
+//                Toast.makeText(activity as Context, "save default address", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+
 
     }
 
     override fun onResume() {
         super.onResume()
         setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.back , true)
+    }
+
+    private fun handleAddressEvents(id: Int, addressPostion: Int): Unit{
+        when(id){
+            R.id.tv_remove_address -> {
+                removeAddress(addressPostion)
+            }
+
+            R.id.tv_edit_address -> {
+                editAddress(addressPostion)
+            }
+
+            else -> Toast.makeText(activity as Context, "Some other action", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun editAddress(addressPostion: Int) {
+        Toast.makeText(activity as Context, "edit item: $addressPostion", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun removeAddress(addressPostion: Int) {
+        Toast.makeText(activity as Context, "Remove item: $addressPostion", Toast.LENGTH_SHORT).show()
+        mViewModel.removeAddress(addressList?.get(addressPostion))
     }
 
 }

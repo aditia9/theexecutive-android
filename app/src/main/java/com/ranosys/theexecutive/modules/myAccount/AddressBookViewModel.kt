@@ -44,4 +44,8 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
 
         })
     }
+
+    fun removeAddress(address: MyAccountDataClass.Address?) {
+
+    }
 }

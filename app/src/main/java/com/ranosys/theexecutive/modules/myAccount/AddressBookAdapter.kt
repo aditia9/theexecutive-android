@@ -10,7 +10,8 @@ import com.ranosys.theexecutive.utils.Utils
  * @Author Ranosys Technologies
  * @Date 01-May-2018
  */
-class AddressBookAdapter(var addressList: MutableList<MyAccountDataClass.Address>?, val addressItemBinding: AddressListItemBinding) : RecyclerView.Adapter<AddressBookAdapter.Holder>() {
+class AddressBookAdapter(var addressList: MutableList<MyAccountDataClass.Address>?, private val addressItemBinding: AddressListItemBinding,
+                        val action:(id:Int, itemPos: Int) -> Unit) : RecyclerView.Adapter<AddressBookAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return AddressBookAdapter.Holder(addressItemBinding)
@@ -19,15 +20,24 @@ class AddressBookAdapter(var addressList: MutableList<MyAccountDataClass.Address
     override fun getItemCount(): Int = addressList?.size?:0
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(addressList?.get(position))
+        holder.bind(addressList?.get(position), position, action)
     }
 
 
-    class Holder(val itemBinding: AddressListItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(address: MyAccountDataClass.Address?) {
+    class Holder(private val itemBinding: AddressListItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+        fun bind(address: MyAccountDataClass.Address?, position: Int, action:(id: Int, itemPos: Int) -> Unit) {
             address.let {
                 itemBinding.country = Utils.getCountryName(it?.country_id!!)
                 itemBinding.address = it
+
+                itemBinding.tvRemoveAddress.setOnClickListener { view ->
+                    action(view.id, position)
+                }
+
+                itemBinding.tvEditAddress.setOnClickListener {view ->
+                    action(view.id, position)
+                }
+
             }
         }
 
