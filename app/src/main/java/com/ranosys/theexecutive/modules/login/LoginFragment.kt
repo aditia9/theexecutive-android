@@ -302,6 +302,8 @@ class LoginFragment: BaseFragment() {
 
         } catch (e : ApiException ) {
             AppLog.printStackTrace(e)
+            mGoogleSignInClient.signOut()
+            Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", null)
         }
     }
 
