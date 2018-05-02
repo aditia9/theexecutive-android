@@ -86,7 +86,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                     itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
                     itemBinding?.tvSize?.isEnabled = false
                     itemBinding?.tvSize?.isClickable = false
-                    itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
+                   // itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
                     itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
 
                 }

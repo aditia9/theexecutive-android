@@ -5,7 +5,9 @@ import android.arch.lifecycle.MutableLiveData
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 
 /**
@@ -148,6 +150,47 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
                 productList.value = productListResponse?.items
                 noProductAvailable.value = productListResponse?.items?.size
+                saveOptionsResponse(productListResponse)
+            }
+        })
+    }
+
+    private fun saveOptionsResponse(response : ProductListingDataClass.ProductListingResponse?){
+        response?.items?.forEach {
+            if(it.type_id == Constants.CONFIGURABLE) {
+                if(null == GlobalSingelton.instance?.colorList || null == GlobalSingelton.instance?.sizeList)
+                    it.extension_attributes.configurable_product_options.forEach {
+                        when(it.label){
+                            Constants.COLOR_ -> {
+                                getProductOptions(it.attribute_id, Constants.COLOR_)
+                            }
+                            Constants.SIZE_ -> {
+                                getProductOptions(it.attribute_id, Constants.SIZE_)
+                            }
+                        }
+                    }
+                return
+            }
+        }
+    }
+
+    fun getProductOptions(attributeId : String?, label : String?){
+        AppRepository.getProductOptions(attributeId, object : ApiCallback<List<ProductOptionsResponse>> {
+            override fun onException(error: Throwable) {
+            }
+
+            override fun onError(errorMsg: String) {
+            }
+
+            override fun onSuccess(t: List<ProductOptionsResponse>?) {
+                when(label){
+                    Constants.COLOR_ -> {
+                        GlobalSingelton.instance?.colorList = t
+                    }
+                    Constants.SIZE_ -> {
+                        GlobalSingelton.instance?.sizeList = t
+                    }
+                }
             }
         })
     }
@@ -157,8 +200,6 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         productListResponse?.items?.clear()
         productList.value?.clear()
     }
-
-
 
     private fun prepareProductListingRequest(catId: Int, query: String, fromSearch: Boolean): Map<String, String> {
         val requestMap: MutableMap<String, String> = mutableMapOf()

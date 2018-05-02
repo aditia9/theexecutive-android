@@ -69,7 +69,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val name = product.name
             val productType = product.type_id
             val tag: String? = product.extension_attributes.tag_text
-            var price: String
+            val price: String
             var specialPrice = "0.0"
             if(productType == Constants.CONFIGURABLE){
                 price = Utils.getFromattedPrice(product.extension_attributes.regular_price)
@@ -100,7 +100,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             var imgUrl = ""
             if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0].file
 
-            val product = ProductListingDataClass.ProductMaskedResponse(
+            return ProductListingDataClass.ProductMaskedResponse(
                     sku = sku,
                     name = name,
                     normalPrice = price,
@@ -109,8 +109,6 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
                     collectionTag = tag ?:  "",
                     discountPer = discount,
                     imageUrl = imgUrl)
-
-            return product
         }
 
         private fun isNewProduct(fromDate: String, toDate: String): String {

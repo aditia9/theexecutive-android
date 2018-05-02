@@ -97,7 +97,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     fun validateData(context: Context): Boolean {
         var isValid = true
 
-        if (TextUtils.isEmpty(email.get().trim())) {
+        if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))
             isValid = false
         } else if (!Utils.isValidEmail(email.get())) {
@@ -105,7 +105,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             isValid = false
         }
 
-        if (TextUtils.isEmpty(password.get().trim())) {
+        if (TextUtils.isEmpty(password.get())) {
             passwordError.set(context.getString(R.string.empty_password))
             isValid = false
         }

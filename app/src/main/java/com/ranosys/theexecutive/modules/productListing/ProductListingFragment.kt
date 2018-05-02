@@ -14,6 +14,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.ExpandableListView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -84,6 +85,16 @@ class ProductListingFragment: BaseFragment() {
         filterOptionDialog.setCancelable(true)
         filterOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         filterOptionDialog.window.setGravity(Gravity.BOTTOM)
+        filterOptionBinding.filterList.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
+            var previousGroup = -1
+            override fun onGroupExpand(groupPosition: Int) {
+                if(groupPosition != previousGroup){
+                    filterOptionBinding.filterList.collapseGroup(previousGroup)
+                }
+                previousGroup = groupPosition
+            }
+
+        })
         filterOptionAdapter = FilterOptionAdapter(mViewModel, mViewModel.filterOptionList?.value)
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
         prepareFilterDialog()
@@ -104,11 +115,11 @@ class ProductListingFragment: BaseFragment() {
         mViewModel.noProductAvailable.observe(this, Observer { count ->
             count?.let {
                 if(count <= 0){
-                    mBinding.listingContainer.visibility = View.GONE
+                    mBinding.productList.visibility = View.GONE
                     mBinding.tvNoProductAvailable.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.text = getString(R.string.no_product_available_error)
                 }else{
-                    mBinding.listingContainer.visibility = View.VISIBLE
+                    mBinding.productList.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.visibility = View.GONE
                     mBinding.tvNoProductAvailable.text = ""
                 }

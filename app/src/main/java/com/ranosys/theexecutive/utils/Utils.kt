@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -11,7 +12,9 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Build
+import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
@@ -51,7 +54,8 @@ object Utils {
         }
 
     fun isValidEmail(email: String?): Boolean {
-        val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
+       // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
+        val p = Pattern.compile( "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
         val m = p.matcher(email)
         return m.matches()
     }
@@ -269,6 +273,24 @@ object Utils {
 
     fun getStringFromFormattedPrice(price: String): String {
         return price.replace(",", "")
+    }
+
+    @SuppressLint("ServiceCast")
+    fun getDeviceId(context: Context): String {
+        var IMEI = ""
+        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        IMEI = telephonyManager.deviceId
+        if (TextUtils.isEmpty(IMEI)) {
+            val manager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val info = manager.connectionInfo
+            val address = info.macAddress
+            return if (!TextUtils.isEmpty(address)) {
+                address
+            } else {
+                "0000000000000000"
+            }
+        }
+        return IMEI
     }
 
     fun getCountryName(id: String): String{

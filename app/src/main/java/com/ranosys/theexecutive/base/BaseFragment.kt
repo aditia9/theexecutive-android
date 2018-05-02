@@ -6,9 +6,9 @@ import android.app.Dialog
 import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.webkit.*
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -130,28 +130,33 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT /*+ rl_add_to_box.height*/)
         webPagesDialog.window.setGravity(Gravity.BOTTOM)
         webPagesDialog.tv_web_title.text = title
-        webPagesDialog.webview.getSettings().setJavaScriptEnabled(true) // enable javascript
-        webPagesDialog.webview.getSettings().defaultZoom = WebSettings.ZoomDensity.FAR
-        webPagesDialog.webview.getSettings().builtInZoomControls = true
-        webPagesDialog.webview.getSettings().displayZoomControls = false
-        webPagesDialog.webview.setWebViewClient(object : WebViewClient() {
+        webPagesDialog.webview.settings.javaScriptEnabled = true // enable javascript
+        webPagesDialog.webview.settings.defaultZoom = WebSettings.ZoomDensity.FAR
+        webPagesDialog.webview.settings.builtInZoomControls = true
+        webPagesDialog.webview.settings.displayZoomControls = false
+        webPagesDialog.webview.webViewClient = object : WebViewClient() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 Toast.makeText(activity, description, Toast.LENGTH_SHORT).show()
             }
 
             @TargetApi(android.os.Build.VERSION_CODES.M)
             override fun onReceivedError(view: WebView, req: WebResourceRequest, rerr: WebResourceError) {
-                // Redirect to deprecated method, so you can use it in all SDK versions
                 onReceivedError(view, rerr.errorCode, rerr.description.toString(), req.url.toString())
             }
-        })
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                showLoading()
+                super.onPageStarted(view, url, favicon)
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                hideLoading()
+                super.onPageFinished(view, url)
+            }
+        }
 
         webPagesDialog.webview.loadUrl(url)
-        webPagesDialog.img_back.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                webPagesDialog.dismiss()
-            }
-        })
+        webPagesDialog.img_back.setOnClickListener { webPagesDialog.dismiss() }
         webPagesDialog.show()
     }
 
