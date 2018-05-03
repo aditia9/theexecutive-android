@@ -27,25 +27,34 @@
 
         <TextView
             android:id="@+id/tv_product_name"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:text="@{item.name}"
             android:fontFamily="@font/dax_medium"
-            android:textSize="@dimen/twenty_sp"
+            android:textSize="@dimen/sixteen_sp"
             android:layout_marginStart="@dimen/twenty_dp"
             app:layout_constraintStart_toEndOf="@id/img_product"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAllCaps="true"
+            android:ellipsize="end"
+            android:maxLines="2"
             />
 
         <TextView
-            android:id="@+id/tv_product_id"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_product_sku"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:hint="@{item.sku}"
+            android:textSize="@dimen/twelve_sp"
             android:layout_marginTop="@dimen/five_dp"
             android:layout_marginStart="@dimen/twenty_dp"
             app:layout_constraintTop_toBottomOf="@id/tv_product_name"
-            app:layout_constraintStart_toEndOf="@id/img_product"/>
+            app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:ellipsize="end"
+            android:maxLines="1"
+            />
 
         <TextView
             android:id="@+id/tv_product_color"
@@ -54,7 +63,7 @@
             android:text="BLACK"
             android:layout_marginStart="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/twenty_dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_product_id"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_sku"
             app:layout_constraintStart_toEndOf="@id/img_product"/>
 
         <View
@@ -63,9 +72,9 @@
             android:layout_height="@dimen/twenty_dp"
             android:layout_marginStart="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/twenty_dp"
-            android:background="@color/colorAccent"
+            android:background="@color/divider_color"
             app:layout_constraintStart_toEndOf="@id/tv_product_color"
-            app:layout_constraintTop_toBottomOf="@id/tv_product_id" />
+            app:layout_constraintTop_toBottomOf="@id/tv_product_sku" />
 
         <TextView
             android:id="@+id/tv_item_size"
@@ -74,32 +83,19 @@
             android:text="L"
             android:layout_marginTop="@dimen/twenty_dp"
             android:layout_marginStart="@dimen/twenty_dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_product_id"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_sku"
             app:layout_constraintStart_toEndOf="@id/view"/>
 
         <TextView
             android:id="@+id/tv_regular_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="IDR 109.900"
             android:textSize="@dimen/twelve_sp"
             android:layout_marginStart="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/twenty_dp"
             app:layout_constraintTop_toBottomOf="@id/tv_product_color"
             app:layout_constraintStart_toEndOf="@id/img_product"
             />
-
-        <TextView
-            android:id="@+id/tv_final_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sixteen_sp"
-            android:text="IDR 179.900"
-            android:textColor="#FF0000"
-            android:layout_marginTop="@dimen/sixteen_dp"
-            android:layout_marginStart="@dimen/ten_dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_item_size"
-            app:layout_constraintStart_toEndOf="@id/tv_regular_price"/>
 
         <ImageView
             android:id="@+id/img_bag"
@@ -120,8 +116,7 @@
             android:src="@drawable/delete"
             android:padding="@dimen/eight_dp"
             android:layout_marginTop="@dimen/sixteen_dp"
-            android:layout_marginStart="@dimen/thirty_dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_final_price"
+            android:layout_marginStart="@dimen/twenty_dp"
             app:layout_constraintStart_toEndOf="@id/img_bag"
             app:layout_constraintBottom_toBottomOf="@+id/img_bag"
             />

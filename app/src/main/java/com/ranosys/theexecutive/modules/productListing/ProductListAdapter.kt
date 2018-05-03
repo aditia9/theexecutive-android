@@ -53,7 +53,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
                 val ss = SpannableStringBuilder(price)
                 ss.setSpan(StrikethroughSpan(), 0, normalPrice.length, 0)
                 ss.setSpan(ForegroundColorSpan(Color.RED), normalPrice.length, price.length, 0)
-                ss.setSpan(RelativeSizeSpan(1.1f), normalPrice.length, price.length, 0)
+                ss.setSpan(RelativeSizeSpan(1.3f), normalPrice.length, price.length, 0)
                 product.displayPrice = ss.toString()
                 itemBinding.tvDisplayPrice?.text = ss
             }

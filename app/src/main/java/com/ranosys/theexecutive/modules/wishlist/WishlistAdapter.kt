@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.WishlistItemBinding
+import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Details
@@ -54,6 +55,8 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
 
         fun bind(context: Context?, item : Item?, position : Int, action: (Int, Int, Item?) -> Unit, listener: OnItemClickListener?){
             itemBinding?.item = item
+
+            itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString())
 
             itemView.setOnClickListener {
                 view -> action(0, position, item)
