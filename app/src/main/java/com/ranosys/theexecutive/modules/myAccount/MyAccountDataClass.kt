@@ -16,46 +16,24 @@ class MyAccountDataClass {
 
 
     data class UserInfoResponse(
-            val id: Int,
-            val group_id: Int,
-            val default_billing: String,
-            val default_shipping: String,
-            val created_at: String,
-            val updated_at: String,
-            val created_in: String,
-            val dob: String,
-            val email: String,
-            val firstname: String,
-            val lastname: String,
-            val prefix: String,
-            val gender: Int,
-            val store_id: Int,
-            val website_id: Int,
+            val id: Int?,
+            val group_id: Int?,
+            val default_billing: String?,
+            val default_shipping: String?,
+            val created_at: String?,
+            val updated_at: String?,
+            val created_in: String?,
+            val dob: String?,
+            val email: String?,
+            val firstname: String?,
+            val lastname: String?,
+            val prefix: String?,
+            val gender: Int?,
+            val store_id: Int?,
+            val website_id: Int?,
             val addresses: MutableList<Address>?,
-            val disable_auto_group_change: Int
-    ){
-       fun copy(addressList: MutableList<Address>?): UserInfoResponse {
-           var userInfoResponse = UserInfoResponse( id = this.id,
-                   group_id = this.group_id,
-                   default_billing = this.default_billing,
-                   default_shipping = this.default_shipping,
-                   created_at = this.created_at,
-                   created_in = this.created_in,
-                   updated_at = this.updated_at,
-                   dob = this.dob,
-                   email = this.email,
-                   firstname = this.firstname,
-                   lastname = this.lastname,
-                   prefix = this.prefix,
-                   gender = this.gender,
-                   store_id = this.store_id,
-                   website_id = this.website_id,
-                   disable_auto_group_change = this.disable_auto_group_change,
-                   addresses = addressList?.toMutableList())
-
-           return userInfoResponse
-       }
-    }
+            val disable_auto_group_change: Int?
+    )
 
     data class Address(
             var id: String = "",

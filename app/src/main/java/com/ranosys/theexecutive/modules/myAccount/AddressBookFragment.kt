@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.AddressListItemBinding
 import com.ranosys.theexecutive.utils.DialogOkCallback
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_address_book.*
@@ -42,7 +43,24 @@ class AddressBookFragment: BaseFragment() {
         //api for getting address
         mViewModel.getAddressList()
         observeAddressList()
+        observeRemoveAddressApiResponse()
         return view
+    }
+
+    private fun observeRemoveAddressApiResponse() {
+        mViewModel.removeAddressApiResponse.observe(this, Observer { apiResponse ->
+            hideLoading()
+            if(apiResponse?.error.isNullOrBlank()){
+
+                Toast.makeText(activity as Context, "Address removed successfully", Toast.LENGTH_SHORT).show()
+                addressList = apiResponse?.apiResponse?.addresses
+                addressBookAdapter.addressList = addressList
+                addressBookAdapter.notifyDataSetChanged()
+
+            }else{
+                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+            }
+        })
     }
 
     private fun observeAddressList() {
@@ -75,29 +93,11 @@ class AddressBookFragment: BaseFragment() {
         })
         address_list.adapter = addressBookAdapter
 
-
-
-//        addressItemBinding.tvEditAddress.setOnClickListener {
-//            Toast.makeText(activity as Context, "edit address", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        addressItemBinding.tvRemoveAddress.setOnClickListener {
-//            //Toast.makeText(activity as Context, "remove address", Toast.LENGTH_SHORT).show()
-//
-//        }
-//
-//        addressItemBinding.chkDefault.setOnCheckedChangeListener { buttonView, isChecked ->
-//            if(isChecked){
-//                Toast.makeText(activity as Context, "save default address", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
-
     }
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.back , true)
+        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
     }
 
     private fun handleAddressEvents(id: Int, addressPostion: Int): Unit{
@@ -114,19 +114,32 @@ class AddressBookFragment: BaseFragment() {
         }
     }
 
-    private fun editAddress(addressPostion: Int) {
-        Toast.makeText(activity as Context, "edit item: $addressPostion", Toast.LENGTH_SHORT).show()
+    private fun editAddress(addressPosition: Int) {
+        //todo - move to add address screen with address
+        val addAddressFragment = AddAddressFragment.getInstance(addressList?.get(addressPosition))
+        FragmentUtils.addFragment(context, addAddressFragment,null, AddAddressFragment::class.java.name, true )
     }
 
-    private fun removeAddress(addressPostion: Int) {
-        Toast.makeText(activity as Context, "Remove item: $addressPostion", Toast.LENGTH_SHORT).show()
-        Utils.showDialog(activity, "You want to remove this address", getString(android.R.string.ok), "", object: DialogOkCallback{
-            override fun setDone(done: Boolean) {
-                mViewModel.removeAddress(addressList?.get(addressPostion))
-            }
+    private fun removeAddress(addressPosition: Int) {
+        if(addressList?.get(addressPosition) == Utils.getDefaultAddress()){
+            Utils.showDialog(activity, "can't delete default address", getString(android.R.string.ok), "", null)
+        }else{
+            Utils.showDialog(activity, "You want to remove this address", getString(android.R.string.ok), "", object: DialogOkCallback{
+                override fun setDone(done: Boolean) {
+                    callRemoveAddressApi(addressPosition)
+                }
 
-        })
+            })
+        }
+    }
 
+    private fun callRemoveAddressApi(addressPosition: Int) {
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            mViewModel.removeAddress(addressList?.get(addressPosition))
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
     }
 
 }

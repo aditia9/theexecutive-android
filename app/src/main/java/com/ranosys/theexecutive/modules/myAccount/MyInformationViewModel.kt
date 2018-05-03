@@ -50,7 +50,7 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                 //update info saved at singleton
                 GlobalSingelton.instance?.userInfo = t
 
-                val defaultAdd = t?.addresses?.single { it.id == t.default_shipping }
+                val defaultAdd = Utils.getDefaultAddress()
                 var countryCode = ""
                 var mobileNo = ""
                 if(defaultAdd?.telephone?.contains("-") == true){

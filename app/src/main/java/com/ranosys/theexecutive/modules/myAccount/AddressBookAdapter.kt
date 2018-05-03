@@ -27,8 +27,13 @@ class AddressBookAdapter(var addressList: MutableList<MyAccountDataClass.Address
     class Holder(private val itemBinding: AddressListItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(address: MyAccountDataClass.Address?, position: Int, action:(id: Int, itemPos: Int) -> Unit) {
             address.let {
+
+
                 itemBinding.country = Utils.getCountryName(it?.country_id!!)
                 itemBinding.address = it
+                itemBinding.isDefault = it == Utils.getDefaultAddress()
+
+
 
                 itemBinding.tvRemoveAddress.setOnClickListener { view ->
                     action(view.id, position)

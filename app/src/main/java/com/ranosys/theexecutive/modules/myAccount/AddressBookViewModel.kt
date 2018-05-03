@@ -16,6 +16,7 @@ import com.ranosys.theexecutive.utils.GlobalSingelton
  */
 class AddressBookViewModel(application: Application): BaseViewModel(application) {
     val addressList: MutableLiveData<ApiResponse<MutableList<MyAccountDataClass.Address>>> = MutableLiveData()
+    var removeAddressApiResponse : MutableLiveData<ApiResponse<MyAccountDataClass.UserInfoResponse>> = MutableLiveData()
 
     fun getAddressList() {
 
@@ -41,15 +42,43 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
                 apiResponse.apiResponse = t?.addresses?.toMutableList()
                 addressList.value = apiResponse
             }
-
         })
     }
 
     fun removeAddress(address: MyAccountDataClass.Address?) {
         var addList = addressList.value?.apiResponse?.toMutableList()
         addList?.remove(address)
-        addList.toString()
 
-        var request : MyAccountDataClass.UserInfoResponse? =  GlobalSingelton.instance?.userInfo!!.copy(addList)
+        var updatedInfo = GlobalSingelton.instance?.userInfo?.copy(addresses = addList)
+
+        updatedInfo?.let {
+
+            val request = MyAccountDataClass.UpdateInfoRequest(customer = updatedInfo)
+
+            val apiResponse = ApiResponse<MyAccountDataClass.UserInfoResponse>()
+            AppRepository.updateUserInfo(request, object: ApiCallback<MyAccountDataClass.UserInfoResponse>{
+                override fun onException(error: Throwable) {
+                    AppLog.e("Update Information API : ${error.message}")
+                    apiResponse.error = error.message
+                    removeAddressApiResponse.value = apiResponse
+                }
+
+                override fun onError(errorMsg: String) {
+                    AppLog.e("Update Information API : $errorMsg")
+                    apiResponse.error = errorMsg
+                    removeAddressApiResponse.value = apiResponse
+                }
+
+                override fun onSuccess(t: MyAccountDataClass.UserInfoResponse?) {
+                    //update info saved at singleton
+                    GlobalSingelton.instance?.userInfo = t
+
+                    apiResponse.apiResponse = t
+                    removeAddressApiResponse.value = apiResponse
+                }
+            })
+        }
+
+
     }
 }

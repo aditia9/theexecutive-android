@@ -8,6 +8,10 @@
     <data>
         <import type="com.ranosys.theexecutive.utils.Utils"/>
         <variable
+            name="isDefault"
+            type="Boolean"/>
+
+        <variable
             name="country"
             type="String"/>
         <variable
@@ -37,6 +41,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/set_as_default"
                 android:layout_marginEnd="@dimen/twenty_four_dp"
+                android:enabled="@{!isDefault}"
+                android:checked="@{isDefault}"
                 android:textSize="@dimen/fourteen_sp"
                 android:textColor="@color/hint_color"
                 app:layout_constraintTop_toTopOf="parent"

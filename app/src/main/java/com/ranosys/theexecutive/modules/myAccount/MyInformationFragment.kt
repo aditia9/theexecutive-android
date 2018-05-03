@@ -79,11 +79,13 @@ class MyInformationFragment: BaseFragment() {
     private fun observeUserInfoResponse() {
         mViewModel.userInfoApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
-            mBinding.info = mViewModel.maskedUserInfo.get()
-            mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode))
             if(apiResponse?.error.isNullOrBlank().not()){
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+            }else{
+                mBinding.info = mViewModel.maskedUserInfo.get()
+                mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode))
             }
+
         })
     }
 

@@ -32,6 +32,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import java.text.NumberFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -296,5 +297,10 @@ object Utils {
     fun getCountryName(id: String): String{
         return GlobalSingelton.instance?.storeList?.single { it.code.toString() == id }.let { it?.name } ?: ""
 
+    }
+
+    fun getDefaultAddress(): MyAccountDataClass.Address?{
+        val info = GlobalSingelton.instance?.userInfo
+        return info?.addresses?.single { it.id == info.default_shipping }
     }
 }
