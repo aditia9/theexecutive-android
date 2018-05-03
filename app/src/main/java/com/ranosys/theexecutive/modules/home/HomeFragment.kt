@@ -43,7 +43,7 @@ class HomeFragment : BaseFragment() {
         val homeViewPager = HomeViewPager(childFragmentManager)
         viewpager.setPagingEnabled(false)
         viewpager.adapter = homeViewPager
-        viewpager.offscreenPageLimit = 2
+        viewpager.offscreenPageLimit = 0
         tabLayout.setupWithViewPager(viewpager)
         createTabIcons()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{

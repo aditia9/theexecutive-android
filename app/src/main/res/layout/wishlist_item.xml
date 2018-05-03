@@ -19,7 +19,7 @@
             android:layout_width="@dimen/one_fifty_dp"
             android:layout_height="@dimen/one_eighty_dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/placeholder2"
+            android:src="@drawable/placeholder"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             bind:baseUrlWithProductImageUrl="@{item.image}"
