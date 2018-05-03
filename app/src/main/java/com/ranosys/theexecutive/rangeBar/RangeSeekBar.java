@@ -29,6 +29,7 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
 import com.ranosys.theexecutive.R;
+import com.ranosys.theexecutive.utils.Utils;
 
 import java.math.BigDecimal;
 
@@ -49,8 +50,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     /**
      * Default color of a {@link RangeSeekBar}, #FF33B5E5. This is also known as "Ice Cream Sandwich" blue.
      */
-    public static final int ACTIVE_COLOR = Color.argb(0xFF, 0x33, 0xB5, 0xE5);
+    public static final int ACTIVE_COLOR = Color.argb(0xFF, 0x35, 0x32, 0x33);
     public static final int HINT_COLOR = Color.argb(0xFF, 0x99, 0x99, 0x99);
+    public static final int INACTIVE_COLOR = Color.argb(0xFF, 221, 221, 221);
     /**
      * An invalid pointer id.
      */
@@ -71,7 +73,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private static final int DEFAULT_TEXT_DISTANCE_TO_BUTTON_IN_DP = 8;
     private static final int DEFAULT_TEXT_DISTANCE_TO_TOP_IN_DP = 8;
 
-    private static final int LINE_HEIGHT_IN_DP = 6;
+    private static final int LINE_HEIGHT_IN_DP = 16;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint shadowPaint = new Paint();
 
@@ -172,8 +174,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             setRangeToDefaultValues();
             internalPad = PixelUtil.dpToPx(context, INITIAL_PADDING_IN_DP);
             barHeight = PixelUtil.dpToPx(context, LINE_HEIGHT_IN_DP);
-            activeColor = HINT_COLOR;
-            defaultColor = Color.GRAY;
+            activeColor = ACTIVE_COLOR;
+            defaultColor = INACTIVE_COLOR;
             alwaysActive = false;
             showTextAboveThumbs = true;
             textAboveThumbsColor = HINT_COLOR;
@@ -196,8 +198,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 showLabels = a.getBoolean(R.styleable.RangeSeekBar_showLabels, true);
                 internalPad = a.getDimensionPixelSize(R.styleable.RangeSeekBar_internalPadding, INITIAL_PADDING_IN_DP);
                 barHeight = a.getDimensionPixelSize(R.styleable.RangeSeekBar_barHeight, LINE_HEIGHT_IN_DP);
-                activeColor = a.getColor(R.styleable.RangeSeekBar_activeColor, HINT_COLOR);
-                defaultColor = a.getColor(R.styleable.RangeSeekBar_defaultColor, Color.GRAY);
+                activeColor = a.getColor(R.styleable.RangeSeekBar_activeColor, ACTIVE_COLOR);
+                defaultColor = a.getColor(R.styleable.RangeSeekBar_defaultColor, INACTIVE_COLOR);
                 alwaysActive = a.getBoolean(R.styleable.RangeSeekBar_alwaysActive, false);
 
                 Drawable normalDrawable = a.getDrawable(R.styleable.RangeSeekBar_thumbNormal);
@@ -664,8 +666,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             paint.setTextSize(textSize);
             paint.setColor(textAboveThumbsColor);
 
-            String minText = valueToString(getSelectedMinValue());
-            String maxText = valueToString(getSelectedMaxValue());
+            String minText = Utils.INSTANCE.getFromattedPrice(valueToString(getSelectedMinValue()));
+            String maxText = Utils.INSTANCE.getFromattedPrice(valueToString(getSelectedMaxValue()));
             float minTextWidth = paint.measureText(mCurrency + minText);
             float maxTextWidth = paint.measureText(mCurrency + maxText);
             // keep the position so that the labels don't get cut off

@@ -1,21 +1,25 @@
 package com.ranosys.theexecutive.modules.productListing
 
+import android.databinding.ObservableField
+
 /**
- * @Class An adapter class for all products showing in viewpager.
+ * @Class An data class collection fro product listing
  * @author Ranosys Technologies
  * @Date 20-Mar-2018
  */
 
 class ProductListingDataClass {
 
-    class ProductMaskedResponse(var sku: String = "0",
-                                var name: String = "Demo Longggg Naaaaame",
-                                var normalPrice: String = "6.9",
-                                var specialPrice: String = "2,42.900",
-                                var type: String = "New",
-                                var discountPer: Int = 40,
-                                var collectionTag: String = "Chinese Collections",
-                                var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
+    class ProductMaskedResponse(var sku: String = "",
+                                var name: String = "",
+                                var normalPrice: String = "",
+                                var specialPrice: String = "",
+                                var displayPrice: String = "",
+                                var type: String = "",
+                                var discountPer: Int = 0,
+                                var collectionTag: String = "",
+                                var imageUrl: String = "")
+
 
 
     data class SortOptionResponse(
@@ -39,9 +43,13 @@ class ProductListingDataClass {
     data class FilterChildOption(
             val label: String,
             val code: String,
-            val value: String,
-            var isSelected: Boolean = false
-    )
+            val value: String){
+        var _isSelected: ObservableField<Boolean>
+        init {
+            _isSelected = ObservableField<Boolean>()
+        }
+    }
+
 
 
     data class PriceRange(var min: String = "",
@@ -49,8 +57,8 @@ class ProductListingDataClass {
 
 
     data class ProductListingResponse(
-            val total_count: Int,
-            val items: List<Item>
+            var total_count: Int,
+            var items: MutableList<Item>
     )
 
     data class Item(
@@ -58,7 +66,7 @@ class ProductListingDataClass {
             val sku: String,
             val name: String,
             val attribute_set_id: Int,
-            val price: Double,
+            val price: String,
             val status: Int,
             val visibility: Int,
             val type_id: String,
@@ -66,9 +74,9 @@ class ProductListingDataClass {
             val updated_at: String,
             val weight: Double,
             val extension_attributes: ExtensionAttributes,
-            val product_links: List<Any>,
+            val product_links: List<ProductLinks?>?,
             val options: List<Any>,
-            val media_gallery_entries: List<MediaGalleryEntry>,
+            val media_gallery_entries: MutableList<MediaGalleryEntry>?,
             val tier_prices: List<Any>,
             val custom_attributes: List<CustomAttribute>
     )
@@ -76,11 +84,12 @@ class ProductListingDataClass {
     data class ExtensionAttributes(
             val website_ids: List<Int>,
             val category_links: List<CategoryLink>,
-            val stock_item: StockItem,
+            val stock_item: StockItem?,
             val configurable_product_options: List<ConfigurableProductOption>,
             val configurable_product_links: List<Int>,
-            val regular_price: Double,
-            val final_price: Double
+            val regular_price: String,
+            val final_price: String,
+            val tag_text: String = ""
     )
 
     data class ConfigurableProductOption(
@@ -137,13 +146,30 @@ class ProductListingDataClass {
             val position: Int,
             val disabled: Boolean,
             val types: List<String>,
-            val file: String
+            var file: String
     )
 
     data class CustomAttribute(
             val attribute_code: String,
             val value: Any
     )
+
+
+    data class ProductLinks(
+            val sku: String,
+            val link_type: String,
+            val linked_product_sku: String,
+            val linked_product_type: String,
+            val position: Int,
+            val extension_attributes: ProductExtensionAttributes
+    )
+
+    data class ProductExtensionAttributes (
+
+        var linked_product_name : String,
+        var linked_product_image : String,
+        var linked_product_regularprice : Int,
+        var linked_product_finalprice  : Int)
 
 
 }

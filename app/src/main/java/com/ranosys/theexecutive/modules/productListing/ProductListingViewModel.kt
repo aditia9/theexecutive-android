@@ -5,28 +5,58 @@ import android.arch.lifecycle.MutableLiveData
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
-import java.util.*
 
 /**
  * Created by nikhil on 20/3/18.
  */
 class ProductListingViewModel(application: Application): BaseViewModel(application) {
 
-    var maskedProductList: MutableLiveData<ArrayList<ProductListingDataClass.ProductMaskedResponse>> = MutableLiveData()
+    var productList: MutableLiveData<MutableList<ProductListingDataClass.Item>> = MutableLiveData()
     var isLoading: Boolean = false
-    var totalProductCount: Int = 0
+    var isFiltered: Boolean = false
+    var isSorted: Boolean = false
+    var lastSearchQuery: String = ""
 
+
+    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>()
     var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData<MutableList<ProductListingDataClass.Filter>>()
     var priceFilter: MutableLiveData<ProductListingDataClass.Filter> = MutableLiveData()
+    var noProductAvailable: MutableLiveData<Int> = MutableLiveData()
     var selectedFilterMap = hashMapOf<String, String>()
     var selectedPriceRange = ProductListingDataClass.PriceRange()
+    var selectedSortOption = ProductListingDataClass.SortOptionResponse("", "")
 
     var productListResponse: ProductListingDataClass.ProductListingResponse? = null
 
-    fun getSortOptions() {
-        AppRepository.sortOptionApi(object : ApiCallback<ProductListingDataClass.SortOptionResponse>{
+    fun getSortOptions(type: String) {
+        AppRepository.sortOptionApi(type, object : ApiCallback<ArrayList<ProductListingDataClass.SortOptionResponse>>{
+            override fun onSuccess(sortOptions: ArrayList<ProductListingDataClass.SortOptionResponse>?) {
+                val tempOptions: ArrayList<ProductListingDataClass.SortOptionResponse> = ArrayList()
+                sortOptions?.let {
+                    for (option in it){
+                        if (option.attribute_code == Constants.FILTER_PRICE_KEY){
+                            tempOptions.add(ProductListingDataClass.SortOptionResponse(
+                                    attribute_code = option.attribute_code,
+                                    attribute_name = option.attribute_name + Constants.LOW_TO_HIGH))
+
+                            tempOptions.add(ProductListingDataClass.SortOptionResponse(
+                                    attribute_code = option.attribute_code,
+                                    attribute_name = option.attribute_name + Constants.HIGH_TO_LOW))
+
+                            continue
+                        }
+
+                        tempOptions.add(option)
+                    }
+                }
+
+                sortOptionList?.value = tempOptions
+            }
+
             override fun onException(error: Throwable) {
                 Utils.printLog("Sort option api", error.message?: "exception")
             }
@@ -35,15 +65,12 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                 Utils.printLog("Sort option api", message = errorMsg)
             }
 
-            override fun onSuccess(sortOptions: ProductListingDataClass.SortOptionResponse?) {
-                //TODO - save sort options
-            }
 
         })
     }
 
     fun getFilterOptions(categoryId: Int?) {
-        AppRepository.filterOptionApi(categoryId!!, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
+        AppRepository.filterOptionApi(categoryId ?: Constants.UNIVERSAL_CAT_ID, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("Filter option api", error.message?: "exception")
             }
@@ -54,103 +81,162 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
             override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
 
-                filterOptions?.run {
-                    for (filter in filterOptions.filters){
-                        selectedFilterMap.put(filter.name, "")
+                if (filterOptions?.total_count!! > 0) {
+                    filterOptions.run {
+                        for (filter in filterOptions.filters) {
+                            selectedFilterMap.put(filter.code, "")
+                        }
                     }
+
+                    priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }[0]
                 }
-
-                priceFilter.value = filterOptions?.filters?.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }?.get(0)
-                filterOptionList?.value = filterOptions?.filters?.toMutableList()
-
-
+                filterOptionList?.value = filterOptions.filters.toMutableList()
             }
         })
     }
 
-    fun getProductListing(sku: String) {
+    fun getSearchFilterOptions(query: String) {
+        AppRepository.searchFilterOptionApi(query, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
+            override fun onException(error: Throwable) {
+                Utils.printLog("search Filter option api", error.message?: "exception")
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog("search Filter option api", errorMsg)
+            }
+
+            override fun onSuccess(filterOptions: ProductListingDataClass.FilterOptionsResponse?) {
+
+                if (filterOptions?.filters?.isNotEmpty()!!) {
+                    filterOptions.run {
+                        for (filter in filterOptions.filters) {
+                            selectedFilterMap.put(filter.code, "")
+                        }
+                    }
+
+                    priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }[0]
+                }
+                filterOptionList?.value = filterOptions.filters.toMutableList()
+            }
+        })
+    }
+
+    fun getProductListing(catId: Int?, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false) {
         isLoading = true
 
-        AppRepository.getProductList(prepareProductListingRequest(sku), object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
+        if(fromSearch && fromPagination.not()){
+            clearExistingList()
+        }
+
+        AppRepository.getProductList(prepareProductListingRequest(catId ?: Constants.UNIVERSAL_CAT_ID, query,fromSearch), fromSearch,  object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("product listing", error.message?: "exception")
             }
 
             override fun onError(errorMsg: String) {
-                Utils.printLog("product listing", errorMsg)            }
+                Utils.printLog("product listing", errorMsg)
+            }
 
             override fun onSuccess(response: ProductListingDataClass.ProductListingResponse?) {
 
                 isLoading = false
-                productListResponse = response
-                totalProductCount = productListResponse?.total_count ?: 0
+                if(null == productListResponse){
+                    productListResponse = response
 
-                val maskedResponse: ArrayList<ProductListingDataClass.ProductMaskedResponse> = ArrayList()
-                productListResponse?.items.let {
-                    for(product in productListResponse!!.items){
-                        val sku = product.sku
-                        val name = product.name
-                        val productType = product.type_id
-                        var price = 0.0
-                        var specialPrice = 0.0
-                        if(productType == Constants.FILTER_CONFIGURABLE_LABEL){
-                            price = product.extension_attributes.regular_price
-                            specialPrice = product.extension_attributes.final_price
-                        }else{
-                            price = product.price
-                            val attributes = product.custom_attributes.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }.toList()
-                            if(attributes.isNotEmpty()){
-                                specialPrice = attributes.get(0).value.toString().toDouble()
-                            }
-                        }
-
-                        val type = ""
-                        val discount = (((price - specialPrice).div(price)).times(100)).toInt()
-                        var imgUrl = ""
-                        if(product.media_gallery_entries.isNotEmpty())   imgUrl = product.media_gallery_entries[0].label.toString()
-
-                        val product = ProductListingDataClass.ProductMaskedResponse(
-                                sku = sku,
-                                name = name,
-                                normalPrice = price.toString(),
-                                specialPrice = specialPrice.toString(),
-                                type = type,
-                                discountPer = discount,
-                                imageUrl = imgUrl)
-
-                        maskedResponse.add(product)
-
-                    }
+                }else{
+                    productListResponse?.items?.addAll(response?.items as ArrayList)
+                    productListResponse?.total_count = response?.total_count ?: 0
                 }
 
-                var list = maskedProductList.value
-                if(null == list){
-                    list = arrayListOf()
-                }
-                list.addAll(maskedResponse)
-
-                maskedProductList.value = list
+                productList.value = productListResponse?.items
+                noProductAvailable.value = productListResponse?.items?.size
+                saveOptionsResponse(productListResponse)
             }
         })
     }
 
-    private fun prepareProductListingRequest(sku: String): Map<String, String> {
+    private fun saveOptionsResponse(response : ProductListingDataClass.ProductListingResponse?){
+        response?.items?.forEach {
+            if(it.type_id == Constants.CONFIGURABLE) {
+                if(null == GlobalSingelton.instance?.colorList || null == GlobalSingelton.instance?.sizeList)
+                    it.extension_attributes.configurable_product_options.forEach {
+                        when(it.label){
+                            Constants.COLOR_ -> {
+                                getProductOptions(it.attribute_id, Constants.COLOR_)
+                            }
+                            Constants.SIZE_ -> {
+                                getProductOptions(it.attribute_id, Constants.SIZE_)
+                            }
+                        }
+                    }
+                return
+            }
+        }
+    }
+
+    fun getProductOptions(attributeId : String?, label : String?){
+        AppRepository.getProductOptions(attributeId, object : ApiCallback<List<ProductOptionsResponse>> {
+            override fun onException(error: Throwable) {
+            }
+
+            override fun onError(errorMsg: String) {
+            }
+
+            override fun onSuccess(t: List<ProductOptionsResponse>?) {
+                when(label){
+                    Constants.COLOR_ -> {
+                        GlobalSingelton.instance?.colorList = t
+                    }
+                    Constants.SIZE_ -> {
+                        GlobalSingelton.instance?.sizeList = t
+                    }
+                }
+            }
+        })
+    }
+
+    fun clearExistingList() {
+        productListResponse?.total_count = 0
+        productListResponse?.items?.clear()
+        productList.value?.clear()
+    }
+
+    private fun prepareProductListingRequest(catId: Int, query: String, fromSearch: Boolean): Map<String, String> {
         val requestMap: MutableMap<String, String> = mutableMapOf()
 
-        requestMap.put(Constants.REQUEST_ID_LABEL, "81")
-        requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
-        val page = (maskedProductList.value?.size)?.div(10)?.plus(1) ?: 1
-        requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString()) // pageCout
-        //requestMap.put("product_list_order",) sort option
-        //requestMap.put("product_list_dir","asc/desc) sort option
+        if(fromSearch){
+            requestMap.put(Constants.REQUEST_SEARCH_LABEL, query)
+        }else {
+            requestMap.put(Constants.REQUEST_ID_LABEL, catId.toString())
+        }
+
+        if(selectedSortOption.attribute_code.isNotBlank()){
+            requestMap.put(Constants.SORT_OPTION_LABEL, selectedSortOption.attribute_code)
+            val dir = when{
+                selectedSortOption.attribute_name.contains(Constants.HIGH_TO_LOW, true) -> Constants.DESC
+                selectedSortOption.attribute_name.contains(Constants.LOW_TO_HIGH, true) -> Constants.ASC
+                else -> ""
+            }
+
+            if(dir.isNotBlank()){
+                requestMap.put(Constants.SORT_OPTION_DIR, dir)
+            }
+        }
 
         if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
-            selectedFilterMap.put(Constants.FILTER_PRICE_LABEL, selectedPriceRange.min + "-" + selectedPriceRange.max)
+            selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.toFloat().toInt().toString() + "-" + selectedPriceRange.max.toFloat().toInt().toString())
         }
 
         for((key, value) in selectedFilterMap){
-            requestMap.put(key, value)
+            if(value.isNotBlank()){
+                requestMap.put(key, value)
+            }
         }
+
+
+        requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
+        val page = (productList.value?.size)?.div(10)?.plus(1) ?: 1
+        requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString())
 
         return requestMap
     }

@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
+        android:paddingTop="@dimen/sixteen_dp"
         android:paddingBottom="@dimen/sixteen_dp">
 
         <ScrollView
@@ -70,6 +71,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/et_email"
                         android:inputType="textEmailAddress"
+                        android:maxLines="1"
                         android:text="@={loginVM.email}"
                         android:paddingStart="@dimen/field_start_padding"
                         android:onTextChanged="@{() -> loginVM.onEmailTextChanged()}"

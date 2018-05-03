@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/img_expand_collapse"
             android:textAllCaps="true"
-            android:textStyle="bold"
             android:padding="10dp"
+            android:textStyle="bold"
             android:layout_marginLeft="20dp"
             android:text="@{childData.name}"
             android:textSize="18sp"/>
@@ -30,7 +30,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@drawable/dropdown"
             />
 
     </RelativeLayout>

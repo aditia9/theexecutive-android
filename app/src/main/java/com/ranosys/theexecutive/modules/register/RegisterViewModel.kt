@@ -24,7 +24,7 @@ import java.util.*
 /**
  * Created by Mohammad Sunny on 31/1/18.
  */
-class  RegisterViewModel(application: Application): BaseViewModel(application) {
+class RegisterViewModel(application: Application): BaseViewModel(application) {
     var firstName: ObservableField<String> = ObservableField()
     var firstNameError: ObservableField<String> = ObservableField()
     var lastName: ObservableField<String> = ObservableField()
@@ -166,9 +166,6 @@ class  RegisterViewModel(application: Application): BaseViewModel(application) {
     }
 
 
-
-
-
     fun callRegisterApi() {
         if(isValidData(getApplication())){
             val address = RegisterDataClass.Address(region_id = selectedState.get().id,
@@ -299,7 +296,7 @@ class  RegisterViewModel(application: Application): BaseViewModel(application) {
 
 
         if (TextUtils.isEmpty(streetAddress1.get()) && TextUtils.isEmpty(streetAddress2.get())){
-            streetAddress1Error.set(context.getString(R.string.street_address_1))
+            streetAddress1Error.set(context.getString(R.string.street_address_error))
             isValid = false
         }
 

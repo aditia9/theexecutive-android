@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.WindowManager
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentForgotPasswordBinding
@@ -29,6 +29,8 @@ class ForgotPasswordFragment: BaseFragment() {
         forgotPassVM = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         mBinding.vm = forgotPassVM
 
+        //handleKeyboard(mBinding.root)
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         observeApiSuccess()
         observeApiFailure()
         return mBinding.root
@@ -52,6 +54,7 @@ class ForgotPasswordFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         setToolBarParams(getString(R.string.forgot_password_title), 0, "", R.drawable.back, true, 0, false )
     }
 
@@ -67,11 +70,21 @@ class ForgotPasswordFragment: BaseFragment() {
 
     private fun observeApiSuccess() {
         forgotPassVM.apiSuccessResponse?.observe(this, Observer<Boolean> { isLinkSent ->
-           if(isLinkSent!!) {
-               hideLoading()
-               Toast.makeText(activity,getString(R.string.email_sent),Toast.LENGTH_SHORT).show()
-               activity?.onBackPressed()
-           }
+            if(isLinkSent!!) {
+                hideLoading()
+                Utils.showDialog(activity as Context, getString(R.string.email_sent), context?.getString(android.R.string.ok), "", object: DialogOkCallback{
+                    override fun setDone(done: Boolean) {
+                        activity?.onBackPressed()
+                    }
+
+                })
+
+            }
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 }

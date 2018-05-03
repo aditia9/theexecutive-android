@@ -1,24 +1,38 @@
 package com.ranosys.theexecutive.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Build
+import android.telephony.TelephonyManager
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import java.text.NumberFormat
+import java.util.*
 import java.util.regex.Pattern
 
 
@@ -39,7 +53,8 @@ object Utils {
         }
 
     fun isValidEmail(email: String?): Boolean {
-        val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
+       // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
+        val p = Pattern.compile( "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
         val m = p.matcher(email)
         return m.matches()
     }
@@ -52,9 +67,9 @@ object Utils {
     }
 
     fun isValidMobile(mobile: String): Boolean {
-       if(mobile.length >= 8 && mobile.length <=16){
-           return true
-       }
+        if(mobile.length in 8..16){
+            return true
+        }
         return false
 
     }
@@ -67,11 +82,7 @@ object Utils {
             val mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
             return if (wifi.isAvailable && wifi.isConnected) {
                 true
-            } else if (mobile.isAvailable && mobile.isConnected) {
-                true
-            } else {
-                false
-            }
+            } else mobile.isAvailable && mobile.isConnected
         } catch (ex: Exception) {
             print(ex.stackTrace)
         }
@@ -140,10 +151,23 @@ object Utils {
         })
     }
 
-    fun logout(context: Context){
+    fun showErrorDialog(context: Context, error : String){
+        showDialog(context, error, context.getString(android.R.string.ok), "", object : DialogOkCallback{
+            override fun setDone(done: Boolean) {
+
+            }
+        })
+    }
+
+    fun logout(context: Context, mGoogleSignInClient: GoogleSignInClient){
+        //fb and g mail logout
+        LoginManager.getInstance().logOut()
+        mGoogleSignInClient.signOut()
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
-        Toast.makeText(context, context.getString(R.string.logout_success_message), Toast.LENGTH_SHORT).show()
+        updateCartCount(0)
+        SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
+
     }
 
     fun isTablet(context: Context): Boolean {
@@ -152,4 +176,104 @@ object Utils {
         return xlarge || large
     }
 
+    fun openCmsPage(context: Context, url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        context.startActivity(intent)
+    }
+
+    fun compareDrawable(context: Context, d1: Drawable, d2: Drawable): Boolean{
+        return (d1 as BitmapDrawable).bitmap == (d2 as BitmapDrawable).bitmap
+    }
+
+    fun getDeviceWidth(context: Context) : Int{
+        val displayMetrics = DisplayMetrics()
+        (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.widthPixels
+    }
+
+    private fun getDeviceHeight(context: Context?) : Int{
+        val displayMetrics = DisplayMetrics()
+        (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.heightPixels
+    }
+
+    fun convertDpIntoPx(context: Context?, dp : Float) : Int{
+        val r = context?.resources
+        val px = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, r?.displayMetrics))
+        return px
+    }
+
+    fun setImageViewHeight(context: Context?, imageView : ImageView?, percentage : Int?){
+        val height = getDeviceHeight(context)
+        val removeHeight = height.times(percentage!!).div(100)
+        imageView?.layoutParams?.height = height - removeHeight
+    }
+
+    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double){
+        val width = getDeviceWidth(context)
+        val height = width.times(times)
+        imageView.layoutParams?.height = height.toInt()
+    }
+
+    fun setViewHeightWrtDeviceHeight(context: Context, view: View, times: Double){
+        val width = getDeviceHeight(context)
+        val height = width.times(times)
+        view.layoutParams?.height = height.toInt()
+    }
+
+    fun setViewHeightWrtDeviceWidth(context: Context, view: View, times: Double){
+        val width = getDeviceWidth(context)
+        val height = width.times(times)
+        view.layoutParams?.height = height.toInt()
+    }
+
+    fun shareUrl(context: Context, url: String?) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Sharing Product links")
+        intent.putExtra(Intent.EXTRA_TEXT, url)
+        context.startActivity(Intent.createChooser(intent, "Share Product"))
+    }
+
+    fun updateCartCount(count: Int) {
+        GlobalSingelton.instance?.cartCount?.value = count
+    }
+
+    fun getFromattedPrice(price: String): String {
+        val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
+        if(price.isNotBlank()){
+            val p = price.toDouble()
+            return numberFormatter.format(p)
+        }else{
+            return price
+        }
+    }
+
+    fun getDoubleFromFormattedPrice(price: String): Double {
+        return price.replace(",", "").toDouble()
+    }
+
+    fun getStringFromFormattedPrice(price: String): String {
+        return price.replace(",", "")
+    }
+
+    @SuppressLint("ServiceCast")
+    fun getDeviceId(context: Context): String {
+        var IMEI = ""
+        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        IMEI = telephonyManager.deviceId
+        if (TextUtils.isEmpty(IMEI)) {
+            val manager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val info = manager.connectionInfo
+            val address = info.macAddress
+            return if (!TextUtils.isEmpty(address)) {
+                address
+            } else {
+                "0000000000000000"
+            }
+        }
+        return IMEI
+    }
 }

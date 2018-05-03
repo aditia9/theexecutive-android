@@ -25,13 +25,15 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="@dimen/two_fifty_dp"
-            android:scaleType="centerCrop"
-            bind:imageUrl="@{productItem.imageUrl}"
+            bind:baseUrlWithProductImageUrl="@{productItem.imageUrl}"
             android:layout_marginTop="@dimen/four_dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:contentDescription="@string/product_image"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <TextView
             android:id="@+id/tv_label"
@@ -52,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:visibility='@{TextUtils.isEmpty(productItem.type + "")? View.GONE : View.VISIBLE}'
+            android:visibility='@{productItem.discountPer == 0? View.GONE : View.VISIBLE}'
             android:text='@{productItem.discountPer + "%"}'
             android:paddingTop="@dimen/four_dp"
             android:paddingBottom="@dimen/eight_dp"
@@ -76,7 +78,7 @@
             android:paddingBottom="@dimen/three_dp"
             android:visibility="@{TextUtils.isEmpty(productItem.collectionTag)? View.GONE : View.VISIBLE}"
             android:ellipsize="end"
-            app:layout_constraintVertical_bias=".8"
+            app:layout_constraintVertical_bias=".9"
             app:layout_constraintTop_toTopOf="@id/image"
             app:layout_constraintBottom_toBottomOf="@id/image"
             app:layout_constraintRight_toRightOf="parent"
@@ -88,23 +90,25 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="2"
+            android:textAllCaps="true"
             android:text="@{productItem.name}"
             android:ellipsize="end"
+            android:textSize="@dimen/fourteen_sp"
             android:layout_marginTop="@dimen/twelve_dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image"/>
 
         <TextView
-            android:id="@+id/tv_normal_price"
+            android:id="@+id/tv_display_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="2"
             app:layout_constraintHorizontal_chainStyle="packed"
             android:textSize="@dimen/twelve_sp"
-            android:text="=@{productItem.normalPrice}"
-            android:visibility="@{TextUtils.isEmpty(productItem.specialPrice)? View.GONE : View.VISIBLE}"
+            android:text="@{productItem.displayPrice}"
+            android:visibility="@{TextUtils.isEmpty(productItem.displayPrice)? View.GONE : View.VISIBLE}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_name"/>

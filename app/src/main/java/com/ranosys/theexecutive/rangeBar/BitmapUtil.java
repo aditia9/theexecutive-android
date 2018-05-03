@@ -4,9 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
 /**
- * @Class An adapter class for all products showing in viewpager.
+ * @Class helper for range bar class
  * @author Ranosys Technologies
  * @Date 10-Apr-2018
  */

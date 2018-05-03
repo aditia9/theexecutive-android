@@ -1,18 +1,28 @@
 package com.ranosys.theexecutive.base
 
+import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Dialog
 import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.Gravity
+import android.webkit.*
+import android.widget.RelativeLayout
+import android.widget.Toast
 import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.web_pages_layout.*
 
 
 /**
- * Created by Mohammad Sunny on 22/2/18.
+ * @Details Base class for all fragments
+ * @Author Ranosys Technologies
+ * @Date 22,Feb,2018
  */
 abstract class BaseFragment : LifecycleFragment() {
 
@@ -22,15 +32,14 @@ abstract class BaseFragment : LifecycleFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = activity
-    }
-
-    override fun onResume() {
-        super.onResume()
         observeLeftIconClick()
     }
 
     fun showLoading() {
-        mProgressDialog = Utils.showProgressDialog(mContext)
+        if(null == mProgressDialog || mProgressDialog?.isShowing?.not()!!){
+            mProgressDialog = Utils.showProgressDialog(mContext)
+        }
+
     }
 
     fun hideLoading() {
@@ -42,7 +51,7 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     fun setToolBarParams(title: String?, titleBackground : Int?, subTitle: String?, leftIcon : Int?, leftIconVisibility : Boolean,
-                         rightIcon : Int?, rightIconVisibility : Boolean){
+                         rightIcon : Int?, rightIconVisibility : Boolean, showLogo: Boolean = false){
         setTitle(title)
         setTitleBackground(titleBackground)
         setSubTitle(subTitle)
@@ -50,7 +59,12 @@ abstract class BaseFragment : LifecycleFragment() {
         setLeftIconVisibilty(leftIconVisibility)
         setRightIcon(rightIcon)
         setRightIconVisibilty(rightIconVisibility)
+        setShowLogo(showLogo)
 
+    }
+
+    private fun setShowLogo(showLogo: Boolean) {
+        (activity as BaseActivity).setShowLogo(showLogo)
     }
 
     protected fun getToolBarViewModel() : ToolbarViewModel?{
@@ -109,5 +123,44 @@ abstract class BaseFragment : LifecycleFragment() {
             }
         })
     }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    fun prepareWebPageDialog(context : Context?, url : String?, title : String?) {
+        val webPagesDialog = Dialog(context, R.style.MaterialDialogSheet)
+        webPagesDialog.setContentView(R.layout.web_pages_layout)
+        webPagesDialog.setCancelable(true)
+        webPagesDialog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT /*+ rl_add_to_box.height*/)
+        webPagesDialog.window.setGravity(Gravity.BOTTOM)
+        webPagesDialog.tv_web_title.text = title
+        webPagesDialog.webview.settings.javaScriptEnabled = true // enable javascript
+        webPagesDialog.webview.settings.defaultZoom = WebSettings.ZoomDensity.FAR
+        webPagesDialog.webview.settings.builtInZoomControls = true
+        webPagesDialog.webview.settings.displayZoomControls = false
+        webPagesDialog.webview.webViewClient = object : WebViewClient() {
+            override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
+                Toast.makeText(activity, description, Toast.LENGTH_SHORT).show()
+            }
+
+            @TargetApi(android.os.Build.VERSION_CODES.M)
+            override fun onReceivedError(view: WebView, req: WebResourceRequest, rerr: WebResourceError) {
+                onReceivedError(view, rerr.errorCode, rerr.description.toString(), req.url.toString())
+            }
+
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                showLoading()
+                super.onPageStarted(view, url, favicon)
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                hideLoading()
+                super.onPageFinished(view, url)
+            }
+        }
+
+        webPagesDialog.webview.loadUrl(url)
+        webPagesDialog.img_back.setOnClickListener { webPagesDialog.dismiss() }
+        webPagesDialog.show()
+    }
+
 
 }

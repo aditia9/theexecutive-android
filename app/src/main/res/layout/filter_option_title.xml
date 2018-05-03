@@ -13,15 +13,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/six_dp"
-        android:paddingBottom="@dimen/six_dp">
+        android:paddingBottom="@dimen/six_dp"
+        android:layout_marginBottom="@dimen/six_dp">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:textSize="@dimen/eighteen_sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:text="@{filter.name}"/>
+
+        <ImageView
+            android:id="@+id/img_expand_collapse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/twelve_dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/expand_image"
+            />
     </android.support.constraint.ConstraintLayout>
 </layout>

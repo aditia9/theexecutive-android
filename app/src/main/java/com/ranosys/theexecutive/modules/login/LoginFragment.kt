@@ -13,6 +13,7 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -37,15 +38,26 @@ import org.json.JSONObject
 import java.util.*
 
 /**
- * Created by Nikhil Agarwal on 23/2/18.
+ * @Details Class for login
+ * @Author Ranosys Technologies
+ * @Date 23,March,2018
  */
-
-class LoginFragment : BaseFragment() {
+class LoginFragment: BaseFragment() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var mBinding: FragmentLoginBinding
     private lateinit var callBackManager: CallbackManager
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private var loginRequiredPrompt: Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val data = arguments
+        data?.let {
+            loginRequiredPrompt = data.get(Constants.LOGIN_REQUIRED_PROMPT) as Boolean
+        }
+
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -118,7 +130,6 @@ class LoginFragment : BaseFragment() {
             when (id) {
                 btn_register.id -> {
                     FragmentUtils.addFragment(activity as Context, RegisterFragment(),null,  RegisterFragment::class.java.name, true)
-                    loginViewModel.clickedBtnId?.value = null
                 }
 
                 btn_login.id -> {
@@ -132,7 +143,6 @@ class LoginFragment : BaseFragment() {
                     } else {
                         showNetworkErrorDialog(activity as Context)
                     }
-                    loginViewModel.clickedBtnId?.value = null
                 }
 
                 btn_fb_login.id -> {
@@ -142,7 +152,6 @@ class LoginFragment : BaseFragment() {
                     } else {
                         showNetworkErrorDialog(activity as Context)
                     }
-                    loginViewModel.clickedBtnId?.value = null
                 }
 
                 btn_gmail_login.id -> {
@@ -151,17 +160,43 @@ class LoginFragment : BaseFragment() {
                     } else {
                         showNetworkErrorDialog(activity as Context)
                     }
-                    loginViewModel.clickedBtnId?.value = null
                 }
 
                 tv_forgot_password.id -> {
                     Utils.hideSoftKeypad(activity as Context)
                     FragmentUtils.addFragment(activity as Context, ForgotPasswordFragment(), null, ForgotPasswordFragment::class.java.name, true)
-                    loginViewModel.clickedBtnId?.value = null
+
                 }
 
-
             }
+        })
+
+        loginViewModel.userCartIdResponse?.observe(this, Observer {
+            response ->
+            val userCartId = response?.apiResponse ?: response?.error
+            if(userCartId is String){
+                loginViewModel.getUserCartCount()
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+        loginViewModel.userCartCountResponse?.observe(this, Observer {
+            response ->
+            val userCount = response?.apiResponse
+            if(userCount is String){
+                try {
+                    Utils.updateCartCount(userCount.toInt())
+                }catch (e : NumberFormatException){
+                    AppLog.printStackTrace(e)
+                }
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+
         })
     }
 
@@ -173,12 +208,13 @@ class LoginFragment : BaseFragment() {
                 }
             })
         })
-
     }
 
     private fun observeApiSuccess() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
+            //api to get cart id
+            loginViewModel.getCartIdForUser(token)
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
             SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
             FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)

@@ -15,20 +15,20 @@
                 <android.support.v4.view.ViewPager
                     android:id="@+id/viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
+                    android:layout_height="300dp"
                     android:scrollbars="none"
-                    promotionData="@{categoryModel.promotionResponse}"
                     >
                 </android.support.v4.view.ViewPager>
 
                 <TextView
-                    android:id="@+id/tv_subscriptin_text"
+                    android:id="@+id/tv_promotion_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/viewpager"
                     android:gravity="center"
-                    android:textSize="@dimen/twenty_sp"
-                    android:padding="@dimen/fifteen_dp"
+                    android:textSize="@dimen/sixteen_sp"
+                    android:paddingTop="@dimen/fifteen_dp"
+                    android:paddingBottom="@dimen/fifteen_dp"
                     android:textStyle="bold"
                     />
 
