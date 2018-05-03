@@ -4,9 +4,11 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.WishlistItemBinding
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 
 /**
@@ -57,6 +59,25 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
             itemBinding?.item = item
 
             itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString())
+
+            item?.options?.run{
+                if(item.options.isNotEmpty()){
+                    itemBinding?.layoutColorSize?.visibility = View.VISIBLE
+                    item.options.forEach {
+                        when(it?.label){
+                            Constants.COLOR_ -> {
+                                itemBinding?.tvProductColor?.text =  it.value
+                            }
+                            Constants.SIZE_ -> {
+                                itemBinding?.tvProductSize?.text =  it.value
+                            }
+                        }
+                    }
+                }else{
+                    itemBinding?.layoutColorSize?.visibility = View.INVISIBLE
+                }
+            }
+
 
             itemView.setOnClickListener {
                 view -> action(0, position, item)

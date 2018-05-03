@@ -38,14 +38,16 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
         })
     }
 
-    fun deleteItemFromWishlist(itemId : Int){
+    fun deleteItemFromWishlist(itemId : Int?){
         val apiResponse = ApiResponse<String>()
         AppRepository.deleteWishlistItem(itemId, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
+                apiResponse.apiResponse = error.toString()
                 mutualDeleteItemResponse.value?.throwable = error
             }
 
             override fun onError(errorMsg: String) {
+                apiResponse.apiResponse = errorMsg
                 mutualDeleteItemResponse.value?.error = errorMsg
             }
 

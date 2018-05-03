@@ -29,6 +29,21 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <TextView
+            android:id="@+id/tv_no_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:theme="@style/sub_heading_theme"
+            android:textColor="@color/hint_color"
+            android:gravity="center"
+            android:text="@string/no_item"
+            android:visibility="gone"
+            />
+
         <android.support.constraint.Guideline
             android:id="@+id/guideline_right"
             android:layout_width="wrap_content"

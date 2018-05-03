@@ -244,11 +244,11 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun getWishlist(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<WishlistResponse>
 
-        @GET("rest/{store_code}/V1/wishlist/mine/item/{item_id}/delete/")
+        @DELETE("rest/{store_code}/V1/wishlist/mine/item/{item_id}/delete")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun deleteWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int): Call<String>
+        fun deleteWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
 
     }
 }

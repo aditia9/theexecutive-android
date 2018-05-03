@@ -10,11 +10,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentWishlistBinding
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_wishlist.*
 
@@ -25,7 +25,8 @@ import kotlinx.android.synthetic.main.fragment_wishlist.*
  */
 class WishlistFragment : BaseFragment() {
 
-    var wishlistModelView: WishlistViewModel? = null
+    private var wishlistModelView: WishlistViewModel? = null
+    private var itemPosition : Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentWishlistBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_wishlist, container, false)
@@ -36,14 +37,10 @@ class WishlistFragment : BaseFragment() {
         return mViewDataBinding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     @SuppressLint("StringFormatInvalid")
     private fun observeEvents() {
         wishlistModelView?.mutualWishlistResponse?.observe(this, Observer<ApiResponse<WishlistResponse>> { apiResponse ->
-            // hideLoading()
+            hideLoading()
             if(apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is WishlistResponse) {
@@ -57,13 +54,15 @@ class WishlistFragment : BaseFragment() {
         })
 
         wishlistModelView?.mutualDeleteItemResponse?.observe(this, Observer<ApiResponse<String>> { apiResponse ->
-            //hideLoading()
             if(apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is String) {
-
+                    wishlistModelView?.wishlistResponse?.get()?.items?.removeAt(itemPosition)
+                    rv_wishlist.adapter.notifyDataSetChanged()
+                    callWishlistApi()
                 }
             }else {
+                hideLoading()
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
@@ -73,36 +72,44 @@ class WishlistFragment : BaseFragment() {
         val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.VERTICAL, false)
         rv_wishlist.layoutManager = linearLayoutManager
         if (wishlistModelView?.wishlistResponse?.get()?.items?.size!! > 0) {
+            tv_no_items.visibility = View.GONE
+            tv_wishlist_count.visibility = View.VISIBLE
             val colorViewAdapter = WishlistAdapter(activity as Context, wishlistModelView?.wishlistResponse?.get()?.items, {
                 id:Int, pos: Int, item: Item? ->
                 when(id){
                     0 -> {
-                        Toast.makeText(activity, ""+id, Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(activity, ""+id, Toast.LENGTH_SHORT).show()
                     }
                     R.id.img_bag -> {
-                        Toast.makeText(activity, item?.sku, Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(activity, item?.sku, Toast.LENGTH_SHORT).show()
                     }
                     R.id.img_delete -> {
-                        Toast.makeText(activity, item?.regular_price.toString(), Toast.LENGTH_SHORT).show()
+                        Utils.showDialog(context, getString(R.string.remove_item_text),
+                                getString(R.string.yes), getString(R.string.no), object : DialogOkCallback {
+                            override fun setDone(done: Boolean) {
+                                itemPosition = pos
+                                callDeleteItemFromWishlist(item?.id)
+                            }
+                        })
                     }
                 }
             })
             rv_wishlist.adapter = colorViewAdapter
         }else{
-
+            tv_no_items.visibility = View.VISIBLE
+            tv_wishlist_count.visibility = View.GONE
         }
     }
 
     private fun callWishlistApi(){
         if (Utils.isConnectionAvailable(activity as Context)) {
-            //showLoading()
             wishlistModelView?.getWishlist()
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
     }
 
-    private fun callDeleteItemFromWishlist(itemId : Int){
+    private fun callDeleteItemFromWishlist(itemId : Int?){
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
             wishlistModelView?.deleteItemFromWishlist(itemId)

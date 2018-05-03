@@ -10,7 +10,7 @@ data class WishlistResponse(
 		val id: Int,
 		val name: String,
 		val items_count: Int,
-		val items: List<Item>?
+		val items: MutableList<Item>?
 )
 
 data class Item(
@@ -22,5 +22,12 @@ data class Item(
 		val image: String,
 		val regular_price: Int,
 		val final_price: Int,
-		val options: List<Any>
+		val options: List<Option?>
+)
+
+data class Option(
+		val label: String,
+		val value: String,
+		val option_id: Int,
+		val option_value: Int
 )
