@@ -16,15 +16,15 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Utils
 
 /**
- * @Details
+ * @Details Adapter to show wear with items
  * @Author Ranosys Technologies
  * @Date 13,Apr,2018
  */
 class WearWithProductsAdapter(var context : Context, var list : List<ProductListingDataClass.ProductLinks?>?) : RecyclerView.Adapter<WearWithProductsAdapter.Holder>() {
 
-    var mContext : Context? = null
-    var wearWithList : List<ProductListingDataClass.ProductLinks?>? = null
-    var clickListener: WearWithProductsAdapter.OnItemClickListener? = null
+    private var mContext : Context? = null
+    private var wearWithList : List<ProductListingDataClass.ProductLinks?>? = null
+    private var clickListener: WearWithProductsAdapter.OnItemClickListener? = null
 
     init {
         mContext = context
@@ -54,7 +54,7 @@ class WearWithProductsAdapter(var context : Context, var list : List<ProductList
     }
 
 
-    fun getItem(position: Int) : ProductListingDataClass.ProductLinks?{
+    private fun getItem(position: Int) : ProductListingDataClass.ProductLinks?{
         return wearWithList?.get(position)
     }
 
@@ -62,7 +62,7 @@ class WearWithProductsAdapter(var context : Context, var list : List<ProductList
         holder?.bind(getItem(position), clickListener, position)
     }
 
-    class Holder(var itemBinding: WearWithLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
+    class Holder(private var itemBinding: WearWithLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
         fun bind(productLinks : ProductListingDataClass.ProductLinks?, listener: OnItemClickListener?, position: Int){
 

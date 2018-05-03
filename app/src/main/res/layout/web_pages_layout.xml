@@ -22,7 +22,8 @@
                 android:src="@drawable/back"
                 android:layout_centerVertical="true"
                 android:padding="@dimen/six_dp"
-                android:layout_marginLeft="@dimen/ten_dp"
+                android:layout_marginStart="@dimen/ten_dp"
+                android:contentDescription="@string/back"
                 />
 
             <TextView

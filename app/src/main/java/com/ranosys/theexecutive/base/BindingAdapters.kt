@@ -24,7 +24,9 @@ import com.ranosys.theexecutive.utils.GlobalSingelton
 
 
 /**
- * Created by Mohammad Sunny on 22/2/18.
+ * @Details Adapters method all binding in xml
+ * @Author Ranosys Technologies
+ * @Date 22,Feb,2018
  */
 class BindingAdapters {
 
@@ -85,8 +87,8 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(imageUrl)
-                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
@@ -101,8 +103,8 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
@@ -119,8 +121,8 @@ class BindingAdapters {
                 GlideApp.with(imageView.context)
                         .asBitmap()
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)

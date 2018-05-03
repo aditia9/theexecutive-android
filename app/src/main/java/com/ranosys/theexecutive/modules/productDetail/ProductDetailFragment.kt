@@ -34,7 +34,7 @@ class ProductDetailFragment : BaseFragment() {
     var pagerPosition : Int? = 0
     var productSku : String? = ""
     var productName : String? = ""
-    var pagerAdapter : ProductStatePagerAdapter? = null
+    private var pagerAdapter : ProductStatePagerAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentProductDetailBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container, false)

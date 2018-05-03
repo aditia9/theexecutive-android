@@ -28,8 +28,8 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var addToWIshListResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var addToCartResponse: MutableLiveData<ApiResponse<AddToCartResponse>>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
-    var url_one : ObservableField<String> = ObservableField()
-    var url_two : ObservableField<String> = ObservableField()
+    var urlOne : ObservableField<String> = ObservableField()
+    var urlTwo : ObservableField<String> = ObservableField()
     var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var guestCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
@@ -76,7 +76,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
 
     fun getProductChildren(productSku : String?){
         val apiResponse = ApiResponse<List<ChildProductsResponse>>()
-        AppRepository.getProductChildern(productSku, object : ApiCallback<List<ChildProductsResponse>> {
+        AppRepository.getProductChildren(productSku, object : ApiCallback<List<ChildProductsResponse>> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 productChildrenResponse?.value = apiResponse
@@ -111,26 +111,6 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
                 t?.get(0)?.label = label
                 apiResponse.apiResponse = t
                 productOptionResponse?.value = apiResponse
-            }
-        })
-    }
-
-    fun getStaticPagesUrl(){
-        val apiResponse = ApiResponse<StaticPagesUrlResponse>()
-        AppRepository.getStaticPagesUrl(object : ApiCallback<StaticPagesUrlResponse> {
-            override fun onException(error: Throwable) {
-                apiResponse.error = error.message
-                staticPagesUrlResponse?.value = apiResponse
-            }
-
-            override fun onError(errorMsg: String) {
-                apiResponse.error = errorMsg
-                staticPagesUrlResponse?.value = apiResponse
-            }
-
-            override fun onSuccess(t: StaticPagesUrlResponse?) {
-                apiResponse.apiResponse = t
-                staticPagesUrlResponse?.value = apiResponse
             }
         })
     }
@@ -206,7 +186,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         })
     }
 
-    fun getCartIdForUser(userToken: String?){
+    fun getCartIdForUser() {
         val apiResponse = ApiResponse<String>()
         AppRepository.createUserCart(object : ApiCallback<String> {
             override fun onException(error: Throwable) {

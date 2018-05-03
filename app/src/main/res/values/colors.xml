@@ -20,6 +20,7 @@
     <color name="hint_color">#999999</color>
     <color name="divider_color">#DDDDDD</color>
     <color name="transparent_white">#90ffffff</color>
+    <color name="transparent_bottom_sheet_color">#CCFFFFFF</color>
 
 
 </resources>
