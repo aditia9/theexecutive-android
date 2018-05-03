@@ -38,12 +38,11 @@ import org.json.JSONObject
 import java.util.*
 
 /**
- * @Details Fragment for login functionality
+ * @Details Class for login
  * @Author Ranosys Technologies
- * @Date 02,March,2018
+ * @Date 23,March,2018
  */
-
-class LoginFragment : BaseFragment() {
+class LoginFragment: BaseFragment() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var mBinding: FragmentLoginBinding
@@ -186,9 +185,13 @@ class LoginFragment : BaseFragment() {
 
         loginViewModel.userCartCountResponse?.observe(this, Observer {
             response ->
-            val userCount = response?.apiResponse ?: response?.error
+            val userCount = response?.apiResponse
             if(userCount is String){
-                Utils.updateCartCount(userCount.toInt())
+                try {
+                    Utils.updateCartCount(userCount.toInt())
+                }catch (e : NumberFormatException){
+                    AppLog.printStackTrace(e)
+                }
             }
             else {
                 Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()

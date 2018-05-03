@@ -18,16 +18,16 @@ import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 
+@Suppress("NAME_SHADOWING")
 /**
  * @Details Adapter for categories
  * @Author Ranosys Technologies
  * @Date 02,March,2018
  */
-
-class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenData>?) : ExpandableListAdapter{
+class CategoryThreeLevelAdapter(context: Context?, var list : MutableList<ChildrenData>?) : ExpandableListAdapter{
 
     var context: Context? = null
-    var categoryList: MutableList<ChildrenData>?
+    private var categoryList: MutableList<ChildrenData>?
 
     init {
         this.context = context
@@ -57,18 +57,14 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
         return 0
     }
 
+    @Suppress("DEPRECATION")
     override fun getChildView(group: Int, child: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
         val expandableListView = SecondLevelExpandableListView(context)
         expandableListView.setAdapter(CategoryTwoLevelAdapter(context, categoryList?.get(group)?.children_data))
         expandableListView.setGroupIndicator(null)
         expandableListView.setChildIndicator(null)
         expandableListView.divider = context?.resources?.getDrawable(android.R.color.transparent)
-        expandableListView.setChildDivider(context?.getResources()?.getDrawable(android.R.color.transparent))
-
-        if(categoryList?.get(group)?.children_data?.size!! != 0)
-        {
-            expandableListView.expandGroup(child,true)
-        }
+        expandableListView.setChildDivider(context?.resources?.getDrawable(android.R.color.transparent))
 
         expandableListView.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
             var previousGroup = -1
@@ -81,36 +77,32 @@ class CategoryThreeLevelAdapter(context: Context?, list : MutableList<ChildrenDa
 
         })
 
-        expandableListView.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
-            override fun onGroupClick(expandableListView: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
-                if(null != categoryList?.get(group)?.children_data?.get(p2)?.children_data){
-                    if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
-                        val bundle = Bundle()
-                        bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
-                        bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
-                        FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
-                    }
-                }else if((categoryList?.get(group)?.children_data?.get(p2) as ChildrenData).name == "View All"){
+        expandableListView.setOnGroupClickListener { expandableListView, _, p2, _ ->
+            if(null != categoryList?.get(group)?.children_data?.get(p2)?.children_data){
+                if(categoryList?.get(group)?.children_data?.get(p2)?.children_data?.size!! == 0){
                     val bundle = Bundle()
                     bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
                     bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
                     FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 }
-
-
-                return false
-            }
-        })
-
-        expandableListView.setOnChildClickListener(object : ExpandableListView.OnChildClickListener{
-            override fun onChildClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Int, p4: Long): Boolean {
+            }else if((categoryList?.get(group)?.children_data?.get(p2) as ChildrenData).name == context?.getString(R.string.view_all)){
                 val bundle = Bundle()
-                bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.children_data?.get(p3)?.id!!)
-                bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.children_data?.get(p3)?.name!!)
+                bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
+                bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
                 FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
-                return false
             }
-        })
+
+            expandableListView?.smoothScrollToPosition(group)
+            false
+        }
+
+        expandableListView.setOnChildClickListener { _, _, p2, p3, _ ->
+            val bundle = Bundle()
+            bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.children_data?.get(p3)?.id!!)
+            bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.children_data?.get(p3)?.name!!)
+            FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+            false
+        }
 
 
         return expandableListView

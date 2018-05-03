@@ -7,13 +7,14 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.AbsListView
 import android.widget.ExpandableListView
 import android.widget.TextView
 import android.widget.Toast
@@ -27,21 +28,20 @@ import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
 
 /**
- * @Details Fragment to show categories on home screen
+ * @Details Class showing categories on Home screen
  * @Author Ranosys Technologies
  * @Date 21,Feb,2018
  */
-
 class CategoryFragment : BaseFragment() {
 
     private var categoryModelView: CategoryModelView? = null
-    var handler = Handler(Looper.getMainLooper())
+    private var handler = Handler(Looper.getMainLooper())
     private lateinit var viewPager : ViewPager
     private lateinit var pagerAdapter:CustomViewPageAdapter
 
@@ -61,7 +61,7 @@ class CategoryFragment : BaseFragment() {
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
-        promotionBinding?.root?.tv_promotion_text?.text = SavedPreferences.getInstance()?.getStringValue(Constants.PROMOTION_MESSAGE)
+        promotionBinding?.root?.tv_promotion_text?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
         Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.CATEGORY_IMAGE_HEIGHT_RATIO)
         viewPager = promotionBinding.root?.viewpager!!
 
@@ -78,12 +78,14 @@ class CategoryFragment : BaseFragment() {
                     }
 
                     Constants.PROMOTION_TYPE_PRODUCT -> {
-                        val fragment = ProductDetailFragment.getInstance(null, item.value, 0)
+                        val fragment = ProductDetailFragment.getInstance(null, item.value, item.title, 0)
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
 
                     Constants.PROMOTION_TYPE_CMS_PAGE -> {
-                        Utils.openCmsPage(activity as Context, item.value)
+                        if(item.value.isNotBlank()){
+                            prepareWebPageDialog(activity as Context, item.value ,item.title)
+                        }
 
                     }
                 }
@@ -103,7 +105,7 @@ class CategoryFragment : BaseFragment() {
         })
 
 
-        elv_parent_category.setOnGroupClickListener { p0, p1, p2, p3 ->
+        elv_parent_category.setOnGroupClickListener { _, _, p2, _ ->
             if(categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.children_data?.size!! == 0){
                 val bundle = Bundle()
                 bundle.putInt(Constants.CATEGORY_ID, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.id!!)
@@ -113,21 +115,44 @@ class CategoryFragment : BaseFragment() {
             false
         }
 
-        elv_parent_category.setOnScrollListener(object: AbsListView.OnScrollListener{
-            override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-            }
+        et_search_home.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
 
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                if(scrollState != 0){
-                    slideDown(view.rootView.findViewById(R.id.tabLayout))
-                }else{
-                    slideUp(view.rootView.findViewById(R.id.tabLayout))
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.isNullOrBlank().not()){
+                    et_search_home.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
                 }
             }
 
         })
 
-        et_search_home.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        et_search_home.setOnTouchListener(View.OnTouchListener { _, event ->
+            val drawableRight = 2
+            if(event.action == MotionEvent.ACTION_UP) {
+                if(event.rawX >= et_search_home.right - et_search_home.compoundDrawables[drawableRight].bounds.width()) {
+                    if(Utils.compareDrawable(activity as Context, et_search_home.compoundDrawables[drawableRight], (activity as Context).getDrawable(R.drawable.cancel))){
+                        return@OnTouchListener true
+                    }else if(Utils.compareDrawable(activity as Context, et_search_home.compoundDrawables[drawableRight], (activity as Context).getDrawable(R.drawable.search))){
+                        if(et_search_home.text.isNotBlank()){
+                            val query = et_search_home.text.toString()
+                            et_search_home.setText("")
+                            Utils.hideSoftKeypad(activity as Context)
+                            val bundle = Bundle()
+                            bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, query)
+                            FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+                        }else{
+                            Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+
+            false
+        })
+
+        et_search_home.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if(v.text.toString().isEmpty().not()){
                     Utils.hideSoftKeypad(activity as Context)
@@ -172,7 +197,6 @@ class CategoryFragment : BaseFragment() {
 
     private fun observePromotionsApiResponse() {
         categoryModelView?.mutualPromotionResponse?.observe(this, Observer<ApiResponse<List<PromotionsResponseDataClass>>> { apiResponse ->
-            // hideLoading()
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             if (response is List<*>) {
                 categoryModelView?.promotionResponse?.set(response as List<PromotionsResponseDataClass>?)
@@ -232,42 +256,6 @@ class CategoryFragment : BaseFragment() {
             }
         }
         handler.postDelayed(runnable, 3000)
-    }
-
-    // It will use in future
-//    fun getQueryMap(childrenDataList: ArrayList<ChildrenData>?): HashMap<String, String> {
-//
-//        val queryMap = HashMap<String, String>()
-//
-//        queryMap.put("searchCriteria[filterGroups][0][filters][0][field]", "entity_id")
-//        queryMap.put("searchCriteria[filterGroups][0][filters][0][[conditionType]", "in")
-//
-//        if (childrenDataList!!.size > 0) {
-//
-//            val childrenDataListSize = childrenDataList.size
-//            val categoryArray = StringBuilder()
-//
-//            for (k in 0 until childrenDataListSize) {
-//
-//                if(childrenDataList.get(k).is_active!!){
-//                    categoryArray.append(childrenDataList.get(k).id)
-//                }
-//            }
-//            queryMap.put("searchCriteria[filterGroups][0][filters][0][[conditionType]", categoryArray.toString())
-//
-//        }
-//
-//        return queryMap
-//    }
-
-    private fun slideUp(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(0f).duration = Constants.AIMATION_DURATION
-    }
-
-    private fun slideDown(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
     }
 
 }

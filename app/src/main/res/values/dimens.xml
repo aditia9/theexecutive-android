@@ -28,6 +28,7 @@
     <dimen name="sixty_dp">60dp</dimen>
 
     <dimen name="two_dp">2dp</dimen>
+    <dimen name="two_px">2px</dimen>
     <dimen name="four_dp">4dp</dimen>
     <dimen name="eight_dp">8dp</dimen>
     <dimen name="sixteen_dp">16dp</dimen>
@@ -64,6 +65,6 @@
     <dimen name="six_hundred_dp">600dp</dimen>
     <dimen name="eighty_dp">80dp</dimen>
     <dimen name="four_hundred_dp">400dp</dimen>
-    <dimen name="two_px">2px</dimen>
+    <dimen name="eighteen_dp">18dp</dimen>
 
 </resources>

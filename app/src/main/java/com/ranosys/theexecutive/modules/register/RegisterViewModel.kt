@@ -166,9 +166,6 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     }
 
 
-
-
-
     fun callRegisterApi() {
         if(isValidData(getApplication())){
             val address = RegisterDataClass.Address(region_id = selectedState.get().id,

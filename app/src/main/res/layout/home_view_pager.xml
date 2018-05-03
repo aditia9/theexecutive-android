@@ -26,11 +26,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/viewpager"
                     android:gravity="center"
-                    android:textSize="@dimen/eighteen_sp"
+                    android:textSize="@dimen/sixteen_sp"
                     android:paddingTop="@dimen/fifteen_dp"
                     android:paddingBottom="@dimen/fifteen_dp"
-                    android:paddingRight="@dimen/eight_dp"
-                    android:paddingLeft="@dimen/eight_dp"
                     android:textStyle="bold"
                     />
 

@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.ActivityInfo
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import com.ranosys.rtp.RunTimePermissionActivity
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
@@ -16,12 +18,12 @@ import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
-/**
- * @Details Base activity, contains common methods for all activities
- * @Author Ranosys Technologies
- * @Date 22,March,2018
- */
 
+/**
+ * @Details Base class for all activities
+ * @Author Ranosys Technologies
+ * @Date 22,Feb,2018
+ */
 open class BaseActivity: RunTimePermissionActivity(){
 
     var toolbarViewModel: ToolbarViewModel? = null
@@ -31,10 +33,10 @@ open class BaseActivity: RunTimePermissionActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(Utils.isTablet(this)){
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        requestedOrientation = if(Utils.isTablet(this)){
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }else{
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         baseViewModel = ViewModelProviders.of(this).get(BaseViewModel::class.java)
@@ -110,17 +112,17 @@ open class BaseActivity: RunTimePermissionActivity(){
         toolbarViewModel?.isRightIconVisible?.set(isVisible)
     }
 
-//    private fun changeStatusBarColor(color: Int) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            val window = window
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//            window.statusBarColor = ContextCompat.getColor(this, color)
-//        }
-//    }
-//
-//    fun hideToolBar(){
-//        supportActionBar?.hide()
-//    }
+    private fun changeStatusBarColor(color: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window = window
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = resources.getColor(color)
+        }
+    }
+
+    fun hideToolBar(){
+        supportActionBar?.hide()
+    }
 
 }

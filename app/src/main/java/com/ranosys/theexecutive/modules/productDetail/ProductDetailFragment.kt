@@ -14,8 +14,10 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentProductDetailBinding
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_product_detail.*
 
@@ -26,11 +28,13 @@ import kotlinx.android.synthetic.main.fragment_product_detail.*
  */
 class ProductDetailFragment : BaseFragment() {
 
-    private lateinit var productDetailViewModel : ProductDetailViewModel
+    lateinit var productDetailViewModel : ProductDetailViewModel
     var productList : MutableList<ProductListingDataClass.Item>? = null
     var position : Int? = 0
+    var pagerPosition : Int? = 0
     var productSku : String? = ""
-    var pagerAdapter : ProductStatePagerAdapter? = null
+    var productName : String? = ""
+    private var pagerAdapter : ProductStatePagerAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentProductDetailBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container, false)
@@ -39,39 +43,47 @@ class ProductDetailFragment : BaseFragment() {
         mViewDataBinding?.productDetailVM = productDetailViewModel
         mViewDataBinding?.executePendingBindings()
 
-
         observeEvents()
+
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            getStaticPagesUrl()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+
         return mViewDataBinding?.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(null == productList){
+        if(null == productDetailViewModel.productList?.get()){
             if (Utils.isConnectionAvailable(activity as Context)) {
+                showLoading()
+                setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
                 getProductDetail(productSku)
             } else {
                 Utils.showNetworkErrorDialog(activity as Context)
             }
 
         }else{
-            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productList)
+            pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get(), position)
             product_viewpager.adapter = pagerAdapter
-            product_viewpager.offscreenPageLimit = 2
+            product_viewpager.adapter?.notifyDataSetChanged()
+            product_viewpager.offscreenPageLimit = 5
             product_viewpager.currentItem = position!!
         }
 
         product_viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
-
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                setToolBarParams(productList?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+                pagerPosition = position
+                setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
             }
 
             override fun onPageSelected(position: Int) {
-
             }
         })
 
@@ -79,11 +91,12 @@ class ProductDetailFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        productList?.let {
-            setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-        }
+        setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
     }
 
+    private fun getStaticPagesUrl(){
+        productDetailViewModel.getStaticPagesUrl()
+    }
 
     private fun getProductDetail(productSku : String?){
         productDetailViewModel.getProductDetail(productSku)
@@ -95,23 +108,36 @@ class ProductDetailFragment : BaseFragment() {
             if (response is ProductListingDataClass.Item) {
                 productList = mutableListOf()
                 productList?.add(response)
+                productDetailViewModel.productList?.set(productList)
                 setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
-                pagerAdapter = ProductStatePagerAdapter(activity?.supportFragmentManager,productList)
+                pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get(), position)
                 product_viewpager.adapter = pagerAdapter
-                product_viewpager.offscreenPageLimit = 2
-                product_viewpager.currentItem = position!!
+                product_viewpager.offscreenPageLimit = 3
+                product_viewpager.adapter?.notifyDataSetChanged()
+                hideLoading()
             } else {
                 Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+        })
+
+        productDetailViewModel.staticPagesUrlResponse?.observe( this, Observer<ApiResponse<StaticPagesUrlResponse>> { apiResponse ->
+            val response = apiResponse?.apiResponse
+            if(response is StaticPagesUrlResponse){
+                productDetailViewModel.staticPages = response
+                GlobalSingelton.instance?.staticPagesResponse = response
+            } else {
+                Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
             }
         })
     }
 
     companion object {
 
-        fun getInstance(productList : MutableList<ProductListingDataClass.Item>?, productSku : String?, position : Int?) =
+        fun getInstance(productList : MutableList<ProductListingDataClass.Item>?, productSku : String?, productName : String?, position : Int?) =
                 ProductDetailFragment().apply {
                     this.productList = productList
                     this.productSku = productSku
+                    this.productName = productName
                     this.position = position
                 }
 

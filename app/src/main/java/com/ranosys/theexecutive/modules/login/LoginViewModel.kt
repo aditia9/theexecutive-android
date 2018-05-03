@@ -99,6 +99,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))
+            isValid = false
         } else if (!Utils.isValidEmail(email.get())) {
             emailError.set(context.getString(R.string.provide_valid_email))
             isValid = false

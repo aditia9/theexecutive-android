@@ -25,6 +25,7 @@
             android:background="@color/theme_black_color"
             android:text="@string/chat"
             android:textSize="@dimen/sixteen_sp"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:drawableLeft="@drawable/chat"
             android:padding="@dimen/ten_dp"

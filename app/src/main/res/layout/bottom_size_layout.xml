@@ -19,7 +19,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent_white"
+            android:background="@color/transparent_bottom_sheet_color"
             >
 
             <TextView
@@ -85,7 +85,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/back"
                     android:padding="@dimen/fifteen_dp"
-                    android:contentDescription="@string/back"
                     />
 
                 <TextView
@@ -104,7 +103,6 @@
                     android:src="@drawable/forward"
                     android:layout_marginLeft="@dimen/thirty_dp"
                     android:padding="@dimen/fifteen_dp"
-                    android:contentDescription="@string/forward"
                     />
 
 
@@ -131,12 +129,13 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_price_dialog"
+                    android:id="@+id/tv_product_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/twenty_dp"
+                    android:textStyle="bold"
                     />
 
             </RelativeLayout>

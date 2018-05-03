@@ -15,7 +15,6 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
-import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.utils.*
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
@@ -74,17 +73,17 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             hideLoading()
             Utils.showDialog(activity as Context, getString(R.string.verify_email_message), context?.getString(android.R.string.ok), "", object: DialogOkCallback{
                 override fun setDone(done: Boolean) {
-                    FragmentUtils.addFragment(activity as Context, LoginFragment(), null, LoginFragment::class.java.name, false)
+                    //FragmentUtils.addFragment(activity as Context, LoginFragment(), null, LoginFragment::class.java.name, false)
+                    activity?.onBackPressed()
                 }
 
             } )
-
         })
 
         registerViewModel.apiSocialRegResponse?.observe(this, android.arch.lifecycle.Observer { token ->
             if(!TextUtils.isEmpty(token)){
                 hideLoading()
-                Toast.makeText(activity, getString(R.string.register_successful), Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.register_successfull), Toast.LENGTH_SHORT).show()
                 FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, false)
             }
         })
@@ -122,7 +121,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             showDate(Calendar.getInstance().get(Calendar.YEAR) - Constants.MINIMUM_AGE, 0, 1, R.style.DatePickerSpinner)
         }
 
-        cb_subscribe.text = SavedPreferences.getInstance()?.getStringValue(Constants.SUBS_MESSAGE)
+        cb_subscribe.text = GlobalSingelton.instance?.configuration?.subscription_message
 
         cb_subscribe.setOnCheckedChangeListener { buttonView, isChecked ->
             registerViewModel.isSubscribed.set(isChecked)

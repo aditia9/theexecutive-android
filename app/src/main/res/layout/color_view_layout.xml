@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/img_color"
-            android:layout_width="80dp"
-            android:layout_height="110dp"
+            android:layout_width="55dp"
+            android:layout_height="70dp"
             android:src="@drawable/placeholder"
             android:padding="@dimen/two_dp"
             android:scaleType="centerCrop"
@@ -40,7 +40,7 @@
             android:gravity="center"
             android:layout_centerHorizontal="true"
             android:text="@{colorView.label}"
-            android:textSize="@dimen/sixteen_sp"
+            android:textSize="@dimen/twelve_sp"
             />
 
     </RelativeLayout>

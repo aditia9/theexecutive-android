@@ -32,6 +32,7 @@
                 android:theme="@style/myAppTheme"
                 android:singleLine="true"
                 android:inputType="text"
+                android:hint="@string/search"
                 android:imeOptions="actionSearch"
                 android:drawableEnd="@drawable/search"
                 android:backgroundTint="@color/theme_accent_color"/>
@@ -43,7 +44,9 @@
             android:layout_height="match_parent"
             android:divider="@null"
             android:scrollbars="none"
+            android:transcriptMode="disabled"
             android:childDivider="@null"
+            android:animateLayoutChanges="true"
             android:groupIndicator="@null"
             android:layout_below="@+id/til_search"
             android:layout_marginTop="@dimen/four_dp"

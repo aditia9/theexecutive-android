@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.activities
 
+import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -13,20 +14,29 @@ import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.zopim.android.sdk.api.ZopimChat
 
 /**
- * Created by Mohammad Sunny on 19/2/18.
+ * @Details Dashboard screen for an app
+ * @Author Ranosys Technologies
+ * @Date 19,Mar,2018
  */
 class DashBoardActivity: BaseActivity() {
+
+    lateinit var webPagesDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding?.toolbarViewModel = toolbarViewModel
+
+        //initialize Zendesk chat setup
+        setUpZendeskChat()
         val model = ViewModelProviders.of(this).get(DashBoardViewModel::class.java)
         model.manageFragments().observe(this, Observer { isCreated ->
             if(isCreated!!){
@@ -55,7 +65,8 @@ class DashBoardActivity: BaseActivity() {
                                     if(TextUtils.isEmpty(isLogin)){
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
                                     }else{
-                                        (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, "", 0, false, 0, false)
+                                        val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
+                                        (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, email, 0, false, 0, false)
                                     }
                                 }
                                 2 -> {
@@ -66,7 +77,9 @@ class DashBoardActivity: BaseActivity() {
                         if(fragment is ProductListingFragment)
                             (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true )
                         if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true)
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
+                        if(fragment is ProductDetailFragment) {
+                            (fragment as ProductDetailFragment).onResume()
                         }
                     }
                 }
@@ -74,5 +87,9 @@ class DashBoardActivity: BaseActivity() {
 
         })
 
+    }
+
+    private fun setUpZendeskChat() {
+        ZopimChat.init(Constants.ZENDESK_CHAT)
     }
 }

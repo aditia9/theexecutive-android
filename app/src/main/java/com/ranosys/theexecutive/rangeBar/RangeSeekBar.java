@@ -29,6 +29,7 @@ import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
 import com.ranosys.theexecutive.R;
+import com.ranosys.theexecutive.utils.Utils;
 
 import java.math.BigDecimal;
 
@@ -665,8 +666,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             paint.setTextSize(textSize);
             paint.setColor(textAboveThumbsColor);
 
-            String minText = valueToString(getSelectedMinValue());
-            String maxText = valueToString(getSelectedMaxValue());
+            String minText = Utils.INSTANCE.getFromattedPrice(valueToString(getSelectedMinValue()));
+            String maxText = Utils.INSTANCE.getFromattedPrice(valueToString(getSelectedMaxValue()));
             float minTextWidth = paint.measureText(mCurrency + minText);
             float maxTextWidth = paint.measureText(mCurrency + maxText);
             // keep the position so that the labels don't get cut off

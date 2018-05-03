@@ -32,7 +32,7 @@ class WearWithProductsAdapter(var context : Context, var list : List<ProductList
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item : ProductListingDataClass.ProductLinks?)
+        fun onItemClick(item : ProductListingDataClass.ProductLinks?, position : Int)
     }
 
     fun setItemClickListener(listener: OnItemClickListener){
@@ -59,12 +59,12 @@ class WearWithProductsAdapter(var context : Context, var list : List<ProductList
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(getItem(position), clickListener)
+        holder?.bind(getItem(position), clickListener, position)
     }
 
     class Holder(private var itemBinding: WearWithLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(productLinks : ProductListingDataClass.ProductLinks?, listener: OnItemClickListener?){
+        fun bind(productLinks : ProductListingDataClass.ProductLinks?, listener: OnItemClickListener?, position: Int){
 
             val normalPrice = "IDR\u00A0" + productLinks?.extension_attributes?.linked_product_regularprice
             val spPrice = " IDR\u00A0" + productLinks?.extension_attributes?.linked_product_finalprice
@@ -79,7 +79,7 @@ class WearWithProductsAdapter(var context : Context, var list : List<ProductList
             itemBinding?.tvNormalPrice?.text = ss
 
             itemView.setOnClickListener {
-                listener?.onItemClick(productLinks)
+                listener?.onItemClick(productLinks,position)
             }
         }
     }

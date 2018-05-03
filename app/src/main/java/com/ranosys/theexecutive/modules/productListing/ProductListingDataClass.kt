@@ -10,14 +10,15 @@ import android.databinding.ObservableField
 
 class ProductListingDataClass {
 
-    class ProductMaskedResponse(var sku: String = "0",
-                                var name: String = "Demo Longggg Naaaaame",
-                                var normalPrice: String = "6.9",
-                                var specialPrice: String = "2,42.900",
-                                var type: String = "New",
-                                var discountPer: Int = 40,
-                                var collectionTag: String = "Chinese Collections",
-                                var imageUrl: String = "http://fashionbombdaily.com/wp-content/uploads/2015/08/bomb-product-of-the-day-zara-mini-city-bag-fbd2.jpg")
+    class ProductMaskedResponse(var sku: String = "",
+                                var name: String = "",
+                                var normalPrice: String = "",
+                                var specialPrice: String = "",
+                                var displayPrice: String = "",
+                                var type: String = "",
+                                var discountPer: Int = 0,
+                                var collectionTag: String = "",
+                                var imageUrl: String = "")
 
 
 
@@ -65,7 +66,7 @@ class ProductListingDataClass {
             val sku: String,
             val name: String,
             val attribute_set_id: Int,
-            val price: Double,
+            val price: String,
             val status: Int,
             val visibility: Int,
             val type_id: String,
@@ -86,8 +87,9 @@ class ProductListingDataClass {
             val stock_item: StockItem?,
             val configurable_product_options: List<ConfigurableProductOption>,
             val configurable_product_links: List<Int>,
-            val regular_price: Double,
-            val final_price: Double
+            val regular_price: String,
+            val final_price: String,
+            val tag_text: String = ""
     )
 
     data class ConfigurableProductOption(
