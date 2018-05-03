@@ -14,7 +14,9 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentWishlistBinding
+import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_wishlist.*
 
@@ -78,7 +80,8 @@ class WishlistFragment : BaseFragment() {
                 id:Int, pos: Int, item: Item? ->
                 when(id){
                     0 -> {
-                        //Toast.makeText(activity, ""+id, Toast.LENGTH_SHORT).show()
+                        val fragment = ProductDetailFragment.getInstance(null, item?.sku, item?.name, 0)
+                        FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
                     R.id.img_bag -> {
                         //Toast.makeText(activity, item?.sku, Toast.LENGTH_SHORT).show()

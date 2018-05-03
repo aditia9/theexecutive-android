@@ -121,7 +121,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         //prepare request
         val requestMap: MutableMap<String, String?> = mutableMapOf()
 
-        requestMap["productId"] = productItem?.id.toString()
+        requestMap["productSku"] = productItem?.sku
         requestMap["options[$colorAttr]"] = colorValue
         requestMap["options[$sizeAttr]"] = sizeValue
 
