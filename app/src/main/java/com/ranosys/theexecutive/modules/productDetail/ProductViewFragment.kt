@@ -155,7 +155,6 @@ class ProductViewFragment : BaseFragment() {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setPrice(){
         if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)){
             price = SpannableStringBuilder("IDR\u00A0 ${Utils.getFromattedPrice(productItemViewModel.productItem?.price!!)}")

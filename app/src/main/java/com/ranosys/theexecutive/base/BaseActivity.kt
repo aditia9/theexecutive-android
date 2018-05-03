@@ -18,8 +18,11 @@ import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
+
 /**
- * Created by Mohammad Sunny on 22/2/18.
+ * @Details Base class for all activities
+ * @Author Ranosys Technologies
+ * @Date 22,Feb,2018
  */
 open class BaseActivity: RunTimePermissionActivity(){
 

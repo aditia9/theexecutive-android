@@ -38,9 +38,10 @@ import org.json.JSONObject
 import java.util.*
 
 /**
- * Created by Nikhil Agarwal on 23/2/18.
+ * @Details Class for login
+ * @Author Ranosys Technologies
+ * @Date 23,March,2018
  */
-
 class LoginFragment: BaseFragment() {
 
     private lateinit var loginViewModel: LoginViewModel

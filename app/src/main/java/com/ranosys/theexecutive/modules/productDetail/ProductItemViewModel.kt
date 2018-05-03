@@ -115,26 +115,6 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         })
     }
 
-    fun getStaticPagesUrl(){
-        val apiResponse = ApiResponse<StaticPagesUrlResponse>()
-        AppRepository.getStaticPagesUrl(object : ApiCallback<StaticPagesUrlResponse> {
-            override fun onException(error: Throwable) {
-                apiResponse.error = error.message
-                staticPagesUrlResponse?.value = apiResponse
-            }
-
-            override fun onError(errorMsg: String) {
-                apiResponse.error = errorMsg
-                staticPagesUrlResponse?.value = apiResponse
-            }
-
-            override fun onSuccess(t: StaticPagesUrlResponse?) {
-                apiResponse.apiResponse = t
-                staticPagesUrlResponse?.value = apiResponse
-            }
-        })
-    }
-
     fun callAddToWishListApi(colorAttr : String?, colorValue : String?, sizeAttr : String?, sizeValue : String?){
         val apiResponse = ApiResponse<String>()
 

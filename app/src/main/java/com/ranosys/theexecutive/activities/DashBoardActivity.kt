@@ -22,7 +22,9 @@ import com.ranosys.theexecutive.utils.SavedPreferences
 import com.zopim.android.sdk.api.ZopimChat
 
 /**
- * Created by Mohammad Sunny on 19/2/18.
+ * @Details Dashboard screen for an app
+ * @Author Ranosys Technologies
+ * @Date 19,Mar,2018
  */
 class DashBoardActivity: BaseActivity() {
 

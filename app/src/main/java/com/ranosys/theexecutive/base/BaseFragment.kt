@@ -20,7 +20,9 @@ import kotlinx.android.synthetic.main.web_pages_layout.*
 
 
 /**
- * Created by Mohammad Sunny on 22/2/18.
+ * @Details Base class for all fragments
+ * @Author Ranosys Technologies
+ * @Date 22,Feb,2018
  */
 abstract class BaseFragment : LifecycleFragment() {
 

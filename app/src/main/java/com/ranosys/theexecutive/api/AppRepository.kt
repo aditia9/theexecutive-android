@@ -24,8 +24,10 @@ import java.io.IOException
 
 
 /**
- * Created by Mohammad Sunny on 23/2/18.
- */
+ * @Details Repository class for api calling
+ * @Author Ranosys Technologies
+ * @Date 23,Feb,2018
+*/
 object AppRepository {
 
     private fun parseError(response: Response<Any>?, callBack: ApiCallback<Any>) {
@@ -70,7 +72,6 @@ object AppRepository {
     fun getConfiguration(callBack: ApiCallback<ConfigurationResponse>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
-        //val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
         val storeCode = Constants.ALL
         val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java)?.getConfiguration(ApiConstants.BEARER + adminToken,  storeCode)
 
@@ -101,7 +102,7 @@ object AppRepository {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if(!response!!.isSuccessful){
                     if(response.code() == Constants.ERROR_CODE_401){
-                        val errorBody = "The email address or password do not match with our system, Kindly enter the valid credentials"
+                        val errorBody = Constants.INVALID_CREDENTIALS
                         callBack.onError(errorBody)
                     }else{
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
@@ -217,13 +218,13 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPut = retrofit?.create<ApiService.ForgotPasswordService>(ApiService.ForgotPasswordService::class.java!!)?.forgotPasswordApi(ApiConstants.BEARER + adminToken, storeCode, request)
+        val callPut = retrofit?.create<ApiService.ForgotPasswordService>(ApiService.ForgotPasswordService::class.java)?.forgotPasswordApi(ApiConstants.BEARER + adminToken, storeCode, request)
 
         callPut?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if (!response!!.isSuccessful) {
                     if(response.code() == Constants.ERROR_CODE_404){
-                        val errorBody = "No user exists with this email id."
+                        val errorBody = Constants.NO_USER_EXIST
                         callBack.onError(errorBody)
                     }else{
 
@@ -296,7 +297,7 @@ object AppRepository {
             override fun onResponse(call: Call<RegisterDataClass.RegistrationResponse>?, response: Response<RegisterDataClass.RegistrationResponse>?) {
                 if(!response!!.isSuccessful){
                     if(response.code() == Constants.ERROR_CODE_400){
-                        val errorBody = "It seems like you are already registered with us, kindly login."
+                        val errorBody = Constants.ALREADY_REGISTERED
                         callBack.onError(errorBody)
 
                     }else{
@@ -322,8 +323,8 @@ object AppRepository {
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if(!response!!.isSuccessful){
-                    if(response.code() == 404){
-                        val errorBody = "No user exists with this email id."
+                    if(response.code() == Constants.ERROR_CODE_404){
+                        val errorBody = Constants.NO_USER_EXIST
                         callBack.onError(errorBody)
                     }else{
 

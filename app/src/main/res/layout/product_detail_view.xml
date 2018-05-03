@@ -33,7 +33,7 @@
                     android:id="@+id/img_one"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/six_hundred_dp"
-                    android:src="@drawable/placeholder2"
+                    android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_one_detail"
                     bind:baseUrlWithProductImageUrl='@{productItemVM.urlOne}'
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_below="@id/img_one"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:src="@drawable/placeholder2"
+                    android:src="@drawable/placeholder"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/image_two_detail"
                     bind:baseUrlWithProductImageUrl='@{productItemVM.urlTwo}'

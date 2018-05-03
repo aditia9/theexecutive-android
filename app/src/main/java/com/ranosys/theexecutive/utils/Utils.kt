@@ -29,7 +29,6 @@ import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import java.text.NumberFormat
@@ -228,17 +227,6 @@ object Utils {
         val width = getDeviceWidth(context)
         val height = width.times(times)
         view.layoutParams?.height = height.toInt()
-    }
-
-
-    fun openPages(context: Context, url: String?) {
-        (context as DashBoardActivity).webPagesDialog.show()
-//        if((url ?: "").isNotBlank()){
-//            val intent = Intent(Intent.ACTION_VIEW)
-//            intent.data = Uri.parse(url)
-//            context.startActivity(intent)
-//        }
-
     }
 
     fun shareUrl(context: Context, url: String?) {
