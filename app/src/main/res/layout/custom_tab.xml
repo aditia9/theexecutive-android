@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:textColor="@color/theme_black_color"
-    android:textSize="@dimen/sixteen_sp"
-    android:fontFamily="@font/dax_regular"
+    android:textSize="@dimen/fourteen_sp"
+    android:maxLines="1"
     android:textAllCaps="true"
     />

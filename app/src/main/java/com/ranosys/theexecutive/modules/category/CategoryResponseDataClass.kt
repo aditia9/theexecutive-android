@@ -5,8 +5,8 @@ package com.ranosys.theexecutive.modules.category
  */
 data class CategoryResponseDataClass(
 		val image: String?,
-		val children_data: ArrayList<ChildrenData>,
-		val id: Int? = 0,
+		var children_data: MutableList<ChildrenData>,
+		var id: Int? = 0,
 		val parent_id: Int? = 0,
 		val name: String? = "",
 		val is_active: Boolean? = false,
@@ -16,9 +16,9 @@ data class CategoryResponseDataClass(
 )
 
 data class ChildrenData(
-		val image: String?,
-		val children_data: ArrayList<ChildrenData>,
-		val id: Int? = 0,
+		val image: String? = "",
+		var children_data: MutableList<ChildrenData>? = null,
+		var id: Int? = 0,
 		val parent_id: Int? = 0,
 		val name: String? = "",
 		val is_active: Boolean? = false,

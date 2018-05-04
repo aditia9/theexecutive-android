@@ -2,41 +2,48 @@ package com.ranosys.theexecutive.modules.category
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.Nullable
-import android.support.annotation.RequiresApi
-import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
+import android.view.inputmethod.EditorInfo
 import android.widget.ExpandableListView
+import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
 import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
+import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
+import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.GlobalSingelton
+import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
 
-
 /**
- * Created by Mohammad Sunny on 21/2/18.
+ * @Details Class showing categories on Home screen
+ * @Author Ranosys Technologies
+ * @Date 21,Feb,2018
  */
 class CategoryFragment : BaseFragment() {
 
-    var categoryModelView: CategoryModelView? = null
-    var handler = Handler(Looper.getMainLooper())
-    lateinit var viewPager : ViewPager
+    private var categoryModelView: CategoryModelView? = null
+    private var handler = Handler(Looper.getMainLooper())
+    private lateinit var viewPager : ViewPager
+    private lateinit var pagerAdapter:CustomViewPageAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,15 +54,43 @@ class CategoryFragment : BaseFragment() {
         return mViewDataBinding?.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true )
+        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
 
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
-        viewPager = promotionBinding?.root?.viewpager!!
+        promotionBinding?.root?.tv_promotion_text?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
+        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.CATEGORY_IMAGE_HEIGHT_RATIO)
+        viewPager = promotionBinding.root?.viewpager!!
+
+        pagerAdapter = CustomViewPageAdapter(view.context, categoryModelView?.promotionResponse?.get())
+        promotionBinding.viewpager.adapter = pagerAdapter
+        pagerAdapter.setItemClickListener(listener = object: CustomViewPageAdapter.OnItemClickListener{
+            override fun onItemClick(item: PromotionsResponseDataClass?) {
+                when(item?.type){
+                    Constants.PROMOTION_TYPE_CATEGORY -> {
+                        val bundle = Bundle()
+                        bundle.putInt(Constants.CATEGORY_ID, item.value.toInt())
+                        bundle.putString(Constants.CATEGORY_NAME, item.title)
+                        FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+                    }
+
+                    Constants.PROMOTION_TYPE_PRODUCT -> {
+                        val fragment = ProductDetailFragment.getInstance(null, item.value, item.title, 0)
+                        FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                    }
+
+                    Constants.PROMOTION_TYPE_CMS_PAGE -> {
+                        if(item.value.isNotBlank()){
+                            prepareWebPageDialog(activity as Context, item.value ,item.title)
+                        }
+
+                    }
+                }
+            }
+        })
         elv_parent_category.addHeaderView(promotionBinding.root)
 
         elv_parent_category.setOnGroupExpandListener(object : ExpandableListView.OnGroupExpandListener{
@@ -70,37 +105,80 @@ class CategoryFragment : BaseFragment() {
         })
 
 
-        elv_parent_category.setOnGroupClickListener(object : ExpandableListView.OnGroupClickListener{
-            override fun onGroupClick(p0: ExpandableListView?, p1: View?, p2: Int, p3: Long): Boolean {
-                if(categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.children_data?.size!! == 0){
-                    val bundle = Bundle()
-                    bundle.putInt(Constants.CATEGORY_ID, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.id!!)
-                    bundle.putString(Constants.CATEGORY_NAME, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.name!!)
-                    FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
-                }
-                return false
+        elv_parent_category.setOnGroupClickListener { _, _, p2, _ ->
+            if(categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.children_data?.size!! == 0){
+                val bundle = Bundle()
+                bundle.putInt(Constants.CATEGORY_ID, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.id!!)
+                bundle.putString(Constants.CATEGORY_NAME, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.name!!)
+                FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
             }
+            false
+        }
+
+        et_search_home.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.isNullOrBlank().not()){
+                    et_search_home.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search, 0)
+                }
+            }
+
         })
 
-        elv_parent_category.setOnScrollListener(object: AbsListView.OnScrollListener{
-            override fun onScroll(view: AbsListView?, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-            }
-
-            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                if(scrollState != 0){
-                    slideDown(view.rootView.findViewById(R.id.tabLayout))
-                }else{
-                    slideUp(view.rootView.findViewById(R.id.tabLayout))
+        et_search_home.setOnTouchListener(View.OnTouchListener { _, event ->
+            val drawableRight = 2
+            if(event.action == MotionEvent.ACTION_UP) {
+                if(event.rawX >= et_search_home.right - et_search_home.compoundDrawables[drawableRight].bounds.width()) {
+                    if(Utils.compareDrawable(activity as Context, et_search_home.compoundDrawables[drawableRight], (activity as Context).getDrawable(R.drawable.cancel))){
+                        return@OnTouchListener true
+                    }else if(Utils.compareDrawable(activity as Context, et_search_home.compoundDrawables[drawableRight], (activity as Context).getDrawable(R.drawable.search))){
+                        if(et_search_home.text.isNotBlank()){
+                            val query = et_search_home.text.toString()
+                            et_search_home.setText("")
+                            Utils.hideSoftKeypad(activity as Context)
+                            val bundle = Bundle()
+                            bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, query)
+                            FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+                        }else{
+                            Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
 
+            false
+        })
+
+        et_search_home.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if(v.text.toString().isEmpty().not()){
+                    Utils.hideSoftKeypad(activity as Context)
+                    val bundle = Bundle()
+                    bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, v.text.toString())
+                    FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+
+                }else{
+                    Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
+                }
+                return@OnEditorActionListener true
+            }
+            false
         })
 
         observePromotionsApiResponse()
         observeCategoryApiResponse()
-        getPromotions()
-        getCategories()
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            getPromotions()
+            getCategories()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+
     }
+
 
     override fun onPause() {
         super.onPause()
@@ -118,35 +196,55 @@ class CategoryFragment : BaseFragment() {
 
 
     private fun observePromotionsApiResponse() {
-        categoryModelView?.mutualPromotionResponse?.observe(this, object : Observer<ApiResponse<List<PromotionsResponseDataClass>>> {
-            override fun onChanged(@Nullable apiResponse: ApiResponse<List<PromotionsResponseDataClass>>?) {
-                // hideLoading()
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is List<*>) {
-                    categoryModelView?.promotionResponse?.set(response as List<PromotionsResponseDataClass>?)
-                    startScrollViewPager(viewPager, response.size)
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
-                }
+        categoryModelView?.mutualPromotionResponse?.observe(this, Observer<ApiResponse<List<PromotionsResponseDataClass>>> { apiResponse ->
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if (response is List<*>) {
+                categoryModelView?.promotionResponse?.set(response as List<PromotionsResponseDataClass>?)
+                pagerAdapter.promotionList = categoryModelView?.promotionResponse?.get()
+                pagerAdapter.notifyDataSetChanged()
+                startScrollViewPager(viewPager, response.size)
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
         })
     }
 
     private fun observeCategoryApiResponse() {
-        categoryModelView?.mutualHomeResponse?.observe(this, object : Observer<ApiResponse<CategoryResponseDataClass>> {
-            override fun onChanged(@Nullable apiResponse: ApiResponse<CategoryResponseDataClass>?) {
-                hideLoading()
-                val response = apiResponse?.apiResponse ?: apiResponse?.error
-                if (response is CategoryResponseDataClass) {
-                    categoryModelView?.categoryResponse?.set(response)
-                } else {
-                    Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+        categoryModelView?.mutualHomeResponse?.observe(this, Observer<ApiResponse<CategoryResponseDataClass>> { apiResponse ->
+            hideLoading()
+            val response = apiResponse?.apiResponse ?: apiResponse?.error
+            if (response is CategoryResponseDataClass) {
+
+                response.children_data = response.children_data.filter { it.is_active == true } as ArrayList<ChildrenData>
+
+                //add view all category and remove inactive sub categories
+                for(cat in response.children_data){
+                    when(cat.name){
+                        Constants.MEN -> {
+                            val viewAll = ChildrenData(id = cat.id, name = getString(R.string.view_all), is_active = true)
+                            cat.children_data?.add(0, viewAll)
+                            cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
+                        }
+
+                        Constants.WOMEN -> {
+                            val viewAll = ChildrenData(id = cat.id, name = getString(R.string.view_all), is_active = true)
+                            cat.children_data?.add(0, viewAll)
+                            cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
+                        }
+
+                        else -> cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
+                    }
                 }
+
+                categoryModelView?.categoryResponse?.set(response)
+
+            } else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
         })
     }
 
-    fun startScrollViewPager(viewPager : ViewPager, count : Int){
+    private fun startScrollViewPager(viewPager : ViewPager, count : Int){
         var currentPage = 0
         val runnable = object : Runnable {
             override fun run() {
@@ -160,40 +258,4 @@ class CategoryFragment : BaseFragment() {
         handler.postDelayed(runnable, 3000)
     }
 
-
-    // It will use in future
-    fun getQueryMap(childrenDataList: ArrayList<ChildrenData>?): HashMap<String, String> {
-
-        val queryMap = HashMap<String, String>()
-
-        queryMap.put("searchCriteria[filterGroups][0][filters][0][field]", "entity_id")
-        queryMap.put("searchCriteria[filterGroups][0][filters][0][[conditionType]", "in")
-
-        if (childrenDataList!!.size > 0) {
-
-            val childrenDataListSize = childrenDataList.size
-            val categoryArray = StringBuilder()
-
-            for (k in 0 until childrenDataListSize) {
-
-                if(childrenDataList.get(k).is_active!!){
-                    categoryArray.append(childrenDataList.get(k).id)
-                }
-            }
-            queryMap.put("searchCriteria[filterGroups][0][filters][0][[conditionType]", categoryArray.toString())
-
-        }
-
-        return queryMap
-    }
-
-    private fun slideUp(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(0f).duration = Constants.AIMATION_DURATION
-    }
-
-    private fun slideDown(child: TabLayout) {
-        child.clearAnimation()
-        child.animate().translationY(child.height.toFloat()).duration = Constants.AIMATION_DURATION
-    }
 }

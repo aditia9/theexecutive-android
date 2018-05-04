@@ -36,6 +36,22 @@
         <item name="android:fontFamily">@font/opensans_regular</item>
     </style>
 
+    <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>
+    </style>
+
+    <style name="MaterialDialogSheetAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide</item>
+    </style>
+
+
     <style name="button_theme" parent="Widget.AppCompat.Button.Colored">
         <item name="colorPrimary">@color/theme_black_color</item>
         <item name="colorPrimaryDark">@color/theme_black_color</item>
@@ -51,10 +67,16 @@
     <style name="heading_theme" parent="myAppTheme">
         <item name="android:textSize">@dimen/text_size_heading</item>
         <item name="android:fontFamily">@font/opensans_semibold</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="sub_heading_theme" parent="myAppTheme">
         <item name="android:textSize">@dimen/text_size_sub_heading</item>
+        <item name="android:fontFamily">@font/opensans_semibold</item>
+    </style>
+
+    <style name="list_group_theme" parent="myAppTheme">
+        <item name="android:textSize">@dimen/text_size_regular</item>
         <item name="android:fontFamily">@font/opensans_semibold</item>
     </style>
 
@@ -69,5 +91,5 @@
         <item name="colorControlNormal">@color/hint_color</item>
     </style>
 
-    <dimen name="date_picker_font_size">22sp</dimen>
+
 </resources>

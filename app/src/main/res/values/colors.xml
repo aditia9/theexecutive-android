@@ -13,13 +13,14 @@
 
     <color name="colorText">#ffffff</color>
     <color name="light_background">#F6F6F6</color>
-    <color name="translucent_bg">#0D000000</color>
+    <color name="translucent_bg">#66f2f3f8</color>
 
 
     <color name="theme_black_color">#232021</color>
     <color name="hint_color">#999999</color>
     <color name="divider_color">#DDDDDD</color>
-
+    <color name="transparent_white">#90ffffff</color>
+    <color name="transparent_bottom_sheet_color">#CCFFFFFF</color>
 
 
 </resources>

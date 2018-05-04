@@ -1,7 +1,9 @@
 package com.ranosys.theexecutive.base
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -11,23 +13,43 @@ import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
+
 /**
- * Created by Mohammad Sunny on 22/2/18.
+ * @Details Base class for all activities
+ * @Author Ranosys Technologies
+ * @Date 22,Feb,2018
  */
 open class BaseActivity: RunTimePermissionActivity(){
 
     var toolbarViewModel: ToolbarViewModel? = null
+    private lateinit var baseViewModel: BaseViewModel
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = if(Utils.isTablet(this)){
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }else{
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
+        baseViewModel = ViewModelProviders.of(this).get(BaseViewModel::class.java)
         toolbarViewModel = ViewModelProviders.of(this).get(ToolbarViewModel::class.java)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        observeCartCount()
+    }
+
+    private fun observeCartCount() {
+        GlobalSingelton.instance?.cartCount?.observe(this, Observer { count ->
+            toolbarViewModel?.cartCount?.set(count)
+        })
     }
 
     override fun onBackPressed() {
@@ -56,6 +78,10 @@ open class BaseActivity: RunTimePermissionActivity(){
             }
 
         }
+    }
+
+    fun setShowLogo(showLogo: Boolean){
+        toolbarViewModel?.showLogo?.set(showLogo)
     }
 
     fun setScreenTitle(title: String?){

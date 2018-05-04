@@ -7,6 +7,7 @@ import android.databinding.ObservableField
 import android.text.TextUtils
 import android.view.View
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
@@ -24,6 +25,8 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
     var apiSuccessResponse: MutableLiveData<String>? = MutableLiveData()
     var isEmailNotAvailable: MutableLiveData<LoginDataClass.SocialLoginData>? = MutableLiveData()
+    var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
 
 
     var clickedBtnId: MutableLiveData<Int>? = null
@@ -90,11 +93,13 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         })
     }
 
+
     fun validateData(context: Context): Boolean {
         var isValid = true
 
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))
+            isValid = false
         } else if (!Utils.isValidEmail(email.get())) {
             emailError.set(context.getString(R.string.provide_valid_email))
             isValid = false
@@ -102,10 +107,6 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
         if (TextUtils.isEmpty(password.get())) {
             passwordError.set(context.getString(R.string.empty_password))
-            isValid = false
-
-        }else if(Utils.isValidPassword(password.get()).not()){
-            passwordError.set(context.getString(R.string.password_validation_err))
             isValid = false
         }
 
@@ -147,6 +148,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
             override fun onSuccess(userToken: String?) {
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+                email.set(userData.email)
                 apiSuccessResponse?.value = userToken
 
             }
@@ -160,6 +162,46 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
     fun onPasswordTextChanged() {
         passwordError.set("")
+    }
+
+    fun getCartIdForUser(userToken: String?){
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createUserCart(object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                userCartIdResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartIdResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
+                userCartIdResponse?.value = apiResponse
+            }
+
+        })
+    }
+
+    fun getUserCartCount() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountUser(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                userCartCountResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartCountResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                userCartCountResponse?.value = apiResponse
+            }
+
+        })
+
     }
 
 }
