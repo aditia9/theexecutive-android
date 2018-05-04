@@ -45,7 +45,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val normalPrice = "IDR\u00A0" + product.normalPrice
             val spPrice = " IDR\u00A0" + product.specialPrice
 
-            if(product.normalPrice == product.specialPrice){
+            if(product.normalPrice == product.specialPrice || product.specialPrice.isBlank()){
                 product.displayPrice = normalPrice
                 itemBinding.tvDisplayPrice?.text = normalPrice
             }else{
@@ -70,7 +70,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val productType = product.type_id
             val tag: String? = product.extension_attributes.tag_text
             val price: String
-            var specialPrice = "0.0"
+            var specialPrice = ""
             if(productType == Constants.CONFIGURABLE){
                 price = Utils.getFromattedPrice(product.extension_attributes.regular_price)
                 specialPrice = Utils.getFromattedPrice(product.extension_attributes.final_price)
@@ -96,7 +96,10 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             }
             val type = if(toDate.isNotBlank() && fromDate.isNotBlank()) isNewProduct(fromDate, toDate) else ""
 
-            val discount = (((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100)).toInt()
+            var discount = 0
+            if(specialPrice.isNotBlank()){
+                discount = Math.round((((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100))).toInt()
+            }
             var imgUrl = ""
             if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0].file
 
