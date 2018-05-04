@@ -26,11 +26,13 @@ class AddAddressFragment:BaseFragment() {
     private lateinit var mBinding: FragmentAddAddressBinding
     private var address: MyAccountDataClass.Address? = null
     private  var listener: AdapterView.OnItemSelectedListener? = null
+    private  var listenerClick: AdapterView.OnItemLongClickListener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_address, container, false)
         mViewModel = ViewModelProviders.of(this).get(AddAddressViewModel::class.java)
         mViewModel.prepareMaskedAddress(address)
+        mBinding.vm = mViewModel
         callCountryApi()
 
         observeCountryList()
@@ -58,6 +60,13 @@ class AddAddressFragment:BaseFragment() {
                 Toast.makeText(activity," Kuch to ho ja", Toast.LENGTH_SHORT).show()
             }
 
+        }
+
+        listenerClick = object :AdapterView.OnItemLongClickListener{
+            override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Toast.makeText(activity," Kuch to ho ja", Toast.LENGTH_SHORT).show()
+            }
         }
 //        listener = object : AdapterView.OnItemSelectedListener{
 //            override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -89,13 +98,13 @@ class AddAddressFragment:BaseFragment() {
                 mViewModel.selectedState.set(maskedAdd?.state)
                 mViewModel.selectedCity.set(maskedAdd?.city)
                 mBinding.vm = mViewModel
+                mBinding.executePendingBindings()
 
-//                mBinding.spinnerCountry.onItemSelectedListener = listener
-//                mBinding.spinnerCity.onItemSelectedListener = listener
-//                mBinding.spinnerState.onItemSelectedListener = listener
 
-                /*mBinding.spinnerCountry.setSelection((mBinding.spinnerCountry.adapter as ArrayAdapter<RegisterDataClass.Country>).getPosition(mViewModel.countryList.value?.apiResponse?.single { it.full_name_english == maskedAdd?.country }))
-                mBinding.spinnerState.setSelection((mBinding.spinnerState.adapter as ArrayAdapter<RegisterDataClass.State>).getPosition(mViewModel.countryList.value?.apiResponse?.flatMap { it.available_regions }?.toList()?.single { it.name == maskedAdd?.state }))*/
+                val temp = mViewModel.countryList.value?.apiResponse?.single { it.full_name_english == maskedAdd?.country }
+                mBinding.spinnerCountry.setSelection(mViewModel.countryList.value?.apiResponse?.indexOf(temp)?: 0)
+                val temp2 = mViewModel.countryList.value?.apiResponse?.flatMap { it.available_regions }?.toList()?.single { it.name == maskedAdd?.state }
+                mBinding.spinnerState.setSelection(mViewModel.countryList.value?.apiResponse?.flatMap { it.available_regions }?.toList()?.indexOf(temp2) ?: 0)
 
             }else{
                 Utils.showDialog(activity,"Country api failed", getString(android.R.string.ok), "", null)

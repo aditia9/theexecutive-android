@@ -120,7 +120,7 @@ class AddressBookFragment: BaseFragment() {
         if(addressList?.get(addressPosition) == Utils.getDefaultAddress()){
             Utils.showDialog(activity, "can't delete default address", getString(android.R.string.ok), "", null)
         }else{
-            Utils.showDialog(activity, "You want to remove this address", getString(android.R.string.ok), "", object: DialogOkCallback{
+            Utils.showDialog(activity, "You want to remove this address", getString(android.R.string.ok), getString(android.R.string.cancel), object: DialogOkCallback{
                 override fun setDone(done: Boolean) {
                     callRemoveAddressApi(addressPosition)
                 }

@@ -2,13 +2,10 @@ package com.ranosys.theexecutive.base
 
 import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
-import android.databinding.InverseBindingListener
 import android.databinding.ObservableField
 import android.support.design.widget.TextInputLayout
 import android.support.v4.view.ViewPager
 import android.text.TextUtils
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ExpandableListView
 import android.widget.ImageView
 import android.widget.Spinner
@@ -59,26 +56,26 @@ class BindingAdapters {
 //
 //        }
 
-        @JvmStatic
-        @BindingAdapter(value = *arrayOf("app:selectedValue", "app:selectedValueAttrChanged"), requireAll = false)
-        fun bindSpinnerData(pAppCompatSpinner: Spinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
-            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    newTextAttrChanged.onChange()
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                    pAppCompatSpinner.setSelection(0)
-                }
-            }
-            if(newSelectedValue != null) {
-                for (i in 0..pAppCompatSpinner.adapter.count - 1) {
-                    if (newSelectedValue.equals(pAppCompatSpinner.getItemAtPosition(i).toString())) {
-                        pAppCompatSpinner.setSelection(i, true)
-                    }
-                }
-            }
-        }
+//        @JvmStatic
+//        @BindingAdapter(value = *arrayOf("app:selectedValue", "app:selectedValueAttrChanged"), requireAll = false)
+//        fun bindSpinnerData(pAppCompatSpinner: Spinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
+//            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+//                    newTextAttrChanged.onChange()
+//                }
+//
+//                override fun onNothingSelected(parent: AdapterView<*>) {
+//                    pAppCompatSpinner.setSelection(0)
+//                }
+//            }
+//            if(newSelectedValue != null) {
+//                for (i in 0..pAppCompatSpinner.adapter.count - 1) {
+//                    if (newSelectedValue.equals(pAppCompatSpinner.getItemAtPosition(i).toString())) {
+//                        pAppCompatSpinner.setSelection(i, true)
+//                    }
+//                }
+//            }
+//        }
 
         @JvmStatic
         @InverseBindingAdapter(attribute = "app:selectedValue", event = "app:selectedValueAttrChanged")
