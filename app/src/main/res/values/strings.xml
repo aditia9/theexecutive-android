@@ -12,6 +12,9 @@
     <string name="empty_full_name">Please provide Full Name.</string>
     <string name="empty_user_id">Please provide NRIC /FIN /Passport.</string>
     <string name="empty_password">Password is required.</string>
+    <string name="empty_current_password">Current Password is required.</string>
+    <string name="empty_confirm_password">Confirm Password is required.</string>
+    <string name="empty_new_password">New Password is required.</string>
     <string name="mobile_error">Mobile Number is required.</string>
     <string name="dob_error">Date of birth is required.</string>
     <string name="city_error">Please provide city.</string>
@@ -85,6 +88,7 @@
     <string name="valid_password_error">Password must contain 8 or more characters, special character and number.</string>
     <string name="valid_mobile_error">Length should be between 8 to 16.</string>
     <string name="confirm_password_error">The password does not match, kindly enter the same password as above.</string>
+    <string name="same_password_error">It seems the password same as before, kindly enter new password.</string>
     <string name="select_lang_title">Select Language</string>
     <string name="select_option">Select Option</string>
     <string name="continue_btn">Continue</string>
@@ -145,6 +149,7 @@
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="email_sent">We have sent you an email, please follow the instruction to reset password.</string>
+    <string name="password_change_msg">Your password successfully changed.</string>
     <string name="logout_text">Are you sure you want to logout from application?</string>
     <string name="empty_sort_option_selection_error">Please select at least one option.</string>
     <string name="no_product_available_error">Oops.. we couldn\'t find what you need.</string>
@@ -170,6 +175,9 @@
     <string name="view_all">View All</string>
     <string name="expand_image">Expand Icon</string>
     <string name="back">Back Icon</string>
+    <string name="change_password">Change Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
 
 
 </resources>
