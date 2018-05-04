@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -11,7 +12,9 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Build
+import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
@@ -26,7 +29,6 @@ import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import java.text.NumberFormat
@@ -65,7 +67,7 @@ object Utils {
     }
 
     fun isValidMobile(mobile: String): Boolean {
-        if(mobile.length >= 8 && mobile.length <=16){
+        if(mobile.length in 8..16){
             return true
         }
         return false
@@ -80,11 +82,7 @@ object Utils {
             val mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
             return if (wifi.isAvailable && wifi.isConnected) {
                 true
-            } else if (mobile.isAvailable && mobile.isConnected) {
-                true
-            } else {
-                false
-            }
+            } else mobile.isAvailable && mobile.isConnected
         } catch (ex: Exception) {
             print(ex.stackTrace)
         }
@@ -185,7 +183,7 @@ object Utils {
     }
 
     fun compareDrawable(context: Context, d1: Drawable, d2: Drawable): Boolean{
-        return (d1 as BitmapDrawable).bitmap.equals((d2 as BitmapDrawable).bitmap)
+        return (d1 as BitmapDrawable).bitmap == (d2 as BitmapDrawable).bitmap
     }
 
     fun getDeviceWidth(context: Context) : Int{
@@ -194,7 +192,7 @@ object Utils {
         return displayMetrics.widthPixels
     }
 
-    fun getDeviceHeight(context: Context?) : Int{
+    private fun getDeviceHeight(context: Context?) : Int{
         val displayMetrics = DisplayMetrics()
         (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.heightPixels
@@ -231,23 +229,12 @@ object Utils {
         view.layoutParams?.height = height.toInt()
     }
 
-
-    fun openPages(context: Context, url: String?) {
-        (context as DashBoardActivity).webPagesDialog.show()
-//        if((url ?: "").isNotBlank()){
-//            val intent = Intent(Intent.ACTION_VIEW)
-//            intent.data = Uri.parse(url)
-//            context.startActivity(intent)
-//        }
-
-    }
-
     fun shareUrl(context: Context, url: String?) {
-        val intent = Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Sharing Product links");
-        intent.putExtra(Intent.EXTRA_TEXT, url);
-        context.startActivity(Intent.createChooser(intent, "Share Product"));
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Sharing Product links")
+        intent.putExtra(Intent.EXTRA_TEXT, url)
+        context.startActivity(Intent.createChooser(intent, "Share Product"))
     }
 
     fun updateCartCount(count: Int) {
@@ -270,5 +257,23 @@ object Utils {
 
     fun getStringFromFormattedPrice(price: String): String {
         return price.replace(",", "")
+    }
+
+    @SuppressLint("ServiceCast")
+    fun getDeviceId(context: Context): String {
+        var IMEI = ""
+        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        IMEI = telephonyManager.deviceId
+        if (TextUtils.isEmpty(IMEI)) {
+            val manager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val info = manager.connectionInfo
+            val address = info.macAddress
+            return if (!TextUtils.isEmpty(address)) {
+                address
+            } else {
+                "0000000000000000"
+            }
+        }
+        return IMEI
     }
 }

@@ -35,8 +35,10 @@ import kotlinx.android.synthetic.main.fragment_product_listing.*
 import java.util.*
 
 /**
- * Created by nikhil on 20/3/18.
- */
+ * @Details fragment shows product listing
+ * @Author Ranosys Technologies
+ * @Date 16,Apr,2018
+*/
 class ProductListingFragment: BaseFragment() {
 
     private lateinit var mBinding: FragmentProductListingBinding
@@ -75,7 +77,7 @@ class ProductListingFragment: BaseFragment() {
         sortOptionDialog.window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         sortOptionDialog.window.setGravity(Gravity.BOTTOM)
         sortOptionAdapter = SortOptionAdapter(mViewModel, mViewModel.sortOptionList?.value)
-        sortOptionBinding.sortOptionList.setAdapter(sortOptionAdapter)
+        sortOptionBinding.sortOptionList.adapter = sortOptionAdapter
         prepareSortOptionDialog()
 
         //filter screen binding
@@ -183,7 +185,7 @@ class ProductListingFragment: BaseFragment() {
 
     private fun clearSelectedSortOption() {
         mViewModel.selectedSortOption = ProductListingDataClass.SortOptionResponse("","")
-        sortOptionAdapter?.let { it.notifyDataSetChanged()}
+        sortOptionAdapter.notifyDataSetChanged()
     }
 
     private fun observeSortOptions() {
@@ -331,14 +333,14 @@ class ProductListingFragment: BaseFragment() {
 
         })
 
-        et_search.setOnTouchListener(View.OnTouchListener { v, event ->
-            val DRAWABLE_RIGHT = 2
-            if(event.getAction() == MotionEvent.ACTION_UP) {
-                if(event.rawX >= et_search.right - et_search.compoundDrawables[DRAWABLE_RIGHT].bounds.width()) {
-                    if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.cancel))){
+        et_search.setOnTouchListener(View.OnTouchListener { _, event ->
+            val drawableRight = 2
+            if(event.action == MotionEvent.ACTION_UP) {
+                if(event.rawX >= et_search.right - et_search.compoundDrawables[drawableRight].bounds.width()) {
+                    if(Utils.compareDrawable(activity as Context, et_search.compoundDrawables[drawableRight], (activity as Context).getDrawable(R.drawable.cancel))){
                         et_search.setText("")
                         return@OnTouchListener true
-                    }else if(Utils.compareDrawable(activity as Context, et_search.getCompoundDrawables()[DRAWABLE_RIGHT], (activity as Context).getDrawable(R.drawable.search))){
+                    }else if(Utils.compareDrawable(activity as Context, et_search.compoundDrawables[drawableRight], (activity as Context).getDrawable(R.drawable.search))){
                         if(et_search.text.isNotBlank()){
                             handleSearchAction(et_search.text.toString())
                             mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0)
@@ -353,7 +355,7 @@ class ProductListingFragment: BaseFragment() {
         })
 
 
-        et_search.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        et_search.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 handleSearchAction(v.text.toString())
                 return@OnEditorActionListener true
@@ -489,7 +491,7 @@ class ProductListingFragment: BaseFragment() {
         //reset other filters
         val keys = mViewModel.selectedFilterMap.keys
         for (key in keys){
-            mViewModel.selectedFilterMap.put(key, "")
+            mViewModel.selectedFilterMap[key] = ""
         }
 
         filterOptionAdapter.resetFilter()

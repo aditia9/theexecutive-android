@@ -1,7 +1,9 @@
 package com.ranosys.theexecutive.modules.productDetail.dataClassess
 
 /**
- * Created by Mohammad Sunny on 9/4/18.
+ * @Details Data class
+ * @Author Ranosys Technologies
+ * @Date 9,Apr,2018
  */
 
 data class ProductOptionsResponse(

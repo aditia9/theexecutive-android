@@ -19,7 +19,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#CCFFFFFF"
+            android:background="@color/transparent_bottom_sheet_color"
             >
 
             <TextView

@@ -1,7 +1,7 @@
 package com.ranosys.theexecutive.modules.productDetail.dataClassess
 
 /**
- * @Details
+ * @Details Data class
  * @Author Ranosys Technologies
  * @Date 13,Apr,2018
  */
