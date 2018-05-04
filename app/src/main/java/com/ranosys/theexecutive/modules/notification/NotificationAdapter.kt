@@ -16,6 +16,9 @@ class NotificationAdapter(var notificationListData: List<NotificationListRespons
         fun onItemClick(item: NotificationListResponse)
     }
 
+    fun setItemClickListener(listener: NotificationAdapter.OnItemClickListener) {
+        clickListener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationAdapter.Holder {
         val binding: NotificationItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.notification_item, parent, false)

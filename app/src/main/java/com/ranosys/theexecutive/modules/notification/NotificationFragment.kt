@@ -27,7 +27,11 @@ class NotificationFragment : BaseFragment() {
 
     private fun getNotification() {
 
-        var notificationAdapter = NotificationAdapter()
+        val notificationList: MutableList<NotificationListResponse>? = null
+        val notification = NotificationListResponse(123, "Title", "", "desc", true)
+
+        notificationList?.add(notification)
+        val notificationAdapter = NotificationAdapter(notificationList)
 
         notificationAdapter.clickListener
     }
