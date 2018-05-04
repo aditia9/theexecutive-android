@@ -10,18 +10,17 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.ColorViewLayoutBinding
 
 /**
- * @Details
+ * @Details adapter to set color options of product
  * @Author Ranosys Technologies
  * @Date 16,Apr,2018
  */
+
 class ColorRecyclerAdapter(var context : Context, var list : List<ProductViewFragment.ColorsView>?) : RecyclerView.Adapter<ColorRecyclerAdapter.Holder>() {
 
-    var mContext : Context? = null
-    var colorViewList : List<ProductViewFragment.ColorsView>? = null
-    var clickListener: ColorRecyclerAdapter.OnItemClickListener? = null
+    private var colorViewList : List<ProductViewFragment.ColorsView>? = null
+    private var clickListener: ColorRecyclerAdapter.OnItemClickListener? = null
 
     init {
-        mContext = context
         colorViewList = list
     }
 
@@ -50,21 +49,21 @@ class ColorRecyclerAdapter(var context : Context, var list : List<ProductViewFra
         holder?.bind(context, getItem(position), clickListener, position)
     }
 
-    fun getItem(position: Int) : ProductViewFragment.ColorsView?{
+    private fun getItem(position: Int) : ProductViewFragment.ColorsView?{
         return colorViewList?.get(position)
     }
 
-    class Holder(var itemBinding: ColorViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
+    class Holder(private var itemBinding: ColorViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
         fun bind(context : Context?, colorView : ProductViewFragment.ColorsView?, listener: OnItemClickListener?, position: Int){
             itemBinding?.colorView = colorView
             if(colorView?.isSelected!!){
                 itemBinding?.imgColor?.background = context?.resources?.getDrawable(R.drawable.color_border)
-                itemBinding?.tvLabel?.setTypeface(Typeface.DEFAULT_BOLD)
+                itemBinding?.tvLabel?.typeface = Typeface.DEFAULT_BOLD
             }
             else{
                 itemBinding?.imgColor?.background = null
-                itemBinding?.tvLabel?.setTypeface(Typeface.DEFAULT)
+                itemBinding?.tvLabel?.typeface = Typeface.DEFAULT
             }
             itemView.setOnClickListener {
                 listener?.onItemClick(colorView,position)

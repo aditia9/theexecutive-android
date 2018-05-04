@@ -3,8 +3,11 @@ package com.ranosys.theexecutive.modules.productDetail.dataClassess
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 
 /**
- * Created by Mohammad Sunny on 4/4/18.
+ * @Details Data class
+ * @Author Ranosys Technologies
+ * @Date 4,Apr,2018
  */
+
 data class ProductDetailResponse(
 		val id: Int,
 		val sku: String?,

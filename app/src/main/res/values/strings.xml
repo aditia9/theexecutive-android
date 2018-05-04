@@ -151,7 +151,7 @@
     <string name="empty_filter_option_selection_error">Please select at least one option.</string>
     <string name="enter_search_error">Please enter search keyword</string>
     <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app.</string>
-    <string name="loading_data">Loading...</string>
+    <string name="loading_data">Loading…</string>
     <string name="add_to_cart_success_msg">Product added to bag</string>
     <string name="available_colors">Available Colors</string>
     <string name="wishlist_success_msg">Product added to wishlist</string>
@@ -167,6 +167,9 @@
     <string name="mobile_number_label">Mobile Number : </string>
     <string name="remove">Remove</string>
     <string name="add_addresse">Add Address</string>
+    <string name="view_all">View All</string>
+    <string name="expand_image">Expand Icon</string>
+    <string name="back">Back Icon</string>
 
 
 </resources>
