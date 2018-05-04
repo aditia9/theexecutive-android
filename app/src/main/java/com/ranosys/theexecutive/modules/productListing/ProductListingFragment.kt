@@ -459,7 +459,7 @@ class ProductListingFragment: BaseFragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if(s?.isNotBlank() == true){
+                    if(s?.isNotBlank() == true && s.contains(".").not()){
                         val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
                         filterOptionBinding.priceRangeBar.selectedMaxValue = input
                     }

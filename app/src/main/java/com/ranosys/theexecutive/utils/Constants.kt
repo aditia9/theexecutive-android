@@ -93,7 +93,7 @@ object Constants {
     const val ERROR_CODE_404: Int = 404
     const val ERROR_CODE_401: Int = 401
     const val ERROR_CODE_400: Int = 400
-    const val ZENDESK_CHAT: String = "5eqiIZLxn9cEhPESVqDlhr6J0tdAM0Jg"
+    const val ZENDESK_CHAT: String = "4gHlsXEXVL3ZjRJ6jA5W66wwYYcJPdef"
     const val ZERO: String = "0.0"
     const val INVALID_CREDENTIALS: String = "The email address or password do not match with our system, Kindly enter the valid credentials"
     const val NO_USER_EXIST : String = "No user exists with this email id"

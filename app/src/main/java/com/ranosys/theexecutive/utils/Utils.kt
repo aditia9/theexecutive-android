@@ -245,6 +245,7 @@ object Utils {
         val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
         if(price.isNotBlank()){
             val p = price.toDouble()
+            //val newPrice = numberFormatter.format(p).replace(",",".")
             return numberFormatter.format(p)
         }else{
             return price

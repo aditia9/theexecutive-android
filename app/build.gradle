@@ -53,19 +53,19 @@ android {
         }
         uatClient {
             dimension "client"
-            resValue "string", 'app_name', "U-The Executive" //app name to be shown in device
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
             resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
         }
         devClient {
             dimension "client"
-            resValue "string", 'app_name', "D-The Executive" //app name to be shown in device
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
             resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
         }
         qatClient {
             dimension "client"
-            resValue "string", 'app_name', "Q-The Executive" //app name to be shown in device
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
             resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
         }

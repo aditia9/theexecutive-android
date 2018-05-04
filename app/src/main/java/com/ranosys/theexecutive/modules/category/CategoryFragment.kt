@@ -219,21 +219,9 @@ class CategoryFragment : BaseFragment() {
 
                 //add view all category and remove inactive sub categories
                 for(cat in response.children_data){
-                    when(cat.name){
-                        Constants.MEN -> {
-                            val viewAll = ChildrenData(id = cat.id, name = getString(R.string.view_all), is_active = true)
-                            cat.children_data?.add(0, viewAll)
-                            cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
-                        }
-
-                        Constants.WOMEN -> {
-                            val viewAll = ChildrenData(id = cat.id, name = getString(R.string.view_all), is_active = true)
-                            cat.children_data?.add(0, viewAll)
-                            cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
-                        }
-
-                        else -> cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
-                    }
+                    val viewAll = ChildrenData(id = cat.id, name = getString(R.string.view_all), is_active = true)
+                    cat.children_data?.add(0, viewAll)
+                    cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
                 }
 
                 categoryModelView?.categoryResponse?.set(response)
