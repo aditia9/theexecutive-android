@@ -6,13 +6,12 @@ import android.databinding.InverseBindingListener
 import android.databinding.ObservableField
 import android.support.design.widget.TextInputLayout
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.AppCompatSpinner
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ExpandableListView
 import android.widget.ImageView
+import android.widget.Spinner
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
@@ -36,27 +35,58 @@ class BindingAdapters {
             view.isErrorEnabled = !TextUtils.isEmpty(errorMessage)
         }
 
+//        @JvmStatic
+//        @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
+//        fun bindSpinnerData(pAppCompatSpinner: AppCompatSpinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
+//            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+//                    newTextAttrChanged.onChange()
+//                }
+//
+//                override fun onNothingSelected(parent: AdapterView<*>) {}
+//            }
+//            if (newSelectedValue != null) {
+//                val pos = (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
+//                pAppCompatSpinner.setSelection(pos, true)
+//            }
+//        }
+//
+//        @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
+//        fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String {
+//            return pAppCompatSpinner.selectedItem.toString()
+//
+//        }
+
         @JvmStatic
-        @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
-        fun bindSpinnerData(pAppCompatSpinner: AppCompatSpinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
+        @BindingAdapter(value = *arrayOf("app:selectedValue", "app:selectedValueAttrChanged"), requireAll = false)
+        fun bindSpinnerData(pAppCompatSpinner: Spinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
             pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                     newTextAttrChanged.onChange()
                 }
 
-                override fun onNothingSelected(parent: AdapterView<*>) {}
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    pAppCompatSpinner.setSelection(0)
+                }
             }
-            if (newSelectedValue != null) {
-                val pos = (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
-                pAppCompatSpinner.setSelection(pos, true)
+            if(newSelectedValue != null) {
+                for (i in 0..pAppCompatSpinner.adapter.count - 1) {
+                    if (newSelectedValue.equals(pAppCompatSpinner.getItemAtPosition(i).toString())) {
+                        pAppCompatSpinner.setSelection(i, true)
+                    }
+                }
             }
         }
 
-        @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-        fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String {
+        @JvmStatic
+        @InverseBindingAdapter(attribute = "app:selectedValue", event = "app:selectedValueAttrChanged")
+        fun captureSelectedValue(pAppCompatSpinner: Spinner): String {
             return pAppCompatSpinner.selectedItem.toString()
-
         }
+
+
+
+
 
         @JvmStatic
         @BindingAdapter("android:src")

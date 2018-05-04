@@ -50,9 +50,14 @@ class AddAddressFragment:BaseFragment() {
             if(apiResponse?.error.isNullOrBlank()){
 
                 val maskedAdd = mViewModel.maskedAddress
+                mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(maskedAdd?._countryCode))
+                mViewModel.selectedCountry.set(maskedAdd?.country)
+                mViewModel.selectedState.set(maskedAdd?.state)
+                mViewModel.selectedCity.set(maskedAdd?.city)
+
                 mBinding.vm = mViewModel
-                mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(maskedAdd?._countryCode))
-                mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(maskedAdd?._countryCode))
+//                mBinding.spinnerCountry.setSelection((mBinding.spinnerCountry.adapter as ArrayAdapter<RegisterDataClass.Country>).getPosition(mViewModel.countryList.value?.apiResponse?.single { it.full_name_english == maskedAdd?.country }))
+//                mBinding.spinnerState.setSelection((mBinding.spinnerState.adapter as ArrayAdapter<RegisterDataClass.State>).getPosition(mViewModel.countryList.value?.apiResponse?.flatMap { it.available_regions }?.toList()?.single { it.name == maskedAdd?.state }))
 
             }else{
                 Utils.showDialog(activity,"Country api failed", getString(android.R.string.ok), "", null)

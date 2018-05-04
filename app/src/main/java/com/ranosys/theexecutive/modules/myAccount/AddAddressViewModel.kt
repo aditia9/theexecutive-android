@@ -3,9 +3,10 @@ package com.ranosys.theexecutive.modules.myAccount
 import AppLog
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
-import android.databinding.ObservableArrayList
+import android.databinding.ObservableField
 import android.view.View
 import android.widget.Spinner
+import android.widget.Toast
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
@@ -15,6 +16,7 @@ import com.ranosys.theexecutive.modules.register.RegisterViewModel
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.Utils
 import java.util.*
 
 /**
@@ -25,8 +27,12 @@ import java.util.*
 class AddAddressViewModel(application: Application): BaseViewModel(application) {
 
     var countryList :MutableLiveData<ApiResponse<MutableList<RegisterDataClass.Country>>> = MutableLiveData()
-    var stateList :ObservableArrayList<RegisterDataClass.State> = ObservableArrayList()
+    var stateList :MutableList<RegisterDataClass.State> = mutableListOf()
     var maskedAddress: MyAccountDataClass.MaskedUserInfo? = null
+
+    var selectedCountry: ObservableField<String> = ObservableField()
+    var selectedCity: ObservableField<String> = ObservableField()
+    var selectedState: ObservableField<String> = ObservableField()
 
     fun callCountryApi() {
         var apiResponse = ApiResponse<MutableList<RegisterDataClass.Country>>()
@@ -46,6 +52,8 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
             override fun onSuccess(countries: List<RegisterDataClass.Country>?) {
                 if(null != countries && countries.isNotEmpty()){
                     apiResponse.apiResponse = countries.toMutableList()
+                    stateList = apiResponse.apiResponse!!.single { it.full_name_english == maskedAddress?.country }.available_regions.toMutableList()
+
                     countryList.value = apiResponse
                 }
             }
@@ -83,5 +91,25 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
                 _countryCode = countryCode
         )
 
+    }
+
+    private fun callCityApi(stateCode: String) {
+        AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>>{
+            override fun onException(error: Throwable) {
+                Utils.printLog(RegisterViewModel.CITY_API_TAG, RegisterViewModel.ERROR_TAG)
+            }
+
+            override fun onError(errorMsg: String) {
+                Utils.printLog(RegisterViewModel.CITY_API_TAG, RegisterViewModel.ERROR_TAG)
+                Toast.makeText(getApplication<Application>(), errorMsg, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onSuccess(cities: List<RegisterDataClass.City>?) {
+                cities?.run {
+
+                }
+            }
+
+        })
     }
 }

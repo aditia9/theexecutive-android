@@ -3,7 +3,6 @@ package com.ranosys.theexecutive.modules.myAccount
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
-import com.ranosys.theexecutive.databinding.AddressListItemBinding
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
@@ -30,12 +28,10 @@ class AddressBookFragment: BaseFragment() {
     private lateinit var mViewModel: AddressBookViewModel
     private var addressList: MutableList<MyAccountDataClass.Address>? = null
     private lateinit var addressBookAdapter: AddressBookAdapter
-    private lateinit var addressItemBinding: AddressListItemBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.fragment_address_book, container, false)
-        addressItemBinding = DataBindingUtil.inflate(inflater, R.layout.address_list_item, container,false)
 
         mViewModel = ViewModelProviders.of(this).get(AddressBookViewModel::class.java)
         addressList = GlobalSingelton.instance?.userInfo?.addresses?.toMutableList()
@@ -88,7 +84,7 @@ class AddressBookFragment: BaseFragment() {
         address_list.layoutManager = linearLayoutManager
 
         //get stored
-        addressBookAdapter = AddressBookAdapter(addressList, addressItemBinding, action = {id: Int, pos: Int ->
+        addressBookAdapter = AddressBookAdapter(addressList, action = {id: Int, pos: Int ->
             handleAddressEvents(id, pos)
         })
         address_list.adapter = addressBookAdapter
