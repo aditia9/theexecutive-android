@@ -17,6 +17,7 @@ object Constants {
     val SELECTED_STORE_ID_KEY = "selected_store_id"
     val SELECTED_WEBSITE_ID_KEY = "selected_website_id"
     val ANDROID_DEVICE_ID_KEY = "device_id"
+    val USER_FCM_ID = "fcmId"
     val MESSAGE = "message"
     val ERROR = "Error"
     val MAINTENENCE_OFF = "0"
@@ -92,5 +93,20 @@ object Constants {
     const val ERROR_CODE_400: Int = 400
     const val ZENDESK_CHAT: String = "5eqiIZLxn9cEhPESVqDlhr6J0tdAM0Jg"
     const val ZERO: String = "0.0"
+    const val NOTIFICATION_CHANNEL_ID = "4655"
+    var notificationCounter = 0
+
+    const val KEY_REDIRECTION_TYPE = "redirectType"
+    const val KEY_REDIRECTION_VALUE = "redirectTypeValue"
+    const val KEY_REDIRECTION_URL = "notification_cms_url"
+    const val KEY_REDIRECTION_TITLE = "redirect_title"
+    const val KEY_NOTIFICATION_TITLE = "notification_title"
+    const val KEY_NOTIFICATION_ALERT = "notification_alert"
+    const val KEY_NOTIFICATION_ID = "notification_id"
+
+    const val NOTIFICATION_TYPE_CMS = "cms"
+    const val NOTIFICATION_TYPE_PRODUCT_DETAIL = "product_detail"
+    const val NOTIFICATION_TYPE_CATALOG = "catalog"
+    const val NOTIFICATION_TYPE_ORDER_LIST = "order_list"
 
 }

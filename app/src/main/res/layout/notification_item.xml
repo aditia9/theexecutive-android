@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="notification"
+            type="com.ranosys.theexecutive.modules.notification.NotificationListResponse"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@{notification.isRead ? @color/notification_read_bg : @android:color/white}">
+
+    <ImageView
+        android:id="@+id/img_bullet"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:src="@{notification.isRead ? @drawable/notification_read : @drawable/notification}"
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintTop_toBottomOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_bullet"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="10dp"
+            android:layout_height="wrap_content" />
+
+
+
+        <ImageView
+            android:id="@+id/img_notification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

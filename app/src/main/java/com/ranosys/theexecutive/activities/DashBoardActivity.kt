@@ -24,45 +24,45 @@ import com.zopim.android.sdk.api.ZopimChat
 /**
  * Created by Mohammad Sunny on 19/2/18.
  */
-class DashBoardActivity: BaseActivity() {
+class DashBoardActivity : BaseActivity() {
 
     lateinit var webPagesDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+        val toolbarBinding: ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding?.toolbarViewModel = toolbarViewModel
 
         //initialize Zendesk cha setup
         setUpZendeskChat()
         val model = ViewModelProviders.of(this).get(DashBoardViewModel::class.java)
         model.manageFragments().observe(this, Observer { isCreated ->
-            if(isCreated!!){
-                if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
+            if (isCreated!!) {
+                if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
                     FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
-                }else{
+                } else {
                     FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
                 }
             }
 
         })
 
-        supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
+        supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener {
             override fun onBackStackChanged() {
                 val backStackCount = supportFragmentManager.backStackEntryCount
-                if(backStackCount > 0){
+                if (backStackCount > 0) {
                     val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
-                    fragment?.run{
-                        if(fragment is HomeFragment) {
-                            when(HomeFragment.fragmentPosition){
+                    fragment?.run {
+                        if (fragment is HomeFragment) {
+                            when (HomeFragment.fragmentPosition) {
                                 0 -> {
                                     (fragment as BaseFragment).setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true, true)
                                 }
                                 1 -> {
                                     val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-                                    if(TextUtils.isEmpty(isLogin)){
+                                    if (TextUtils.isEmpty(isLogin)) {
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
-                                    }else{
+                                    } else {
                                         val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, email, 0, false, 0, false)
                                     }
@@ -72,11 +72,12 @@ class DashBoardActivity: BaseActivity() {
                                 }
                             }
                         }
-                        if(fragment is ProductListingFragment)
-                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true )
-                        if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
-                        if(fragment is ProductDetailFragment) {
+                        if (fragment is ProductListingFragment)
+                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)
+                        if (fragment is LoginFragment) {
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false, true)
+                        }
+                        if (fragment is ProductDetailFragment) {
                             (fragment as ProductDetailFragment).onResume()
                         }
                     }
@@ -85,6 +86,39 @@ class DashBoardActivity: BaseActivity() {
 
         })
 
+        dataFromPreviousPage()
+    }
+
+    private fun dataFromPreviousPage() {
+        val extras = intent.extras
+
+        val redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
+        val redirectValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
+        val redirectTitle = extras.getString(Constants.KEY_REDIRECTION_TITLE)
+
+        if (!TextUtils.isEmpty(redirectType)) {
+            when (redirectType) {
+
+                Constants.NOTIFICATION_TYPE_CMS -> {
+
+                }
+                Constants.NOTIFICATION_TYPE_PRODUCT_DETAIL -> {
+                    val fragment = ProductDetailFragment.getInstance(null, redirectValue, redirectTitle, 0)
+                    FragmentUtils.addFragment(this, fragment, null, ProductDetailFragment::class.java.name, true)
+                }
+
+                Constants.NOTIFICATION_TYPE_CATALOG -> {
+                    val bundle = Bundle()
+                    bundle.putInt(Constants.CATEGORY_ID, redirectValue.toInt())
+                    bundle.putString(Constants.CATEGORY_NAME, redirectTitle)
+                    FragmentUtils.addFragment(this, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+                }
+
+                Constants.NOTIFICATION_TYPE_ORDER_LIST->{
+
+                }
+            }
+        }
     }
 
     private fun setUpZendeskChat() {
