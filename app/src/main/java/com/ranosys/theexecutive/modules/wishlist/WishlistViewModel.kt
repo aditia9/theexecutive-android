@@ -17,6 +17,7 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
 
     var mutualWishlistResponse = MutableLiveData<ApiResponse<WishlistResponse>>()
     var mutualDeleteItemResponse = MutableLiveData<ApiResponse<String>>()
+    var mutualAddToBagItemResponse = MutableLiveData<ApiResponse<String>>()
     var wishlistResponse: ObservableField<WishlistResponse>? = ObservableField()
 
     fun getWishlist(){
@@ -42,18 +43,39 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
         val apiResponse = ApiResponse<String>()
         AppRepository.deleteWishlistItem(itemId, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
-                apiResponse.apiResponse = error.toString()
-                mutualDeleteItemResponse.value?.throwable = error
+                apiResponse.error = error.message
+                mutualDeleteItemResponse.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                apiResponse.apiResponse = errorMsg
-                mutualDeleteItemResponse.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                mutualDeleteItemResponse.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
                 mutualDeleteItemResponse.value = apiResponse
+            }
+
+        })
+    }
+
+    fun addToBagWishlistItem(itemId : Int?){
+        val apiResponse = ApiResponse<String>()
+        AppRepository.addToBagWishlistItem(itemId, object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualAddToBagItemResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualAddToBagItemResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                mutualAddToBagItemResponse.value = apiResponse
             }
 
         })

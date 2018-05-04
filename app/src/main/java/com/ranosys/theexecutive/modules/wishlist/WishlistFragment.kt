@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
@@ -68,6 +69,18 @@ class WishlistFragment : BaseFragment() {
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
+
+        wishlistModelView?.mutualAddToBagItemResponse?.observe(this, Observer<ApiResponse<String>> { apiResponse ->
+            hideLoading()
+            if(apiResponse?.error.isNullOrEmpty()) {
+                val response = apiResponse?.apiResponse
+                if (response is String) {
+                    Toast.makeText(activity as Context, getString(R.string.add_to_cart_success_msg), Toast.LENGTH_SHORT).show()
+                }
+            }else {
+                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+            }
+        })
     }
 
     private fun setWishlistAdapter(){
@@ -84,7 +97,7 @@ class WishlistFragment : BaseFragment() {
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
                     R.id.img_bag -> {
-                        //Toast.makeText(activity, item?.sku, Toast.LENGTH_SHORT).show()
+                        callAddToBagItemFromWishlist(item?.id)
                     }
                     R.id.img_delete -> {
                         Utils.showDialog(context, getString(R.string.remove_item_text),
@@ -116,6 +129,15 @@ class WishlistFragment : BaseFragment() {
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
             wishlistModelView?.deleteItemFromWishlist(itemId)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+    }
+
+    private fun callAddToBagItemFromWishlist(itemId : Int?){
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            wishlistModelView?.addToBagWishlistItem(itemId)
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
