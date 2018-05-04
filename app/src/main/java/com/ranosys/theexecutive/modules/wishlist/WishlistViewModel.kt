@@ -22,7 +22,7 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
 
     fun getWishlist(){
         val apiResponse = ApiResponse<WishlistResponse>()
-        AppRepository.getWishlist(object : ApiCallback<WishlistResponse> {
+        AppRepository.getWishlist(callBack = object : ApiCallback<WishlistResponse> {
             override fun onException(error: Throwable) {
                 mutualWishlistResponse.value?.throwable = error
             }
@@ -41,7 +41,7 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
 
     fun deleteItemFromWishlist(itemId : Int?){
         val apiResponse = ApiResponse<String>()
-        AppRepository.deleteWishlistItem(itemId, object : ApiCallback<String> {
+        AppRepository.deleteWishlistItem(itemId, callBack = object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 mutualDeleteItemResponse.value = apiResponse
@@ -62,7 +62,7 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
 
     fun addToBagWishlistItem(itemId : Int?){
         val apiResponse = ApiResponse<String>()
-        AppRepository.addToBagWishlistItem(itemId, object : ApiCallback<String> {
+        AppRepository.addToBagWishlistItem(itemId, callBack = object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 mutualAddToBagItemResponse.value = apiResponse

@@ -51,7 +51,7 @@ class WishlistFragment : BaseFragment() {
                     tv_wishlist_count.text = getString(R.string.wishlist_items_count, response.items_count)
                     setWishlistAdapter()
                 }
-            }else {
+             }else {
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
