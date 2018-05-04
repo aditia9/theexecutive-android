@@ -4,7 +4,6 @@ import AppLog
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableField
-import android.view.View
 import android.widget.Spinner
 import android.widget.Toast
 import com.ranosys.theexecutive.api.ApiResponse
@@ -27,7 +26,9 @@ import java.util.*
 class AddAddressViewModel(application: Application): BaseViewModel(application) {
 
     var countryList :MutableLiveData<ApiResponse<MutableList<RegisterDataClass.Country>>> = MutableLiveData()
+    var countryListApiResponse :ApiResponse<MutableList<RegisterDataClass.Country>>? = null
     var stateList :MutableList<RegisterDataClass.State> = mutableListOf()
+    var cityList :MutableList<RegisterDataClass.City> = mutableListOf()
     var maskedAddress: MyAccountDataClass.MaskedUserInfo? = null
 
     var selectedCountry: ObservableField<String> = ObservableField()
@@ -52,18 +53,36 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
             override fun onSuccess(countries: List<RegisterDataClass.Country>?) {
                 if(null != countries && countries.isNotEmpty()){
                     apiResponse.apiResponse = countries.toMutableList()
+                    countryListApiResponse = apiResponse
                     stateList = apiResponse.apiResponse!!.single { it.full_name_english == maskedAddress?.country }.available_regions.toMutableList()
 
-                    countryList.value = apiResponse
+                    val temp = stateList.filter { it.name == maskedAddress?.state }
+                    if(temp.isNotEmpty()){
+                        callCityApi(temp[0].id)
+                    }
+
                 }
             }
         })
     }
 
-    fun onCountrySelection(countrySpinner: View, position: Int, stateSpinner: Spinner){
+    fun onCountrySelection(position: Int, stateSpinner: Spinner){
+        AppLog.e(RegisterViewModel.COUNTRY_API_TAG, "sdfsdfsdfdfgds")
         stateList.clear()
         stateList.addAll(countryList.value?.apiResponse?.get(position)?.available_regions as ArrayList<RegisterDataClass.State>)
         stateSpinner.setSelection(0)
+    }
+
+
+    fun onStateSelection(position: Int){
+        AppLog.e(RegisterViewModel.COUNTRY_API_TAG, "dsfdsfsdfsf")
+        cityList.clear()
+        callCityApi(stateList[position].id)
+    }
+
+    fun onCitySelection(){
+        AppLog.e(RegisterViewModel.COUNTRY_API_TAG,"sfsfsfsfs")
+        //callCityApi(stateList[position].id)
     }
 
     fun prepareMaskedAddress(address: MyAccountDataClass.Address?){
@@ -106,10 +125,12 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
 
             override fun onSuccess(cities: List<RegisterDataClass.City>?) {
                 cities?.run {
-
+                    cityList = cities.toMutableList()
+                    countryList.value = countryListApiResponse
                 }
             }
 
         })
     }
+
 }

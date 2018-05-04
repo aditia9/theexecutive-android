@@ -163,12 +163,11 @@
                         android:inputType="text|textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
-                <Spinner
+                <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/spinner_country"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:spinnerMode="dropdown"
                     android:entries="@{vm.countryList.value.apiResponse}"
                     app:selectedValue="@={vm.selectedCountry}"
                     android:padding="@dimen/ten_dp"
@@ -178,12 +177,11 @@
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintTop_toBottomOf="@id/til_address_2" />
 
-                <Spinner
+                <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/spinner_state"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:spinnerMode="dropdown"
                     android:entries="@{vm.stateList}"
                     app:selectedValue="@={vm.selectedState}"
                     android:padding="@dimen/ten_dp"
@@ -192,13 +190,14 @@
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintTop_toBottomOf="@id/spinner_country" />
 
-                <Spinner
+                <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/spinner_city"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:padding="@dimen/ten_dp"
-                    android:entries="@array/states_array"
+                    android:entries="@{vm.cityList}"
+                    app:selectedValue="@={vm.selectedCity}"
                     android:background="@drawable/spinner"
                     android:spinnerMode="dropdown"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
