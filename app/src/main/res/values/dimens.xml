@@ -66,5 +66,6 @@
     <dimen name="eighty_dp">80dp</dimen>
     <dimen name="four_hundred_dp">400dp</dimen>
     <dimen name="eighteen_dp">18dp</dimen>
+    <dimen name="notification_image_size">250dp</dimen>
 
 </resources>

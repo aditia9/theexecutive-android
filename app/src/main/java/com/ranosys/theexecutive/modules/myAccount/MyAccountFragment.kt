@@ -14,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
+import com.ranosys.theexecutive.modules.notification.NotificationFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -96,6 +97,10 @@ class MyAccountFragment: BaseFragment() {
                     when(option.title){
                         context.getString(R.string.news_letter_option) -> {
                             FragmentUtils.addFragment(context, NewsLetterFragment(),null, NewsLetterFragment::class.java.name, true )
+                        }
+
+                        context.getString(R.string.notifications) -> {
+                            FragmentUtils.addFragment(context, NotificationFragment(),null, NotificationFragment::class.java.name, true )
                         }
                     }
                 }

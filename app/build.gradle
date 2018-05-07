@@ -35,7 +35,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        debug{
+        debug {
             signingConfig signingConfigs.debugConfig
         }
     }
@@ -43,7 +43,7 @@ android {
         enabled = true
     }
 
-    flavorDimensions "client","server"
+    flavorDimensions "client", "server"
     productFlavors {
 
         productionClient {
@@ -141,14 +141,13 @@ dependencies {
         transitive = true;
     }
 
-
     //FCM
     compile "com.google.firebase:firebase-messaging:${rootProject.fireBaseVersion}"
 
-    compile 'com.google.firebase:firebase-core:15.0.0'
+    compile 'com.google.firebase:firebase-core:12.0.1'
 
     implementation group: 'com.zopim.android', name: 'sdk', version: '1.3.3.1'
-}
 
+}
 apply plugin: 'com.google.gms.google-services'
 

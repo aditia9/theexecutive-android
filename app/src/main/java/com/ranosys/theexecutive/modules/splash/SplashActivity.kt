@@ -66,11 +66,11 @@ class SplashActivity : BaseActivity() {
 
     }
 
-    private lateinit var redirectType: String
-    private lateinit var redirectionValue: String
-    private lateinit var redirectTitle: String
-    private lateinit var redirectURL: String
-    private lateinit var notificationId: String
+    private  var redirectType: String? = null
+    private  var redirectionValue: String ? = null
+    private  var redirectTitle: String ? = null
+    private  var redirectURL: String ? = null
+    private  var notificationId: String ? = null
 
     private fun dataFromNotification() {
         val extras = intent.extras

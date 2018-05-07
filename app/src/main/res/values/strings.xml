@@ -161,6 +161,5 @@
     <string name="view_all">View All</string>
     <string name="expand_image">Expand Icon</string>
     <string name="back">Back Icon</string>
-
-
+    <string name="notifications">Notifications</string>
 </resources>
