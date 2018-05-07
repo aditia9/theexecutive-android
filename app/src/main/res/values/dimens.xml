@@ -19,7 +19,6 @@
     <dimen name="one_dip">1dip</dimen>
     <dimen name="twenty_four_dp">24dp</dimen>
     <dimen name="twenty_two_sp">22sp</dimen>
-    <dimen name="fourteen_sp">14sp</dimen>
     <dimen name="thirty_six_dp">36dp</dimen>
     <dimen name="half_dip">.5dip</dimen>
     <dimen name="two_fifty_dp">250dp</dimen>
@@ -38,11 +37,12 @@
     <dimen name="twelve_dp">12dp</dimen>
     <dimen name="parent_category_image_height">350dp</dimen>
 
-
     <dimen name="two_sp">2sp</dimen>
     <dimen name="four_sp">4sp</dimen>
     <dimen name="eight_sp">8sp</dimen>
     <dimen name="ten_sp">10sp</dimen>
+    <dimen name="fourteen_sp">14sp</dimen>
+    <dimen name="fifteen_sp">15sp</dimen>
     <dimen name="sixteen_sp">16sp</dimen>
     <dimen name="twenty_sp">20sp</dimen>
     <dimen name="twentyfour_sp">24sp</dimen>

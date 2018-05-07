@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.WindowManager
 import com.ranosys.rtp.RunTimePermissionActivity
 import com.ranosys.theexecutive.R
@@ -33,6 +34,7 @@ open class BaseActivity: RunTimePermissionActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+       // changeStatusBarColor(R.color.white)
         requestedOrientation = if(Utils.isTablet(this)){
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }else{
@@ -117,7 +119,7 @@ open class BaseActivity: RunTimePermissionActivity(){
             val window = window
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = resources.getColor(color)
+            window.statusBarColor = ContextCompat.getColor(this,color)
         }
     }
 

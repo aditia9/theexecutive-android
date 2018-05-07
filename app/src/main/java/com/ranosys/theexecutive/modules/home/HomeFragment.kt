@@ -16,9 +16,12 @@ import com.facebook.FacebookSdk.getApplicationContext
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
+import com.ranosys.theexecutive.modules.category.CategoryFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.Utils
 import com.zopim.android.sdk.prechat.ZopimChatActivity
+import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -48,7 +51,11 @@ class HomeFragment : BaseFragment() {
         createTabIcons()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {
-
+                when(tab?.position) {
+                    0 -> {
+                        elv_parent_category.smoothScrollToPosition(0)
+                    }
+                }
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
@@ -91,12 +98,15 @@ class HomeFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 when(position){
                     0 -> {
+                        Utils.hideSoftKeypad(activity as Context)
                         fragmentPosition = 0
                         tabLayout.visibility = View.VISIBLE
                         tv_chat.visibility = View.VISIBLE
                         setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true, true)
                     }
                     1 -> {
+                        Utils.hideSoftKeypad(activity as Context)
+                        elv_parent_category.smoothScrollToPosition(0)
                         fragmentPosition = 1
                         tv_chat.visibility = View.GONE
                         val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
@@ -111,6 +121,8 @@ class HomeFragment : BaseFragment() {
                         }
                     }
                     2 -> {
+                        Utils.hideSoftKeypad(activity as Context)
+                        elv_parent_category.smoothScrollToPosition(0)
                         fragmentPosition = 2
                         tabLayout.visibility = View.VISIBLE
                         tv_chat.visibility = View.GONE

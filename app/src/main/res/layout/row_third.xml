@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="@dimen/ten_dp">
 
         <TextView
             android:id="@+id/rowThirdText"
@@ -19,8 +19,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:text="@{childData.name}"
-            android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="@dimen/eighteen_sp"
+            android:textAllCaps="true"
+            />
     </LinearLayout>
 
 </layout>

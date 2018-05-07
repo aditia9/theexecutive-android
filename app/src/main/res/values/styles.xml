@@ -6,19 +6,15 @@
         <item name="colorPrimary">@color/theme_black_color</item>
         <item name="colorPrimaryDark">@color/theme_black_color</item>
         <item name="colorAccent">@color/theme_accent_color</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
 
-    </style>
-
-    <style name="toolbar" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/toolBarColor</item>
-        <item name="colorPrimaryDark">@color/toolBarColor</item>
-        <item name="colorAccent">@color/toolBarColor</item>
-        <item name="android:longClickable">false</item>
-        <item name="android:selectable">false</item>
     </style>
 
     <style name="myAppTheme" parent="AppTheme">
@@ -28,6 +24,7 @@
         <item name="android:fontFamily">@font/opensans_regular</item>
         <item name="android:textSize">@dimen/text_size_regular</item>
         <item name="android:textColor">@color/theme_black_color</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="tilTheme" parent="myAppTheme">

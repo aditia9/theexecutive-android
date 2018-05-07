@@ -170,6 +170,7 @@
     <string name="forward_icon">Forward icon</string>
     <string name="one">1</string>
     <string name="product_out_of_stock">This product is out of stock.</string>
+    <string name="login_required_for_wishlist">Please login before adding items to your wish list.</string>
 
 
 </resources>
