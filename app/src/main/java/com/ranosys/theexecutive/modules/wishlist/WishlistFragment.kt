@@ -76,6 +76,9 @@ class WishlistFragment : BaseFragment() {
                 val response = apiResponse?.apiResponse
                 if (response is String) {
                     Toast.makeText(activity as Context, getString(R.string.add_to_cart_success_msg), Toast.LENGTH_SHORT).show()
+                    wishlistModelView?.wishlistResponse?.get()?.items?.removeAt(itemPosition)
+                    rv_wishlist.adapter.notifyDataSetChanged()
+                    callWishlistApi()
                 }
             }else {
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
@@ -97,6 +100,7 @@ class WishlistFragment : BaseFragment() {
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
                     R.id.img_bag -> {
+                        itemPosition = pos
                         callAddToBagItemFromWishlist(item?.id)
                     }
                     R.id.img_delete -> {
