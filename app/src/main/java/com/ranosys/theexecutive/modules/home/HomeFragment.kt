@@ -51,7 +51,11 @@ class HomeFragment : BaseFragment() {
         createTabIcons()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {
-
+                when(tab?.position) {
+                    0 -> {
+                        elv_parent_category.smoothScrollToPosition(0)
+                    }
+                }
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
