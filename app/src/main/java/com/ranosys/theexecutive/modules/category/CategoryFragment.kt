@@ -107,6 +107,7 @@ class CategoryFragment : BaseFragment() {
 
         elv_parent_category.setOnGroupClickListener { _, _, p2, _ ->
             if(categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.children_data?.size!! == 0){
+                elv_parent_category.smoothScrollToPosition(0)
                 val bundle = Bundle()
                 bundle.putInt(Constants.CATEGORY_ID, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.id!!)
                 bundle.putString(Constants.CATEGORY_NAME, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.name!!)
@@ -139,6 +140,7 @@ class CategoryFragment : BaseFragment() {
                             val query = et_search_home.text.toString()
                             et_search_home.setText("")
                             Utils.hideSoftKeypad(activity as Context)
+                            elv_parent_category.smoothScrollToPosition(0)
                             val bundle = Bundle()
                             bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, query)
                             FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
@@ -156,6 +158,7 @@ class CategoryFragment : BaseFragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if(v.text.toString().isEmpty().not()){
                     Utils.hideSoftKeypad(activity as Context)
+                    elv_parent_category.smoothScrollToPosition(0)
                     val bundle = Bundle()
                     bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, v.text.toString())
                     FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
@@ -190,7 +193,7 @@ class CategoryFragment : BaseFragment() {
     }
 
     private fun getCategories() {
-        showLoading()
+        //showLoading()
         categoryModelView?.getCategories()
     }
 
@@ -211,7 +214,7 @@ class CategoryFragment : BaseFragment() {
 
     private fun observeCategoryApiResponse() {
         categoryModelView?.mutualHomeResponse?.observe(this, Observer<ApiResponse<CategoryResponseDataClass>> { apiResponse ->
-            hideLoading()
+            //hideLoading()
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             if (response is CategoryResponseDataClass) {
 

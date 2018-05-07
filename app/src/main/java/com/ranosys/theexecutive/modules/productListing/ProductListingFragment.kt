@@ -300,6 +300,7 @@ class ProductListingFragment: BaseFragment() {
         val emptyList = ArrayList<ProductListingDataClass.Item>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
+                Utils.hideSoftKeypad(activity as Context)
                 ApiClient.client?.dispatcher()?.cancelAll()
                 mViewModel.isLoading = false
                 val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
@@ -444,8 +445,13 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
-                        filterOptionBinding.priceRangeBar.selectedMinValue = input
+                        try {
+                            val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
+                            filterOptionBinding.priceRangeBar.selectedMinValue = input
+                        }
+                        catch (e : NumberFormatException){
+                            AppLog.printStackTrace(e)
+                        }
 
                     }
                 }

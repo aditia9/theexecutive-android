@@ -84,7 +84,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/back"
-                    android:padding="@dimen/fifteen_dp"
+                    android:paddingTop="@dimen/fifteen_dp"
+                    android:paddingBottom="@dimen/fifteen_dp"
+                    android:paddingRight="@dimen/fifteen_dp"
                     />
 
                 <TextView

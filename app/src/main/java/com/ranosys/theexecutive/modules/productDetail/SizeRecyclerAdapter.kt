@@ -1,6 +1,7 @@
 package com.ranosys.theexecutive.modules.productDetail
 
 import AppLog
+import android.annotation.SuppressLint
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.graphics.Typeface
@@ -61,8 +62,9 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
 
     class Holder(var itemBinding: SizeViewLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
+        @SuppressLint("ResourceAsColor")
         fun bind(context: Context?, sizeView: ProductViewFragment.SizeView?, listener: OnItemClickListener?, position: Int, colorValue: String?, inStockList: MutableList<ProductViewFragment.MaxQuantity>?){
-            var priceList : List<ProductViewFragment.MaxQuantity>? = listOf<ProductViewFragment.MaxQuantity>()
+            var priceList : List<ProductViewFragment.MaxQuantity>? = listOf()
             var inStock : Boolean? = true
             itemBinding?.sizeView = sizeView
             if(sizeView?.isSelected!!){
@@ -86,7 +88,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                     itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
                     itemBinding?.tvSize?.isEnabled = false
                     itemBinding?.tvSize?.isClickable = false
-                   // itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
+                    itemBinding?.tvSize?.setTextColor(R.color.divider_color)
                     itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
 
                 }

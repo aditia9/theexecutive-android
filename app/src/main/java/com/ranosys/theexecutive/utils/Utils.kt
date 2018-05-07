@@ -53,7 +53,7 @@ object Utils {
         }
 
     fun isValidEmail(email: String?): Boolean {
-       // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
+        // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
         val p = Pattern.compile( "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
         val m = p.matcher(email)
         return m.matches()
@@ -242,22 +242,40 @@ object Utils {
     }
 
     fun getFromattedPrice(price: String): String {
-        val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
-        if(price.isNotBlank()){
-            val p = price.toDouble()
-            //val newPrice = numberFormatter.format(p).replace(",",".")
-            return numberFormatter.format(p)
-        }else{
-            return price
+        var newPrice = ""
+        try {
+            val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
+            if (price.isNotBlank()) {
+                val p = price.toDouble()
+                newPrice = numberFormatter.format(p).replace(",", ".")
+            } else {
+                newPrice = price
+            }
+        }catch (e : NumberFormatException){
+            AppLog.printStackTrace(e)
         }
+        return newPrice
+
     }
 
     fun getDoubleFromFormattedPrice(price: String): Double {
-        return price.replace(",", "").toDouble()
+        var newPrice = 0.0
+        try {
+            newPrice = price.replace(",", "").toDouble()
+        }catch (e : NumberFormatException){
+            AppLog.printStackTrace(e)
+        }
+        return newPrice
     }
 
     fun getStringFromFormattedPrice(price: String): String {
-        return price.replace(",", "")
+        var newPrice = ""
+        try {
+            newPrice = price.replace(",", "")
+        }catch (e : NumberFormatException){
+            AppLog.printStackTrace(e)
+        }
+        return newPrice
     }
 
     @SuppressLint("ServiceCast")
