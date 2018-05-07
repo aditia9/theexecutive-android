@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
     <data>
@@ -29,7 +30,7 @@
                 android:text="@string/select_size"
                 android:theme="@style/sub_heading_theme"
                 android:layout_marginTop="@dimen/thirty_dp"
-                android:layout_marginLeft="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/twenty_dp"
                 />
 
             <TextView
@@ -39,9 +40,9 @@
                 android:text="@string/size_guide"
                 android:theme="@style/sub_heading_theme"
                 android:layout_marginTop="@dimen/thirty_dp"
-                android:layout_marginRight="@dimen/twenty_dp"
-                android:layout_alignParentRight="true"
-                android:drawableLeft="@drawable/size_info"
+                android:layout_marginEnd="@dimen/twenty_dp"
+                android:layout_alignParentEnd="true"
+                android:drawableStart="@drawable/size_info"
                 android:drawablePadding="@dimen/five_dp"
                 android:gravity="center_vertical"
                 />
@@ -52,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_select_size"
                 android:layout_marginTop="@dimen/ten_dp"
-                android:layout_marginLeft="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/twenty_dp"
                 >
 
             </android.support.v7.widget.RecyclerView>
@@ -64,7 +65,7 @@
                 android:text="@string/select_quantity"
                 android:theme="@style/sub_heading_theme"
                 android:layout_marginTop="@dimen/thirty_dp"
-                android:layout_marginLeft="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/twenty_dp"
                 android:layout_below="@+id/rv_size_view"
                 />
 
@@ -74,8 +75,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_below="@+id/tv_select_quantity"
-                android:layout_marginTop="@dimen/twenty_dp"
-                android:layout_marginLeft="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/twenty_four_dp"
                 android:gravity="center"
                 >
 
@@ -86,16 +86,17 @@
                     android:src="@drawable/back"
                     android:paddingTop="@dimen/fifteen_dp"
                     android:paddingBottom="@dimen/fifteen_dp"
-                    android:paddingRight="@dimen/fifteen_dp"
-                    />
+                    android:paddingEnd="@dimen/thirty_dp"
+                    tools:ignore="RtlSymmetry"
+                    android:contentDescription="@string/back"/>
 
                 <TextView
                     android:id="@+id/tv_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:text="@string/one"
                     android:textStyle="bold"
-                    android:layout_marginLeft="@dimen/thirty_dp"
+                    android:layout_marginStart="@dimen/fifteen_dp"
                     />
 
                 <ImageView
@@ -103,8 +104,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/forward"
-                    android:layout_marginLeft="@dimen/thirty_dp"
+                    android:layout_marginStart="@dimen/thirty_dp"
                     android:padding="@dimen/fifteen_dp"
+                    android:contentDescription="@string/forward_icon"
                     />
 
 
@@ -116,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_layout"
                 android:background="@color/white"
-                android:layout_marginTop="@dimen/twenty_dp"
+                android:layout_marginTop="@dimen/ten_dp"
                 android:padding="@dimen/fifteen_dp"
                 >
 
@@ -127,7 +129,7 @@
                     android:text="@string/done"
                     android:padding="@dimen/ten_dp"
                     android:background="@drawable/button_border"
-                    android:layout_marginLeft="@dimen/five_dp"
+                    android:layout_marginStart="@dimen/five_dp"
                     />
 
                 <TextView
@@ -138,6 +140,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/twenty_dp"
                     android:textStyle="bold"
+                    android:textSize="@dimen/fourteen_sp"
                     />
 
             </RelativeLayout>

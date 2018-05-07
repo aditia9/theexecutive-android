@@ -15,7 +15,11 @@ import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.telephony.TelephonyManager
+import android.text.SpannableStringBuilder
 import android.text.TextUtils
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StrikethroughSpan
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
@@ -294,5 +298,21 @@ object Utils {
             }
         }
         return IMEI
+    }
+
+    fun getDisplayPrice(configurePrice: String, configureSpecialPrice: String): SpannableStringBuilder {
+        return if(configurePrice.toDouble() > configureSpecialPrice.toDouble() && !configureSpecialPrice.equals(Constants.ZERO)){
+            val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
+            val specialP = "IDR\u00A0" + Utils.getFromattedPrice(configureSpecialPrice)
+            val displayPrice = "$normalP $specialP"
+            SpannableStringBuilder(displayPrice).apply {
+                setSpan(StrikethroughSpan(), 0, normalP.length, 0)
+                setSpan(ForegroundColorSpan(Color.RED), normalP.length, displayPrice.length, 0)
+                setSpan(RelativeSizeSpan(1.3f), normalP.length, displayPrice.length, 0)
+            }
+        }else{
+            val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
+            SpannableStringBuilder(normalP)
+        }
     }
 }

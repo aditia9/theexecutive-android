@@ -46,7 +46,7 @@ class HomeFragment : BaseFragment() {
         val homeViewPager = HomeViewPager(childFragmentManager)
         viewpager.setPagingEnabled(false)
         viewpager.adapter = homeViewPager
-        viewpager.offscreenPageLimit = 2
+        viewpager.offscreenPageLimit = 0
         tabLayout.setupWithViewPager(viewpager)
         createTabIcons()
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
@@ -126,7 +126,7 @@ class HomeFragment : BaseFragment() {
                         fragmentPosition = 2
                         tabLayout.visibility = View.VISIBLE
                         tv_chat.visibility = View.GONE
-                        setToolBarParams(getString(R.string.wishlist), 0, "", 0, false, 0, false)
+                        setToolBarParams(getString(R.string.wishlist), 0, "", R.drawable.back, true, 0, false)
                     }
                 }
             }

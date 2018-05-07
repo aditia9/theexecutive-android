@@ -9,16 +9,12 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.StrikethroughSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -162,7 +158,7 @@ class ProductViewFragment : BaseFragment() {
             if (attributes?.isNotEmpty()!!) {
                 specialPrice = attributes[0].value.toString()
             }
-            val ss = getDisplayPrice(productItemViewModel.productItem?.price!!, specialPrice.toString())
+            val ss = Utils.getDisplayPrice(productItemViewModel.productItem?.price!!, specialPrice.toString())
             tv_price.text = ss
         }
 
@@ -356,7 +352,7 @@ class ProductViewFragment : BaseFragment() {
                                 configureSpecialPrice = attributes[0].value.toString()
                             }
 
-                            val ss = getDisplayPrice(configurePrice, configureSpecialPrice)
+                            val ss = Utils.getDisplayPrice(configurePrice, configureSpecialPrice)
                             childProductsMap[colorValue] = ImagesWithPrice(ss, it.media_gallery_entries)
 
                         }
@@ -372,7 +368,7 @@ class ProductViewFragment : BaseFragment() {
                         if(sp.isNotEmpty()){
                             configSpecialPrice = sp[0].value.toString()
                         }
-                        val ss = getDisplayPrice(configSimplePrice, configSpecialPrice)
+                        val ss = Utils.getDisplayPrice(configSimplePrice, configSpecialPrice)
                         maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty,
                                 it.extension_attributes.stock_item.is_in_stock, ss))
                     }catch (e : Exception){
@@ -561,22 +557,6 @@ class ProductViewFragment : BaseFragment() {
             productItemViewModel.callAddToWishListApi(colorAttrId, colorValue, sizeAttrId, sizeValue)
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
-        }
-    }
-
-    private fun getDisplayPrice(configurePrice: String, configureSpecialPrice: String): SpannableStringBuilder {
-        return if(configurePrice.toDouble() > configureSpecialPrice.toDouble() && !configureSpecialPrice.equals(Constants.ZERO)){
-            val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
-            val specialP = "IDR\u00A0" + Utils.getFromattedPrice(configureSpecialPrice)
-            val displayPrice = "$normalP $specialP"
-            SpannableStringBuilder(displayPrice).apply {
-                setSpan(StrikethroughSpan(), 0, normalP.length, 0)
-                setSpan(ForegroundColorSpan(Color.RED), normalP.length, displayPrice.length, 0)
-                setSpan(RelativeSizeSpan(1.1f), normalP.length, displayPrice.length, 0)
-            }
-        }else{
-            val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
-            SpannableStringBuilder(normalP)
         }
     }
 
