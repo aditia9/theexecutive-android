@@ -162,11 +162,14 @@
     <string name="bag_icon">Bag Icon</string>
     <string name="delete_icon">Delete Icon</string>
     <string name="remove_item_text">Are you sure you want to remove item from your wishlist?</string>
-    <string name="no_item">No item available</string>
+    <string name="no_item">No items available</string>
 
     <string name="view_all">View All</string>
     <string name="expand_image">Expand Icon</string>
     <string name="back">Back Icon</string>
+    <string name="forward_icon">Forward icon</string>
+    <string name="one">1</string>
+    <string name="product_out_of_stock">This product is out of stock.</string>
 
 
 </resources>

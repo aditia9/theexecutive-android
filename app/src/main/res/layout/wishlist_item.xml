@@ -129,6 +129,23 @@
             android:contentDescription="@string/delete_icon"
             />
 
+        <TextView
+            android:id="@+id/tv_out_of_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/delete"
+            android:padding="@dimen/six_dp"
+            android:layout_marginTop="@dimen/sixteen_dp"
+            android:layout_marginStart="@dimen/ten_dp"
+            app:layout_constraintStart_toEndOf="@id/img_delete"
+            app:layout_constraintBottom_toBottomOf="@+id/img_bag"
+            android:contentDescription="@string/delete_icon"
+            android:text="@string/out_of_stock"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="gone"
+            android:textSize="@dimen/twelve_sp"
+            />
+
         <View
             android:layout_width="@dimen/match_constraint"
             android:layout_height="@dimen/one_dp"

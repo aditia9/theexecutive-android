@@ -60,6 +60,14 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
 
             itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString())
 
+            item?.stock_item?.run {
+                if(is_in_stock){
+                    itemBinding?.tvOutOfStock?.visibility = View.GONE
+                }else{
+                    itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
+                }
+            }
+
             item?.options?.run{
                 if(item.options.isNotEmpty()){
                     itemBinding?.layoutColorSize?.visibility = View.VISIBLE

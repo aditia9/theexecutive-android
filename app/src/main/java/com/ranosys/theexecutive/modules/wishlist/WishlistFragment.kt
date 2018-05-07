@@ -100,8 +100,12 @@ class WishlistFragment : BaseFragment() {
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
                     R.id.img_bag -> {
-                        itemPosition = pos
-                        callAddToBagItemFromWishlist(item?.id)
+                        if(item?.stock_item?.is_in_stock!!) {
+                            itemPosition = pos
+                            callAddToBagItemFromWishlist(item.id)
+                        }else{
+                            Toast.makeText(activity, getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
+                        }
                     }
                     R.id.img_delete -> {
                         Utils.showDialog(context, getString(R.string.remove_item_text),
