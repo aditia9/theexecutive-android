@@ -54,8 +54,8 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                 var countryCode = ""
                 var mobileNo = ""
                 if(defaultAdd?.telephone?.contains("-") == true){
-                    countryCode = defaultAdd.telephone.split("-")[0]
-                    mobileNo = defaultAdd.telephone.split("-")[1]
+                    countryCode = defaultAdd.telephone!!.split("-")[0]
+                    mobileNo = defaultAdd.telephone!!.split("-")[1]
                 }else{
                     mobileNo = defaultAdd?.telephone ?: ""
                 }
@@ -113,7 +113,7 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                 customer = userInfoApiResponse.value?.apiResponse as MyAccountDataClass.UserInfoResponse
         )
 
-        updateInfoRequest.customer.addresses?.single { it.id == updateInfoRequest.customer.default_shipping }?.telephone = if(maskedUserInfo.get()._countryCode.isNullOrEmpty().not()) "${maskedUserInfo.get()._countryCode}-${maskedUserInfo.get()._mobile}"
+        updateInfoRequest.customer.addresses?.single { it?.id == updateInfoRequest.customer.default_shipping }?.telephone = if(maskedUserInfo.get()._countryCode.isNullOrEmpty().not()) "${maskedUserInfo.get()._countryCode}-${maskedUserInfo.get()._mobile}"
             else "${maskedUserInfo.get()._mobile}"
 
 

@@ -18,20 +18,21 @@ import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.register.RegisterViewModel
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
+import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import java.util.*
 
 /**
  * @Details
  * @Author Ranosys Technologies
- * @Date 07-May-2018
+ * @Date 03-May-2018
  */
-class AddAddressViewModel(application: Application): BaseViewModel(application) {
+class EditAddressViewModel(application: Application): BaseViewModel(application) {
 
-    var countryListApiResponse : MutableLiveData<ApiResponse<MutableList<RegisterDataClass.Country>>> = MutableLiveData()
-    var countryList : ObservableArrayList<RegisterDataClass.Country> = ObservableArrayList()
-    var stateList : ObservableArrayList<RegisterDataClass.State> = ObservableArrayList()
-    var cityList : ObservableArrayList<RegisterDataClass.City> = ObservableArrayList()
+    var countryListApiResponse :MutableLiveData<ApiResponse<MutableList<RegisterDataClass.Country>>> = MutableLiveData()
+    var countryList :ObservableArrayList<RegisterDataClass.Country> = ObservableArrayList()
+    var stateList :ObservableArrayList<RegisterDataClass.State> = ObservableArrayList()
+    var cityList :ObservableArrayList<RegisterDataClass.City> = ObservableArrayList()
     var maskedAddress: MyAccountDataClass.MaskedUserInfo? = null
     var firstNameError: ObservableField<String> = ObservableField()
     var lastNameError: ObservableField<String> = ObservableField()
@@ -40,7 +41,10 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
     var postalCodeError: ObservableField<String> = ObservableField()
     var updateAddressApiResponse : MutableLiveData<ApiResponse<MyAccountDataClass.UserInfoResponse>> = MutableLiveData()
 
-    val cityHint: RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
+    var selectedAddess: MyAccountDataClass.Address? = null
+
+
+    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
 
 
 
@@ -63,13 +67,11 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
                 if(null != countries && countries.isNotEmpty()){
 
                     apiResponse.apiResponse = countries.toMutableList()
+                    stateList.addAll(apiResponse.apiResponse!!.single { it.full_name_english == maskedAddress?.country }.available_regions.toMutableList())
                     countryList.addAll(countries.toMutableList())
 
-                    if(countryList.isNotEmpty()){
-                        stateList.addAll(apiResponse.apiResponse!![0].available_regions)
-                        if(stateList.isNotEmpty()){
-                            callCityApi(stateList[0].id)
-                        }
+                    if((stateList.filter { it.name == maskedAddress?.state }).isNotEmpty()){
+                        callCityApi(stateList.single { it.name == maskedAddress?.state }.id)
                     }
 
                     countryListApiResponse.value = apiResponse
@@ -92,27 +94,36 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
     }
 
 
-    fun prepareMaskedAddress(){
-
-        maskedAddress = MyAccountDataClass.MaskedUserInfo(
-                _id = "",
-                _firstName = "",
-                _lastName = "",
-                _email = "",
-                _country = "",
-                _city = "",
-                _state = "",
-                _streedAdd1 = "",
-                _streedAdd2 = "",
-                _mobile = "",
-                _postalCode = "",
-                _countryCode = ""
+    fun prepareMaskedAddress(address: MyAccountDataClass.Address?){
+        selectedAddess = address
+        var countryCode = ""
+        var mobileNo = ""
+        if(address?.telephone?.contains("-") == true){
+            countryCode = address.telephone!!.split("-")[0]
+            mobileNo = address.telephone!!.split("-")[1]
+        }else{
+            mobileNo = address?.telephone ?: ""
+        }
+        val country = GlobalSingelton.instance?.storeList?.single { it.code.toString() == address?.country_id}
+        maskedAddress =  MyAccountDataClass.MaskedUserInfo(
+                _id = address?.id,
+                _firstName = address?.firstname,
+                _lastName = address?.lastname,
+                _email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL),
+                _country = country?.name,
+                _city = address?.city,
+                _state = address?.region?.region,
+                _streedAdd1 = address?.street?.get(0),
+                _streedAdd2 = if(address?.street?.size!! > 1)address.street.get(1) else "",
+                _mobile = mobileNo,
+                _postalCode = address.postcode,
+                _countryCode = countryCode
         )
 
     }
 
     private fun callCityApi(stateCode: String) {
-        AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>> {
+        AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>>{
             override fun onException(error: Throwable) {
                 Utils.printLog(RegisterViewModel.CITY_API_TAG, RegisterViewModel.ERROR_TAG)
             }
@@ -178,14 +189,20 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
         return isValid
     }
 
-    fun addAddress() {
-
+    fun editAddress() {
+        //get user info from global singleton
         var userInfo = GlobalSingelton.instance?.userInfo
-        var mobile = "${maskedAddress?.countryCode}-${maskedAddress?.mobile}"
+        //add address
+        var mobile = if(maskedAddress?.countryCode.isNullOrBlank().not()){
+            "${maskedAddress?.countryCode}-${maskedAddress?.mobile}"
+        }else{
+            "${maskedAddress?.mobile}"
+        }
         var selectedState = stateList.single { it.name == maskedAddress?.state }
 
-        var newAddress = userInfo?.addresses!![0].copy(
-                id = null,
+        val pos = userInfo?.addresses?.indexOf(selectedAddess)
+
+        var newAddress = selectedAddess?.copy(
                 firstname = maskedAddress?.firstName,
                 lastname = maskedAddress?.lastName,
                 street = listOf(maskedAddress?.streedAdd1,maskedAddress?.streedAdd2),
@@ -196,21 +213,20 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
                 region_id = if(selectedState.id.isNullOrBlank().not()) selectedState.id else "",
                 region = RegisterDataClass.Region(region_code = selectedState.code,
                         region_id = if(!TextUtils.isEmpty(selectedState.id)) selectedState.id.toInt() else 1,
-                        region = selectedState.name),
-
-                default_billing = null,
-                default_shipping = null
+                        region = selectedState.name)
 
         )
 
-        userInfo.addresses?.add(newAddress)
+
+        userInfo?.addresses?.remove(selectedAddess!!)
+        userInfo?.addresses?.add(newAddress!!)
 
         val editAddressRequest = MyAccountDataClass.UpdateInfoRequest(
-                customer = userInfo
+                customer = userInfo!!
         )
 
         val apiResponse = ApiResponse<MyAccountDataClass.UserInfoResponse>()
-        AppRepository.updateUserInfo(editAddressRequest, object: ApiCallback<MyAccountDataClass.UserInfoResponse> {
+        AppRepository.updateUserInfo(editAddressRequest, object: ApiCallback<MyAccountDataClass.UserInfoResponse>{
             override fun onException(error: Throwable) {
                 AppLog.e("Update Information API : ${error.message}")
                 apiResponse.error = error.message

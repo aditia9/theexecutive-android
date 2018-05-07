@@ -10,12 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_address_book.*
+import kotlinx.android.synthetic.main.toolbar_layout.view.*
 
 /**
  * @Details
@@ -93,6 +95,9 @@ class AddressBookFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
+            addAddress()
+        }
         setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
     }
 
@@ -111,9 +116,12 @@ class AddressBookFragment: BaseFragment() {
     }
 
     private fun editAddress(addressPosition: Int) {
-        //todo - move to add address screen with address
-        val addAddressFragment = AddAddressFragment.getInstance(addressList?.get(addressPosition))
-        FragmentUtils.addFragment(context, addAddressFragment,null, AddAddressFragment::class.java.name, true )
+        val editAddressFragment = EditAddressFragment.getInstance(addressList?.get(addressPosition))
+        FragmentUtils.addFragment(context, editAddressFragment,null, EditAddressFragment::class.java.name, true )
+    }
+
+    private fun addAddress() {
+        FragmentUtils.addFragment(context, AddAddressFragment(),null, AddAddressFragment::class.java.name, true )
     }
 
     private fun removeAddress(addressPosition: Int) {

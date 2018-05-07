@@ -36,20 +36,20 @@ class MyAccountDataClass {
     )
 
     data class Address(
-            var id: String = "",
-            var customer_id: String = "",
-            val region: RegisterDataClass.Region,
-            val region_id: String,
-            val country_id: String,
-            val street: List<String>,
-            var telephone: String,
-            val postcode: String,
-            val city: String,
-            val prefix: String = "",
-            val firstname: String,
-            val lastname: String,
-            val default_shipping: Boolean,
-            val default_billing: Boolean
+            var id: String? = "",
+            var customer_id: String? = "",
+            val region: RegisterDataClass.Region?,
+            val region_id: String?,
+            val country_id: String?,
+            val street: List<String?>?,
+            var telephone: String?,
+            val postcode: String?,
+            val city: String?,
+            val prefix: String? = "",
+            val firstname: String?,
+            val lastname: String?,
+            val default_shipping: Boolean? = null,
+            val default_billing: Boolean? = null
     )
 
     data class MaskedUserInfo(

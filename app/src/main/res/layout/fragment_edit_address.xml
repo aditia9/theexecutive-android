@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="com.ranosys.theexecutive.modules.myAccount.AddAddressViewModel"/>
+            type="com.ranosys.theexecutive.modules.myAccount.EditAddressViewModel"/>
         <variable
             name="address"
             type="com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass.MaskedUserInfo"/>
@@ -232,14 +232,14 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/add_address"
+                    android:id="@+id/edit_address"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/twenty_four_dp"
                     android:layout_marginRight="@dimen/twenty_four_dp"
                     android:layout_marginTop="@dimen/forty_dp"
                     android:background="@drawable/black_button_bg"
-                    android:text="Add"
+                    android:text="Edit"
                     android:theme="@style/button_theme"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"

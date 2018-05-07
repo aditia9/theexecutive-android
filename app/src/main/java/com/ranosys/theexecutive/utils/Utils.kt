@@ -283,8 +283,18 @@ object Utils {
 
     }
 
+    fun getCountryId(name: String?): String{
+        return GlobalSingelton.instance?.storeList?.single { it.name == name }.let { it?.code } ?: ""
+
+    }
+
     fun getDefaultAddress(): MyAccountDataClass.Address?{
         val info = GlobalSingelton.instance?.userInfo
-        return info?.addresses?.single { it.id == info.default_shipping }
+        if(info?.default_shipping.isNullOrBlank().not()){
+            return info?.addresses?.single { it?.id == info.default_shipping }
+        }else{
+            return null
+        }
+
     }
 }

@@ -38,7 +38,6 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
             override fun onSuccess(t: MyAccountDataClass.UserInfoResponse?) {
                 //update info saved at singleton
                 GlobalSingelton.instance?.userInfo = t
-                val defaultAdd = t?.addresses?.single { it.id == t.default_shipping }
                 apiResponse.apiResponse = t?.addresses?.toMutableList()
                 addressList.value = apiResponse
             }

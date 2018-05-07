@@ -13,6 +13,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
+import com.ranosys.theexecutive.modules.myAccount.AddressBookFragment
 import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
@@ -29,11 +30,12 @@ import com.zopim.android.sdk.api.ZopimChat
 class DashBoardActivity: BaseActivity() {
 
     lateinit var webPagesDialog: Dialog
+    lateinit var toolbarBinding : ActivityDashboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
-        toolbarBinding?.toolbarViewModel = toolbarViewModel
+        toolbarBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+        toolbarBinding.toolbarViewModel = toolbarViewModel
 
         //initialize Zendesk chat setup
         setUpZendeskChat()
@@ -80,6 +82,9 @@ class DashBoardActivity: BaseActivity() {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         if(fragment is ProductDetailFragment) {
                             (fragment as ProductDetailFragment).onResume()
+                        }
+                        if(fragment is AddressBookFragment) {
+                            (fragment as AddressBookFragment).onResume()
                         }
                     }
                 }
