@@ -22,5 +22,7 @@
     <color name="transparent_white">#90ffffff</color>
     <color name="transparent_bottom_sheet_color">#CCFFFFFF</color>
 
+    <color name="bottom_sheet_btn">#2A6577</color>
+
 
 </resources>

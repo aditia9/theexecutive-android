@@ -1,153 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.ranosys.theexecutive.modules.checkout.CheckoutViewModel"/>
+    </data>
+
+
+<android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="@dimen/match_constraint"
-        android:fillViewport="true"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.constraint.Guideline
-                android:id="@+id/guideline_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl_inside_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <android.support.constraint.Guideline
-                android:id="@+id/guideline_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
-
-
-            <View
-                android:id="@+id/view_above"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="1dp"
-                android:background="@color/black"
-                android:layout_marginTop="@dimen/sixteen_dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_shipping"
-              />
-
-            <TextView
-                android:id="@+id/tv_shipping"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/shipping_address"
-                android:textSize="@dimen/eighteen_sp"
-                android:layout_marginTop="@dimen/ten_dp"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <RelativeLayout
-                android:id="@+id/relative_box"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintBottom_toBottomOf="@+id/view_below"
-                app:layout_constraintTop_toTopOf="@+id/view_above">
-
-                <TextView
-                    android:id="@+id/txt_name"
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="John Doe"
-                    android:layout_marginTop="@dimen/ten_sp"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
+
+                <TextView
+                    android:id="@+id/tv_shipping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="Shipping Address"
+                    android:textSize="@dimen/eighteen_sp"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/view_above"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/one_dp"
+                    android:layout_marginTop="@dimen/sixteen_dp"
+                    android:background="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_shipping" />
+
+                <RelativeLayout
+                    android:id="@+id/relative_box"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/twenty_four_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_above">
+
+                    <TextView
+                        android:id="@+id/txt_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/five_dp"
+                        android:text="John Doe"
+                        android:textSize="@dimen/eighteen_sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txt_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txt_name"
+                        android:layout_marginTop="@dimen/eight_dp"
+                        android:maxLines="2"
+                        android:text="Supropto 73, Jalan Cilaki Bandung 40115 Indonesia jhgjhghghgjh"
+                        android:textSize="@dimen/fourteen_sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txt_address"
+                        android:layout_marginTop="@dimen/ten_dp"
+                        android:text="+62 2345678912"
+                        android:textSize="@dimen/fourteen_sp" />
+
+                    <ImageView
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginTop="@dimen/ten_dp"
+                        android:src="@drawable/forward" />
+
+                </RelativeLayout>
+
+                <View
+                    android:id="@+id/view_below"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/one_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:background="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/relative_box" />
+
+                <TextView
+                    android:id="@+id/txt_items"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/twenty_four_dp"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text="Items"
+                    android:textSize="@dimen/twenty_sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_below" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="170dp"
+                    android:layout_marginTop="@dimen/ten_dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/txt_items" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_shipping_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_view">
+
+                    <TextView
+                        android:id="@+id/sub_item"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/twelve_dp"
+                        android:layout_toLeftOf="@+id/img_expand_collapse"
+                        android:padding="@dimen/sixteen_dp"
+                        android:text="Shipping Method"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/eighteen_sp" />
+
+                    <ImageView
+                        android:id="@+id/img_expand_collapse"
+                        android:layout_width="@dimen/twelve_dp"
+                        android:layout_height="@dimen/twelve_dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/twenty_four_dp"
+                        android:layout_marginRight="@dimen/ten_dp"
+                        android:src="@drawable/forward" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_shipping_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/ten_dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="@dimen/two_dp"
+                    app:cardElevation="@dimen/one_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rl_shipping_method">
+
+                    <LinearLayout
+                        android:id="@+id/ll_inside_cv_shipping_method"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/ten_dp"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/cb_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <CheckBox
+                            android:id="@+id/cb_two"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <CheckBox
+                            android:id="@+id/cb_three"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <CheckBox
+                            android:id="@+id/cb_four"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <RelativeLayout
+                    android:id="@+id/rl_payment_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cv_shipping_method">
+
+                    <TextView
+                        android:id="@+id/sub_item1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/twelve_dp"
+                        android:layout_toLeftOf="@+id/img_expand_collapse1"
+                        android:padding="@dimen/sixteen_dp"
+                        android:text="Payment Method"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/eighteen_sp" />
+
+                    <ImageView
+                        android:id="@+id/img_expand_collapse1"
+                        android:layout_width="@dimen/twelve_dp"
+                        android:layout_height="@dimen/twelve_dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/twenty_four_dp"
+                        android:layout_marginRight="@dimen/ten_dp"
+                        android:src="@drawable/forward" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_payment_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/ten_dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="@dimen/two_dp"
+                    app:cardElevation="@dimen/one_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rl_payment_method">
+
+                    <LinearLayout
+                        android:id="@+id/ll_inside_cv_payment_method"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/ten_dp"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/cb_one1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <CheckBox
+                            android:id="@+id/cb_two1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <CheckBox
+                            android:id="@+id/cb_three1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <CheckBox
+                            android:id="@+id/cb_four1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+
+                <ImageView
+                    android:id="@+id/img_bottom_sheet"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:src="@drawable/dropdown"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/cv_payment_method" />
+
+
+                <TextView
+                    android:id="@+id/tv_total_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:text="Total IDR 299.800"
                     android:textSize="@dimen/sixteen_sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_bottom_sheet" />
 
-                <TextView
-                    android:id="@+id/txt_address"
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/btn_pay"
+                    android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_name"
-                    android:maxLines="2"
-                    android:text="Supropto 73, Jalan Cilaki Bandung 40115 Indonesia" />
+                    android:layout_marginBottom="@dimen/thirty_dp"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:background="@color/black"
+                    android:text="confirm order &amp; pay now"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/tv_total_amount" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_address"
-                    android:layout_marginBottom="@dimen/ten_dp"
-                    android:text="+62 2345678912" />
+            </android.support.constraint.ConstraintLayout>
 
-                <TextView
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/forward" />
+        </android.support.v4.widget.NestedScrollView>
 
-            </RelativeLayout>
-            <View
-                android:id="@+id/view_below"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="1dp"
-                android:background="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/relative_box"/>
+    </android.support.constraint.ConstraintLayout>
 
-           <TextView
-               android:id="@+id/txt_items"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="Items"
-               android:textSize="@dimen/twenty_sp"
-               android:layout_marginTop="@dimen/ten_dp"
-               app:layout_constraintTop_toBottomOf="@id/view_below"
-               app:layout_constraintStart_toStartOf="@id/guideline_left" />
+    <include layout="@layout/pay_amount_detail_bottom_sheet" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="200dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/twenty_dp"
-                tools:listitem="@layout/item_count"
-                app:layout_constraintTop_toBottomOf="@id/txt_items"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right">
-
-            </android.support.v7.widget.RecyclerView>
-
-
-            <ExpandableListView
-                android:id="@+id/elv_parent_category"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:divider="@null"
-                android:layout_marginTop="@dimen/sixteen_dp"
-                android:scrollbars="none"
-                android:transcriptMode="disabled"
-                android:childDivider="@null"
-                android:animateLayoutChanges="true"
-                android:groupIndicator="@null"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recycler_view"
-                >
-
-            </ExpandableListView>
-
-        </android.support.constraint.ConstraintLayout>
-    </ScrollView>
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>
+</layout>
