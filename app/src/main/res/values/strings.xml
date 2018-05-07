@@ -161,6 +161,7 @@
     <string name="view_all">View All</string>
     <string name="expand_image">Expand Icon</string>
     <string name="back">Back Icon</string>
+    <string name="login_required_for_wishlist">Please login before adding items to your wish list.</string>
 
 
 </resources>
