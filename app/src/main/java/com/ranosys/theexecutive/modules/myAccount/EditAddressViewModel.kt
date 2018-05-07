@@ -191,7 +191,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
 
     fun editAddress() {
         //get user info from global singleton
-        var userInfo = GlobalSingelton.instance?.userInfo
+        var userInfo = GlobalSingelton.instance?.userInfo?.copy()
         //add address
         var mobile = if(maskedAddress?.countryCode.isNullOrBlank().not()){
             "${maskedAddress?.countryCode}-${maskedAddress?.mobile}"

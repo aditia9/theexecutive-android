@@ -47,6 +47,11 @@ class AddressBookAdapter(var addressList: MutableList<MyAccountDataClass.Address
                     action(view.id, position)
                 }
 
+                itemBinding.chkDefault.setOnClickListener {view ->
+                    action(view.id, position)
+
+                }
+
             }
         }
 

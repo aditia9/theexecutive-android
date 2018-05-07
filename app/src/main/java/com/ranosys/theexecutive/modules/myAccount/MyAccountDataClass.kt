@@ -18,8 +18,8 @@ class MyAccountDataClass {
     data class UserInfoResponse(
             val id: Int?,
             val group_id: Int?,
-            val default_billing: String?,
-            val default_shipping: String?,
+            var default_billing: String?,
+            var default_shipping: String?,
             val created_at: String?,
             val updated_at: String?,
             val created_in: String?,
@@ -48,8 +48,8 @@ class MyAccountDataClass {
             val prefix: String? = "",
             val firstname: String?,
             val lastname: String?,
-            val default_shipping: Boolean? = null,
-            val default_billing: Boolean? = null
+            var default_shipping: Boolean? = null,
+            var default_billing: Boolean? = null
     )
 
     data class MaskedUserInfo(

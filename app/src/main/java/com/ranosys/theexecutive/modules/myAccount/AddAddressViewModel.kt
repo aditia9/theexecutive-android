@@ -180,7 +180,7 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
 
     fun addAddress() {
 
-        var userInfo = GlobalSingelton.instance?.userInfo
+        var userInfo = GlobalSingelton.instance?.userInfo?.copy()
         var mobile = "${maskedAddress?.countryCode}-${maskedAddress?.mobile}"
         var selectedState = stateList.single { it.name == maskedAddress?.state }
 

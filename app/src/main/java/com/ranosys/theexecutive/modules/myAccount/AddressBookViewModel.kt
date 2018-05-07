@@ -8,6 +8,7 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.utils.GlobalSingelton
+import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Details
@@ -17,6 +18,7 @@ import com.ranosys.theexecutive.utils.GlobalSingelton
 class AddressBookViewModel(application: Application): BaseViewModel(application) {
     val addressList: MutableLiveData<ApiResponse<MutableList<MyAccountDataClass.Address>>> = MutableLiveData()
     var removeAddressApiResponse : MutableLiveData<ApiResponse<MyAccountDataClass.UserInfoResponse>> = MutableLiveData()
+    var setDefaultAddressApiResponse : MutableLiveData<ApiResponse<MyAccountDataClass.UserInfoResponse>> = MutableLiveData()
 
     fun getAddressList() {
 
@@ -78,6 +80,47 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
             })
         }
 
+
+    }
+
+    fun setDefaultAddress(address: MyAccountDataClass.Address?) {
+        var userInfo= GlobalSingelton.instance?.userInfo?.copy()
+
+        userInfo?.default_shipping = address?.id
+        userInfo?.default_billing = address?.id
+
+        userInfo?.addresses?.single { it == Utils.getDefaultAddress()}?.default_billing = null
+        userInfo?.addresses?.single { it == Utils.getDefaultAddress()}?.default_shipping = null
+
+        userInfo?.addresses?.single { it == address }?.default_shipping = true
+        userInfo?.addresses?.single { it == address }?.default_billing = true
+
+        val editAddressRequest = MyAccountDataClass.UpdateInfoRequest(
+                customer = userInfo!!
+        )
+
+        val apiResponse = ApiResponse<MyAccountDataClass.UserInfoResponse>()
+        AppRepository.updateUserInfo(editAddressRequest, object: ApiCallback<MyAccountDataClass.UserInfoResponse> {
+            override fun onException(error: Throwable) {
+                AppLog.e("Update Information API : ${error.message}")
+                apiResponse.error = error.message
+                setDefaultAddressApiResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.e("Update Information API : $errorMsg")
+                apiResponse.error = errorMsg
+                setDefaultAddressApiResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: MyAccountDataClass.UserInfoResponse?) {
+                //update info saved at singleton
+                GlobalSingelton.instance?.userInfo = t
+
+                apiResponse.apiResponse = t
+                setDefaultAddressApiResponse.value = apiResponse
+            }
+        })
 
     }
 }

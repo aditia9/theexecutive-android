@@ -42,6 +42,7 @@ class AddressBookFragment: BaseFragment() {
         mViewModel.getAddressList()
         observeAddressList()
         observeRemoveAddressApiResponse()
+        observeSetDefaultAddressApiResponse()
         return view
     }
 
@@ -51,6 +52,20 @@ class AddressBookFragment: BaseFragment() {
             if(apiResponse?.error.isNullOrBlank()){
 
                 Toast.makeText(activity as Context, "Address removed successfully", Toast.LENGTH_SHORT).show()
+                addressList = apiResponse?.apiResponse?.addresses
+                addressBookAdapter.addressList = addressList
+                addressBookAdapter.notifyDataSetChanged()
+
+            }else{
+                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+            }
+        })
+    }
+
+    private fun observeSetDefaultAddressApiResponse() {
+        mViewModel.setDefaultAddressApiResponse.observe(this, Observer { apiResponse ->
+            hideLoading()
+            if(apiResponse?.error.isNullOrBlank()){
                 addressList = apiResponse?.apiResponse?.addresses
                 addressBookAdapter.addressList = addressList
                 addressBookAdapter.notifyDataSetChanged()
@@ -111,8 +126,23 @@ class AddressBookFragment: BaseFragment() {
                 editAddress(addressPostion)
             }
 
+            R.id.chk_default -> {
+                changeDefaultAddress(addressPostion)
+            }
+
             else -> Toast.makeText(activity as Context, "Some other action", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun changeDefaultAddress(addressPosition: Int) {
+
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            mViewModel.setDefaultAddress(addressList?.get(addressPosition))
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+
     }
 
     private fun editAddress(addressPosition: Int) {
