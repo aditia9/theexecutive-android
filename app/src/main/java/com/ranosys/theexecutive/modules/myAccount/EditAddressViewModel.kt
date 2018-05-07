@@ -44,7 +44,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
     var selectedAddess: MyAccountDataClass.Address? = null
 
 
-    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
+    private val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
 
 
 
@@ -97,7 +97,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
     fun prepareMaskedAddress(address: MyAccountDataClass.Address?){
         selectedAddess = address
         var countryCode = ""
-        var mobileNo = ""
+        var mobileNo: String
         if(address?.telephone?.contains("-") == true){
             countryCode = address.telephone!!.split("-")[0]
             mobileNo = address.telephone!!.split("-")[1]
