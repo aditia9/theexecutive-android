@@ -81,7 +81,7 @@ class RegisterDataClass {
     )
 
     data class Region(
-            val region_code: String,
+            var region_code: String,
             val region: String,
             val region_id: Int
     )

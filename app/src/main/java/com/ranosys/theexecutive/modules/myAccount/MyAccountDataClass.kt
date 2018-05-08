@@ -27,7 +27,7 @@ class MyAccountDataClass {
             val email: String?,
             val firstname: String?,
             val lastname: String?,
-            val prefix: String?,
+            var prefix: String?,
             val gender: Int?,
             val store_id: Int?,
             val website_id: Int?,

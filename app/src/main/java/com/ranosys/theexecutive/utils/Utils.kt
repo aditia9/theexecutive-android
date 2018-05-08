@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.utils
 
+import AppLog
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog

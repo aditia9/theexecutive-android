@@ -200,6 +200,8 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
         }
         val selectedState = stateList.single { it.name == maskedAddress?.state }
 
+        val pos = userInfo?.addresses?.indexOf(selectedAddess)
+
         val newAddress = selectedAddess?.copy(
                 firstname = maskedAddress?.firstName,
                 lastname = maskedAddress?.lastName,

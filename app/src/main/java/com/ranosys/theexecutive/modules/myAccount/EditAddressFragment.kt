@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_edit_address.*
  * @Author Ranosys Technologies
  * @Date 03-May-2018
  */
+
 class EditAddressFragment:BaseFragment() {
     private lateinit var mViewModel: EditAddressViewModel
     private lateinit var mBinding: FragmentEditAddressBinding

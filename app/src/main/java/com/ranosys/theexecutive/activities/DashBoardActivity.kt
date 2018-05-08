@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.activities
 
-import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil

@@ -16,7 +16,6 @@ import com.facebook.FacebookSdk.getApplicationContext
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
-import com.ranosys.theexecutive.modules.category.CategoryFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
