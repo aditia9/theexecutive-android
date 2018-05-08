@@ -44,8 +44,8 @@ class AddAddressFragment: BaseFragment() {
             hideLoading()
             if(apiResponse?.error.isNullOrBlank()){
                 Toast.makeText(activity,"Address Added Successfully", Toast.LENGTH_SHORT).show()
-                FragmentUtils.addFragment(activity, AddressBookFragment(), null, AddressBookFragment::class.java.name, true )
-
+               // FragmentUtils.addFragment(activity, AddressBookFragment(), null, AddressBookFragment::class.java.name, true )
+                 activity?.onBackPressed()
             }else{
                 Utils.showDialog(activity,"add address api", getString(android.R.string.ok), "", null)
             }

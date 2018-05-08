@@ -38,12 +38,45 @@ class AddressBookFragment: BaseFragment() {
         mViewModel = ViewModelProviders.of(this).get(AddressBookViewModel::class.java)
         addressList = GlobalSingelton.instance?.userInfo?.addresses?.toMutableList()
 
-        //api for getting address
-        mViewModel.getAddressList()
+
         observeAddressList()
         observeRemoveAddressApiResponse()
         observeSetDefaultAddressApiResponse()
+
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        linearLayoutManager = LinearLayoutManager(activity as Context)
+        address_list.layoutManager = linearLayoutManager
+
+        //get stored
+        addressBookAdapter = AddressBookAdapter(addressList, action = {id: Int, pos: Int ->
+            handleAddressEvents(id, pos)
+        })
+        address_list.adapter = addressBookAdapter
+
+        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
+            addAddress()
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
+        //api for getting address
+        getAddressList()
+    }
+
+    fun getAddressList(){
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            mViewModel.getAddressList()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
     }
 
     private fun observeRemoveAddressApiResponse() {
@@ -94,27 +127,6 @@ class AddressBookFragment: BaseFragment() {
         })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        linearLayoutManager = LinearLayoutManager(activity as Context)
-        address_list.layoutManager = linearLayoutManager
-
-        //get stored
-        addressBookAdapter = AddressBookAdapter(addressList, action = {id: Int, pos: Int ->
-            handleAddressEvents(id, pos)
-        })
-        address_list.adapter = addressBookAdapter
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
-            addAddress()
-        }
-        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
-    }
 
     private fun handleAddressEvents(id: Int, addressPosition: Int){
         when(id){

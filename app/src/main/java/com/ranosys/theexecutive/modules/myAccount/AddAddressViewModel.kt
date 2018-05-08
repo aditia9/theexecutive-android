@@ -188,7 +188,7 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
                 id = null,
                 firstname = maskedAddress?.firstName,
                 lastname = maskedAddress?.lastName,
-                street = listOf(maskedAddress?.streedAdd1,maskedAddress?.streedAdd2),
+                street = listOf(maskedAddress?.streedAdd1,maskedAddress?.streedAdd2) as List<String>,
                 telephone = mobile,
                 country_id = Utils.getCountryId(maskedAddress?.country),
                 city = maskedAddress?.city,
