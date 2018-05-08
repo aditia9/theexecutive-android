@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.utils
 
+import AppLog
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
@@ -35,6 +36,7 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import java.text.NumberFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -298,6 +300,26 @@ object Utils {
             }
         }
         return IMEI
+    }
+
+    fun getCountryName(id: String): String{
+        return GlobalSingelton.instance?.storeList?.single { it.code.toString() == id }.let { it?.name } ?: ""
+
+    }
+
+    fun getCountryId(name: String?): String{
+        return GlobalSingelton.instance?.storeList?.single { it.name == name }.let { it?.code } ?: ""
+
+    }
+
+    fun getDefaultAddress(): MyAccountDataClass.Address?{
+        val info = GlobalSingelton.instance?.userInfo
+        if(info?.default_shipping.isNullOrBlank().not()){
+            return info?.addresses?.single { it?.id == info.default_shipping }
+        }else{
+            return null
+        }
+
     }
 
     fun getDisplayPrice(configurePrice: String, configureSpecialPrice: String): SpannableStringBuilder {

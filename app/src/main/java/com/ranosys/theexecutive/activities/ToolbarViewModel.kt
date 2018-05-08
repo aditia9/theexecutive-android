@@ -23,6 +23,7 @@ class ToolbarViewModel(application: Application): BaseViewModel(application) {
     var showLogo : ObservableField<Boolean> = ObservableField()
     var titleBackground : ObservableField<Int> = ObservableField()
     var leftIconClicked: MutableLiveData<Int>? = MutableLiveData()
+    var rightIconClicked: MutableLiveData<Int>? = MutableLiveData()
 
 
     init {
