@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.api.interfaces
 
+import com.google.gson.JsonObject
 import com.ranosys.theexecutive.api.ApiConstants
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
@@ -14,6 +15,7 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
+import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -200,9 +202,8 @@ interface ApiService {
 
         @POST("rest/{store_code}/V1/wishlist/mine/addproduct")
         @Headers(ApiConstants.CONTENT_TYPE,
-                ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun addToWishList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body request: Map<String, String?>): Call<String>
+        fun addToWishList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body request: JsonObject): Call<String>
 
     }
 
@@ -257,5 +258,27 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun updateUserInfo(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body request: MyAccountDataClass.UpdateInfoRequest): Call<MyAccountDataClass.UserInfoResponse>
+    }
+
+    interface WishlistService {
+
+        @GET("rest/{store_code}/V1/wishlist/mine/info/")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getWishlist(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<WishlistResponse>
+
+        @DELETE("rest/{store_code}/V1/wishlist/mine/item/{item_id}/delete")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun deleteWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
+
+        @POST("rest/{store_code}/V1/wishlist/mine/item/{item_id}/addtocart")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
+
     }
 }

@@ -29,7 +29,6 @@ import com.zopim.android.sdk.api.ZopimChat
  */
 class DashBoardActivity: BaseActivity() {
 
-    lateinit var webPagesDialog: Dialog
     lateinit var toolbarBinding : ActivityDashboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +71,7 @@ class DashBoardActivity: BaseActivity() {
                                     }
                                 }
                                 2 -> {
-                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", 0, false, 0, false)
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", R.drawable.back, true, 0, false)
                                 }
                             }
                         }

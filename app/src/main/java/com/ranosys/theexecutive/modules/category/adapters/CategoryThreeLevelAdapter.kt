@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ExpandableListAdapter
 import android.widget.ExpandableListView
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.R.id.elv_parent_category
 import com.ranosys.theexecutive.databinding.RowFirstBinding
 import com.ranosys.theexecutive.modules.category.ChildrenData
 import com.ranosys.theexecutive.modules.category.SecondLevelExpandableListView
@@ -17,6 +18,7 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.fragment_category.*
 
 @Suppress("NAME_SHADOWING")
 /**
