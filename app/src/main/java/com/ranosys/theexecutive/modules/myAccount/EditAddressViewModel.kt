@@ -23,7 +23,7 @@ import com.ranosys.theexecutive.utils.Utils
 import java.util.*
 
 /**
- * @Details
+ * @Details view model for edit address screen
  * @Author Ranosys Technologies
  * @Date 03-May-2018
  */
@@ -41,7 +41,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
     var postalCodeError: ObservableField<String> = ObservableField()
     var updateAddressApiResponse : MutableLiveData<ApiResponse<MyAccountDataClass.UserInfoResponse>> = MutableLiveData()
 
-    var selectedAddess: MyAccountDataClass.Address? = null
+    private var selectedAddess: MyAccountDataClass.Address? = null
 
 
     private val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
@@ -49,7 +49,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
 
 
     fun callCountryApi() {
-        var apiResponse = ApiResponse<MutableList<RegisterDataClass.Country>>()
+        val apiResponse = ApiResponse<MutableList<RegisterDataClass.Country>>()
         AppRepository.getCountryList(object : ApiCallback<List<RegisterDataClass.Country>> {
             override fun onException(error: Throwable) {
                 AppLog.e(RegisterViewModel.COUNTRY_API_TAG, error.message!!)
@@ -97,14 +97,14 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
     fun prepareMaskedAddress(address: MyAccountDataClass.Address?){
         selectedAddess = address
         var countryCode = ""
-        var mobileNo: String
+        val mobileNo: String
         if(address?.telephone?.contains("-") == true){
             countryCode = address.telephone!!.split("-")[0]
             mobileNo = address.telephone!!.split("-")[1]
         }else{
             mobileNo = address?.telephone ?: ""
         }
-        val country = GlobalSingelton.instance?.storeList?.single { it.code.toString() == address?.country_id}
+        val country = GlobalSingelton.instance?.storeList?.single { it.code == address?.country_id}
         maskedAddress =  MyAccountDataClass.MaskedUserInfo(
                 _id = address?.id,
                 _firstName = address?.firstname,
@@ -114,7 +114,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
                 _city = address?.city,
                 _state = address?.region?.region,
                 _streedAdd1 = address?.street?.get(0),
-                _streedAdd2 = if(address?.street?.size!! > 1)address.street.get(1) else "",
+                _streedAdd2 = if(address?.street?.size!! > 1) address.street[1] else "",
                 _mobile = mobileNo,
                 _postalCode = address.postcode,
                 _countryCode = countryCode
@@ -130,7 +130,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
 
             override fun onError(errorMsg: String) {
                 Utils.printLog(RegisterViewModel.CITY_API_TAG, RegisterViewModel.ERROR_TAG)
-                Toast.makeText(getApplication<Application>(), errorMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplication(), errorMsg, Toast.LENGTH_SHORT).show()
             }
 
             override fun onSuccess(cities: List<RegisterDataClass.City>?) {
@@ -191,18 +191,16 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
 
     fun editAddress() {
         //get user info from global singleton
-        var userInfo = GlobalSingelton.instance?.userInfo?.copy()
+        val userInfo = GlobalSingelton.instance?.userInfo?.copy()
         //add address
-        var mobile = if(maskedAddress?.countryCode.isNullOrBlank().not()){
+        val mobile = if(maskedAddress?.countryCode.isNullOrBlank().not()){
             "${maskedAddress?.countryCode}-${maskedAddress?.mobile}"
         }else{
             "${maskedAddress?.mobile}"
         }
-        var selectedState = stateList.single { it.name == maskedAddress?.state }
+        val selectedState = stateList.single { it.name == maskedAddress?.state }
 
-        val pos = userInfo?.addresses?.indexOf(selectedAddess)
-
-        var newAddress = selectedAddess?.copy(
+        val newAddress = selectedAddess?.copy(
                 firstname = maskedAddress?.firstName,
                 lastname = maskedAddress?.lastName,
                 street = listOf(maskedAddress?.streedAdd1,maskedAddress?.streedAdd2),
@@ -210,7 +208,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
                 country_id = Utils.getCountryId(maskedAddress?.country),
                 city = maskedAddress?.city,
                 postcode = maskedAddress?.postalCode,
-                region_id = if(selectedState.id.isNullOrBlank().not()) selectedState.id else "",
+                region_id = if(selectedState.id.isBlank().not()) selectedState.id else "",
                 region = RegisterDataClass.Region(region_code = selectedState.code,
                         region_id = if(!TextUtils.isEmpty(selectedState.id)) selectedState.id.toInt() else 1,
                         region = selectedState.name)

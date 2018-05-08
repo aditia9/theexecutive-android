@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_address_book.*
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
 
 /**
- * @Details
+ * @Details screen showing address list
  * @Author Ranosys Technologies
  * @Date 01-May-2018
  */
@@ -116,18 +116,18 @@ class AddressBookFragment: BaseFragment() {
         setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
     }
 
-    private fun handleAddressEvents(id: Int, addressPostion: Int): Unit{
+    private fun handleAddressEvents(id: Int, addressPosition: Int){
         when(id){
             R.id.tv_remove_address -> {
-                removeAddress(addressPostion)
+                removeAddress(addressPosition)
             }
 
             R.id.tv_edit_address -> {
-                editAddress(addressPostion)
+                editAddress(addressPosition)
             }
 
             R.id.chk_default -> {
-                changeDefaultAddress(addressPostion)
+                changeDefaultAddress(addressPosition)
             }
 
             else -> Toast.makeText(activity as Context, "Some other action", Toast.LENGTH_SHORT).show()

@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_add_address.*
 
 
 /**
- * @Details
+ * @Details screen to add address
  * @Author Ranosys Technologies
  * @Date 07-May-2018
  */
@@ -44,7 +44,7 @@ class AddAddressFragment: BaseFragment() {
             hideLoading()
             if(apiResponse?.error.isNullOrBlank()){
                 Toast.makeText(activity,"Address Added Successfully", Toast.LENGTH_SHORT).show()
-                FragmentUtils.addFragment(activity, AddressBookFragment(), null, AddressBookFragment::class.java.name, false )
+                FragmentUtils.addFragment(activity, AddressBookFragment(), null, AddressBookFragment::class.java.name, true )
 
             }else{
                 Utils.showDialog(activity,"add address api", getString(android.R.string.ok), "", null)

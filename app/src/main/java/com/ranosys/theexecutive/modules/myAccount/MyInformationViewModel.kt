@@ -69,9 +69,9 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                         _city = defaultAdd?.city,
                         _state = defaultAdd?.region?.region,
                         _streedAdd1 = defaultAdd?.street?.get(0),
-                        _streedAdd2 = defaultAdd?.street?.get(1),
+                        _streedAdd2 = if(defaultAdd?.street?.size!! > 1)defaultAdd.street.get(1) else "",
                         _mobile = mobileNo,
-                        _postalCode = defaultAdd?.postcode,
+                        _postalCode = defaultAdd.postcode,
                         _countryCode = countryCode
                 )
 

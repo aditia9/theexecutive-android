@@ -9,7 +9,7 @@ import com.ranosys.theexecutive.databinding.AddressListItemBinding
 import com.ranosys.theexecutive.utils.Utils
 
 /**
- * @Details
+ * @Details Adapter for address list
  * @Author Ranosys Technologies
  * @Date 01-May-2018
  */

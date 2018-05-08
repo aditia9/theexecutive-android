@@ -215,7 +215,7 @@
                     android:id="@+id/til_zip_code"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
-                    android:hint="Zip/Postal code"
+                    android:hint="@string/postcode"
                     app:errorText="@{vm.postalCodeError}"
                     android:theme="@style/tilTheme"
                     android:layout_marginTop="@dimen/sixteen_dp"
@@ -228,7 +228,7 @@
                         android:layout_height="wrap_content"
                         android:text="@={vm.maskedAddress.postalCode}"
                         android:onTextChanged='@{() -> vm.onTextChanged(etZipCode)}'
-                        android:inputType="text|textCapWords" />
+                        android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
@@ -239,7 +239,7 @@
                     android:layout_marginRight="@dimen/twenty_four_dp"
                     android:layout_marginTop="@dimen/forty_dp"
                     android:background="@drawable/black_button_bg"
-                    android:text="Add"
+                    android:text="@string/add"
                     android:theme="@style/button_theme"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"

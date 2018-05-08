@@ -18,7 +18,7 @@ import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_edit_address.*
 
 /**
- * @Details
+ * @Details screen for edit address
  * @Author Ranosys Technologies
  * @Date 03-May-2018
  */
@@ -44,7 +44,7 @@ class EditAddressFragment:BaseFragment() {
             hideLoading()
             if(apiResponse?.error.isNullOrBlank()){
                 Toast.makeText(activity,"Address Edited Successfully", Toast.LENGTH_SHORT).show()
-                FragmentUtils.addFragment(activity, AddressBookFragment(), null, AddressBookFragment::class.java.name, false )
+                FragmentUtils.addFragment(activity, AddressBookFragment(), null, AddressBookFragment::class.java.name, true )
 
             }else{
                 Utils.showDialog(activity,"Country api failed", getString(android.R.string.ok), "", null)

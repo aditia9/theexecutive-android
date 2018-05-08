@@ -11,7 +11,7 @@ import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 
 /**
- * @Details
+ * @Details View model for address book
  * @Author Ranosys Technologies
  * @Date 01-May-2018
  */
@@ -47,10 +47,11 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
     }
 
     fun removeAddress(address: MyAccountDataClass.Address?) {
-        var addList = addressList.value?.apiResponse?.toMutableList()
+        val addList = addressList.value?.apiResponse?.toMutableList()
         addList?.remove(address)
 
-        var updatedInfo = GlobalSingelton.instance?.userInfo?.copy(addresses = addList)
+        val updatedInfo = GlobalSingelton.instance?.userInfo?.copy(addresses = addList)
+
 
         updatedInfo?.let {
 
@@ -84,7 +85,7 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
     }
 
     fun setDefaultAddress(address: MyAccountDataClass.Address?) {
-        var userInfo= GlobalSingelton.instance?.userInfo?.copy()
+        val userInfo= GlobalSingelton.instance?.userInfo?.copy()
 
         userInfo?.default_shipping = address?.id
         userInfo?.default_billing = address?.id
