@@ -189,6 +189,11 @@
     <string name="one">1</string>
     <string name="product_out_of_stock">This product is out of stock.</string>
     <string name="login_required_for_wishlist">Please login before adding items to your wish list.</string>
+    <string name="address_remove_success_msg">Address removed successfully</string>
+    <string name="dafault_address_delete_warning">can\'t delete default address</string>
+    <string name="delete_address_confirmation">You want to remove this address</string>
+    <string name="address_edit_success_msg">Address Edited Successfully</string>
+    <string name="add_address_success_msg">Address Added Successfully</string>
 
 
 </resources>

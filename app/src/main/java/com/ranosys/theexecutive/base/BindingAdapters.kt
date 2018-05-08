@@ -34,59 +34,12 @@ class BindingAdapters {
             view.isErrorEnabled = !TextUtils.isEmpty(errorMessage)
         }
 
-//        @JvmStatic
-//        @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
-//        fun bindSpinnerData(pAppCompatSpinner: AppCompatSpinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
-//            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-//                    newTextAttrChanged.onChange()
-//                }
-//
-//                override fun onNothingSelected(parent: AdapterView<*>) {}
-//            }
-//            if (newSelectedValue != null) {
-//                val pos = (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
-//                pAppCompatSpinner.setSelection(pos, true)
-//            }
-//        }
-//
-//        @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-//        fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String {
-//            return pAppCompatSpinner.selectedItem.toString()
-//
-//        }
-
-//        @JvmStatic
-//        @BindingAdapter(value = *arrayOf("app:selectedValue", "app:selectedValueAttrChanged"), requireAll = false)
-//        fun bindSpinnerData(pAppCompatSpinner: Spinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
-//            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-//                    newTextAttrChanged.onChange()
-//                }
-//
-//                override fun onNothingSelected(parent: AdapterView<*>) {
-//                    pAppCompatSpinner.setSelection(0)
-//                }
-//            }
-//            if(newSelectedValue != null) {
-//                for (i in 0..pAppCompatSpinner.adapter.count - 1) {
-//                    if (newSelectedValue.equals(pAppCompatSpinner.getItemAtPosition(i).toString())) {
-//                        pAppCompatSpinner.setSelection(i, true)
-//                    }
-//                }
-//            }
-//        }
-
         @JvmStatic
         @InverseBindingAdapter(attribute = "app:selectedValue", event = "app:selectedValueAttrChanged")
         fun captureSelectedValue(pAppCompatSpinner: Spinner): String {
             return pAppCompatSpinner.selectedItem.toString()
         }
-
-
-
-
-
+        
         @JvmStatic
         @BindingAdapter("android:src")
         fun setImageResource(imageView: ImageView, resource: Int) {

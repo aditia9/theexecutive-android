@@ -203,7 +203,7 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
 
         )
 
-        userInfo.addresses.add(newAddress)
+        userInfo.addresses?.add(newAddress)
 
         val editAddressRequest = MyAccountDataClass.UpdateInfoRequest(
                 customer = userInfo

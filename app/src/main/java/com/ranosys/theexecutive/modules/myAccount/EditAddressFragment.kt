@@ -13,7 +13,7 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentEditAddressBinding
-import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_edit_address.*
 
@@ -44,11 +44,11 @@ class EditAddressFragment:BaseFragment() {
         mViewModel.updateAddressApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             if(apiResponse?.error.isNullOrBlank()){
-                Toast.makeText(activity,"Address Edited Successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity,getString(R.string.address_edit_success_msg), Toast.LENGTH_SHORT).show()
                 activity?.onBackPressed()
 
             }else{
-                Utils.showDialog(activity,"Country api failed", getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity,apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
     }
@@ -99,7 +99,12 @@ class EditAddressFragment:BaseFragment() {
                 mBinding.spinnerState.setSelection(mViewModel.countryList.flatMap { it.available_regions }.toList().indexOf(temp2))
 
             }else{
-                Utils.showDialog(activity,"Country api failed", getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", object: DialogOkCallback {
+                    override fun setDone(done: Boolean) {
+                        activity?.onBackPressed()
+                    }
+
+                })
             }
         })
     }

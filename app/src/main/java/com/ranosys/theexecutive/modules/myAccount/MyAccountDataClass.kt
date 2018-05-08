@@ -31,9 +31,39 @@ class MyAccountDataClass {
             val gender: Int?,
             val store_id: Int?,
             val website_id: Int?,
-            val addresses: MutableList<Address>?,
+            var addresses: MutableList<Address>?,
             val disable_auto_group_change: Int?
-    )
+    ){
+        fun copy(): UserInfoResponse{
+
+            var addressList = mutableListOf<Address>()
+            this.addresses?.let {
+                for(address in this.addresses!!){
+                    addressList.add(address.copy(region = address.region?.copy(), street = address.street?.toMutableList()))
+                }
+            }
+
+            return UserInfoResponse(
+                    id = this.id,
+                    group_id =  this.group_id,
+                    default_billing = this.default_billing,
+                    default_shipping = this.default_shipping,
+                    created_at = this.created_at,
+                    updated_at = this.updated_at,
+                    created_in = this.created_in,
+                    dob = this.dob,
+                    email = this.email,
+                    firstname = this.firstname,
+                    lastname = this.lastname,
+                    prefix = this.prefix,
+                    gender = this.gender,
+                    store_id = this.store_id,
+                    website_id = this.website_id,
+                    disable_auto_group_change = this.disable_auto_group_change,
+                    addresses = addressList
+            )
+        }
+    }
 
     data class Address(
             var id: String? = "",

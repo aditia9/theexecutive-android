@@ -41,7 +41,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
     var postalCodeError: ObservableField<String> = ObservableField()
     var updateAddressApiResponse : MutableLiveData<ApiResponse<MyAccountDataClass.UserInfoResponse>> = MutableLiveData()
 
-    private var selectedAddess: MyAccountDataClass.Address? = null
+    private var selectedAddress: MyAccountDataClass.Address? = null
 
 
     private val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
@@ -95,7 +95,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
 
 
     fun prepareMaskedAddress(address: MyAccountDataClass.Address?){
-        selectedAddess = address
+        selectedAddress = address
         var countryCode = ""
         val mobileNo: String
         if(address?.telephone?.contains("-") == true){
@@ -190,19 +190,12 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
     }
 
     fun editAddress() {
-        //get user info from global singleton
         val userInfo = GlobalSingelton.instance?.userInfo?.copy()
-        //add address
-        val mobile = if(maskedAddress?.countryCode.isNullOrBlank().not()){
-            "${maskedAddress?.countryCode}-${maskedAddress?.mobile}"
-        }else{
-            "${maskedAddress?.mobile}"
-        }
+
+        val mobile = "${maskedAddress?.countryCode}-${maskedAddress?.mobile}"
         val selectedState = stateList.single { it.name == maskedAddress?.state }
 
-        val pos = userInfo?.addresses?.indexOf(selectedAddess)
-
-        val newAddress = selectedAddess?.copy(
+        val newAddress = selectedAddress?.copy(
                 firstname = maskedAddress?.firstName,
                 lastname = maskedAddress?.lastName,
                 street = listOf(maskedAddress?.streedAdd1,maskedAddress?.streedAdd2),
@@ -217,8 +210,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
 
         )
 
-
-        userInfo?.addresses?.remove(selectedAddess!!)
+        userInfo?.addresses?.remove(selectedAddress!!)
         userInfo?.addresses?.add(newAddress!!)
 
         val editAddressRequest = MyAccountDataClass.UpdateInfoRequest(

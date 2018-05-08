@@ -67,11 +67,11 @@ class AddressBookFragment: BaseFragment() {
     override fun onResume() {
         super.onResume()
         setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
-        //api for getting address
+        addressBookAdapter.addressList = GlobalSingelton.instance?.userInfo?.addresses
         getAddressList()
     }
 
-    fun getAddressList(){
+    private fun getAddressList(){
         if (Utils.isConnectionAvailable(activity as Context)) {
             mViewModel.getAddressList()
         } else {
@@ -84,7 +84,7 @@ class AddressBookFragment: BaseFragment() {
             hideLoading()
             if(apiResponse?.error.isNullOrBlank()){
 
-                Toast.makeText(activity as Context, "Address removed successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity as Context, getString(R.string.address_remove_success_msg), Toast.LENGTH_SHORT).show()
                 addressList = apiResponse?.apiResponse?.addresses
                 addressBookAdapter.addressList = addressList
                 addressBookAdapter.notifyDataSetChanged()
@@ -113,7 +113,6 @@ class AddressBookFragment: BaseFragment() {
         mViewModel.addressList.observe(this, Observer { apiResponse ->
 
             if(apiResponse?.error.isNullOrEmpty()){
-                //update list in adapter
                 addressBookAdapter.let {
                     addressList = apiResponse?.apiResponse
                     addressBookAdapter.addressList = addressList
@@ -142,7 +141,6 @@ class AddressBookFragment: BaseFragment() {
                 changeDefaultAddress(addressPosition)
             }
 
-            else -> Toast.makeText(activity as Context, "Some other action", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -168,9 +166,9 @@ class AddressBookFragment: BaseFragment() {
 
     private fun removeAddress(addressPosition: Int) {
         if(addressList?.get(addressPosition) == Utils.getDefaultAddress()){
-            Utils.showDialog(activity, "can't delete default address", getString(android.R.string.ok), "", null)
+            Utils.showDialog(activity, getString(R.string.dafault_address_delete_warning), getString(android.R.string.ok), "", null)
         }else{
-            Utils.showDialog(activity, "You want to remove this address", getString(android.R.string.ok), getString(android.R.string.cancel), object: DialogOkCallback{
+            Utils.showDialog(activity, getString(R.string.delete_address_confirmation), getString(android.R.string.ok), getString(android.R.string.cancel), object: DialogOkCallback{
                 override fun setDone(done: Boolean) {
                     callRemoveAddressApi(addressPosition)
                 }

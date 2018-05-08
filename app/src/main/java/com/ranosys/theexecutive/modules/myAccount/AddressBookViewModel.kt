@@ -8,7 +8,6 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.utils.GlobalSingelton
-import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Details View model for address book
@@ -50,9 +49,8 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
         val addList = addressList.value?.apiResponse?.toMutableList()
         addList?.remove(address)
 
-        val updatedInfo = GlobalSingelton.instance?.userInfo?.copy(addresses = addList)
-
-
+        var updatedInfo = GlobalSingelton.instance?.userInfo?.copy()
+        updatedInfo?.addresses = addList
         updatedInfo?.let {
 
             val request = MyAccountDataClass.UpdateInfoRequest(customer = updatedInfo)
@@ -87,14 +85,15 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
     fun setDefaultAddress(address: MyAccountDataClass.Address?) {
         val userInfo= GlobalSingelton.instance?.userInfo?.copy()
 
+        val defAddressId = userInfo?.default_billing
         userInfo?.default_shipping = address?.id
         userInfo?.default_billing = address?.id
 
-        userInfo?.addresses?.single { it == Utils.getDefaultAddress()}?.default_billing = null
-        userInfo?.addresses?.single { it == Utils.getDefaultAddress()}?.default_shipping = null
+        userInfo?.addresses?.single { it.id == defAddressId}?.default_billing = null
+        userInfo?.addresses?.single { it.id == defAddressId}?.default_shipping = null
 
-        userInfo?.addresses?.single { it == address }?.default_shipping = true
-        userInfo?.addresses?.single { it == address }?.default_billing = true
+        userInfo?.addresses?.single { it.id == address?.id }?.default_shipping = true
+        userInfo?.addresses?.single { it.id == address?.id }?.default_billing = true
 
         val editAddressRequest = MyAccountDataClass.UpdateInfoRequest(
                 customer = userInfo!!

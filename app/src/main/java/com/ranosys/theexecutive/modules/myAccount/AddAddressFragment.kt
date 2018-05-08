@@ -12,7 +12,7 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentAddAddressBinding
-import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_add_address.*
 
@@ -43,11 +43,10 @@ class AddAddressFragment: BaseFragment() {
         mViewModel.updateAddressApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             if(apiResponse?.error.isNullOrBlank()){
-                Toast.makeText(activity,"Address Added Successfully", Toast.LENGTH_SHORT).show()
-               // FragmentUtils.addFragment(activity, AddressBookFragment(), null, AddressBookFragment::class.java.name, true )
-                 activity?.onBackPressed()
+                Toast.makeText(activity,getString(R.string.add_address_success_msg), Toast.LENGTH_SHORT).show()
+                activity?.onBackPressed()
             }else{
-                Utils.showDialog(activity,"add address api", getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity,apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
     }
@@ -87,7 +86,12 @@ class AddAddressFragment: BaseFragment() {
         mViewModel.countryListApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             if(apiResponse?.error.isNullOrBlank().not()){
-                Utils.showDialog(activity,"Country api failed", getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", object: DialogOkCallback {
+                    override fun setDone(done: Boolean) {
+                        activity?.onBackPressed()
+                    }
+
+                })
             }
         })
     }
