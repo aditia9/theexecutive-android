@@ -12,6 +12,9 @@
     <string name="empty_full_name">Please provide Full Name.</string>
     <string name="empty_user_id">Please provide NRIC /FIN /Passport.</string>
     <string name="empty_password">Password is required.</string>
+    <string name="empty_current_password">Current Password is required.</string>
+    <string name="empty_confirm_password">Confirm Password is required.</string>
+    <string name="empty_new_password">New Password is required.</string>
     <string name="mobile_error">Mobile Number is required.</string>
     <string name="dob_error">Date of birth is required.</string>
     <string name="city_error">Please provide city.</string>
@@ -85,6 +88,7 @@
     <string name="valid_password_error">Password must contain 8 or more characters, special character and number.</string>
     <string name="valid_mobile_error">Length should be between 8 to 16.</string>
     <string name="confirm_password_error">The password does not match, kindly enter the same password as above.</string>
+    <string name="same_password_error">It seems the password same as before, kindly enter new password.</string>
     <string name="select_lang_title">Select Language</string>
     <string name="select_option">Select Option</string>
     <string name="continue_btn">Continue</string>
@@ -92,6 +96,7 @@
     <string name="my_account_option_icon">My account option icon</string>
     <string name="my_account_title">My Account</string>
     <string name="news_letter_option">Subscribe to Newsletter</string>
+    <string name="my_information_option">My Information</string>
     <string name="subscribe_info">Subscribe to our newsletter to stay updated on the latest promotions, new arrivals and online exclusives.</string>
     <string name="new_letter_title">NewsLetter</string>
     <string name="sort_by">Sort by</string>
@@ -132,7 +137,6 @@
     <string name="composition">Composition and Care</string>
     <string name="size_guideline">Size Guideline</string>
     <string name="shipping">Shipping</string>
-    <string name="shipping_address">Shipping Address</string>
     <string name="returns">Returns</string>
     <string name="share">Share</string>
     <string name="buying_guideline">Buying Guideline</string>
@@ -145,6 +149,7 @@
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="email_sent">We have sent you an email, please follow the instruction to reset password.</string>
+    <string name="password_change_msg">Your password successfully changed.</string>
     <string name="logout_text">Are you sure you want to logout from application?</string>
     <string name="empty_sort_option_selection_error">Please select at least one option.</string>
     <string name="no_product_available_error">Oops.. we couldn\'t find what you need.</string>
@@ -159,6 +164,19 @@
     <string name="common_error">Something went wrong, Please try again</string>
     <string name="select_size_err">Please select size</string>
     <string name="no_more_products">No more product available</string>
+    <string name="country">Country</string>
+    <string name="save">save</string>
+    <string name="address_book">Address Book</string>
+    <string name="set_as_default">Set as Default</string>
+    <string name="mobile_number_label">Mobile Number : </string>
+    <string name="remove">Remove</string>
+    <string name="add_addresse">Add Address</string>
+    <string name="wishlist_items_count">Total %1$d items in your wishlist.</string>
+    <string name="bag_icon">Bag Icon</string>
+    <string name="delete_icon">Delete Icon</string>
+    <string name="remove_item_text">Are you sure you want to remove item from your wishlist?</string>
+    <string name="no_item">No items available</string>
+
     <string name="view_all">View All</string>
     <string name="expand_image">Expand Icon</string>
     <string name="back">Back Icon</string>
@@ -167,6 +185,19 @@
     <string name="shipping_method">Shipping Method</string>
     <string name="payment_method">Payment Method</string>
     <string name="confirm_order"><![CDATA[confirm order & pay now]]></string>
+    <string name="change_password">Change Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="add">Add</string>
+    <string name="forward_icon">Forward icon</string>
+    <string name="one">1</string>
+    <string name="product_out_of_stock">This product is out of stock.</string>
+    <string name="login_required_for_wishlist">Please login before adding items to your wish list.</string>
+    <string name="address_remove_success_msg">Address removed successfully</string>
+    <string name="dafault_address_delete_warning">can\'t delete default address</string>
+    <string name="delete_address_confirmation">You want to remove this address</string>
+    <string name="address_edit_success_msg">Address Edited Successfully</string>
+    <string name="add_address_success_msg">Address Added Successfully</string>
 
 
 </resources>

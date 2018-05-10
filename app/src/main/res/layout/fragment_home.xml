@@ -24,11 +24,14 @@
             android:layout_alignParentRight="true"
             android:background="@color/theme_black_color"
             android:text="@string/chat"
-            android:textSize="@dimen/sixteen_sp"
+            android:textSize="@dimen/fourteen_sp"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:drawableLeft="@drawable/chat"
-            android:padding="@dimen/ten_dp"
+            android:paddingLeft="@dimen/ten_dp"
+            android:paddingRight="@dimen/ten_dp"
+            android:paddingTop="@dimen/eight_dp"
+            android:paddingBottom="@dimen/eight_dp"
             android:drawablePadding="@dimen/ten_dp"
             android:layout_margin="@dimen/twenty_dp"
             />
@@ -37,12 +40,12 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
             app:tabMode="fixed"
-            app:tabMaxWidth="0dp"
+            app:tabMaxWidth="@dimen/match_constraint"
             app:tabGravity="fill"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="@dimen/sixty_dp"
             android:layout_alignParentBottom="true"
-            app:tabIndicatorHeight="0dp"
+            app:tabIndicatorHeight="@dimen/match_constraint"
             android:background="@color/white"
             />
 

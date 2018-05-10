@@ -6,6 +6,7 @@
         <import type="android.support.v4.content.ContextCompat" />
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
+        <import type="com.ranosys.theexecutive.R"/>
         <variable
             name="toolbarViewModel"
             type="com.ranosys.theexecutive.activities.ToolbarViewModel"/>
@@ -41,7 +42,7 @@
                 android:id="@+id/toolbar_right_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{toolbarViewModel.cartCount == 0 ? "" : Integer.toString(toolbarViewModel.cartCount)}'
+                android:text='@{(toolbarViewModel.cartCount == 0 || toolbarViewModel.rightIcon != R.drawable.bag) ? "" : Integer.toString(toolbarViewModel.cartCount)}'
                 android:layout_marginRight="@dimen/sixteen_dp"
                 android:paddingTop="@dimen/five_dp"
                 android:textSize="@dimen/twelve_sp"

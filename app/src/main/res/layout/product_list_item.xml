@@ -78,7 +78,7 @@
             android:paddingBottom="@dimen/three_dp"
             android:visibility="@{TextUtils.isEmpty(productItem.collectionTag)? View.GONE : View.VISIBLE}"
             android:ellipsize="end"
-            app:layout_constraintVertical_bias=".9"
+            app:layout_constraintVertical_bias=".95"
             app:layout_constraintTop_toTopOf="@id/image"
             app:layout_constraintBottom_toBottomOf="@id/image"
             app:layout_constraintRight_toRightOf="parent"
