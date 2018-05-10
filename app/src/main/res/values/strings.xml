@@ -162,6 +162,11 @@
     <string name="view_all">View All</string>
     <string name="expand_image">Expand Icon</string>
     <string name="back">Back Icon</string>
+    <string name="shipping_address">Shipping Address</string>
+    <string name="items">Items</string>
+    <string name="shipping_method">Shipping Method</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="confirm_order"><![CDATA[confirm order & pay now]]></string>
 
 
 </resources>
