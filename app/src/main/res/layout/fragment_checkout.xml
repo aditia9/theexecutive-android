@@ -2,7 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
+        <variable
+            name="checkoutViewModel"
+            type="com.ranosys.theexecutive.modules.checkout.CheckoutViewModel"/>
     </data>
 
 
@@ -82,15 +84,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/twenty_four_dp"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_end="@dimen/twenty_four_dp"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintGuide_end="@dimen/forty_eight_dp" />
 
                     <TextView
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/eight_dp"
-                        android:text="John Doe"
+                        android:text="sd"
                         android:textSize="@dimen/eighteen_sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/guideline_right_address"
@@ -101,7 +102,7 @@
                     <TextView
                         android:id="@+id/tv_address"
                         android:layout_width="@dimen/match_constraint"
-                        android:layout_height="wrap_content"
+                        android:layout_height="43dp"
                         android:layout_marginTop="@dimen/eight_dp"
                         android:maxLines="2"
                         android:text="Supropto 73, Jalan Cilasdssdsdski Bandung 40115 Indonesia jhgjhghghgjh"
@@ -120,7 +121,6 @@
                         app:layout_constraintEnd_toStartOf="@+id/guideline_right_address"
                         app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="guideline_right_address"
                         app:layout_constraintTop_toBottomOf="@id/tv_address" />
 
                     <ImageView
