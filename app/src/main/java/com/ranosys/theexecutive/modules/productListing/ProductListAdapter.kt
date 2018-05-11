@@ -106,7 +106,8 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
             var discount = 0
             if(specialPrice.isNotBlank()){
-                discount = Math.round((((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100))).toInt()
+                discount = Math.round((price.replace(".","").toDouble() - specialPrice.replace(".","").toDouble()).div(price.replace(".","").toDouble())).times(100).toInt()
+                //discount = Math.round((((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100))).toInt()
             }
             var imgUrl = ""
             if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0].file
