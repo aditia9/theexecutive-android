@@ -77,11 +77,9 @@ class DashBoardActivity: BaseActivity() {
                         if(fragment is LoginFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         if(fragment is ProductDetailFragment) {
-                            (fragment as ProductDetailFragment).onResume()
-                        }
+                            (fragment as ProductDetailFragment).onResume() }
                         if(fragment is AddressBookFragment) {
-                            (fragment as AddressBookFragment).onResume()
-                        }
+                            (fragment as AddressBookFragment).onResume() }
                     }
                 }
             }
