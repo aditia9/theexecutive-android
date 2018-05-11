@@ -14,6 +14,7 @@
     <color name="colorText">#ffffff</color>
     <color name="light_background">#F6F6F6</color>
     <color name="translucent_bg">#66f2f3f8</color>
+    <color name="btn_checkout_bg">#2A6577</color>
 
 
     <color name="theme_black_color">#232021</color>
