@@ -14,7 +14,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
+import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
+import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
+import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils

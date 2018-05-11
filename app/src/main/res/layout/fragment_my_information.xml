@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.ranosys.theexecutive.modules.myAccount.MyInformationViewModel"/>
+            type="com.ranosys.theexecutive.modules.myInformation.MyInformationViewModel"/>
 
         <variable
             name="info"

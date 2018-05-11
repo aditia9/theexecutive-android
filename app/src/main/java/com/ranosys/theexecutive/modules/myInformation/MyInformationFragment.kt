@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.myInformation
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders

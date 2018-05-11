@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.addressBook
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,6 +12,9 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseFragment
+import com.ranosys.theexecutive.modules.addAddress.AddAddressFragment
+import com.ranosys.theexecutive.modules.editAddress.EditAddressFragment
+import com.ranosys.theexecutive.modules.myAccount.*
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
@@ -53,7 +56,7 @@ class AddressBookFragment: BaseFragment() {
         address_list.layoutManager = linearLayoutManager
 
         //get stored
-        addressBookAdapter = AddressBookAdapter(addressList, action = {id: Int, pos: Int ->
+        addressBookAdapter = AddressBookAdapter(addressList, action = { id: Int, pos: Int ->
             handleAddressEvents(id, pos)
         })
         address_list.adapter = addressBookAdapter
