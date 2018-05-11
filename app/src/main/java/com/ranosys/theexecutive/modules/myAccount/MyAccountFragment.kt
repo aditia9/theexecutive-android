@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
@@ -118,8 +119,31 @@ class MyAccountFragment : BaseFragment() {
                         context.getString(R.string.shipping_address) ->{
                             FragmentUtils.addFragment(context, AddressBookFragment(),null, AddressBookFragment::class.java.name, true )
                         }
+
+                        context.getString(R.string.buying_guide) ->{
+                            val url = ""
+                            openWebPage(context, url, context.getString(R.string.buying_guide))
+                        }
+
+                        context.getString(R.string.contact_us) ->{
+                            val url = ""
+                            openWebPage(context, url, context.getString(R.string.contact_us))
+                        }
+
+                        context.getString(R.string.settings) ->{
+                            val url = ""
+                            openWebPage(context, url, context.getString(R.string.settings))
+                        }
                     }
                 }
+            }
+
+            private fun openWebPage(context: Context, url: String, title: String) {
+                val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
+                fragment?.run {
+                    (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/" , title)
+                }
+
             }
         }
 
