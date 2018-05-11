@@ -130,10 +130,6 @@ class MyAccountFragment : BaseFragment() {
                             openWebPage(context, url, context.getString(R.string.contact_us))
                         }
 
-                        context.getString(R.string.settings) ->{
-                            val url = ""
-                            openWebPage(context, url, context.getString(R.string.settings))
-                        }
                     }
                 }
             }

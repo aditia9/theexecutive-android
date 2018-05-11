@@ -191,12 +191,14 @@
     <string name="product_out_of_stock">This product is out of stock.</string>
     <string name="login_required_for_wishlist">Please login before adding items to your wish list.</string>
     <string name="address_remove_success_msg">Address removed successfully</string>
-    <string name="dafault_address_delete_warning">can\'t delete default address</string>
-    <string name="delete_address_confirmation">You want to remove this address</string>
-    <string name="address_edit_success_msg">Address Edited Successfully</string>
-    <string name="add_address_success_msg">Address Added Successfully</string>
+    <string name="dafault_address_delete_warning">Default address cannot be removed.</string>
+    <string name="delete_address_confirmation">Are you sure you want to remove this address? </string>
+    <string name="address_edit_success_msg">Address is now updated successfully</string>
+    <string name="add_address_success_msg">Address is now added successfully</string>
     <string name="contact_us">Contact Us</string>
     <string name="settings">Settings</string>
+    <string name="add_address_failure_msg">Oops.. this is on us, please retry</string>
+    <string name="udate_profile_success_msg">Your profile is now updated.</string>
 
 
 </resources>

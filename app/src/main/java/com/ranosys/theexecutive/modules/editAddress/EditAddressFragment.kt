@@ -49,7 +49,7 @@ class EditAddressFragment:BaseFragment() {
                 activity?.onBackPressed()
 
             }else{
-                Utils.showDialog(activity,apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
             }
         })
     }
