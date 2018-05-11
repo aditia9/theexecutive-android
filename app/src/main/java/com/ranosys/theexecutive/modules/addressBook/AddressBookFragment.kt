@@ -14,7 +14,7 @@ import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.modules.addAddress.AddAddressFragment
 import com.ranosys.theexecutive.modules.editAddress.EditAddressFragment
-import com.ranosys.theexecutive.modules.myAccount.*
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
@@ -61,7 +61,7 @@ class AddressBookFragment: BaseFragment() {
         })
         address_list.adapter = addressBookAdapter
 
-        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
+        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon_image.setOnClickListener {
             addAddress()
         }
 

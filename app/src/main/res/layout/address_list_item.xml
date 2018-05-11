@@ -93,7 +93,8 @@
                 android:layout_marginTop="@dimen/four_dp"
                 android:text='@{" " + address.telephone}'
                 app:layout_constraintBaseline_toBaselineOf="@id/tv_mobile"
-                app:layout_constraintStart_toEndOf="@id/tv_mobile" />
+                app:layout_constraintStart_toEndOf="@id/tv_mobile"
+                app:layout_constraintTop_toBottomOf="@id/tv_address"/>
 
             <View
                 android:id="@+id/view_upper"
