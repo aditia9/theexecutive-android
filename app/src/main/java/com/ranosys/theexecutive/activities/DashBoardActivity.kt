@@ -19,7 +19,6 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
-import com.zopim.android.sdk.api.ZopimChat
 
 /**
  * @Details Dashboard screen for an app
@@ -28,15 +27,12 @@ import com.zopim.android.sdk.api.ZopimChat
  */
 class DashBoardActivity: BaseActivity() {
 
-    lateinit var webPagesDialog: Dialog
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding?.toolbarViewModel = toolbarViewModel
 
-        //initialize Zendesk chat setup
-        setUpZendeskChat()
+
         val model = ViewModelProviders.of(this).get(DashBoardViewModel::class.java)
         model.manageFragments().observe(this, Observer { isCreated ->
             if(isCreated!!){
@@ -79,7 +75,7 @@ class DashBoardActivity: BaseActivity() {
                         if(fragment is LoginFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         if(fragment is ProductDetailFragment) {
-                            (fragment as ProductDetailFragment).onResume()
+                            fragment.onResume()
                         }
                     }
                 }
@@ -87,9 +83,5 @@ class DashBoardActivity: BaseActivity() {
 
         })
 
-    }
-
-    private fun setUpZendeskChat() {
-        ZopimChat.init(Constants.ZENDESK_CHAT)
     }
 }
