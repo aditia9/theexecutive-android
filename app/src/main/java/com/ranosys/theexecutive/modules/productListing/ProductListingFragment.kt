@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.productListing
 
+import AppLog
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders

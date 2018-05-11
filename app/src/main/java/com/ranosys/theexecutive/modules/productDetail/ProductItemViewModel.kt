@@ -10,7 +10,10 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.AddToCartRequest
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.AddToCartResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences

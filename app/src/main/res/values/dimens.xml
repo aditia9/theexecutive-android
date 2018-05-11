@@ -67,5 +67,6 @@
     <dimen name="eighty_dp">80dp</dimen>
     <dimen name="four_hundred_dp">400dp</dimen>
     <dimen name="eighteen_dp">18dp</dimen>
+    <dimen name="card_corner_radius">4dp</dimen>
 
 </resources>
