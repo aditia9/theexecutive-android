@@ -305,7 +305,6 @@ object Utils {
             val name = SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME) + " " + SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME)
             val visitorInfo = VisitorInfo.Builder()
                     .email(email)
-                    .phoneNumber("889435")
                    // .name(name)
                     .build()
 
@@ -314,7 +313,6 @@ object Utils {
         }else{
             val visitorInfo = VisitorInfo.Builder()
                     .email("")
-                    .phoneNumber("889435")
                     // .name("")
                     .build()
             ZopimChat.setVisitorInfo(visitorInfo)
