@@ -292,6 +292,20 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun updateItemFromShoppingBagGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId")  cartId: String?, @Path("itemId") itemId: Int?, @Body request: ShoppingBagQtyUpdateRequest): Call<ShoppingBagResponse>
 
+
+        @PUT("rest/{store_code}/V1/carts/mine/coupons/{couponCode}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun applyCouponCodeForUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("couponCode") couponCode: String?): Call<String>
+
+
+        @PUT("rest/{store_code}/V1/guest-carts/{cartId}/coupons/{couponCode}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun applyCouponCodeForGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("couponCode")  cartId: String?,  @Path("couponCode") couponCode: String?): Call<String>
+
     }
 
     interface MyAccount {

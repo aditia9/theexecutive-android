@@ -161,4 +161,48 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
 
         })
     }
+
+
+    fun applyCouponCodeForUser(promoCode: String?) {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.applyCouponCodeForUser(promoCode, callBack = object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualDeleteItemResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualDeleteItemResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                mutualDeleteItemResponse.value = apiResponse
+            }
+
+        })
+    }
+
+
+    fun applyCouponCodeForGuestUser(promoCode: String?, cartId: String) {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.applyCouponCodeForGuestUser(couponCode = promoCode, cartId = cartId, callBack = object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualDeleteItemResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualDeleteItemResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                mutualDeleteItemResponse.value = apiResponse
+            }
+
+        })
+    }
 }

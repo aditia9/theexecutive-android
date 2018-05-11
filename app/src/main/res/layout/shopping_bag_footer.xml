@@ -4,8 +4,8 @@
     <data>
 
         <variable
-            name="item"
-            type="com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse" />
+            name="shoppingViewModel"
+            type="com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

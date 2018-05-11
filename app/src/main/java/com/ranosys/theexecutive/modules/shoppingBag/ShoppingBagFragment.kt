@@ -60,6 +60,10 @@ class ShoppingBagFragment : BaseFragment() {
                     rv_shopping_bag_list.adapter.notifyDataSetChanged()
                     cartQty -= updateQty
                     setCartTitle()
+                    if(shoppingBagViewModel.shoppingBagListResponse?.get()?.size!! == 0){
+                        c2_main_layout.visibility = View.GONE
+                        tv_no_items.visibility = View.VISIBLE
+                    }
                 }
             } else {
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
@@ -96,6 +100,7 @@ class ShoppingBagFragment : BaseFragment() {
 
 
             var size = shoppingBagViewModel.shoppingBagListResponse?.get()?.size!!
+            tv_no_items.visibility = View.GONE
 
             while (size > 0) {
                 val qty = shoppingBagViewModel.shoppingBagListResponse?.get()!![size - 1].qty
@@ -105,9 +110,9 @@ class ShoppingBagFragment : BaseFragment() {
 
             setCartTitle()
 
-            val shoppingBagAdapter = ShoppingBagAdapter(activity as Context, shoppingBagViewModel.shoppingBagListResponse!!.get(), { id: Int, pos: Int, item: ShoppingBagResponse?, qty: Int? ->
+            val shoppingBagAdapter = ShoppingBagAdapter(activity as Context, shoppingBagViewModel.shoppingBagListResponse!!.get(), { id: Int, pos: Int, item: ShoppingBagResponse?, qty: Int?, promoCode : String? ->
 
-                updateQty = qty!!
+
 
                 when (id) {
                     0 -> {
@@ -116,10 +121,12 @@ class ShoppingBagFragment : BaseFragment() {
                     }
 
                     R.id.img_wishlist -> {
+                        updateQty = qty!!
                         callAddToWishListFromBag(item?.item_id)
                         itemPosition = pos
                     }
                     R.id.img_delete -> {
+                        updateQty = qty!!
                         Utils.showDialog(context, getString(R.string.remove_item_text_bag),
                                 getString(R.string.yes), getString(R.string.no), object : DialogOkCallback {
                             override fun setDone(done: Boolean) {
@@ -130,18 +137,31 @@ class ShoppingBagFragment : BaseFragment() {
                     }
 
                     R.id.img_increment -> {
+                        updateQty = qty!!
                         cartQty += 1
                         updateCartItem(ShoppingBagQtyUpdateRequest(CartItem(item_id = item?.item_id.toString(), qty = qty.toString(), quote_id = item?.quote_id.toString())))
                     }
 
                     R.id.img_decrement -> {
+                        updateQty = qty!!
                         cartQty -= 1
                         updateCartItem(ShoppingBagQtyUpdateRequest(CartItem(item_id = item?.item_id.toString(), qty = qty.toString(), quote_id = item?.quote_id.toString())))
                     }
+
+
+                    R.id.btn_apply -> {
+                        applyCouponCode(promoCode)
+                    }
+
+                   // applyCouponCode
                 }
             })
 
             rv_shopping_bag_list.adapter = shoppingBagAdapter
+        }else{
+            c2_main_layout.visibility = View.GONE
+            tv_no_items.visibility = View.VISIBLE
+
         }
     }
 
@@ -179,6 +199,23 @@ class ShoppingBagFragment : BaseFragment() {
         shoppingBagViewModel.moveItemFromCart(item_id)
     }
 
+
+    private fun applyCouponCode(promoCode: String?) {
+        if (userToken.isNullOrBlank().not()) {
+            showLoading()
+            shoppingBagViewModel.applyCouponCodeForUser(promoCode)
+        } else {
+            val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
+                    ?: ""
+            if (guestCartId.isNotBlank()) {
+                showLoading()
+                shoppingBagViewModel.applyCouponCodeForGuestUser(promoCode, guestCartId)
+            }
+        }
+    }
+
+
+
     private fun getShoppingBag() {
         showLoading()
         if (userToken.isNullOrBlank().not()) {
@@ -199,5 +236,6 @@ class ShoppingBagFragment : BaseFragment() {
 
     private fun setCartTitle() {
         tv_cart_quantity.setText("Total " + cartQty + " Items in your cart")
+        Utils.updateCartCount(cartQty)
     }
 }

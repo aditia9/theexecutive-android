@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.modules.shoppingBag
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -11,7 +12,7 @@ import com.ranosys.theexecutive.databinding.ShoppingBagFooterBinding
 import com.ranosys.theexecutive.databinding.ShoppingBagItemBinding
 
 
-class ShoppingBagAdapter(var context: Context, var shoppingBagList: List<ShoppingBagResponse>?, val action: (Int, Int, ShoppingBagResponse?, Int?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShoppingBagAdapter(var context: Context, var shoppingBagList: List<ShoppingBagResponse>?, val action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     var mContext: Context? = null
@@ -62,19 +63,19 @@ class ShoppingBagAdapter(var context: Context, var shoppingBagList: List<Shoppin
 
     class Holder(var itemBinding: ShoppingBagItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?) -> Unit, listener: ShoppingBagAdapter.OnItemClickListener?) {
+        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, listener: ShoppingBagAdapter.OnItemClickListener?) {
             itemBinding?.item = item
             var updateQty = item?.qty
 
             itemBinding?.imgProduct?.setOnClickListener { view ->
-                action(0, position, item, updateQty)
+                action(0, position, item, updateQty, null)
             }
 
             itemBinding?.imgDecrement?.setOnClickListener { view ->
                 if (item?.qty!! > 1) {
                     updateQty = --item.qty
                     itemBinding?.tvQuantity?.text = updateQty.toString()
-                    action(view.id, position, item, updateQty)
+                    action(view.id, position, item, updateQty, null)
                 }
             }
 
@@ -83,16 +84,16 @@ class ShoppingBagAdapter(var context: Context, var shoppingBagList: List<Shoppin
                 if (item?.qty!! >= 1) {
                     updateQty = ++item.qty
                     itemBinding?.tvQuantity?.text = updateQty.toString()
-                    action(view.id, position, item, updateQty)
+                    action(view.id, position, item, updateQty, null)
                 }
             }
 
             itemBinding?.imgWishlist?.setOnClickListener { view ->
-                action(view.id, position, item, updateQty)
+                action(view.id, position, item, updateQty, null)
             }
 
             itemBinding?.imgDelete?.setOnClickListener { view ->
-                action(view.id, position, item, updateQty)
+                action(view.id, position, item, updateQty, null)
             }
         }
 
@@ -108,15 +109,14 @@ class ShoppingBagAdapter(var context: Context, var shoppingBagList: List<Shoppin
 
     class ShoppingBagFooterHolder(var itemBinding: ShoppingBagFooterBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?) -> Unit, listener: ShoppingBagAdapter.OnItemClickListener?) {
-
-            itemBinding?.tvTotal?.setText("57486787 ")
-            itemBinding?.etPromoCode?.setText("21341dkfhgjkdf")
+        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, listener: ShoppingBagAdapter.OnItemClickListener?) {
 
             itemBinding?.btnApply?.setOnClickListener { view ->
-                Toast.makeText(context, "Promo code apply", Toast.LENGTH_SHORT).show()
+                if(!TextUtils.isEmpty(itemBinding!!.etPromoCode.text.toString())){
+                    Toast.makeText(context, "Promo code apply"+ itemBinding!!.etPromoCode.text.toString(), Toast.LENGTH_SHORT).show()
+                    action(view.id, position, item, null, itemBinding!!.etPromoCode.text.toString())
+                }
             }
-
 
             itemBinding?.btnCheckout?.setOnClickListener { view ->
                 Toast.makeText(context, "Checkout", Toast.LENGTH_SHORT).show()
