@@ -87,5 +87,7 @@ object Constants {
     const val NO_USER_EXIST : String = "No user exists with this email id"
     const val ALREADY_REGISTERED : String = "It seems like you are already registered with us, kindly login"
     const val CATEGORY_IMAGE_HEIGHT_RATIO: Double = 1.5
+    const val FIRST_NAME: String = "first_name"
+    const val LAST_NAME: String = "last_name"
 
 }
