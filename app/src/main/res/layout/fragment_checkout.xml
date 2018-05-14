@@ -3,14 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="checkoutViewModel"
-            type="com.ranosys.theexecutive.modules.checkout.CheckoutViewModel"/>
+            name="country"
+            type="String"/>
+
+        <variable
+            name="address"
+            type="com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass.Address"/>
     </data>
 
 
 <android.support.design.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -91,7 +96,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/eight_dp"
-                        android:text="sd"
+                        android:text='@{address.firstname + " " +address.lastname}'
                         android:textSize="@dimen/eighteen_sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/guideline_right_address"
@@ -102,10 +107,11 @@
                     <TextView
                         android:id="@+id/tv_address"
                         android:layout_width="@dimen/match_constraint"
-                        android:layout_height="43dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/eight_dp"
-                        android:maxLines="2"
-                        android:text="Supropto 73, Jalan Cilasdssdsdski Bandung 40115 Indonesia jhgjhghghgjh"
+                        android:ellipsize="end"
+                        android:maxLines="5"
+                        android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +"\n" + address.city + ", " + address.region.region + "," + country}'
                         app:layout_constraintEnd_toStartOf="@+id/guideline_right_address"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_marginTop="@dimen/eight_dp"
-                        android:text="+62 2345678912"
+                        android:text='@{" " + address.telephone}'
                         app:layout_constraintEnd_toStartOf="@+id/guideline_right_address"
                         app:layout_constraintHorizontal_bias="0"
                         app:layout_constraintLeft_toLeftOf="parent"

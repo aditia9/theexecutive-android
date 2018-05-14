@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
+import com.ranosys.theexecutive.modules.myAccount.AddressBookFragment
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.fragment_checkout.*
 
 class CheckoutFragment : BaseFragment(){
 
@@ -30,6 +32,20 @@ class CheckoutFragment : BaseFragment(){
         return checkoutBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        address_expand_img.setOnClickListener {
+            FragmentUtils.addFragment(context, AddressBookFragment(),null, AddressBookFragment::class.java.name, true )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setToolBarParams(getString(R.string.checkout), 0, "", R.drawable.back, true, 0 , true)
+        initiateCheckoutProcess()
+    }
+
     private fun initiateCheckoutProcess() {
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
@@ -43,7 +59,13 @@ class CheckoutFragment : BaseFragment(){
     private fun observeApiResponse() {
         checkoutViewModel.selectedAddress.observe(this, Observer { address ->
             hideLoading()
-            Toast.makeText(activity, "reponse aa gya", Toast.LENGTH_SHORT).show()
+            checkoutBinding.address = address
+
+        })
+
+
+        checkoutViewModel.country.observe(this, Observer { country->
+            checkoutBinding.country = country
         })
     }
 }

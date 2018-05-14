@@ -10,6 +10,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
+import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.AddressBookFragment
@@ -83,6 +84,10 @@ class DashBoardActivity: BaseActivity() {
                         }
                         if(fragment is AddressBookFragment) {
                             (fragment as AddressBookFragment).onResume()
+                        }
+
+                        if(fragment is CheckoutFragment) {
+                            (fragment as CheckoutFragment).onResume()
                         }
                     }
                 }
