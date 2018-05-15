@@ -90,6 +90,18 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_promo_code" />
 
 
+        <ImageView
+            android:id="@+id/imv_delete_promo_code"
+            android:layout_width="wrap_content"
+            android:background="@drawable/delete"
+            android:layout_marginTop="@dimen/fifteen_dp"
+            android:padding="@dimen/ten_dp"
+            android:visibility="gone"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintEnd_toEndOf="@id/et_promo_code"
+            app:layout_constraintTop_toBottomOf="@+id/tv_promo_code"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/btn_checkout"
             android:layout_width="@dimen/match_constraint"
@@ -100,7 +112,7 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
             app:layout_constraintStart_toStartOf="@id/guideline_left_1"
-            app:layout_constraintTop_toBottomOf="@+id/btn_apply" />
+            app:layout_constraintTop_toBottomOf="@+id/et_promo_code" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -201,6 +201,6 @@
     <string name="delete_address_confirmation">You want to remove this address</string>
     <string name="address_edit_success_msg">Address Edited Successfully</string>
     <string name="add_address_success_msg">Address Added Successfully</string>
-
+    <string name="items_in_your_cart">Items in your cart</string>
 
 </resources>

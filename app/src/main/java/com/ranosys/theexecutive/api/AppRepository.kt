@@ -15,7 +15,8 @@ import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagQtyUpdateRequest
-import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingCartResponse
+import com.ranosys.theexecutive.modules.shoppingBag.TotalResponse
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
@@ -735,15 +736,15 @@ object AppRepository {
         })
     }
 
-    fun getCartOfUser(callBack: ApiCallback<List<ShoppingBagResponse>>) {
+    fun getCartOfUser(callBack: ApiCallback<ShoppingCartResponse>) {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
 
         val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCartOfUser(ApiConstants.BEARER + userToken, storeCode)
 
-        callPost?.enqueue(object : Callback<List<ShoppingBagResponse>> {
-            override fun onResponse(call: Call<List<ShoppingBagResponse>>?, response: Response<List<ShoppingBagResponse>>?) {
+        callPost?.enqueue(object : Callback<ShoppingCartResponse> {
+            override fun onResponse(call: Call<ShoppingCartResponse>?, response: Response<ShoppingCartResponse>?) {
                 if (!response!!.isSuccessful) {
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
 
@@ -752,21 +753,21 @@ object AppRepository {
                 }
             }
 
-            override fun onFailure(call: Call<List<ShoppingBagResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<ShoppingCartResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })
     }
 
-    fun getCartOfGuest(cartId: String ,callBack: ApiCallback<List<ShoppingBagResponse>>) {
+    fun getCartOfGuest(cartId: String ,callBack: ApiCallback<ShoppingCartResponse>) {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
 
         val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCartOfGuest((ApiConstants.BEARER + adminToken), storeCode, cartId)
 
-        callPost?.enqueue(object : Callback<List<ShoppingBagResponse>> {
-            override fun onResponse(call: Call<List<ShoppingBagResponse>>?, response: Response<List<ShoppingBagResponse>>?) {
+        callPost?.enqueue(object : Callback<ShoppingCartResponse> {
+            override fun onResponse(call: Call<ShoppingCartResponse>?, response: Response<ShoppingCartResponse>?) {
                 if (!response!!.isSuccessful) {
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
 
@@ -775,7 +776,7 @@ object AppRepository {
                 }
             }
 
-            override fun onFailure(call: Call<List<ShoppingBagResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<ShoppingCartResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })
@@ -910,15 +911,16 @@ object AppRepository {
         })
     }
 
-    fun updateFromShoppingBagItemGuestUser(shoppingBagQtyUpdateRequest : ShoppingBagQtyUpdateRequest, callBack: ApiCallback<ShoppingBagResponse>) {
+    fun updateFromShoppingBagItemGuestUser(shoppingBagQtyUpdateRequest : ShoppingBagQtyUpdateRequest, callBack: ApiCallback<ShoppingBagQtyUpdateRequest>) {
         val retrofit = ApiClient.retrofit
-        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
+        val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.updateItemFromShoppingBagGuestUser(ApiConstants.BEARER + userToken,  storeCode, shoppingBagQtyUpdateRequest.cartItem.quote_id, shoppingBagQtyUpdateRequest.cartItem.item_id.toInt(), shoppingBagQtyUpdateRequest)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.updateItemFromShoppingBagGuestUser(ApiConstants.BEARER + adminToken,  storeCode, guestCartId, shoppingBagQtyUpdateRequest.cartItem.item_id.toInt(), shoppingBagQtyUpdateRequest)
 
-        callGet?.enqueue(object : Callback<ShoppingBagResponse> {
-            override fun onResponse(call: Call<ShoppingBagResponse>?, response: Response<ShoppingBagResponse>?) {
+        callGet?.enqueue(object : Callback<ShoppingBagQtyUpdateRequest> {
+            override fun onResponse(call: Call<ShoppingBagQtyUpdateRequest>?, response: Response<ShoppingBagQtyUpdateRequest>?) {
                 if(!response!!.isSuccessful){
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                 } else {
@@ -926,14 +928,14 @@ object AppRepository {
                 }
             }
 
-            override fun onFailure(call: Call<ShoppingBagResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ShoppingBagQtyUpdateRequest>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })
     }
 
 
-    fun updateFromShoppingBagItemUser( shoppingBagQtyUpdateRequest : ShoppingBagQtyUpdateRequest, callBack: ApiCallback<ShoppingBagResponse>) {
+    fun updateFromShoppingBagItemUser( shoppingBagQtyUpdateRequest : ShoppingBagQtyUpdateRequest, callBack: ApiCallback<ShoppingBagQtyUpdateRequest>) {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
@@ -941,8 +943,8 @@ object AppRepository {
         val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.updateItemFromShoppingBagUser(ApiConstants.BEARER + userToken,  storeCode, shoppingBagQtyUpdateRequest.cartItem.item_id.toInt()
                 , shoppingBagQtyUpdateRequest )
 
-        callGet?.enqueue(object : Callback<ShoppingBagResponse> {
-            override fun onResponse(call: Call<ShoppingBagResponse>?, response: Response<ShoppingBagResponse>?) {
+        callGet?.enqueue(object : Callback<ShoppingBagQtyUpdateRequest> {
+            override fun onResponse(call: Call<ShoppingBagQtyUpdateRequest>?, response: Response<ShoppingBagQtyUpdateRequest>?) {
                 if(!response!!.isSuccessful){
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                 } else {
@@ -950,7 +952,7 @@ object AppRepository {
                 }
             }
 
-            override fun onFailure(call: Call<ShoppingBagResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ShoppingBagQtyUpdateRequest>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })
@@ -1045,6 +1047,137 @@ object AppRepository {
         })
     }
 
+    fun getCouponCodeForUser(  callBack: ApiCallback<Any>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCouponCodeForUser(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<Any> {
+            override fun onResponse(call: Call<Any>?, response: Response<Any>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getCouponCodeForGuestUser(cartId: String , callBack: ApiCallback<Any>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCouponCodeForGuestUser(ApiConstants.BEARER + userToken,  storeCode, cartId)
+
+        callGet?.enqueue(object : Callback<Any> {
+            override fun onResponse(call: Call<Any>?, response: Response<Any>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getTotalForUser(  callBack: ApiCallback<TotalResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getTotalForUser(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<TotalResponse> {
+            override fun onResponse(call: Call<TotalResponse>?, response: Response<TotalResponse>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<TotalResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getTotalForGuestUser(cartId: String , callBack: ApiCallback<TotalResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getTotalForGuestUser(ApiConstants.BEARER + userToken,  storeCode, cartId)
+
+        callGet?.enqueue(object : Callback<TotalResponse> {
+            override fun onResponse(call: Call<TotalResponse>?, response: Response<TotalResponse>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<TotalResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun deleteCouponCodeForUser(callBack: ApiCallback<String>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteCouponCodeForUser(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun deleteCouponCodeForGuestUser(cartId: String , callBack: ApiCallback<String>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteCouponCodeForGuestUser(ApiConstants.BEARER + userToken,  storeCode, cartId)
+
+        callGet?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
 
 
     fun addToBagWishlistItem(itemId : Int?, callBack: ApiCallback<String>) {

@@ -7,48 +7,55 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
-
+/**
+ * @Class An data class for Shopping bag view model
+ * @author Ranosys Technologies
+ * @Date 15-May-2018
+ */
 
 class ShoppingBagViewModel(application: Application) : BaseViewModel(application) {
 
-    var mutualShoppingBaglistResponse = MutableLiveData<ApiResponse<List<ShoppingBagResponse>>>()
-    var mutualShoppingBagItemResponse = MutableLiveData<ApiResponse<ShoppingBagResponse>>()
+    var mutualShoppingBagListResponse = MutableLiveData<ApiResponse<ShoppingCartResponse>>()
+    var mutualShoppingBagItemResponse = MutableLiveData<ApiResponse<ShoppingBagQtyUpdateRequest>>()
+    var mutualTotalResponse = MutableLiveData<ApiResponse<TotalResponse>>()
     var mutualDeleteItemResponse = MutableLiveData<ApiResponse<String>>()
-    var shoppingBagListResponse: ObservableField<MutableList<ShoppingBagResponse>>? = ObservableField()
+    var mutualPromoCodeResponse = MutableLiveData<ApiResponse<String>>()
+    var mutualPromoCodeDeleteResponse = MutableLiveData<ApiResponse<String>>()
+    var shoppingBagListResponse: ObservableField<ShoppingCartResponse>? = ObservableField()
 
     fun getShoppingBagForUser() {
-        val apiResponse = ApiResponse<List<ShoppingBagResponse>>()
-        AppRepository.getCartOfUser(callBack = object : ApiCallback<List<ShoppingBagResponse>> {
-            override fun onSuccess(t: List<ShoppingBagResponse>?) {
+        val apiResponse = ApiResponse<ShoppingCartResponse>()
+        AppRepository.getCartOfUser(callBack = object : ApiCallback<ShoppingCartResponse> {
+            override fun onSuccess(t: ShoppingCartResponse?) {
                 apiResponse.apiResponse = t
-                mutualShoppingBaglistResponse.value = apiResponse
+                mutualShoppingBagListResponse.value = apiResponse
             }
 
             override fun onException(error: Throwable) {
-                mutualShoppingBaglistResponse.value?.throwable = error
+                mutualShoppingBagListResponse.value?.throwable = error
             }
 
             override fun onError(errorMsg: String) {
-                mutualShoppingBaglistResponse.value?.error = errorMsg
+                mutualShoppingBagListResponse.value?.error = errorMsg
             }
         })
     }
 
 
     fun getShoppingBagForGuestUser(cartId: String) {
-        val apiResponse = ApiResponse<List<ShoppingBagResponse>>()
-        AppRepository.getCartOfGuest(callBack = object : ApiCallback<List<ShoppingBagResponse>> {
-            override fun onSuccess(t: List<ShoppingBagResponse>?) {
+        val apiResponse = ApiResponse<ShoppingCartResponse>()
+        AppRepository.getCartOfGuest(callBack = object : ApiCallback<ShoppingCartResponse> {
+            override fun onSuccess(t: ShoppingCartResponse?) {
                 apiResponse.apiResponse = t
-                mutualShoppingBaglistResponse.value = apiResponse
+                mutualShoppingBagListResponse.value = apiResponse
             }
 
             override fun onException(error: Throwable) {
-                mutualShoppingBaglistResponse.value?.throwable = error
+                mutualShoppingBagListResponse.value?.throwable = error
             }
 
             override fun onError(errorMsg: String) {
-                mutualShoppingBaglistResponse.value?.error = errorMsg
+                mutualShoppingBagListResponse.value?.error = errorMsg
             }
 
         }, cartId = cartId)
@@ -99,8 +106,8 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
 
 
     fun updateItemFromShoppingBagUser(shoppingBagQtyUpdateRequest: ShoppingBagQtyUpdateRequest) {
-        val apiResponse = ApiResponse<ShoppingBagResponse>()
-        AppRepository.updateFromShoppingBagItemUser(shoppingBagQtyUpdateRequest, callBack = object : ApiCallback<ShoppingBagResponse> {
+        val apiResponse = ApiResponse<ShoppingBagQtyUpdateRequest>()
+        AppRepository.updateFromShoppingBagItemUser(shoppingBagQtyUpdateRequest, callBack = object : ApiCallback<ShoppingBagQtyUpdateRequest> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 mutualShoppingBagItemResponse.value = apiResponse
@@ -111,7 +118,7 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
                 mutualShoppingBagItemResponse.value = apiResponse
             }
 
-            override fun onSuccess(t: ShoppingBagResponse?) {
+            override fun onSuccess(t: ShoppingBagQtyUpdateRequest?) {
                 apiResponse.apiResponse = t
                 mutualShoppingBagItemResponse.value = apiResponse
             }
@@ -120,8 +127,8 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
     }
 
     fun updateItemFromShoppingBagGuest(shoppingBagQtyUpdateRequest: ShoppingBagQtyUpdateRequest) {
-        val apiResponse = ApiResponse<ShoppingBagResponse>()
-        AppRepository.updateFromShoppingBagItemGuestUser(shoppingBagQtyUpdateRequest, callBack = object : ApiCallback<ShoppingBagResponse> {
+        val apiResponse = ApiResponse<ShoppingBagQtyUpdateRequest>()
+        AppRepository.updateFromShoppingBagItemGuestUser(shoppingBagQtyUpdateRequest, callBack = object : ApiCallback<ShoppingBagQtyUpdateRequest> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 mutualShoppingBagItemResponse.value = apiResponse
@@ -132,7 +139,7 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
                 mutualShoppingBagItemResponse.value = apiResponse
             }
 
-            override fun onSuccess(t: ShoppingBagResponse?) {
+            override fun onSuccess(t: ShoppingBagQtyUpdateRequest?) {
                 apiResponse.apiResponse = t
                 mutualShoppingBagItemResponse.value = apiResponse
             }
@@ -201,6 +208,143 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
                 mutualDeleteItemResponse.value = apiResponse
+            }
+
+        })
+    }
+
+    fun getCouponCodeForUser() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.getCouponCodeForUser(callBack = object : ApiCallback<Any> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualPromoCodeResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualPromoCodeResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: Any?) {
+                if (t is String) {
+                    apiResponse.apiResponse = "" + t.toString()
+                } else {
+                    apiResponse.apiResponse = ""
+                }
+                mutualPromoCodeResponse.value = apiResponse
+            }
+
+        })
+    }
+
+
+    fun getCouponCodeForGuestUser(cartId: String) {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.getCouponCodeForGuestUser(cartId = cartId, callBack = object : ApiCallback<Any> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualPromoCodeResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualPromoCodeResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: Any?) {
+                if (t is String) {
+                    apiResponse.apiResponse = "" + t.toString()
+                } else {
+                    apiResponse.apiResponse = ""
+                }
+                mutualPromoCodeResponse.value = apiResponse
+            }
+
+        })
+    }
+
+
+    fun getTotalForUser() {
+        val apiResponse = ApiResponse<TotalResponse>()
+        AppRepository.getTotalForUser(callBack = object : ApiCallback<TotalResponse> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualTotalResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualTotalResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: TotalResponse?) {
+                apiResponse.apiResponse = t
+                mutualTotalResponse.value = apiResponse
+            }
+
+        })
+    }
+
+
+    fun getTotalForGuestUser(cartId: String) {
+        val apiResponse = ApiResponse<TotalResponse>()
+        AppRepository.getTotalForGuestUser(cartId = cartId, callBack = object : ApiCallback<TotalResponse> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualTotalResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualTotalResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: TotalResponse?) {
+                apiResponse.apiResponse = t
+                mutualTotalResponse.value = apiResponse
+            }
+        })
+    }
+
+
+    fun deleteCouponCodeForUser() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.deleteCouponCodeForUser(callBack = object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualPromoCodeDeleteResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualPromoCodeDeleteResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                mutualPromoCodeDeleteResponse.value = apiResponse
+            }
+
+        })
+    }
+
+    fun deleteCouponCodeForGuestUser(cartId: String) {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.deleteCouponCodeForGuestUser(cartId = cartId, callBack = object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                mutualPromoCodeDeleteResponse.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                mutualPromoCodeDeleteResponse.value = apiResponse
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                mutualPromoCodeDeleteResponse.value = apiResponse
             }
 
         })

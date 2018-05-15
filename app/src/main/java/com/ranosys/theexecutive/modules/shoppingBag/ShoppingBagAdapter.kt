@@ -5,23 +5,36 @@ import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.ShoppingBagFooterBinding
 import com.ranosys.theexecutive.databinding.ShoppingBagItemBinding
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.Utils
 
+/**
+ * @Class An data class for Shopping bag adapter
+ * @author Ranosys Technologies
+ * @Date 15-May-2018
+ */
 
-class ShoppingBagAdapter(var context: Context, var shoppingBagList: List<ShoppingBagResponse>?, val action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+const val TYPE_FOOTER = 0
+const val TYPE_ITEM = 1
 
+class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResponse?, promoCode: String, grandTotal: Int, private val action: (Int, Int, Item?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var mContext: Context? = null
-    private val TYPE_FOOTER = 0
-    private val TYPE_ITEM = 1
-    var clickListener: ShoppingBagAdapter.OnItemClickListener? = null
+    private var mContext: Context? = null
+    private var mPromoCode: String
+    private var mGrandTotal: Int = 0
+
+    private var clickListener: ShoppingBagAdapter.OnItemClickListener? = null
 
     init {
         mContext = context
+        mPromoCode = promoCode
+        mGrandTotal = grandTotal
     }
 
     interface OnItemClickListener {
@@ -33,93 +46,149 @@ class ShoppingBagAdapter(var context: Context, var shoppingBagList: List<Shoppin
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == shoppingBagList?.size) TYPE_FOOTER else TYPE_ITEM
+        return if (position == shoppingBag?.items!!.size) TYPE_FOOTER else TYPE_ITEM
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
 
-        if (viewType == TYPE_FOOTER) {
+        return if (viewType == TYPE_FOOTER) {
             val binding: ShoppingBagFooterBinding? = DataBindingUtil.inflate(LayoutInflater.from(parent?.context), R.layout.shopping_bag_footer, parent, false)
-            return ShoppingBagFooterHolder(itemBinding = binding)
+            ShoppingBagFooterHolder(itemBinding = binding)
 
         } else {
             val binding: ShoppingBagItemBinding? = DataBindingUtil.inflate(LayoutInflater.from(parent?.context), R.layout.shopping_bag_item, parent, false)
-            return Holder(itemBinding = binding)
+            Holder(itemBinding = binding)
         }
     }
 
     override fun getItemCount(): Int {
-        shoppingBagList?.run {
+        shoppingBag?.items?.run {
             return size + 1
         }
         return 0
     }
 
 
-    fun getItem(position: Int): ShoppingBagResponse? {
-        return shoppingBagList?.get(position)
+    private fun getItem(position: Int): Item? {
+        return shoppingBag?.items?.get(position)
     }
 
 
     class Holder(var itemBinding: ShoppingBagItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, listener: ShoppingBagAdapter.OnItemClickListener?) {
+        fun bind(context: Context?, item: Item?, position: Int, action: (Int, Int, Item?, Int?, String?) -> Unit) {
             itemBinding?.item = item
             var updateQty = item?.qty
 
-            itemBinding?.imgProduct?.setOnClickListener { view ->
+            itemBinding?.imgProduct?.setOnClickListener {
                 action(0, position, item, updateQty, null)
             }
 
-            itemBinding?.imgDecrement?.setOnClickListener { view ->
-                if (item?.qty!! > 1) {
-                    updateQty = --item.qty
-                    itemBinding?.tvQuantity?.text = updateQty.toString()
+            itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.price.toString(), item?.extension_attributes?.regular_price.toString())
+
+            item?.product_option?.extension_attributes?.configurable_item_options.run {
+
+                if (item?.product_option?.extension_attributes?.configurable_item_options != null && item.product_option.extension_attributes.configurable_item_options.isNotEmpty()) {
+                    item.product_option.extension_attributes.configurable_item_options.forEach {
+                        when (it.extension_attributes.attribute_label) {
+                            Constants.COLOR_ -> {
+                                itemBinding?.tvProductColor?.text = it.extension_attributes.option_label
+                            }
+                            Constants.SIZE_ -> {
+                                itemBinding?.tvProductSize?.text = it.extension_attributes.option_label
+                            }
+                        }
+                    }
+                } else {
+                    itemBinding?.layoutColorSize?.visibility = View.INVISIBLE
+                }
+
+
+
+                item?.extension_attributes?.stock_item?.run {
+                    if (is_in_stock) {
+                        itemBinding?.tvOutOfStock?.visibility = View.GONE
+                    } else {
+                        itemBinding?.tvOutOfStock?.visibility = View.INVISIBLE
+                    }
+                }
+
+                itemBinding?.imgDecrement?.setOnClickListener { view ->
+
+                    if (item?.extension_attributes?.stock_item?.is_in_stock!!) {
+                        if (item.qty > 1) {
+                            updateQty = item.qty
+                            updateQty = (updateQty!! - 1)
+                            itemBinding?.tvQuantity?.text = updateQty.toString()
+                            action(view.id, position, item, updateQty, null)
+                        }
+                    }
+                }
+
+                itemBinding?.imgIncrement?.setOnClickListener { view ->
+
+                    if (item?.extension_attributes?.stock_item?.is_in_stock!!) {
+                        var localItemCount = item.qty
+                        if (item.qty >= 1 && item.extension_attributes.stock_item.qty >= ++localItemCount) {
+                            updateQty = localItemCount
+                            itemBinding?.tvQuantity?.text = updateQty.toString()
+                            action(view.id, position, item, updateQty, null)
+                        } else {
+                            Toast.makeText(context, context?.getString(R.string.no_more_products), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                itemBinding?.imgWishlist?.setOnClickListener { view ->
+                    action(view.id, position, item, updateQty, null)
+                }
+
+                itemBinding?.imgDelete?.setOnClickListener { view ->
                     action(view.id, position, item, updateQty, null)
                 }
             }
 
-            itemBinding?.imgIncrement?.setOnClickListener { view ->
-
-                if (item?.qty!! >= 1) {
-                    updateQty = ++item.qty
-                    itemBinding?.tvQuantity?.text = updateQty.toString()
-                    action(view.id, position, item, updateQty, null)
-                }
-            }
-
-            itemBinding?.imgWishlist?.setOnClickListener { view ->
-                action(view.id, position, item, updateQty, null)
-            }
-
-            itemBinding?.imgDelete?.setOnClickListener { view ->
-                action(view.id, position, item, updateQty, null)
-            }
         }
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder is Holder) {
-            holder.bind(mContext, getItem(position), position, action, clickListener)
+            holder.bind(mContext, getItem(position), position, action)
         } else if (holder is ShoppingBagFooterHolder) {
-            holder.bind(mContext, null, position, action, clickListener)
+            holder.bind(mContext, null, position, action, mPromoCode, mGrandTotal)
         }
     }
 
     class ShoppingBagFooterHolder(var itemBinding: ShoppingBagFooterBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, listener: ShoppingBagAdapter.OnItemClickListener?) {
+        fun bind(context: Context?, item: Item?, position: Int, action: (Int, Int, Item?, Int?, String?) -> Unit, mPromoCode: String, mGrandTotal: Int) {
 
             itemBinding?.btnApply?.setOnClickListener { view ->
-                if(!TextUtils.isEmpty(itemBinding!!.etPromoCode.text.toString())){
-                    Toast.makeText(context, "Promo code apply"+ itemBinding!!.etPromoCode.text.toString(), Toast.LENGTH_SHORT).show()
+                if (!TextUtils.isEmpty(itemBinding!!.etPromoCode.text.toString())) {
                     action(view.id, position, item, null, itemBinding!!.etPromoCode.text.toString())
                 }
             }
 
-            itemBinding?.btnCheckout?.setOnClickListener { view ->
-                Toast.makeText(context, "Checkout", Toast.LENGTH_SHORT).show()
+            itemBinding?.btnCheckout?.setOnClickListener {
+            }
+
+            if (mGrandTotal != 0) {
+                itemBinding?.tvTotal?.text = Utils.getFromattedPrice(mGrandTotal.toString())
+            }
+
+            if (!TextUtils.isEmpty(mPromoCode)) {
+                itemBinding?.etPromoCode?.setText(mPromoCode)
+                itemBinding?.etPromoCode?.isEnabled = false
+                itemBinding?.imvDeletePromoCode?.visibility = View.VISIBLE
+                itemBinding?.btnApply?.visibility = View.GONE
+
+            } else {
+                itemBinding?.imvDeletePromoCode?.visibility = View.GONE
+                itemBinding?.btnApply?.visibility = View.VISIBLE
+            }
+
+            itemBinding?.imvDeletePromoCode?.setOnClickListener { view ->
+                action(view.id, position, item, null, itemBinding!!.etPromoCode.text.toString())
             }
         }
     }
