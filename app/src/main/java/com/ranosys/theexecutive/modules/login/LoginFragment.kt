@@ -273,7 +273,9 @@ class LoginFragment: BaseFragment() {
                 firstName = fbDataResult.first_name
                 lastName = fbDataResult.last_name
                 email = fbDataResult.email
-                gender = fbDataResult.gender
+                if(fbDataResult.gender != null){
+                    gender = fbDataResult.gender
+                }
             }
 
         } catch (e: JSONException) {
