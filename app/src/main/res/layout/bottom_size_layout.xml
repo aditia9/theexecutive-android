@@ -136,8 +136,13 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/twenty_dp"
+                    android:gravity="right"
+                    android:maxLines="2"
+                    android:layout_marginEnd="@dimen/sixteen_dp"
+                    android:layout_marginStart="@dimen/twenty_dp"
+                    android:layout_toRightOf="@id/btn_done"
                     android:textStyle="bold"
+                    android:textSize="@dimen/fourteen_sp"
                     />
 
             </RelativeLayout>
