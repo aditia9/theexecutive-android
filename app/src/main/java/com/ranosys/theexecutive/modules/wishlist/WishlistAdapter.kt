@@ -82,7 +82,7 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
                         }
                     }
                 }else{
-                    itemBinding?.layoutColorSize?.visibility = View.INVISIBLE
+                    itemBinding?.layoutColorSize?.visibility = View.GONE
                 }
             }
 

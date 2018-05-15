@@ -69,8 +69,8 @@
                 android:layout_marginEnd="@dimen/twenty_four_dp"
                 android:layout_marginStart="@dimen/twenty_four_dp"
                 android:layout_marginTop="@dimen/eight_dp"
-                android:maxLines="2"
-                android:text='@{address.street[0] + " " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +", " + country}'
+                android:maxLines="5"
+                android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +"\n" + address.city + ", " + address.region.region + ", " + country}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_name" />
