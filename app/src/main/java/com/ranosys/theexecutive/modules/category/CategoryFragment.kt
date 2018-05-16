@@ -19,19 +19,23 @@ import android.widget.ExpandableListView
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
 import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
+import com.ranosys.theexecutive.modules.myAccount.AddAddressFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
+import kotlinx.android.synthetic.main.toolbar_layout.view.*
 
 /**
  * @Details Class showing categories on Home screen
@@ -51,6 +55,10 @@ class CategoryFragment : BaseFragment() {
         categoryModelView = ViewModelProviders.of(this).get(CategoryModelView::class.java)
         mViewDataBinding?.categoryViewModel = categoryModelView
         mViewDataBinding?.executePendingBindings()
+
+        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
+            FragmentUtils.addFragment(context, ShoppingBagFragment(),null, ShoppingBagFragment::class.java.name, true )
+        }
         return mViewDataBinding?.root
     }
 
