@@ -207,10 +207,6 @@
     <string name="add_address_failure_msg">Oops.. this is on us, please retry</string>
     <string name="udate_profile_success_msg">Your profile is now updated.</string>
 
-    <string name="dafault_address_delete_warning">can\'t delete default address</string>
-    <string name="delete_address_confirmation">You want to remove this address</string>
-    <string name="address_edit_success_msg">Address Edited Successfully</string>
-    <string name="add_address_success_msg">Address Added Successfully</string>
     <string name="items_in_your_cart"> Items in your cart</string>
 
 </resources>
