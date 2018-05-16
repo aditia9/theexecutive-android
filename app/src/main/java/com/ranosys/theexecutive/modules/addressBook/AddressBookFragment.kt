@@ -69,8 +69,11 @@ class AddressBookFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
         addressBookAdapter.addressList = GlobalSingelton.instance?.userInfo?.addresses
+    }
+
+    fun setToolbarAndCallAddressApi(){
+        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
         getAddressList()
     }
 
@@ -168,7 +171,7 @@ class AddressBookFragment: BaseFragment() {
     }
 
     private fun removeAddress(addressPosition: Int) {
-        if(addressList?.get(addressPosition) == Utils.getDefaultAddress()){
+        if(addressList?.get(addressPosition)?.default_billing == true && addressList?.get(addressPosition)?.default_shipping == true){
             Utils.showDialog(activity, getString(R.string.dafault_address_delete_warning), getString(android.R.string.ok), "", null)
         }else{
             Utils.showDialog(activity, getString(R.string.delete_address_confirmation), getString(android.R.string.ok), getString(android.R.string.cancel), object: DialogOkCallback{

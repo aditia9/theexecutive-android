@@ -173,7 +173,7 @@
     <string name="mobile_number_label">Mobile Number : </string>
     <string name="remove">Remove</string>
     <string name="add_addresse">Add Address</string>
-    <string name="wishlist_items_count">Total %1$d items in your wishlist.</string>
+    <string name="wishlist_items_count">Total %1$d items in your wishlist</string>
     <string name="bag_icon">Bag Icon</string>
     <string name="delete_icon">Delete Icon</string>
     <string name="remove_item_text">Are you sure you want to remove item from your wishlist?</string>
@@ -189,7 +189,7 @@
     <string name="forward_icon">Forward icon</string>
     <string name="one">1</string>
     <string name="product_out_of_stock">This product is out of stock.</string>
-    <string name="login_required_for_wishlist">Please login before adding items to your wish list.</string>
+    <string name="login_required_for_wishlist">Please login before adding items to your wish list</string>
     <string name="address_remove_success_msg">Address removed successfully</string>
     <string name="dafault_address_delete_warning">Default address cannot be removed.</string>
     <string name="delete_address_confirmation">Are you sure you want to remove this address? </string>

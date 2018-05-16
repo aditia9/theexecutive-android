@@ -48,7 +48,10 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
 
     fun removeAddress(address: MyAccountDataClass.Address?) {
         val addList = addressList.value?.apiResponse?.toMutableList()
-        addList?.remove(address)
+        val tempAddress = addList?.single { it.id == address?.id }
+        if(tempAddress != null){
+            addList.remove(tempAddress)
+        }
 
         var updatedInfo = GlobalSingelton.instance?.userInfo?.copy()
         updatedInfo?.addresses = addList
