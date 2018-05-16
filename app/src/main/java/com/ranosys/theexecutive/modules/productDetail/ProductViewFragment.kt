@@ -203,8 +203,10 @@ class ProductViewFragment : BaseFragment() {
     }
 
     private fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
-        Utils.setImageViewHeight(activity as Context, img_one, 27)
-        Utils.setImageViewHeight(activity as Context, img_two, 27)
+
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, 1.5)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, 1.5)
+
         if(mediaGalleryList?.size!! > 0)
             productItemViewModel.urlOne.set(mediaGalleryList[0].file)
         if(mediaGalleryList.size > 1) {
@@ -218,7 +220,7 @@ class ProductViewFragment : BaseFragment() {
         for(i in 2..listSize.minus(1)){
             val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
             productImagesBinding?.mediaGalleryEntry = mediaGalleryList[i]
-            Utils.setImageViewHeight(activity as Context, productImagesBinding?.imgProductImage, 27)
+            Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage!!, 1.5)
             val view = productImagesBinding!!.root.img_product_image
             view.setOnClickListener {
                 val drawable=view.drawable as BitmapDrawable
@@ -600,6 +602,7 @@ class ProductViewFragment : BaseFragment() {
                 rv_color_view.adapter = colorViewAdapter
                 colorViewAdapter.setItemClickListener(object : ColorRecyclerAdapter.OnItemClickListener {
                     override fun onItemClick(item: ProductViewFragment.ColorsView?, position: Int) {
+                        product_scroll_view.fullScroll(View.FOCUS_UP)
                         colorsViewList?.forEachIndexed { index, _ ->
                             colorsViewList?.get(index)?.isSelected = index == position
                         }
