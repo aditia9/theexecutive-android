@@ -15,7 +15,6 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
-import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -104,16 +103,16 @@ class MyAccountFragment : BaseFragment() {
                             FragmentUtils.addFragment(context, ChangePasswordFragment(), null, ChangePasswordFragment::class.java.name, true)
                         }
 
-                        context.getString(R.string.my_information_option) ->{
-                            FragmentUtils.addFragment(context, MyInformationFragment(),null, MyInformationFragment::class.java.name, true )
+                        context.getString(R.string.my_information_option) -> {
+                            FragmentUtils.addFragment(context, MyInformationFragment(), null, MyInformationFragment::class.java.name, true)
                         }
 
-                        context.getString(R.string.select_lang_title) ->{
-                            FragmentUtils.addFragment(context, ChangeLanguageFragment(),null, ChangeLanguageFragment::class.java.name, true )
+                        context.getString(R.string.select_lang_title) -> {
+                            FragmentUtils.addFragment(context, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, true)
                         }
 
-                        context.getString(R.string.shipping_address) ->{
-                            FragmentUtils.addFragment(context, AddressBookFragment(),null, AddressBookFragment::class.java.name, true )
+                        context.getString(R.string.shipping_address) -> {
+                            FragmentUtils.addFragment(context, AddressBookFragment(), null, AddressBookFragment::class.java.name, true)
                         }
                     }
                 }

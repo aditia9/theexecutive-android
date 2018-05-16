@@ -346,9 +346,9 @@ class ShoppingBagFragment : BaseFragment() {
         setToolBarParams(getString(R.string.shopping_bag), 0, "", R.drawable.back, true, 0, false)
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setCartTitle() {
-        tv_cart_quantity.setText(getString(R.string.total) + " "+ cartQty + " "+ getString(R.string.items_in_your_cart))
+        val qtyMsg = getString(R.string.total) + " "+ cartQty + " "+ getString(R.string.items_in_your_cart)
+        tv_cart_quantity.text =  qtyMsg
         Utils.updateCartCount(cartQty)
     }
 }
