@@ -15,18 +15,18 @@ import com.ranosys.theexecutive.base.BaseViewModel
 
 class ShoppingBagViewModel(application: Application) : BaseViewModel(application) {
 
-    var mutualShoppingBagListResponse = MutableLiveData<ApiResponse<ShoppingCartResponse>>()
+    var mutualShoppingBagListResponse = MutableLiveData<ApiResponse<List<ShoppingBagResponse>>>()
     var mutualShoppingBagItemResponse = MutableLiveData<ApiResponse<ShoppingBagQtyUpdateRequest>>()
     var mutualTotalResponse = MutableLiveData<ApiResponse<TotalResponse>>()
     var mutualDeleteItemResponse = MutableLiveData<ApiResponse<String>>()
     var mutualPromoCodeResponse = MutableLiveData<ApiResponse<String>>()
     var mutualPromoCodeDeleteResponse = MutableLiveData<ApiResponse<String>>()
-    var shoppingBagListResponse: ObservableField<ShoppingCartResponse>? = ObservableField()
+    var shoppingBagListResponse: ObservableField<MutableList<ShoppingBagResponse>>? = ObservableField()
 
     fun getShoppingBagForUser() {
-        val apiResponse = ApiResponse<ShoppingCartResponse>()
-        AppRepository.getCartOfUser(callBack = object : ApiCallback<ShoppingCartResponse> {
-            override fun onSuccess(t: ShoppingCartResponse?) {
+        val apiResponse = ApiResponse<List<ShoppingBagResponse>>()
+        AppRepository.getCartOfUser(callBack = object : ApiCallback<List<ShoppingBagResponse>> {
+            override fun onSuccess(t: List<ShoppingBagResponse>?) {
                 apiResponse.apiResponse = t
                 mutualShoppingBagListResponse.value = apiResponse
             }
@@ -43,9 +43,9 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
 
 
     fun getShoppingBagForGuestUser(cartId: String) {
-        val apiResponse = ApiResponse<ShoppingCartResponse>()
-        AppRepository.getCartOfGuest(callBack = object : ApiCallback<ShoppingCartResponse> {
-            override fun onSuccess(t: ShoppingCartResponse?) {
+        val apiResponse = ApiResponse<List<ShoppingBagResponse>>()
+        AppRepository.getCartOfGuest(callBack = object : ApiCallback<List<ShoppingBagResponse>> {
+            override fun onSuccess(t: List<ShoppingBagResponse>?) {
                 apiResponse.apiResponse = t
                 mutualShoppingBagListResponse.value = apiResponse
             }
@@ -175,17 +175,17 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
         AppRepository.applyCouponCodeForUser(promoCode, callBack = object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
-                mutualDeleteItemResponse.value = apiResponse
+                mutualPromoCodeResponse.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
                 apiResponse.error = errorMsg
-                mutualDeleteItemResponse.value = apiResponse
+                mutualPromoCodeResponse.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
-                mutualDeleteItemResponse.value = apiResponse
+                mutualPromoCodeResponse.value = apiResponse
             }
 
         })
@@ -197,17 +197,17 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
         AppRepository.applyCouponCodeForGuestUser(couponCode = promoCode, cartId = cartId, callBack = object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
-                mutualDeleteItemResponse.value = apiResponse
+                mutualPromoCodeResponse.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
                 apiResponse.error = errorMsg
-                mutualDeleteItemResponse.value = apiResponse
+                mutualPromoCodeResponse.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
-                mutualDeleteItemResponse.value = apiResponse
+                mutualPromoCodeResponse.value = apiResponse
             }
 
         })

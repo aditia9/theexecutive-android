@@ -202,5 +202,8 @@
     <string name="address_edit_success_msg">Address Edited Successfully</string>
     <string name="add_address_success_msg">Address Added Successfully</string>
     <string name="items_in_your_cart"> Items in your cart</string>
+    <string name="only">Only</string>
+    <string name="product_available">product available</string>
+    <string name="promo_code_invalid">The promo code you entered is not valid.</string>
 
 </resources>

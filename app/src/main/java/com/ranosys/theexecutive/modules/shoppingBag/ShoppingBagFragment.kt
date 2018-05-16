@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.modules.shoppingBag
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -19,6 +18,7 @@ import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_shopping_bag.*
+import kotlinx.android.synthetic.main.shopping_bag_footer.*
 
 
 /**
@@ -50,23 +50,23 @@ class ShoppingBagFragment : BaseFragment() {
     }
 
     private fun observeEvents() {
-        shoppingBagViewModel.mutualShoppingBagListResponse.observe(this, Observer<ApiResponse<ShoppingCartResponse>> { apiResponse ->
+        shoppingBagViewModel.mutualShoppingBagListResponse.observe(this, Observer<ApiResponse<List<ShoppingBagResponse>>> { apiResponse ->
             hideLoading()
-
             if (apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
-                if (response is ShoppingCartResponse) {
-                    shoppingBagViewModel.shoppingBagListResponse?.set(response)
+                if (response is List<ShoppingBagResponse>) {
+                    shoppingBagViewModel.shoppingBagListResponse?.set(response as MutableList<ShoppingBagResponse>?)
                     setShoppingBagAdapter()
                 }
             } else {
+                hideLoading()
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
 
+
         // for delete item
         shoppingBagViewModel.mutualDeleteItemResponse.observe(this, Observer<ApiResponse<String>> { apiResponse ->
-            hideLoading()
             if (apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is String) {
@@ -82,6 +82,7 @@ class ShoppingBagFragment : BaseFragment() {
                          }*/
                 }
             } else {
+                hideLoading()
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
@@ -89,7 +90,6 @@ class ShoppingBagFragment : BaseFragment() {
 
         // getPromo code apply
         shoppingBagViewModel.mutualPromoCodeResponse.observe(this, Observer<ApiResponse<String>> { apiResponse ->
-            hideLoading()
             if (apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is String) {
@@ -104,6 +104,9 @@ class ShoppingBagFragment : BaseFragment() {
                     }
                 }
             } else {
+                hideLoading()
+                et_promo_code.setText(" ")
+                et_promo_code.error = getString(R.string.promo_code_invalid)
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
@@ -111,7 +114,6 @@ class ShoppingBagFragment : BaseFragment() {
 
         //for get delete promo code
         shoppingBagViewModel.mutualPromoCodeDeleteResponse.observe(this, Observer<ApiResponse<String>> { apiResponse ->
-            hideLoading()
             if (apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is String) {
@@ -121,12 +123,12 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                hideLoading()
             }
         })
 
         // for update Qty
         shoppingBagViewModel.mutualShoppingBagItemResponse.observe(this, Observer<ApiResponse<ShoppingBagQtyUpdateRequest>> { apiResponse ->
-            hideLoading()
             if (apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is ShoppingBagQtyUpdateRequest) {
@@ -136,19 +138,20 @@ class ShoppingBagFragment : BaseFragment() {
                 getShoppingBag()
                 setCartTitle()
             } else {
+                hideLoading()
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
 
         // For get Total prices
         shoppingBagViewModel.mutualTotalResponse.observe(this, Observer<ApiResponse<TotalResponse>> { apiResponse ->
-            hideLoading()
             if (apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is TotalResponse) {
                     totalPrice = response.subtotal
                 }
             } else {
+                hideLoading()
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
@@ -161,24 +164,22 @@ class ShoppingBagFragment : BaseFragment() {
                 return true
             }
         }
+        cartQty = 0
         rv_shopping_bag_list.layoutManager = linearLayoutManager
 
-        if (shoppingBagViewModel.shoppingBagListResponse?.get()?.items?.size!! > 0) {
+        if (shoppingBagViewModel.shoppingBagListResponse?.get()?.size!! > 0) {
 
+            var size = shoppingBagViewModel.shoppingBagListResponse?.get()?.size
 
-            var size = shoppingBagViewModel.shoppingBagListResponse?.get()?.items?.size
             tv_no_items.visibility = View.GONE
-
             while (size!! > 0) {
-                val qty = shoppingBagViewModel.shoppingBagListResponse?.get()!!.items[size - 1].qty
+                val qty = shoppingBagViewModel.shoppingBagListResponse?.get()!![size - 1].qty
                 cartQty = cartQty.plus(qty)
                 size--
             }
-
             setCartTitle()
 
-            val shoppingBagAdapter = ShoppingBagAdapter(activity as Context, shoppingBagViewModel.shoppingBagListResponse!!.get(), promoCode, totalPrice, { id: Int, pos: Int, item: Item?, qty: Int?, promoCode: String? ->
-
+            val shoppingBagAdapter = ShoppingBagAdapter(activity as Context, shoppingBagViewModel.shoppingBagListResponse!!.get(), promoCode, totalPrice, { id: Int, pos: Int, item: ShoppingBagResponse?, qty: Int?, promoCode: String? ->
 
                 when (id) {
                     0 -> {
@@ -225,7 +226,6 @@ class ShoppingBagFragment : BaseFragment() {
 
                 }
             })
-
             rv_shopping_bag_list.adapter = shoppingBagAdapter
         } else {
             c2_main_layout.visibility = View.GONE
@@ -347,8 +347,8 @@ class ShoppingBagFragment : BaseFragment() {
     }
 
     private fun setCartTitle() {
-        val qtyMsg = getString(R.string.total) + " "+ cartQty + " "+ getString(R.string.items_in_your_cart)
-        tv_cart_quantity.text =  qtyMsg
+        val qtyMsg = getString(R.string.total) + " " + cartQty + " " + getString(R.string.items_in_your_cart)
+        tv_cart_quantity.text = qtyMsg
         Utils.updateCartCount(cartQty)
     }
 }
