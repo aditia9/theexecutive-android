@@ -232,6 +232,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             }
 
             override fun onSuccess(userToken: String?) {
+                SavedPreferences.getInstance()?.saveStringValue(emailAddress.get(), Constants.USER_EMAIL)
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
                 apiSocialRegResponse?.value = userToken
 
@@ -313,6 +314,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         if (TextUtils.isEmpty(postalCode.get())){
             postalCodeError.set(context.getString(R.string.postal_error))
+            isValid = false
+        }else if(!Utils.isValidPincode(postalCode.get())){
+            postalCodeError.set(context.getString(R.string.valid_postal_error))
             isValid = false
         }
 

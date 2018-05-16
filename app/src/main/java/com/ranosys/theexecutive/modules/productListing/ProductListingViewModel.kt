@@ -29,7 +29,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var selectedFilterMap = hashMapOf<String, String>()
     var selectedPriceRange = ProductListingDataClass.PriceRange()
     var selectedSortOption = ProductListingDataClass.SortOptionResponse("", "")
-
+    var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
     var productListResponse: ProductListingDataClass.ProductListingResponse? = null
 
     fun getSortOptions(type: String) {
@@ -130,10 +130,12 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
         AppRepository.getProductList(prepareProductListingRequest(catId ?: Constants.UNIVERSAL_CAT_ID, query,fromSearch), fromSearch,  object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
             override fun onException(error: Throwable) {
+                apiFailureResponse?.value = error.message
                 Utils.printLog("product listing", error.message?: "exception")
             }
 
             override fun onError(errorMsg: String) {
+                apiFailureResponse?.value = errorMsg
                 Utils.printLog("product listing", errorMsg)
             }
 
