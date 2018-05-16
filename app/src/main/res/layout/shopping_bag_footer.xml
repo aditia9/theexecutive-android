@@ -87,20 +87,37 @@
             android:background="@drawable/ghost_btn_bg"
             android:text="@string/btn_apply"
             app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
-            app:layout_constraintTop_toBottomOf="@+id/tv_promo_code" />
+            app:layout_constraintBottom_toBottomOf="@+id/et_promo_code" />
 
+
+        <TextView
+            android:id="@+id/tv_applied_promo_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:text="@string/promo_code"
+            android:textSize="@dimen/sixteen_sp"
+            android:visibility="visible"
+            android:padding="@dimen/ten_dp"
+            android:textColor="@color/light_green"
+            android:background="@drawable/applied_promo_code_bg"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_1"
+            app:layout_constraintTop_toBottomOf="@+id/et_promo_code" />
 
         <ImageView
             android:id="@+id/imv_delete_promo_code"
             android:layout_width="wrap_content"
-            android:background="@drawable/delete"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/fifteen_dp"
+            android:background="@drawable/delete"
+            android:contentDescription="@string/app_name"
             android:padding="@dimen/ten_dp"
             android:visibility="gone"
-            android:contentDescription="@string/app_name"
-            app:layout_constraintEnd_toEndOf="@id/et_promo_code"
-            app:layout_constraintTop_toBottomOf="@+id/tv_promo_code"
-            android:layout_height="wrap_content" />
+            android:layout_marginStart="@dimen/ten_dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_applied_promo_code"
+            app:layout_constraintStart_toEndOf="@id/tv_applied_promo_code"
+            app:layout_constraintTop_toTopOf="@+id/tv_applied_promo_code"
+            app:layout_constraintVertical_bias="0.04000002" />
 
         <Button
             android:id="@+id/btn_checkout"
@@ -112,7 +129,7 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
             app:layout_constraintStart_toStartOf="@id/guideline_left_1"
-            app:layout_constraintTop_toBottomOf="@+id/et_promo_code" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_applied_promo_code" />
 
     </android.support.constraint.ConstraintLayout>
 

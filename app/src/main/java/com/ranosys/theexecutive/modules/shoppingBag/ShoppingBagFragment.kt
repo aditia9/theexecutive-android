@@ -72,7 +72,6 @@ class ShoppingBagFragment : BaseFragment() {
                 if (response is String) {
                     isFromPromoCode = false
                     getShoppingBag()
-                    TODO("FOR FUTURE USE")
                     /*     shoppingBagViewModel.shoppingBagListResponse?.get()?.items?.removeAt(itemPosition)
                          rv_shopping_bag_list.adapter.notifyDataSetChanged()
                          cartQty -= updateQty
@@ -349,7 +348,7 @@ class ShoppingBagFragment : BaseFragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setCartTitle() {
-        tv_cart_quantity.setText(getString(R.string.total) + cartQty + getString(R.string.items_in_your_cart))
+        tv_cart_quantity.setText(getString(R.string.total) + " "+ cartQty + " "+ getString(R.string.items_in_your_cart))
         Utils.updateCartCount(cartQty)
     }
 }

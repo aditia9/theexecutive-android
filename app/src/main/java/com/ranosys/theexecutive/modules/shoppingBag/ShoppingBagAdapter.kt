@@ -109,7 +109,7 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
                     if (is_in_stock) {
                         itemBinding?.tvOutOfStock?.visibility = View.GONE
                     } else {
-                        itemBinding?.tvOutOfStock?.visibility = View.INVISIBLE
+                        itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
                     }
                 }
 
@@ -119,7 +119,7 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
                         if (item.qty > 1) {
                             updateQty = item.qty
                             updateQty = (updateQty!! - 1)
-                            itemBinding?.tvQuantity?.text = updateQty.toString()
+                           // itemBinding?.tvQuantity?.text = updateQty.toString()
                             action(view.id, position, item, updateQty, null)
                         }
                     }
@@ -131,7 +131,7 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
                         var localItemCount = item.qty
                         if (item.qty >= 1 && item.extension_attributes.stock_item.qty >= ++localItemCount) {
                             updateQty = localItemCount
-                            itemBinding?.tvQuantity?.text = updateQty.toString()
+                            //itemBinding?.tvQuantity?.text = updateQty.toString()
                             action(view.id, position, item, updateQty, null)
                         } else {
                             Toast.makeText(context, context?.getString(R.string.no_more_products), Toast.LENGTH_SHORT).show()
@@ -177,13 +177,13 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
             }
 
             if (!TextUtils.isEmpty(mPromoCode)) {
-                itemBinding?.etPromoCode?.setText(mPromoCode)
-                itemBinding?.etPromoCode?.isEnabled = false
+                itemBinding?.tvAppliedPromoCode?.setText(mPromoCode)
                 itemBinding?.imvDeletePromoCode?.visibility = View.VISIBLE
+                itemBinding?.etPromoCode?.visibility = View.GONE
                 itemBinding?.btnApply?.visibility = View.GONE
-
             } else {
                 itemBinding?.imvDeletePromoCode?.visibility = View.GONE
+                itemBinding?.tvAppliedPromoCode?.visibility = View.GONE
                 itemBinding?.btnApply?.visibility = View.VISIBLE
             }
 
