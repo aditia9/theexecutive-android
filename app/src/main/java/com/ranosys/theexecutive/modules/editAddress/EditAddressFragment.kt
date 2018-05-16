@@ -114,7 +114,7 @@ class EditAddressFragment:BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.add_addresse), 0, "", R.drawable.back, true, 0 , false)
+        setToolBarParams(getString(R.string.edit_addresse), 0, "", R.drawable.back, true, 0 , false)
     }
 
     companion object {
