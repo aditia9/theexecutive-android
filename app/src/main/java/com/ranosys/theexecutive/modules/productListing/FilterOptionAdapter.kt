@@ -80,7 +80,7 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
                 productListVM.selectedFilterMap.put(filter!!.code, filter.options.get(childPos).value)
 
                 for (item in getGroup(groupPos)?.options!!){
-                    item._isSelected.set(false)
+                    item._isSelected?.set(false)
                 }
 
                 val op= getChild(groupPos, childPos)
