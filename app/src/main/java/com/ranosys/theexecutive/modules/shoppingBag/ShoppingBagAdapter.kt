@@ -126,8 +126,14 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                         if (item.qty > 1) {
                             updateQty = item.qty
                             updateQty = (updateQty!! - 1)
-                           // itemBinding?.tvQuantity?.text = updateQty.toString()
-                            action(view.id, position, item, updateQty, null)
+                            if(item.qty > item.extension_attributes.stock_item.qty){
+                                val fullMsg = context?.getString(R.string.only) + " "+ item.extension_attributes.stock_item.qty + " " + context?.getString(R.string.product_available)
+                                itemBinding?.tvQtyMsg?.text = fullMsg
+                                itemBinding?.tvQtyMsg?.visibility = View.VISIBLE
+                            }else{
+                                itemBinding?.tvQtyMsg?.visibility = View.GONE
+                                action(view.id, position, item, updateQty, null)
+                            }
                         }
                     }
                 }
