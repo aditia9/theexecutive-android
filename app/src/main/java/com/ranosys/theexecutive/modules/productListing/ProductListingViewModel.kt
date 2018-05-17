@@ -226,7 +226,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         }
 
         if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
-            selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.toFloat().toInt().toString() + "-" + selectedPriceRange.max.toFloat().toInt().toString())
+            selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.replace(".","") + "-" + selectedPriceRange.max.replace(".",""))
         }
 
         for((key, value) in selectedFilterMap){
