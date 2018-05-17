@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.editAddress
 
 import AppLog
 import android.app.Application
@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.register.RegisterViewModel
 import com.ranosys.theexecutive.utils.Constants
@@ -105,7 +106,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
             mobileNo = address?.telephone ?: ""
         }
         val country = GlobalSingelton.instance?.storeList?.single { it.code == address?.country_id}
-        maskedAddress =  MyAccountDataClass.MaskedUserInfo(
+        maskedAddress = MyAccountDataClass.MaskedUserInfo(
                 _id = address?.id,
                 _firstName = address?.firstname,
                 _lastName = address?.lastname,
@@ -114,7 +115,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
                 _city = address?.city,
                 _state = address?.region?.region,
                 _streedAdd1 = address?.street?.get(0),
-                _streedAdd2 = if(address?.street?.size!! > 1) address.street[1] else "",
+                _streedAdd2 = if (address?.street?.size!! > 1) address.street[1] else "",
                 _mobile = mobileNo,
                 _postalCode = address.postcode,
                 _countryCode = countryCode
@@ -176,7 +177,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
             isValid = false
         }
 
-        if (TextUtils.isEmpty(maskedAddress?.streedAdd1) && TextUtils.isEmpty(maskedAddress?.streedAdd2)){
+        if (TextUtils.isEmpty(maskedAddress?.streedAdd1)){
             streetAddress1Error.set(context.getString(R.string.street_address_error))
             isValid = false
         }

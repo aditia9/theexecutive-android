@@ -36,6 +36,8 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.zopim.android.sdk.api.ZopimChat
+import com.zopim.android.sdk.model.VisitorInfo
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import java.text.NumberFormat
 import java.util.*
@@ -301,6 +303,29 @@ object Utils {
         }
         return IMEI
     }
+
+    fun setUpZendeskChat() {
+        val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        if(!TextUtils.isEmpty(isLogin)) {
+            val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
+            val name = SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME) + " " + SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME)
+            val visitorInfo = VisitorInfo.Builder()
+                    .email(email)
+                   // .name(name)
+                    .build()
+
+            // visitor info can be set at any point when that information becomes available
+            ZopimChat.setVisitorInfo(visitorInfo)
+        }else{
+            val visitorInfo = VisitorInfo.Builder()
+                    .email("")
+                    // .name("")
+                    .build()
+            ZopimChat.setVisitorInfo(visitorInfo)
+        }
+        ZopimChat.init(Constants.ZENDESK_CHAT)
+    }
+
 
     fun getCountryName(id: String): String{
         return GlobalSingelton.instance?.storeList?.single { it.code.toString() == id }.let { it?.name } ?: ""

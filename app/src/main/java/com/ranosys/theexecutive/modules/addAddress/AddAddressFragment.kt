@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.addAddress
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -46,7 +46,7 @@ class AddAddressFragment: BaseFragment() {
                 Toast.makeText(activity,getString(R.string.add_address_success_msg), Toast.LENGTH_SHORT).show()
                 activity?.onBackPressed()
             }else{
-                Utils.showDialog(activity,apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
             }
         })
     }

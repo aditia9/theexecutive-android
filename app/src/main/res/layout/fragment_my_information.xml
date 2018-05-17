@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.ranosys.theexecutive.modules.myAccount.MyInformationViewModel"/>
+            type="com.ranosys.theexecutive.modules.myInformation.MyInformationViewModel"/>
 
         <variable
             name="info"
@@ -68,6 +68,7 @@
                         android:text="@={info.firstName}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/hint_color"
                         android:maxLength="50"
                         android:editable="false"
                         android:paddingStart="@dimen/field_start_padding"/>
@@ -88,6 +89,7 @@
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_last_name"
                         android:text="@={info.lastName}"
+                        android:textColor="@color/hint_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
@@ -112,6 +114,7 @@
                         android:layout_width="match_parent"
                         android:paddingStart="@dimen/field_start_padding"
                         android:text="@={info.email}"
+                        android:textColor="@color/hint_color"
                         android:layout_height="wrap_content"
                         android:editable="false"/>
                 </android.support.design.widget.TextInputLayout>
@@ -171,6 +174,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={info.streedAdd1}"
+                        android:textColor="@color/hint_color"
                         android:editable="false"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
@@ -192,6 +196,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={info.streedAdd2}"
+                        android:textColor="@color/hint_color"
                         android:editable="false"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
@@ -213,6 +218,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={info.country}"
+                        android:textColor="@color/hint_color"
                         android:editable="false"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
@@ -234,6 +240,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={info.state}"
+                        android:textColor="@color/hint_color"
                         android:editable="false"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
@@ -255,6 +262,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={info.city}"
+                        android:textColor="@color/hint_color"
                         android:editable="false"
                         android:paddingStart="@dimen/field_start_padding"/>
                 </android.support.design.widget.TextInputLayout>
@@ -275,6 +283,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/field_start_padding"
+                        android:textColor="@color/hint_color"
                         android:text="@={info.postalCode}"
                         android:editable="false" />
                 </android.support.design.widget.TextInputLayout>
@@ -283,8 +292,8 @@
                     android:id="@+id/btn_save"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/black_button_bg"
                     android:text="@string/save"
+                    android:background="@color/hint_color"
                     android:theme="@style/button_theme"
                     android:layout_marginTop="@dimen/forty_dp"
                     android:layout_marginRight="@dimen/twenty_four_dp"

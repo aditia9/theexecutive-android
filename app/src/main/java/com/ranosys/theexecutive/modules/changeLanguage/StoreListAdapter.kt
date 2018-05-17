@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.changeLanguage
 
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
