@@ -108,7 +108,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                         }
                     }
                 } else {
-                    itemBinding?.layoutColorSize?.visibility = View.INVISIBLE
+                    itemBinding?.layoutColorSize?.visibility = View.GONE
                 }
 
 
