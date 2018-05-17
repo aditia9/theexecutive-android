@@ -25,7 +25,6 @@ import java.util.*
  */
 class FCMListenerService : FirebaseMessagingService() {
 
-    private var dataMap: Map<String, String>? = null
     internal lateinit var redirectType: String
     internal lateinit var redirectValue: String
     internal lateinit var redirectTitle: String
@@ -39,14 +38,14 @@ class FCMListenerService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        dataMap = remoteMessage.data
-        redirectType = (dataMap as MutableMap<String, String>?)?.get(Constants.KEY_REDIRECTION_TYPE)!!
-        redirectValue = (dataMap as MutableMap<String, String>?)?.get(Constants.KEY_REDIRECTION_VALUE)!!
-        redirectTitle = (dataMap as MutableMap<String, String>?)?.get(Constants.KEY_REDIRECTION_TITLE)!!
-        redirectUrl = (dataMap as MutableMap<String, String>?)?.get(Constants.KEY_REDIRECTION_URL)!!
-        title = (dataMap as MutableMap<String, String>?)?.get(Constants.KEY_NOTIFICATION_TITLE)!!
-        message = (dataMap as MutableMap<String, String>?)?.get(Constants.KEY_NOTIFICATION_ALERT)!!
-        notificationId = (dataMap as MutableMap<String, String>?)?.get(Constants.KEY_NOTIFICATION_ID)!!
+        var dataMap = (remoteMessage.data as Map<String, String>)
+        redirectType = dataMap.get(Constants.KEY_REDIRECTION_TYPE) ?: ""
+        redirectValue = dataMap.get(Constants.KEY_REDIRECTION_VALUE) ?: ""
+        redirectTitle = dataMap.get(Constants.KEY_REDIRECTION_TITLE) ?: ""
+        redirectUrl = dataMap.get(Constants.KEY_IMAGE) ?: ""
+        title = dataMap.get(Constants.KEY_NOTIFICATION_TITLE) ?: ""
+        message = dataMap.get(Constants.KEY_NOTIFICATION_ALERT) ?: ""
+        notificationId = dataMap.get(Constants.KEY_NOTIFICATION_ID) ?: ""
 
         Constants.notificationCounter++
 
@@ -61,7 +60,7 @@ class FCMListenerService : FirebaseMessagingService() {
 
         val intent = Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        /*  intent.putExtra(Constant.KEY_REDIRECT_TYPE, redirectType)
+       /*   intent.putExtra(Constant.KEY_REDIRECT_TYPE, redirectType)
           intent.putExtra(Constant.KEY_REDIRECT_TITLE, redirectTitle)
           intent.putExtra(Constant.KEY_REDIRECT_URL, redirectUrl)
           intent.putExtra(Constant.KEY_ID, redirectValue)

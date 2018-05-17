@@ -102,13 +102,24 @@ object Constants {
     const val NOTIFICATION_CHANNEL_ID = "4655"
     var notificationCounter = 0
 
-    const val KEY_REDIRECTION_TYPE = "redirectType"
-    const val KEY_REDIRECTION_VALUE = "redirectTypeValue"
-    const val KEY_REDIRECTION_URL = "notification_cms_url"
-    const val KEY_REDIRECTION_TITLE = "redirect_title"
-    const val KEY_NOTIFICATION_TITLE = "notification_title"
+    const val KEY_REDIRECTION_TYPE = "type"
+    const val KEY_REDIRECTION_VALUE = "type_id"
+    const val KEY_IMAGE = "image"
+    const val KEY_REDIRECTION_TITLE = "redirection_title"
+    const val KEY_NOTIFICATION_TITLE = "title"
     const val KEY_NOTIFICATION_ALERT = "notification_alert"
     const val KEY_NOTIFICATION_ID = "notification_id"
+    const val KEY_NOTIFICATION_MESSAGE = "message"
+
+ /*   0 = "notification_id"
+    1 = "type_id"
+    2 = "type"
+    3 = "alert"
+    4 = "image"
+    5 = "title"
+    6 = "message"
+    7 = "coupon_code"
+    8 = "redirection_title"*/
 
     const val NOTIFICATION_TYPE_CMS = "cms"
     const val NOTIFICATION_TYPE_PRODUCT_DETAIL = "product_detail"

@@ -78,7 +78,7 @@ class SplashActivity : BaseActivity() {
             redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
             redirectionValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
             redirectTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
-            redirectURL = extras.getString(Constants.KEY_REDIRECTION_URL)
+            redirectURL = extras.getString(Constants.KEY_IMAGE)
             notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
         }
     }
@@ -200,7 +200,7 @@ class SplashActivity : BaseActivity() {
         if (!TextUtils.isEmpty(redirectType)) {
             intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
             intent.putExtra(Constants.KEY_NOTIFICATION_TITLE, redirectTitle)
-            intent.putExtra(Constants.KEY_REDIRECTION_URL, redirectURL)
+            intent.putExtra(Constants.KEY_IMAGE, redirectURL)
             intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
             intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
         }
@@ -243,8 +243,9 @@ class SplashActivity : BaseActivity() {
         if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))) {
             SavedPreferences.getInstance()?.saveStringValue(Settings.Secure.getString(contentResolver,
                     Settings.Secure.ANDROID_ID), Constants.ANDROID_DEVICE_ID_KEY)
-        }
 
+        }
+        AppLog.d("device id: "+SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
         if (!TextUtils.isEmpty(SavedPreferences.getInstance()?.getFcmID(Constants.USER_FCM_ID))) {
 
         }
