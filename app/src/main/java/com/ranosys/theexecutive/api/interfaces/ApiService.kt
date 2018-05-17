@@ -261,7 +261,7 @@ interface ApiService {
         fun getCartOfGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Path("cart_id") cartId: String): Call<List<ShoppingBagResponse>>
 
 
-        @DELETE("rest/{store_code}/V1/carts/mine/guest-carts/{cartId}/items/{itemId}")
+        @DELETE("rest/{store_code}/V1/guest-carts/{cartId}/items/{itemId}")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
@@ -286,7 +286,7 @@ interface ApiService {
         fun updateItemFromShoppingBagUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("itemId") itemId: Int?, @Body request: ShoppingBagQtyUpdateRequest): Call<ShoppingBagQtyUpdateRequest>
 
 
-        @PUT("rest/{store_code}/V1/carts/mine/guest-carts/{cartId}/items/{itemId}")
+        @PUT("rest/{store_code}/V1/guest-carts/{cartId}/items/{itemId}")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)

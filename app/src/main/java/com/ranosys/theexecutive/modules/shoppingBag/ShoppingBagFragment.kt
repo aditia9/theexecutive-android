@@ -105,7 +105,25 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                et_promo_code.setText(" ")
+                et_promo_code.setText("")
+                et_promo_code.error = getString(R.string.promo_code_invalid)
+                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+            }
+        })
+
+
+        // Apply Promo code apply
+        shoppingBagViewModel.mutualApplyPromoCodeResponse.observe(this, Observer<ApiResponse<String>> { apiResponse ->
+            if (apiResponse?.error.isNullOrEmpty()) {
+                val response = apiResponse?.apiResponse
+                if (response is String) {
+                    if (!TextUtils.isEmpty(response)) {
+                        getShoppingBag()
+                    }
+                }
+            } else {
+                hideLoading()
+                et_promo_code.setText("")
                 et_promo_code.error = getString(R.string.promo_code_invalid)
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }

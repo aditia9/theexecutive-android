@@ -161,7 +161,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
 
 
                 if(item?.qty!! > 0){
-                    itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice((item.price * item.qty).toString(), (item.extension_attributes.regular_price *  item.qty).toString())
+                    itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice((item.extension_attributes.regular_price  * item.qty).toString(), (item.price*  item.qty).toString())
                 }
 
                 if(item.extension_attributes.stock_item.is_in_stock){

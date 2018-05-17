@@ -20,6 +20,7 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
     var mutualTotalResponse = MutableLiveData<ApiResponse<TotalResponse>>()
     var mutualDeleteItemResponse = MutableLiveData<ApiResponse<String>>()
     var mutualPromoCodeResponse = MutableLiveData<ApiResponse<String>>()
+    var mutualApplyPromoCodeResponse = MutableLiveData<ApiResponse<String>>()
     var mutualPromoCodeDeleteResponse = MutableLiveData<ApiResponse<String>>()
     var shoppingBagListResponse: ObservableField<MutableList<ShoppingBagResponse>>? = ObservableField()
 
@@ -175,17 +176,17 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
         AppRepository.applyCouponCodeForUser(promoCode, callBack = object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
-                mutualPromoCodeResponse.value = apiResponse
+                mutualApplyPromoCodeResponse.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
                 apiResponse.error = errorMsg
-                mutualPromoCodeResponse.value = apiResponse
+                mutualApplyPromoCodeResponse.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
-                mutualPromoCodeResponse.value = apiResponse
+                mutualApplyPromoCodeResponse.value = apiResponse
             }
 
         })
@@ -197,17 +198,17 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
         AppRepository.applyCouponCodeForGuestUser(couponCode = promoCode, cartId = cartId, callBack = object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
-                mutualPromoCodeResponse.value = apiResponse
+                mutualApplyPromoCodeResponse.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
                 apiResponse.error = errorMsg
-                mutualPromoCodeResponse.value = apiResponse
+                mutualApplyPromoCodeResponse.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
-                mutualPromoCodeResponse.value = apiResponse
+                mutualApplyPromoCodeResponse.value = apiResponse
             }
 
         })
