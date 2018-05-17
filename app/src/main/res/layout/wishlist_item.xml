@@ -92,6 +92,7 @@
                 android:id="@+id/tv_product_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAllCaps="true"
                 android:textSize="@dimen/fourteen_sp"/>
 
             <View
@@ -106,6 +107,7 @@
                 android:id="@+id/tv_product_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAllCaps="true"
                 android:layout_marginStart="@dimen/six_dp"
                 android:textSize="@dimen/fourteen_sp"
                 />
