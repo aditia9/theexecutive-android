@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
+import com.ranosys.theexecutive.modules.order.OrderListResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordDataClass
@@ -855,6 +856,27 @@ object AppRepository {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getOrdersList(callBack: ApiCallback<List<OrderListResponse>>){
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getMyOrderList(ApiConstants.BEARER + userToken, storeCode)
+        callGet?.enqueue(object : Callback<List<OrderListResponse>> {
+
+            override fun onResponse(call: Call<List<OrderListResponse>>?, response: Response<List<OrderListResponse>>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<OrderListResponse>>?, t: Throwable?) {
                 callBack.onError(Constants.ERROR)
             }
         })

@@ -15,6 +15,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
+import com.ranosys.theexecutive.modules.order.OrderListFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -113,6 +114,10 @@ class MyAccountFragment : BaseFragment() {
 
                         context.getString(R.string.shipping_address) ->{
                             FragmentUtils.addFragment(context, AddressBookFragment(),null, AddressBookFragment::class.java.name, true )
+                        }
+
+                        context.getString(R.string.my_orders) -> {
+                            FragmentUtils.addFragment(context, OrderListFragment(),null, OrderListFragment::class.java.name, true )
                         }
                     }
                 }

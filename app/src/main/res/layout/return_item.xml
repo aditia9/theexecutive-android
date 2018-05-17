@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_product"
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="@dimen/forty_dp"
+            android:layout_marginTop="@dimen/twenty_dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/one"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_name_of_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/twenty_dp"
+            android:fontFamily="@font/dax_medium"
+            android:text="3/4TH T-SHIRT"
+            android:textSize="@dimen/twenty_sp"
+            app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_product_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:hint="SKU 8003025547"
+            app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintTop_toBottomOf="@id/txt_name_of_product" />
+
+        <TextView
+            android:id="@+id/txt_product_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:text="Black"
+            app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintTop_toBottomOf="@id/txt_product_id" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="@dimen/one_dp"
+            android:layout_height="@dimen/twenty_dp"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintStart_toEndOf="@id/txt_product_color"
+            app:layout_constraintTop_toBottomOf="@id/txt_product_id" />
+
+        <TextView
+            android:id="@+id/txt_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:text="L"
+            app:layout_constraintStart_toEndOf="@id/view"
+            app:layout_constraintTop_toBottomOf="@id/txt_product_id" />
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IDR 249.900"
+            android:textColor="#FF0000"
+            android:textSize="@dimen/sixteen_sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.79"
+            app:layout_constraintStart_toEndOf="@id/txt_size"
+            app:layout_constraintTop_toTopOf="@id/txt_size" />
+
+        <TextView
+            android:id="@+id/tv_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Return Qty"
+            android:textSize="@dimen/sixteen_sp"
+            app:layout_constraintEnd_toEndOf="@id/img_product"
+            app:layout_constraintStart_toStartOf="@id/img_product"
+            app:layout_constraintTop_toBottomOf="@id/img_product" />
+
+
+        <Button
+            android:id="@+id/btn_back"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:background="@drawable/back"
+            app:layout_constraintStart_toStartOf="@id/img_product"
+            app:layout_constraintTop_toBottomOf="@+id/tv_return" />
+
+        <TextView
+            android:id="@+id/txt_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="@dimen/sixteen_sp"
+            app:layout_constraintEnd_toEndOf="@id/btn_forward"
+            app:layout_constraintStart_toStartOf="@id/btn_back"
+            app:layout_constraintTop_toBottomOf="@id/tv_return" />
+
+        <Button
+            android:id="@+id/btn_forward"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:background="@drawable/forward"
+            app:layout_constraintEnd_toEndOf="@id/tv_return"
+            app:layout_constraintTop_toBottomOf="@+id/tv_return" />
+
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/thirty_dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_return"
+            app:layout_constraintTop_toBottomOf="@id/img_product" />
+
+        <CheckBox
+            android:id="@+id/chk_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.37" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

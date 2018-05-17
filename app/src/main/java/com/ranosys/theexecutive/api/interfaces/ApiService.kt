@@ -2,6 +2,7 @@ package com.ranosys.theexecutive.api.interfaces
 
 import com.google.gson.JsonObject
 import com.ranosys.theexecutive.api.ApiConstants
+import com.ranosys.theexecutive.modules.order.OrderListResponse
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
@@ -244,6 +245,14 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun addTOCartGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode:String, @Path("cart_id") cartId: String,  @Body request: AddToCartRequest): Call<AddToCartResponse>
+    }
+
+    interface MyOrdersService {
+        @GET("rest/{store_code}/V1/orders/mine")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getMyOrderList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String): Call<List<OrderListResponse>>
     }
 
     interface MyAccount {
