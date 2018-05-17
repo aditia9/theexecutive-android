@@ -182,10 +182,9 @@ class CategoryFragment : BaseFragment() {
 
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        handler.removeCallbacksAndMessages(null)
+    override fun onDestroy() {
+        super.onDestroy()
+       handler.removeCallbacksAndMessages(null)
     }
 
     private fun getPromotions() {
