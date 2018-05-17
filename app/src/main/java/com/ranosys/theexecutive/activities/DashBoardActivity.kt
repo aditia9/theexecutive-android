@@ -97,13 +97,14 @@ class DashBoardActivity : BaseActivity() {
         val redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
         val redirectValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
         val redirectTitle = extras.getString(Constants.KEY_REDIRECTION_TITLE)
+        val notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
+        val notificationImg = extras.getString(Constants.KEY_IMAGE)
+        val notificationTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
+        val notificationMessage = extras.getString(Constants.KEY_NOTIFICATION_MESSAGE)
 
         if (!TextUtils.isEmpty(redirectType)) {
             when (redirectType) {
 
-                Constants.NOTIFICATION_TYPE_CMS -> {
-
-                }
                 Constants.NOTIFICATION_TYPE_PRODUCT_DETAIL -> {
                     val fragment = ProductDetailFragment.getInstance(null, redirectValue, redirectTitle, 0)
                     FragmentUtils.addFragment(this, fragment, null, ProductDetailFragment::class.java.name, true)
@@ -117,7 +118,11 @@ class DashBoardActivity : BaseActivity() {
                 }
 
                 Constants.NOTIFICATION_TYPE_ORDER_LIST->{
+                    //redirect to order list
+                }
 
+                else -> {
+                    //redirect to notification list
                 }
             }
         }

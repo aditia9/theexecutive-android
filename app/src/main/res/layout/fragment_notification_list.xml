@@ -2,11 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable
-            name="newsLetterVM"
-            type="com.ranosys.theexecutive.modules.myAccount.NewsLetterViewModel"/>
-    </data>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/notification_list"

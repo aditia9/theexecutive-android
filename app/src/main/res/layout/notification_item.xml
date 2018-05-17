@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
 
         <variable
             name="notification"
@@ -13,6 +17,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/sixteen_dp"
         android:background="@{notification.isRead ? @color/notification_read_bg : @android:color/white}">
 
         <ImageView
@@ -28,25 +33,28 @@
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/twenty_dp"
             android:layout_marginStart="@dimen/fifteen_dp"
-            android:layout_marginTop="@dimen/fifteen_dp"
-            android:textSize="@dimen/sixteen_sp"
+            android:text="@{notification.title}"
+            android:hint="Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_desc"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/twenty_dp"
             android:layout_marginStart="@dimen/fifteen_dp"
-            android:layout_marginTop="@dimen/three_dp"
+            android:layout_marginTop="@dimen/four_dp"
             android:textSize="@dimen/fourteen_sp"
+            android:text="@{notification.description}"
+            android:hint="DescriptionsDescriptionsDescriptions DesionsDescriptions DescrptionsDescriptions  DescptionsDescriptions DescriptionsDescriptions"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
 
@@ -57,8 +65,8 @@
             android:layout_marginStart="@dimen/ten_dp"
             android:layout_marginTop="@dimen/three_dp"
             android:text="25 Dec 2018, 01:15 Am"
-            android:textColor="@color/chat_bubble_stroke"
-            android:textSize="@dimen/twelve_sp"
+            android:textSize="@dimen/fourteen_sp"
+            android:textColor="@color/hint_color"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
@@ -69,6 +77,8 @@
             android:layout_marginTop="@dimen/ten_dp"
             android:contentDescription="@string/app_name"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="@{TextUtils.isEmpty(notification.imgUrl)? View.GONE : View.VISIBLE}"
+            bind:baseUrlWithProductImageUrl="@{notification.imgUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_date_time" />
 

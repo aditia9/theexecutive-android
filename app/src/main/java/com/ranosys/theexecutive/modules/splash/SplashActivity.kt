@@ -33,6 +33,13 @@ class SplashActivity : BaseActivity() {
 
     private val handler = Handler()
     private var canNavigateToHome: Boolean = false
+    private  var redirectType: String? = null
+    private  var redirectionValue: String ? = null
+    private  var redirectTitle: String ? = null
+    private  var notificationId: String ? = null
+    private  var notificationImg: String ? = null
+    private  var notificationTitle: String ? = null
+    private  var notificationMessage: String ? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +62,7 @@ class SplashActivity : BaseActivity() {
         //fetch device id
         getDeviceID()
 
-        // data from notification
+        // get data from notification
         dataFromNotification()
 
         handler.postDelayed({
@@ -66,20 +73,16 @@ class SplashActivity : BaseActivity() {
 
     }
 
-    private  var redirectType: String? = null
-    private  var redirectionValue: String ? = null
-    private  var redirectTitle: String ? = null
-    private  var redirectURL: String ? = null
-    private  var notificationId: String ? = null
-
     private fun dataFromNotification() {
         val extras = intent.extras
         if (extras != null) {
             redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
             redirectionValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
             redirectTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
-            redirectURL = extras.getString(Constants.KEY_IMAGE)
             notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
+            notificationImg = extras.getString(Constants.KEY_IMAGE)
+            notificationTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
+            notificationMessage = extras.getString(Constants.KEY_NOTIFICATION_MESSAGE)
         }
     }
 
@@ -199,10 +202,12 @@ class SplashActivity : BaseActivity() {
         val intent = Intent(this@SplashActivity, DashBoardActivity::class.java)
         if (!TextUtils.isEmpty(redirectType)) {
             intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
-            intent.putExtra(Constants.KEY_NOTIFICATION_TITLE, redirectTitle)
-            intent.putExtra(Constants.KEY_IMAGE, redirectURL)
+            intent.putExtra(Constants.KEY_REDIRECTION_TITLE, redirectTitle)
+            intent.putExtra(Constants.KEY_REDIRECTION_VALUE, redirectionValue)
             intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
-            intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
+            intent.putExtra(Constants.KEY_NOTIFICATION_TITLE, notificationTitle)
+            intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, notificationMessage)
+            intent.putExtra(Constants.KEY_IMAGE, notificationImg)
         }
         startActivity(intent)
         finish()

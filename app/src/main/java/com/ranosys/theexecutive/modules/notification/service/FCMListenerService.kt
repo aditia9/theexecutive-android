@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
-import android.text.TextUtils
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.ranosys.theexecutive.R
@@ -25,31 +24,32 @@ import java.util.*
  */
 class FCMListenerService : FirebaseMessagingService() {
 
-    internal lateinit var redirectType: String
-    internal lateinit var redirectValue: String
-    internal lateinit var redirectTitle: String
-    internal lateinit var redirectUrl: String
-    internal lateinit var title: String
+    private lateinit var redirectType: String
+    private lateinit var redirectValue: String
+    private lateinit var redirectTitle: String
+    private lateinit var notificationImg: String
+    private lateinit var title: String
     internal lateinit var message: String
-    internal lateinit var notificationId: String
+    private lateinit var notificationId: String
     private lateinit var notification: NotificationCompat.Builder
 
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        var dataMap = (remoteMessage.data as Map<String, String>)
+        var dataMap = (remoteMessage.data)
         redirectType = dataMap.get(Constants.KEY_REDIRECTION_TYPE) ?: ""
         redirectValue = dataMap.get(Constants.KEY_REDIRECTION_VALUE) ?: ""
         redirectTitle = dataMap.get(Constants.KEY_REDIRECTION_TITLE) ?: ""
-        redirectUrl = dataMap.get(Constants.KEY_IMAGE) ?: ""
+        notificationImg = dataMap.get(Constants.KEY_IMAGE) ?: ""
         title = dataMap.get(Constants.KEY_NOTIFICATION_TITLE) ?: ""
-        message = dataMap.get(Constants.KEY_NOTIFICATION_ALERT) ?: ""
+        message = dataMap.get(Constants.KEY_NOTIFICATION_MESSAGE) ?: ""
         notificationId = dataMap.get(Constants.KEY_NOTIFICATION_ID) ?: ""
 
         Constants.notificationCounter++
 
-        if (!TextUtils.isEmpty(remoteMessage.notification?.body)) {
+        //generate notification if body is not empty and Notification are enabled from settings
+        if ((remoteMessage.notification?.body).isNullOrEmpty().not()) {
             val msg = remoteMessage.notification?.body
             createNotification(msg!!, getString(R.string.app_name))
         }
@@ -60,12 +60,13 @@ class FCMListenerService : FirebaseMessagingService() {
 
         val intent = Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-       /*   intent.putExtra(Constant.KEY_REDIRECT_TYPE, redirectType)
-          intent.putExtra(Constant.KEY_REDIRECT_TITLE, redirectTitle)
-          intent.putExtra(Constant.KEY_REDIRECT_URL, redirectUrl)
-          intent.putExtra(Constant.KEY_ID, redirectValue)
-          intent.putExtra(Constant.LAYER_NAME, Constant.LAYER_NOTIFICATION)
-          intent.putExtra(Constant.KEY_NOTIFICATION_ID, notificationId)*/
+        intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
+        intent.putExtra(Constants.KEY_REDIRECTION_TITLE, redirectTitle)
+        intent.putExtra(Constants.KEY_REDIRECTION_VALUE, redirectValue)
+        intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
+        intent.putExtra(Constants.KEY_NOTIFICATION_TITLE, title)
+        intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, message)
+        intent.putExtra(Constants.KEY_IMAGE, notificationImg)
 
         val pendingIntent = PendingIntent.getActivity(this, Calendar.getInstance().timeInMillis.toInt(), intent,
                 PendingIntent.FLAG_ONE_SHOT)
