@@ -120,8 +120,6 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     }
 
-
-
     private fun observeApiFailure() {
         registerViewModel.apiFailureResponse?.observe(this, android.arch.lifecycle.Observer { errorMsg ->
             hideLoading()
