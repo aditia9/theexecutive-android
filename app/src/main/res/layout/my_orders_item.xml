@@ -10,7 +10,7 @@
 
         <variable
             name="item"
-            type="com.ranosys.theexecutive.modules.order.OrderListResponse" />
+            type="com.ranosys.theexecutive.modules.order.orderList.OrderListResponse" />
 
     </data>
 

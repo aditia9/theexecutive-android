@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.order
+package com.ranosys.theexecutive.modules.order.orderList
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -11,7 +11,7 @@ import com.ranosys.theexecutive.databinding.MyOrdersItemBinding
 class OrderListAdapter(var context: Context, var orderList: List<OrderListResponse>?, val action: (Int, Int, OrderListResponse?) -> Unit) : RecyclerView.Adapter<OrderListAdapter.Holder>() {
 
     var mContext: Context? = null
-    var clickListener: OrderListAdapter.OnItemClickListener? = null
+    var clickListener: OnItemClickListener? = null
 
     init {
         mContext = context
@@ -26,9 +26,9 @@ class OrderListAdapter(var context: Context, var orderList: List<OrderListRespon
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): OrderListAdapter.Holder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): Holder {
         val binding: MyOrdersItemBinding? = DataBindingUtil.inflate(LayoutInflater.from(parent?.context), R.layout.my_orders_item, parent, false)
-        return OrderListAdapter.Holder(binding)
+        return Holder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -38,7 +38,7 @@ class OrderListAdapter(var context: Context, var orderList: List<OrderListRespon
         return 0
     }
 
-    override fun onBindViewHolder(holder: OrderListAdapter.Holder?, position: Int) {
+    override fun onBindViewHolder(holder: Holder?, position: Int) {
         holder?.bind(mContext, getItem(position), position, action, clickListener)
     }
 
@@ -49,9 +49,12 @@ class OrderListAdapter(var context: Context, var orderList: List<OrderListRespon
 
     class Holder(var itemBinding: MyOrdersItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: OrderListResponse?, position: Int, action: (Int, Int, OrderListResponse?) -> Unit, listener: OrderListAdapter.OnItemClickListener?) {
+        fun bind(context: Context?, item: OrderListResponse?, position: Int, action: (Int, Int, OrderListResponse?) -> Unit, listener: OnItemClickListener?) {
             itemBinding?.item = item
 
+            if(item?.status.equals("Complete")){
+
+            }
 
         }
     }
