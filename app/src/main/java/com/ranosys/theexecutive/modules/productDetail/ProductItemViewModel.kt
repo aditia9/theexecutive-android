@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableField
 import android.view.View
+import com.google.gson.JsonObject
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
@@ -118,14 +119,17 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     fun callAddToWishListApi(colorAttr : String?, colorValue : String?, sizeAttr : String?, sizeValue : String?){
         val apiResponse = ApiResponse<String>()
 
-        //prepare request
-        val requestMap: MutableMap<String, String?> = mutableMapOf()
+        val jsonObject = JsonObject()
+        val jsonOptionObject = JsonObject().apply {
+            addProperty(colorAttr, colorValue)
+            addProperty(sizeAttr, sizeValue)
+        }
+        jsonObject.run {
+            addProperty(Constants.PRODUCT_SKU, productItem?.sku)
+            add(Constants.OPTIONS ,jsonOptionObject)
+        }
 
-        requestMap["productId"] = productItem?.id.toString()
-        requestMap["options[$colorAttr]"] = colorValue
-        requestMap["options[$sizeAttr]"] = sizeValue
-
-        AppRepository.addToWishList(requestMap, object : ApiCallback<String> {
+        AppRepository.addToWishList(jsonObject, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 addToWIshListResponse?.value = apiResponse

@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.api.interfaces
 
+import com.google.gson.JsonObject
 import com.ranosys.theexecutive.api.ApiConstants
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
@@ -192,7 +193,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun addToWishList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body request: Map<String, String?>): Call<String>
+        fun addToWishList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body request: JsonObject): Call<String>
 
     }
 
