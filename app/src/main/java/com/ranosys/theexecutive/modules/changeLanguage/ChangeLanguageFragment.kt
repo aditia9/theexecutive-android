@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.changeLanguage
 
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -18,8 +19,11 @@ import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.change_language_fragment.*
 
 /**
- * Created by nikhil on 16/3/18.
+ * @Details Fragment to show language selection
+ * @Author Ranosys Technologies
+ * @Date 16,Mar,2018
  */
+
 class ChangeLanguageFragment: BaseFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -75,14 +79,10 @@ class ChangeLanguageFragment: BaseFragment() {
 
     private fun getDefaultStore(): StoreResponse {
         return  StoreResponse(id = 1,
-                name = "English",
+                name = Constants.DEFAULT_STORE_LANGUAGE,
                 code = Constants.DEFAULT_STORE_CODE,
                 store_group_id = 1,
                 website_id = 1)
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
 }

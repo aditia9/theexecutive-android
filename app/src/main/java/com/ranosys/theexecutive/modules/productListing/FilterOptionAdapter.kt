@@ -86,9 +86,7 @@ class FilterOptionAdapter(val productListVM: ProductListingViewModel, var option
                 val op= getChild(groupPos, childPos)
                 op?._isSelected?.set(true)
                 //getChild(groupPos, childPos)?._isSelected?.set(true)
-                sl.let{
-                  it.add(op?._isSelected!!)
-                }
+                sl.add(op?._isSelected!!)
 
                 notifyDataSetChanged()
                 return false

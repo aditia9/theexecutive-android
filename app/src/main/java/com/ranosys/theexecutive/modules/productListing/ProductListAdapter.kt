@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.productListing
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
@@ -30,22 +31,29 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding: ProductListItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.product_list_item, parent,false)
-        Utils.setImageViewHeightWrtDeviceWidth(parent.context, binding.image, .6)
-        return ProductListAdapter.Holder(binding)
+
+        return ProductListAdapter.Holder(binding, parent.context)
     }
 
     override fun getItemCount() = productList.size
 
-    class Holder(val itemBinding: ProductListItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
+    class Holder(val itemBinding: ProductListItemBinding, val ctx: Context): RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(productItem: ProductListingDataClass.Item, position : Int, listener: ProductListAdapter.OnItemClickListener){
+
+            if((position + 1) % ProductListingFragment.COLUMN_CHANGE_FACTOR == 0){
+                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, 1.4)
+            }else{
+                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, .6)
+            }
+
 
             val product = prepareMaskedResponse(productItem)
             itemBinding.productItem = product
             val normalPrice = "IDR\u00A0" + product.normalPrice
             val spPrice = " IDR\u00A0" + product.specialPrice
 
-            if(product.normalPrice == product.specialPrice){
+            if(product.normalPrice == product.specialPrice || product.specialPrice.isBlank()){
                 product.displayPrice = normalPrice
                 itemBinding.tvDisplayPrice?.text = normalPrice
             }else{
@@ -53,7 +61,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
                 val ss = SpannableStringBuilder(price)
                 ss.setSpan(StrikethroughSpan(), 0, normalPrice.length, 0)
                 ss.setSpan(ForegroundColorSpan(Color.RED), normalPrice.length, price.length, 0)
-                ss.setSpan(RelativeSizeSpan(1.1f), normalPrice.length, price.length, 0)
+                ss.setSpan(RelativeSizeSpan(1.3f), normalPrice.length, price.length, 0)
                 product.displayPrice = ss.toString()
                 itemBinding.tvDisplayPrice?.text = ss
             }
@@ -70,7 +78,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             val productType = product.type_id
             val tag: String? = product.extension_attributes.tag_text
             val price: String
-            var specialPrice = "0.0"
+            var specialPrice = ""
             if(productType == Constants.CONFIGURABLE){
                 price = Utils.getFromattedPrice(product.extension_attributes.regular_price)
                 specialPrice = Utils.getFromattedPrice(product.extension_attributes.final_price)
@@ -96,15 +104,22 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
             }
             val type = if(toDate.isNotBlank() && fromDate.isNotBlank()) isNewProduct(fromDate, toDate) else ""
 
-            val discount = (((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100)).toInt()
+            var discount = 0
+            if(specialPrice.isNotBlank()){
+                discount = Math.round((price.replace(".","").toDouble() - specialPrice.replace(".","").toDouble()).div(price.replace(".","").toDouble())).times(100).toInt()
+                //discount = Math.round((((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100))).toInt()
+            }
             var imgUrl = ""
             if(product.media_gallery_entries?.isNotEmpty()!!)   imgUrl = product.media_gallery_entries[0].file
+
+            val newNP = price.replace(",",".")
+            val newSP = specialPrice.replace(",",".")
 
             return ProductListingDataClass.ProductMaskedResponse(
                     sku = sku,
                     name = name,
-                    normalPrice = price,
-                    specialPrice = specialPrice,
+                    normalPrice = newNP,
+                    specialPrice = newSP,
                     type = type,
                     collectionTag = tag ?:  "",
                     discountPer = discount,

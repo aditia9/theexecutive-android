@@ -2,17 +2,13 @@ package com.ranosys.theexecutive.base
 
 import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
-import android.databinding.InverseBindingListener
 import android.databinding.ObservableField
 import android.support.design.widget.TextInputLayout
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.AppCompatSpinner
 import android.text.TextUtils
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ExpandableListView
 import android.widget.ImageView
+import android.widget.Spinner
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
@@ -24,7 +20,9 @@ import com.ranosys.theexecutive.utils.GlobalSingelton
 
 
 /**
- * Created by Mohammad Sunny on 22/2/18.
+ * @Details Adapters method all binding in xml
+ * @Author Ranosys Technologies
+ * @Date 22,Feb,2018
  */
 class BindingAdapters {
 
@@ -37,27 +35,11 @@ class BindingAdapters {
         }
 
         @JvmStatic
-        @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
-        fun bindSpinnerData(pAppCompatSpinner: AppCompatSpinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
-            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    newTextAttrChanged.onChange()
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {}
-            }
-            if (newSelectedValue != null) {
-                val pos = (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
-                pAppCompatSpinner.setSelection(pos, true)
-            }
-        }
-
-        @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-        fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String {
+        @InverseBindingAdapter(attribute = "app:selectedValue", event = "app:selectedValueAttrChanged")
+        fun captureSelectedValue(pAppCompatSpinner: Spinner): String {
             return pAppCompatSpinner.selectedItem.toString()
-
         }
-
+        
         @JvmStatic
         @BindingAdapter("android:src")
         fun setImageResource(imageView: ImageView, resource: Int) {
@@ -70,13 +52,6 @@ class BindingAdapters {
             val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data)
             view.setAdapter(adapter)
         }
-
-//        @JvmStatic
-//        @BindingAdapter("bind:filterOptions")
-//        fun setFilterOptions(view: ExpandableListView, response: MutableList<ProductListingDataClass.Filter>?) {
-//            val adapter = FilterOptionAdapter(view.context, response)
-//            view.setAdapter(adapter)
-//        }
 
         @JvmStatic
         @BindingAdapter("promotionData")
@@ -92,8 +67,8 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(imageUrl)
-                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
@@ -108,8 +83,8 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
@@ -126,8 +101,8 @@ class BindingAdapters {
                 GlideApp.with(imageView.context)
                         .asBitmap()
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder2)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder2)// will be displayed if the image url is null
+                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
+                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)

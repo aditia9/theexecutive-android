@@ -1,6 +1,7 @@
 package com.ranosys.theexecutive.utils
 
 import android.arch.lifecycle.MutableLiveData
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
@@ -16,6 +17,8 @@ class GlobalSingelton private constructor(){
     var sizeList: List<ProductOptionsResponse>? = null
     var staticPagesResponse: StaticPagesUrlResponse? = null
     var configuration: ConfigurationResponse? = null
+    var userInfo: MyAccountDataClass.UserInfoResponse? = null
+
     var cartCount: MutableLiveData<Int> = MutableLiveData()
 
     companion object {

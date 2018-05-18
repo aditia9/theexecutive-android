@@ -4,12 +4,16 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableField
 import android.view.View
+import com.google.gson.JsonObject
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
-import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.AddToCartRequest
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.AddToCartResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ChildProductsResponse
+import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -24,12 +28,10 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
     var productItem :  ProductListingDataClass.Item? = null
     var productChildrenResponse: MutableLiveData<ApiResponse<List<ChildProductsResponse>>>? = MutableLiveData()
     var productOptionResponse: MutableLiveData<ApiResponse<List<ProductOptionsResponse>>>? = MutableLiveData()
-    var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
     var addToWIshListResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var addToCartResponse: MutableLiveData<ApiResponse<AddToCartResponse>>? = MutableLiveData()
-    var staticPages : StaticPagesUrlResponse? = null
-    var url_one : ObservableField<String> = ObservableField()
-    var url_two : ObservableField<String> = ObservableField()
+    var urlOne : ObservableField<String> = ObservableField()
+    var urlTwo : ObservableField<String> = ObservableField()
     var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var guestCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
@@ -76,7 +78,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
 
     fun getProductChildren(productSku : String?){
         val apiResponse = ApiResponse<List<ChildProductsResponse>>()
-        AppRepository.getProductChildern(productSku, object : ApiCallback<List<ChildProductsResponse>> {
+        AppRepository.getProductChildren(productSku, object : ApiCallback<List<ChildProductsResponse>> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 productChildrenResponse?.value = apiResponse
@@ -115,37 +117,20 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         })
     }
 
-    fun getStaticPagesUrl(){
-        val apiResponse = ApiResponse<StaticPagesUrlResponse>()
-        AppRepository.getStaticPagesUrl(object : ApiCallback<StaticPagesUrlResponse> {
-            override fun onException(error: Throwable) {
-                apiResponse.error = error.message
-                staticPagesUrlResponse?.value = apiResponse
-            }
-
-            override fun onError(errorMsg: String) {
-                apiResponse.error = errorMsg
-                staticPagesUrlResponse?.value = apiResponse
-            }
-
-            override fun onSuccess(t: StaticPagesUrlResponse?) {
-                apiResponse.apiResponse = t
-                staticPagesUrlResponse?.value = apiResponse
-            }
-        })
-    }
-
     fun callAddToWishListApi(colorAttr : String?, colorValue : String?, sizeAttr : String?, sizeValue : String?){
         val apiResponse = ApiResponse<String>()
 
-        //prepare request
-        val requestMap: MutableMap<String, String?> = mutableMapOf()
+        val jsonObject = JsonObject()
+        val jsonOptionObject = JsonObject().apply {
+            addProperty(colorAttr, colorValue)
+            addProperty(sizeAttr, sizeValue)
+        }
+        jsonObject.run {
+            addProperty(Constants.PRODUCT_SKU, productItem?.sku)
+            add(Constants.OPTIONS ,jsonOptionObject)
+        }
 
-        requestMap["productId"] = productItem?.id.toString()
-        requestMap["options[$colorAttr]"] = colorValue
-        requestMap["options[$sizeAttr]"] = sizeValue
-
-        AppRepository.addToWishList(requestMap, object : ApiCallback<String> {
+        AppRepository.addToWishList(jsonObject, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 addToWIshListResponse?.value = apiResponse
@@ -206,7 +191,7 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         })
     }
 
-    fun getCartIdForUser(userToken: String?){
+    fun getCartIdForUser() {
         val apiResponse = ApiResponse<String>()
         AppRepository.createUserCart(object : ApiCallback<String> {
             override fun onException(error: Throwable) {

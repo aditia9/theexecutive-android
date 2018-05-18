@@ -12,7 +12,7 @@ android {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
-        versionName "1.8"
+        versionName "1.11"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -53,19 +53,19 @@ android {
         }
         uatClient {
             dimension "client"
-            resValue "string", 'app_name', "U-The Executive" //app name to be shown in device
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
             resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
         }
         devClient {
             dimension "client"
-            resValue "string", 'app_name', "D-The Executive" //app name to be shown in device
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
             resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
         }
         qatClient {
             dimension "client"
-            resValue "string", 'app_name', "Q-The Executive" //app name to be shown in device
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
             resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
         }
@@ -136,11 +136,11 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:${rootProject.glideVersion}"
     kapt "com.github.bumptech.glide:compiler:${rootProject.glideVersion}"
     implementation project(':SpinnerDatePickerLib')
-    //implementation 'com.github.amarjain07:StickyScrollView:1.0.2'
     implementation project(':stickyscrollview')
     compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {
         transitive = true;
     }
     implementation group: 'com.zopim.android', name: 'sdk', version: '1.3.3.1'
+    implementation 'com.android.support:cardview-v7:27.1.1'
 }
 

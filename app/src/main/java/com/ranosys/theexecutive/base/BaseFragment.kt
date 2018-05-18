@@ -20,7 +20,9 @@ import kotlinx.android.synthetic.main.web_pages_layout.*
 
 
 /**
- * Created by Mohammad Sunny on 22/2/18.
+ * @Details Base class for all fragments
+ * @Author Ranosys Technologies
+ * @Date 22,Feb,2018
  */
 abstract class BaseFragment : LifecycleFragment() {
 
@@ -116,6 +118,11 @@ abstract class BaseFragment : LifecycleFragment() {
             when(id) {
                 R.id.toolbar_left_icon -> {
                     getToolBarViewModel()?.leftIconClicked?.value = null
+                    (activity as BaseActivity).onBackPressed()
+                }
+
+                R.id.toolbar_right_icon -> {
+                    getToolBarViewModel()?.rightIconClicked?.value = null
                     (activity as BaseActivity).onBackPressed()
                 }
             }

@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.activities
 
-import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -13,28 +12,29 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
-import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
-import com.zopim.android.sdk.api.ZopimChat
 
 /**
- * Created by Mohammad Sunny on 19/2/18.
+ * @Details Dashboard screen for an app
+ * @Author Ranosys Technologies
+ * @Date 19,Mar,2018
  */
 class DashBoardActivity: BaseActivity() {
 
-    lateinit var webPagesDialog: Dialog
+    lateinit var toolbarBinding : ActivityDashboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val toolbarBinding : ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
-        toolbarBinding?.toolbarViewModel = toolbarViewModel
+        toolbarBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+        toolbarBinding.toolbarViewModel = toolbarViewModel
 
-        //initialize Zendesk cha setup
-        setUpZendeskChat()
+
         val model = ViewModelProviders.of(this).get(DashBoardViewModel::class.java)
         model.manageFragments().observe(this, Observer { isCreated ->
             if(isCreated!!){
@@ -68,7 +68,7 @@ class DashBoardActivity: BaseActivity() {
                                     }
                                 }
                                 2 -> {
-                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", 0, false, 0, false)
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", R.drawable.back, true, 0, false)
                                 }
                             }
                         }
@@ -77,17 +77,14 @@ class DashBoardActivity: BaseActivity() {
                         if(fragment is LoginFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         if(fragment is ProductDetailFragment) {
-                            (fragment as ProductDetailFragment).onResume()
-                        }
+                            (fragment as ProductDetailFragment).onResume() }
+                        if(fragment is AddressBookFragment) {
+                            (fragment as AddressBookFragment).onResume() }
                     }
                 }
             }
 
         })
 
-    }
-
-    private fun setUpZendeskChat() {
-        ZopimChat.init(Constants.ZENDESK_CHAT)
     }
 }

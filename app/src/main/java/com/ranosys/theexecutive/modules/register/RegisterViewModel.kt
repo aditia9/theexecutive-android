@@ -28,25 +28,26 @@ import java.util.*
  */
 class RegisterViewModel(application: Application): BaseViewModel(application) {
     var firstName: ObservableField<String> = ObservableField()
-    var firstNameError: ObservableField<String> = ObservableField()
     var lastName: ObservableField<String> = ObservableField()
-    var lastNameError: ObservableField<String> = ObservableField()
-    var emailAddress: ObservableField<String> = ObservableField()
+    var firstNameError: ObservableField<String> = ObservableField()
     var emailAddressError: ObservableField<String> = ObservableField()
-    var mobileNumber: ObservableField<String> = ObservableField()
+    var lastNameError: ObservableField<String> = ObservableField()
+    val passwordError = ObservableField<String>()
+    val confirmPasswordError = ObservableField<String>()
     var mobileNumberError: ObservableField<String> = ObservableField()
+    var streetAddress1Error: ObservableField<String> = ObservableField()
+    var postalCodeError: ObservableField<String> = ObservableField()
+    var emailAddress: ObservableField<String> = ObservableField()
+    var mobileNumber: ObservableField<String> = ObservableField()
+    var countryCode: ObservableField<String> = ObservableField()
     var selectedGender: ObservableField<Int> = ObservableField(MALE)
     var dob: ObservableField<Date> = ObservableField()
     var dobError: ObservableField<String> = ObservableField()
     var streetAddress1: ObservableField<String> = ObservableField()
-    var streetAddress1Error: ObservableField<String> = ObservableField()
     var streetAddress2: ObservableField<String> = ObservableField()
     var postalCode: ObservableField<String> = ObservableField()
-    var postalCodeError: ObservableField<String> = ObservableField()
     var password: ObservableField<String> = ObservableField()
-    val passwordError = ObservableField<String>()
     var confirmPassword: ObservableField<String> = ObservableField()
-    val confirmPasswordError = ObservableField<String>()
     val isSubscribed = ObservableField<Boolean>(false)
 
     var countryList :MutableList<RegisterDataClass.Country> = mutableListOf<RegisterDataClass.Country>()
@@ -145,6 +146,10 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         }
     }
 
+    fun onCountryCodeSelection(countryCodeSpinner: View, position: Int){
+        countryCode.set((countryCodeSpinner as Spinner).selectedItem.toString())
+    }
+
     private fun callCityApi(stateCode: String) {
         AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>>{
             override fun onException(error: Throwable) {
@@ -175,7 +180,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             val address = RegisterDataClass.Address(region_id = selectedState.get().id,
                     firstname = firstName.get(),
                     lastname = lastName.get(),
-                    telephone = mobileNumber.get(),
+                    telephone = "${countryCode.get()}-${ mobileNumber.get()}",
                     city =      selectedCity.get().name ,
                     postcode = postalCode.get(),
                     default_billing = true,
@@ -236,6 +241,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             }
 
             override fun onSuccess(userToken: String?) {
+                SavedPreferences.getInstance()?.saveStringValue(emailAddress.get(), Constants.USER_EMAIL)
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
 
@@ -365,7 +371,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         }
 
 
-        if (TextUtils.isEmpty(streetAddress1.get()) && TextUtils.isEmpty(streetAddress2.get())){
+        if (TextUtils.isEmpty(streetAddress1.get())){
             streetAddress1Error.set(context.getString(R.string.street_address_error))
             isValid = false
         }
@@ -383,6 +389,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         if (TextUtils.isEmpty(postalCode.get())){
             postalCodeError.set(context.getString(R.string.postal_error))
+            isValid = false
+        }else if(!Utils.isValidPincode(postalCode.get())){
+            postalCodeError.set(context.getString(R.string.valid_postal_error))
             isValid = false
         }
 
