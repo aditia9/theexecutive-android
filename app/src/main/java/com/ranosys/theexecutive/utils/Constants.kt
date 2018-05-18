@@ -89,5 +89,7 @@ object Constants {
     const val CATEGORY_IMAGE_HEIGHT_RATIO: Double = 1.5
     const val FIRST_NAME: String = "first_name"
     const val LAST_NAME: String = "last_name"
+    const val PRODUCT_SKU: String = "productSku"
+    const val OPTIONS: String = "options"
 
 }
