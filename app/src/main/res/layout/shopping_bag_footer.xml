@@ -31,7 +31,7 @@
         <View
             android:id="@+id/view1"
             android:layout_width="@dimen/match_constraint"
-            android:layout_height="@dimen/one_dp"
+            android:layout_height="@dimen/match_constraint"
             android:layout_marginTop="@dimen/five_dp"
             android:background="@color/divider_color"
             app:layout_constraintEnd_toEndOf="parent"

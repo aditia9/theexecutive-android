@@ -10,11 +10,13 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentShoppingBagBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
+import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_shopping_bag.*
@@ -124,7 +126,6 @@ class ShoppingBagFragment : BaseFragment() {
             } else {
                 hideLoading()
                 et_promo_code.setText("")
-                et_promo_code.error = getString(R.string.promo_code_invalid)
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
@@ -174,6 +175,22 @@ class ShoppingBagFragment : BaseFragment() {
             }
         })
 
+
+        shoppingBagViewModel.guestCartIdResponse?.observe(this, Observer {
+            response ->
+            if(response?.error.isNullOrEmpty()) {
+                val guestCartId = response?.apiResponse
+                if (guestCartId is String) {
+                    getShoppingBag()
+                }
+            }
+            else {
+                hideLoading()
+                Toast.makeText(activity,response?.error, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
     }
 
     private fun setShoppingBagAdapter() {
@@ -183,6 +200,8 @@ class ShoppingBagFragment : BaseFragment() {
             }
         }
         cartQty = 0
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        rv_shopping_bag_list.addItemDecoration(itemDecor)
         rv_shopping_bag_list.layoutManager = linearLayoutManager
 
         if (shoppingBagViewModel.shoppingBagListResponse?.get()?.size!! > 0) {
@@ -323,6 +342,8 @@ class ShoppingBagFragment : BaseFragment() {
                 }
                 getTotalForUser()
                 shoppingBagViewModel.getShoppingBagForGuestUser(guestCartId)
+            }else {
+                shoppingBagViewModel.getCartIdForGuest()
             }
         }
     }
@@ -365,7 +386,7 @@ class ShoppingBagFragment : BaseFragment() {
     }
 
     private fun setCartTitle() {
-        val qtyMsg = getString(R.string.total) + " " + cartQty + " " + getString(R.string.items_in_your_cart)
+        val qtyMsg = getString(R.string.items_in_your_cart, cartQty)
         tv_cart_quantity.text = qtyMsg
         Utils.updateCartCount(cartQty)
     }
