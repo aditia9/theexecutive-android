@@ -12,9 +12,14 @@ import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
+import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
+import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
+import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
 import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
 import com.ranosys.theexecutive.modules.payment.PaymentGatway
 import com.ranosys.theexecutive.utils.DialogOkCallback
@@ -105,17 +110,28 @@ class MyAccountFragment : BaseFragment() {
                             FragmentUtils.addFragment(context, ChangePasswordFragment(), null, ChangePasswordFragment::class.java.name, true)
                         }
 
-                        context.getString(R.string.my_information_option) ->{
-                            FragmentUtils.addFragment(context, MyInformationFragment(),null, MyInformationFragment::class.java.name, true )
+                        context.getString(R.string.my_information_option) -> {
+                            FragmentUtils.addFragment(context, MyInformationFragment(), null, MyInformationFragment::class.java.name, true)
                         }
 
-                        context.getString(R.string.select_lang_title) ->{
-                            FragmentUtils.addFragment(context, ChangeLanguageFragment(),null, ChangeLanguageFragment::class.java.name, true )
+                        context.getString(R.string.select_lang_title) -> {
+                            FragmentUtils.addFragment(context, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, true)
                         }
 
-                        context.getString(R.string.shipping_address) ->{
-                            FragmentUtils.addFragment(context, AddressBookFragment(),null, AddressBookFragment::class.java.name, true )
+                        context.getString(R.string.shipping_address) -> {
+                            FragmentUtils.addFragment(context, AddressBookFragment(), null, AddressBookFragment::class.java.name, true)
                         }
+
+                        context.getString(R.string.buying_guide) ->{
+                            val url = ""
+                            openWebPage(context, url, context.getString(R.string.buying_guide))
+                        }
+
+                        context.getString(R.string.contact_us) ->{
+                            val url = ""
+                            openWebPage(context, url, context.getString(R.string.contact_us))
+                        }
+
 
                         context.getString(R.string.my_orders) -> {
                             FragmentUtils.addFragment(context, OrderListFragment(),null, OrderListFragment::class.java.name, true )
@@ -127,6 +143,14 @@ class MyAccountFragment : BaseFragment() {
 
                     }
                 }
+            }
+
+            private fun openWebPage(context: Context, url: String, title: String) {
+                val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
+                fragment?.run {
+                    (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/" , title)
+                }
+
             }
         }
 

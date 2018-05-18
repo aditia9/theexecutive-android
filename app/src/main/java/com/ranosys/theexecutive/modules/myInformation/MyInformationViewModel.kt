@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.myInformation
 
 import AppLog
 import android.app.Application
@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 
@@ -69,7 +70,7 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                         _city = defaultAdd?.city,
                         _state = defaultAdd?.region?.region,
                         _streedAdd1 = defaultAdd?.street?.get(0),
-                        _streedAdd2 = if(defaultAdd?.street?.size!! > 1)defaultAdd.street.get(1) else "",
+                        _streedAdd2 = if (defaultAdd?.street?.size!! > 1) defaultAdd.street.get(1) else "",
                         _mobile = mobileNo,
                         _postalCode = defaultAdd.postcode,
                         _countryCode = countryCode

@@ -1,10 +1,12 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.myInformation
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,6 +41,25 @@ class MyInformationFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        et_mobile_number.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                val newMobileNo = et_mobile_number.text.toString()
+                if((mViewModel.maskedUserInfo.get()._mobile == newMobileNo).not()){
+                    btn_save.background = (activity as Context).getDrawable(R.drawable.black_button_bg)
+                }else{
+                    btn_save.background = (activity as Context).getDrawable(R.color.hint_color)
+                }
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
         btn_save.setOnClickListener {
             //check if info updated
             val newMobileNo = et_mobile_number.text.toString()
@@ -55,13 +76,11 @@ class MyInformationFragment: BaseFragment() {
 
             //call api
             if (Utils.isConnectionAvailable(activity as Context)) {
-                if(mViewModel.infoUpdated){
-                    if(mViewModel.isValidData(activity as Context)){
+                if(mViewModel.infoUpdated) {
+                    if (mViewModel.isValidData(activity as Context)) {
                         showLoading()
                         mViewModel.updateUserInfo()
                     }
-                }else{
-                    Utils.showDialog(activity,"Field not updated", getString(android.R.string.ok), "", null)
                 }
             } else {
                 Utils.showNetworkErrorDialog(activity as Context)
@@ -80,7 +99,7 @@ class MyInformationFragment: BaseFragment() {
         mViewModel.userInfoApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             if(apiResponse?.error.isNullOrBlank().not()){
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
             }else{
                 mBinding.info = mViewModel.maskedUserInfo.get()
                 mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode))
@@ -88,6 +107,7 @@ class MyInformationFragment: BaseFragment() {
 
         })
     }
+
 
     private fun getUserInformation() {
         if (Utils.isConnectionAvailable(activity as Context)) {
