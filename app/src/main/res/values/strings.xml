@@ -208,5 +208,8 @@
     <string name="udate_profile_success_msg">Your profile is now updated.</string>
 
     <string name="items_in_your_cart"> Items in your cart</string>
+    <string name="only">Only</string>
+    <string name="product_available">product available</string>
+    <string name="promo_code_invalid">The promo code you entered is not valid.</string>
 
 </resources>

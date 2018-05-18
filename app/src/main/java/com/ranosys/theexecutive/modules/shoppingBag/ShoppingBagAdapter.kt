@@ -23,7 +23,7 @@ import com.ranosys.theexecutive.utils.Utils
 const val TYPE_FOOTER = 0
 const val TYPE_ITEM = 1
 
-class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResponse?, promoCode: String, grandTotal: Int, private val action: (Int, Int, Item?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: List<ShoppingBagResponse>?, promoCode: String, grandTotal: Int, private val action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mContext: Context? = null
     private var mPromoCode: String
@@ -46,7 +46,7 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == shoppingBag?.items!!.size) TYPE_FOOTER else TYPE_ITEM
+        return if (position == shoppingBagList?.size) TYPE_FOOTER else TYPE_ITEM
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
@@ -62,21 +62,21 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
     }
 
     override fun getItemCount(): Int {
-        shoppingBag?.items?.run {
+        shoppingBagList?.run {
             return size + 1
         }
         return 0
     }
 
 
-    private fun getItem(position: Int): Item? {
-        return shoppingBag?.items?.get(position)
+    private fun getItem(position: Int): ShoppingBagResponse? {
+        return shoppingBagList?.get(position)
     }
 
 
     class Holder(var itemBinding: ShoppingBagItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: Item?, position: Int, action: (Int, Int, Item?, Int?, String?) -> Unit) {
+        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit) {
             itemBinding?.item = item
             var updateQty = item?.qty
 
@@ -84,25 +84,32 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
                 action(0, position, item, updateQty, null)
             }
 
-            itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.price.toString(), item?.extension_attributes?.regular_price.toString())
-
             item?.product_option?.extension_attributes?.configurable_item_options.run {
 
                 if (item?.product_option?.extension_attributes?.configurable_item_options != null && item.product_option.extension_attributes.configurable_item_options.isNotEmpty()) {
                     item.product_option.extension_attributes.configurable_item_options.forEach {
                         when (it.extension_attributes.attribute_label) {
                             Constants.COLOR_ -> {
-                                itemBinding?.tvProductColor?.text = it.extension_attributes.option_label
+                                if(!TextUtils.isEmpty(it.extension_attributes.option_label)){
+                                    itemBinding?.tvProductColor?.text = it.extension_attributes.option_label
+                                }else{
+                                    itemBinding?.tvProductColor?.visibility = View.GONE
+                                    itemBinding?.viewVertical?.visibility = View.GONE
+                                }
                             }
                             Constants.SIZE_ -> {
-                                itemBinding?.tvProductSize?.text = it.extension_attributes.option_label
+                                if(!TextUtils.isEmpty(it.extension_attributes.option_label)){
+                                    itemBinding?.tvProductSize?.text = it.extension_attributes.option_label
+                                }else{
+                                    itemBinding?.tvProductSize?.visibility = View.GONE
+                                }
+
                             }
                         }
                     }
                 } else {
-                    itemBinding?.layoutColorSize?.visibility = View.INVISIBLE
+                    itemBinding?.layoutColorSize?.visibility = View.GONE
                 }
-
 
 
                 item?.extension_attributes?.stock_item?.run {
@@ -119,8 +126,14 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
                         if (item.qty > 1) {
                             updateQty = item.qty
                             updateQty = (updateQty!! - 1)
-                           // itemBinding?.tvQuantity?.text = updateQty.toString()
-                            action(view.id, position, item, updateQty, null)
+                            if(item.qty > item.extension_attributes.stock_item.qty){
+                                val fullMsg = context?.getString(R.string.only) + " "+ item.extension_attributes.stock_item.qty + " " + context?.getString(R.string.product_available)
+                                itemBinding?.tvQtyMsg?.text = fullMsg
+                                itemBinding?.tvQtyMsg?.visibility = View.VISIBLE
+                            }else{
+                                itemBinding?.tvQtyMsg?.visibility = View.GONE
+                                action(view.id, position, item, updateQty, null)
+                            }
                         }
                     }
                 }
@@ -131,7 +144,6 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
                         var localItemCount = item.qty
                         if (item.qty >= 1 && item.extension_attributes.stock_item.qty >= ++localItemCount) {
                             updateQty = localItemCount
-                            //itemBinding?.tvQuantity?.text = updateQty.toString()
                             action(view.id, position, item, updateQty, null)
                         } else {
                             Toast.makeText(context, context?.getString(R.string.no_more_products), Toast.LENGTH_SHORT).show()
@@ -146,6 +158,22 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
                 itemBinding?.imgDelete?.setOnClickListener { view ->
                     action(view.id, position, item, updateQty, null)
                 }
+
+
+                if(item?.qty!! > 0){
+                    itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice((item.extension_attributes.regular_price  * item.qty).toString(), (item.price*  item.qty).toString())
+                }
+
+                if(item.extension_attributes.stock_item.is_in_stock){
+                    if(item.qty > item.extension_attributes.stock_item.qty){
+                        val fullMsg = context?.getString(R.string.only) + " "+ item.extension_attributes.stock_item.qty + " " + context?.getString(R.string.product_available)
+                        itemBinding?.tvQtyMsg?.text = fullMsg
+                        itemBinding?.tvQtyMsg?.visibility = View.VISIBLE
+                    }else{
+                        itemBinding?.tvQtyMsg?.visibility = View.GONE
+                    }
+                }
+
             }
 
         }
@@ -161,7 +189,7 @@ class ShoppingBagAdapter(var context: Context, var shoppingBag: ShoppingCartResp
 
     class ShoppingBagFooterHolder(var itemBinding: ShoppingBagFooterBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: Item?, position: Int, action: (Int, Int, Item?, Int?, String?) -> Unit, mPromoCode: String, mGrandTotal: Int) {
+        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, mPromoCode: String, mGrandTotal: Int) {
 
             itemBinding?.btnApply?.setOnClickListener { view ->
                 if (!TextUtils.isEmpty(itemBinding!!.etPromoCode.text.toString())) {

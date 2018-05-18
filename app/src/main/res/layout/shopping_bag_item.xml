@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.ranosys.theexecutive.modules.shoppingBag.Item" />
+            type="com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse" />
 
     </data>
 
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content" />
 
             <View
-                android:id="@+id/view"
+                android:id="@+id/view_vertical"
                 android:layout_width="@dimen/one_dp"
                 android:layout_height="@dimen/twenty_dp"
                 android:layout_marginStart="@dimen/twenty_dp"
@@ -128,18 +128,18 @@
 
         <TextView
             android:id="@+id/tv_qty_msg"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:padding="@dimen/six_dp"
-            android:text="@string/out_of_stock"
+            android:layout_marginStart="@dimen/five_dp"
             android:textColor="@color/light_green"
-            android:textSize="@dimen/twelve_sp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@id/img_increment"
+            android:layout_marginEnd="@dimen/five_dp"
+            android:textSize="@dimen/ten_sp"
+            android:visibility="gone"
+            android:maxLines="2"
+            app:layout_constraintTop_toTopOf="@id/img_increment"
+            app:layout_constraintStart_toEndOf="@id/img_increment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.16"
-            app:layout_constraintStart_toEndOf="@id/img_increment" />
+            />
 
 
         <TextView
@@ -180,12 +180,12 @@
             android:id="@+id/tv_out_of_stock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/sixteen_dp"
             android:padding="@dimen/six_dp"
             android:text="@string/out_of_stock"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="@dimen/fourteen_sp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/img_product"
             app:layout_constraintEnd_toEndOf="@id/img_product"
             app:layout_constraintStart_toStartOf="@id/img_product"
