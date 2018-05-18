@@ -385,7 +385,7 @@ class ShoppingBagFragment : BaseFragment() {
     }
 
     private fun setCartTitle() {
-        val qtyMsg = getString(R.string.total) + " " + cartQty + " " + getString(R.string.items_in_your_cart)
+        val qtyMsg = getString(R.string.items_in_your_cart, cartQty)
         tv_cart_quantity.text = qtyMsg
         Utils.updateCartCount(cartQty)
     }
