@@ -2,12 +2,7 @@ package com.ranosys.theexecutive.modules.productDetail
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.graphics.Color
 import android.support.v7.widget.RecyclerView
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
-import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
@@ -68,15 +63,22 @@ class WearWithProductsAdapter(var context : Context, var list : List<ProductList
 
             val normalPrice = "IDR\u00A0" + productLinks?.extension_attributes?.linked_product_regularprice
             val spPrice = " IDR\u00A0" + productLinks?.extension_attributes?.linked_product_finalprice
-            val price = "$normalPrice $spPrice"
 
-            val ss = SpannableStringBuilder(price)
-            ss.setSpan(StrikethroughSpan(), 0, normalPrice.length, 0)
-            ss.setSpan(ForegroundColorSpan(Color.RED), normalPrice.length, price.length, 0)
-            ss.setSpan(RelativeSizeSpan(1.1f), normalPrice.length, price.length, 0)
+            itemBinding?.tvNormalPrice?.text = Utils.getDisplayPrice(productLinks?.extension_attributes?.linked_product_regularprice.toString(), productLinks?.extension_attributes?.linked_product_finalprice.toString())
+//            if(productLinks?.extension_attributes?.linked_product_regularprice == productLinks?.extension_attributes?.linked_product_finalprice || productLinks?.extension_attributes?.linked_product_finalprice.toString().isBlank()){
+//                itemBinding?.tvNormalPrice?.text = normalPrice
+//            }else{
+//                val price = "$normalPrice $spPrice"
+//                val ss = SpannableStringBuilder(price)
+//                ss.setSpan(StrikethroughSpan(), 0, normalPrice.length, 0)
+//                ss.setSpan(ForegroundColorSpan(Color.RED), normalPrice.length, price.length, 0)
+//                ss.setSpan(RelativeSizeSpan(1.1f), normalPrice.length, price.length, 0)
+//                itemBinding?.tvNormalPrice?.text = ss
+//            }
+
 
             itemBinding?.productLinks = productLinks
-            itemBinding?.tvNormalPrice?.text = ss
+
 
             itemView.setOnClickListener {
                 listener?.onItemClick(productLinks,position)

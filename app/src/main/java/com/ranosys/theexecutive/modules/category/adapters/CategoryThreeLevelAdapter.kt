@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ExpandableListAdapter
 import android.widget.ExpandableListView
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.R.id.elv_parent_category
 import com.ranosys.theexecutive.databinding.RowFirstBinding
 import com.ranosys.theexecutive.modules.category.ChildrenData
 import com.ranosys.theexecutive.modules.category.SecondLevelExpandableListView
@@ -18,7 +17,6 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
-import kotlinx.android.synthetic.main.fragment_category.*
 
 @Suppress("NAME_SHADOWING")
 /**
@@ -90,7 +88,7 @@ class CategoryThreeLevelAdapter(context: Context?, var list : MutableList<Childr
             }else if((categoryList?.get(group)?.children_data?.get(p2) as ChildrenData).name == context?.getString(R.string.view_all)){
                 val bundle = Bundle()
                 bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
-                bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
+                bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.name)
                 FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
             }
 

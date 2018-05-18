@@ -42,7 +42,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
         fun bind(productItem: ProductListingDataClass.Item, position : Int, listener: ProductListAdapter.OnItemClickListener){
 
             if((position + 1) % ProductListingFragment.COLUMN_CHANGE_FACTOR == 0){
-                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, 1.4)
+                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, 1.45)
             }else{
                 Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, .6)
             }
@@ -106,7 +106,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
             var discount = 0
             if(specialPrice.isNotBlank()){
-                discount = Math.round((price.replace(".","").toDouble() - specialPrice.replace(".","").toDouble()).div(price.replace(".","").toDouble())).times(100).toInt()
+                discount = Math.round((price.replace(".","").toDouble() - specialPrice.replace(".","").toDouble()).div(price.replace(".","").toDouble()).times(100)).toInt()
                 //discount = Math.round((((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100))).toInt()
             }
             var imgUrl = ""
