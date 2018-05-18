@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
-import com.ranosys.theexecutive.modules.myAccount.AddressBookFragment
+import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_checkout.*
@@ -36,7 +36,7 @@ class CheckoutFragment : BaseFragment(){
         super.onViewCreated(view, savedInstanceState)
 
         address_expand_img.setOnClickListener {
-            FragmentUtils.addFragment(context, AddressBookFragment(),null, AddressBookFragment::class.java.name, true )
+            FragmentUtils.addFragment(context, AddressBookFragment.getInstance(true),null, AddressBookFragment::class.java.name, true )
         }
     }
 

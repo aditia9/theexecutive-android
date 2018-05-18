@@ -51,19 +51,19 @@ class DashBoardActivity: BaseActivity() {
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
             override fun onBackStackChanged() {
                 val backStackCount = supportFragmentManager.backStackEntryCount
-                if(backStackCount > 0){
+                if (backStackCount > 0) {
                     val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
-                    fragment?.run{
-                        if(fragment is HomeFragment) {
-                            when(HomeFragment.fragmentPosition){
+                    fragment?.run {
+                        if (fragment is HomeFragment) {
+                            when (HomeFragment.fragmentPosition) {
                                 0 -> {
                                     (fragment as BaseFragment).setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true, true)
                                 }
                                 1 -> {
                                     val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-                                    if(TextUtils.isEmpty(isLogin)){
+                                    if (TextUtils.isEmpty(isLogin)) {
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
-                                    }else{
+                                    } else {
                                         val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, email, 0, false, 0, false)
                                     }
@@ -73,22 +73,24 @@ class DashBoardActivity: BaseActivity() {
                                 }
                             }
                         }
-                        if(fragment is ProductListingFragment)
-                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true )
-                        if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
-                        if(fragment is ProductDetailFragment) {
-                            (fragment as ProductDetailFragment).onResume() }
-                        if(fragment is AddressBookFragment) {
-                            (fragment as AddressBookFragment).onResume() }
+                        if (fragment is ProductListingFragment)
+                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)
+                        if (fragment is LoginFragment) {
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false, true)
+                        }
+                        if (fragment is ProductDetailFragment) {
+                            (fragment as ProductDetailFragment).onResume()
+                        }
+                        if (fragment is AddressBookFragment) {
                             (fragment as AddressBookFragment).onResume()
                         }
 
-                        if(fragment is CheckoutFragment) {
+                        if (fragment is CheckoutFragment) {
                             (fragment as CheckoutFragment).onResume()
                         }
                     }
                 }
+            }
         })
     }
 }

@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.addressBook
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -33,6 +34,8 @@ class AddressBookFragment: BaseFragment() {
     private lateinit var mViewModel: AddressBookViewModel
     private var addressList: MutableList<MyAccountDataClass.Address>? = null
     private lateinit var addressBookAdapter: AddressBookAdapter
+    private var isFromCheckout: Boolean  = false
+    private var liveAddress: MutableLiveData<MyAccountDataClass.Address>?  = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -144,7 +147,21 @@ class AddressBookFragment: BaseFragment() {
                 changeDefaultAddress(addressPosition)
             }
 
+            else -> {
+                if(isFromCheckout){
+                    addressSelection(addressPosition)
+                }
+            }
+
         }
+    }
+
+    private fun addressSelection(addressPosition: Int) {
+        //perform only if from checkout
+        Toast.makeText(activity, "Address selected", Toast.LENGTH_SHORT).show()
+        liveAddress?.value = addressList?.get(addressPosition)
+        activity?.onBackPressed()
+
     }
 
     private fun changeDefaultAddress(addressPosition: Int) {
@@ -186,6 +203,15 @@ class AddressBookFragment: BaseFragment() {
             mViewModel.removeAddress(addressList?.get(addressPosition))
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
+        }
+    }
+
+    companion object {
+        fun getInstance(isFromCheckout : Boolean  = false, liveAddress: MutableLiveData<MyAccountDataClass.Address>? = null): AddressBookFragment{
+            return AddressBookFragment().apply {
+                this.isFromCheckout = isFromCheckout
+                this.liveAddress = liveAddress
+            }
         }
     }
 
