@@ -125,6 +125,7 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
+                et_promo_code.setText("")
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
