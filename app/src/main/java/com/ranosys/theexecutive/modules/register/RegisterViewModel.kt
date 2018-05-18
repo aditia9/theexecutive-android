@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.register
 
+import AppLog
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
@@ -11,6 +12,7 @@ import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
@@ -63,6 +65,8 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
     var apiSocialRegResponse: MutableLiveData<String>? = MutableLiveData()
     var apiDirectRegSuccessResponse: MutableLiveData<RegisterDataClass.RegistrationResponse>? = MutableLiveData()
+    var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
 
     companion object {
         const val MALE = 1
@@ -239,10 +243,76 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             override fun onSuccess(userToken: String?) {
                 SavedPreferences.getInstance()?.saveStringValue(emailAddress.get(), Constants.USER_EMAIL)
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
-                apiSocialRegResponse?.value = userToken
+                SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+
+                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
+                if(guestCartId.isNotBlank()){
+                    mergeCart(guestCartId)
+                }else{
+                    apiSocialRegResponse?.value = userToken
+                }
 
             }
         })
+    }
+
+    private fun mergeCart(guestCartId: String) {
+        AppRepository.cartMergeApi(guestCartId, object: ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                AppLog.d("cart merge api : ${error.message}")
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.d("cart merge api : ${errorMsg}")
+            }
+
+            override fun onSuccess(t: String?) {
+                //delete guest cart id
+                SavedPreferences.getInstance()?.saveStringValue("", Constants.GUEST_CART_ID_KEY)
+                apiSocialRegResponse?.value = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+            }
+
+        })
+    }
+
+    fun getCartIdForUser(userToken: String?){
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createUserCart(object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                userCartIdResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartIdResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
+                userCartIdResponse?.value = apiResponse
+            }
+
+        })
+    }
+
+    fun getUserCartCount() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountUser(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                userCartCountResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartCountResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                userCartCountResponse?.value = apiResponse
+            }
+
+        })
+
     }
 
     fun onGenderSelection(view: RadioGroup, id:Int){

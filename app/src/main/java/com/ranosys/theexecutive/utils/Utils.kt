@@ -36,9 +36,9 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.zopim.android.sdk.api.ZopimChat
 import com.zopim.android.sdk.model.VisitorInfo
-import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import java.text.NumberFormat
 import java.util.*
 import java.util.regex.Pattern

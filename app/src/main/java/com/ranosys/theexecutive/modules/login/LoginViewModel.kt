@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.login
 
+import AppLog
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
@@ -87,7 +88,13 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             override fun onSuccess(userToken: String?) {
                 //save customer token
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
-                apiSuccessResponse?.value = userToken
+
+                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
+                if(guestCartId.isNotBlank()){
+                    mergeCart(guestCartId)
+                }else{
+                    apiSuccessResponse?.value = userToken
+                }
 
             }
         })
@@ -149,8 +156,33 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             override fun onSuccess(userToken: String?) {
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
                 email.set(userData.email)
-                apiSuccessResponse?.value = userToken
 
+                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
+                if(guestCartId.isNotBlank()){
+                    mergeCart(guestCartId)
+                }else{
+                    apiSuccessResponse?.value = userToken
+                }
+
+            }
+
+        })
+    }
+
+    private fun mergeCart(guestCartId: String) {
+        AppRepository.cartMergeApi(guestCartId, object: ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                AppLog.d("cart merge api : ${error.message}")
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.d("cart merge api : ${errorMsg}")
+            }
+
+            override fun onSuccess(t: String?) {
+                //delete guest cart id
+                SavedPreferences.getInstance()?.saveStringValue("", Constants.GUEST_CART_ID_KEY)
+                apiSuccessResponse?.value = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
             }
 
         })
