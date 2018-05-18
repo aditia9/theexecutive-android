@@ -36,7 +36,7 @@ class CheckoutFragment : BaseFragment(){
         super.onViewCreated(view, savedInstanceState)
 
         address_expand_img.setOnClickListener {
-            FragmentUtils.addFragment(context, AddressBookFragment.getInstance(true),null, AddressBookFragment::class.java.name, true )
+            FragmentUtils.addFragment(context, AddressBookFragment.getInstance(true, checkoutViewModel.selectedAddress),null, AddressBookFragment::class.java.name, true )
         }
     }
 
@@ -62,7 +62,6 @@ class CheckoutFragment : BaseFragment(){
             checkoutBinding.address = address
 
         })
-
 
         checkoutViewModel.country.observe(this, Observer { country->
             checkoutBinding.country = country

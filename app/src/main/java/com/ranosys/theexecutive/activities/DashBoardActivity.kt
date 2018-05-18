@@ -17,38 +17,41 @@ import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.zopim.android.sdk.api.ZopimChat
 
 /**
  * @Details Dashboard screen for an app
  * @Author Ranosys Technologies
  * @Date 19,Mar,2018
  */
-class DashBoardActivity: BaseActivity() {
+class DashBoardActivity : BaseActivity() {
 
-    lateinit var toolbarBinding : ActivityDashboardBinding
+    lateinit var toolbarBinding: ActivityDashboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbarBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding.toolbarViewModel = toolbarViewModel
 
-
+        //initialize Zendesk chat setup
+        setUpZendeskChat()
         val model = ViewModelProviders.of(this).get(DashBoardViewModel::class.java)
         model.manageFragments().observe(this, Observer { isCreated ->
-            if(isCreated!!){
-                if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
+            if (isCreated!!) {
+                if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
                     FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
-                }else{
+                } else {
                     FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
                 }
             }
 
         })
 
-        supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener{
+        supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener {
             override fun onBackStackChanged() {
                 val backStackCount = supportFragmentManager.backStackEntryCount
                 if (backStackCount > 0) {
@@ -84,7 +87,9 @@ class DashBoardActivity: BaseActivity() {
                         if (fragment is AddressBookFragment) {
                             (fragment as AddressBookFragment).onResume()
                         }
-
+                        if (fragment is ShoppingBagFragment) {
+                            fragment.onResume()
+                        }
                         if (fragment is CheckoutFragment) {
                             (fragment as CheckoutFragment).onResume()
                         }
@@ -92,5 +97,10 @@ class DashBoardActivity: BaseActivity() {
                 }
             }
         })
+
+    }
+
+    private fun setUpZendeskChat() {
+        ZopimChat.init(Constants.ZENDESK_CHAT)
     }
 }

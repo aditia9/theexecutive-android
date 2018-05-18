@@ -363,7 +363,7 @@ object Utils {
             SpannableStringBuilder(displayPrice).apply {
                 setSpan(StrikethroughSpan(), 0, normalP.length, 0)
                 setSpan(ForegroundColorSpan(Color.RED), normalP.length, displayPrice.length, 0)
-                setSpan(RelativeSizeSpan(1.3f), normalP.length, displayPrice.length, 0)
+                setSpan(RelativeSizeSpan(1.1f), normalP.length, displayPrice.length, 0)
             }
         }else{
             val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)

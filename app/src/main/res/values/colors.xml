@@ -14,6 +14,7 @@
     <color name="colorText">#ffffff</color>
     <color name="light_background">#F6F6F6</color>
     <color name="translucent_bg">#99f6f6f6</color>
+    <color name="btn_checkout_bg">#2A6577</color>
 
 
     <color name="theme_black_color">#232021</color>
@@ -22,6 +23,7 @@
     <color name="transparent_white">#90ffffff</color>
     <color name="transparent_bottom_sheet_color">#CCFFFFFF</color>
     <color name="address_item_bg_color">#f8f6f7</color>
+    <color name="light_green">#0d9344</color>
 
     <color name="bottom_sheet_btn">#2A6577</color>
 
