@@ -7,6 +7,9 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.SavedPreferences
+
 /**
  * @Class An data class for Shopping bag view model
  * @author Ranosys Technologies
@@ -23,6 +26,7 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
     var mutualApplyPromoCodeResponse = MutableLiveData<ApiResponse<String>>()
     var mutualPromoCodeDeleteResponse = MutableLiveData<ApiResponse<String>>()
     var shoppingBagListResponse: ObservableField<MutableList<ShoppingBagResponse>>? = ObservableField()
+    var guestCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
 
     fun getShoppingBagForUser() {
         val apiResponse = ApiResponse<List<ShoppingBagResponse>>()
@@ -346,6 +350,28 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
                 mutualPromoCodeDeleteResponse.value = apiResponse
+            }
+
+        })
+    }
+
+    fun getCartIdForGuest() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createGuestCart(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+                guestCartIdResponse?.value = apiResponse
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+                guestCartIdResponse?.value = apiResponse
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.GUEST_CART_ID_KEY)
+                guestCartIdResponse?.value = apiResponse
             }
 
         })

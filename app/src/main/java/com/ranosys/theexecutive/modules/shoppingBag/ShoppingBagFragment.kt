@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
@@ -174,6 +175,22 @@ class ShoppingBagFragment : BaseFragment() {
             }
         })
 
+
+        shoppingBagViewModel.guestCartIdResponse?.observe(this, Observer {
+            response ->
+            if(response?.error.isNullOrEmpty()) {
+                val guestCartId = response?.apiResponse
+                if (guestCartId is String) {
+                    getShoppingBag()
+                }
+            }
+            else {
+                hideLoading()
+                Toast.makeText(activity,response?.error, Toast.LENGTH_LONG).show()
+            }
+
+        })
+
     }
 
     private fun setShoppingBagAdapter() {
@@ -323,6 +340,8 @@ class ShoppingBagFragment : BaseFragment() {
                 }
                 getTotalForUser()
                 shoppingBagViewModel.getShoppingBagForGuestUser(guestCartId)
+            }else {
+                shoppingBagViewModel.getCartIdForGuest()
             }
         }
     }
