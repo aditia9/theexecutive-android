@@ -10,10 +10,10 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
-import com.ranosys.theexecutive.modules.home.HomeFragment
-import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment

@@ -102,14 +102,14 @@ class ProductListingFragment: BaseFragment() {
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
         prepareFilterDialog()
 
-        callInitialApis()
-
-
         observeProductList()
+        observeApiErrors()
         observeNoProductAvailable()
         observeFilterOptions()
         observePriceFilter()
         observeSortOptions()
+
+        callInitialApis()
 
         return mBinding.root
     }
@@ -513,6 +513,14 @@ class ProductListingFragment: BaseFragment() {
             }
         })
     }
+
+    private fun observeApiErrors() {
+        mViewModel.apiFailureResponse?.observe(this, Observer<String> { error ->
+            hideLoading()
+            Utils.showErrorDialog(activity as Context, getString(R.string.something_went_wrong_error))
+        })
+    }
+
 
     fun callProductListingApi(catId: Int? = 0, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false){
         if (Utils.isConnectionAvailable(activity as Context)) {
