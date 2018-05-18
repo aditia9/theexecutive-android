@@ -51,8 +51,6 @@ object Constants {
     const val NEW_FROM_DATE_LABEL: String = "news_from_date"
     const val NEW_TO_DATE_LABEL: String = "news_to_date"
     const val SHORT_DESCRIPTION: String = "short_description"
-    const val PRODUCT_SKU: String = "productSku"
-    const val OPTIONS: String = "options"
     const val COLOR: String = "color"
     const val COLOR_: String = "Color"
     const val SIZE: String = "size"
@@ -87,5 +85,9 @@ object Constants {
     const val NO_USER_EXIST : String = "No user exists with this email id"
     const val ALREADY_REGISTERED : String = "It seems like you are already registered with us, kindly login"
     const val CATEGORY_IMAGE_HEIGHT_RATIO: Double = 1.5
+    const val FIRST_NAME: String = "first_name"
+    const val LAST_NAME: String = "last_name"
+    const val PRODUCT_SKU: String = "productSku"
+    const val OPTIONS: String = "options"
 
 }

@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.addAddress
 
 import AppLog
 import android.app.Application
@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.modules.register.RegisterViewModel
 import com.ranosys.theexecutive.utils.Constants
@@ -165,7 +166,7 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
             isValid = false
         }
 
-        if (TextUtils.isEmpty(maskedAddress?.streedAdd1) && TextUtils.isEmpty(maskedAddress?.streedAdd2)){
+        if (TextUtils.isEmpty(maskedAddress?.streedAdd1)){
             streetAddress1Error.set(context.getString(R.string.street_address_error))
             isValid = false
         }

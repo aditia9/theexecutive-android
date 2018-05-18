@@ -10,17 +10,16 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
+import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
-import com.ranosys.theexecutive.modules.myAccount.AddressBookFragment
-import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
-import com.zopim.android.sdk.api.ZopimChat
 
 /**
  * @Details Dashboard screen for an app
@@ -36,8 +35,7 @@ class DashBoardActivity: BaseActivity() {
         toolbarBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding.toolbarViewModel = toolbarViewModel
 
-        //initialize Zendesk chat setup
-        setUpZendeskChat()
+
         val model = ViewModelProviders.of(this).get(DashBoardViewModel::class.java)
         model.manageFragments().observe(this, Observer { isCreated ->
             if(isCreated!!){
@@ -80,9 +78,9 @@ class DashBoardActivity: BaseActivity() {
                         if(fragment is LoginFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         if(fragment is ProductDetailFragment) {
-                            (fragment as ProductDetailFragment).onResume()
-                        }
+                            (fragment as ProductDetailFragment).onResume() }
                         if(fragment is AddressBookFragment) {
+                            (fragment as AddressBookFragment).onResume() }
                             (fragment as AddressBookFragment).onResume()
                         }
 
@@ -91,13 +89,6 @@ class DashBoardActivity: BaseActivity() {
                         }
                     }
                 }
-            }
-
         })
-
-    }
-
-    private fun setUpZendeskChat() {
-        ZopimChat.init(Constants.ZENDESK_CHAT)
     }
 }

@@ -1,4 +1,4 @@
-package com.ranosys.theexecutive.modules.myAccount
+package com.ranosys.theexecutive.modules.editAddress
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentEditAddressBinding
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_edit_address.*
@@ -48,7 +49,7 @@ class EditAddressFragment:BaseFragment() {
                 activity?.onBackPressed()
 
             }else{
-                Utils.showDialog(activity,apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
             }
         })
     }

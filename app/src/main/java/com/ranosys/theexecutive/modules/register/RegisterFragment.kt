@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.register
 
+import AppLog
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.DialogInterface
@@ -84,10 +85,42 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             if(!TextUtils.isEmpty(token)){
                 hideLoading()
                 Toast.makeText(activity, getString(R.string.register_successfull), Toast.LENGTH_SHORT).show()
+
+                //api to get cart id
+                registerViewModel.getCartIdForUser(token)
+                SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
+                SavedPreferences.getInstance()?.saveStringValue(registerViewModel.emailAddress.get(), Constants.USER_EMAIL)
                 FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, false)
             }
         })
+
+        registerViewModel.userCartIdResponse?.observe(this, android.arch.lifecycle.Observer {response ->
+            val userCartId = response?.apiResponse ?: response?.error
+            if(userCartId is String){
+                registerViewModel.getUserCartCount()
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+        })
+
+        registerViewModel.userCartCountResponse?.observe(this, android.arch.lifecycle.Observer { response ->
+            val userCount = response?.apiResponse
+            if(userCount is String){
+                try {
+                    Utils.updateCartCount(userCount.toInt())
+                }catch (e : NumberFormatException){
+                    AppLog.printStackTrace(e)
+                }
+            }
+            else {
+                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+            }
+        })
+
     }
+
+
 
     private fun observeApiFailure() {
         registerViewModel.apiFailureResponse?.observe(this, android.arch.lifecycle.Observer { errorMsg ->

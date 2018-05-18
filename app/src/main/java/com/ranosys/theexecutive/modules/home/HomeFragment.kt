@@ -28,19 +28,25 @@ import kotlinx.android.synthetic.main.fragment_home.*
  * Created by Mohammad Sunny on 19/3/18.
  */
 class HomeFragment : BaseFragment() {
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         mViewDataBinding?.executePendingBindings()
         return mViewDataBinding?.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setPagerAdapter()
+
+        //initialize Zendesk chat setup
+        Utils.setUpZendeskChat()
 
         tv_chat.setOnClickListener {
             startActivity(Intent(getApplicationContext(), ZopimChatActivity::class.java))
         }
     }
+
     private fun setPagerAdapter(){
         val homeViewPager = HomeViewPager(childFragmentManager)
         viewpager.setPagingEnabled(false)
@@ -48,6 +54,7 @@ class HomeFragment : BaseFragment() {
         viewpager.offscreenPageLimit = 0
         tabLayout.setupWithViewPager(viewpager)
         createTabIcons()
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 when(tab?.position) {
@@ -56,6 +63,7 @@ class HomeFragment : BaseFragment() {
                     }
                 }
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
                 view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_accent_color))
@@ -72,6 +80,7 @@ class HomeFragment : BaseFragment() {
                     }
                 }
             }
+
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val view = tab?.customView as TextView
                 view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_black_color))
@@ -89,6 +98,7 @@ class HomeFragment : BaseFragment() {
                 }
             }
         })
+
         viewpager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
@@ -131,6 +141,7 @@ class HomeFragment : BaseFragment() {
             }
         })
     }
+
     private fun createTabIcons() {
         val tabOne = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null) as TextView
         tabOne.text = getString(R.string.home)
@@ -147,6 +158,7 @@ class HomeFragment : BaseFragment() {
         tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist, 0, 0)
         tabLayout.getTabAt(2)?.customView = tabThree
     }
+
     companion object {
         var fragmentPosition : Int? = null
     }

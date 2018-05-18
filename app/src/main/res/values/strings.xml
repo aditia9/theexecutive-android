@@ -87,6 +87,7 @@
     <string name="postal_error">Zip/ Postal code is required.</string>
     <string name="valid_password_error">Password must contain 8 or more characters, special character and number.</string>
     <string name="valid_mobile_error">Length should be between 8 to 16.</string>
+    <string name="valid_postal_error">Length should be 5.</string>
     <string name="confirm_password_error">The password does not match, kindly enter the same password as above.</string>
     <string name="same_password_error">It seems the password same as before, kindly enter new password.</string>
     <string name="select_lang_title">Select Language</string>
@@ -140,6 +141,7 @@
     <string name="returns">Returns</string>
     <string name="share">Share</string>
     <string name="buying_guideline">Buying Guideline</string>
+    <string name="buying_guide">Buying Guide</string>
     <string name="add_to_wishlist">Add to wishlist</string>
     <string name="might_like">You Might Also Like</string>
     <string name="add_to_bag">Add to Bag</string>
@@ -194,11 +196,15 @@
     <string name="product_out_of_stock">This product is out of stock.</string>
     <string name="login_required_for_wishlist">Please login before adding items to your wish list.</string>
     <string name="address_remove_success_msg">Address removed successfully</string>
-    <string name="dafault_address_delete_warning">can\'t delete default address</string>
-    <string name="delete_address_confirmation">You want to remove this address</string>
-    <string name="address_edit_success_msg">Address Edited Successfully</string>
-    <string name="add_address_success_msg">Address Added Successfully</string>
     <string name="checkout">checkout</string>
+    <string name="dafault_address_delete_warning">Default address cannot be removed.</string>
+    <string name="delete_address_confirmation">Are you sure you want to remove this address? </string>
+    <string name="address_edit_success_msg">Address is now updated successfully</string>
+    <string name="add_address_success_msg">Address is now added successfully</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="settings">Settings</string>
+    <string name="add_address_failure_msg">Oops.. this is on us, please retry</string>
+    <string name="udate_profile_success_msg">Your profile is now updated.</string>
 
 
 </resources>
