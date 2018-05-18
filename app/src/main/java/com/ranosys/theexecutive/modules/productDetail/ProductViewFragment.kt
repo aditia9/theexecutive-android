@@ -203,7 +203,6 @@ class ProductViewFragment : BaseFragment() {
     }
 
     private fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
-
         Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, 1.5)
         Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, 1.5)
 
