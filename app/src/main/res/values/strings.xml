@@ -87,6 +87,7 @@
     <string name="postal_error">Zip/ Postal code is required.</string>
     <string name="valid_password_error">Password must contain 8 or more characters, special character and number.</string>
     <string name="valid_mobile_error">Length should be between 8 to 16.</string>
+    <string name="valid_postal_error">Length should be 5.</string>
     <string name="confirm_password_error">The password does not match, kindly enter the same password as above.</string>
     <string name="same_password_error">It seems the password same as before, kindly enter new password.</string>
     <string name="select_lang_title">Select Language</string>

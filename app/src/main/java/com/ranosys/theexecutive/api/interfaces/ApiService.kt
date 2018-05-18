@@ -246,7 +246,13 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun addTOCartGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Path("cart_id") cartId: String, @Body request: AddToCartRequest): Call<AddToCartResponse>
+        fun addTOCartGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode:String, @Path("cart_id") cartId: String,  @Body request: AddToCartRequest): Call<AddToCartResponse>
+
+        @GET("rest/{store_code}/V1/cart/mine/mergecart/{guest_cart_id}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun mergeCart(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode:String, @Path("guest_cart_id") guestCartId:String): Call<String>
 
         @GET("rest/{store_code}/V1/carts/mine/items")
         @Headers(ApiConstants.CONTENT_TYPE,
