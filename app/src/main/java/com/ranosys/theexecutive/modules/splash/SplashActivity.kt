@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
@@ -78,7 +79,7 @@ class SplashActivity : BaseActivity() {
         if (extras != null) {
             redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
             redirectionValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
-            redirectTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
+            redirectTitle = extras.getString(Constants.KEY_REDIRECTION_TITLE)
             notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
             notificationImg = extras.getString(Constants.KEY_IMAGE)
             notificationTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
@@ -197,6 +198,12 @@ class SplashActivity : BaseActivity() {
         alert.show()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.i("MY INTENT", intent.toString())
+
+
+    }
 
     private fun moveToHome() {
         val intent = Intent(this@SplashActivity, DashBoardActivity::class.java)

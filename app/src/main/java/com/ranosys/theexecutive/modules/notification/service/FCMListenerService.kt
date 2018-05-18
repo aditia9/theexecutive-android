@@ -51,7 +51,7 @@ class FCMListenerService : FirebaseMessagingService() {
         //generate notification if body is not empty and Notification are enabled from settings
         if ((remoteMessage.notification?.body).isNullOrEmpty().not()) {
             val msg = remoteMessage.notification?.body
-            createNotification(msg!!, getString(R.string.app_name))
+            createNotification(message, title)
         }
     }
 

@@ -122,9 +122,10 @@ object Constants {
     8 = "redirection_title"*/
 
     const val NOTIFICATION_TYPE_CMS = "cms"
-    const val NOTIFICATION_TYPE_PRODUCT_DETAIL = "product_detail"
-    const val NOTIFICATION_TYPE_CATALOG = "catalog"
-    const val NOTIFICATION_TYPE_ORDER_LIST = "order_list"
+    const val NOTIFICATION_TYPE_PRODUCT_DETAIL = "Product"
+    const val NOTIFICATION_TYPE_CATALOG = "Category"
+    const val NOTIFICATION_TYPE_ORDER_LIST = "Order"
+    const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
     const val USER_FCM_ID = "fcm_id"
 
 }

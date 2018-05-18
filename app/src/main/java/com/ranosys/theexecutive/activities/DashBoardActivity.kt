@@ -37,13 +37,23 @@ class DashBoardActivity : BaseActivity() {
 
         //initialize Zendesk chat setup
         setUpZendeskChat()
+
+        val intent = intent
+        val bundle = intent.extras
+
         val model = ViewModelProviders.of(this).get(DashBoardViewModel::class.java)
         model.manageFragments().observe(this, Observer { isCreated ->
             if (isCreated!!) {
                 if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
                     FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
+                    if(bundle.getString(Constants.KEY_REDIRECTION_TYPE).isNullOrEmpty().not()){
+                        dataFromPreviousPage()
+                    }
                 } else {
                     FragmentUtils.addFragment(this, HomeFragment(), null, HomeFragment::class.java.name, true)
+                    if(bundle.getString(Constants.KEY_REDIRECTION_TYPE).isNullOrEmpty().not()){
+                        dataFromPreviousPage()
+                    }
                 }
             }
 
@@ -88,8 +98,8 @@ class DashBoardActivity : BaseActivity() {
 
         })
 
-        dataFromPreviousPage()
     }
+
 
     private fun dataFromPreviousPage() {
         val extras = intent.extras
