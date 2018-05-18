@@ -13,6 +13,7 @@
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fifteen_dp"
         android:layout_marginTop="@dimen/fifteen_dp">
 
         <ImageView
@@ -96,7 +97,6 @@
             android:layout_marginStart="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/fifteen_dp"
             android:contentDescription="@string/app_name"
-            android:scaleType="centerCrop"
             android:padding="@dimen/three_dp"
             android:src="@drawable/back"
             app:layout_constraintStart_toEndOf="@id/img_product"
@@ -194,15 +194,6 @@
             app:layout_constraintStart_toStartOf="@id/img_product"
            />
 
-
-        <View
-            android:layout_width="@dimen/match_constraint"
-            android:layout_height="@dimen/one_dp"
-            android:layout_marginTop="@dimen/forty_dp"
-            android:background="@color/divider_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_product" />
 
     </android.support.constraint.ConstraintLayout>
 

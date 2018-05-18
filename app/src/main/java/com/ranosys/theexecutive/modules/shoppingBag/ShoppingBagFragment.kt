@@ -16,6 +16,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentShoppingBagBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
+import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_shopping_bag.*
@@ -124,8 +125,6 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                et_promo_code.setText("")
-                et_promo_code.error = getString(R.string.promo_code_invalid)
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
@@ -200,6 +199,8 @@ class ShoppingBagFragment : BaseFragment() {
             }
         }
         cartQty = 0
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        rv_shopping_bag_list.addItemDecoration(itemDecor)
         rv_shopping_bag_list.layoutManager = linearLayoutManager
 
         if (shoppingBagViewModel.shoppingBagListResponse?.get()?.size!! > 0) {
