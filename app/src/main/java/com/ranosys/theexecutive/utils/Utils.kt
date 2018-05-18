@@ -19,6 +19,7 @@ import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Patterns
 import android.util.TypedValue
 import android.view.View
 import android.view.Window
@@ -55,11 +56,15 @@ object Utils {
             return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         }
 
-    fun isValidEmail(email: String?): Boolean {
+    /*fun isValidEmail(email: String?): Boolean {
         // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
         val p = Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
         val m = p.matcher(email)
         return m.matches()
+    }*/
+
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     fun isValidPassword(password: String): Boolean {
