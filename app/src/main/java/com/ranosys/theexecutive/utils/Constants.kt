@@ -51,8 +51,6 @@ object Constants {
     const val NEW_FROM_DATE_LABEL: String = "news_from_date"
     const val NEW_TO_DATE_LABEL: String = "news_to_date"
     const val SHORT_DESCRIPTION: String = "short_description"
-    const val PRODUCT_SKU: String = "productSku"
-    const val OPTIONS: String = "options"
     const val COLOR: String = "color"
     const val COLOR_: String = "Color"
     const val SIZE: String = "size"
