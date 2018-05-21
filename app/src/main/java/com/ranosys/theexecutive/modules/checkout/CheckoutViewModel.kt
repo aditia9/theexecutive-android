@@ -7,6 +7,7 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 
@@ -19,6 +20,7 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
     val CommanError: MutableLiveData<String> = MutableLiveData()
     val selectedAddress: MutableLiveData<MyAccountDataClass.Address> = MutableLiveData()
+    val shoppingBagItems: MutableLiveData<List<ShoppingBagResponse>> = MutableLiveData()
     var country: MutableLiveData<String> = MutableLiveData()
 
     fun getAddressApi() {
@@ -45,6 +47,18 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
 
     fun getCartItemsApi() {
+        AppRepository.getCartOfUser(callBack = object : ApiCallback<List<ShoppingBagResponse>> {
+            override fun onSuccess(t: List<ShoppingBagResponse>?) {
+                shoppingBagItems.value = t
+            }
 
+            override fun onException(error: Throwable) {
+                CommanError.value = error.message
+            }
+
+            override fun onError(errorMsg: String) {
+                CommanError.value = errorMsg
+            }
+        })
     }
 }

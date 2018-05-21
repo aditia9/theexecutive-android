@@ -167,8 +167,9 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/cart_item_list"
                     android:layout_width="@dimen/match_constraint"
-                    android:layout_height="@dimen/one_seventy_dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/eight_dp"
+                    android:layout_marginBottom="@dimen/eight_dp"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
