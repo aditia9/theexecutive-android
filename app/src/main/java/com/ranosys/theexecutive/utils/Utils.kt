@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.utils
 
+import AppLog
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
@@ -15,7 +16,11 @@ import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.telephony.TelephonyManager
+import android.text.SpannableStringBuilder
 import android.text.TextUtils
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StrikethroughSpan
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
@@ -31,6 +36,9 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.zopim.android.sdk.api.ZopimChat
+import com.zopim.android.sdk.model.VisitorInfo
 import java.text.NumberFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -53,8 +61,8 @@ object Utils {
         }
 
     fun isValidEmail(email: String?): Boolean {
-       // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
-        val p = Pattern.compile( "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
+        // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
+        val p = Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
         val m = p.matcher(email)
         return m.matches()
     }
@@ -68,6 +76,14 @@ object Utils {
 
     fun isValidMobile(mobile: String): Boolean {
         if(mobile.length in 8..16){
+            return true
+        }
+        return false
+
+    }
+
+    fun isValidPincode(pincode: String): Boolean {
+        if(pincode.length == 5){
             return true
         }
         return false
@@ -242,21 +258,40 @@ object Utils {
     }
 
     fun getFromattedPrice(price: String): String {
-        val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
-        if(price.isNotBlank()){
-            val p = price.toDouble()
-            return numberFormatter.format(p)
-        }else{
-            return price
+        var newPrice = ""
+        try {
+            val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
+            if (price.isNotBlank()) {
+                val p = price.toDouble()
+                newPrice = numberFormatter.format(p).replace(",", ".")
+            } else {
+                newPrice = price
+            }
+        }catch (e : NumberFormatException){
+            AppLog.printStackTrace(e)
         }
+        return newPrice
+
     }
 
     fun getDoubleFromFormattedPrice(price: String): Double {
-        return price.replace(",", "").toDouble()
+        var newPrice = 0.0
+        try {
+            newPrice = price.replace(",", "").toDouble()
+        }catch (e : NumberFormatException){
+            AppLog.printStackTrace(e)
+        }
+        return newPrice
     }
 
     fun getStringFromFormattedPrice(price: String): String {
-        return price.replace(",", "")
+        var newPrice = ""
+        try {
+            newPrice = price.replace(",", "")
+        }catch (e : NumberFormatException){
+            AppLog.printStackTrace(e)
+        }
+        return newPrice
     }
 
     @SuppressLint("ServiceCast")
@@ -275,5 +310,64 @@ object Utils {
             }
         }
         return IMEI
+    }
+
+    fun setUpZendeskChat() {
+        val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        if(!TextUtils.isEmpty(isLogin)) {
+            val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
+            val name = SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME) + " " + SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME)
+            val visitorInfo = VisitorInfo.Builder()
+                    .email(email)
+                   // .name(name)
+                    .build()
+
+            // visitor info can be set at any point when that information becomes available
+            ZopimChat.setVisitorInfo(visitorInfo)
+        }else{
+            val visitorInfo = VisitorInfo.Builder()
+                    .email("")
+                    // .name("")
+                    .build()
+            ZopimChat.setVisitorInfo(visitorInfo)
+        }
+        ZopimChat.init(Constants.ZENDESK_CHAT)
+    }
+
+
+    fun getCountryName(id: String): String{
+        return GlobalSingelton.instance?.storeList?.single { it.code.toString() == id }.let { it?.name } ?: ""
+
+    }
+
+    fun getCountryId(name: String?): String{
+        return GlobalSingelton.instance?.storeList?.single { it.name == name }.let { it?.code } ?: ""
+
+    }
+
+    fun getDefaultAddress(): MyAccountDataClass.Address?{
+        val info = GlobalSingelton.instance?.userInfo
+        if(info?.default_shipping.isNullOrBlank().not()){
+            return info?.addresses?.single { it?.id == info.default_shipping }
+        }else{
+            return null
+        }
+
+    }
+
+    fun getDisplayPrice(configurePrice: String, configureSpecialPrice: String): SpannableStringBuilder {
+        return if(configurePrice.toDouble() > configureSpecialPrice.toDouble() && !configureSpecialPrice.equals(Constants.ZERO)){
+            val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
+            val specialP = "IDR\u00A0" + Utils.getFromattedPrice(configureSpecialPrice)
+            val displayPrice = "$normalP $specialP"
+            SpannableStringBuilder(displayPrice).apply {
+                setSpan(StrikethroughSpan(), 0, normalP.length, 0)
+                setSpan(ForegroundColorSpan(Color.RED), normalP.length, displayPrice.length, 0)
+                setSpan(RelativeSizeSpan(1.1f), normalP.length, displayPrice.length, 0)
+            }
+        }else{
+            val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
+            SpannableStringBuilder(normalP)
+        }
     }
 }

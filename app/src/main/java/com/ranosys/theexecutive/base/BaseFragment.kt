@@ -120,6 +120,11 @@ abstract class BaseFragment : LifecycleFragment() {
                     getToolBarViewModel()?.leftIconClicked?.value = null
                     (activity as BaseActivity).onBackPressed()
                 }
+
+                R.id.toolbar_right_icon -> {
+                    getToolBarViewModel()?.rightIconClicked?.value = null
+                    (activity as BaseActivity).onBackPressed()
+                }
             }
         })
     }

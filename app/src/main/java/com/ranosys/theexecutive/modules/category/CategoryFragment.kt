@@ -19,6 +19,7 @@ import android.widget.ExpandableListView
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
@@ -26,12 +27,14 @@ import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
+import kotlinx.android.synthetic.main.toolbar_layout.view.*
 
 /**
  * @Details Class showing categories on Home screen
@@ -51,6 +54,10 @@ class CategoryFragment : BaseFragment() {
         categoryModelView = ViewModelProviders.of(this).get(CategoryModelView::class.java)
         mViewDataBinding?.categoryViewModel = categoryModelView
         mViewDataBinding?.executePendingBindings()
+
+        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
+            FragmentUtils.addFragment(context, ShoppingBagFragment(),null, ShoppingBagFragment::class.java.name, true )
+        }
         return mViewDataBinding?.root
     }
 
@@ -107,6 +114,7 @@ class CategoryFragment : BaseFragment() {
 
         elv_parent_category.setOnGroupClickListener { _, _, p2, _ ->
             if(categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.children_data?.size!! == 0){
+                elv_parent_category.smoothScrollToPosition(0)
                 val bundle = Bundle()
                 bundle.putInt(Constants.CATEGORY_ID, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.id!!)
                 bundle.putString(Constants.CATEGORY_NAME, categoryModelView?.categoryResponse?.get()?.children_data?.get(p2)?.name!!)
@@ -139,6 +147,7 @@ class CategoryFragment : BaseFragment() {
                             val query = et_search_home.text.toString()
                             et_search_home.setText("")
                             Utils.hideSoftKeypad(activity as Context)
+                            elv_parent_category.smoothScrollToPosition(0)
                             val bundle = Bundle()
                             bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, query)
                             FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
@@ -156,6 +165,7 @@ class CategoryFragment : BaseFragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if(v.text.toString().isEmpty().not()){
                     Utils.hideSoftKeypad(activity as Context)
+                    elv_parent_category.smoothScrollToPosition(0)
                     val bundle = Bundle()
                     bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, v.text.toString())
                     FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
@@ -179,10 +189,9 @@ class CategoryFragment : BaseFragment() {
 
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        handler.removeCallbacksAndMessages(null)
+    override fun onDestroy() {
+        super.onDestroy()
+       handler.removeCallbacksAndMessages(null)
     }
 
     private fun getPromotions() {
@@ -190,7 +199,7 @@ class CategoryFragment : BaseFragment() {
     }
 
     private fun getCategories() {
-        showLoading()
+        //showLoading()
         categoryModelView?.getCategories()
     }
 
@@ -211,7 +220,7 @@ class CategoryFragment : BaseFragment() {
 
     private fun observeCategoryApiResponse() {
         categoryModelView?.mutualHomeResponse?.observe(this, Observer<ApiResponse<CategoryResponseDataClass>> { apiResponse ->
-            hideLoading()
+            //hideLoading()
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             if (response is CategoryResponseDataClass) {
 
@@ -219,21 +228,9 @@ class CategoryFragment : BaseFragment() {
 
                 //add view all category and remove inactive sub categories
                 for(cat in response.children_data){
-                    when(cat.name){
-                        Constants.MEN -> {
-                            val viewAll = ChildrenData(id = cat.id, name = getString(R.string.view_all), is_active = true)
-                            cat.children_data?.add(0, viewAll)
-                            cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
-                        }
-
-                        Constants.WOMEN -> {
-                            val viewAll = ChildrenData(id = cat.id, name = getString(R.string.view_all), is_active = true)
-                            cat.children_data?.add(0, viewAll)
-                            cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
-                        }
-
-                        else -> cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
-                    }
+                    val viewAll = ChildrenData(id = cat.id, name = getString(R.string.view_all), is_active = true)
+                    cat.children_data?.add(0, viewAll)
+                    cat.children_data = cat.children_data?.filter{ it.is_active == true} as ArrayList<ChildrenData>
                 }
 
                 categoryModelView?.categoryResponse?.set(response)

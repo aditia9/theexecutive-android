@@ -12,8 +12,14 @@ import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
+import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
+import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
+import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -24,7 +30,7 @@ import kotlinx.android.synthetic.main.logout_btn.view.*
 /**
  * Created by nikhil on 22/3/18.
  */
-class MyAccountFragment: BaseFragment() {
+class MyAccountFragment : BaseFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
 
@@ -50,32 +56,33 @@ class MyAccountFragment: BaseFragment() {
         val titleArray = resources.getStringArray(R.array.my_account_option_title_array)
         val iconArray = resources.obtainTypedArray(R.array.my_account_option_icon_array)
 
-        for (i in 0..(titleArray.size - 1)){
+        for (i in 0..(titleArray.size - 1)) {
             optionList.add(MyAccountDataClass.MyAccountOption(titleArray[i], iconArray.getResourceId(i, -1)))
         }
 
         return optionList
     }
 
-    class MyAccountAdapter(val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+    class MyAccountAdapter(val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         companion object {
             const val VIEW_TYPE_FOOTER = 2
             const val VIEW_TYPE_ITEM = 1
         }
+
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            if(holder is MyAccountHolder){
+            if (holder is MyAccountHolder) {
                 holder.bind(optionArray[position], context)
             }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            if(viewType == VIEW_TYPE_FOOTER){
+            if (viewType == VIEW_TYPE_FOOTER) {
                 val itemView = LayoutInflater.from(parent.context).inflate(R.layout.logout_btn, parent, false)
-                return MyAccountFooterHolder(itemView,context)
+                return MyAccountFooterHolder(itemView, context)
 
-            }else{
-                val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent,false)
+            } else {
+                val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent, false)
                 return MyAccountAdapter.MyAccountHolder(binding)
             }
 
@@ -88,16 +95,52 @@ class MyAccountFragment: BaseFragment() {
         override fun getItemCount() = optionArray.size + 1
 
 
-        class MyAccountHolder(val itemBinding: MyAccountOptionItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
+        class MyAccountHolder(val itemBinding: MyAccountOptionItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
-            fun bind(option: MyAccountDataClass.MyAccountOption, context: Context){
+            fun bind(option: MyAccountDataClass.MyAccountOption, context: Context) {
                 itemBinding.option = option
 
                 itemView.setOnClickListener {
-                    when(option.title){
+                    when (option.title) {
                         context.getString(R.string.news_letter_option) -> {
-                            FragmentUtils.addFragment(context, NewsLetterFragment(),null, NewsLetterFragment::class.java.name, true )
+                            FragmentUtils.addFragment(context, NewsLetterFragment(), null, NewsLetterFragment::class.java.name, true)
                         }
+                        context.getString(R.string.change_password) -> {
+                            FragmentUtils.addFragment(context, ChangePasswordFragment(), null, ChangePasswordFragment::class.java.name, true)
+                        }
+
+                        context.getString(R.string.my_information_option) -> {
+                            FragmentUtils.addFragment(context, MyInformationFragment(), null, MyInformationFragment::class.java.name, true)
+                        }
+
+                        context.getString(R.string.select_lang_title) -> {
+                            FragmentUtils.addFragment(context, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, true)
+                        }
+
+                        context.getString(R.string.shipping_address) -> {
+                            FragmentUtils.addFragment(context, AddressBookFragment(), null, AddressBookFragment::class.java.name, true)
+                        }
+
+                        context.getString(R.string.buying_guide) ->{
+                            val url = ""
+                            openWebPage(context, url, context.getString(R.string.buying_guide))
+                        }
+
+                        context.getString(R.string.contact_us) ->{
+                            val url = ""
+                            openWebPage(context, url, context.getString(R.string.contact_us))
+                        }
+
+                    }
+                }
+            }
+
+            private fun openWebPage(context: Context, url: String, title: String) {
+                val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
+                fragment?.run {
+                    (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/" , title)
+                }
+
 
                         context.getString(R.string.notifications) -> {
                             FragmentUtils.addFragment(context, NotificationFragment(),null, NotificationFragment::class.java.name, true )
@@ -107,7 +150,7 @@ class MyAccountFragment: BaseFragment() {
             }
         }
 
-        class MyAccountFooterHolder(val item: View, context: Context): RecyclerView.ViewHolder(item){
+        class MyAccountFooterHolder(val item: View, context: Context) : RecyclerView.ViewHolder(item) {
             init {
                 itemView.btn_logout.setOnClickListener({
                     Utils.showDialog(context, context.getString(R.string.logout_text),

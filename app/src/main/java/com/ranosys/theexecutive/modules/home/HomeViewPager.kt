@@ -40,15 +40,20 @@ class HomeViewPager(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
             1 -> {
                 val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-                if(TextUtils.isEmpty(isLogin)){
-                    return LoginFragment()
+                return if(TextUtils.isEmpty(isLogin)){
+                    LoginFragment()
                 }else {
-                    return MyAccountFragment()
+                    MyAccountFragment()
                 }
             }
 
             2 -> {
-                return WishlistFragment()
+                val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                return if(TextUtils.isEmpty(isLogin)){
+                    LoginFragment()
+                }else {
+                    WishlistFragment()
+                }
             }
         }
         return null

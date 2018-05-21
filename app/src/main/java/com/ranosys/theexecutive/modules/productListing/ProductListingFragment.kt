@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.productListing
 
+import AppLog
 import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -101,14 +102,14 @@ class ProductListingFragment: BaseFragment() {
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
         prepareFilterDialog()
 
-        callInitialApis()
-
-
         observeProductList()
+        observeApiErrors()
         observeNoProductAvailable()
         observeFilterOptions()
         observePriceFilter()
         observeSortOptions()
+
+        callInitialApis()
 
         return mBinding.root
     }
@@ -300,6 +301,7 @@ class ProductListingFragment: BaseFragment() {
         val emptyList = ArrayList<ProductListingDataClass.Item>()
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
+                Utils.hideSoftKeypad(activity as Context)
                 ApiClient.client?.dispatcher()?.cancelAll()
                 mViewModel.isLoading = false
                 val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
@@ -444,8 +446,13 @@ class ProductListingFragment: BaseFragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if(s?.isNotBlank() == true){
-                        val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
-                        filterOptionBinding.priceRangeBar.selectedMinValue = input
+                        try {
+                            val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
+                            filterOptionBinding.priceRangeBar.selectedMinValue = input
+                        }
+                        catch (e : NumberFormatException){
+                            AppLog.printStackTrace(e)
+                        }
 
                     }
                 }
@@ -459,7 +466,7 @@ class ProductListingFragment: BaseFragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if(s?.isNotBlank() == true){
+                    if(s?.isNotBlank() == true && s.contains(".").not()){
                         val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
                         filterOptionBinding.priceRangeBar.selectedMaxValue = input
                     }
@@ -506,6 +513,14 @@ class ProductListingFragment: BaseFragment() {
             }
         })
     }
+
+    private fun observeApiErrors() {
+        mViewModel.apiFailureResponse?.observe(this, Observer<String> { error ->
+            hideLoading()
+            Utils.showErrorDialog(activity as Context, getString(R.string.something_went_wrong_error))
+        })
+    }
+
 
     fun callProductListingApi(catId: Int? = 0, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false){
         if (Utils.isConnectionAvailable(activity as Context)) {

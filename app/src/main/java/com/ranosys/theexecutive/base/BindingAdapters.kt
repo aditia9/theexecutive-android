@@ -2,17 +2,13 @@ package com.ranosys.theexecutive.base
 
 import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
-import android.databinding.InverseBindingListener
 import android.databinding.ObservableField
 import android.support.design.widget.TextInputLayout
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.AppCompatSpinner
 import android.text.TextUtils
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ExpandableListView
 import android.widget.ImageView
+import android.widget.Spinner
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
@@ -39,27 +35,11 @@ class BindingAdapters {
         }
 
         @JvmStatic
-        @BindingAdapter(value = *arrayOf("selectedValue", "selectedValueAttrChanged"), requireAll = false)
-        fun bindSpinnerData(pAppCompatSpinner: AppCompatSpinner, newSelectedValue: String?, newTextAttrChanged: InverseBindingListener) {
-            pAppCompatSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                    newTextAttrChanged.onChange()
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {}
-            }
-            if (newSelectedValue != null) {
-                val pos = (pAppCompatSpinner.adapter as ArrayAdapter<String>).getPosition(newSelectedValue)
-                pAppCompatSpinner.setSelection(pos, true)
-            }
-        }
-
-        @InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-        fun captureSelectedValue(pAppCompatSpinner: AppCompatSpinner): String {
+        @InverseBindingAdapter(attribute = "app:selectedValue", event = "app:selectedValueAttrChanged")
+        fun captureSelectedValue(pAppCompatSpinner: Spinner): String {
             return pAppCompatSpinner.selectedItem.toString()
-
         }
-
+        
         @JvmStatic
         @BindingAdapter("android:src")
         fun setImageResource(imageView: ImageView, resource: Int) {
@@ -72,13 +52,6 @@ class BindingAdapters {
             val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data)
             view.setAdapter(adapter)
         }
-
-//        @JvmStatic
-//        @BindingAdapter("bind:filterOptions")
-//        fun setFilterOptions(view: ExpandableListView, response: MutableList<ProductListingDataClass.Filter>?) {
-//            val adapter = FilterOptionAdapter(view.context, response)
-//            view.setAdapter(adapter)
-//        }
 
         @JvmStatic
         @BindingAdapter("promotionData")

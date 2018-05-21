@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/theme_black_color</item>
+        <item name="colorPrimaryDark">@color/theme_black_color</item>
+        <item name="colorAccent">@color/theme_accent_color</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="myAppTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/theme_black_color</item>
+        <item name="colorPrimaryDark">@color/theme_black_color</item>
+        <item name="colorAccent">@color/theme_accent_color</item>
+        <item name="android:fontFamily">@font/opensans_regular</item>
+        <item name="android:textSize">@dimen/text_size_regular</item>
+        <item name="android:textColor">@color/theme_black_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

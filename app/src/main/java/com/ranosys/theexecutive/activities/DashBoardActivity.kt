@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.activities
 
-import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -13,9 +12,11 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
-import com.ranosys.theexecutive.modules.myAccount.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -28,12 +29,12 @@ import com.zopim.android.sdk.api.ZopimChat
  */
 class DashBoardActivity : BaseActivity() {
 
-    lateinit var webPagesDialog: Dialog
+    lateinit var toolbarBinding: ActivityDashboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val toolbarBinding: ActivityDashboardBinding? = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
-        toolbarBinding?.toolbarViewModel = toolbarViewModel
+        toolbarBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
+        toolbarBinding.toolbarViewModel = toolbarViewModel
 
         //initialize Zendesk chat setup
         setUpZendeskChat()
@@ -46,6 +47,7 @@ class DashBoardActivity : BaseActivity() {
             if (isCreated!!) {
                 if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
                     FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
+                } else {
                     if(bundle.getString(Constants.KEY_REDIRECTION_TYPE).isNullOrEmpty().not()){
                         dataFromPreviousPage()
                     }
@@ -62,7 +64,7 @@ class DashBoardActivity : BaseActivity() {
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener {
             override fun onBackStackChanged() {
                 val backStackCount = supportFragmentManager.backStackEntryCount
-                if (backStackCount > 0) {
+                if(backStackCount > 0){
                     val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
                     fragment?.run {
                         if (fragment is HomeFragment) {
@@ -72,15 +74,15 @@ class DashBoardActivity : BaseActivity() {
                                 }
                                 1 -> {
                                     val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-                                    if (TextUtils.isEmpty(isLogin)) {
+                                    if(TextUtils.isEmpty(isLogin)){
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
-                                    } else {
+                                    }else{
                                         val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, email, 0, false, 0, false)
                                     }
                                 }
                                 2 -> {
-                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", 0, false, 0, false)
+                                    (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", R.drawable.back, true, 0, false)
                                 }
                             }
                         }
@@ -91,6 +93,12 @@ class DashBoardActivity : BaseActivity() {
                         }
                         if (fragment is ProductDetailFragment) {
                             (fragment as ProductDetailFragment).onResume()
+                        }
+                        if (fragment is AddressBookFragment) {
+                            (fragment as AddressBookFragment).onResume()
+                        }
+                        if (fragment is ShoppingBagFragment) {
+                            fragment.onResume()
                         }
                     }
                 }
