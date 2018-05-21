@@ -21,6 +21,7 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
     val CommanError: MutableLiveData<String> = MutableLiveData()
     val selectedAddress: MutableLiveData<MyAccountDataClass.Address> = MutableLiveData()
     val shoppingBagItems: MutableLiveData<List<ShoppingBagResponse>> = MutableLiveData()
+    val shippingMethodList: MutableLiveData<List<CheckoutDataClass.GetShippingMethodsResponse>> = MutableLiveData()
     var country: MutableLiveData<String> = MutableLiveData()
 
     fun getAddressApi() {
@@ -59,6 +60,27 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
             override fun onError(errorMsg: String) {
                 CommanError.value = errorMsg
             }
+        })
+    }
+
+    fun getShippingMethodsApi(addressId: String){
+
+        val request = CheckoutDataClass.GetShippingMethodsRequest(addressId)
+        AppRepository.getShippingMethods(request, object : ApiCallback<List<CheckoutDataClass.GetShippingMethodsResponse>>{
+
+            override fun onSuccess(t: List<CheckoutDataClass.GetShippingMethodsResponse>?) {
+                shippingMethodList.value = t
+            }
+
+            override fun onException(error: Throwable) {
+                CommanError.value = error.message
+            }
+
+            override fun onError(errorMsg: String) {
+                CommanError.value = errorMsg
+            }
+
+
         })
     }
 }

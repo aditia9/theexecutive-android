@@ -44,7 +44,7 @@ class CheckoutFragment : BaseFragment(){
         cart_item_list.layoutManager = linearLayoutManager
         cart_item_list.adapter = shoppingItemAdapter
 
-        address_expand_img.setOnClickListener {
+        checkoutBinding.addressExpandView.setOnClickListener {
             FragmentUtils.addFragment(context, AddressBookFragment.getInstance(true, checkoutViewModel.selectedAddress),null, AddressBookFragment::class.java.name, true )
         }
     }
@@ -52,7 +52,6 @@ class CheckoutFragment : BaseFragment(){
     override fun onResume() {
         super.onResume()
         setToolBarParams(getString(R.string.checkout), 0, "", R.drawable.back, true, 0 , true)
-        initiateCheckoutProcess()
     }
 
     private fun initiateCheckoutProcess() {
@@ -70,6 +69,9 @@ class CheckoutFragment : BaseFragment(){
             hideLoading()
             checkoutBinding.address = address
 
+            //call shipping method api according to updated address
+            checkoutViewModel.getShippingMethodsApi(address?.id!!)
+
         })
 
         checkoutViewModel.country.observe(this, Observer { country->
@@ -78,9 +80,14 @@ class CheckoutFragment : BaseFragment(){
 
         //observe shopping bag items
         checkoutViewModel.shoppingBagItems.observe(this, Observer { items ->
-            Toast.makeText(activity, "LIst : " + items?.size.toString(), Toast.LENGTH_SHORT).show()
             shoppingItemAdapter.itemList = items?.toMutableList()
             shoppingItemAdapter.notifyDataSetChanged()
+        })
+
+        //observe shipping method list
+        checkoutViewModel.shippingMethodList.observe(this, Observer { shippingMethods ->
+            Toast.makeText(activity, "shippimg methods : " + shippingMethods?.size.toString(), Toast.LENGTH_SHORT).show()
+
         })
     }
 }
