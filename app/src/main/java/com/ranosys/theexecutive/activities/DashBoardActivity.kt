@@ -10,10 +10,10 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
-import com.ranosys.theexecutive.modules.home.HomeFragment
-import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
@@ -47,7 +47,6 @@ class DashBoardActivity : BaseActivity() {
             if (isCreated!!) {
                 if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))) {
                     FragmentUtils.addFragment(this, ChangeLanguageFragment(), null, ChangeLanguageFragment::class.java.name, false)
-                } else {
                     if(bundle.getString(Constants.KEY_REDIRECTION_TYPE).isNullOrEmpty().not()){
                         dataFromPreviousPage()
                     }

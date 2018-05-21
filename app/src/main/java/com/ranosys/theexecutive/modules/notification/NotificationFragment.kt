@@ -57,7 +57,7 @@ class NotificationFragment : BaseFragment() {
     private fun getNotification() {
         Utils.hideSoftKeypad(activity as Context)
         if (Utils.isConnectionAvailable(activity as Context)) {
-            showLoading()
+            //showLoading()
             mViewModel.getNotification()
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
