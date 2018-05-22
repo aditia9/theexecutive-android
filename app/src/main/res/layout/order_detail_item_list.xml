@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="item"
-            type="com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse" />
-
+            type="com.ranosys.theexecutive.modules.order.orderDetail.Item" />
     </data>
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fifteen_dp">
+        android:layout_margin="@dimen/ten_dp"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/img_product"
-            android:layout_width="@dimen/one_fifty_dp"
-            android:layout_height="182dp"
+            android:layout_width="@dimen/one_twenty_dp"
+            android:layout_height="@dimen/one_twenty_dp"
             android:contentDescription="@string/product_image"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            bind:baseUrlWithProductImageUrl="@{item.extension_attributes.image}" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_product_name"
@@ -48,8 +46,9 @@
             android:layout_marginStart="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/five_dp"
             android:ellipsize="end"
-            android:hint="@{item.sku}"
             android:maxLines="1"
+            android:text='@{"SKU " +item.sku}'
+            android:textColor="@color/hint_color"
             android:textSize="@dimen/twelve_sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_product"
@@ -60,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/fifteen_dp"
+            android:layout_marginTop="@dimen/twenty_dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toEndOf="@id/img_product"
             app:layout_constraintTop_toBottomOf="@id/tv_product_sku">
@@ -68,9 +67,9 @@
             <TextView
                 android:id="@+id/tv_product_color"
                 android:layout_width="wrap_content"
-                android:textSize="@dimen/fourteen_sp"
+                android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:layout_height="wrap_content" />
+                android:textSize="@dimen/fourteen_sp" />
 
             <View
                 android:id="@+id/view_vertical"
@@ -83,121 +82,27 @@
                 android:id="@+id/tv_product_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/fourteen_sp"
+                android:layout_marginStart="@dimen/twenty_dp"
                 android:textColor="@color/black"
-                android:layout_marginStart="@dimen/twenty_dp" />
+                android:textSize="@dimen/fourteen_sp" />
 
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/img_decrement"
-            android:layout_width="@dimen/twenty_dp"
-            android:layout_height="@dimen/twenty_dp"
-            android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/fifteen_dp"
-            android:contentDescription="@string/app_name"
-            android:padding="@dimen/three_dp"
-            android:src="@drawable/back"
-            app:layout_constraintStart_toEndOf="@id/img_product"
-            app:layout_constraintTop_toBottomOf="@+id/layout_color_size" />
-
-
-        <TextView
-            android:id="@+id/tv_quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/ten_dp"
-            android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/twelve_dp"
-            android:text="@{String.valueOf(item.qty)}"
-            app:layout_constraintStart_toEndOf="@id/img_decrement"
-            app:layout_constraintTop_toBottomOf="@+id/layout_color_size" />
-
-        <ImageView
-            android:id="@+id/img_increment"
-            android:layout_width="@dimen/twenty_dp"
-            android:layout_height="@dimen/twenty_dp"
-            android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/fifteen_dp"
-            android:contentDescription="@string/app_name"
-            android:padding="@dimen/three_dp"
-            android:src="@drawable/forward"
-            app:layout_constraintStart_toEndOf="@id/tv_quantity"
-            app:layout_constraintTop_toBottomOf="@+id/layout_color_size" />
-
-
-        <TextView
-            android:id="@+id/tv_qty_msg"
-            android:layout_width="@dimen/match_constraint"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/five_dp"
-            android:layout_marginEnd="@dimen/five_dp"
-            android:textSize="@dimen/ten_sp"
-            android:visibility="gone"
-            android:maxLines="2"
-            app:layout_constraintTop_toTopOf="@id/img_increment"
-            app:layout_constraintStart_toEndOf="@id/img_increment"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
 
 
         <TextView
             android:id="@+id/tv_regular_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/ten_dp"
             android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/fifteen_dp"
-            android:textSize="@dimen/fourteen_sp"
-            app:layout_constraintStart_toEndOf="@id/img_product"
-            app:layout_constraintTop_toBottomOf="@+id/img_decrement" />
-
-        <ImageView
-            android:id="@+id/img_wishlist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/sixteen_dp"
-            android:contentDescription="@string/bag_icon"
-            android:padding="@dimen/eight_dp"
-            app:layout_constraintStart_toEndOf="@id/img_product"
-            app:layout_constraintTop_toBottomOf="@id/tv_regular_price" />
-
-        <ImageView
-            android:id="@+id/img_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/sixteen_dp"
-            android:contentDescription="@string/delete_icon"
-            android:padding="@dimen/eight_dp"
-            android:src="@drawable/delete"
-            app:layout_constraintBottom_toBottomOf="@+id/img_wishlist"
-            app:layout_constraintStart_toEndOf="@id/img_wishlist" />
-
-        <TextView
-            android:id="@+id/tv_out_of_stock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/sixteen_dp"
-            android:padding="@dimen/six_dp"
-            android:text="@string/out_of_stock"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="@dimen/fourteen_sp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/img_product"
-            app:layout_constraintEnd_toEndOf="@id/img_product"
-            app:layout_constraintStart_toStartOf="@id/img_product"
-            />
-
-
-        <View
-            android:layout_width="@dimen/match_constraint"
-            android:layout_height="@dimen/one_dp"
-            android:layout_marginTop="@dimen/forty_dp"
-            android:background="@color/divider_color"
+            android:text='@{""+item.original_price}'
+            android:textColor="@color/red"
+            android:textSize="@dimen/sixteen_sp"
+            app:layout_constraintBottom_toBottomOf="@+id/layout_color_size"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_product" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/layout_color_size" />
+
 
     </android.support.constraint.ConstraintLayout>
 

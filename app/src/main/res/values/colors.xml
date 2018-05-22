@@ -24,6 +24,7 @@
     <color name="transparent_bottom_sheet_color">#CCFFFFFF</color>
     <color name="address_item_bg_color">#f8f6f7</color>
     <color name="light_green">#0d9344</color>
+    <color name="red">#FF2842</color>
 
 
 </resources>

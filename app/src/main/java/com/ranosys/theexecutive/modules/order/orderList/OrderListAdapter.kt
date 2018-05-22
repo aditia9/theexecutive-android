@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.MyOrdersItemBinding
 
-class OrderListAdapter(var context: Context, var orderList: List<OrderListResponse>?, val action: (Int, Int, OrderListResponse?) -> Unit) : RecyclerView.Adapter<OrderListAdapter.Holder>() {
+class OrderListAdapter(var context: Context, var orderList: List<OrderListResponse>?, private val action: (Int, String, OrderListResponse?) -> Unit) : RecyclerView.Adapter<OrderListAdapter.Holder>() {
 
     var mContext: Context? = null
     var clickListener: OnItemClickListener? = null
@@ -49,15 +49,12 @@ class OrderListAdapter(var context: Context, var orderList: List<OrderListRespon
 
     class Holder(var itemBinding: MyOrdersItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: OrderListResponse?, position: Int, action: (Int, Int, OrderListResponse?) -> Unit, listener: OnItemClickListener?) {
+        fun bind(context: Context?, item: OrderListResponse?, position: Int, action: (Int, String, OrderListResponse?) -> Unit, listener: OnItemClickListener?) {
             itemBinding?.item = item
 
-            if(item?.status.equals("Complete")){
-
+            itemView.setOnClickListener {
+                item?.id?.let { action(0, it, item) }
             }
-
         }
     }
-
-
 }

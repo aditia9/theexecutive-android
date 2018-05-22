@@ -11,6 +11,7 @@ import com.ranosys.theexecutive.modules.changePassword.ChangePasswordDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
@@ -363,6 +364,12 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getMyOrderList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String): Call<List<OrderListResponse>>
+
+        @GET("rest/{store_code}/V1/order/{order_id}/mine")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getOrderDetail(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Path("order_id") orderId:String ,@QueryMap queryMap: HashMap<String, String>?): Call<OrderDetailResponse>
     }
 
     interface MyAccount {

@@ -44,7 +44,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_shopping_bag_list"
+                android:id="@+id/rv_order_detail_list"
                 android:layout_width="@dimen/match_constraint"
                 android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="@id/guideline_right"

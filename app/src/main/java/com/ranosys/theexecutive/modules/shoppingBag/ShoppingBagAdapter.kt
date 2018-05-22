@@ -29,7 +29,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
     private var mPromoCode: String
     private var mGrandTotal: Int = 0
 
-    private var clickListener: ShoppingBagAdapter.OnItemClickListener? = null
+    private var clickListener: OnItemClickListener? = null
 
     init {
         mContext = context

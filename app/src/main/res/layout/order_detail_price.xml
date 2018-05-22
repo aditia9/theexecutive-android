@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/sixty_dp">
+
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_right_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/five_dp" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_left_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/five_dp" />
+
+        <TextView
+            android:id="@+id/tv_product_qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:textSize="@dimen/eighteen_sp"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:textSize="@dimen/eighteen_sp"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_shopping_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:text="@string/shipping_cost"
+            android:textSize="@dimen/eighteen_sp"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_product_price" />
+
+        <TextView
+            android:id="@+id/tv_shipping_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:textSize="@dimen/eighteen_sp"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_product_price" />
+
+
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:text="@string/total"
+            android:textSize="@dimen/eighteen_sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_shopping_cost" />
+
+        <TextView
+            android:id="@+id/tv_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:textSize="@dimen/eighteen_sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_shipping_price" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

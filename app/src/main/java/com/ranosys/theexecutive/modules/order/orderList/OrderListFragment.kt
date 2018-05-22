@@ -13,6 +13,9 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentOrderListBinding
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_order_list.*
 
@@ -70,19 +73,26 @@ class OrderListFragment : BaseFragment() {
         rv_order_list.layoutManager = linearLayoutManager
         if (orderListModelView?.orderListResponse?.get()?.size!! > 0) {
             tv_no_items.visibility = View.GONE
-            val orderListAdapter = OrderListAdapter(activity as Context, orderListModelView?.orderListResponse?.get(), { id: Int, pos: Int, item: OrderListResponse? ->
+            val orderListAdapter = OrderListAdapter(activity as Context, orderListModelView?.orderListResponse?.get(), { id: Int, orderId: String, item: OrderListResponse? ->
                 when (id) {
                     0 -> {
-
+                        val bundle = Bundle()
+                        bundle.putString(Constants.ORDER_ID, orderId)
+                        FragmentUtils.addFragment(context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                     }
 
                 }
             })
             rv_order_list.adapter = orderListAdapter
-        }else{
+        } else {
             tv_no_items.visibility = View.VISIBLE
 
         }
+    }
 
+
+    override fun onResume() {
+        super.onResume()
+        setToolBarParams(getString(R.string.my_orders), 0, "", R.drawable.back, true, 0, false)
     }
 }

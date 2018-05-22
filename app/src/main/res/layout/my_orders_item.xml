@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
     xmlns:bind="http://schemas.android.com/tools"
-   >
-
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="item"
             type="com.ranosys.theexecutive.modules.order.orderList.OrderListResponse" />
@@ -15,7 +12,6 @@
     </data>
 
     <android.support.v7.widget.CardView
-
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,15 +29,15 @@
 
             <ImageView
                 android:id="@+id/img_product_item"
-                android:layout_width="@dimen/hundred_dp"
-                android:layout_height="@dimen/hundred_dp"
+                android:layout_width="@dimen/one_twenty_dp"
+                android:layout_height="@dimen/one_twenty_dp"
                 android:layout_margin="@dimen/ten_dp"
                 android:contentDescription="@string/image_one_detail"
                 android:scaleType="centerCrop"
                 android:src="@drawable/one"
-                bind:baseUrlWithProductImageUrl="@{item.image}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                bind:baseUrlWithProductImageUrl="@{item.image}" />
 
             <TextView
                 android:id="@+id/tv_date"
@@ -97,7 +93,7 @@
                 android:layout_height="28dp"
                 android:layout_marginEnd="@dimen/twenty_dp"
                 android:background="@drawable/ghost_btn_bg"
-                android:text="Return"
+                android:text="@string/order_return"
                 android:textAllCaps="false"
                 android:textSize="@dimen/fourteen_sp"
                 app:layout_constraintBottom_toBottomOf="@id/tv_status"
