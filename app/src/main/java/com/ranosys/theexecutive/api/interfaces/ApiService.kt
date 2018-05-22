@@ -219,6 +219,13 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun getShippingMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetShippingMethodsRequest): Call<List<CheckoutDataClass.GetShippingMethodsResponse>>
 
+        @POST("rest/{store_code}/V1/carts/mine/shipping-information?fields=payment_methods,totals[total_segments]")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getPaymentMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetPaymentMethodsRequest): Call<CheckoutDataClass.PaymentMethodResponse>
+
+
         @POST("rest/{store_code}/V1/guest-carts")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,

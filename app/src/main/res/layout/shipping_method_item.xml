@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="shippingMethod"
+            type="com.ranosys.theexecutive.modules.checkout.CheckoutDataClass.GetShippingMethodsResponse" />
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/eight_dp">
+
+        <CheckBox
+            android:id="@+id/cb_shipping_method"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{shippingMethod.carrier_title + " " + shippingMethod.method_title}'/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

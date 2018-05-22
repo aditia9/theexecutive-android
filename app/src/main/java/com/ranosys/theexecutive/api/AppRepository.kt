@@ -1246,9 +1246,9 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getShippingMethods(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getShippingMethods(ApiConstants.BEARER + userToken, storeCode, request)
 
-        callGet?.enqueue(object : Callback<List<CheckoutDataClass.GetShippingMethodsResponse>> {
+        callPost?.enqueue(object : Callback<List<CheckoutDataClass.GetShippingMethodsResponse>> {
             override fun onResponse(call: Call<List<CheckoutDataClass.GetShippingMethodsResponse>>?, response: Response<List<CheckoutDataClass.GetShippingMethodsResponse>>?) {
                 if (!response!!.isSuccessful) {
                     parseError(response as Response<Any>, callBack as ApiCallback<Any>)
@@ -1258,6 +1258,27 @@ object AppRepository {
             }
 
             override fun onFailure(call: Call<List<CheckoutDataClass.GetShippingMethodsResponse>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getPaymentMethods(request: CheckoutDataClass.GetPaymentMethodsRequest, callBack: ApiCallback<CheckoutDataClass.PaymentMethodResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getPaymentMethods(ApiConstants.BEARER + userToken, storeCode, request)
+
+        callPost?.enqueue(object : Callback<CheckoutDataClass.PaymentMethodResponse> {
+            override fun onResponse(call: Call<CheckoutDataClass.PaymentMethodResponse>?, response: Response<CheckoutDataClass.PaymentMethodResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.PaymentMethodResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

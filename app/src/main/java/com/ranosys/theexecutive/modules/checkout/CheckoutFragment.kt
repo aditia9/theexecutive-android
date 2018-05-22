@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
@@ -23,12 +22,17 @@ class CheckoutFragment : BaseFragment(){
     private lateinit var checkoutViewModel: CheckoutViewModel
     private lateinit var checkoutBinding: FragmentCheckoutBinding
     private lateinit var shoppingItemAdapter: ShoppingItemAdapter
+    private lateinit var shippingMethodAdapter: ShippingtMethodAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         checkoutBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_checkout, container, false)
         checkoutViewModel = ViewModelProviders.of(this).get(CheckoutViewModel::class.java)
         shoppingItemAdapter = ShoppingItemAdapter(mutableListOf())
+        shippingMethodAdapter = ShippingtMethodAdapter(mutableListOf(), {
+            isChecked: Boolean, shippingMethod: CheckoutDataClass.GetShippingMethodsResponse ->
+            handleShippingMethodSelection(isChecked, shippingMethod)
+        })
 
         observeApiResponse()
 
@@ -37,12 +41,21 @@ class CheckoutFragment : BaseFragment(){
         return checkoutBinding.root
     }
 
+    private fun handleShippingMethodSelection(checked: Boolean, shippingMethod: CheckoutDataClass.GetShippingMethodsResponse) {
+        checkoutViewModel.getPaymentMethods(shippingMethod)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val linearLayoutManager = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
-        cart_item_list.layoutManager = linearLayoutManager
+        val linearLayoutManagerHorizontal = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
+        cart_item_list.layoutManager = linearLayoutManagerHorizontal
         cart_item_list.adapter = shoppingItemAdapter
+
+        val linearLayoutManager = LinearLayoutManager(activity)
+        shipping_methods_list.layoutManager = linearLayoutManager
+        shipping_methods_list.adapter = shippingMethodAdapter
+
 
         checkoutBinding.addressExpandView.setOnClickListener {
             FragmentUtils.addFragment(context, AddressBookFragment.getInstance(true, checkoutViewModel.selectedAddress),null, AddressBookFragment::class.java.name, true )
@@ -86,7 +99,12 @@ class CheckoutFragment : BaseFragment(){
 
         //observe shipping method list
         checkoutViewModel.shippingMethodList.observe(this, Observer { shippingMethods ->
-            Toast.makeText(activity, "shippimg methods : " + shippingMethods?.size.toString(), Toast.LENGTH_SHORT).show()
+            shippingMethodAdapter.shippingMethodList = shippingMethods?.toMutableList()
+            shippingMethodAdapter.notifyDataSetChanged()
+        })
+
+        //observe payment methods
+        checkoutViewModel.paymentMethodList.observe(this, Observer { paymentMethodList ->
 
         })
     }

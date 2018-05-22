@@ -21,6 +21,55 @@ class CheckoutDataClass {
             val available: Boolean,
             val error_message: String,
             val price_excl_tax: Int,
-            val price_incl_tax: Int
+            val price_incl_tax: Int,
+            var isSelected: Boolean = false
     )
+
+
+    data class GetPaymentMethodsRequest(
+            val addressInformation: AddressInformation
+    )
+
+    data class AddressInformation(
+            val shipping_address: ShippingAddress,
+            val billing_address: ShippingAddress,
+            val shipping_carrier_code: String,
+            val shipping_method_code: String
+    )
+
+    data class ShippingAddress(
+            val customer_id: String,
+            val region: String,
+            val region_id: String,
+            val region_code: String,
+            val country_id: String,
+            val street: List<String?>,
+            val postcode: String,
+            val city: String,
+            val firstname: String,
+            val lastname: String,
+            val telephone: String
+    )
+
+
+    data class PaymentMethodResponse(
+            val payment_methods: List<PaymentMethod>,
+            val totals: Totals
+    )
+
+    data class PaymentMethod(
+            val code: String,
+            val title: String
+    )
+
+    data class Totals(
+            val total_segments: List<TotalSegment>
+    )
+
+    data class TotalSegment(
+            val code: String,
+            val title: String,
+            val value: Int
+    )
+
 }

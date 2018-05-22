@@ -22,6 +22,8 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
     val selectedAddress: MutableLiveData<MyAccountDataClass.Address> = MutableLiveData()
     val shoppingBagItems: MutableLiveData<List<ShoppingBagResponse>> = MutableLiveData()
     val shippingMethodList: MutableLiveData<List<CheckoutDataClass.GetShippingMethodsResponse>> = MutableLiveData()
+    val paymentMethodList: MutableLiveData<List<CheckoutDataClass.PaymentMethod>> = MutableLiveData()
+    val totalAmounts: MutableLiveData<List<CheckoutDataClass.TotalSegment>> = MutableLiveData()
     var country: MutableLiveData<String> = MutableLiveData()
 
     fun getAddressApi() {
@@ -82,5 +84,53 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
 
         })
+    }
+
+    fun getPaymentMethods(shippingMethod: CheckoutDataClass.GetShippingMethodsResponse) {
+        var request = preparePaymentMethodRequest(shippingMethod)
+
+        AppRepository.getPaymentMethods(request, object: ApiCallback<CheckoutDataClass.PaymentMethodResponse>{
+            override fun onException(error: Throwable) {
+                CommanError.value = error.message
+            }
+
+            override fun onError(errorMsg: String) {
+                CommanError.value = errorMsg
+            }
+
+            override fun onSuccess(t: CheckoutDataClass.PaymentMethodResponse?) {
+                paymentMethodList.value = t?.payment_methods
+                totalAmounts.value = t?.totals?.total_segments
+            }
+
+        })
+    }
+
+    private fun preparePaymentMethodRequest(shippingMethod: CheckoutDataClass.GetShippingMethodsResponse): CheckoutDataClass.GetPaymentMethodsRequest {
+        val selectedAddress = selectedAddress.value
+        val requestAddress =  CheckoutDataClass.ShippingAddress(
+                customer_id = selectedAddress?.customer_id!!,
+                firstname = selectedAddress.firstname!!,
+                lastname = selectedAddress.lastname!!,
+                telephone = selectedAddress.telephone!!,
+                country_id = selectedAddress.country_id!!,
+                city = selectedAddress.city!!,
+                postcode = selectedAddress.postcode!!,
+                region_id = selectedAddress.region_id!!,
+                region_code = selectedAddress.region?.region_code!!,
+                region = selectedAddress.region.region,
+                street = selectedAddress.street!!
+        )
+
+        val addressInformation = CheckoutDataClass.AddressInformation(
+                shipping_address = requestAddress,
+                billing_address = requestAddress,
+                shipping_carrier_code = shippingMethod.carrier_code,
+                shipping_method_code = shippingMethod.method_code
+        )
+
+        val request = CheckoutDataClass.GetPaymentMethodsRequest(addressInformation)
+        return request
+
     }
 }
