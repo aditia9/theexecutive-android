@@ -7,10 +7,14 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 
+/**
+ * @Details A util class for handling broadcast functions
+ * @Author Ranosys Technologies
+ * @Date 02,May,2018
+ */
 object BroadcastUtils {
 
     private const val REDIRECT_NOTIFICATION = "redirect_notification"
-
 
     fun broadcastUpdateLocation(context: Context) {
         send(context, REDIRECT_NOTIFICATION, null)

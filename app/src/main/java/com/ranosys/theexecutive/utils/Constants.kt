@@ -66,9 +66,10 @@ object Constants {
     const val NEW_TAG: String = "New"
     const val MEN: String = "MEN"
     const val WOMEN: String = "WOMEN"
-    const val PROMOTION_TYPE_CATEGORY: String = "Category"
-    const val PROMOTION_TYPE_PRODUCT: String = "Product"
-    const val PROMOTION_TYPE_CMS_PAGE: String = "CMS"
+    const val TYPE_CATEGORY: String = "Category"
+    const val TYPE_PRODUCT: String = "Product"
+    const val TYPE_CMS_PAGE: String = "CMS"
+    const val TYPE_ORDER: String = "Order"
     const val SEARCH_FROM_HOME_QUERY: String = "search_from_home_query"
     const val UNIVERSAL_CAT_ID: Int = 0
     const val URL_KEY: String = "url_key"

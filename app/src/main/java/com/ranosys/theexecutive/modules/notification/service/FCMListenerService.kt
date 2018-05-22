@@ -20,7 +20,9 @@ import java.util.*
 
 
 /**
- * Created by ranosys-sys2 on 19/10/16.
+ * @Details A service class for push notification
+ * @Author Ranosys Technologies
+ * @Date 02,May,2018
  */
 class FCMListenerService : FirebaseMessagingService() {
 
@@ -37,7 +39,7 @@ class FCMListenerService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        var dataMap = (remoteMessage.data)
+        val dataMap = (remoteMessage.data)
         redirectType = dataMap.get(Constants.KEY_REDIRECTION_TYPE) ?: ""
         redirectValue = dataMap.get(Constants.KEY_REDIRECTION_VALUE) ?: ""
         redirectTitle = dataMap.get(Constants.KEY_REDIRECTION_TITLE) ?: ""
@@ -50,7 +52,6 @@ class FCMListenerService : FirebaseMessagingService() {
 
         //generate notification if body is not empty and Notification are enabled from settings
         if ((remoteMessage.notification?.body).isNullOrEmpty().not()) {
-            val msg = remoteMessage.notification?.body
             createNotification(message, title)
         }
     }

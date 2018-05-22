@@ -6,13 +6,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.NotificationItemBinding
+import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
 
-class NotificationAdapter(var notificationListData: List<NotificationListResponse>?) : RecyclerView.Adapter<NotificationAdapter.Holder>() {
+/**
+ * @Details An adapter class for notification listing
+ * @Author Ranosys Technologies
+ * @Date 02,May,2018
+ */
+class NotificationAdapter(private var notificationListData: List<NotificationListResponse>?) : RecyclerView.Adapter<NotificationAdapter.Holder>() {
 
     var clickListener: NotificationAdapter.OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onItemClick(item: NotificationListResponse)
+        fun onItemClick(item: NotificationListResponse?)
     }
 
     fun setItemClickListener(listener: NotificationAdapter.OnItemClickListener) {
@@ -30,11 +36,13 @@ class NotificationAdapter(var notificationListData: List<NotificationListRespons
 
     override fun getItemCount(): Int = notificationListData?.size ?: 0
 
-    class Holder(private val itemBinding: NotificationItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+    class Holder(private val itemBinding: NotificationItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
         fun bind(notificationResponse: NotificationListResponse?, listener: NotificationAdapter.OnItemClickListener) {
-
-
+            itemBinding?.notification = notificationResponse
+            itemView.setOnClickListener {
+                listener.onItemClick(notificationResponse)
+            }
         }
     }
 }

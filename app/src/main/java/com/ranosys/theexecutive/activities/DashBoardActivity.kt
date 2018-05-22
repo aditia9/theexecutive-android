@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
+import com.ranosys.theexecutive.modules.notification.NotificationFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
@@ -88,16 +89,16 @@ class DashBoardActivity : BaseActivity() {
                         if (fragment is ProductListingFragment)
                             (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)
                         if (fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false, true)
-                        }
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false, true) }
                         if (fragment is ProductDetailFragment) {
-                            (fragment as ProductDetailFragment).onResume()
-                        }
+                            fragment.onResume() }
                         if (fragment is AddressBookFragment) {
-                            (fragment as AddressBookFragment).onResume()
-                        }
+                            fragment.onResume() }
                         if (fragment is ShoppingBagFragment) {
-                            fragment.onResume()
+                            fragment.onResume() }
+                        if (fragment is NotificationFragment) {
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.notifications), 0, "", R.drawable.back, true, 0, false)
+                            fragment.getNotification()
                         }
                     }
                 }

@@ -11,7 +11,7 @@
 
         <variable
             name="notification"
-            type="com.ranosys.theexecutive.modules.notification.NotificationListResponse" />
+            type="com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -38,7 +38,6 @@
             android:layout_marginEnd="@dimen/twenty_dp"
             android:layout_marginStart="@dimen/fifteen_dp"
             android:text="@{notification.title}"
-            android:hint="Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintHorizontal_bias="0"
@@ -52,7 +51,6 @@
             android:layout_marginTop="@dimen/four_dp"
             android:textSize="@dimen/fourteen_sp"
             android:text="@{notification.description}"
-            android:hint="DescriptionsDescriptionsDescriptions DesionsDescriptions DescrptionsDescriptions  DescptionsDescriptions DescriptionsDescriptions"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
@@ -64,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/ten_dp"
             android:layout_marginTop="@dimen/three_dp"
-            android:text="25 Dec 2018, 01:15 Am"
             android:textSize="@dimen/fourteen_sp"
             android:textColor="@color/hint_color"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
