@@ -21,7 +21,6 @@ import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
 import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
 import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
 import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
-import com.ranosys.theexecutive.modules.payment.PaymentGatway
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -138,7 +137,6 @@ class MyAccountFragment : BaseFragment() {
                         }
 
                         context.getString(R.string.settings) -> {
-                            FragmentUtils.addFragment(context, PaymentGatway(),null, PaymentGatway::class.java.name, true )
                         }
 
                     }
