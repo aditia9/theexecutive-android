@@ -541,11 +541,14 @@ class ProductViewFragment : BaseFragment() {
         //check for logged in user
         if((SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY) ?: "").isBlank()){
             //show toast to user to login
-            Toast.makeText(activity as Context, getString(R.string.login_required_for_wishlist), Toast.LENGTH_SHORT).show()
-            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
-            val bundle = Bundle()
-            bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
-            FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+            Utils.showDialog(activity, getString(R.string.login_required_error), getString(android.R.string.ok), "", object : DialogOkCallback {
+                override fun setDone(done: Boolean) {
+                    setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
+                    val bundle = Bundle()
+                    bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
+                    FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+                }
+            })
         }else{
             if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
                 openBottomSizeSheet(true)

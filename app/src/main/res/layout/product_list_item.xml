@@ -73,7 +73,7 @@
             android:gravity="center"
             android:textStyle="bold"
             android:background="@color/translucent_bg"
-            android:textSize="@dimen/fourteen_sp"
+            android:textSize="@dimen/twelve_sp"
             android:text="@{productItem.collectionTag}"
             android:paddingTop="@dimen/three_dp"
             android:paddingBottom="@dimen/three_dp"
