@@ -67,7 +67,7 @@
     <string name="facebook_login">Login with Facebook</string>
     <string name="gmail_login">Login with Gmail</string>
     <string name="create_account">Create an Account</string>
-    <string name="password_validation_err">Password should contain 8 characters, one digit, one special character</string>
+    <string name="password_validation_err">Password must contain 8 or more characters, at least 1 alphabet and 1 number.</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email Address</string>
