@@ -67,7 +67,6 @@
     <string name="facebook_login">Login with Facebook</string>
     <string name="gmail_login">Login with Gmail</string>
     <string name="create_account">Create an Account</string>
-    <string name="password_validation_err">Password must contain 8 or more characters, at least 1 alphabet and 1 number.</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email Address</string>
@@ -82,7 +81,7 @@
     <string name="street_address_error">Street Address Line 1 is required.</string>
     <string name="street_address_2">Street Address Line 2 </string>
     <string name="postal_error">Zip/ Postal code is required.</string>
-    <string name="valid_password_error">Password must contain 8 or more characters, special character and number.</string>
+    <string name="valid_password_error">Password must contain 8 or more characters, at least 1 alphabet and 1 number.</string>
     <string name="valid_mobile_error">Length should be between 8 to 16.</string>
     <string name="valid_postal_error">Length should be 5.</string>
     <string name="confirm_password_error">The password does not match, kindly enter the same password as above.</string>
