@@ -73,4 +73,12 @@ class CheckoutDataClass {
             val value: Int
     )
 
+
+    data class PlaceOrderRequest(
+            val paymentMethod: PlaceOrderPaymentMethod
+    )
+
+    data class PlaceOrderPaymentMethod(
+            val method: String
+    )
 }

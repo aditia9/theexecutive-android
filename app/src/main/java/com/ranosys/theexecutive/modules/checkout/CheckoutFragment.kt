@@ -9,11 +9,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_checkout.*
 
@@ -55,6 +58,7 @@ class CheckoutFragment : BaseFragment(){
 
     private fun handlePaymentMethodSelection(checked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod) {
         paymentMethodAdapter.notifyDataSetChanged()
+        checkoutViewModel.placeOrderApi(paymentMethod)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -124,5 +128,18 @@ class CheckoutFragment : BaseFragment(){
             paymentMethodAdapter.paymentMethodList = paymentMethodList
             paymentMethodAdapter.notifyDataSetChanged()
         })
+
+        //observe order id
+        checkoutViewModel.orderId.observe(this, Observer { orderId ->
+            val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+            createOrderUrl(orderId, storeCode, userToken)
+        })
+    }
+
+
+    private fun createOrderUrl(orderId: String?, storeCode: String, userToken: String?) {
+        val url = "${BuildConfig.API_URL}/apppayment/?___store=$storeCode&orderid=$orderId&token=$userToken"
+        prepareWebPageDialog(activity as Context, url , "ORDER")
     }
 }
