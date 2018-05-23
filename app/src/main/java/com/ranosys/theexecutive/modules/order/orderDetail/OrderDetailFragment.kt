@@ -18,6 +18,11 @@ import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_order_detail.*
 
+/**
+ * @Details fragment shows Order Detail
+ * @Author Ranosys Technologies
+ * @Date 21, May,2018
+ */
 
 class OrderDetailFragment : BaseFragment() {
 

@@ -1,6 +1,5 @@
 package com.ranosys.theexecutive.modules.order.orderDetail
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
@@ -11,6 +10,11 @@ import com.ranosys.theexecutive.databinding.OrderDetailAddressBinding
 import com.ranosys.theexecutive.databinding.OrderDetailItemListBinding
 import com.ranosys.theexecutive.databinding.OrderDetailPriceBinding
 
+/**
+ * @Class An data class for Order detail adapter
+ * @author Ranosys Technologies
+ * @Date 21-May-2018
+ */
 
 const val ORDER_PRICE = 2
 const val ORDER_ITEM = 1
@@ -22,10 +26,9 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
 
     private var clickListener: OnItemClickListener? = null
 
-    private var listSize : Int = 0
+    private var listSize: Int = 0
 
     init {
-        mContext = context
         listSize = OrderDetail?.items?.size!!
     }
 
@@ -78,9 +81,9 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         when (holder) {
-            is OrderDetailItemHolder -> holder.bind(mContext, getItem(position), position)
-            is OrderDetailAddressHolder -> holder.bind(mContext, OrderDetail, position)
-            is OrderDetailPriceHolder -> holder.bind(mContext, OrderDetail, position)
+            is OrderDetailItemHolder -> holder.bind(context, getItem(position), position)
+            is OrderDetailAddressHolder -> holder.bind(context, OrderDetail, position)
+            is OrderDetailPriceHolder -> holder.bind(context, OrderDetail, position)
         }
     }
 
@@ -100,28 +103,28 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             itemBinding?.tvProductPrice?.text = item?.subtotal_incl_tax.toString()
             itemBinding?.tvShippingPrice?.text = item?.shipping_incl_tax.toString()
             itemBinding?.tvTotalPrice?.text = item?.grand_total.toString()
-            itemBinding?.tvProductQty?.text = (item?.items?.size.toString() +" "+ context?.getString(R.string.products))
+            itemBinding?.tvProductQty?.text = (item?.items?.size.toString() + " " + context?.getString(R.string.products))
         }
     }
 
     class OrderDetailAddressHolder(var itemBinding: OrderDetailAddressBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        @SuppressLint("SetTextI18n")
+
         fun bind(context: Context?, item: OrderDetailResponse?, position: Int) {
             itemBinding?.item = item
 
-            itemBinding?.tvUserName?.text = item?.billing_address?.firstname + " "+ item?.billing_address?.lastname
+            itemBinding?.tvUserName?.text = item?.billing_address?.firstname + " " + item?.billing_address?.lastname
             itemBinding?.tvUserEmailId?.text = item?.billing_address?.email
             itemBinding?.tvOrderDate?.text = item?.items!![0].created_at
-           var size =  item.billing_address.street.size
-           var street = ""
+            val size = item.billing_address.street.size
+            var street = ""
 
-            if(size == 1){
+            if (size == 1) {
                 street = item.billing_address.street[0]
-            }else if (size > 1){
+            } else if (size > 1) {
                 street = item.billing_address.street[0] + item.billing_address.street[1]
             }
-            var address = street+ " " + item.billing_address.postcode +", " + item.billing_address.country_id
+            val address = street + " " + item.billing_address.postcode + ", " + item.billing_address.country_id
             itemBinding?.tvUserAddress?.text = address
         }
     }

@@ -136,9 +136,6 @@ class MyAccountFragment : BaseFragment() {
                             FragmentUtils.addFragment(context, OrderListFragment(),null, OrderListFragment::class.java.name, true )
                         }
 
-                        context.getString(R.string.settings) -> {
-                        }
-
                     }
                 }
             }

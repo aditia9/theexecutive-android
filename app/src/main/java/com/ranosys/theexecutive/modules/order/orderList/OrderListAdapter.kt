@@ -8,6 +8,13 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.MyOrdersItemBinding
 
+/**
+ * @Class An data class for Order List
+ * @author Ranosys Technologies
+ * @Date 15-May-2018
+ */
+
+
 class OrderListAdapter(var context: Context, var orderList: List<OrderListResponse>?, private val action: (Int, String, OrderListResponse?) -> Unit) : RecyclerView.Adapter<OrderListAdapter.Holder>() {
 
     var mContext: Context? = null

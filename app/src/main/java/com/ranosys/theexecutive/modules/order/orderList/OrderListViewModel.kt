@@ -8,6 +8,11 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 
+/**
+ * @Class An data class for Order List view model
+ * @author Ranosys Technologies
+ * @Date 21-May-2018
+ */
 
 class OrderListViewModel(application: Application) : BaseViewModel(application) {
 

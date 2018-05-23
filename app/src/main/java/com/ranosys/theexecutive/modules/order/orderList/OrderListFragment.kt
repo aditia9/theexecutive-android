@@ -19,6 +19,13 @@ import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_order_list.*
 
+/**
+ * @Class An data class for Order List
+ * @author Ranosys Technologies
+ * @Date 21-May-2018
+ */
+
+
 class OrderListFragment : BaseFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager

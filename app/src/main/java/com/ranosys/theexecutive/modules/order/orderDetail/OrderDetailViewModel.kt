@@ -8,6 +8,12 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 
+/**
+ * @Class An data class for Order Detail view model
+ * @author Ranosys Technologies
+ * @Date 21-May-2018
+ */
+
 class OrderDetailViewModel(application: Application) : BaseViewModel(application) {
 
     var orderDetailResponse = MutableLiveData<ApiResponse<OrderDetailResponse>>()
