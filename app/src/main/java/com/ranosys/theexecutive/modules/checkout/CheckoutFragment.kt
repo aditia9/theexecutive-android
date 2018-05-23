@@ -23,15 +23,22 @@ class CheckoutFragment : BaseFragment(){
     private lateinit var checkoutBinding: FragmentCheckoutBinding
     private lateinit var shoppingItemAdapter: ShoppingItemAdapter
     private lateinit var shippingMethodAdapter: ShippingtMethodAdapter
+    private lateinit var paymentMethodAdapter: PaymentMethodAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         checkoutBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_checkout, container, false)
         checkoutViewModel = ViewModelProviders.of(this).get(CheckoutViewModel::class.java)
         shoppingItemAdapter = ShoppingItemAdapter(mutableListOf())
+
         shippingMethodAdapter = ShippingtMethodAdapter(mutableListOf(), {
             isChecked: Boolean, shippingMethod: CheckoutDataClass.GetShippingMethodsResponse ->
             handleShippingMethodSelection(isChecked, shippingMethod)
+        })
+
+        paymentMethodAdapter = PaymentMethodAdapter(mutableListOf(), {
+            isChecked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod ->
+            handlePaymentMethodSelection(isChecked, paymentMethod)
         })
 
         observeApiResponse()
@@ -42,7 +49,12 @@ class CheckoutFragment : BaseFragment(){
     }
 
     private fun handleShippingMethodSelection(checked: Boolean, shippingMethod: CheckoutDataClass.GetShippingMethodsResponse) {
+        shippingMethodAdapter.notifyDataSetChanged()
         checkoutViewModel.getPaymentMethods(shippingMethod)
+    }
+
+    private fun handlePaymentMethodSelection(checked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod) {
+        paymentMethodAdapter.notifyDataSetChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,9 +64,13 @@ class CheckoutFragment : BaseFragment(){
         cart_item_list.layoutManager = linearLayoutManagerHorizontal
         cart_item_list.adapter = shoppingItemAdapter
 
-        val linearLayoutManager = LinearLayoutManager(activity)
-        shipping_methods_list.layoutManager = linearLayoutManager
+        val linearLayoutManagerShippingMethod = LinearLayoutManager(activity)
+        shipping_methods_list.layoutManager = linearLayoutManagerShippingMethod
         shipping_methods_list.adapter = shippingMethodAdapter
+
+        val linearLayoutManagerPaymentMethod = LinearLayoutManager(activity)
+        payment_methods_list.layoutManager = linearLayoutManagerPaymentMethod
+        payment_methods_list.adapter = paymentMethodAdapter
 
 
         checkoutBinding.addressExpandView.setOnClickListener {
@@ -105,7 +121,8 @@ class CheckoutFragment : BaseFragment(){
 
         //observe payment methods
         checkoutViewModel.paymentMethodList.observe(this, Observer { paymentMethodList ->
-
+            paymentMethodAdapter.paymentMethodList = paymentMethodList
+            paymentMethodAdapter.notifyDataSetChanged()
         })
     }
 }

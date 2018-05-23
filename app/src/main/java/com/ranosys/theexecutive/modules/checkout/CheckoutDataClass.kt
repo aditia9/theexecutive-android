@@ -59,7 +59,8 @@ class CheckoutDataClass {
 
     data class PaymentMethod(
             val code: String,
-            val title: String
+            val title: String,
+            var isSelected: Boolean = false
     )
 
     data class Totals(
