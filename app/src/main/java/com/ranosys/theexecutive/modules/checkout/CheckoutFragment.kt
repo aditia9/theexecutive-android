@@ -58,7 +58,7 @@ class CheckoutFragment : BaseFragment(){
 
     private fun handlePaymentMethodSelection(checked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod) {
         paymentMethodAdapter.notifyDataSetChanged()
-        checkoutViewModel.placeOrderApi(paymentMethod)
+        checkoutViewModel.selectedPaymentMethod = paymentMethod
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,6 +79,10 @@ class CheckoutFragment : BaseFragment(){
 
         checkoutBinding.addressExpandView.setOnClickListener {
             FragmentUtils.addFragment(context, AddressBookFragment.getInstance(true, checkoutViewModel.selectedAddress),null, AddressBookFragment::class.java.name, true )
+        }
+
+        btn_pay.setOnClickListener {
+            checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
         }
     }
 
@@ -119,8 +123,14 @@ class CheckoutFragment : BaseFragment(){
 
         //observe shipping method list
         checkoutViewModel.shippingMethodList.observe(this, Observer { shippingMethods ->
-            shippingMethodAdapter.shippingMethodList = shippingMethods?.toMutableList()
-            shippingMethodAdapter.notifyDataSetChanged()
+
+            if(shippingMethods?.size ?: 0 <= 0){
+
+            }else{
+                shippingMethodAdapter.shippingMethodList = shippingMethods?.toMutableList()
+                shippingMethodAdapter.notifyDataSetChanged()
+            }
+
         })
 
         //observe payment methods

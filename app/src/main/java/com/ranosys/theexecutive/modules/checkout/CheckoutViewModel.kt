@@ -20,6 +20,7 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
     val CommanError: MutableLiveData<String> = MutableLiveData()
     val selectedAddress: MutableLiveData<MyAccountDataClass.Address> = MutableLiveData()
+    var selectedPaymentMethod: CheckoutDataClass.PaymentMethod? = null
     val shoppingBagItems: MutableLiveData<List<ShoppingBagResponse>> = MutableLiveData()
     val orderId: MutableLiveData<String> = MutableLiveData()
     val shippingMethodList: MutableLiveData<List<CheckoutDataClass.GetShippingMethodsResponse>> = MutableLiveData()
@@ -135,9 +136,9 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
     }
 
-    fun placeOrderApi(paymentMethod: CheckoutDataClass.PaymentMethod) {
+    fun placeOrderApi(paymentMethod: CheckoutDataClass.PaymentMethod?) {
         val paymentMode = CheckoutDataClass.PlaceOrderPaymentMethod(
-                method = paymentMethod.code
+                method = paymentMethod?.code!!
         )
         val request = CheckoutDataClass.PlaceOrderRequest(
                 paymentMethod = paymentMode
