@@ -31,7 +31,7 @@ class NotificationAdapter(private var notificationListData: List<NotificationLis
     }
 
     override fun onBindViewHolder(holder: NotificationAdapter.Holder, position: Int) {
-        holder.bind(notificationListData!!.get(position), listener = clickListener!!)
+        holder.bind(notificationListData!![position], listener = clickListener!!)
     }
 
     override fun getItemCount(): Int = notificationListData?.size ?: 0
