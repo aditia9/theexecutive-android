@@ -103,5 +103,6 @@ object Constants {
     const val LAST_NAME: String = "last_name"
     const val PRODUCT_SKU: String = "productSku"
     const val OPTIONS: String = "options"
+    val IMAGE_RATIO: Double = 1.44
 
 }

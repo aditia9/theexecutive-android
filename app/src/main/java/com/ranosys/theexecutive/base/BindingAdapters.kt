@@ -119,7 +119,7 @@ class BindingAdapters {
         }
 
 
-        //for images in product listing
+        //for images in product listing product details
         @JvmStatic
         @BindingAdapter("bind:baseUrlWithProductImageUrl")
         fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {

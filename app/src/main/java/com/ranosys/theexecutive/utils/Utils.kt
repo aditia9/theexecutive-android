@@ -231,8 +231,14 @@ object Utils {
         imageView?.layoutParams?.height = height - removeHeight
     }
 
-    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double){
-        val width = getDeviceWidth(context)
+    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double, widthMargin: Int = 0, column: Int = 1){
+        val width = (getDeviceWidth(context) - convertDpIntoPx(context, widthMargin.toFloat())) / column
+        val height = width.times(times)
+        imageView.layoutParams?.height = height.toInt()
+    }
+
+    fun setImageViewHeightWrtWidth(context: Context, imageView: ImageView, times: Double){
+        val width = imageView.width
         val height = width.times(times)
         imageView.layoutParams?.height = height.toInt()
     }

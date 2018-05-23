@@ -42,9 +42,9 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
         fun bind(productItem: ProductListingDataClass.Item, position : Int, listener: ProductListAdapter.OnItemClickListener){
 
             if((position + 1) % ProductListingFragment.COLUMN_CHANGE_FACTOR == 0){
-                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, 1.45)
+                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, Constants.IMAGE_RATIO, 32)
             }else{
-                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, .6)
+                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, Constants.IMAGE_RATIO, 48, 2)
             }
 
 

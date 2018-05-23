@@ -96,6 +96,8 @@ class ProductViewFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, 40)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, 40)
 
         productItemViewModel.productItem?.run {
             setData()
@@ -208,9 +210,6 @@ class ProductViewFragment : BaseFragment() {
 
     private fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
 
-        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, 1.5)
-        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, 1.5)
-
         if(mediaGalleryList?.size!! > 0)
             productItemViewModel.urlOne.set(mediaGalleryList[0].file)
         if(mediaGalleryList.size > 1) {
@@ -224,7 +223,7 @@ class ProductViewFragment : BaseFragment() {
         for(i in 2..listSize.minus(1)){
             val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
             productImagesBinding?.mediaGalleryEntry = mediaGalleryList[i]
-            Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage!!, 1.5)
+            Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage!!, Constants.IMAGE_RATIO, 40)
             val view = productImagesBinding!!.root.img_product_image
             view.setOnClickListener {
                 val drawable=view.drawable as BitmapDrawable
