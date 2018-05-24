@@ -302,10 +302,13 @@ class ProductListingFragment: BaseFragment() {
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
                 Utils.hideSoftKeypad(activity as Context)
-                ApiClient.client?.dispatcher()?.cancelAll()
-                mViewModel.isLoading = false
-                val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
-                FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                if (isClicked) {
+                    isClicked = false
+                    ApiClient.client?.dispatcher()?.cancelAll()
+                    mViewModel.isLoading = false
+                    val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
+                    FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                }
             }
 
         })
@@ -548,5 +551,7 @@ class ProductListingFragment: BaseFragment() {
         var categoryName: String? = null
         var categoryId: Int? = null
         var homeSearchQuery: String = ""
+        var isClicked : Boolean = true
+
     }
 }

@@ -36,6 +36,7 @@ import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
+import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.*
 import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.bottom_size_layout.*
@@ -339,6 +340,7 @@ class ProductViewFragment : BaseFragment() {
 
         productItemViewModel.productChildrenResponse?.observe(this, Observer<ApiResponse<List<ChildProductsResponse>>> { apiResponse ->
             val response = apiResponse?.apiResponse ?: apiResponse?.error
+            hideLoading()
             if (response is List<*>) {
                 val list = response as List<ChildProductsResponse>
 
@@ -387,7 +389,7 @@ class ProductViewFragment : BaseFragment() {
                 setSizeViewList()
 
                 AppLog.e("ChildProductsMap : " + childProductsMap.toString())
-                hideLoading()
+
 
             } else {
                 Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
@@ -521,16 +523,15 @@ class ProductViewFragment : BaseFragment() {
 
         productItemViewModel.productDetailResponse?.observe(this, Observer<ApiResponse<ProductListingDataClass.Item>> { apiResponse ->
             val response = apiResponse?.apiResponse ?: apiResponse?.error
+            hideLoading()
             if (response is ProductListingDataClass.Item) {
                 relatedProductList?.add(response)
                 if(productLinksList?.size == relatedProductList?.size){
-                    hideLoading()
                     val fragment = ProductDetailFragment.getInstance(relatedProductList, relatedSku , relatedName, relatedPosition)
                     FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                 }
             } else {
-                hideLoading()
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
             }
         })
 
@@ -651,6 +652,7 @@ class ProductViewFragment : BaseFragment() {
                 sizeViewList?.add(SizeView(it.label, sizeAttrId, it.value,false))
         }
         AppLog.e("sizeViewList : " + sizeViewList.toString())
+        ProductListingFragment.isClicked = true
     }
 
     private fun prepareSizeDialog() {
