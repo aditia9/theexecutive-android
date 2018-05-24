@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
@@ -16,6 +17,9 @@ import com.google.firebase.messaging.RemoteMessage
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.splash.SplashActivity
 import com.ranosys.theexecutive.utils.Constants
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 
@@ -62,7 +66,7 @@ class FCMListenerService : FirebaseMessagingService() {
     private fun createNotification(body: String, title: String) {
 
         val intent = Intent(this, SplashActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
         intent.putExtra(Constants.KEY_REDIRECTION_TITLE, redirectTitle)
         intent.putExtra(Constants.KEY_REDIRECTION_VALUE, redirectValue)
@@ -92,7 +96,7 @@ class FCMListenerService : FirebaseMessagingService() {
                      .setSummaryText(message))*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_LOW
+            val importance = NotificationManager.IMPORTANCE_HIGH
             val notificationChannel = NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID, resources.getString(R.string.app_name), importance)
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
@@ -100,7 +104,7 @@ class FCMListenerService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(notificationChannel)
 
             notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
-                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setDefaults(Notification.FLAG_AUTO_CANCEL)
                     .setSmallIcon(getNotificationIcon())
                     .setVibrate(vibrationArray)
                     .setContentTitle(title)
@@ -110,11 +114,18 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setContentIntent(pendingIntent)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setChannelId(Constants.NOTIFICATION_CHANNEL_ID)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setAutoCancel(false)
-                    .setStyle(NotificationCompat.BigPictureStyle()
+                    .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                   /* .setStyle(NotificationCompat.BigPictureStyle()
                             .bigPicture(big_bitmap_image)
-                            .setBigContentTitle(title))
+                            .setBigContentTitle(title))*/
+                    .setStyle(NotificationCompat.BigPictureStyle()
+                            //This one is same as large icon but it wont show when its expanded that's why we again setting
+                            // .bigLargeIcon(GlideApp.with(this).load("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg").get())
+                            //This is Big Banner image
+                            .bigPicture(getBitmapFromURL("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg"))
+                            //When Notification expanded title and content text
+                            .setBigContentTitle(title)
+                            .setSummaryText(message))
         } else {
             notification = NotificationCompat.Builder(this)
                     .setSmallIcon(getNotificationIcon())
@@ -124,10 +135,20 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setSound(defaultSoundUri)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setContentIntent(pendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setStyle(NotificationCompat.BigPictureStyle()
+                    .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                    /*.setStyle(NotificationCompat.BigPictureStyle()
                             .bigPicture(big_bitmap_image)
-                            .setBigContentTitle(title))
+                            .setBigContentTitle(title))*/
+                   // .setLargeIcon(GlideApp.with(this).load("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg").get())
+                    //BigPicture Style
+                    .setStyle(NotificationCompat.BigPictureStyle()
+                            //This one is same as large icon but it wont show when its expanded that's why we again setting
+                           // .bigLargeIcon(GlideApp.with(this).load("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg").get())
+                            //This is Big Banner image
+                            .bigPicture(getBitmapFromURL("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg"))
+                            //When Notification expanded title and content text
+                            .setBigContentTitle(title)
+                            .setSummaryText(message))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notification.color = resources.getColor(R.color.black)
@@ -147,5 +168,20 @@ class FCMListenerService : FirebaseMessagingService() {
     override fun onDeletedMessages() {
         super.onDeletedMessages()
         Constants.notificationCounter--
+    }
+
+    fun getBitmapFromURL(strURL: String): Bitmap? {
+        try {
+            val url = URL(strURL)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+            val input = connection.inputStream
+            return BitmapFactory.decodeStream(input)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
+        }
+
     }
 }
