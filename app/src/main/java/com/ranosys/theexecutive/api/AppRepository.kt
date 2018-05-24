@@ -1304,4 +1304,26 @@ object AppRepository {
             }
         })
     }
+
+    fun getTotalAmounts(callBack: ApiCallback<CheckoutDataClass.Totals>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getTotalAmounts(ApiConstants.BEARER + userToken, storeCode)
+
+        callGet?.enqueue(object : Callback<CheckoutDataClass.Totals> {
+            override fun onResponse(call: Call<CheckoutDataClass.Totals>?, response: Response<CheckoutDataClass.Totals>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.Totals>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
 }

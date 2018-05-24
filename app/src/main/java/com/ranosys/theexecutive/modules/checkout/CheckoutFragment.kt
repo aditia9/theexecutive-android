@@ -97,7 +97,6 @@ class CheckoutFragment : BaseFragment() {
     private fun initiateCheckoutProcess() {
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
-            checkoutViewModel.getAddressApi()
             checkoutViewModel.getCartItemsApi()
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
@@ -120,8 +119,14 @@ class CheckoutFragment : BaseFragment() {
 
         //observe shopping bag items
         checkoutViewModel.shoppingBagItems.observe(this, Observer { items ->
-            shoppingItemAdapter.itemList = items?.toMutableList()
-            shoppingItemAdapter.notifyDataSetChanged()
+            hideLoading()
+            if(items != null && items.isNotEmpty()){
+                shoppingItemAdapter.itemList = items.toMutableList()
+                shoppingItemAdapter.notifyDataSetChanged()
+
+                //call user info api and total api
+            }
+
         })
 
         //observe shipping method list

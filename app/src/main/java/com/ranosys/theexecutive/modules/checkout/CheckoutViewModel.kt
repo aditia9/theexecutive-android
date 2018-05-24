@@ -18,7 +18,7 @@ import com.ranosys.theexecutive.utils.Utils
  */
 class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
-    val CommanError: MutableLiveData<String> = MutableLiveData()
+    val commanError: MutableLiveData<String> = MutableLiveData()
     val selectedAddress: MutableLiveData<MyAccountDataClass.Address> = MutableLiveData()
     var selectedPaymentMethod: CheckoutDataClass.PaymentMethod? = null
     val shoppingBagItems: MutableLiveData<List<ShoppingBagResponse>> = MutableLiveData()
@@ -32,13 +32,13 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
         AppRepository.getUserInfo(object: ApiCallback<MyAccountDataClass.UserInfoResponse> {
             override fun onException(error: Throwable) {
                 AppLog.e("My Information API : ${error.message}")
-                CommanError.value = error.message
+                commanError.value = error.message
 
             }
 
             override fun onError(errorMsg: String) {
                 AppLog.e("My Information API : $errorMsg")
-                CommanError.value = errorMsg
+                commanError.value = errorMsg
             }
 
             override fun onSuccess(t: MyAccountDataClass.UserInfoResponse?) {
@@ -58,11 +58,11 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
             }
 
             override fun onException(error: Throwable) {
-                CommanError.value = error.message
+                commanError.value = error.message
             }
 
             override fun onError(errorMsg: String) {
-                CommanError.value = errorMsg
+                commanError.value = errorMsg
             }
         })
     }
@@ -77,11 +77,11 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
             }
 
             override fun onException(error: Throwable) {
-                CommanError.value = error.message
+                commanError.value = error.message
             }
 
             override fun onError(errorMsg: String) {
-                CommanError.value = errorMsg
+                commanError.value = errorMsg
             }
 
 
@@ -93,11 +93,11 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.getPaymentMethods(request, object: ApiCallback<CheckoutDataClass.PaymentMethodResponse>{
             override fun onException(error: Throwable) {
-                CommanError.value = error.message
+                commanError.value = error.message
             }
 
             override fun onError(errorMsg: String) {
-                CommanError.value = errorMsg
+                commanError.value = errorMsg
             }
 
             override fun onSuccess(t: CheckoutDataClass.PaymentMethodResponse?) {
@@ -146,15 +146,32 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.placeOrder(request, object: ApiCallback<String>{
             override fun onException(error: Throwable) {
-                CommanError.value = error.message
+                commanError.value = error.message
             }
 
             override fun onError(errorMsg: String) {
-                CommanError.value = errorMsg
+                commanError.value = errorMsg
             }
 
             override fun onSuccess(t: String?) {
                 orderId.value = t
+            }
+
+        })
+    }
+
+    fun getTotalAmountsApi() {
+        AppRepository.getTotalAmounts(callBack = object : ApiCallback<CheckoutDataClass.Totals> {
+            override fun onException(error: Throwable) {
+                commanError.value = error.message
+            }
+
+            override fun onError(errorMsg: String) {
+                commanError.value = errorMsg
+            }
+
+            override fun onSuccess(t: CheckoutDataClass.Totals?) {
+                totalAmounts.value = t?.total_segments
             }
 
         })
