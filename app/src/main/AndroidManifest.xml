@@ -52,6 +52,26 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+
+        <!--Service to handle notification from FCM-->
+
+        <service
+            android:name=".modules.notification.service.FCMListenerService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <!--Service to get instanceID for FCM-->
+
+        <service android:name=".modules.notification.service.FCMInstanceIDService"
+           >
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="ac9f28f00658e1a1d50a62453bf18354b7df852f" />

@@ -536,11 +536,6 @@ class ProductListingFragment: BaseFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        setToolBarParams(categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)
-    }
-
     companion object {
         const val COLUMN_TWO = 2
         const val COLUMN_ONE = 1

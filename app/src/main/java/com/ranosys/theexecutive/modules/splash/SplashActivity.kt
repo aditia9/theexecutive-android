@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
@@ -33,6 +34,13 @@ class SplashActivity : BaseActivity() {
 
     private val handler = Handler()
     private var canNavigateToHome: Boolean = false
+    private  var redirectType: String? = null
+    private  var redirectionValue: String ? = null
+    private  var redirectTitle: String ? = null
+    private  var notificationId: String ? = null
+    private  var notificationImg: String ? = null
+    private  var notificationTitle: String ? = null
+    private  var notificationMessage: String ? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +48,7 @@ class SplashActivity : BaseActivity() {
         // observeEvent()
 
         //check for auth token in SP if not get from assets
-        if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))){
+        if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))) {
             val token: String = getAuthToken()
             SavedPreferences.getInstance()?.saveStringValue(token, Constants.ACCESS_TOKEN_KEY)
         }
@@ -55,25 +63,41 @@ class SplashActivity : BaseActivity() {
         //fetch device id
         getDeviceID()
 
+        // get data from notification
+        dataFromNotification()
+
         handler.postDelayed({
             kotlin.run {
-                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+                if (canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
         }, Constants.SPLASH_TIMEOUT)
 
     }
 
+    private fun dataFromNotification() {
+        val extras = intent.extras
+        if (extras != null) {
+            redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
+            redirectionValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
+            redirectTitle = extras.getString(Constants.KEY_REDIRECTION_TITLE)
+            notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
+            notificationImg = extras.getString(Constants.KEY_IMAGE)
+            notificationTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
+            notificationMessage = extras.getString(Constants.KEY_NOTIFICATION_MESSAGE)
+        }
+    }
+
 
     private fun getConfigurationApi() {
-        AppRepository.getConfiguration(object: ApiCallback<ConfigurationResponse>{
+        AppRepository.getConfiguration(object : ApiCallback<ConfigurationResponse> {
             override fun onException(error: Throwable) {
                 AppLog.d("Config Api : ${error.message}")
-                showExitApplicationDialog(getString(R.string.common_error), pAction = {getConfigurationApi()}, nAction = {finish()})
+                showExitApplicationDialog(getString(R.string.common_error), pAction = { getConfigurationApi() }, nAction = { finish() })
             }
 
             override fun onError(errorMsg: String) {
                 AppLog.e("Config Api : $errorMsg")
-                showExitApplicationDialog(getString(R.string.common_error), pAction = {getConfigurationApi()}, nAction = {finish()})
+                showExitApplicationDialog(getString(R.string.common_error), pAction = { getConfigurationApi() }, nAction = { finish() })
             }
 
             override fun onSuccess(configuration: ConfigurationResponse?) {
@@ -84,7 +108,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun manageConfiguration(configuration: ConfigurationResponse?) {
-        if(configuration?.maintenance == Constants.MAINTENENCE_OFF){
+        if (configuration?.maintenance == Constants.MAINTENENCE_OFF) {
 
             GlobalSingelton.instance?.configuration = configuration
 
@@ -95,21 +119,20 @@ class SplashActivity : BaseActivity() {
             getCartIdAndCount()
 
             //check version
-            if(configuration.version.toFloat() >= BuildConfig.VERSION_CODE + 1){
+            if (configuration.version.toFloat() >= BuildConfig.VERSION_CODE + 1) {
                 //force update
                 AppLog.d("Config Api : FORCE UPDATE")
-                showExitApplicationDialog(getString(R.string.force_update_msg), pAction =  {
+                showExitApplicationDialog(getString(R.string.force_update_msg), pAction = {
                     //redirect to play store
                 })
-            }
-            else if(configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()){
+            } else if (configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()) {
                 //soft update
                 AppLog.d("Config Api : SOFT UPDATE")
             }
-        }else{
+        } else {
             //stop app with maintenance message
             AppLog.d("Config Api : MAINTENANCE MODE")
-            showExitApplicationDialog(getString(R.string.maintenance_msg), pAction = {finish()})
+            showExitApplicationDialog(getString(R.string.maintenance_msg), pAction = { finish() })
 
         }
     }
@@ -117,65 +140,75 @@ class SplashActivity : BaseActivity() {
     private fun getCartIdAndCount() {
         //if user logged in get his cart count and cart id
         val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-        val guestCardId= SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY) ?: ""
+        val guestCardId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
+                ?: ""
 
-        if(userToken.isNullOrBlank().not()){
+        if (userToken.isNullOrBlank().not()) {
             getCartIdForUser()
-        }else if(guestCardId.isNotBlank()){
+        } else if (guestCardId.isNotBlank()) {
             getGuestCartCount(guestCardId)
         }
     }
 
     private fun getStoresApi() {
-        AppRepository.getStores(object: ApiCallback<ArrayList<StoreResponse>>{
+        AppRepository.getStores(object : ApiCallback<ArrayList<StoreResponse>> {
             override fun onSuccess(stores: ArrayList<StoreResponse>?) {
 
                 val it = stores?.iterator()
                 while (it?.hasNext()!!) {
                     val integer = it.next()
-                    if (integer.id ==  0) {
+                    if (integer.id == 0) {
                         it.remove()
                     }
                 }
 
                 GlobalSingelton.instance?.storeList = stores
 
-                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+                if (canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
             override fun onException(error: Throwable) {
-                AppLog.e("Store Api : ${error.message}")
-                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+                AppLog.e(error.message!!)
+                if (canNavigateToHome) moveToHome() else canNavigateToHome = true
 
             }
 
             override fun onError(errorMsg: String) {
-                AppLog.e("Store Api : $errorMsg")
-                if(canNavigateToHome) moveToHome() else canNavigateToHome = true
+                AppLog.e(errorMsg)
+                if (canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
 
         })
     }
 
-    private fun showExitApplicationDialog(message: String, pText: String = "OK", pAction:() -> Unit = {}, nText: String = "CALCEL", nAction:() -> Unit = {}) {
+    private fun showExitApplicationDialog(message: String, pText: String = getString(R.string.ok), pAction: () -> Unit = {}, nText: String = getString(R.string.cancel), nAction: () -> Unit = {}) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(message)
-                .setPositiveButton(pText) {
-                    dialog, _ -> dialog.cancel()
-                    pAction()}
+                .setPositiveButton(pText) { dialog, _ ->
+                    dialog.cancel()
+                    pAction()
+                }
 
-                .setNegativeButton(nText){
-                    dialog, _ -> dialog.cancel()
+                .setNegativeButton(nText) { dialog, _ ->
+                    dialog.cancel()
                     nAction()
                 }
         val alert = builder.create()
         alert.show()
     }
 
-
-    private fun moveToHome(){
+    private fun moveToHome() {
         val intent = Intent(this@SplashActivity, DashBoardActivity::class.java)
+        if (!TextUtils.isEmpty(redirectType)) {
+            intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
+            intent.putExtra(Constants.KEY_REDIRECTION_TITLE, redirectTitle)
+            intent.putExtra(Constants.KEY_REDIRECTION_VALUE, redirectionValue)
+            intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
+            intent.putExtra(Constants.KEY_NOTIFICATION_TITLE, notificationTitle)
+            intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, notificationMessage)
+            intent.putExtra(Constants.KEY_IMAGE, notificationImg)
+        }
         startActivity(intent)
         finish()
     }
@@ -186,15 +219,15 @@ class SplashActivity : BaseActivity() {
         handler.removeCallbacksAndMessages(null)
     }
 
-    private fun getAuthToken(): String{
+    private fun getAuthToken(): String {
         var reader: BufferedReader? = null
         var token = ""
         try {
-            reader =  BufferedReader(InputStreamReader(assets.open(Constants.CONFIG_FILE_NAME)))
+            reader = BufferedReader(InputStreamReader(assets.open(Constants.CONFIG_FILE_NAME)))
             token = reader.readLine()
 
         } catch (e: IOException) {
-            if(BuildConfig.DEBUG)
+            if (BuildConfig.DEBUG)
                 e.printStackTrace()
         } finally {
             if (null != reader) {
@@ -210,14 +243,20 @@ class SplashActivity : BaseActivity() {
         return token
     }
 
+    @SuppressLint("HardwareIds")
     private fun getDeviceID() {
         if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))) {
             SavedPreferences.getInstance()?.saveStringValue(Settings.Secure.getString(contentResolver,
                     Settings.Secure.ANDROID_ID), Constants.ANDROID_DEVICE_ID_KEY)
+
+        }
+        AppLog.d("device id: "+SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+        if (!TextUtils.isEmpty(SavedPreferences.getInstance()?.getFcmID(Constants.USER_FCM_ID))) {
+
         }
     }
 
-    private fun getCartIdForUser(){
+    private fun getCartIdForUser() {
         val apiResponse = ApiResponse<String>()
         AppRepository.createUserCart(object : ApiCallback<String> {
             override fun onException(error: Throwable) {
@@ -239,7 +278,7 @@ class SplashActivity : BaseActivity() {
 
     fun getUserCartCount() {
         val apiResponse = ApiResponse<String>()
-        AppRepository.cartCountUser(object : ApiCallback<String>{
+        AppRepository.cartCountUser(object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 AppLog.e("User Cart count: ${error.message}")
             }
@@ -252,7 +291,7 @@ class SplashActivity : BaseActivity() {
                 apiResponse.apiResponse = t
                 try {
                     Utils.updateCartCount(t?.toInt() ?: 0)
-                }catch (e: NumberFormatException){
+                } catch (e: NumberFormatException) {
                     AppLog.printStackTrace(e)
                 }
 
@@ -264,7 +303,7 @@ class SplashActivity : BaseActivity() {
 
     private fun getGuestCartCount(cartId: String) {
         val apiResponse = ApiResponse<String>()
-        AppRepository.cartCountGuest(cartId, object : ApiCallback<String>{
+        AppRepository.cartCountGuest(cartId, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 AppLog.e("Guest Cart count: ${error.message}")
             }
@@ -277,7 +316,7 @@ class SplashActivity : BaseActivity() {
                 apiResponse.apiResponse = t
                 try {
                     Utils.updateCartCount(t?.toInt() ?: 0)
-                }catch (e: NumberFormatException){
+                } catch (e: NumberFormatException) {
                     AppLog.printStackTrace(e)
                 }
             }

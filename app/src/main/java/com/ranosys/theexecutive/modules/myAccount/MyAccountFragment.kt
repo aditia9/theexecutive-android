@@ -20,6 +20,7 @@ import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
 import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
 import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
+import com.ranosys.theexecutive.modules.notification.NotificationFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -130,6 +131,10 @@ class MyAccountFragment : BaseFragment() {
                             openWebPage(context, url, context.getString(R.string.contact_us))
                         }
 
+                        context.getString(R.string.notifications) -> {
+                            FragmentUtils.addFragment(context, NotificationFragment(),null, NotificationFragment::class.java.name, true )
+                        }
+
                     }
                 }
             }
@@ -140,30 +145,32 @@ class MyAccountFragment : BaseFragment() {
                     (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/" , title)
                 }
 
-            }
-        }
 
-        class MyAccountFooterHolder(val item: View, context: Context) : RecyclerView.ViewHolder(item) {
-            init {
-                itemView.btn_logout.setOnClickListener({
-                    Utils.showDialog(context, context.getString(R.string.logout_text),
-                            context.getString(R.string.yes), context.getString(R.string.no), object : DialogOkCallback {
-                        override fun setDone(done: Boolean) {
-
-                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                    .requestIdToken(context.getString(R.string.gmail_server_client_id))
-                                    .requestEmail()
-                                    .requestProfile()
-                                    .build()
-
-                            val mGoogleSignInClient = GoogleSignIn.getClient(context as Activity, gso)
-                            Utils.logout(item.context, mGoogleSignInClient)
-
-                        }
-                    })
-                })
             }
         }
     }
+}
+
+class MyAccountFooterHolder(val item: View, context: Context) : RecyclerView.ViewHolder(item) {
+    init {
+        itemView.btn_logout.setOnClickListener({
+            Utils.showDialog(context, context.getString(R.string.logout_text),
+                    context.getString(R.string.yes), context.getString(R.string.no), object : DialogOkCallback {
+                override fun setDone(done: Boolean) {
+
+                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(context.getString(R.string.gmail_server_client_id))
+                            .requestEmail()
+                            .requestProfile()
+                            .build()
+
+                    val mGoogleSignInClient = GoogleSignIn.getClient(context as Activity, gso)
+                    Utils.logout(item.context, mGoogleSignInClient)
+
+                }
+            })
+        })
+    }
+
 }
 

@@ -184,6 +184,7 @@
     <string name="view_all">View All</string>
     <string name="expand_image">Expand Icon</string>
     <string name="back">Back Icon</string>
+    <string name="notifications">Notifications</string>
     <string name="change_password">Change Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
@@ -212,5 +213,6 @@
     <string name="only">Only</string>
     <string name="product_available">product available</string>
     <string name="promo_code_invalid">The promo code you entered is not valid.</string>
+    <string name="ok">OK</string>
 
 </resources>
