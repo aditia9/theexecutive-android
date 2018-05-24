@@ -136,11 +136,11 @@ class DashBoardActivity : BaseActivity() {
                 }
 
                 Constants.NOTIFICATION_TYPE_ORDER_LIST->{
-                    //redirect to order list
+                    //ToDo Redirect to order list
                 }
 
                 else -> {
-                    //redirect to notification list
+                    //ToDo Redirect to notification list
                 }
             }
         }

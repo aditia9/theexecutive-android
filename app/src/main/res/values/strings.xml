@@ -213,5 +213,6 @@
     <string name="only">Only</string>
     <string name="product_available">product available</string>
     <string name="promo_code_invalid">The promo code you entered is not valid.</string>
+    <string name="ok">OK</string>
 
 </resources>

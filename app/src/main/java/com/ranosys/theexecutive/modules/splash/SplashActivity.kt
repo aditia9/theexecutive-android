@@ -168,13 +168,13 @@ class SplashActivity : BaseActivity() {
             }
 
             override fun onException(error: Throwable) {
-                AppLog.e("Store Api : ${error.message}")
+                AppLog.e(error.message!!)
                 if (canNavigateToHome) moveToHome() else canNavigateToHome = true
 
             }
 
             override fun onError(errorMsg: String) {
-                AppLog.e("Store Api : $errorMsg")
+                AppLog.e(errorMsg)
                 if (canNavigateToHome) moveToHome() else canNavigateToHome = true
             }
 
@@ -182,7 +182,7 @@ class SplashActivity : BaseActivity() {
         })
     }
 
-    private fun showExitApplicationDialog(message: String, pText: String = "OK", pAction: () -> Unit = {}, nText: String = "CALCEL", nAction: () -> Unit = {}) {
+    private fun showExitApplicationDialog(message: String, pText: String = getString(R.string.ok), pAction: () -> Unit = {}, nText: String = getString(R.string.cancel), nAction: () -> Unit = {}) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(message)
                 .setPositiveButton(pText) { dialog, _ ->
@@ -196,13 +196,6 @@ class SplashActivity : BaseActivity() {
                 }
         val alert = builder.create()
         alert.show()
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        Log.i("MY INTENT", intent.toString())
-
-
     }
 
     private fun moveToHome() {

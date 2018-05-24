@@ -49,7 +49,7 @@ class NotificationFragment : BaseFragment() {
                 notificationList = response as List<NotificationListResponse>
                 setNotificationAdapter()
             } else {
-               // Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
             }
         } )
 
@@ -99,7 +99,7 @@ class NotificationFragment : BaseFragment() {
             }
 
             Constants.TYPE_ORDER -> {
-
+                //ToDo Redirect to order screen
             }
 
         }

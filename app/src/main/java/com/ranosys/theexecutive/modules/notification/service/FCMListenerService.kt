@@ -34,25 +34,27 @@ class FCMListenerService : FirebaseMessagingService() {
     internal lateinit var message: String
     private lateinit var notificationId: String
     private lateinit var notification: NotificationCompat.Builder
+    var vibrationArray = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
 
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        val dataMap = (remoteMessage.data)
-        redirectType = dataMap.get(Constants.KEY_REDIRECTION_TYPE) ?: ""
-        redirectValue = dataMap.get(Constants.KEY_REDIRECTION_VALUE) ?: ""
-        redirectTitle = dataMap.get(Constants.KEY_REDIRECTION_TITLE) ?: ""
-        notificationImg = dataMap.get(Constants.KEY_IMAGE) ?: ""
-        title = dataMap.get(Constants.KEY_NOTIFICATION_TITLE) ?: ""
-        message = dataMap.get(Constants.KEY_NOTIFICATION_MESSAGE) ?: ""
-        notificationId = dataMap.get(Constants.KEY_NOTIFICATION_ID) ?: ""
+        remoteMessage.data?.run {
+            val dataMap = (remoteMessage.data)
+            redirectType = dataMap.get(Constants.KEY_REDIRECTION_TYPE) ?: ""
+            redirectValue = dataMap.get(Constants.KEY_REDIRECTION_VALUE) ?: ""
+            redirectTitle = dataMap.get(Constants.KEY_REDIRECTION_TITLE) ?: ""
+            notificationImg = dataMap.get(Constants.KEY_IMAGE) ?: ""
+            title = dataMap.get(Constants.KEY_NOTIFICATION_TITLE) ?: ""
+            message = dataMap.get(Constants.KEY_NOTIFICATION_MESSAGE) ?: ""
+            notificationId = dataMap.get(Constants.KEY_NOTIFICATION_ID) ?: ""
 
-        Constants.notificationCounter++
+            Constants.notificationCounter++
 
-        //generate notification if body is not empty and Notification are enabled from settings
-        if ((remoteMessage.notification?.body).isNullOrEmpty().not()) {
+            //generate notification if body is not empty and Notification are enabled from settings
             createNotification(message, title)
+
         }
     }
 
@@ -82,13 +84,12 @@ class FCMListenerService : FirebaseMessagingService() {
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
             notificationChannel.enableVibration(true)
-            notificationChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
             notificationManager.createNotificationChannel(notificationChannel)
 
             notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setSmallIcon(getNotificationIcon())
-                    .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400))
+                    .setVibrate(vibrationArray)
                     .setContentTitle(title)
                     .setContentText(body)
                     .setAutoCancel(true)
@@ -100,20 +101,7 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setAutoCancel(false)
                     .setStyle(NotificationCompat.BigPictureStyle()
                             .bigPicture(big_bitmap_image)
-                            .setBigContentTitle("big title"))
-
-            /* //here comes to load image by Picasso
-             //it should be inside try block
-             .setLargeIcon(GlideApp.with(context).load("URL_TO_LOAD_LARGE_ICON").get())
-             //BigPicture Style
-             .setStyle(NotificationCompat.BigPictureStyle()
-                     //This one is same as large icon but it wont show when its expanded that's why we again setting
-                     .bigLargeIcon(GlideApp.with(context).load("URL_TO_LOAD_LARGE_ICON").get())
-                     //This is Big Banner image
-                     .bigPicture(GlideApp.with(context).load("URL_TO_LOAD_BANNER_IMAGE").get())
-                     //When Notification expanded title and content text
-                     .setBigContentTitle(title)
-                     .setSummaryText(message))*/
+                            .setBigContentTitle(title))
         } else {
             notification = NotificationCompat.Builder(this)
                     .setSmallIcon(getNotificationIcon())
@@ -125,7 +113,7 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setContentIntent(pendingIntent)
                     .setStyle(NotificationCompat.BigPictureStyle()
                             .bigPicture(big_bitmap_image)
-                            .setBigContentTitle("big title"))
+                            .setBigContentTitle(title))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notification.color = resources.getColor(R.color.black)
