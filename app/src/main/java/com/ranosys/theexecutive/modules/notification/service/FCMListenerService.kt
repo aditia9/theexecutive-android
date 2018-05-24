@@ -72,11 +72,24 @@ class FCMListenerService : FirebaseMessagingService() {
         intent.putExtra(Constants.KEY_IMAGE, notificationImg)
 
         val pendingIntent = PendingIntent.getActivity(this, Calendar.getInstance().timeInMillis.toInt(), intent,
-                PendingIntent.FLAG_ONE_SHOT)
+                PendingIntent.FLAG_UPDATE_CURRENT)
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val big_bitmap_image = BitmapFactory.decodeResource(resources, R.mipmap.app_icon)
+
+        /* //here comes to load image by Picasso
+             //it should be inside try block
+             .setLargeIcon(GlideApp.with(context).load("URL_TO_LOAD_LARGE_ICON").get())
+             //BigPicture Style
+             .setStyle(NotificationCompat.BigPictureStyle()
+                     //This one is same as large icon but it wont show when its expanded that's why we again setting
+                     .bigLargeIcon(GlideApp.with(context).load("URL_TO_LOAD_LARGE_ICON").get())
+                     //This is Big Banner image
+                     .bigPicture(GlideApp.with(context).load("URL_TO_LOAD_BANNER_IMAGE").get())
+                     //When Notification expanded title and content text
+                     .setBigContentTitle(title)
+                     .setSummaryText(message))*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_LOW
@@ -97,7 +110,7 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setContentIntent(pendingIntent)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setChannelId(Constants.NOTIFICATION_CHANNEL_ID)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setAutoCancel(false)
                     .setStyle(NotificationCompat.BigPictureStyle()
                             .bigPicture(big_bitmap_image)
@@ -111,6 +124,7 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setSound(defaultSoundUri)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setStyle(NotificationCompat.BigPictureStyle()
                             .bigPicture(big_bitmap_image)
                             .setBigContentTitle(title))
