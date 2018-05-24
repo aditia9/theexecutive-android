@@ -213,7 +213,7 @@ interface ApiService {
 
     interface CartService {
 
-        @POST("rest/{store_code}/V1/carts/mine/estimate-shipping-methods-by-address-id")
+        @POST("rest/{store_code}/V1/carts/mine/payment-information")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)

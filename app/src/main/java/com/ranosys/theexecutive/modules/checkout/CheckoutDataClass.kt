@@ -70,7 +70,7 @@ class CheckoutDataClass {
     data class TotalSegment(
             val code: String,
             val title: String,
-            val value: Int
+            val value: String
     )
 
 

@@ -131,8 +131,6 @@ class AddressBookFragment: BaseFragment() {
                     addressBookAdapter.addressList = addressList
                     addressBookAdapter.notifyDataSetChanged()
 
-                    //to update selected address at checkout screen when address updated
-                    //liveAddress?.value = addressList?.single { it.id == liveAddress?.value?.id }
                 }
 
             }else{
@@ -186,7 +184,7 @@ class AddressBookFragment: BaseFragment() {
     }
 
     private fun editAddress(addressPosition: Int) {
-        val editAddressFragment = EditAddressFragment.getInstance(addressList?.get(addressPosition))
+        val editAddressFragment = EditAddressFragment.getInstance(addressList?.get(addressPosition), liveAddress)
         FragmentUtils.addFragment(context, editAddressFragment,null, EditAddressFragment::class.java.name, true )
     }
 
