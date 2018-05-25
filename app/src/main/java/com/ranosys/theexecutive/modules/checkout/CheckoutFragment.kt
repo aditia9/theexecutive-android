@@ -15,6 +15,7 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
+import com.ranosys.theexecutive.databinding.ShippingMethodItemBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_checkout.*
@@ -27,7 +28,6 @@ class CheckoutFragment : BaseFragment() {
     private lateinit var checkoutViewModel: CheckoutViewModel
     private lateinit var checkoutBinding: FragmentCheckoutBinding
     private lateinit var shoppingItemAdapter: ShoppingItemAdapter
-    private lateinit var shippingMethodAdapter: ShippingtMethodAdapter
     private lateinit var paymentMethodAdapter: PaymentMethodAdapter
 
 
@@ -36,9 +36,6 @@ class CheckoutFragment : BaseFragment() {
         checkoutViewModel = ViewModelProviders.of(this).get(CheckoutViewModel::class.java)
         shoppingItemAdapter = ShoppingItemAdapter(mutableListOf())
 
-        shippingMethodAdapter = ShippingtMethodAdapter(mutableListOf(), { isChecked: Boolean, shippingMethod: CheckoutDataClass.GetShippingMethodsResponse ->
-            handleShippingMethodSelection(isChecked, shippingMethod)
-        })
 
         paymentMethodAdapter = PaymentMethodAdapter(mutableListOf(), { isChecked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod ->
             handlePaymentMethodSelection(isChecked, paymentMethod)
@@ -68,10 +65,10 @@ class CheckoutFragment : BaseFragment() {
             checkoutViewModel.selectedShippingMethod = shippingMethod
             checkoutViewModel.getPaymentMethods(shippingMethod)
         }else{
-            checkoutViewModel.selectedShippingMethod = shippingMethod
+            checkoutViewModel.selectedShippingMethod = null
             paymentMethodAdapter.paymentMethodList = emptyList()
         }
-        shippingMethodAdapter.notifyDataSetChanged()
+
 
     }
 
@@ -87,32 +84,30 @@ class CheckoutFragment : BaseFragment() {
         cart_item_list.layoutManager = linearLayoutManagerHorizontal
         cart_item_list.adapter = shoppingItemAdapter
 
-        val linearLayoutManagerShippingMethod = LinearLayoutManager(activity)
-        shipping_methods_list.layoutManager = linearLayoutManagerShippingMethod
-        shipping_methods_list.adapter = shippingMethodAdapter
+
 
         val linearLayoutManagerPaymentMethod = LinearLayoutManager(activity)
         payment_methods_list.layoutManager = linearLayoutManagerPaymentMethod
         payment_methods_list.adapter = paymentMethodAdapter
 
 
-        tv_shipping_method.setOnClickListener {
-            if(cv_shipping_method.visibility == View.GONE && shippingMethodAdapter.itemCount > 0){
-                cv_shipping_method.visibility = View.VISIBLE
-                cv_payment_method.visibility = View.GONE
-            }else if(cv_shipping_method.visibility == View.VISIBLE){
-                cv_shipping_method.visibility = View.GONE
-            }
-        }
-
-        tv_payment_method.setOnClickListener {
-            if(cv_payment_method.visibility == View.GONE && checkoutViewModel.selectedShippingMethod != null && paymentMethodAdapter.itemCount > 0){
-                cv_payment_method.visibility = View.VISIBLE
-                cv_shipping_method.visibility = View.GONE
-            }else if(cv_payment_method.visibility == View.VISIBLE || checkoutViewModel.selectedShippingMethod == null){
-                cv_payment_method.visibility = View.GONE
-            }
-        }
+//        tv_shipping_method.setOnClickListener {
+//            if(cv_shipping_method.visibility == View.GONE && shippingMethodAdapter.itemCount > 0){
+//                cv_shipping_method.visibility = View.VISIBLE
+//                cv_payment_method.visibility = View.GONE
+//            }else if(cv_shipping_method.visibility == View.VISIBLE){
+//                cv_shipping_method.visibility = View.GONE
+//            }
+//        }
+//
+//        tv_payment_method.setOnClickListener {
+//            if(cv_payment_method.visibility == View.GONE && checkoutViewModel.selectedShippingMethod != null && paymentMethodAdapter.itemCount > 0){
+//                cv_payment_method.visibility = View.VISIBLE
+//                cv_shipping_method.visibility = View.GONE
+//            }else if(cv_payment_method.visibility == View.VISIBLE || checkoutViewModel.selectedShippingMethod == null){
+//                cv_payment_method.visibility = View.GONE
+//            }
+//        }
 
 
         checkoutBinding.addressExpandView.setOnClickListener {
@@ -181,8 +176,7 @@ class CheckoutFragment : BaseFragment() {
             if (shippingMethods?.size ?: 0 <= 0) {
                 Utils.showErrorDialog(activity as Context, (activity as Context).getString(R.string.empty_shipping_method_error))
             } else {
-                shippingMethodAdapter.shippingMethodList = shippingMethods?.toMutableList()
-                shippingMethodAdapter.notifyDataSetChanged()
+                populateShippingMethods(shippingMethods)
             }
 
         })
@@ -205,6 +199,17 @@ class CheckoutFragment : BaseFragment() {
                     ?: Constants.DEFAULT_STORE_CODE
             createOrderUrl(orderId, storeCode, userToken)
         })
+    }
+
+    private fun populateShippingMethods(shippingMethods: List<CheckoutDataClass.GetShippingMethodsResponse>?) {
+        var position = 0
+        for(method in shippingMethods?.toMutableList()!!) {
+            val rbBinding: ShippingMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.shipping_method_item, checkoutBinding.shippingMethodRg, false)
+            rbBinding.shippingMethod = method
+            rbBinding.rbShippingMethod.id = position
+            checkoutBinding.shippingMethodRg.addView(rbBinding.root)
+            position++
+        }
     }
 
     private fun callAddressApi() {
