@@ -16,10 +16,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.SavedPreferences
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_checkout.*
 import kotlinx.android.synthetic.main.pay_amount_detail_bottom_sheet.*
 import kotlinx.android.synthetic.main.total_segment_item.view.*
@@ -48,15 +45,34 @@ class CheckoutFragment : BaseFragment() {
         })
 
         observeApiResponse()
+        observeCommanError()
 
         initiateCheckoutProcess()
 
         return checkoutBinding.root
     }
 
+
+    private fun handleError(error: String?) {
+
+        Utils.showDialog(activity as Context, error, (activity as Context).getString(android.R.string.ok), "", object: DialogOkCallback{
+            override fun setDone(done: Boolean) {
+                activity?.onBackPressed()
+            }
+        })
+    }
+
     private fun handleShippingMethodSelection(checked: Boolean, shippingMethod: CheckoutDataClass.GetShippingMethodsResponse) {
+
+        if(checked){
+            checkoutViewModel.selectedShippingMethod = shippingMethod
+            checkoutViewModel.getPaymentMethods(shippingMethod)
+        }else{
+            checkoutViewModel.selectedShippingMethod = shippingMethod
+            paymentMethodAdapter.paymentMethodList = emptyList()
+        }
         shippingMethodAdapter.notifyDataSetChanged()
-        checkoutViewModel.getPaymentMethods(shippingMethod)
+
     }
 
     private fun handlePaymentMethodSelection(checked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod) {
@@ -78,6 +94,25 @@ class CheckoutFragment : BaseFragment() {
         val linearLayoutManagerPaymentMethod = LinearLayoutManager(activity)
         payment_methods_list.layoutManager = linearLayoutManagerPaymentMethod
         payment_methods_list.adapter = paymentMethodAdapter
+
+
+        tv_shipping_method.setOnClickListener {
+            if(cv_shipping_method.visibility == View.GONE && shippingMethodAdapter.itemCount > 0){
+                cv_shipping_method.visibility = View.VISIBLE
+                cv_payment_method.visibility = View.GONE
+            }else if(cv_shipping_method.visibility == View.VISIBLE){
+                cv_shipping_method.visibility = View.GONE
+            }
+        }
+
+        tv_payment_method.setOnClickListener {
+            if(cv_payment_method.visibility == View.GONE && checkoutViewModel.selectedShippingMethod != null && paymentMethodAdapter.itemCount > 0){
+                cv_payment_method.visibility = View.VISIBLE
+                cv_shipping_method.visibility = View.GONE
+            }else if(cv_payment_method.visibility == View.VISIBLE || checkoutViewModel.selectedShippingMethod == null){
+                cv_payment_method.visibility = View.GONE
+            }
+        }
 
 
         checkoutBinding.addressExpandView.setOnClickListener {
@@ -103,6 +138,13 @@ class CheckoutFragment : BaseFragment() {
         }
     }
 
+
+    private fun observeCommanError() {
+        checkoutViewModel.commanError.observe(this, Observer { error ->
+            handleError(error)
+        })
+    }
+
     private fun observeApiResponse() {
         checkoutViewModel.selectedAddress.observe(this, Observer { address ->
             hideLoading()
@@ -125,6 +167,10 @@ class CheckoutFragment : BaseFragment() {
                 shoppingItemAdapter.notifyDataSetChanged()
 
                 //call user info api and total api
+                callAddressApi()
+                checkoutViewModel.getTotalAmountsApi()
+            }else{
+                handleError("No bag items: " + (activity as Context).getString(R.string.something_went_wrong_error))
             }
 
         })
@@ -159,6 +205,15 @@ class CheckoutFragment : BaseFragment() {
                     ?: Constants.DEFAULT_STORE_CODE
             createOrderUrl(orderId, storeCode, userToken)
         })
+    }
+
+    private fun callAddressApi() {
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            checkoutViewModel.getAddressApi()
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
     }
 
     private fun updateTotalSegment(totalAmts: List<CheckoutDataClass.TotalSegment>?) {

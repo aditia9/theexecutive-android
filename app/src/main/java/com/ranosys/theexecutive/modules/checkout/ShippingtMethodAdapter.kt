@@ -34,14 +34,15 @@ class ShippingtMethodAdapter(var shippingMethodList: List<CheckoutDataClass.GetS
             itemBinding.cbShippingMethod.isChecked = shippingMethod?.isSelected!!
 
             itemBinding.cbShippingMethod.setOnCheckedChangeListener { buttonView, isChecked ->
+                action(isChecked, shippingMethodList?.get(position)!!)
                 if(isChecked){
                     resetCheckbox(shippingMethodList)
                     shippingMethod.isSelected = true
-                    action(isChecked, shippingMethodList?.get(position)!!)
 
                 }else{
                     shippingMethod.isSelected = false
                 }
+
             }
         }
 

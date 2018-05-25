@@ -34,11 +34,11 @@ class PaymentMethodAdapter(var paymentMethodList: List<CheckoutDataClass.Payment
                 if(isChecked){
                     resetCheckbox(paymentMethodList)
                     paymentMethod.isSelected = true
-                    action(isChecked, paymentMethodList?.get(position)!!)
 
                 }else{
                     paymentMethod.isSelected = false
                 }
+                action(isChecked, paymentMethodList?.get(position)!!)
             }
         }
 

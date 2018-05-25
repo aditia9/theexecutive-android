@@ -187,6 +187,7 @@
                     android:layout_marginTop="@dimen/eight_dp"
                     android:layout_marginBottom="@dimen/eight_dp"
                     android:orientation="horizontal"
+
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@id/tv_items" />
@@ -206,10 +207,13 @@
                         android:id="@+id/tv_shipping_method"
                         android:layout_width="@dimen/match_constraint"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/shipping_method"
                         android:textSize="@dimen/eighteen_sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"/>
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintRight_toLeftOf="@+id/shipping_method_expand_img"/>
 
 
                     <ImageView
@@ -232,6 +236,7 @@
                         android:padding="@dimen/six_dp"
                         app:cardCornerRadius="@dimen/two_dp"
                         app:cardElevation="@dimen/cardview_default_elevation"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -276,7 +281,8 @@
                         android:text="@string/payment_method"
                         android:textSize="@dimen/eighteen_sp"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="@id/payment_method_expand_img"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintRight_toLeftOf="@id/payment_method_expand_img"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
@@ -297,6 +303,7 @@
                         android:padding="@dimen/six_dp"
                         app:cardCornerRadius="@dimen/two_dp"
                         app:cardElevation="@dimen/cardview_default_elevation"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_payment_method">
