@@ -70,8 +70,7 @@ class DashBoardActivity: BaseActivity() {
                             }
                         }
                         if(fragment is ProductListingFragment){
-                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true )
-                            ProductListingFragment.isClicked = true}
+                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true ) }
                         if(fragment is LoginFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         if(fragment is ProductDetailFragment) {

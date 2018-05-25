@@ -70,7 +70,7 @@ class ProductViewFragment : BaseFragment() {
     private var colorMap = HashMap<String, String>()
     private var sizeMap = HashMap<String, String>()
     private var childProductsMap = HashMap<String, ImagesWithPrice?>()
-    private var colorOptionList : List<ProductOptionsResponse>? = null
+    private var colorOptionList : List<ProductOptionsResponse>? = listOf()
     private var sizeOptionList : List<ProductOptionsResponse>? = null
     private lateinit var sizeDilaogBinding: BottomSizeLayoutBinding
     private lateinit var sizeDilaog: Dialog
@@ -133,8 +133,8 @@ class ProductViewFragment : BaseFragment() {
         setDescription()
         if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
             setPrice()
-            setProductImages(productItemViewModel.productItem?.media_gallery_entries)
         }
+        setProductImages(productItemViewModel.productItem?.media_gallery_entries)
         setWearWithProductsData()
         if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
             if(position == pagerPosition) {
@@ -600,7 +600,7 @@ class ProductViewFragment : BaseFragment() {
                 colorOptionList?.forEachIndexed { index, it ->
                     if (index == 0) {
                         colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap[it.value]?.list, childProductsMap[it.value]?.price, true))
-                        setProductImages(childProductsMap[it.value]?.list)
+                        //setProductImages(childProductsMap[it.value]?.list)
                         price = childProductsMap[it.value]?.price
                         tv_price.text = childProductsMap[it.value]?.price
                     } else {
@@ -613,6 +613,11 @@ class ProductViewFragment : BaseFragment() {
                     price = childProductsMap[colorValue]?.price
                     tv_price.text = childProductsMap[colorValue]?.price
                 }
+            }
+            if(colorOptionList?.size == 0){
+                colorsViewList?.add(ColorsView("", colorAttrId, "", productItemViewModel.productItem?.media_gallery_entries, childProductsMap[colorValue]?.price, true))
+                price = childProductsMap[colorValue]?.price
+                tv_price.text = childProductsMap[colorValue]?.price
             }
 
             AppLog.e("colorsViewList : " + productItemViewModel.productItem?.sku + " " + colorsViewList.toString())
@@ -633,8 +638,8 @@ class ProductViewFragment : BaseFragment() {
                         tv_price.text = item?.price
                         colorViewAdapter.notifyDataSetChanged()
                         item?.list?.let {
-                            ll_color_choice.removeAllViews()
-                            setProductImages(it)
+                            //ll_color_choice.removeAllViews()
+                            //setProductImages(it)
                         }
                     }
                 })

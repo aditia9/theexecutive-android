@@ -90,6 +90,7 @@ object Constants {
     const val SORT_TYPE_SEARCH: String = "search"
     const val LIST_TAG_KEY: String = "tag_text"
     const val SPLASH_TIMEOUT: Long = 3000
+    const val CLICK_TIMEOUT: Long = 3000
     const val ERROR_CODE_404: Int = 404
     const val ERROR_CODE_401: Int = 401
     const val ERROR_CODE_400: Int = 400

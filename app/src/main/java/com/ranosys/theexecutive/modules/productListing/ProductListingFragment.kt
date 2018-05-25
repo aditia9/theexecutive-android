@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -39,7 +40,7 @@ import java.util.*
  * @Details fragment shows product listing
  * @Author Ranosys Technologies
  * @Date 16,Apr,2018
-*/
+ */
 class ProductListingFragment: BaseFragment() {
 
     private lateinit var mBinding: FragmentProductListingBinding
@@ -52,6 +53,7 @@ class ProductListingFragment: BaseFragment() {
     private lateinit var filterOptionDialog: Dialog
     private lateinit var sortOptionDialog: Dialog
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var mLastClickTime: Long = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -302,13 +304,14 @@ class ProductListingFragment: BaseFragment() {
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
                 Utils.hideSoftKeypad(activity as Context)
-                if (isClicked) {
-                    isClicked = false
-                    ApiClient.client?.dispatcher()?.cancelAll()
-                    mViewModel.isLoading = false
-                    val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
-                    FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < Constants.CLICK_TIMEOUT){
+                    return
                 }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                ApiClient.client?.dispatcher()?.cancelAll()
+                mViewModel.isLoading = false
+                val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
+                FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
             }
 
         })
@@ -551,7 +554,5 @@ class ProductListingFragment: BaseFragment() {
         var categoryName: String? = null
         var categoryId: Int? = null
         var homeSearchQuery: String = ""
-        var isClicked : Boolean = true
-
     }
 }

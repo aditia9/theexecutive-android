@@ -126,7 +126,7 @@ abstract class BaseFragment : LifecycleFragment() {
 
     @SuppressLint("SetJavaScriptEnabled")
     fun prepareWebPageDialog(context : Context?, url : String?, title : String?) {
-        val webPagesDialog = Dialog(context, R.style.MaterialDialogSheet)
+        val webPagesDialog = Dialog(context, R.style.Animation_Design_BottomSheetDialog)
         webPagesDialog.setContentView(R.layout.web_pages_layout)
         webPagesDialog.setCancelable(true)
         webPagesDialog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT /*+ rl_add_to_box.height*/)
