@@ -36,7 +36,6 @@ import com.ranosys.theexecutive.databinding.ProductImagesLayoutBinding
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
-import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.*
 import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.bottom_size_layout.*
@@ -652,7 +651,6 @@ class ProductViewFragment : BaseFragment() {
                 sizeViewList?.add(SizeView(it.label, sizeAttrId, it.value,false))
         }
         AppLog.e("sizeViewList : " + sizeViewList.toString())
-        ProductListingFragment.isClicked = true
     }
 
     private fun prepareSizeDialog() {
