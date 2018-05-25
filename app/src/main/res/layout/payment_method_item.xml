@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
     <data>
         <variable
             name="paymentMethod"
@@ -8,16 +7,12 @@
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <RadioButton
+        android:id="@+id/rb_payment_method"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/eight_dp">
-
-        <CheckBox
-            android:id="@+id/cb_payment_method"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text='@{paymentMethod.title}'/>
-
-    </android.support.constraint.ConstraintLayout>
+        android:text='@{paymentMethod.title}'
+        android:button="@null"
+        android:padding="@dimen/eight_dp"
+        android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"/>
 </layout>

@@ -15,6 +15,7 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
+import com.ranosys.theexecutive.databinding.PaymentMethodItemBinding
 import com.ranosys.theexecutive.databinding.ShippingMethodItemBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.utils.*
@@ -28,7 +29,6 @@ class CheckoutFragment : BaseFragment() {
     private lateinit var checkoutViewModel: CheckoutViewModel
     private lateinit var checkoutBinding: FragmentCheckoutBinding
     private lateinit var shoppingItemAdapter: ShoppingItemAdapter
-    private lateinit var paymentMethodAdapter: PaymentMethodAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,10 +36,6 @@ class CheckoutFragment : BaseFragment() {
         checkoutViewModel = ViewModelProviders.of(this).get(CheckoutViewModel::class.java)
         shoppingItemAdapter = ShoppingItemAdapter(mutableListOf())
 
-
-        paymentMethodAdapter = PaymentMethodAdapter(mutableListOf(), { isChecked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod ->
-            handlePaymentMethodSelection(isChecked, paymentMethod)
-        })
 
         observeApiResponse()
         observeCommanError()
@@ -66,14 +62,12 @@ class CheckoutFragment : BaseFragment() {
             checkoutViewModel.getPaymentMethods(shippingMethod)
         }else{
             checkoutViewModel.selectedShippingMethod = null
-            paymentMethodAdapter.paymentMethodList = emptyList()
         }
 
 
     }
 
     private fun handlePaymentMethodSelection(checked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod) {
-        paymentMethodAdapter.notifyDataSetChanged()
         checkoutViewModel.selectedPaymentMethod = paymentMethod
     }
 
@@ -83,12 +77,6 @@ class CheckoutFragment : BaseFragment() {
         val linearLayoutManagerHorizontal = LinearLayoutManager(activity as Context, LinearLayoutManager.HORIZONTAL, false)
         cart_item_list.layoutManager = linearLayoutManagerHorizontal
         cart_item_list.adapter = shoppingItemAdapter
-
-
-
-        val linearLayoutManagerPaymentMethod = LinearLayoutManager(activity)
-        payment_methods_list.layoutManager = linearLayoutManagerPaymentMethod
-        payment_methods_list.adapter = paymentMethodAdapter
 
 
 //        tv_shipping_method.setOnClickListener {
@@ -116,6 +104,20 @@ class CheckoutFragment : BaseFragment() {
 
         btn_pay.setOnClickListener {
             checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
+        }
+
+        checkoutBinding.shippingMethodRg.setOnCheckedChangeListener { buttonView, _ ->
+            val position = buttonView.checkedRadioButtonId
+            val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position)
+            checkoutViewModel.selectedShippingMethod = shippingMethod
+            checkoutViewModel.getPaymentMethods(shippingMethod!!)
+        }
+
+        checkoutBinding.paymentMethodRg.setOnCheckedChangeListener { buttonView, _ ->
+            val position = buttonView.checkedRadioButtonId
+            val paymentMethod = checkoutViewModel.paymentMethodList.value?.get(position)
+            checkoutViewModel.selectedPaymentMethod = paymentMethod
+
         }
     }
 
@@ -183,8 +185,11 @@ class CheckoutFragment : BaseFragment() {
 
         //observe payment methods
         checkoutViewModel.paymentMethodList.observe(this, Observer { paymentMethodList ->
-            paymentMethodAdapter.paymentMethodList = paymentMethodList
-            paymentMethodAdapter.notifyDataSetChanged()
+            if (paymentMethodList?.size ?: 0 <= 0) {
+                Utils.showErrorDialog(activity as Context, (activity as Context).getString(R.string.empty_payment_method_error))
+            } else {
+                populatePaymentMethods(paymentMethodList)
+            }
         })
 
         //observe total segment
@@ -199,6 +204,19 @@ class CheckoutFragment : BaseFragment() {
                     ?: Constants.DEFAULT_STORE_CODE
             createOrderUrl(orderId, storeCode, userToken)
         })
+    }
+
+    private fun populatePaymentMethods(paymentMethodList: List<CheckoutDataClass.PaymentMethod>?) {
+
+        var position = 0
+        checkoutBinding.paymentMethodRg.removeAllViews()
+        for(method in paymentMethodList?.toMutableList()!!) {
+            val rbBinding: PaymentMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.payment_method_item, checkoutBinding.paymentMethodRg, false)
+            rbBinding.paymentMethod = method
+            rbBinding.rbPaymentMethod.id = position
+            checkoutBinding.paymentMethodRg.addView(rbBinding.root)
+            position++
+        }
     }
 
     private fun populateShippingMethods(shippingMethods: List<CheckoutDataClass.GetShippingMethodsResponse>?) {
