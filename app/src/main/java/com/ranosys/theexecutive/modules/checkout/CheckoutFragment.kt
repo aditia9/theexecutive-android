@@ -55,21 +55,6 @@ class CheckoutFragment : BaseFragment() {
         })
     }
 
-    private fun handleShippingMethodSelection(checked: Boolean, shippingMethod: CheckoutDataClass.GetShippingMethodsResponse) {
-
-        if(checked){
-            checkoutViewModel.selectedShippingMethod = shippingMethod
-            checkoutViewModel.getPaymentMethods(shippingMethod)
-        }else{
-            checkoutViewModel.selectedShippingMethod = null
-        }
-
-
-    }
-
-    private fun handlePaymentMethodSelection(checked: Boolean, paymentMethod: CheckoutDataClass.PaymentMethod) {
-        checkoutViewModel.selectedPaymentMethod = paymentMethod
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,23 +64,30 @@ class CheckoutFragment : BaseFragment() {
         cart_item_list.adapter = shoppingItemAdapter
 
 
-//        tv_shipping_method.setOnClickListener {
-//            if(cv_shipping_method.visibility == View.GONE && shippingMethodAdapter.itemCount > 0){
-//                cv_shipping_method.visibility = View.VISIBLE
-//                cv_payment_method.visibility = View.GONE
-//            }else if(cv_shipping_method.visibility == View.VISIBLE){
-//                cv_shipping_method.visibility = View.GONE
-//            }
-//        }
-//
-//        tv_payment_method.setOnClickListener {
-//            if(cv_payment_method.visibility == View.GONE && checkoutViewModel.selectedShippingMethod != null && paymentMethodAdapter.itemCount > 0){
-//                cv_payment_method.visibility = View.VISIBLE
-//                cv_shipping_method.visibility = View.GONE
-//            }else if(cv_payment_method.visibility == View.VISIBLE || checkoutViewModel.selectedShippingMethod == null){
-//                cv_payment_method.visibility = View.GONE
-//            }
-//        }
+        tv_shipping_method.setOnClickListener {
+            checkoutViewModel.shippingMethodList.value?.run {
+                if(cv_shipping_method.visibility == View.GONE && checkoutViewModel.shippingMethodList.value!!.isNotEmpty()){
+                    cv_shipping_method.visibility = View.VISIBLE
+                    cv_payment_method.visibility = View.GONE
+                }else if(cv_shipping_method.visibility == View.VISIBLE){
+                    cv_shipping_method.visibility = View.GONE
+                }
+            }
+
+        }
+
+        tv_payment_method.setOnClickListener {
+
+            checkoutViewModel.paymentMethodList.value?.run {
+                if(cv_payment_method.visibility == View.GONE && checkoutViewModel.selectedShippingMethod != null && checkoutViewModel.paymentMethodList.value!!.isNotEmpty()){
+                    cv_payment_method.visibility = View.VISIBLE
+                    cv_shipping_method.visibility = View.GONE
+                }else if(cv_payment_method.visibility == View.VISIBLE || checkoutViewModel.selectedShippingMethod == null){
+                    cv_payment_method.visibility = View.GONE
+                }
+            }
+
+        }
 
 
         checkoutBinding.addressExpandView.setOnClickListener {
@@ -118,6 +110,20 @@ class CheckoutFragment : BaseFragment() {
             val paymentMethod = checkoutViewModel.paymentMethodList.value?.get(position)
             checkoutViewModel.selectedPaymentMethod = paymentMethod
 
+        }
+
+        img_bottom_sheet.setOnClickListener {
+            if(total_segment_bottom_sheet.visibility == View.GONE){
+                total_segment_bottom_sheet.visibility = View.VISIBLE
+            }
+
+        }
+
+        img_close_total_segment.setOnClickListener {
+
+            if(total_segment_bottom_sheet.visibility == View.VISIBLE){
+                total_segment_bottom_sheet.visibility = View.GONE
+            }
         }
     }
 
@@ -209,6 +215,7 @@ class CheckoutFragment : BaseFragment() {
     private fun populatePaymentMethods(paymentMethodList: List<CheckoutDataClass.PaymentMethod>?) {
 
         var position = 0
+
         checkoutBinding.paymentMethodRg.removeAllViews()
         for(method in paymentMethodList?.toMutableList()!!) {
             val rbBinding: PaymentMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.payment_method_item, checkoutBinding.paymentMethodRg, false)
@@ -244,12 +251,11 @@ class CheckoutFragment : BaseFragment() {
         totalAmts?.run {
             for (totalSegment in totalAmts) {
                 if(totalSegment == totalAmts.last()){
+                    checkoutBinding.tvTotalAmount.text = "IDR ${totalSegment.value}"
                     addChildViewsToFooter(ll_total_segment, totalSegment, true)
                 }else{
                     addChildViewsToFooter(ll_total_segment, totalSegment)
                 }
-
-
             }
         }
     }

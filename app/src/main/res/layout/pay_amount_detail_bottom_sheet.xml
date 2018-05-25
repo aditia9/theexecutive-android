@@ -2,21 +2,42 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/total_segment_bottom_sheet"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     app:cardBackgroundColor="@color/white"
     android:layout_margin="@dimen/eight_dp"
-    android:padding="@dimen/ten_dp"
     android:visibility="gone"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
     app:cardElevation="@dimen/cardview_default_elevation">
 
-    <LinearLayout
-        android:id="@+id/ll_total_segment"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginBottom="@dimen/sixteen_dp">
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:padding="@dimen/ten_dp">
+
+        <ImageView
+            android:id="@+id/img_close_total_segment"
+            android:layout_width="@dimen/fourteen_dp"
+            android:layout_height="@dimen/fourteen_dp"
+            android:src="@drawable/dropdown"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/ll_total_segment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/eight_dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_close_total_segment"
+            android:layout_marginBottom="@dimen/sixteen_dp">
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+
 </android.support.v7.widget.CardView>
