@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.notification.service
 
+import AppLog
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -35,9 +36,10 @@ class FCMListenerService : FirebaseMessagingService() {
     private lateinit var redirectTitle: String
     private lateinit var notificationImg: String
     private lateinit var title: String
-    internal lateinit var message: String
+    internal lateinit var body: String
     private lateinit var notificationId: String
     private lateinit var notification: NotificationCompat.Builder
+    private val notificationImageBaseUrl: String = "http://192.168.10.66/delami/pub/media/notification_image"
     var vibrationArray = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
 
 
@@ -45,19 +47,27 @@ class FCMListenerService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
 
         remoteMessage.data?.run {
-            val dataMap = (remoteMessage.data)
-            redirectType = dataMap.get(Constants.KEY_REDIRECTION_TYPE) ?: ""
-            redirectValue = dataMap.get(Constants.KEY_REDIRECTION_VALUE) ?: ""
-            redirectTitle = dataMap.get(Constants.KEY_REDIRECTION_TITLE) ?: ""
-            notificationImg = dataMap.get(Constants.KEY_IMAGE) ?: ""
-            title = dataMap.get(Constants.KEY_NOTIFICATION_TITLE) ?: ""
-            message = dataMap.get(Constants.KEY_NOTIFICATION_MESSAGE) ?: ""
-            notificationId = dataMap.get(Constants.KEY_NOTIFICATION_ID) ?: ""
+            val dataMap = remoteMessage.data
+            AppLog.e(dataMap.toString())
+            redirectType = dataMap[Constants.KEY_REDIRECTION_TYPE] ?: ""
+            AppLog.e("redirectType " + redirectType)
+            redirectValue = dataMap[Constants.KEY_REDIRECTION_VALUE] ?: ""
+            AppLog.e("redirectValue " + redirectValue)
+            redirectTitle = dataMap[Constants.KEY_REDIRECTION_TITLE] ?: ""
+            AppLog.e("redirectTitle "+ redirectTitle)
+            notificationImg = dataMap[Constants.KEY_IMAGE] ?: ""
+            AppLog.e("notificationImg "+ notificationImg)
+            title = remoteMessage.notification?.title ?: ""
+            AppLog.e("title " + title)
+            body = remoteMessage.notification?.body ?: ""
+            AppLog.e("message "+body)
+            notificationId = dataMap[Constants.KEY_NOTIFICATION_ID] ?: ""
+            AppLog.e("notificationId " + notificationId)
 
             Constants.notificationCounter++
 
             //generate notification if body is not empty and Notification are enabled from settings
-            createNotification(message, title)
+            createNotification(body, title)
 
         }
     }
@@ -66,13 +76,12 @@ class FCMListenerService : FirebaseMessagingService() {
     private fun createNotification(body: String, title: String) {
 
         val intent = Intent(this, SplashActivity::class.java)
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
         intent.putExtra(Constants.KEY_REDIRECTION_TITLE, redirectTitle)
         intent.putExtra(Constants.KEY_REDIRECTION_VALUE, redirectValue)
         intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
         intent.putExtra(Constants.KEY_NOTIFICATION_TITLE, title)
-        intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, message)
+        intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, body)
         intent.putExtra(Constants.KEY_IMAGE, notificationImg)
 
         val pendingIntent = PendingIntent.getActivity(this, Calendar.getInstance().timeInMillis.toInt(), intent,
@@ -80,20 +89,6 @@ class FCMListenerService : FirebaseMessagingService() {
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val big_bitmap_image = BitmapFactory.decodeResource(resources, R.mipmap.app_icon)
-
-        /* //here comes to load image by Picasso
-             //it should be inside try block
-             .setLargeIcon(GlideApp.with(context).load("URL_TO_LOAD_LARGE_ICON").get())
-             //BigPicture Style
-             .setStyle(NotificationCompat.BigPictureStyle()
-                     //This one is same as large icon but it wont show when its expanded that's why we again setting
-                     .bigLargeIcon(GlideApp.with(context).load("URL_TO_LOAD_LARGE_ICON").get())
-                     //This is Big Banner image
-                     .bigPicture(GlideApp.with(context).load("URL_TO_LOAD_BANNER_IMAGE").get())
-                     //When Notification expanded title and content text
-                     .setBigContentTitle(title)
-                     .setSummaryText(message))*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_HIGH
@@ -115,17 +110,10 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setChannelId(Constants.NOTIFICATION_CHANNEL_ID)
                     .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                   /* .setStyle(NotificationCompat.BigPictureStyle()
-                            .bigPicture(big_bitmap_image)
-                            .setBigContentTitle(title))*/
                     .setStyle(NotificationCompat.BigPictureStyle()
-                            //This one is same as large icon but it wont show when its expanded that's why we again setting
-                            // .bigLargeIcon(GlideApp.with(this).load("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg").get())
-                            //This is Big Banner image
-                            .bigPicture(getBitmapFromURL("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg"))
-                            //When Notification expanded title and content text
+                            .bigPicture(getBitmapFromURL(notificationImageBaseUrl+notificationImg))
                             .setBigContentTitle(title)
-                            .setSummaryText(message))
+                            .setSummaryText(body))
         } else {
             notification = NotificationCompat.Builder(this)
                     .setSmallIcon(getNotificationIcon())
@@ -136,19 +124,10 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setContentIntent(pendingIntent)
                     .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                    /*.setStyle(NotificationCompat.BigPictureStyle()
-                            .bigPicture(big_bitmap_image)
-                            .setBigContentTitle(title))*/
-                   // .setLargeIcon(GlideApp.with(this).load("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg").get())
-                    //BigPicture Style
                     .setStyle(NotificationCompat.BigPictureStyle()
-                            //This one is same as large icon but it wont show when its expanded that's why we again setting
-                           // .bigLargeIcon(GlideApp.with(this).load("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg").get())
-                            //This is Big Banner image
-                            .bigPicture(getBitmapFromURL("http://magento.theexecutive.co.id/pub/media/home_promotion/c/o/corporate.jpg"))
-                            //When Notification expanded title and content text
+                            .bigPicture(getBitmapFromURL(notificationImageBaseUrl+notificationImg))
                             .setBigContentTitle(title)
-                            .setSummaryText(message))
+                            .setSummaryText(body))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notification.color = resources.getColor(R.color.black)

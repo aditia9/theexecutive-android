@@ -93,9 +93,9 @@ object Constants {
     const val NOTIFICATION_CHANNEL_ID = "4655"
     var notificationCounter = 0
     const val KEY_REDIRECTION_TYPE = "type"
-    const val KEY_REDIRECTION_VALUE = "type_id"
+    const val KEY_REDIRECTION_VALUE = "typeId"
     const val KEY_IMAGE = "image_url"
-    const val KEY_REDIRECTION_TITLE = "redirection_title"
+    const val KEY_REDIRECTION_TITLE = "redirect_title"
     const val KEY_NOTIFICATION_TITLE = "gcm.notification.title"
     const val KEY_NOTIFICATION_ALERT = "notification_alert"
     const val KEY_NOTIFICATION_ID = "notification_id"

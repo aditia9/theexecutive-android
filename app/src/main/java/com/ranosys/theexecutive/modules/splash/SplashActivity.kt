@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.TextUtils
-import android.util.Log
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
@@ -72,6 +71,11 @@ class SplashActivity : BaseActivity() {
             }
         }, Constants.SPLASH_TIMEOUT)
 
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        AppLog.e("onNewIntent")
     }
 
     private fun dataFromNotification() {
