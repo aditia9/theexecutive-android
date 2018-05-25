@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.MyOrdersItemBinding
+import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Class An data class for Order List
@@ -15,14 +16,10 @@ import com.ranosys.theexecutive.databinding.MyOrdersItemBinding
  */
 
 
-class OrderListAdapter(var context: Context, var orderList: List<OrderListResponse>?, private val action: (Int, String, OrderListResponse?) -> Unit) : RecyclerView.Adapter<OrderListAdapter.Holder>() {
+class OrderListAdapter(var context: Context, private var orderList: List<OrderListResponse>?, private val action: (Int, String, OrderListResponse?) -> Unit) : RecyclerView.Adapter<OrderListAdapter.Holder>() {
 
-    var mContext: Context? = null
     var clickListener: OnItemClickListener? = null
 
-    init {
-        mContext = context
-    }
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
@@ -46,7 +43,7 @@ class OrderListAdapter(var context: Context, var orderList: List<OrderListRespon
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(mContext, getItem(position), position, action, clickListener)
+        holder?.bind(getItem(position), action)
     }
 
     fun getItem(position: Int): OrderListResponse? {
@@ -56,11 +53,17 @@ class OrderListAdapter(var context: Context, var orderList: List<OrderListRespon
 
     class Holder(var itemBinding: MyOrdersItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: OrderListResponse?, position: Int, action: (Int, String, OrderListResponse?) -> Unit, listener: OnItemClickListener?) {
+        fun bind(item: OrderListResponse?, action: (Int, String, OrderListResponse?) -> Unit) {
             itemBinding?.item = item
 
             itemView.setOnClickListener {
                 item?.id?.let { action(0, it, item) }
+            }
+            if (null != item)
+                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.amount!!, item.amount)
+
+            itemBinding?.btnReturn?.setOnClickListener { view ->
+                item?.id?.let { action(view.id, it, item) }
             }
         }
     }

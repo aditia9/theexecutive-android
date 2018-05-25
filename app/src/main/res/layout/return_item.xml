@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+        <data>
+            <variable
+                name="item"
+                type="com.ranosys.theexecutive.modules.order.orderDetail.Item" />
+
+            <variable
+                name="returnViewModel"
+                type="com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnViewModel">
+            </variable>
+        </data>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/twenty_dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_product"
+            android:layout_width="@dimen/hundred_dp"
+            android:layout_height="@dimen/one_twenty_dp"
+            android:layout_marginStart="@dimen/forty_dp"
+            android:layout_marginTop="@dimen/twenty_dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/one"
+            android:contentDescription="@string/app_name"
+            bind:baseUrlWithProductImageUrl="@{item.extension_attributes.image}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_name_of_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/thirty_dp"
+            android:fontFamily="@font/dax_medium"
+            android:text="@{item.name}"
+            android:textSize="@dimen/sixteen_sp"
+            app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_product_sku"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:text='@{"SKU " +item.sku}'
+            android:textSize="@dimen/twelve_sp"
+            app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintTop_toBottomOf="@id/tv_name_of_product" />
+
+
+        <LinearLayout
+            android:id="@+id/layout_color_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/twenty_dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_sku">
+
+            <TextView
+                android:id="@+id/tv_product_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fourteen_sp" />
+
+            <View
+                android:id="@+id/view_vertical"
+                android:layout_width="@dimen/one_dp"
+                android:layout_height="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:background="@color/divider_color" />
+
+            <TextView
+                android:id="@+id/tv_product_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/twenty_dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fourteen_sp" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{""+item.original_price}'
+            android:textColor="@color/red"
+            android:textSize="@dimen/sixteen_sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.79"
+            app:layout_constraintStart_toEndOf="@id/layout_color_size"
+            app:layout_constraintTop_toTopOf="@id/layout_color_size" />
+
+        <TextView
+            android:id="@+id/tv_return"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/return_qty"
+            android:textSize="@dimen/sixteen_sp"
+            android:layout_margin="@dimen/five_dp"
+            app:layout_constraintEnd_toEndOf="@id/img_product"
+            app:layout_constraintStart_toStartOf="@id/img_product"
+            app:layout_constraintTop_toBottomOf="@id/img_product" />
+
+
+        <ImageView
+            android:id="@+id/img_decrement"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ten_dp"
+            android:layout_height="@dimen/ten_dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:contentDescription="@string/app_name"
+            android:background="@drawable/back"
+            app:layout_constraintStart_toStartOf="@id/img_product"
+            app:layout_constraintTop_toBottomOf="@+id/tv_return" />
+
+        <TextView
+            android:id="@+id/txt_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="@dimen/sixteen_sp"
+            app:layout_constraintEnd_toEndOf="@id/img_increment"
+            app:layout_constraintStart_toStartOf="@id/img_decrement"
+            app:layout_constraintTop_toBottomOf="@id/tv_return" />
+
+        <ImageView
+            android:id="@+id/img_increment"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/ten_dp"
+            android:layout_height="@dimen/ten_dp"
+            android:layout_marginTop="@dimen/ten_dp"
+            android:contentDescription="@string/app_name"
+            android:background="@drawable/forward"
+            app:layout_constraintEnd_toEndOf="@id/tv_return"
+            app:layout_constraintTop_toBottomOf="@+id/tv_return" />
+
+      <!--  android:onItemSelected="@{(parent, view, pos, id) -> returnViewModel.onStateSelection(parent, pos, reasonSpinner)}"-->
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/sp_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/thirty_dp"
+            android:prompt="@string/app_name"
+            android:entries="@array/reason_array"
+            app:layout_constraintStart_toEndOf="@id/tv_return"
+            app:layout_constraintTop_toBottomOf="@id/img_product" />
+
+        <CheckBox
+            android:id="@+id/chk_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.37" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

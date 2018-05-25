@@ -1,14 +1,18 @@
 package com.ranosys.theexecutive.modules.order.orderDetail
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.OrderDetailAddressBinding
 import com.ranosys.theexecutive.databinding.OrderDetailItemListBinding
 import com.ranosys.theexecutive.databinding.OrderDetailPriceBinding
+import com.ranosys.theexecutive.utils.Constants
 
 /**
  * @Class An data class for Order detail adapter
@@ -21,8 +25,6 @@ const val ORDER_ITEM = 1
 const val ORDER_ADDRESS = 0
 
 class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDetailResponse?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private var mContext: Context? = null
 
     private var clickListener: OnItemClickListener? = null
 
@@ -81,7 +83,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         when (holder) {
-            is OrderDetailItemHolder -> holder.bind(context, getItem(position), position)
+            is OrderDetailItemHolder -> holder.bind(context, getItem(position), OrderDetail, position)
             is OrderDetailAddressHolder -> holder.bind(context, OrderDetail, position)
             is OrderDetailPriceHolder -> holder.bind(context, OrderDetail, position)
         }
@@ -89,9 +91,33 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
 
     class OrderDetailItemHolder(var itemBinding: OrderDetailItemListBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(context: Context?, item: Item?, position: Int) {
-            itemBinding?.item = item
+        fun bind(context: Context?, orderItem: Item?, item: OrderDetailResponse?, position: Int) {
+            itemBinding?.item = orderItem
 
+            if(item?.items?.get(position -1)?.extension_attributes != null && item.items.get(position -1).extension_attributes?.options != null){
+                item.items[position - 1].extension_attributes?.options?.forEach {
+                    when (it.label) {
+                        Constants.COLOR_ -> {
+                            if(!TextUtils.isEmpty(it.label)){
+                                itemBinding?.tvProductColor?.text = it.value
+                            }else{
+                                itemBinding?.tvProductColor?.visibility = View.GONE
+                                itemBinding?.viewVertical?.visibility = View.GONE
+                            }
+                        }
+                        Constants.SIZE_ -> {
+                            if(!TextUtils.isEmpty(it.label)){
+                                itemBinding?.tvProductSize?.text = it.value
+                            }else{
+                                itemBinding?.tvProductSize?.visibility = View.GONE
+                            }
+
+                        }
+                    }
+                }
+            }else{
+                itemBinding?.layoutColorSize?.visibility = View.GONE
+            }
         }
     }
 
@@ -110,6 +136,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
     class OrderDetailAddressHolder(var itemBinding: OrderDetailAddressBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
 
+        @SuppressLint("SetTextI18n")
         fun bind(context: Context?, item: OrderDetailResponse?, position: Int) {
             itemBinding?.item = item
 
@@ -124,7 +151,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             } else if (size > 1) {
                 street = item.billing_address.street[0] + item.billing_address.street[1]
             }
-            val address = street + " " + item.billing_address.postcode + ", " + item.billing_address.country_id
+            val address = street + ", " + item.billing_address.city +", "+item.billing_address.postcode + ", " + item.billing_address.country_id
             itemBinding?.tvUserAddress?.text = address
         }
     }

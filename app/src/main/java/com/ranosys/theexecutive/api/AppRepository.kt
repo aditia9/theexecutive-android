@@ -12,6 +12,7 @@ import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
+import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnRequest
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
@@ -1283,6 +1284,29 @@ object AppRepository {
             }
 
             override fun onFailure(call: Call<OrderDetailResponse>?, t: Throwable?) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+    fun returnProduct(request: OrderReturnRequest, callBack: ApiCallback<String>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
+                ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.returnProduct(ApiConstants.BEARER + userToken, storeCode, request)
+        callPost?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

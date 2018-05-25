@@ -216,6 +216,9 @@
     <string name="shipping_cost">Shipping Cost</string>
     <string name="products">Products</string>
     <string name="order_return">Return</string>
+    <string name="order_return_to">Return To</string>
+    <string name="order_return_from">Return From</string>
     <string name="order_no">ORDER NO.</string>
+    <string name="return_qty">Return Qty</string>
 
 </resources>

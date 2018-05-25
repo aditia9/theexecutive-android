@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentOrderListBinding
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
+import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -88,6 +89,12 @@ class OrderListFragment : BaseFragment() {
                         FragmentUtils.addFragment(context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                     }
 
+                    R.id.btn_return -> {
+                        val bundle = Bundle()
+                        bundle.putString(Constants.ORDER_ID, orderId)
+                        FragmentUtils.addFragment(context, OrderReturnFragment(), bundle, OrderReturnFragment::class.java.name, true)
+
+                    }
                 }
             })
             rv_order_list.adapter = orderListAdapter
