@@ -88,7 +88,7 @@ class CategoryThreeLevelAdapter(context: Context?, var list : MutableList<Childr
             }else if((categoryList?.get(group)?.children_data?.get(p2) as ChildrenData).name == context?.getString(R.string.view_all)){
                 val bundle = Bundle()
                 bundle.putInt(Constants.CATEGORY_ID, categoryList?.get(group)?.children_data?.get(p2)?.id!!)
-                bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.children_data?.get(p2)?.name!!)
+                bundle.putString(Constants.CATEGORY_NAME, categoryList?.get(group)?.name)
                 FragmentUtils.addFragment(context!!, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
             }
 

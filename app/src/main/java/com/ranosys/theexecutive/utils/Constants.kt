@@ -77,6 +77,7 @@ object Constants {
     const val SORT_TYPE_CATALOG: String = "catalog"
     const val SORT_TYPE_SEARCH: String = "search"
     const val SPLASH_TIMEOUT: Long = 3000
+    const val CLICK_TIMEOUT: Long = 3000
     const val ERROR_CODE_404: Int = 404
     const val ERROR_CODE_401: Int = 401
     const val ERROR_CODE_400: Int = 400
@@ -106,5 +107,6 @@ object Constants {
     const val NOTIFICATION_TYPE_ORDER_LIST = "Order"
     const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
     const val USER_FCM_ID = "fcm_id"
+    val IMAGE_RATIO: Double = 1.44
 
 }

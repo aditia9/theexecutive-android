@@ -21,7 +21,6 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
-import com.zopim.android.sdk.api.ZopimChat
 
 /**
  * @Details Dashboard screen for an app
@@ -36,9 +35,6 @@ class DashBoardActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         toolbarBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding.toolbarViewModel = toolbarViewModel
-
-        //initialize Zendesk chat setup
-        setUpZendeskChat()
 
         val intent = intent
         val bundle = intent.extras
@@ -99,11 +95,18 @@ class DashBoardActivity : BaseActivity() {
                         if (fragment is NotificationFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.notifications), 0, "", R.drawable.back, true, 0, false)
                             fragment.getNotification()
+                            if(fragment is ProductListingFragment){
+                                (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true ) }
+                            if(fragment is LoginFragment) {
+                                (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
+                            if(fragment is ProductDetailFragment) {
+                                fragment.onResume()
+                            }
                         }
                     }
                 }
-            }
 
+            }
         })
 
     }
@@ -135,7 +138,7 @@ class DashBoardActivity : BaseActivity() {
                     FragmentUtils.addFragment(this, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                 }
 
-                Constants.NOTIFICATION_TYPE_ORDER_LIST->{
+                Constants.NOTIFICATION_TYPE_ORDER_LIST -> {
                     //ToDo Redirect to order list
                 }
 
@@ -146,7 +149,4 @@ class DashBoardActivity : BaseActivity() {
         }
     }
 
-    private fun setUpZendeskChat() {
-        ZopimChat.init(Constants.ZENDESK_CHAT)
-    }
 }

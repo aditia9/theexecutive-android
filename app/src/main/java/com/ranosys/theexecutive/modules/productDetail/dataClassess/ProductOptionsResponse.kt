@@ -7,6 +7,6 @@ package com.ranosys.theexecutive.modules.productDetail.dataClassess
  */
 
 data class ProductOptionsResponse(
-        var label: String?,
-        val value: String?
+        var label: String? = "",
+        val value: String? = ""
 )
