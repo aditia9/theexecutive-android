@@ -32,6 +32,7 @@ class ProductStatePagerAdapter(fm : FragmentManager?, productList : List<Product
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, o: Any) {
+        super.destroyItem(container, position, o)
         Glide.get(container.context).clearMemory()
 
     }
