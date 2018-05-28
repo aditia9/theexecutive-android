@@ -34,17 +34,10 @@ class SplashActivity : BaseActivity() {
     private val handler = Handler()
     private var canNavigateToHome: Boolean = false
     private  var redirectType: String? = null
-    private  var redirectionValue: String ? = null
-    private  var redirectTitle: String ? = null
-    private  var notificationId: String ? = null
-    private  var notificationImg: String ? = null
-    private  var notificationTitle: String ? = null
-    private  var notificationMessage: String ? = null
+    private  var notificationIntent: Intent ? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-       // setContentView(R.layout.activity_splash)
 
         //check for auth token in SP if not get from assets
         if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))) {
@@ -74,18 +67,12 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun dataFromNotification() {
-        val extras = intent.extras
-        if (extras != null) {
-            redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
-            redirectionValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
-            redirectTitle = extras.getString(Constants.KEY_REDIRECTION_TITLE)
-            notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
-            notificationImg = extras.getString(Constants.KEY_IMAGE)
-            notificationTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
-            notificationMessage = extras.getString(Constants.KEY_NOTIFICATION_MESSAGE)
+        notificationIntent = intent
+        val extras = notificationIntent?.extras
+        notificationIntent?.extras?.run {
+            redirectType = extras?.getString(Constants.KEY_REDIRECTION_TYPE)
         }
     }
-
 
     private fun getConfigurationApi() {
         AppRepository.getConfiguration(object : ApiCallback<ConfigurationResponse> {
@@ -200,13 +187,7 @@ class SplashActivity : BaseActivity() {
     private fun moveToHome() {
         val intent = Intent(this@SplashActivity, DashBoardActivity::class.java)
         if (!TextUtils.isEmpty(redirectType)) {
-            intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
-            intent.putExtra(Constants.KEY_REDIRECTION_TITLE, redirectTitle)
-            intent.putExtra(Constants.KEY_REDIRECTION_VALUE, redirectionValue)
-            intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
-            intent.putExtra(Constants.KEY_NOTIFICATION_TITLE, notificationTitle)
-            intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, notificationMessage)
-            intent.putExtra(Constants.KEY_IMAGE, notificationImg)
+            intent.putExtras(notificationIntent)
         }
         startActivity(intent)
         finish()
@@ -275,7 +256,7 @@ class SplashActivity : BaseActivity() {
         })
     }
 
-    fun getUserCartCount() {
+    private fun getUserCartCount() {
         val apiResponse = ApiResponse<String>()
         AppRepository.cartCountUser(object : ApiCallback<String> {
             override fun onException(error: Throwable) {

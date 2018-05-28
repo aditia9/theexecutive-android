@@ -86,26 +86,20 @@ class DashBoardActivity : BaseActivity() {
                             (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)
                         if (fragment is LoginFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false, true) }
-                        if (fragment is ProductDetailFragment) {
-                            fragment.onResume() }
-                        if (fragment is AddressBookFragment) {
-                            fragment.onResume() }
-                        if (fragment is ShoppingBagFragment) {
-                            fragment.onResume() }
                         if (fragment is NotificationFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.notifications), 0, "", R.drawable.back, true, 0, false)
                             fragment.getNotification()
-                            if(fragment is ProductListingFragment){
-                                (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true ) }
-                            if(fragment is LoginFragment) {
-                                (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
-                            if(fragment is ProductDetailFragment) {
-                                fragment.onResume()
-                            }
                         }
+                        if(fragment is ProductListingFragment){
+                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true ) }
+                        if(fragment is LoginFragment) {
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
+                        (fragment as? ProductDetailFragment)?.onResume()
+                        (fragment as? AddressBookFragment)?.onResume()
+                        (fragment as? ShoppingBagFragment)?.onResume()
+
                     }
                 }
-
             }
         })
 
@@ -118,10 +112,6 @@ class DashBoardActivity : BaseActivity() {
         val redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
         val redirectValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
         val redirectTitle = extras.getString(Constants.KEY_REDIRECTION_TITLE)
-        val notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
-        val notificationImg = extras.getString(Constants.KEY_IMAGE)
-        val notificationTitle = extras.getString(Constants.KEY_NOTIFICATION_TITLE)
-        val notificationMessage = extras.getString(Constants.KEY_NOTIFICATION_MESSAGE)
 
         if (!TextUtils.isEmpty(redirectType)) {
             when (redirectType) {
