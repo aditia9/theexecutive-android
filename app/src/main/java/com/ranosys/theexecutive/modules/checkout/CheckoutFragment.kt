@@ -107,8 +107,10 @@ class CheckoutFragment : BaseFragment() {
 
         checkoutBinding.paymentMethodRg.setOnCheckedChangeListener { buttonView, _ ->
             val position = buttonView.checkedRadioButtonId
-            val paymentMethod = checkoutViewModel.paymentMethodList.value?.get(position)
-            checkoutViewModel.selectedPaymentMethod = paymentMethod
+            if (position != -1) {
+                val paymentMethod = checkoutViewModel.paymentMethodList.value?.get(position)
+                checkoutViewModel.selectedPaymentMethod = paymentMethod
+            }
 
         }
 
@@ -194,6 +196,7 @@ class CheckoutFragment : BaseFragment() {
             if (paymentMethodList?.size ?: 0 <= 0) {
                 Utils.showErrorDialog(activity as Context, (activity as Context).getString(R.string.empty_payment_method_error))
             } else {
+                checkoutBinding.paymentMethodRg.clearCheck()
                 populatePaymentMethods(paymentMethodList)
             }
         })
@@ -221,9 +224,11 @@ class CheckoutFragment : BaseFragment() {
             val rbBinding: PaymentMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.payment_method_item, checkoutBinding.paymentMethodRg, false)
             rbBinding.paymentMethod = method
             rbBinding.rbPaymentMethod.id = position
+            rbBinding.rbPaymentMethod.isChecked = false
             checkoutBinding.paymentMethodRg.addView(rbBinding.root)
             position++
         }
+
     }
 
     private fun populateShippingMethods(shippingMethods: List<CheckoutDataClass.GetShippingMethodsResponse>?) {
