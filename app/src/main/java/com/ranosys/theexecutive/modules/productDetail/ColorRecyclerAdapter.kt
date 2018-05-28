@@ -40,7 +40,7 @@ class ColorRecyclerAdapter(var context : Context, var list : List<ProductViewFra
 
     override fun getItemCount(): Int {
         colorViewList?.run {
-            return size
+            return 1
         }
         return 0
     }
