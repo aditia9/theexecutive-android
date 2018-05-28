@@ -96,6 +96,8 @@ object Constants {
     const val KEY_REDIRECTION_TYPE = "type"
     const val KEY_REDIRECTION_VALUE = "typeId"
     const val KEY_IMAGE = "image_url"
+    const val KEY_TITLE = "title"
+    const val KEY_BODY = "body"
     const val KEY_REDIRECTION_TITLE = "redirect_title"
     const val KEY_NOTIFICATION_TITLE = "gcm.notification.title"
     const val KEY_NOTIFICATION_ALERT = "notification_alert"

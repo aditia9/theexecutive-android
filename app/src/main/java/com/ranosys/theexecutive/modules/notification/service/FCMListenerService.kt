@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.modules.splash.SplashActivity
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
@@ -50,19 +51,12 @@ class FCMListenerService : FirebaseMessagingService() {
             val dataMap = remoteMessage.data
             AppLog.e(dataMap.toString())
             redirectType = dataMap[Constants.KEY_REDIRECTION_TYPE] ?: ""
-            AppLog.e("redirectType " + redirectType)
             redirectValue = dataMap[Constants.KEY_REDIRECTION_VALUE] ?: ""
-            AppLog.e("redirectValue " + redirectValue)
             redirectTitle = dataMap[Constants.KEY_REDIRECTION_TITLE] ?: ""
-            AppLog.e("redirectTitle "+ redirectTitle)
             notificationImg = dataMap[Constants.KEY_IMAGE] ?: ""
-            AppLog.e("notificationImg "+ notificationImg)
-            title = dataMap["title"] ?: ""
-            AppLog.e("title " + title)
-            body = dataMap["body"] ?: ""
-            AppLog.e("bidy "+body)
+            title = dataMap[Constants.KEY_TITLE] ?: ""
+            body = dataMap[Constants.KEY_BODY] ?: ""
             notificationId = dataMap[Constants.KEY_NOTIFICATION_ID] ?: ""
-            AppLog.e("notificationId " + notificationId)
 
             Constants.notificationCounter++
 
@@ -78,8 +72,7 @@ class FCMListenerService : FirebaseMessagingService() {
         if(Utils.isAppIsInBackground(this)){
             intent = Intent(this, SplashActivity::class.java)
         }else{
-            //intent = Intent(this, DashBoardActivity::class.java)
-            intent = Intent(this, SplashActivity::class.java)
+            intent = Intent(this, DashBoardActivity::class.java)
         }
 
         intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
