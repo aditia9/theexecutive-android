@@ -1,7 +1,6 @@
 package com.ranosys.theexecutive.modules.notification.service
 
 import AppLog
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -18,6 +17,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.splash.SplashActivity
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.Utils
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -40,7 +40,7 @@ class FCMListenerService : FirebaseMessagingService() {
     private lateinit var notificationId: String
     private lateinit var notification: NotificationCompat.Builder
     private val notificationImageBaseUrl: String = "http://192.168.10.66/delami/pub/media/notification_image"
-    var vibrationArray = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+    private var vibrationArray = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
 
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -57,10 +57,10 @@ class FCMListenerService : FirebaseMessagingService() {
             AppLog.e("redirectTitle "+ redirectTitle)
             notificationImg = dataMap[Constants.KEY_IMAGE] ?: ""
             AppLog.e("notificationImg "+ notificationImg)
-            title = remoteMessage.notification?.title ?: ""
+            title = dataMap["title"] ?: ""
             AppLog.e("title " + title)
-            body = remoteMessage.notification?.body ?: ""
-            AppLog.e("message "+body)
+            body = dataMap["body"] ?: ""
+            AppLog.e("bidy "+body)
             notificationId = dataMap[Constants.KEY_NOTIFICATION_ID] ?: ""
             AppLog.e("notificationId " + notificationId)
 
@@ -74,8 +74,14 @@ class FCMListenerService : FirebaseMessagingService() {
 
 
     private fun createNotification(body: String, title: String) {
+        val intent : Intent
+        if(Utils.isAppIsInBackground(this)){
+            intent = Intent(this, SplashActivity::class.java)
+        }else{
+            //intent = Intent(this, DashBoardActivity::class.java)
+            intent = Intent(this, SplashActivity::class.java)
+        }
 
-        val intent = Intent(this, SplashActivity::class.java)
         intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
         intent.putExtra(Constants.KEY_REDIRECTION_TITLE, redirectTitle)
         intent.putExtra(Constants.KEY_REDIRECTION_VALUE, redirectValue)
@@ -84,8 +90,9 @@ class FCMListenerService : FirebaseMessagingService() {
         intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, body)
         intent.putExtra(Constants.KEY_IMAGE, notificationImg)
 
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         val pendingIntent = PendingIntent.getActivity(this, Calendar.getInstance().timeInMillis.toInt(), intent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.FLAG_ONE_SHOT)
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -99,7 +106,6 @@ class FCMListenerService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(notificationChannel)
 
             notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
-                    .setDefaults(Notification.FLAG_AUTO_CANCEL)
                     .setSmallIcon(getNotificationIcon())
                     .setVibrate(vibrationArray)
                     .setContentTitle(title)

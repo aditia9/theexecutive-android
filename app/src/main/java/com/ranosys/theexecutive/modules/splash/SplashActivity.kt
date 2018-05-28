@@ -73,11 +73,6 @@ class SplashActivity : BaseActivity() {
 
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        AppLog.e("onNewIntent")
-    }
-
     private fun dataFromNotification() {
         val extras = intent.extras
         if (extras != null) {

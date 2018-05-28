@@ -64,6 +64,7 @@
             android:layout_marginTop="@dimen/three_dp"
             android:textSize="@dimen/fourteen_sp"
             android:textColor="@color/hint_color"
+            android:text="@{notification.sent_date}"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
