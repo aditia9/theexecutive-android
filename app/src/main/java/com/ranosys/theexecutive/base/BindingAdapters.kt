@@ -124,15 +124,18 @@ class BindingAdapters {
         @BindingAdapter("bind:baseUrlWithProductImageUrl")
         fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
             val baseUrl = GlobalSingelton.instance?.configuration?.product_media_url
-            imageUrl?.run {
+            if(imageUrl.isNullOrEmpty().not()){
                 GlideApp.with(imageView.context)
                         .asBitmap()
                         .load(baseUrl+imageUrl)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .placeholder(R.drawable.placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
+                        .centerCrop()
                         .into(imageView)
+
             }
         }
     }
