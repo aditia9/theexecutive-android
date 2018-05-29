@@ -135,9 +135,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 }
 
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    Log.d("Position", "" + position)
-                    Log.d("value", "" + parent.toString())
-                    Log.d("value", "" + (view as AppCompatTextView).text)
+                    Log.d(context?.getString(R.string.app_name), "" + (view as AppCompatTextView).text)
                     orderItem?.request_reason = view.text.toString()
                 }
             }

@@ -90,7 +90,7 @@
             <Button
                 android:id="@+id/btn_return"
                 android:layout_width="wrap_content"
-                android:layout_height="28dp"
+                android:layout_height="@dimen/twenty_eight_dp"
                 android:layout_marginEnd="@dimen/twenty_dp"
                 android:background="@drawable/ghost_btn_bg"
                 android:text="@string/order_return"
