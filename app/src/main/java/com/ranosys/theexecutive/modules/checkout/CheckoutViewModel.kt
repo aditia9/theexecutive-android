@@ -28,6 +28,8 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
     val paymentMethodList: MutableLiveData<List<CheckoutDataClass.PaymentMethod>> = MutableLiveData()
     val totalAmounts: MutableLiveData<List<CheckoutDataClass.TotalSegment>> = MutableLiveData()
     var country: MutableLiveData<String> = MutableLiveData()
+    var totalSegmentVisible : Boolean = false
+
 
     fun getAddressApi() {
         AppRepository.getUserInfo(object: ApiCallback<MyAccountDataClass.UserInfoResponse> {

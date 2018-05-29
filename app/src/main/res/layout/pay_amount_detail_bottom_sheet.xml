@@ -7,10 +7,9 @@
     android:layout_width="match_parent"
     app:cardBackgroundColor="@color/white"
     android:layout_margin="@dimen/eight_dp"
-    android:visibility="gone"
     app:cardCornerRadius="@dimen/card_corner_radius"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-    app:cardElevation="@dimen/cardview_default_elevation">
+    app:cardElevation="@dimen/four_dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,12 +17,25 @@
         android:padding="@dimen/ten_dp">
 
         <ImageView
-            android:id="@+id/img_close_total_segment"
-            android:layout_width="@dimen/fourteen_dp"
-            android:layout_height="@dimen/fourteen_dp"
-            android:src="@drawable/dropdown"
+            android:id="@+id/img_total_segment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/eight_dp"
+            android:src="@drawable/forward"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_total_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/eighteen_sp"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/eight_dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_total_segment"
+            app:layout_constraintBottom_toTopOf="@+id/btn_pay"/>
 
         <LinearLayout
             android:id="@+id/ll_total_segment"
@@ -31,11 +43,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/eight_dp"
+            android:visibility="gone"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_close_total_segment"
+            app:layout_constraintTop_toBottomOf="@+id/img_total_segment"
             android:layout_marginBottom="@dimen/sixteen_dp">
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_pay"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/sixteen_dp"
+            android:theme="@style/button_theme"
+            android:background="@drawable/black_button_bg"
+            android:text="@string/confirm_order"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_total_segment" />
 
     </android.support.constraint.ConstraintLayout>
 

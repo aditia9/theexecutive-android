@@ -1,15 +1,18 @@
 package com.ranosys.theexecutive.modules.checkout
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
@@ -68,9 +71,12 @@ class CheckoutFragment : BaseFragment() {
             checkoutViewModel.shippingMethodList.value?.run {
                 if(cv_shipping_method.visibility == View.GONE && checkoutViewModel.shippingMethodList.value!!.isNotEmpty()){
                     cv_shipping_method.visibility = View.VISIBLE
+                    divider_shipping_method_below.visibility = View.GONE
                     cv_payment_method.visibility = View.GONE
+
                 }else if(cv_shipping_method.visibility == View.VISIBLE){
                     cv_shipping_method.visibility = View.GONE
+                    divider_shipping_method_below.visibility = View.VISIBLE
                 }
             }
 
@@ -82,8 +88,10 @@ class CheckoutFragment : BaseFragment() {
                 if(cv_payment_method.visibility == View.GONE && checkoutViewModel.selectedShippingMethod != null && checkoutViewModel.paymentMethodList.value!!.isNotEmpty()){
                     cv_payment_method.visibility = View.VISIBLE
                     cv_shipping_method.visibility = View.GONE
+                    divider_payment_method_below.visibility = View.GONE
                 }else if(cv_payment_method.visibility == View.VISIBLE || checkoutViewModel.selectedShippingMethod == null){
                     cv_payment_method.visibility = View.GONE
+                    divider_payment_method_below.visibility = View.VISIBLE
                 }
             }
 
@@ -94,9 +102,9 @@ class CheckoutFragment : BaseFragment() {
             FragmentUtils.addFragment(context, AddressBookFragment.getInstance(true, checkoutViewModel.selectedAddress), null, AddressBookFragment::class.java.name, true)
         }
 
-        btn_pay.setOnClickListener {
-            checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
-        }
+//        btn_pay.setOnClickListener {
+//            checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
+//        }
 
         checkoutBinding.shippingMethodRg.setOnCheckedChangeListener { buttonView, _ ->
             val position = buttonView.checkedRadioButtonId
@@ -112,21 +120,66 @@ class CheckoutFragment : BaseFragment() {
                 checkoutViewModel.selectedPaymentMethod = paymentMethod
             }
 
-        }
-
-        img_bottom_sheet.setOnClickListener {
-            if(total_segment_bottom_sheet.visibility == View.GONE){
-                total_segment_bottom_sheet.visibility = View.VISIBLE
+            if(checkoutViewModel.selectedPaymentMethod != null){
+                btn_pay.background = (activity as Context).getDrawable(R.drawable.green_button_bg)
+            }else{
+                btn_pay.background = (activity as Context).getDrawable(R.drawable.black_button_bg)
             }
 
         }
 
-        img_close_total_segment.setOnClickListener {
 
-            if(total_segment_bottom_sheet.visibility == View.VISIBLE){
-                total_segment_bottom_sheet.visibility = View.GONE
+        img_total_segment.setOnClickListener {
+            checkoutViewModel.totalSegmentVisible = checkoutViewModel.totalSegmentVisible.not()
+
+            if(checkoutViewModel.totalSegmentVisible){
+                ll_total_segment.visibility = View.VISIBLE
+                tv_total_amount.visibility = View.GONE
+                img_total_segment.setImageResource(R.drawable.dropdown)
+                BottomSheetBehavior.from(total_segment_bottom_sheet).state = BottomSheetBehavior.STATE_EXPANDED
+
+            }else{
+                ll_total_segment.visibility = View.GONE
+                tv_total_amount.visibility = View.VISIBLE
+                img_total_segment.setImageResource(R.drawable.forward)
             }
+
+            getViewHeight(total_segment_bottom_sheet)
+
         }
+    }
+
+    private fun getViewHeight(view : View): Int {
+        var height = 0
+        view.getViewTreeObserver().addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            @SuppressLint("NewApi")
+            override fun onGlobalLayout() {
+                //now we can retrieve the width and height
+                //val width = view.getWidth()
+                height = view.getHeight()
+
+                //your tasks
+                updateOffsetViewHeight(height)
+
+                //this is an important step not to keep receiving callbacks:
+                //we should remove this listener
+                //I use the function to remove it based on the api level!
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
+                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                else
+                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this)
+            }
+        })
+
+        return height
+    }
+
+    private fun updateOffsetViewHeight(height: Int) {
+        val params = checkoutBinding.offsetView.getLayoutParams()
+        params.height = height + 30
+        checkoutBinding.offsetView.layoutParams = params
+
     }
 
     override fun onResume() {
@@ -170,6 +223,7 @@ class CheckoutFragment : BaseFragment() {
             if(items != null && items.isNotEmpty()){
                 shoppingItemAdapter.itemList = items.toMutableList()
                 shoppingItemAdapter.notifyDataSetChanged()
+                checkoutBinding.cartItemSize = items.size
 
                 //call user info api and total api
                 callAddressApi()
@@ -203,6 +257,7 @@ class CheckoutFragment : BaseFragment() {
 
         //observe total segment
         checkoutViewModel.totalAmounts.observe(this, Observer { totalAmts ->
+            tv_total_amount.text = "IDR ${totalAmts?.single { it.code == "grand_total" }?.value}"
             updateTotalSegment(totalAmts)
         })
 
@@ -256,7 +311,6 @@ class CheckoutFragment : BaseFragment() {
         totalAmts?.run {
             for (totalSegment in totalAmts) {
                 if(totalSegment == totalAmts.last()){
-                    checkoutBinding.tvTotalAmount.text = "IDR ${totalSegment.value}"
                     addChildViewsToFooter(ll_total_segment, totalSegment, true)
                 }else{
                     addChildViewsToFooter(ll_total_segment, totalSegment)

@@ -6,6 +6,10 @@
         <import type="android.text.TextUtils"/>
 
         <variable
+            name="cartItemSize"
+            type="Integer"/>
+
+        <variable
             name="country"
             type="String"/>
 
@@ -14,357 +18,283 @@
             type="com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass.Address"/>
     </data>
 
-        <android.support.constraint.ConstraintLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white">
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none">
 
-            <ScrollView
-                android:id="@+id/scroll_view"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="@dimen/match_constraint"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl_inside_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/cl_inside_scroll_view"
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
+
+
+                <TextView
+                    android:id="@+id/tv_shipping"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:padding="@dimen/four_dp"
+                    android:text="@string/shipping_address"
+                    android:textSize="@dimen/eighteen_sp"
+                    android:visibility="@{address != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintRight_toRightOf="@id/guideline_right"
+                    app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/divider_address_above"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/half_dip"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:background="@color/divider_color"
+                    android:visibility="@{tvShipping.visibility}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_shipping"/>
+
+                <View
+                    android:id="@+id/divider_address_below"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/half_dip"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:background="@color/divider_color"
+                    android:visibility="@{tvShipping.visibility}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_mobile"/>
+
+                <View
+                    android:id="@+id/address_expand_view"
+                    android:layout_width="48dp"
+                    android:layout_height="@dimen/match_constraint"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider_address_above"
+                    app:layout_constraintBottom_toTopOf="@id/divider_address_below"
+                    />
+
+                <ImageView
+                    android:id="@+id/address_expand_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/forward"
+                    android:padding="@dimen/eight_dp"
+                    android:visibility="@{tvShipping.visibility}"
+                    app:layout_constraintTop_toTopOf="@id/address_expand_view"
+                    app:layout_constraintBottom_toBottomOf="@id/address_expand_view"
+                    app:layout_constraintEnd_toEndOf="@id/address_expand_view"
+                    app:layout_constraintStart_toStartOf="@id/address_expand_view"/>
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:text='@{address.firstname + " " +address.lastname}'
+                    android:hint="NIKhil BANsal"
+                    android:textSize="@dimen/eighteen_sp"
+                    android:textStyle="bold"
+                    android:visibility="@{TextUtils.isEmpty(address.firstname)? View.GONE : View.VISIBLE}"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toStartOf="@id/address_expand_view"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintTop_toBottomOf="@id/divider_address_above"/>
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:ellipsize="end"
+                    android:maxLines="5"
+                    android:visibility="@{TextUtils.isEmpty(address.firstname)? View.GONE : View.VISIBLE}"
+                    android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +"\n" + address.city + ", " + address.region.region + "," + country}'
+                    android:hint="dshskhfkshfkskshkshkshkshks\nshfkshkshkshkshkhskhks"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toStartOf="@id/address_expand_view"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+                <TextView
+                    android:id="@+id/tv_mobile"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:visibility="@{TextUtils.isEmpty(address.telephone)? View.GONE : View.VISIBLE}"
+                    android:text='@{" " + address.telephone}'
+                    android:hint="sdfjlskjlsjflslfslfjlsjfl"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toStartOf="@id/address_expand_view"
+                    app:layout_constraintTop_toBottomOf="@id/tv_address"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_items"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    android:text="@string/items"
+                    android:padding="@dimen/four_dp"
+                    android:visibility="@{cartItemSize != 0 ? View.VISIBLE: View.GONE}"
+                    android:textSize="@dimen/eighteen_sp"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintTop_toBottomOf="@+id/divider_address_below" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/cart_item_list"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    android:layout_marginBottom="@dimen/eight_dp"
+                    android:visibility="@{tvItems.visibility}"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/tv_items" />
+
+                <TextView
+                    android:id="@+id/tv_shipping_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:text="@string/shipping_method"
+                    android:textSize="@dimen/eighteen_sp"
+                    android:padding="@dimen/four_dp"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintTop_toBottomOf="@id/cart_item_list"/>
+
+                <ImageView
+                    android:id="@+id/shipping_method_expand_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/forward"
+                    app:layout_constraintTop_toTopOf="@id/tv_shipping_method"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_shipping_method"
+                    app:layout_constraintRight_toRightOf="@id/tv_shipping_method"
+                    android:padding="@dimen/eight_dp"/>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_shipping_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/two_dp"
+                    app:cardElevation="@dimen/six_dp"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/tv_shipping_method">
+
+                    <RadioGroup
+                        android:id="@+id/shipping_method_rg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </android.support.v7.widget.CardView>
+
+                <View
+                    android:id="@+id/divider_shipping_method_below"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/half_dip"
+                    android:background="@color/divider_color"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cv_shipping_method"/>
+
+                <TextView
+                    android:id="@+id/tv_payment_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/four_dp"
+                    android:text="@string/payment_method"
+                    android:textSize="@dimen/eighteen_sp"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintTop_toBottomOf="@id/divider_shipping_method_below"
+                    />
+
+                <ImageView
+                    android:id="@+id/payment_method_expand_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/forward"
+                    app:layout_constraintTop_toTopOf="@id/tv_payment_method"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_payment_method"
+                    app:layout_constraintRight_toRightOf="@id/tv_payment_method"
+                    android:padding="@dimen/eight_dp"/>
+
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_payment_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/two_dp"
+                    app:cardElevation="@dimen/six_dp"
+                    android:layout_marginTop="@dimen/twelve_dp"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintTop_toBottomOf="@id/tv_payment_method">
+
+                    <RadioGroup
+                        android:id="@+id/payment_method_rg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </android.support.v7.widget.CardView>
+
+                <View
+                    android:id="@+id/divider_payment_method_below"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/half_dip"
+                    android:background="@color/divider_color"
+                    android:layout_marginTop="@dimen/eight_dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cv_payment_method"/>
+
+                <View
+                    android:id="@+id/offset_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/divider_payment_method_below"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline_right"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v4.widget.NestedScrollView>
 
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline_left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
+        <include layout="@layout/pay_amount_detail_bottom_sheet" />
 
-                    <TextView
-                        android:id="@+id/tv_shipping"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/eight_dp"
-                        android:text="@string/shipping_address"
-                        android:textSize="@dimen/eighteen_sp"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:id="@+id/view_above"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="@dimen/one_dip"
-                        android:layout_marginTop="@dimen/sixteen_dp"
-                        android:background="@color/divider_color"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_shipping" />
-
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/address_container"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/eight_dp"
-                        android:paddingBottom="@dimen/eight_dp"
-                        android:visibility="@{TextUtils.isEmpty(address.firstname)? View.GONE : View.VISIBLE}"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintTop_toBottomOf="@id/view_above">
-
-                        <android.support.constraint.Guideline
-                            android:id="@+id/guideline_right_address"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/twenty_four_dp"
-                            android:orientation="vertical"
-                            app:layout_constraintGuide_end="@dimen/forty_eight_dp" />
-
-                        <TextView
-                            android:id="@+id/tv_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/eight_dp"
-                            android:text='@{address.firstname + " " +address.lastname}'
-                            android:textSize="@dimen/eighteen_sp"
-                            android:textStyle="bold"
-                            android:visibility="@{TextUtils.isEmpty(address.firstname)? View.GONE : View.VISIBLE}"
-                            app:layout_constraintEnd_toStartOf="@+id/guideline_right_address"
-                            app:layout_constraintHorizontal_bias="0"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tv_address"
-                            android:layout_width="@dimen/match_constraint"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/eight_dp"
-                            android:ellipsize="end"
-                            android:maxLines="5"
-                            android:visibility="@{TextUtils.isEmpty(address.firstname)? View.GONE : View.VISIBLE}"
-                            android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +"\n" + address.city + ", " + address.region.region + "," + country}'
-                            app:layout_constraintEnd_toStartOf="@+id/guideline_right_address"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
-
-                        <TextView
-                            android:id="@+id/tv_mobile"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginTop="@dimen/eight_dp"
-                            android:visibility="@{TextUtils.isEmpty(address.telephone)? View.GONE : View.VISIBLE}"
-                            android:text='@{" " + address.telephone}'
-                            app:layout_constraintEnd_toStartOf="@+id/guideline_right_address"
-                            app:layout_constraintHorizontal_bias="0"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_address" />
-
-                        <View
-                            android:id="@+id/address_expand_view"
-                            android:layout_width="@dimen/match_constraint"
-                            android:layout_height="@dimen/match_constraint"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintLeft_toRightOf="@id/guideline_right_address"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-
-                        <ImageView
-                            android:id="@+id/address_expand_img"
-                            android:layout_width="@dimen/fourteen_dp"
-                            android:layout_height="@dimen/fourteen_dp"
-                            android:src="@drawable/forward"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintHorizontal_bias="1.0"
-                            app:layout_constraintLeft_toRightOf="@id/guideline_right_address"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </android.support.constraint.ConstraintLayout>
-
-                    <View
-                        android:id="@+id/view_below"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="@dimen/one_dip"
-                        android:layout_marginTop="@dimen/sixteen_dp"
-                        android:background="@color/divider_color"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/address_container" />
-
-                    <TextView
-                        android:id="@+id/tv_items"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/eight_dp"
-                        android:text="@string/items"
-                        android:textSize="@dimen/eighteen_sp"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintTop_toBottomOf="@id/view_below" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/cart_item_list"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/eight_dp"
-                        android:layout_marginBottom="@dimen/eight_dp"
-                        android:orientation="horizontal"
-
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintTop_toBottomOf="@id/tv_items" />
-
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/shipping_method_container"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/twenty_dp"
-                        android:padding="@dimen/six_dp"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintTop_toBottomOf="@id/cart_item_list">
-
-
-                        <TextView
-                            android:id="@+id/tv_shipping_method"
-                            android:layout_width="@dimen/match_constraint"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
-                            android:text="@string/shipping_method"
-                            android:textSize="@dimen/eighteen_sp"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintHorizontal_bias="0"
-                            app:layout_constraintRight_toLeftOf="@+id/shipping_method_expand_img"/>
-
-
-                        <ImageView
-                            android:id="@+id/shipping_method_expand_img"
-                            android:layout_width="@dimen/fourteen_dp"
-                            android:layout_height="@dimen/fourteen_dp"
-                            android:src="@drawable/forward"
-                            app:layout_constraintTop_toTopOf="@id/tv_shipping_method"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_shipping_method"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintHorizontal_bias="1"
-                            app:layout_constraintLeft_toRightOf="@id/tv_shipping_method"/>
-
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/cv_shipping_method"
-                            android:layout_width="@dimen/match_constraint"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="12dp"
-                            android:layout_marginTop="@dimen/twelve_dp"
-                            android:padding="@dimen/six_dp"
-                            app:cardCornerRadius="@dimen/two_dp"
-                            app:cardElevation="@dimen/cardview_default_elevation"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_shipping_method">
-
-                            <RadioGroup
-                                android:id="@+id/shipping_method_rg"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                />
-
-                        </android.support.v7.widget.CardView>
-
-                        <View
-                            android:id="@+id/shipping_method_divider"
-                            android:layout_width="@dimen/match_constraint"
-                            android:layout_height="@dimen/one_dip"
-                            android:layout_marginTop="@dimen/sixteen_dp"
-                            android:background="@color/hint_color"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/shipping_method_container" />
-                    </android.support.constraint.ConstraintLayout>
-
-
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/payment_method_container"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/twenty_dp"
-                        android:padding="@dimen/six_dp"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintTop_toBottomOf="@id/shipping_method_container">
-
-                        <TextView
-                            android:id="@+id/tv_payment_method"
-                            android:layout_width="@dimen/match_constraint"
-                            android:layout_height="wrap_content"
-                            android:capitalize="words"
-                            android:text="@string/payment_method"
-                            android:textSize="@dimen/eighteen_sp"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintHorizontal_bias="0"
-                            app:layout_constraintRight_toLeftOf="@id/payment_method_expand_img"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/payment_method_expand_img"
-                            android:layout_width="@dimen/fourteen_dp"
-                            android:layout_height="@dimen/fourteen_dp"
-                            android:src="@drawable/forward"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_payment_method"
-                            app:layout_constraintLeft_toRightOf="@id/tv_payment_method"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/tv_payment_method" />
-
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/cv_payment_method"
-                            android:layout_width="@dimen/match_constraint"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/twelve_dp"
-                            android:padding="@dimen/six_dp"
-                            app:cardCornerRadius="@dimen/two_dp"
-                            app:cardElevation="@dimen/cardview_default_elevation"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_payment_method">
-
-                            <RadioGroup
-                                android:id="@+id/payment_method_rg"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                />
-
-                        </android.support.v7.widget.CardView>
-
-                        <View
-                            android:id="@+id/payment_method_divider"
-                            android:layout_width="@dimen/match_constraint"
-                            android:layout_height="@dimen/one_dip"
-                            android:layout_marginTop="@dimen/sixteen_dp"
-                            android:background="@color/hint_color"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/payment_method_container" />
-
-                    </android.support.constraint.ConstraintLayout>
-
-
-                    <ImageView
-                        android:id="@+id/img_bottom_sheet"
-                        android:layout_width="@dimen/fourteen_dp"
-                        android:layout_height="@dimen/fourteen_dp"
-                        android:layout_marginTop="@dimen/sixteen_dp"
-                        android:src="@drawable/dropdown"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintHorizontal_bias="1"
-                        app:layout_constraintTop_toBottomOf="@id/payment_method_container"/>
-
-                    <TextView
-                        android:id="@+id/tv_total_amount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/twelve_dp"
-                        android:textSize="@dimen/sixteen_sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintTop_toBottomOf="@id/img_bottom_sheet" />
-
-                    <Button
-                        android:id="@+id/btn_pay"
-                        android:layout_width="@dimen/match_constraint"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/thirty_dp"
-                        android:layout_marginTop="@dimen/sixteen_dp"
-                        android:theme="@style/button_theme"
-                        android:background="@drawable/black_button_bg"
-                        android:text="@string/confirm_order"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                        app:layout_constraintStart_toStartOf="@id/guideline_left"
-                        app:layout_constraintTop_toBottomOf="@id/tv_total_amount" />
-
-
-                </android.support.constraint.ConstraintLayout>
-
-
-            </ScrollView>
-
-
-        </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 </layout>
