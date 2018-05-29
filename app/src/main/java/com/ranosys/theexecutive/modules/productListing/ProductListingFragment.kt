@@ -434,7 +434,7 @@ class ProductListingFragment: BaseFragment() {
             //price range bar listeners
             filterOptionBinding.priceRangeBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Long>{
                 override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<Long>?, minValue: Long, maxValue: Long) {
-                    if(minValue <= maxValue || minValue == maxValue){
+                    if(minValue <= maxValue ){
                         filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(minValue.toString()))
                         filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(maxValue.toString()))
                     }
