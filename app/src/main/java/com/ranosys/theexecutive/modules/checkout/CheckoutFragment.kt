@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
@@ -73,10 +74,12 @@ class CheckoutFragment : BaseFragment() {
                     cv_shipping_method.visibility = View.VISIBLE
                     divider_shipping_method_below.visibility = View.GONE
                     cv_payment_method.visibility = View.GONE
+                    shipping_method_expand_img.setImageResource(R.drawable.dropdown)
 
                 }else if(cv_shipping_method.visibility == View.VISIBLE){
                     cv_shipping_method.visibility = View.GONE
                     divider_shipping_method_below.visibility = View.VISIBLE
+                    shipping_method_expand_img.setImageResource(R.drawable.forward)
                 }
             }
 
@@ -89,9 +92,11 @@ class CheckoutFragment : BaseFragment() {
                     cv_payment_method.visibility = View.VISIBLE
                     cv_shipping_method.visibility = View.GONE
                     divider_payment_method_below.visibility = View.GONE
+                    payment_method_expand_img.setImageResource(R.drawable.dropdown)
                 }else if(cv_payment_method.visibility == View.VISIBLE || checkoutViewModel.selectedShippingMethod == null){
                     cv_payment_method.visibility = View.GONE
                     divider_payment_method_below.visibility = View.VISIBLE
+                    payment_method_expand_img.setImageResource(R.drawable.forward)
                 }
             }
 
@@ -102,9 +107,10 @@ class CheckoutFragment : BaseFragment() {
             FragmentUtils.addFragment(context, AddressBookFragment.getInstance(true, checkoutViewModel.selectedAddress), null, AddressBookFragment::class.java.name, true)
         }
 
-//        btn_pay.setOnClickListener {
-//            checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
-//        }
+        btn_pay.setOnClickListener {
+            Toast.makeText(activity, "place order", Toast.LENGTH_SHORT).show()
+            //checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
+        }
 
         checkoutBinding.shippingMethodRg.setOnCheckedChangeListener { buttonView, _ ->
             val position = buttonView.checkedRadioButtonId
@@ -241,6 +247,7 @@ class CheckoutFragment : BaseFragment() {
                 Utils.showErrorDialog(activity as Context, (activity as Context).getString(R.string.empty_shipping_method_error))
             } else {
                 populateShippingMethods(shippingMethods)
+                checkoutBinding.shippingMethodCount = shippingMethods?.size
             }
 
         })
@@ -252,6 +259,7 @@ class CheckoutFragment : BaseFragment() {
             } else {
                 checkoutBinding.paymentMethodRg.clearCheck()
                 populatePaymentMethods(paymentMethodList)
+                checkoutBinding.paymentMethodCount = paymentMethodList?.size
             }
         })
 
@@ -264,9 +272,23 @@ class CheckoutFragment : BaseFragment() {
         //observe order id
         checkoutViewModel.orderId.observe(this, Observer { orderId ->
             val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
-                    ?: Constants.DEFAULT_STORE_CODE
-            createOrderUrl(orderId, storeCode, userToken)
+            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?: Constants.DEFAULT_STORE_CODE
+
+            when(checkoutViewModel.selectedPaymentMethod?.code){
+                "banktransfer" -> {
+                    Toast.makeText(activity, "Bank transfer", Toast.LENGTH_SHORT).show()
+                }
+
+                "cashondelivery" -> {
+                    Toast.makeText(activity, "Bank transfer", Toast.LENGTH_SHORT).show()
+                }
+
+                else ->{
+                    Toast.makeText(activity, "Bank transfer", Toast.LENGTH_SHORT).show()
+                    //createOrderUrl(orderId, storeCode, userToken)
+                }
+            }
+
         })
     }
 
