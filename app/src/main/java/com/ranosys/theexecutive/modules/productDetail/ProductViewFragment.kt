@@ -522,15 +522,16 @@ class ProductViewFragment : BaseFragment() {
 
         productItemViewModel.productDetailResponse?.observe(this, Observer<ApiResponse<ProductListingDataClass.Item>> { apiResponse ->
             val response = apiResponse?.apiResponse ?: apiResponse?.error
-            hideLoading()
             if (response is ProductListingDataClass.Item) {
                 relatedProductList?.add(response)
                 if(productLinksList?.size == relatedProductList?.size){
                     val fragment = ProductDetailFragment.getInstance(relatedProductList, relatedSku , relatedName, relatedPosition)
                     FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                    hideLoading()
                 }
             } else {
                 Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
+                hideLoading()
             }
         })
 
