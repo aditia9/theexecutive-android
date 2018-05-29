@@ -79,10 +79,11 @@ class ProductDetailFragment : BaseFragment() {
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 pagerPosition = position
-                setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+
             }
 
             override fun onPageSelected(position: Int) {
+                setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
             }
         })
 
