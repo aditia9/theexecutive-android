@@ -19,6 +19,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/twenty_dp"
         app:cardBackgroundColor="@color/address_item_bg_color">
 
 
@@ -43,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/sixteen_sp"
+                android:layout_margin="@dimen/five_dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_return_from"
@@ -104,10 +106,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/sixteen_sp"
+                android:layout_marginTop="@dimen/five_dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_return"
-                app:layout_constraintTop_toTopOf="parent" />
+                />
 
 
             <TextView
@@ -115,8 +118,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/five_dp"
-                android:maxLines="3"
-                android:text="lkkldfjskdf dfgjkfdhgjk jdfkghjkdf ghjkdghdfghjkdfgh "
+                android:maxLines="5"
                 android:textSize="@dimen/sixteen_sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_office_name" />
@@ -133,7 +135,7 @@
             android:text="@string/order_return"
             android:textColor="@color/white"
             android:layout_marginTop="@dimen/ten_dp"
-            android:layout_marginBottom="@dimen/twenty_dp"
+            android:layout_marginBottom="@dimen/forty_dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             />

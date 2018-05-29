@@ -13,6 +13,7 @@ import com.ranosys.theexecutive.databinding.OrderDetailAddressBinding
 import com.ranosys.theexecutive.databinding.OrderDetailItemListBinding
 import com.ranosys.theexecutive.databinding.OrderDetailPriceBinding
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Class An data class for Order detail adapter
@@ -118,6 +119,10 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             }else{
                 itemBinding?.layoutColorSize?.visibility = View.GONE
             }
+
+            if(item?.items!![position - 1].original_price != 0){
+                itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item.items[position - 1].original_price.toString(), item.items[position - 1].original_price.toString())
+            }
         }
     }
 
@@ -142,7 +147,12 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
 
             itemBinding?.tvUserName?.text = item?.billing_address?.firstname + " " + item?.billing_address?.lastname
             itemBinding?.tvUserEmailId?.text = item?.billing_address?.email
-            itemBinding?.tvOrderDate?.text = item?.items!![0].created_at
+
+            if(item?.items!![0].created_at.isNotBlank()){
+                itemBinding?.tvOrderDate?.text = Utils.getDateFormat(item.items[0].created_at)
+            }
+
+
             val size = item.billing_address.street.size
             var street = ""
 

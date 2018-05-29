@@ -30,6 +30,7 @@ class OrderReturnFragment : BaseFragment() {
 
     private var orderId: String = ""
     private lateinit var orderReturnViewModel: OrderReturnViewModel
+    private var isReturnable = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,6 +46,7 @@ class OrderReturnFragment : BaseFragment() {
 
         getOrderDetail(orderId)
         observeEvents()
+        showLoading()
 
         return viewBinder?.root
     }
@@ -90,13 +92,20 @@ class OrderReturnFragment : BaseFragment() {
         rv_order_return_list.layoutManager = linearLayoutManager
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
         rv_order_return_list.addItemDecoration(itemDecor)
+        tv_order_id.text = getString(R.string.order_no) +" " +orderId
 
         val orderReturnAdapter = OrderReturnAdapter(activity as Context, orderReturnViewModel.orderDetailObservable?.get(), { id: Int ->
 
             when (id) {
                 R.id.btn_return -> {
-                    showLoading()
-                    orderReturnViewModel.returnProduct(getOrderReturnRequest())
+                    isReturnable = false
+                    getOrderReturnRequest()
+                    if (isReturnable){
+                        showLoading()
+                        orderReturnViewModel.returnProduct(getOrderReturnRequest())
+                    }else{
+                        Toast.makeText(activity, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         })
@@ -115,6 +124,7 @@ class OrderReturnFragment : BaseFragment() {
             if (orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.request_return!!) {
                 item = Item(orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.item_id!!, orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.request_reason!!, orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.request_qty!!)
                 mutableItemList.add(i, item)
+                isReturnable = true
             }
             i++
         }

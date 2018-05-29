@@ -31,7 +31,7 @@
             android:id="@+id/tv_product_name"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginStart="@dimen/fifteen_dp"
             android:layout_marginTop="@dimen/ten_dp"
             android:ellipsize="end"
             android:fontFamily="@font/dax_medium"
@@ -47,7 +47,7 @@
             android:id="@+id/tv_product_sku"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginStart="@dimen/fifteen_dp"
             android:layout_marginTop="@dimen/five_dp"
             android:ellipsize="end"
             android:maxLines="1"
@@ -62,7 +62,7 @@
             android:id="@+id/layout_color_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/twenty_dp"
+            android:layout_marginStart="@dimen/fifteen_dp"
             android:layout_marginTop="@dimen/twenty_dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toEndOf="@id/img_product"
@@ -73,22 +73,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="@dimen/fourteen_sp" />
+                android:textSize="@dimen/twelve_sp" />
 
             <View
                 android:id="@+id/view_vertical"
                 android:layout_width="@dimen/one_dp"
                 android:layout_height="@dimen/twenty_dp"
-                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/ten_dp"
                 android:background="@color/divider_color" />
 
             <TextView
                 android:id="@+id/tv_product_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/ten_dp"
                 android:textColor="@color/black"
-                android:textSize="@dimen/fourteen_sp" />
+                android:textSize="@dimen/twelve_sp" />
 
         </LinearLayout>
 
@@ -99,9 +99,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/ten_dp"
             android:layout_marginStart="@dimen/twenty_dp"
-            android:text='@{""+item.original_price}'
             android:textColor="@color/red"
-            android:textSize="@dimen/sixteen_sp"
+            android:textSize="@dimen/fourteen_sp"
             android:layout_marginTop="@dimen/five_dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_product_sku"
             app:layout_constraintBottom_toBottomOf="@+id/img_product"

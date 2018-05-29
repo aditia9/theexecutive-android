@@ -55,6 +55,7 @@ class OrderListFragment : BaseFragment() {
         linearLayoutManager = LinearLayoutManager(activity as Context)
         rv_order_list.layoutManager = linearLayoutManager
 
+        showLoading()
         observeEvents()
     }
 

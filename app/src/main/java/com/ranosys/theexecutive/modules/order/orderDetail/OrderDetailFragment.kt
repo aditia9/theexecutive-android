@@ -41,6 +41,7 @@ class OrderDetailFragment : BaseFragment() {
         }
 
         getOrderDetail(orderId)
+        showLoading()
         observeEvents()
         return viewBinder?.root
     }

@@ -17,6 +17,7 @@ import com.ranosys.theexecutive.databinding.ReturnItemBinding
 import com.ranosys.theexecutive.modules.order.orderDetail.Item
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.Utils
 
 
 const val ORDER_ITEM = 0
@@ -112,7 +113,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                     }
                 }
             } else {
-                itemBinding?.layoutColorSize?.visibility = View.INVISIBLE
+                itemBinding?.layoutColorSize?.visibility = View.GONE
             }
 
             itemBinding?.imgIncrement?.setOnClickListener {
@@ -123,6 +124,10 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 }
             }
 
+
+            if(item?.items?.get(position)?.original_price != 0){
+                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item?.items?.get(position)?.original_price.toString(), item?.items?.get(position)?.original_price.toString())
+            }
 
             itemBinding?.spReason?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -167,17 +172,24 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
             if (size != null) {
                 if (size == 1) {
                     street = item.billing_address.street[0]
+                } else if (size > 1) {
+                    street = item.billing_address.street[0] + ", "+ item.billing_address.street[1]
                 }
-                if (size > 1) {
-                    street = item.billing_address.street[0] + item.billing_address.street[1]
-                }
-            }
-            val address = street + " " + item?.billing_address?.postcode + ", " + item?.billing_address?.country_id
-            itemBinding?.tvUserAddress?.text = address
+                val address = street + ", " + item.billing_address.city + ", " + item.billing_address.postcode + ", " + item.billing_address.country_id
+                itemBinding?.tvUserAddress?.text = address
 
 
-            itemBinding?.btnReturn?.setOnClickListener { view ->
-                action(view.id)
+                if(!TextUtils.isEmpty(item.extension_attributes.returnto_address.returnto_name)){
+                    itemBinding?.tvOfficeName?.text = item.extension_attributes.returnto_address.returnto_name
+                }
+
+                if(!TextUtils.isEmpty(item.extension_attributes.returnto_address.returnto_address)){
+                    itemBinding?.tvOfficeAddress?.text = item.extension_attributes.returnto_address.returnto_address + ", " + item.extension_attributes.returnto_address.returnto_contact
+                }
+
+                itemBinding?.btnReturn?.setOnClickListener { view ->
+                    action(view.id)
+                }
             }
         }
     }

@@ -40,6 +40,8 @@ import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.zopim.android.sdk.api.ZopimChat
 import com.zopim.android.sdk.model.VisitorInfo
 import java.text.NumberFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
@@ -370,4 +372,12 @@ object Utils {
             SpannableStringBuilder(normalP)
         }
     }
+
+    fun getDateFormat(strDate : String): String {
+        var format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val newDate = format.parse(strDate)
+        format = SimpleDateFormat("dd-MM-yyyy")
+        return format.format(newDate)
+    }
+
 }
