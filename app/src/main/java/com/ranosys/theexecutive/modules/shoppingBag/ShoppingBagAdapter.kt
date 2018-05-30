@@ -22,6 +22,7 @@ import com.ranosys.theexecutive.utils.Utils
 
 const val TYPE_FOOTER = 0
 const val TYPE_ITEM = 1
+var isOutOfProductInCart : Boolean =  false
 
 class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: List<ShoppingBagResponse>?, promoCode: String, grandTotal: Int, private val action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -35,6 +36,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
         mContext = context
         mPromoCode = promoCode
         mGrandTotal = grandTotal
+        isOutOfProductInCart = false
     }
 
     interface OnItemClickListener {
@@ -115,8 +117,11 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                 item?.extension_attributes?.stock_item?.run {
                     if (is_in_stock) {
                         itemBinding?.tvOutOfStock?.visibility = View.GONE
+                        itemBinding?.imgProductBlur?.visibility = View.GONE
                     } else {
                         itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
+                        itemBinding?.imgProductBlur?.visibility = View.VISIBLE
+                        isOutOfProductInCart = true
                     }
                 }
 
@@ -181,7 +186,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder is Holder) {
-            holder.bind(mContext, getItem(position), position, action)
+            holder.bind(mContext, getItem(position), position,  action)
         } else if (holder is ShoppingBagFooterHolder) {
             holder.bind(mContext, null, position, action, mPromoCode, mGrandTotal)
         }
@@ -218,6 +223,15 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
             itemBinding?.imvDeletePromoCode?.setOnClickListener { view ->
                 action(view.id, position, item, null, itemBinding!!.etPromoCode.text.toString())
             }
+
+            itemBinding?.btnCheckout?.setOnClickListener{view ->
+                if(isOutOfProductInCart){
+                    Toast.makeText(context, context?.getText(R.string.cart_out_of_stock), Toast.LENGTH_SHORT).show()
+                }else{
+
+                }
+            }
+
         }
     }
 }
