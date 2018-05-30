@@ -63,7 +63,6 @@ class CategoryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
 
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
@@ -77,19 +76,19 @@ class CategoryFragment : BaseFragment() {
         pagerAdapter.setItemClickListener(listener = object: CustomViewPageAdapter.OnItemClickListener{
             override fun onItemClick(item: PromotionsResponseDataClass?) {
                 when(item?.type){
-                    Constants.PROMOTION_TYPE_CATEGORY -> {
+                    Constants.TYPE_CATEGORY -> {
                         val bundle = Bundle()
                         bundle.putInt(Constants.CATEGORY_ID, item.value.toInt())
                         bundle.putString(Constants.CATEGORY_NAME, item.title)
                         FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                     }
 
-                    Constants.PROMOTION_TYPE_PRODUCT -> {
+                    Constants.TYPE_PRODUCT -> {
                         val fragment = ProductDetailFragment.getInstance(null, item.value, item.title, 0)
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
 
-                    Constants.PROMOTION_TYPE_CMS_PAGE -> {
+                    Constants.TYPE_CMS_PAGE -> {
                         if(item.value.isNotBlank()){
                             prepareWebPageDialog(activity as Context, item.value ,item.title)
                         }

@@ -25,7 +25,9 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 
 /**
- * Created by Mohammad Sunny on 19/3/18.
+ * @Details A fragment for home
+ * @Author Ranosys Technologies
+ * @Date 19,Mar,2018
  */
 class HomeFragment : BaseFragment() {
 
@@ -37,6 +39,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
         setPagerAdapter()
 
         //initialize Zendesk chat setup
@@ -99,7 +102,7 @@ class HomeFragment : BaseFragment() {
             }
         })
 
-        viewpager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {

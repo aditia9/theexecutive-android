@@ -11,6 +11,8 @@ import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
+import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
@@ -811,7 +813,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.MyAccount>(ApiService.MyAccount::class.java)?.getUserInfo(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.MyAccountService>(ApiService.MyAccountService::class.java)?.getUserInfo(ApiConstants.BEARER + userToken, storeCode)
 
         callGet?.enqueue(object : Callback<MyAccountDataClass.UserInfoResponse> {
             override fun onResponse(call: Call<MyAccountDataClass.UserInfoResponse>?, response: Response<MyAccountDataClass.UserInfoResponse>?) {
@@ -833,7 +835,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPut = retrofit?.create<ApiService.MyAccount>(ApiService.MyAccount::class.java)?.updateUserInfo(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPut = retrofit?.create<ApiService.MyAccountService>(ApiService.MyAccountService::class.java)?.updateUserInfo(ApiConstants.BEARER + userToken, storeCode, request)
 
         callPut?.enqueue(object : Callback<MyAccountDataClass.UserInfoResponse> {
             override fun onResponse(call: Call<MyAccountDataClass.UserInfoResponse>?, response: Response<MyAccountDataClass.UserInfoResponse>?) {
@@ -1348,4 +1350,48 @@ object AppRepository {
             }
         })
     }
+
+    fun getNotificationList(callBack: ApiCallback<List<NotificationListResponse>>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.getNotificationList(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<List<NotificationListResponse>> {
+            override fun onResponse(call: Call<List<NotificationListResponse>>?, response: Response<List<NotificationListResponse>>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<NotificationListResponse>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun changeNotificationStatus(request: NotificationChangeStatusRequest, callBack: ApiCallback<Boolean>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.changeNotificationStatus(ApiConstants.BEARER + userToken,  storeCode, request)
+
+        callGet?.enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
 }

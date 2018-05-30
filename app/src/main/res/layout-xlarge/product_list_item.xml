@@ -25,7 +25,6 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="@dimen/four_hundred_dp"
-            android:scaleType="fitXY"
             bind:baseUrlWithProductImageUrl="@{productItem.imageUrl}"
             android:layout_marginTop="@dimen/four_dp"
             android:adjustViewBounds="true"

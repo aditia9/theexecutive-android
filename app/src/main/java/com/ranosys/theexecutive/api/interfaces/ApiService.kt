@@ -11,6 +11,8 @@ import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
+import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
@@ -357,7 +359,7 @@ interface ApiService {
 
     }
 
-    interface MyAccount {
+    interface MyAccountService {
         @GET("rest/{store_code}/V1/customers/me")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
@@ -390,6 +392,22 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
+
+    }
+
+    interface NotificationService {
+
+        @GET("rest/{store_code}/V1/notification/mine/list")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getNotificationList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<List<NotificationListResponse>>
+
+        @POST("rest/{store_code}/V1/notification/changestatus")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun changeNotificationStatus(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: NotificationChangeStatusRequest): Call<Boolean>
 
     }
 

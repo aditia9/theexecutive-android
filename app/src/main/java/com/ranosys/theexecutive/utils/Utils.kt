@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.utils
 import AppLog
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -23,6 +24,7 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StrikethroughSpan
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Patterns
 import android.util.TypedValue
 import android.view.View
 import android.view.Window
@@ -60,16 +62,20 @@ object Utils {
             return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         }
 
-    fun isValidEmail(email: String?): Boolean {
+    /*fun isValidEmail(email: String?): Boolean {
         // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
         val p = Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
         val m = p.matcher(email)
         return m.matches()
+    }*/
+
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     fun isValidPassword(password: String): Boolean {
 
-        val p = Pattern.compile("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#\$%^&+=])(?=\\S+\$).{8,}\$")
+        val p = Pattern.compile("^(?=.*[0-9])(?=.*[a-zA-Z])(?=\\S+\$).{8,}\$")
         val m = p.matcher(password)
         return m.matches()
     }
@@ -227,8 +233,14 @@ object Utils {
         imageView?.layoutParams?.height = height - removeHeight
     }
 
-    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double){
-        val width = getDeviceWidth(context)
+    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double, widthMargin: Int = 0, column: Int = 1){
+        val width = (getDeviceWidth(context) - convertDpIntoPx(context, widthMargin.toFloat())) / column
+        val height = width.times(times)
+        imageView.layoutParams?.height = height.toInt()
+    }
+
+    fun setImageViewHeightWrtWidth(context: Context, imageView: ImageView, times: Double){
+        val width = imageView.width
         val height = width.times(times)
         imageView.layoutParams?.height = height.toInt()
     }
@@ -334,7 +346,6 @@ object Utils {
         ZopimChat.init(Constants.ZENDESK_CHAT)
     }
 
-
     fun getCountryName(id: String): String{
         return GlobalSingelton.instance?.storeList?.single { it.code.toString() == id }.let { it?.name } ?: ""
 
@@ -370,4 +381,33 @@ object Utils {
             SpannableStringBuilder(normalP)
         }
     }
+
+    /**
+     * Method checks if the app is in background or not
+     */
+    fun isAppIsInBackground(context : Context) : Boolean{
+        var isInBackground = true;
+        val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            val runningProcesses = am.getRunningAppProcesses()
+            for (processInfo in runningProcesses) {
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (activeProcess in processInfo.pkgList) {
+                        if (activeProcess.equals(context.getPackageName())) {
+                            isInBackground = false;
+                        }
+                    }
+                }
+            }
+        } else {
+            val taskInfo = am.getRunningTasks(1);
+            val componentInfo = taskInfo.get(0).topActivity;
+            if (componentInfo.getPackageName().equals(context.getPackageName())) {
+                isInBackground = false;
+            }
+        }
+
+        return isInBackground;
+    }
+
 }

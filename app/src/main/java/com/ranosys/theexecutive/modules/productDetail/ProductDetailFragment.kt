@@ -16,7 +16,6 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentProductDetailBinding
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
-import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_product_detail.*
@@ -70,7 +69,7 @@ class ProductDetailFragment : BaseFragment() {
             pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get(), position)
             product_viewpager.adapter = pagerAdapter
             product_viewpager.adapter?.notifyDataSetChanged()
-            product_viewpager.offscreenPageLimit = 5
+            product_viewpager.offscreenPageLimit = 2
             product_viewpager.currentItem = position!!
         }
 
@@ -105,6 +104,7 @@ class ProductDetailFragment : BaseFragment() {
     private fun observeEvents() {
         productDetailViewModel.productDetailResponse?.observe(this, Observer<ApiResponse<ProductListingDataClass.Item>> { apiResponse ->
             val response = apiResponse?.apiResponse ?: apiResponse?.error
+            hideLoading()
             if (response is ProductListingDataClass.Item) {
                 productList = mutableListOf()
                 productList?.add(response)
@@ -112,11 +112,11 @@ class ProductDetailFragment : BaseFragment() {
                 setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
                 pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get(), position)
                 product_viewpager.adapter = pagerAdapter
-                product_viewpager.offscreenPageLimit = 3
+                product_viewpager.offscreenPageLimit = 2
                 product_viewpager.adapter?.notifyDataSetChanged()
-                hideLoading()
+
             } else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
             }
         })
 
