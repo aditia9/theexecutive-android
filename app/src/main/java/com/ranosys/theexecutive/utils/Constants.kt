@@ -89,5 +89,7 @@ object Constants {
     const val LAST_NAME: String = "last_name"
     const val PRODUCT_SKU: String = "productSku"
     const val OPTIONS: String = "options"
+    val PAYMENT_METHOD_BANK_TRANSFER_KEY: String = "banktransfer"
+    val PAYMENT_METHOD_COD_KEY: String = "cashondelivery"
 
 }

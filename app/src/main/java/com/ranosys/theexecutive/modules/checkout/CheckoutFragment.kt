@@ -28,6 +28,12 @@ import kotlinx.android.synthetic.main.pay_amount_detail_bottom_sheet.*
 import kotlinx.android.synthetic.main.total_segment_item.view.*
 
 
+/**
+ * @Details screen for checkout
+ * @Author Ranosys Technologies
+ * @Date 10-May-2018
+ */
+
 class CheckoutFragment : BaseFragment() {
 
     private lateinit var checkoutViewModel: CheckoutViewModel
@@ -42,7 +48,7 @@ class CheckoutFragment : BaseFragment() {
 
 
         observeApiResponse()
-        observeCommanError()
+        observeCommonError()
 
         initiateCheckoutProcess()
 
@@ -151,18 +157,17 @@ class CheckoutFragment : BaseFragment() {
             }
 
             getViewHeight(total_segment_bottom_sheet)
-
         }
     }
 
     private fun getViewHeight(view : View): Int {
         var height = 0
-        view.getViewTreeObserver().addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+        view.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             @SuppressLint("NewApi")
             override fun onGlobalLayout() {
                 //now we can retrieve the width and height
                 //val width = view.getWidth()
-                height = view.getHeight()
+                height = view.height
 
                 //your tasks
                 updateOffsetViewHeight(height)
@@ -171,10 +176,7 @@ class CheckoutFragment : BaseFragment() {
                 //we should remove this listener
                 //I use the function to remove it based on the api level!
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
-                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this)
-                else
-                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this)
+                view.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
 
@@ -182,7 +184,7 @@ class CheckoutFragment : BaseFragment() {
     }
 
     private fun updateOffsetViewHeight(height: Int) {
-        val params = checkoutBinding.offsetView.getLayoutParams()
+        val params = checkoutBinding.offsetView.layoutParams
         params.height = height + 30
         checkoutBinding.offsetView.layoutParams = params
 
@@ -203,7 +205,7 @@ class CheckoutFragment : BaseFragment() {
     }
 
 
-    private fun observeCommanError() {
+    private fun observeCommonError() {
         checkoutViewModel.commanError.observe(this, Observer { error ->
             handleError(error)
         })
@@ -265,7 +267,13 @@ class CheckoutFragment : BaseFragment() {
 
         //observe total segment
         checkoutViewModel.totalAmounts.observe(this, Observer { totalAmts ->
-            tv_total_amount.text = "IDR ${totalAmts?.single { it.code == "grand_total" }?.value}"
+            val amount = totalAmts?.single { it.code == "grand_total" }?.value
+
+            if(amount.isNullOrEmpty().not()){
+                tv_total_amount.text = "IDR ${amount}"
+            }else{
+                tv_total_amount.text = ""
+            }
             updateTotalSegment(totalAmts)
         })
 
@@ -275,16 +283,16 @@ class CheckoutFragment : BaseFragment() {
             val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?: Constants.DEFAULT_STORE_CODE
 
             when(checkoutViewModel.selectedPaymentMethod?.code){
-                "banktransfer" -> {
+                Constants.PAYMENT_METHOD_BANK_TRANSFER_KEY -> {
                     Toast.makeText(activity, "Bank transfer", Toast.LENGTH_SHORT).show()
                 }
 
-                "cashondelivery" -> {
-                    Toast.makeText(activity, "Bank transfer", Toast.LENGTH_SHORT).show()
+                Constants.PAYMENT_METHOD_COD_KEY -> {
+                    Toast.makeText(activity, "cod", Toast.LENGTH_SHORT).show()
                 }
 
                 else ->{
-                    Toast.makeText(activity, "Bank transfer", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "other method", Toast.LENGTH_SHORT).show()
                     //createOrderUrl(orderId, storeCode, userToken)
                 }
             }
@@ -294,28 +302,23 @@ class CheckoutFragment : BaseFragment() {
 
     private fun populatePaymentMethods(paymentMethodList: List<CheckoutDataClass.PaymentMethod>?) {
 
-        var position = 0
-
         checkoutBinding.paymentMethodRg.removeAllViews()
-        for(method in paymentMethodList?.toMutableList()!!) {
+        for((position, method) in paymentMethodList?.toMutableList()!!.withIndex()) {
             val rbBinding: PaymentMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.payment_method_item, checkoutBinding.paymentMethodRg, false)
             rbBinding.paymentMethod = method
             rbBinding.rbPaymentMethod.id = position
             rbBinding.rbPaymentMethod.isChecked = false
             checkoutBinding.paymentMethodRg.addView(rbBinding.root)
-            position++
         }
 
     }
 
     private fun populateShippingMethods(shippingMethods: List<CheckoutDataClass.GetShippingMethodsResponse>?) {
-        var position = 0
-        for(method in shippingMethods?.toMutableList()!!) {
+        for((position, method) in shippingMethods?.toMutableList()!!.withIndex()) {
             val rbBinding: ShippingMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.shipping_method_item, checkoutBinding.shippingMethodRg, false)
             rbBinding.shippingMethod = method
             rbBinding.rbShippingMethod.id = position
             checkoutBinding.shippingMethodRg.addView(rbBinding.root)
-            position++
         }
     }
 

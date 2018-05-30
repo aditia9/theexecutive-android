@@ -213,31 +213,6 @@ interface ApiService {
 
     interface CartService {
 
-        @GET("rest/{store_code}/V1/carts/mine/totals?fields=total_segments")
-        @Headers(ApiConstants.CONTENT_TYPE,
-                ApiConstants.X_REQUESTED_WITH,
-                ApiConstants.CACHE_CONTROL)
-        fun getTotalAmounts(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<CheckoutDataClass.Totals>
-
-        @POST("rest/{store_code}/V1/carts/mine/payment-information")
-        @Headers(ApiConstants.CONTENT_TYPE,
-                ApiConstants.X_REQUESTED_WITH,
-                ApiConstants.CACHE_CONTROL)
-        fun placeOrder(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.PlaceOrderRequest): Call<String>
-
-        @POST("rest/{store_code}/V1/carts/mine/estimate-shipping-methods-by-address-id")
-        @Headers(ApiConstants.CONTENT_TYPE,
-                ApiConstants.X_REQUESTED_WITH,
-                ApiConstants.CACHE_CONTROL)
-        fun getShippingMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetShippingMethodsRequest): Call<List<CheckoutDataClass.GetShippingMethodsResponse>>
-
-        @POST("rest/{store_code}/V1/carts/mine/shipping-information?fields=payment_methods,totals[total_segments]")
-        @Headers(ApiConstants.CONTENT_TYPE,
-                ApiConstants.X_REQUESTED_WITH,
-                ApiConstants.CACHE_CONTROL)
-        fun getPaymentMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetPaymentMethodsRequest): Call<CheckoutDataClass.PaymentMethodResponse>
-
-
         @POST("rest/{store_code}/V1/guest-carts")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
@@ -415,6 +390,35 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
+
+    }
+
+    interface CheckoutService {
+
+        @GET("rest/{store_code}/V1/carts/mine/totals?fields=total_segments")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getTotalAmounts(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<CheckoutDataClass.Totals>
+
+        @POST("rest/{store_code}/V1/carts/mine/payment-information")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun placeOrder(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.PlaceOrderRequest): Call<String>
+
+        @POST("rest/{store_code}/V1/carts/mine/estimate-shipping-methods-by-address-id")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getShippingMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetShippingMethodsRequest): Call<List<CheckoutDataClass.GetShippingMethodsResponse>>
+
+        @POST("rest/{store_code}/V1/carts/mine/shipping-information?fields=payment_methods,totals[total_segments]")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getPaymentMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetPaymentMethodsRequest): Call<CheckoutDataClass.PaymentMethodResponse>
+
 
     }
 
