@@ -113,7 +113,7 @@
             android:background="@drawable/promo_cancel"
             android:contentDescription="@string/app_name"
             android:padding="@dimen/ten_dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_margin="@dimen/ten_dp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_applied_promo_code"
             app:layout_constraintStart_toEndOf="@id/tv_applied_promo_code"
