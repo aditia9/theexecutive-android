@@ -202,7 +202,12 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                 }
             }
 
-            itemBinding?.btnCheckout?.setOnClickListener {
+            itemBinding?.btnCheckout?.setOnClickListener { view->
+                if(isOutOfProductInCart){
+                    Toast.makeText(context, context?.getText(R.string.cart_out_of_stock), Toast.LENGTH_SHORT).show()
+                }else{
+                    action(view.id, position, item, null, itemBinding!!.etPromoCode.text.toString())
+                }
             }
 
             if (mGrandTotal != 0) {
@@ -224,13 +229,6 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                 action(view.id, position, item, null, itemBinding!!.etPromoCode.text.toString())
             }
 
-            itemBinding?.btnCheckout?.setOnClickListener{view ->
-                if(isOutOfProductInCart){
-                    Toast.makeText(context, context?.getText(R.string.cart_out_of_stock), Toast.LENGTH_SHORT).show()
-                }else{
-
-                }
-            }
 
         }
     }
