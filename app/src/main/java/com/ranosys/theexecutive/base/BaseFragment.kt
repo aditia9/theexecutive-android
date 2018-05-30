@@ -160,6 +160,10 @@ abstract class BaseFragment : LifecycleFragment() {
                 hideLoading()
                 super.onPageFinished(view, url)
             }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                return super.shouldOverrideUrlLoading(view, request)
+            }
         }
 
         webPagesDialog.webview.loadUrl(url)

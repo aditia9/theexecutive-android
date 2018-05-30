@@ -206,7 +206,7 @@ class CheckoutFragment : BaseFragment() {
 
 
     private fun observeCommonError() {
-        checkoutViewModel.commanError.observe(this, Observer { error ->
+        checkoutViewModel.commonError.observe(this, Observer { error ->
             handleError(error)
         })
     }
@@ -267,12 +267,12 @@ class CheckoutFragment : BaseFragment() {
 
         //observe total segment
         checkoutViewModel.totalAmounts.observe(this, Observer { totalAmts ->
-            val amount = totalAmts?.single { it.code == "grand_total" }?.value
+            val amount = totalAmts?.single { it.code == Constants.GRAND_TOTAL_KEY }?.value
 
             if(amount.isNullOrEmpty().not()){
-                tv_total_amount.text = "IDR ${amount}"
+                tv_total_amount.text = "${Constants.IDR} ${amount}"
             }else{
-                tv_total_amount.text = ""
+                tv_total_amount.text = "${Constants.IDR} ${amount}"
             }
             updateTotalSegment(totalAmts)
         })
@@ -354,7 +354,7 @@ class CheckoutFragment : BaseFragment() {
 
         val convertView = LayoutInflater.from(activity).inflate(R.layout.total_segment_item, null)
         convertView.item_name.text = totalSegment.title
-        convertView.item_value.text = "IDR ${totalSegment.value}"
+        convertView.item_value.text = "${Constants.IDR} ${totalSegment.value}"
 
         if(isLastItem){
             convertView.item_name.setTypeface(null, Typeface.BOLD)

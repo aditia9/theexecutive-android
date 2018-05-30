@@ -1,5 +1,7 @@
 package com.ranosys.theexecutive.modules.checkout
 
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+
 /**
  * @Details
  * @Author Ranosys Technologies
@@ -7,6 +9,25 @@ package com.ranosys.theexecutive.modules.checkout
  */
 class CheckoutDataClass {
 
+
+
+    data class UserInfoNselectedShippingResponse(
+            val customer: MyAccountDataClass.UserInfoResponse,
+            val extension_attributes: ExtensionAttributes
+    )
+
+    data class ExtensionAttributes(
+            val shipping_assignments: List<ShippingAssignment>
+    )
+
+    data class ShippingAssignment(
+            val shipping: Shipping
+    )
+
+    data class Shipping(
+            val address: MyAccountDataClass.Address,
+            val method: String
+    )
 
     data class GetShippingMethodsRequest(val addressId: String)
 

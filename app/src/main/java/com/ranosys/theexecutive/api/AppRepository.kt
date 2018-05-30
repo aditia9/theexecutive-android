@@ -1326,4 +1326,26 @@ object AppRepository {
             }
         })
     }
+
+    fun getUserInfoNSelectedShipping(callBack: ApiCallback<CheckoutDataClass.UserInfoNselectedShippingResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getUserInfoNSelectedShipping(ApiConstants.BEARER + userToken, storeCode)
+
+        callGet?.enqueue(object : Callback<CheckoutDataClass.UserInfoNselectedShippingResponse> {
+            override fun onResponse(call: Call<CheckoutDataClass.UserInfoNselectedShippingResponse>?, response: Response<CheckoutDataClass.UserInfoNselectedShippingResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.UserInfoNselectedShippingResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
 }
