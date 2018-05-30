@@ -26,5 +26,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
+
+        <TextView
+            android:id="@+id/tv_promo_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/five_dp"
+            android:background="@color/black_tran"
+            android:gravity="center"
+            android:padding="@dimen/twenty_dp"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:visibility="gone"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/main_container" />
+
+
     </android.support.constraint.ConstraintLayout>
 </layout>

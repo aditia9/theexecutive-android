@@ -21,6 +21,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.ApiClient
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
@@ -64,7 +65,7 @@ class ProductListingFragment: BaseFragment() {
             categoryId = data.get(Constants.CATEGORY_ID) as Int? ?: 0
             categoryName = data.get(Constants.CATEGORY_NAME) as String? ?: ""
         }
-
+        (activity as DashBoardActivity).showPromotionMsg()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
