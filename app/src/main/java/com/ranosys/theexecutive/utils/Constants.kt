@@ -4,6 +4,7 @@ package com.ranosys.theexecutive.utils
  * Created by Mohammad Sunny on 22/2/18.
  */
 object Constants {
+    const val API_URL = "http://magento.theexecutive.co.id/"
     const val ACCESS_TOKEN_KEY = "access_token"
     const val USER_ACCESS_TOKEN_KEY = "user_access_token"
     const val USER_CART_ID_KEY = "user_cart_id_key"

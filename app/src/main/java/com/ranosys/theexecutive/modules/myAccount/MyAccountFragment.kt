@@ -22,6 +22,7 @@ import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
 import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
 import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -148,17 +149,9 @@ class MyAccountFragment : BaseFragment() {
             private fun openWebPage(context: Context, url: String, title: String) {
                 val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
                 fragment?.run {
-                    (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/", title)
+                    (fragment as BaseFragment).prepareWebPageDialog(context, Constants.API_URL, title)
                 }
             }
-        }
-
-        private fun openWebPage(context: Context, url: String, title: String) {
-            val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
-            fragment?.run {
-                (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/", title)
-            }
-
         }
     }
 }
