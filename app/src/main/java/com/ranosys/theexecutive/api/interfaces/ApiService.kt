@@ -361,7 +361,6 @@ interface ApiService {
 
     }
 
-    interface MyAccountService {
     interface MyOrdersService {
         @GET("rest/{store_code}/V1/orders/mine")
         @Headers(ApiConstants.CONTENT_TYPE,
@@ -384,7 +383,7 @@ interface ApiService {
 
     }
 
-    interface MyAccount {
+    interface MyAccountService {
         @GET("rest/{store_code}/V1/customers/me")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,

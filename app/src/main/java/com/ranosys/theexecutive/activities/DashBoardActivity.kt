@@ -90,15 +90,11 @@ class DashBoardActivity : BaseActivity() {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.notifications), 0, "", R.drawable.back, true, 0, false)
                             fragment.getNotification()
                         }
-                        if(fragment is ProductListingFragment){
-                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true ) }
-                        if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         (fragment as? ProductDetailFragment)?.onResume()
                         (fragment as? AddressBookFragment)?.onResume()
                         (fragment as? ShoppingBagFragment)?.onResume()
-
                     }
+
                 }
             }
         })

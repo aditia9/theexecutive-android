@@ -148,11 +148,20 @@ class MyAccountFragment : BaseFragment() {
             private fun openWebPage(context: Context, url: String, title: String) {
                 val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
                 fragment?.run {
-                    (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/" , title)
+                    (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/", title)
                 }
-
             }
         }
+
+        private fun openWebPage(context: Context, url: String, title: String) {
+            val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
+            fragment?.run {
+                (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/", title)
+            }
+
+        }
+    }
+}
 
 class MyAccountFooterHolder(val item: View, context: Context) : RecyclerView.ViewHolder(item) {
     init {
