@@ -70,5 +70,6 @@
     <dimen name="four_hundred_dp">400dp</dimen>
     <dimen name="eighteen_dp">18dp</dimen>
     <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="notification_image_size">250dp</dimen>
 
 </resources>

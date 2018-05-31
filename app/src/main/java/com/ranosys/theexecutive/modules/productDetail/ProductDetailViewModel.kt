@@ -24,11 +24,13 @@ class ProductDetailViewModel(application: Application): BaseViewModel(applicatio
         val apiResponse = ApiResponse<ProductListingDataClass.Item>()
         AppRepository.getProductDetail(productSku, object : ApiCallback<ProductListingDataClass.Item> {
             override fun onException(error: Throwable) {
-                productDetailResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                productDetailResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                productDetailResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                productDetailResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: ProductListingDataClass.Item?) {

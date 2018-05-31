@@ -237,7 +237,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
 
         requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
-        val page = (productList.value?.size)?.div(10)?.plus(1) ?: 1
+        val page = (productList.value?.size)?.div(Constants.LIST_PAGE_ITEM_COUNT)?.plus(1) ?: 1
         requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString())
 
         return requestMap
