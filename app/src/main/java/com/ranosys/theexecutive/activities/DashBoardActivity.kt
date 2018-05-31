@@ -91,6 +91,7 @@ class DashBoardActivity : BaseActivity() {
                         (fragment as? AddressBookFragment)?.onResume()
                         (fragment as? ShoppingBagFragment)?.onResume()
                         (fragment as? CheckoutFragment)?.onResume()
+
                     }
                 }
             }

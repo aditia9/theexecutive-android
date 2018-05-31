@@ -8,6 +8,7 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.webkit.*
 import android.widget.RelativeLayout
@@ -159,10 +160,23 @@ abstract class BaseFragment : LifecycleFragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 hideLoading()
                 super.onPageFinished(view, url)
+                Log.d("PAYMENT URL - ", url )
+
+                if ((url!!.contains("BASE URL") && url.contains("SUCCESS URL")) || url.contains("BASE URL") && url.contains("SUCCESS REIEW URL")) {
+                    //popupAllFragments()
+                    //go to success fragment
+
+
+                } else if (url.contains("BASE URL") && url.contains("FAILURE URL")) {
+
+                }
+
+
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                return super.shouldOverrideUrlLoading(view, request)
+                view?.loadUrl(request!!.url.toString())
+                return true
             }
         }
 

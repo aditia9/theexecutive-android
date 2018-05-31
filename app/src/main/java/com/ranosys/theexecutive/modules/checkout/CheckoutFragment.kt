@@ -114,15 +114,18 @@ class CheckoutFragment : BaseFragment() {
         }
 
         btn_pay.setOnClickListener {
-            Toast.makeText(activity, "place order", Toast.LENGTH_SHORT).show()
-            //checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
+            checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
         }
 
         checkoutBinding.shippingMethodRg.setOnCheckedChangeListener { buttonView, _ ->
             val position = buttonView.checkedRadioButtonId
-            val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position)
-            checkoutViewModel.selectedShippingMethod = shippingMethod
-            checkoutViewModel.getPaymentMethods(shippingMethod!!)
+
+            if(position != -1){
+                val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position)
+                checkoutViewModel.selectedShippingMethod = shippingMethod
+                checkoutViewModel.getPaymentMethods(shippingMethod!!)
+            }
+
         }
 
         checkoutBinding.paymentMethodRg.setOnCheckedChangeListener { buttonView, _ ->
@@ -218,6 +221,13 @@ class CheckoutFragment : BaseFragment() {
 
             //call shipping method api according to updated address
             checkoutViewModel.getShippingMethodsApi(address?.id!!)
+            if(checkoutBinding.cvShippingMethod.visibility == View.VISIBLE){
+                checkoutBinding.cvShippingMethod.visibility = View.GONE
+                divider_shipping_method_below.visibility = View.VISIBLE
+                shipping_method_expand_img.setImageResource(R.drawable.forward)
+
+            }
+
 
         })
 
@@ -248,6 +258,7 @@ class CheckoutFragment : BaseFragment() {
             if (shippingMethods?.size ?: 0 <= 0) {
                 Utils.showErrorDialog(activity as Context, (activity as Context).getString(R.string.empty_shipping_method_error))
             } else {
+                checkoutBinding.shippingMethodRg.clearCheck()
                 populateShippingMethods(shippingMethods)
                 checkoutBinding.shippingMethodCount = shippingMethods?.size
             }
@@ -285,15 +296,19 @@ class CheckoutFragment : BaseFragment() {
             when(checkoutViewModel.selectedPaymentMethod?.code){
                 Constants.PAYMENT_METHOD_BANK_TRANSFER_KEY -> {
                     Toast.makeText(activity, "Bank transfer", Toast.LENGTH_SHORT).show()
+                    val orderResultFragment = OrderResultFragment.getInstance(orderId!!, "success")
+                    FragmentUtils.replaceFragment(activity as Context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
                 }
 
                 Constants.PAYMENT_METHOD_COD_KEY -> {
                     Toast.makeText(activity, "cod", Toast.LENGTH_SHORT).show()
+                    val orderResultFragment = OrderResultFragment.getInstance(orderId!!, "success")
+                    FragmentUtils.replaceFragment(activity as Context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
                 }
 
                 else ->{
                     Toast.makeText(activity, "other method", Toast.LENGTH_SHORT).show()
-                    //createOrderUrl(orderId, storeCode, userToken)
+                    createOrderUrl(orderId, storeCode, userToken)
                 }
             }
 
@@ -307,13 +322,16 @@ class CheckoutFragment : BaseFragment() {
             val rbBinding: PaymentMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.payment_method_item, checkoutBinding.paymentMethodRg, false)
             rbBinding.paymentMethod = method
             rbBinding.rbPaymentMethod.id = position
-            rbBinding.rbPaymentMethod.isChecked = false
+            //rbBinding.rbPaymentMethod.isChecked = false
             checkoutBinding.paymentMethodRg.addView(rbBinding.root)
         }
 
     }
 
     private fun populateShippingMethods(shippingMethods: List<CheckoutDataClass.GetShippingMethodsResponse>?) {
+        checkoutBinding.shippingMethodRg.removeAllViews()
+        checkoutBinding.paymentMethodRg.removeAllViews()
+
         for((position, method) in shippingMethods?.toMutableList()!!.withIndex()) {
             val rbBinding: ShippingMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.shipping_method_item, checkoutBinding.shippingMethodRg, false)
             rbBinding.shippingMethod = method
