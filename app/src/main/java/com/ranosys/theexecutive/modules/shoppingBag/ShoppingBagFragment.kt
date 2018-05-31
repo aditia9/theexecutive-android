@@ -263,7 +263,7 @@ class ShoppingBagFragment : BaseFragment() {
 
                     R.id.btn_checkout -> {
                         if (userToken.isNullOrBlank().not()) {
-                            TODO( "next module checkout")
+                            TODO( "for next module checkout")
                         } else {
                             FragmentUtils.addFragment(context, LoginFragment(), null, LoginFragment::class.java.name, true)
                         }

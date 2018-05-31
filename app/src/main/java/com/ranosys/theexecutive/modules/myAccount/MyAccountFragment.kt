@@ -21,6 +21,8 @@ import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
 import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
 import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
+import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -131,6 +133,11 @@ class MyAccountFragment : BaseFragment() {
                             openWebPage(context, url, context.getString(R.string.contact_us))
                         }
 
+
+                        context.getString(R.string.my_orders) -> {
+                            FragmentUtils.addFragment(context, OrderListFragment(),null, OrderListFragment::class.java.name, true )
+                        }
+
                         context.getString(R.string.notifications) -> {
                             FragmentUtils.addFragment(context, NotificationFragment(),null, NotificationFragment::class.java.name, true )
                         }
@@ -142,10 +149,8 @@ class MyAccountFragment : BaseFragment() {
             private fun openWebPage(context: Context, url: String, title: String) {
                 val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
                 fragment?.run {
-                    (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/" , title)
+                    (fragment as BaseFragment).prepareWebPageDialog(context, Constants.API_URL, title)
                 }
-
-
             }
         }
     }

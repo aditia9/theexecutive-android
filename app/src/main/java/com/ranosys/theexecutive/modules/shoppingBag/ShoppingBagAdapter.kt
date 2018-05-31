@@ -30,7 +30,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
     private var mPromoCode: String
     private var mGrandTotal: Int = 0
 
-    private var clickListener: ShoppingBagAdapter.OnItemClickListener? = null
+    private var clickListener: OnItemClickListener? = null
 
     init {
         mContext = context
@@ -228,8 +228,6 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
             itemBinding?.imvDeletePromoCode?.setOnClickListener { view ->
                 action(view.id, position, item, null, itemBinding!!.etPromoCode.text.toString())
             }
-
-
         }
     }
 }

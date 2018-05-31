@@ -264,6 +264,13 @@
         <item>Settings</item>
     </string-array>
 
+
+    <string-array name="reason_array">
+        <item>Bad Quality</item>
+        <item>Bad Quality 2</item>
+        <item>Bad Quality 3</item>
+    </string-array>
+
     <integer-array name="my_account_option_icon_array">
         <item>@drawable/info</item>
         <item>@drawable/order</item>

@@ -24,7 +24,10 @@
     <color name="transparent_bottom_sheet_color">#CCFFFFFF</color>
     <color name="address_item_bg_color">#f8f6f7</color>
     <color name="light_green">#0d9344</color>
+
+    <color name="red">#FF2842</color>
     <color name="blur_image_color">#CCFFFFFF</color>
+
 
     <color name="notification_green">#6ec778</color>
     <color name="notification_gry">#a1a1a1</color>
