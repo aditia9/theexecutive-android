@@ -261,6 +261,14 @@ class ShoppingBagFragment : BaseFragment() {
                         deleteCouponCode()
                     }
 
+                    R.id.btn_checkout -> {
+                        if (userToken.isNullOrBlank().not()) {
+                            TODO( "next module checkout")
+                        } else {
+                            FragmentUtils.addFragment(context, LoginFragment(), null, LoginFragment::class.java.name, true)
+                        }
+                    }
+
                 }
             })
             rv_shopping_bag_list.adapter = shoppingBagAdapter
