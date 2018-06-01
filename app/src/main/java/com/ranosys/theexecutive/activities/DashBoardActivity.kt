@@ -22,7 +22,6 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
@@ -111,14 +110,22 @@ class DashBoardActivity : BaseActivity() {
 
     }
 
-     fun showPromotionMsg() {
-         tv_promo_msg.visibility = View.VISIBLE
-         tv_promo_msg.text = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message
-        handler.postDelayed({
-            kotlin.run {
-                tv_promo_msg.visibility = View.GONE
+    fun showPromotionMsg(promoMsg: String? = "", url: String? = "", action: () -> Unit) {
+        if(promoMsg.isNullOrEmpty().not()){
+            tv_promo_msg.visibility = View.VISIBLE
+            tv_promo_msg.text = promoMsg
+
+            handler.postDelayed({
+                kotlin.run {
+                    tv_promo_msg.visibility = View.GONE
+                }
+            }, Constants.PROMOTION_TOAST_TIMEOUT)
+
+            tv_promo_msg.setOnClickListener {
+                action()
             }
-        }, Constants.SPLASH_TIMEOUT)
+        }
+
     }
 
 
