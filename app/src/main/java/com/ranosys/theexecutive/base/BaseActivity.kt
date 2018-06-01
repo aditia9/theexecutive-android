@@ -3,11 +3,13 @@ package com.ranosys.theexecutive.base
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.WindowManager
+import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.rtp.RunTimePermissionActivity
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
@@ -29,6 +31,7 @@ open class BaseActivity: RunTimePermissionActivity(){
 
     var toolbarViewModel: ToolbarViewModel? = null
     private lateinit var baseViewModel: BaseViewModel
+    private lateinit var mediaPicker: MediaHelperActivity
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,6 +117,15 @@ open class BaseActivity: RunTimePermissionActivity(){
         toolbarViewModel?.isRightIconVisible?.set(isVisible)
     }
 
+
+    fun initMediaPicker() : MediaHelperActivity{
+         mediaPicker = MediaHelperActivity(this)
+        return mediaPicker
+    }
+
+
+
+
     private fun changeStatusBarColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
@@ -127,4 +139,8 @@ open class BaseActivity: RunTimePermissionActivity(){
         supportActionBar?.hide()
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mediaPicker.onCallbackResult(requestCode, resultCode, data)
+    }
 }

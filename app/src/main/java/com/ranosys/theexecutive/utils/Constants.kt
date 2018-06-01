@@ -110,5 +110,7 @@ object Constants {
     const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
     const val USER_FCM_ID = "fcm_id"
     val IMAGE_RATIO: Double = 1.44
+    const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
+    const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
 
 }

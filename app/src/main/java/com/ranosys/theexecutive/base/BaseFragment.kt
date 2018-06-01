@@ -12,6 +12,7 @@ import android.view.Gravity
 import android.webkit.*
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
@@ -110,6 +111,11 @@ abstract class BaseFragment : LifecycleFragment() {
 
     fun getPermission(permissionList: List<String>, isPermissionGrantedInterface: IsPermissionGrantedInterface) {
         (activity as BaseActivity).getPermission(permissionList, isPermissionGrantedInterface)
+    }
+
+
+    fun initMediaPicker() : MediaHelperActivity{
+        return (activity as BaseActivity).initMediaPicker()
     }
 
     private fun observeLeftIconClick() {

@@ -259,6 +259,7 @@
         <item>Subscribe to Newsletter</item>
         <item>Select Language</item>
         <item>Change Password</item>
+        <item>Bank Transfer</item>
         <item>Buying Guide</item>
         <item>Contact Us</item>
         <item>Settings</item>
@@ -272,8 +273,23 @@
         <item>@drawable/newsletter</item>
         <item>@drawable/language</item>
         <item>@drawable/change_password</item>
+        <item>@drawable/bank_transfer</item>
         <item>@drawable/buying_guide</item>
         <item>@drawable/contact</item>
         <item>@drawable/setting</item>
     </integer-array>
+
+
+    <string-array name="transfer_method_array">
+        <item>ATM</item>
+        <item>Internet Banking</item>
+        <item>Mobile Banking</item>
+        <item>Setor Tunai</item>
+    </string-array>
+
+
+    <string-array name="bank_recipient_array">
+        <item>BCA</item>
+    </string-array>
+
 </resources>
