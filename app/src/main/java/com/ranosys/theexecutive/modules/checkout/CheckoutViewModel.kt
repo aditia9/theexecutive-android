@@ -29,10 +29,11 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
     val totalAmounts: MutableLiveData<List<CheckoutDataClass.TotalSegment>> = MutableLiveData()
     var country: MutableLiveData<String> = MutableLiveData()
     var totalSegmentVisible : Boolean = false
+    var oldShippingMethodCode : String = ""
 
 
     fun getAddressApi() {
-        AppRepository.getUserInfo(object: ApiCallback<MyAccountDataClass.UserInfoResponse> {
+        AppRepository.getUserInfoNSelectedShipping(object: ApiCallback<CheckoutDataClass.UserInfoNselectedShippingResponse> {
             override fun onException(error: Throwable) {
                 AppLog.e("My Information API : ${error.message}")
                 commonError.value = "user info: ${error.message}"
@@ -44,20 +45,41 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
                 commonError.value = "user info: $errorMsg"
             }
 
-            override fun onSuccess(t: MyAccountDataClass.UserInfoResponse?) {
+            override fun onSuccess(t: CheckoutDataClass.UserInfoNselectedShippingResponse?) {
                 //update info saved at singleton
-                GlobalSingelton.instance?.userInfo = t
-                selectedAddress.value = Utils.getDefaultAddress()
-                country.value = selectedAddress.value?.country_id?.let { Utils.getCountryName(it) }
-
-                //analyseSelectedShippingMethod(t)
+                GlobalSingelton.instance?.userInfo = t?.customer
+                //selectedAddress.value = Utils.getDefaultAddress()
+                analyseSelectedShippingMethod(t)
             }
         })
     }
 
-//    private fun analyseSelectedShippingMethod(t: CheckoutDataClass.UserInfoNselectedShippingResponse?) {
-//        t?.extension_attributes!!.shipping_assignments[0].shipping.method
-//    }
+    private fun analyseSelectedShippingMethod(t: CheckoutDataClass.UserInfoNselectedShippingResponse?) {
+        var previousShippingMethod = ""
+        var previousAddressId = ""
+        if(t?.extension_attributes!!.shipping_assignments.isNotEmpty()){
+            previousShippingMethod = t.extension_attributes.shipping_assignments[0].shipping.method ?: ""
+            previousAddressId = t.extension_attributes.shipping_assignments[0].shipping.address.customer_address_id ?: ""
+        }
+
+        if(previousShippingMethod.isEmpty()){
+            selectedAddress.value = Utils.getDefaultAddress()
+            country.value = selectedAddress.value?.country_id?.let { Utils.getCountryName(it) }
+            oldShippingMethodCode = ""
+
+        }else{
+            if(previousAddressId.isEmpty().not()){
+                selectedAddress.value = Utils.getAddressFromId(previousAddressId)
+                country.value = selectedAddress.value?.country_id?.let { Utils.getCountryName(it) }
+                oldShippingMethodCode = previousShippingMethod ?: ""
+            }else{
+                selectedAddress.value = Utils.getDefaultAddress()
+                country.value = selectedAddress.value?.country_id?.let { Utils.getCountryName(it) }
+                oldShippingMethodCode = ""
+            }
+
+        }
+    }
 
 
     fun getCartItemsApi() {
@@ -130,7 +152,8 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
                 region_id = selectedAddress.region_id!!,
                 region_code = selectedAddress.region?.region_code!!,
                 region = selectedAddress.region.region,
-                street = selectedAddress.street!!
+                street = selectedAddress.street!!,
+                customer_address_id = selectedAddress.id
         )
 
         val addressInformation = CheckoutDataClass.AddressInformation(

@@ -42,7 +42,6 @@ import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.zopim.android.sdk.api.ZopimChat
 import com.zopim.android.sdk.model.VisitorInfo
 import java.text.NumberFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -333,7 +332,7 @@ object Utils {
             val name = SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME) + " " + SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME)
             val visitorInfo = VisitorInfo.Builder()
                     .email(email)
-                   // .name(name)
+                    // .name(name)
                     .build()
 
             // visitor info can be set at any point when that information becomes available
@@ -365,6 +364,12 @@ object Utils {
         }else{
             return null
         }
+
+    }
+
+    fun getAddressFromId(addId: String): MyAccountDataClass.Address?{
+        val info = GlobalSingelton.instance?.userInfo
+        return info?.addresses?.single { it.id == addId }
 
     }
 

@@ -10,11 +10,10 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentOrderResultBinding
-import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
-import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_order_result.*
 
 /**
@@ -40,6 +39,9 @@ class OrderResultFragment: BaseFragment(){
         orderResultViewModel.orderId.set(orderId)
         orderResultViewModel.status.set(status)
         orderResultViewModel.getOrderDetails()
+
+        //update user cart count
+        Utils.updateCartCount( 0)
 
         return mBinding.root
     }

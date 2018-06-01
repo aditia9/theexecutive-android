@@ -25,8 +25,26 @@ class CheckoutDataClass {
     )
 
     data class Shipping(
-            val address: MyAccountDataClass.Address,
-            val method: String
+            val address: CheckoutDataClass.Address,
+            val method: String? = ""
+    )
+
+    data class Address(
+            var id: String? = "",
+            var customer_id: String? = "",
+            val region: String?,
+            val region_id: String?,
+            val country_id: String?,
+            val street: List<String?>?,
+            var telephone: String?,
+            val postcode: String?,
+            val city: String?,
+            val prefix: String? = "",
+            val firstname: String? = "",
+            val lastname: String? = "",
+            val customer_address_id: String? = "",
+            var default_shipping: Boolean? = null,
+            var default_billing: Boolean? = null
     )
 
     data class GetShippingMethodsRequest(val addressId: String)
@@ -69,7 +87,9 @@ class CheckoutDataClass {
             val city: String,
             val firstname: String,
             val lastname: String,
-            val telephone: String
+            val telephone: String,
+            val customer_address_id: String?
+
     )
 
 

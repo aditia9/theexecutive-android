@@ -47,6 +47,6 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
         statusMsg.set(statusStr)
         infoMsg.set(infoStr)
         btnAction.set(btnStr)
-
     }
+
 }

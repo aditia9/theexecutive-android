@@ -8,14 +8,13 @@ import android.databinding.DataBindingUtil
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.RadioButton
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
@@ -23,7 +22,6 @@ import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
 import com.ranosys.theexecutive.databinding.PaymentMethodItemBinding
 import com.ranosys.theexecutive.databinding.ShippingMethodItemBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
-import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_checkout.*
 import kotlinx.android.synthetic.main.pay_amount_detail_bottom_sheet.*
@@ -128,9 +126,12 @@ class CheckoutFragment : BaseFragment() {
             val position = buttonView.checkedRadioButtonId
 
             if(position != -1){
-                val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position)
-                checkoutViewModel.selectedShippingMethod = shippingMethod
-                checkoutViewModel.getPaymentMethods(shippingMethod!!)
+                if(position < checkoutViewModel.shippingMethodList.value!!.size){
+                    val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position) ?: null
+                    checkoutViewModel.selectedShippingMethod = shippingMethod
+                    checkoutViewModel.getPaymentMethods(shippingMethod!!)
+                }
+
             }
 
         }
@@ -138,8 +139,11 @@ class CheckoutFragment : BaseFragment() {
         checkoutBinding.paymentMethodRg.setOnCheckedChangeListener { buttonView, _ ->
             val position = buttonView.checkedRadioButtonId
             if (position != -1) {
-                val paymentMethod = checkoutViewModel.paymentMethodList.value?.get(position)
-                checkoutViewModel.selectedPaymentMethod = paymentMethod
+                if(position < checkoutViewModel.paymentMethodList.value!!.size){
+                    val paymentMethod = checkoutViewModel.paymentMethodList.value?.get(position)
+                    checkoutViewModel.selectedPaymentMethod = paymentMethod
+                }
+
             }
 
             if(checkoutViewModel.selectedPaymentMethod != null){
@@ -278,6 +282,7 @@ class CheckoutFragment : BaseFragment() {
                 checkoutBinding.shippingMethodRg.clearCheck()
                 populateShippingMethods(shippingMethods)
                 checkoutBinding.shippingMethodCount = shippingMethods?.size
+
             }
 
         })
@@ -307,6 +312,7 @@ class CheckoutFragment : BaseFragment() {
 
         //observe order id
         checkoutViewModel.orderId.observe(this, Observer { orderId ->
+            hideLoading()
             redirectToOrderResultScreen(orderId!!)
         })
     }
@@ -329,7 +335,6 @@ class CheckoutFragment : BaseFragment() {
             }
 
             else -> {
-                popUpAllFragments()
                 createOrderUrl(orderId, storeCode, userToken)
             }
         }
@@ -359,8 +364,20 @@ class CheckoutFragment : BaseFragment() {
             val rbBinding: ShippingMethodItemBinding = DataBindingUtil.inflate(layoutInflater, R.layout.shipping_method_item, checkoutBinding.shippingMethodRg, false)
             rbBinding.shippingMethod = method
             rbBinding.rbShippingMethod.id = position
+            //check old shipping method
+            if(checkoutViewModel.oldShippingMethodCode == "${method.carrier_code}_${method.method_code}"){
+                rbBinding.rbShippingMethod.isChecked = true
+            }
             checkoutBinding.shippingMethodRg.addView(rbBinding.root)
         }
+
+        if(checkoutViewModel.oldShippingMethodCode.isEmpty()){
+            (checkoutBinding.shippingMethodRg.getChildAt(0)as RadioButton).isChecked = true
+        }
+
+        //reset old shipping method
+        checkoutViewModel.oldShippingMethodCode = ""
+
     }
 
     private fun callAddressApi() {
@@ -388,7 +405,7 @@ class CheckoutFragment : BaseFragment() {
 
     private fun createOrderUrl(orderId: String?, storeCode: String, userToken: String?) {
         val url = "${BuildConfig.API_URL}apppayment/?___store=$storeCode&orderid=$orderId&token=$userToken"
-        prepareWebPageDialog(activity as Context, url, "ORDER")
+        prepareWebPageDialog(activity as Context, url, "", orderId!!)
     }
 
     private fun addChildViewsToFooter(footerContainer: LinearLayout, totalSegment: CheckoutDataClass.TotalSegment, isLastItem: Boolean = false) {

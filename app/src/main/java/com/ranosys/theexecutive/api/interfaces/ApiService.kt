@@ -2,7 +2,6 @@ package com.ranosys.theexecutive.api.interfaces
 
 import com.google.gson.JsonObject
 import com.ranosys.theexecutive.api.ApiConstants
-import com.ranosys.theexecutive.modules.order.orderList.OrderListResponse
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
@@ -12,10 +11,11 @@ import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
-import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
-import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
+import com.ranosys.theexecutive.modules.order.orderList.OrderListResponse
+import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnRequest
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
