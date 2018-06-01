@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.modules.checkout
 import android.app.Application
 import android.databinding.ObservableField
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.utils.Constants
 
 /**
  * @Details
@@ -27,17 +28,17 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
         var infoStr = ""
 
         when(status.get()){
-            "success" -> {
+            Constants.SUCCESS -> {
                 statusStr = "order placed successfully"
                 btnStr = "view order"
                 infoStr = "Thank you for order. You will receive a confirmation email with detail of ypur order and link to track theYour oder has been placed successfully. Your oder has been placed successfully."
             }
-            "cancelled" -> {
+            Constants.CANCEL -> {
                 statusStr = "order cancled"
                 btnStr = "continue shopping"
                 infoStr = "Your order has been cancelled"
             }
-            "failure" -> {
+            Constants.FAILURE -> {
                 statusStr = "order failed"
                 btnStr = "continue shopping"
                 infoStr = "Your order has been failed"

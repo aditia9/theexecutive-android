@@ -15,6 +15,7 @@ import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlideApp
 import com.ranosys.theexecutive.utils.GlobalSingelton
 
@@ -119,15 +120,15 @@ class BindingAdapters {
 
             var imageName = ""
             when(status){
-                "success" -> {
+                Constants.SUCCESS -> {
                     imageName = "order_success"
 
                 }
-                "cancelled" -> {
+                Constants.CANCEL -> {
                     imageName = "order_cancel"
 
                 }
-                "failure" -> {
+                Constants.FAILURE -> {
                     imageName = "order_fail"
 
                 }

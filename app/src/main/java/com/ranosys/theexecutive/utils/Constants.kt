@@ -115,6 +115,10 @@ object Constants {
     const val NOTIFICATION_TYPE_ORDER_LIST = "Order"
     const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
     const val USER_FCM_ID = "fcm_id"
+    const val STATUS = "status"
+    const val SUCCESS = "success"
+    const val FAILURE = "failure"
+    const val CANCEL = "cancelled"
     val IMAGE_RATIO: Double = 1.44
 
 }

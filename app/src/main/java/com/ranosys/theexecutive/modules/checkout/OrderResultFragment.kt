@@ -30,8 +30,8 @@ class OrderResultFragment: BaseFragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        orderId = arguments?.getString("order_id") ?: ""
-        status = arguments?.getString("status") ?: ""
+        orderId = arguments?.getString(Constants.ORDER_ID) ?: ""
+        status = arguments?.getString(Constants.STATUS) ?: ""
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_order_result, container, false)
         orderResultViewModel = ViewModelProviders.of(this).get(OrderResultViewModel::class.java)
@@ -50,18 +50,18 @@ class OrderResultFragment: BaseFragment(){
 
         btn_action.setOnClickListener {
             when(status){
-                "success" -> {
+                Constants.SUCCESS -> {
                     popUpAllFragments()
                     val bundle = Bundle()
                     bundle.putString(Constants.ORDER_ID, orderId)
                     FragmentUtils.addFragment(activity as Context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                 }
 
-                "failure" -> {
+                Constants.FAILURE -> {
                     activity?.onBackPressed()
                 }
 
-                "cancelled" -> {
+                Constants.CANCEL -> {
                     activity?.onBackPressed()
                 }
             }
@@ -77,8 +77,8 @@ class OrderResultFragment: BaseFragment(){
         fun getInstance(orderId: String, status: String): OrderResultFragment{
 
             var bundle = Bundle()
-            bundle.putString("order_id", orderId)
-            bundle.putString("status", status)
+            bundle.putString(Constants.ORDER_ID, orderId)
+            bundle.putString(Constants.STATUS, status)
             val orderResultFragment = OrderResultFragment()
             orderResultFragment.arguments = bundle
 

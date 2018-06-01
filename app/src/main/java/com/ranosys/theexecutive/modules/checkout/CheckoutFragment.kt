@@ -324,13 +324,13 @@ class CheckoutFragment : BaseFragment() {
         when(checkoutViewModel.selectedPaymentMethod?.code){
             Constants.PAYMENT_METHOD_BANK_TRANSFER_KEY -> {
                 popUpAllFragments()
-                val orderResultFragment = OrderResultFragment.getInstance(orderId, "success")
+                val orderResultFragment = OrderResultFragment.getInstance(orderId, Constants.SUCCESS)
                 FragmentUtils.addFragment(activity as Context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
             }
 
             Constants.PAYMENT_METHOD_COD_KEY -> {
                 popUpAllFragments()
-                val orderResultFragment = OrderResultFragment.getInstance(orderId, "success")
+                val orderResultFragment = OrderResultFragment.getInstance(orderId, Constants.SUCCESS)
                 FragmentUtils.addFragment(activity as Context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
             }
 
