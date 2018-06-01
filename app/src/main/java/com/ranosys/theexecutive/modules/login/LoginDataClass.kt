@@ -6,7 +6,11 @@ package com.ranosys.theexecutive.modules.login
 class LoginDataClass {
 
     data class LoginRequest(var username: String,
-                            var password: String)
+                            var password: String,
+                            var registration_id :  String?,
+                            var device_id:  String?,
+                            var device_type : String?
+                            )
 
     data class IsEmailAvailableRequest(var customerEmail: String,
                                        var websiteId: Int)
@@ -22,7 +26,10 @@ class LoginDataClass {
     data class SocialLoginRequest(
             val email: String,
             val type: String,
-            val token: String
+            val token: String,
+            var device_id:  String?,
+            var device_type : String = "android",
+            var registration_id :  String?
     )
 }
 
