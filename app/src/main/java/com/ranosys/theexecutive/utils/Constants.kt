@@ -93,6 +93,10 @@ object Constants {
     const val PRODUCT_SKU: String = "productSku"
     const val OPTIONS: String = "options"
     const val ORDER_ID: String = "order_id"
+    const val PAYMENT_METHOD_BANK_TRANSFER_KEY: String = "banktransfer"
+    const val PAYMENT_METHOD_COD_KEY: String = "cashondelivery"
+    const val GRAND_TOTAL_KEY: String = "grand_total"
+    const val IDR: String = "IDR"
     const val NOTIFICATION_CHANNEL_ID = "4655"
     var notificationCounter = 0
     const val KEY_REDIRECTION_TYPE = "type"
@@ -111,6 +115,10 @@ object Constants {
     const val NOTIFICATION_TYPE_ORDER_LIST = "Order"
     const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
     const val USER_FCM_ID = "fcm_id"
+    const val STATUS = "status"
+    const val SUCCESS = "success"
+    const val FAILURE = "failure"
+    const val CANCEL = "cancelled"
     val IMAGE_RATIO: Double = 1.44
 
 }

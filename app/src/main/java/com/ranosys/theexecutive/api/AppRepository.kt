@@ -4,17 +4,18 @@ import com.google.gson.JsonObject
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
-import com.ranosys.theexecutive.modules.order.orderList.OrderListResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordDataClass
+import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
-import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
-import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
+import com.ranosys.theexecutive.modules.order.orderList.OrderListResponse
+import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnRequest
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
@@ -1309,6 +1310,113 @@ object AppRepository {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getShippingMethods(request: CheckoutDataClass.GetShippingMethodsRequest, callBack: ApiCallback<List<CheckoutDataClass.GetShippingMethodsResponse>>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getShippingMethods(ApiConstants.BEARER + userToken, storeCode, request)
+
+        callPost?.enqueue(object : Callback<List<CheckoutDataClass.GetShippingMethodsResponse>> {
+            override fun onResponse(call: Call<List<CheckoutDataClass.GetShippingMethodsResponse>>?, response: Response<List<CheckoutDataClass.GetShippingMethodsResponse>>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<CheckoutDataClass.GetShippingMethodsResponse>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getPaymentMethods(request: CheckoutDataClass.GetPaymentMethodsRequest, callBack: ApiCallback<CheckoutDataClass.PaymentMethodResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getPaymentMethods(ApiConstants.BEARER + userToken, storeCode, request)
+
+        callPost?.enqueue(object : Callback<CheckoutDataClass.PaymentMethodResponse> {
+            override fun onResponse(call: Call<CheckoutDataClass.PaymentMethodResponse>?, response: Response<CheckoutDataClass.PaymentMethodResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.PaymentMethodResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun placeOrder(request: CheckoutDataClass.PlaceOrderRequest, callBack: ApiCallback<String>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.placeOrder(ApiConstants.BEARER + userToken, storeCode, request)
+
+        callPost?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getTotalAmounts(callBack: ApiCallback<CheckoutDataClass.Totals>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getTotalAmounts(ApiConstants.BEARER + userToken, storeCode)
+
+        callGet?.enqueue(object : Callback<CheckoutDataClass.Totals> {
+            override fun onResponse(call: Call<CheckoutDataClass.Totals>?, response: Response<CheckoutDataClass.Totals>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.Totals>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getUserInfoNSelectedShipping(callBack: ApiCallback<CheckoutDataClass.UserInfoNselectedShippingResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getUserInfoNSelectedShipping(ApiConstants.BEARER + userToken, storeCode)
+
+        callGet?.enqueue(object : Callback<CheckoutDataClass.UserInfoNselectedShippingResponse> {
+            override fun onResponse(call: Call<CheckoutDataClass.UserInfoNselectedShippingResponse>?, response: Response<CheckoutDataClass.UserInfoNselectedShippingResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.UserInfoNselectedShippingResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

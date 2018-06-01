@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="shippingMethod"
+            type="com.ranosys.theexecutive.modules.checkout.CheckoutDataClass.GetShippingMethodsResponse" />
+
+    </data>
+
+    <RadioButton
+        android:id="@+id/rb_shipping_method"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text='@{(shippingMethod.carrier_title ?? "") + " " + (shippingMethod.method_title ?? "")}'
+        android:button="@null"
+        android:padding="@dimen/eight_dp"
+        android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"/>
+</layout>
