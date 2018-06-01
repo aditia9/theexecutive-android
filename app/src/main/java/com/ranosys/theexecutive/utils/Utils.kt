@@ -340,7 +340,6 @@ object Utils {
         }else{
             val visitorInfo = VisitorInfo.Builder()
                     .email("")
-                    // .name("")
                     .build()
             ZopimChat.setVisitorInfo(visitorInfo)
         }
