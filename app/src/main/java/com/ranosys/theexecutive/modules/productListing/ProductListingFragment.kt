@@ -242,16 +242,15 @@ class ProductListingFragment: BaseFragment() {
             val range = priceFilter?.options?.get(0)?.value
             val min = range?.split("-")?.get(0)?.toLong()
             val max = range?.split("-")?.get(1)?.toLong()
-            if(max == min){
-                filterOptionDialog.price_range_bar.visibility = View.GONE
-            }else{
-                filterOptionDialog.price_range_bar.visibility = View.VISIBLE
-                filterOptionBinding.priceRangeBar.setRangeValues(min, max)
-                filterOptionBinding.priceRangeBar.selectedMinValue = min
-                filterOptionBinding.priceRangeBar.selectedMaxValue = max
-                filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
-                filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
-            }
+            if(max == min)
+                filterOptionDialog.price_range_bar.isEnabled = false
+
+            filterOptionDialog.price_range_bar.visibility = View.VISIBLE
+            filterOptionBinding.priceRangeBar.setRangeValues(min, max)
+            filterOptionBinding.priceRangeBar.selectedMinValue = min
+            filterOptionBinding.priceRangeBar.selectedMaxValue = max
+            filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
+            filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
         })
     }
 
