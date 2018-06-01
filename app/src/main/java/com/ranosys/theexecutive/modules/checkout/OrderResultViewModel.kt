@@ -30,17 +30,17 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
             "success" -> {
                 statusStr = "order placed successfully"
                 btnStr = "view order"
-                infoStr = "Your oder has been placed successfully. Your oder has been placed successfully. Your oder has been placed successfully."
+                infoStr = "Thank you for order. You will receive a confirmation email with detail of ypur order and link to track theYour oder has been placed successfully. Your oder has been placed successfully."
             }
-            "cancel" -> {
+            "cancelled" -> {
                 statusStr = "order cancled"
                 btnStr = "continue shopping"
-                infoStr = "Your oder has been cancelled"
+                infoStr = "Your order has been cancelled"
             }
-            "fail" -> {
-                statusStr = "oorder failed"
+            "failure" -> {
+                statusStr = "order failed"
                 btnStr = "continue shopping"
-                infoStr = "Your oder has been failed"
+                infoStr = "Your order has been failed"
             }
         }
 

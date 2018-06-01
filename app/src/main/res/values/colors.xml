@@ -27,6 +27,10 @@
 
     <color name="bottom_sheet_btn">#2A6577</color>
 
+    <color name="red">#FF2842</color>
+    <color name="blur_image_color">#CCFFFFFF</color>
+
+
     <color name="notification_green">#6ec778</color>
     <color name="notification_gry">#a1a1a1</color>
     <color name="notification_read_bg">#f4f4f4</color>

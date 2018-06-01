@@ -123,11 +123,11 @@ class BindingAdapters {
                     imageName = "order_success"
 
                 }
-                "cancel" -> {
+                "cancelled" -> {
                     imageName = "order_cancel"
 
                 }
-                "fail" -> {
+                "failure" -> {
                     imageName = "order_fail"
 
                 }

@@ -1,6 +1,7 @@
 package com.ranosys.theexecutive.modules.checkout
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,9 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentOrderResultBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import kotlinx.android.synthetic.main.fragment_order_result.*
 
@@ -32,6 +36,7 @@ class OrderResultFragment: BaseFragment(){
 
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_order_result, container, false)
         orderResultViewModel = ViewModelProviders.of(this).get(OrderResultViewModel::class.java)
+        mBinding.vm = orderResultViewModel
         orderResultViewModel.orderId.set(orderId)
         orderResultViewModel.status.set(status)
         orderResultViewModel.getOrderDetails()
@@ -44,15 +49,18 @@ class OrderResultFragment: BaseFragment(){
         btn_action.setOnClickListener {
             when(status){
                 "success" -> {
-                    FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+                    popUpAllFragments()
+                    val bundle = Bundle()
+                    bundle.putString(Constants.ORDER_ID, orderId)
+                    FragmentUtils.addFragment(activity as Context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                 }
 
-                "fail" -> {
-                    FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+                "failure" -> {
+                    activity?.onBackPressed()
                 }
 
-                "cancel" -> {
-                    FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+                "cancelled" -> {
+                    activity?.onBackPressed()
                 }
             }
         }

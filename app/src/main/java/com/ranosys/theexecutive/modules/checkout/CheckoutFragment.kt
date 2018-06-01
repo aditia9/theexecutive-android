@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ import com.ranosys.theexecutive.databinding.FragmentCheckoutBinding
 import com.ranosys.theexecutive.databinding.PaymentMethodItemBinding
 import com.ranosys.theexecutive.databinding.ShippingMethodItemBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_checkout.*
 import kotlinx.android.synthetic.main.pay_amount_detail_bottom_sheet.*
@@ -114,7 +116,12 @@ class CheckoutFragment : BaseFragment() {
         }
 
         btn_pay.setOnClickListener {
-            checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
+            if(checkoutViewModel.selectedPaymentMethod != null){
+                callPlaceOrderApi()
+            }else{
+                Utils.showErrorDialog(activity as Context, "U have to select payment method first")
+            }
+
         }
 
         checkoutBinding.shippingMethodRg.setOnCheckedChangeListener { buttonView, _ ->
@@ -161,6 +168,16 @@ class CheckoutFragment : BaseFragment() {
 
             getViewHeight(total_segment_bottom_sheet)
         }
+    }
+
+    private fun callPlaceOrderApi() {
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
+        }
+
     }
 
     private fun getViewHeight(view : View): Int {
@@ -290,30 +307,36 @@ class CheckoutFragment : BaseFragment() {
 
         //observe order id
         checkoutViewModel.orderId.observe(this, Observer { orderId ->
-            val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-            val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?: Constants.DEFAULT_STORE_CODE
-
-            when(checkoutViewModel.selectedPaymentMethod?.code){
-                Constants.PAYMENT_METHOD_BANK_TRANSFER_KEY -> {
-                    Toast.makeText(activity, "Bank transfer", Toast.LENGTH_SHORT).show()
-                    val orderResultFragment = OrderResultFragment.getInstance(orderId!!, "success")
-                    FragmentUtils.replaceFragment(activity as Context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
-                }
-
-                Constants.PAYMENT_METHOD_COD_KEY -> {
-                    Toast.makeText(activity, "cod", Toast.LENGTH_SHORT).show()
-                    val orderResultFragment = OrderResultFragment.getInstance(orderId!!, "success")
-                    FragmentUtils.replaceFragment(activity as Context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
-                }
-
-                else ->{
-                    Toast.makeText(activity, "other method", Toast.LENGTH_SHORT).show()
-                    createOrderUrl(orderId, storeCode, userToken)
-                }
-            }
-
+            redirectToOrderResultScreen(orderId!!)
         })
     }
+
+    private fun redirectToOrderResultScreen(orderId: String) {
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?: Constants.DEFAULT_STORE_CODE
+
+        when(checkoutViewModel.selectedPaymentMethod?.code){
+            Constants.PAYMENT_METHOD_BANK_TRANSFER_KEY -> {
+                popUpAllFragments()
+                val orderResultFragment = OrderResultFragment.getInstance(orderId, "success")
+                FragmentUtils.addFragment(activity as Context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
+            }
+
+            Constants.PAYMENT_METHOD_COD_KEY -> {
+                popUpAllFragments()
+                val orderResultFragment = OrderResultFragment.getInstance(orderId, "success")
+                FragmentUtils.addFragment(activity as Context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
+            }
+
+            else -> {
+                popUpAllFragments()
+                createOrderUrl(orderId, storeCode, userToken)
+            }
+        }
+
+    }
+
+
 
     private fun populatePaymentMethods(paymentMethodList: List<CheckoutDataClass.PaymentMethod>?) {
 
