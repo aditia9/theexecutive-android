@@ -7,11 +7,15 @@ import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordDataClass
+import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
+import com.ranosys.theexecutive.modules.order.orderList.OrderListResponse
+import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnRequest
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
@@ -358,6 +362,28 @@ interface ApiService {
 
     }
 
+    interface MyOrdersService {
+        @GET("rest/{store_code}/V1/orders/mine")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getMyOrderList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String): Call<List<OrderListResponse>>
+
+        @GET("rest/{store_code}/V1/order/{order_id}/mine")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getOrderDetail(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Path("order_id") orderId:String ,@QueryMap queryMap: HashMap<String, String>?): Call<OrderDetailResponse>
+
+
+        @POST("rest/{store_code}/V1/rma/productreturn")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun returnProduct(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode:String,  @Body request: OrderReturnRequest): Call<String>
+
+    }
+
     interface MyAccountService {
         @GET("rest/{store_code}/V1/customers/me")
         @Headers(ApiConstants.CONTENT_TYPE,
@@ -409,4 +435,39 @@ interface ApiService {
         fun changeNotificationStatus(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: NotificationChangeStatusRequest): Call<Boolean>
 
     }
+
+    interface CheckoutService {
+
+        @GET("rest/{store_code}/V1/carts/mine/totals?fields=total_segments")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getTotalAmounts(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<CheckoutDataClass.Totals>
+
+        @POST("rest/{store_code}/V1/carts/mine/payment-information")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun placeOrder(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.PlaceOrderRequest): Call<String>
+
+        @POST("rest/{store_code}/V1/carts/mine/estimate-shipping-methods-by-address-id")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getShippingMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetShippingMethodsRequest): Call<List<CheckoutDataClass.GetShippingMethodsResponse>>
+
+        @POST("rest/{store_code}/V1/carts/mine/shipping-information?fields=payment_methods,totals[total_segments]")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getPaymentMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetPaymentMethodsRequest): Call<CheckoutDataClass.PaymentMethodResponse>
+
+        @GET("rest/{store_code}/V1/carts/mine?fields=customer,extension_attributes")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getUserInfoNSelectedShipping(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<CheckoutDataClass.UserInfoNselectedShippingResponse>
+    }
+
+
 }

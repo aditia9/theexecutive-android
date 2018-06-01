@@ -15,12 +15,14 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentShoppingBagBinding
+import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_shopping_bag.*
 import kotlinx.android.synthetic.main.shopping_bag_footer.*
+import kotlinx.android.synthetic.main.shopping_bag_footer.view.*
 
 
 /**
@@ -39,9 +41,10 @@ class ShoppingBagFragment : BaseFragment() {
     private var isFromPromoCode = false
     private var isFromFirstTime = false
     private var totalPrice: Int = 0
+    private lateinit var viewBinder: FragmentShoppingBagBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val viewBinder: FragmentShoppingBagBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_shopping_bag, container, false)
+        viewBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_shopping_bag, container, false)
         shoppingBagViewModel = ViewModelProviders.of(this).get(ShoppingBagViewModel::class.java)
         viewBinder?.shoppingBagViewModel = shoppingBagViewModel
         isFromPromoCode = false
@@ -107,7 +110,7 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                et_promo_code.setText("")
+                viewBinder.getRoot().et_promo_code.setText("")
                 et_promo_code.error = getString(R.string.promo_code_invalid)
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
@@ -259,6 +262,14 @@ class ShoppingBagFragment : BaseFragment() {
 
                     R.id.imv_delete_promo_code -> {
                         deleteCouponCode()
+                    }
+
+                    R.id.btn_checkout -> {
+                        if (userToken.isNullOrBlank().not()) {
+                            FragmentUtils.addFragment(context, CheckoutFragment(),null, CheckoutFragment::class.java.name, true )
+                        } else {
+                            FragmentUtils.addFragment(context, LoginFragment(), null, LoginFragment::class.java.name, true)
+                        }
                     }
 
                 }
