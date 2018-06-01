@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.base
 
+import AppLog
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Dialog
@@ -13,8 +14,12 @@ import android.webkit.*
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.ranosys.rtp.IsPermissionGrantedInterface
+import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
+import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
+import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.web_pages_layout.*
 
@@ -130,7 +135,14 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    fun prepareWebPageDialog(context : Context?, url : String?, title : String?) {
+    fun prepareWebPageDialog(context : Context?, url : String?, title : String?, orderId: String = "") {
+
+        //success and failure url for ip88
+        val orderCancelUrl: String = "checkout/onepage/cancelled"
+        val orderFailureUrl: String = "checkout/onepage/failure"
+        val orderSuccessUrl: String = "checkout/onepage/success"
+
+
         val webPagesDialog = Dialog(context, R.style.Animation_Design_BottomSheetDialog)
         webPagesDialog.setContentView(R.layout.web_pages_layout)
         webPagesDialog.setCancelable(true)
@@ -159,12 +171,57 @@ abstract class BaseFragment : LifecycleFragment() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 hideLoading()
                 super.onPageFinished(view, url)
+                AppLog.e("PAYMENT URL - : $url")
+
+                if(url!!.contains(BuildConfig.API_URL)){
+
+                    when{
+                        url.contains(orderSuccessUrl) -> {
+                            webPagesDialog.dismiss()
+                            redirectTOOrderResultPage(orderId, "success")
+                        }
+
+                        url.contains(orderFailureUrl) -> {
+                            webPagesDialog.dismiss()
+                            redirectTOOrderResultPage(orderId, "failure")
+                        }
+
+                        url.contains(orderCancelUrl) -> {
+                            webPagesDialog.dismiss()
+                            redirectTOOrderResultPage(orderId, "cancelled")
+                        }
+                    }
+                }
+
+
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                view?.loadUrl(request!!.url.toString())
+                return true
             }
         }
 
         webPagesDialog.webview.loadUrl(url)
-        webPagesDialog.img_back.setOnClickListener { webPagesDialog.dismiss() }
-        webPagesDialog.show()
+        webPagesDialog.img_back.setOnClickListener {
+            webPagesDialog.dismiss()
+//            val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
+//            if(fragment != null && fragment is CheckoutFragment){
+//                redirectTOOrderResultPage(orderId, "cancelled")
+//            }
+        }
+
+    }
+
+    private fun redirectTOOrderResultPage(orderId: String, status: String) {
+        popUpAllFragments()
+        val orderResultFragment = OrderResultFragment.getInstance(orderId, status)
+        FragmentUtils.addFragment(context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
+    }
+
+    //method to remove all fragment except home
+    fun popUpAllFragments() {
+        activity?.supportFragmentManager?.popBackStack(HomeFragment::class.java.name, 0)
     }
 
 

@@ -40,6 +40,10 @@ class AddressBookAdapter(var addressList: MutableList<MyAccountDataClass.Address
 
 
 
+                itemView.setOnClickListener {view ->
+                    action(0, position)
+                }
+
                 itemBinding.tvRemoveAddress.setOnClickListener { view ->
                     action(view.id, position)
                 }

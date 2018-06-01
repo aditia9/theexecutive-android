@@ -76,8 +76,8 @@ class MyAccountDataClass {
             val postcode: String?,
             val city: String?,
             val prefix: String? = "",
-            val firstname: String?,
-            val lastname: String?,
+            val firstname: String? = "",
+            val lastname: String? = "",
             var default_shipping: Boolean? = null,
             var default_billing: Boolean? = null
     )
