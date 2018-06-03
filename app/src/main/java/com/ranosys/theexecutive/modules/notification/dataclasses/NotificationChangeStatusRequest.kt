@@ -8,3 +8,8 @@ package com.ranosys.theexecutive.modules.notification.dataclasses
 class NotificationChangeStatusRequest(val notification_id: String?,
                                       val registration_id: String?,
                                       val device_id: String?)
+
+
+class DeviceRegisterRequest(val device_type: String?,
+                                      val registration_id: String?,
+                                      val device_id: String?)
