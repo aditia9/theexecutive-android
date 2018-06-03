@@ -5,8 +5,10 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.databinding.ObservableField
+import android.support.design.widget.TextInputEditText
 import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
@@ -18,6 +20,11 @@ import okhttp3.RequestBody
 import java.io.File
 import java.util.*
 
+/**
+ * @Details fragment shows BankTransfer View Model
+ * @Author Ranosys Technologies
+ * @Date 1, June,2018
+ */
 class BankTransferViewModel(application: Application) : BaseViewModel(application) {
     var firstName: ObservableField<String> = ObservableField()
     var lastName: ObservableField<String> = ObservableField()
@@ -43,7 +50,7 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     var recipientsList: MutableList<Recipients> = mutableListOf()
     private lateinit var recipient: String
     private lateinit var transferMethods: String
-    lateinit var attachmentFile: File
+    var attachmentFile: File? = null
 
     private val recipients: Recipients = Recipients(value = Constants.BANK_RECIPIENT_LABEL, label = Constants.BANK_RECIPIENT_LABEL)
     private val transferMethodsData: TransferMethodsDataClass = TransferMethodsDataClass(value = Constants.TRANSFER_METHOD_LABEL, label = Constants.TRANSFER_METHOD_LABEL)
@@ -52,7 +59,7 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     init {
         recipientsList.add(recipients)
         recipientsLabel.add(Constants.BANK_RECIPIENT_LABEL)
-         transferMethodsList.add(transferMethodsData)
+        transferMethodsList.add(transferMethodsData)
         transferMethodsLabel.add(Constants.TRANSFER_METHOD_LABEL)
     }
 
@@ -106,9 +113,22 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
         })
     }
 
-  /*  date = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT).format(transferDate.get()),*/
+
+    fun onTextChanged(et: TextInputEditText){
+        when(et.id){
+            R.id.et_first_name -> firstNameError.set("")
+            R.id.et_last_name -> lastNameError.set("")
+            R.id.et_email -> emailAddressError.set("")
+            R.id.et_order_number -> orderNumberError.set("")
+            R.id.et_bank_number -> bankNumberError.set("")
+            R.id.et_holder_acc_number -> holderAccountError.set("")
+            R.id.et_transfer_amount -> transferAmountError.set("")
+        }
+    }
+
+    /*  date = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT).format(transferDate.get()),*/
     @SuppressLint("SimpleDateFormat")
-    fun submitBankTransfer(requestFile: RequestBody) {
+    fun submitBankTransfer(requestFile: RequestBody?) {
         if (isValidData(getApplication())) {
 
 
@@ -121,7 +141,7 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
                     amount = transferAmount.get(),
                     recipient = recipient,
                     method = transferMethods,
-                    date = "2018-06-01"
+                    date = "2018-05-29 21:05:56"
             )
 
             AppRepository.submitBankTransfer(requestFile, attachmentFile, bankTransferRequest, object : ApiCallback<String> {
@@ -142,7 +162,6 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
 
     fun onRecipientSelection(position: Int) {
         recipient = recipientsList[position].value
-
     }
 
     fun onTransferMethodsSelection(position: Int) {
@@ -194,6 +213,20 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
 
         if (TextUtils.isEmpty(transferDate.get()?.toString())) {
             transferDateError.set(context.getString(R.string.transfer_date_error))
+            isValid = false
+        }
+
+
+        if(recipient == Constants.BANK_RECIPIENT_LABEL){
+            Toast.makeText(context, context.getString(R.string.empty_bank_recipient), Toast.LENGTH_SHORT ).show()
+            isValid = false
+        }else if(transferMethods.equals(Constants.TRANSFER_METHOD_LABEL)){
+            Toast.makeText(context, context.getString(R.string.empty_transfer_method), Toast.LENGTH_SHORT ).show()
+            isValid = false
+        }
+
+        if(attachmentFile == null){
+            Toast.makeText(context, context.getString(R.string.empty_attachment_file), Toast.LENGTH_SHORT ).show()
             isValid = false
         }
         return isValid

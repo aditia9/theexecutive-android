@@ -279,17 +279,9 @@
         <item>@drawable/setting</item>
     </integer-array>
 
-
-    <string-array name="transfer_method_array">
-        <item>ATM</item>
-        <item>Internet Banking</item>
-        <item>Mobile Banking</item>
-        <item>Setor Tunai</item>
+    <string-array name="attachment_option_array">
+        <item>Take Photo</item>
+        <item>Choose from Gallery</item>
+        <item>Cancel</item>
     </string-array>
-
-
-    <string-array name="bank_recipient_array">
-        <item>BCA</item>
-    </string-array>
-
 </resources>

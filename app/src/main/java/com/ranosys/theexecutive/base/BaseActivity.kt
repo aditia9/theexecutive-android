@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.WindowManager
 import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.rtp.RunTimePermissionActivity
@@ -31,7 +32,7 @@ open class BaseActivity: RunTimePermissionActivity(){
 
     var toolbarViewModel: ToolbarViewModel? = null
     private lateinit var baseViewModel: BaseViewModel
-    private lateinit var mediaPicker: MediaHelperActivity
+    private var mediaPicker: MediaHelperActivity? = null
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,13 +119,6 @@ open class BaseActivity: RunTimePermissionActivity(){
     }
 
 
-    fun initMediaPicker() : MediaHelperActivity{
-         mediaPicker = MediaHelperActivity(this)
-        return mediaPicker
-    }
-
-
-
 
     private fun changeStatusBarColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -139,8 +133,4 @@ open class BaseActivity: RunTimePermissionActivity(){
         supportActionBar?.hide()
     }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        mediaPicker.onCallbackResult(requestCode, resultCode, data)
-    }
 }

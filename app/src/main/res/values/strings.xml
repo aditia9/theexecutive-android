@@ -227,5 +227,9 @@
     <string name="transfer_amount">Transfer Amount</string>
     <string name="transfer_date_hint">Transfer Date</string>
     <string name="attachment">Attachment</string>
+    <string name="empty_bank_recipient">Bank Recipient is required.</string>
+    <string name="empty_transfer_method">Transfer Method is required.</string>
+    <string name="empty_attachment_file">Attachment File is required.</string>
+    <string name="add_attachment">Add Attachment</string>
 
 </resources>

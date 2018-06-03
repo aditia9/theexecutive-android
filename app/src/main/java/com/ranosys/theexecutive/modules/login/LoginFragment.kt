@@ -24,7 +24,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
+import com.ranosys.theexecutive.DelamiBrandsApplication
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
@@ -46,12 +48,13 @@ class LoginFragment: BaseFragment() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var mBinding: FragmentLoginBinding
-    private lateinit var callBackManager: CallbackManager
+    lateinit var callBackManager: CallbackManager
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private var loginRequiredPrompt: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val data = arguments
         data?.let {
             loginRequiredPrompt = data.get(Constants.LOGIN_REQUIRED_PROMPT) as Boolean
@@ -69,6 +72,7 @@ class LoginFragment: BaseFragment() {
         observeApiFailure()
         observeApiSuccess()
         observeIsEmailAvailableResponse()
+
 
 
         //call backs for fb login
@@ -107,7 +111,7 @@ class LoginFragment: BaseFragment() {
                 .requestProfile()
                 .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(activity as Activity, gso)
+        mGoogleSignInClient = GoogleSignIn.getClient(activity as DashBoardActivity, gso)
 
     }
 
@@ -236,7 +240,7 @@ class LoginFragment: BaseFragment() {
 
     private fun gmailSignIn() {
         val gmailSignInIntent = mGoogleSignInClient.signInIntent
-        startActivityForResult(gmailSignInIntent, RC_GMAIL_SIGN_IN)
+        activity?.startActivityForResult(gmailSignInIntent, RC_GMAIL_SIGN_IN)
     }
 
     //method to get user data from FB

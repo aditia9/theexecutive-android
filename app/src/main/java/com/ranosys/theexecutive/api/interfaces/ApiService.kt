@@ -432,11 +432,13 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun getRecipient(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<List<Recipients>>
 
+        @Multipart
         @POST("rest/{store_code}/V1/banktransfer/submit")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-     //   fun submitBankTransfer(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Part file: MultipartBody.Part, @Part("name") name: RequestBody, @Part("email_submitter") email_submitter: RequestBody, @Part("orderid") orderid: RequestBody,@Part("bank_name") bank_name: RequestBody,@Part("holder_account") holder_account: RequestBody,@Part("amount") amount: RequestBody,@Part("recipient") recipient: RequestBody, @Part("method") method: RequestBody,@Part("date") date: RequestBody): Call<String>
-       fun submitBankTransfer(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: BankTransferRequest): Call<String>
+       fun submitBankTransfer(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Part file: MultipartBody.Part, @Part("name") name: RequestBody, @Part("email_submitter") email_submitter: RequestBody, @Part("orderid") orderid: RequestBody,@Part("bank_name") bank_name: RequestBody,@Part("holder_account") holder_account: RequestBody,@Part("amount") amount: RequestBody,@Part("recipient") recipient: RequestBody, @Part("method") method: RequestBody,@Part("date") date: RequestBody): Call<String>
+       //fun submitBankTransfer(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Part file: MultipartBody.Part, @Part("name") name: String, @Part("email_submitter") email_submitter: String, @Part("orderid") orderid: String,@Part("bank_name") bank_name: String,@Part("holder_account") holder_account: String,@Part("amount") amount: String,@Part("recipient") recipient: String, @Part("method") method: String,@Part("date") date: String): Call<String>
+      // fun submitBankTransfer(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: BankTransferRequest): Call<String>
     }
 }

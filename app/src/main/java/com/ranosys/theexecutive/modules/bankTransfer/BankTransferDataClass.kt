@@ -1,6 +1,10 @@
 package com.ranosys.theexecutive.modules.bankTransfer
 
-
+/**
+ * @Details fragment shows BankTransfer Data Class
+ * @Author Ranosys Technologies
+ * @Date 1, June,2018
+ */
 data class TransferMethodsDataClass(
         val label: String,
         val value: String
