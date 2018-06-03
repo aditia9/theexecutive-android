@@ -228,8 +228,8 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
 
     private fun callLoginApi() {
-        val loginRequest = LoginDataClass.LoginRequest(emailAddress.get().toString(), password.get().toString(), SavedPreferences.getInstance()?.getFcmID(Constants.USER_FCM_ID), "android",
-                SavedPreferences.getInstance()?.getFcmID(Constants.ANDROID_DEVICE_ID_KEY))
+        val loginRequest = LoginDataClass.LoginRequest(emailAddress.get().toString(), password.get().toString(), SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID), Constants.OS_TYPE,
+                SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {

@@ -10,6 +10,7 @@ import com.ranosys.theexecutive.modules.changePassword.ChangePasswordDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
@@ -1285,5 +1286,27 @@ object AppRepository {
         })
     }
 
+
+
+    fun registerDevice(request: DeviceRegisterRequest, callBack: ApiCallback<Boolean>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.registerDevice(ApiConstants.BEARER + userToken,  storeCode, request)
+
+        callGet?.enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
 
 }

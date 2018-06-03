@@ -73,8 +73,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     fun login(){
 
 
-        val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString(), SavedPreferences.getInstance()?.getFcmID(Constants.USER_FCM_ID),  SavedPreferences.getInstance()?.getFcmID(Constants.ANDROID_DEVICE_ID_KEY),"android"
-               )
+        val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString(), SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID), SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY), Constants.OS_TYPE)
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
@@ -146,8 +145,8 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     }
 
     private fun callSocialLoginApi(userData: LoginDataClass.SocialLoginData) {
-        val request = LoginDataClass.SocialLoginRequest(userData.email, userData.type, userData.token, SavedPreferences.getInstance()?.getFcmID(Constants.USER_FCM_ID), "android",
-                SavedPreferences.getInstance()?.getFcmID(Constants.ANDROID_DEVICE_ID_KEY))
+        val request = LoginDataClass.SocialLoginRequest(userData.email, userData.type, userData.token, SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID), Constants.OS_TYPE,
+                SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
         AppRepository.socialLogin(request, object: ApiCallback<String>{
             override fun onException(error: Throwable) {
                 apiFailureResponse?.value = Constants.UNKNOWN_ERROR

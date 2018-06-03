@@ -27,9 +27,9 @@ class LoginDataClass {
             val email: String,
             val type: String,
             val token: String,
-            var device_id:  String?,
-            var device_type : String = "android",
-            var registration_id :  String?
+            var registration_id:  String?,
+            var device_type : String,
+            var device_id :  String?
     )
 }
 

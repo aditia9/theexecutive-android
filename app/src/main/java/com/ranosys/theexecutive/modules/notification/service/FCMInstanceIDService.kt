@@ -28,6 +28,6 @@ class FCMInstanceIDService : FirebaseInstanceIdService() {
 
     private fun sendRegistrationToServer(token: String) {
         // Add custom implementation, as needed.
-        SavedPreferences.getInstance()?.storeFcmId(Constants.USER_FCM_ID, token)
+        SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_FCM_ID)
     }
 }

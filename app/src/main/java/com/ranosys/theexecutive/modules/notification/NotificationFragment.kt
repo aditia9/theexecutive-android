@@ -74,8 +74,8 @@ class NotificationFragment : BaseFragment() {
                 Toast.makeText(activity, item?.description, Toast.LENGTH_SHORT).show()
                 if(item?.isRead?.not()!!) {
                     val request = NotificationChangeStatusRequest(item.notification_id.toString(),
-                            SavedPreferences.getInstance()?.getFcmID(Constants.USER_FCM_ID),
-                            SavedPreferences.getInstance()?.getFcmID(Constants.ANDROID_DEVICE_ID_KEY))
+                            SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID),
+                            SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
                     changeNotificationStatus(request)
                 }
                 redirectToFragment(item)

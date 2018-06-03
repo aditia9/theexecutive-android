@@ -33,8 +33,8 @@ class SplashActivity : BaseActivity() {
 
     private val handler = Handler()
     private var canNavigateToHome: Boolean = false
-    private  var redirectType: String? = null
-    private  var notificationIntent: Intent ? = null
+    private var redirectType: String? = null
+    private var notificationIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -231,9 +231,7 @@ class SplashActivity : BaseActivity() {
 
         }
         AppLog.d("device id: "+SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
-        if (!TextUtils.isEmpty(SavedPreferences.getInstance()?.getFcmID(Constants.USER_FCM_ID))) {
 
-        }
     }
 
     private fun getCartIdForUser() {
