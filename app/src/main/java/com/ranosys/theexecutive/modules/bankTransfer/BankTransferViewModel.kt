@@ -10,14 +10,15 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.register.RegisterViewModel
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
-import okhttp3.RequestBody
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -51,6 +52,8 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     private lateinit var recipient: String
     private lateinit var transferMethods: String
     var attachmentFile: File? = null
+    var bankTransferObservable = MutableLiveData<ApiResponse<String>>()
+
 
     private val recipients: Recipients = Recipients(value = Constants.BANK_RECIPIENT_LABEL, label = Constants.BANK_RECIPIENT_LABEL)
     private val transferMethodsData: TransferMethodsDataClass = TransferMethodsDataClass(value = Constants.TRANSFER_METHOD_LABEL, label = Constants.TRANSFER_METHOD_LABEL)
@@ -114,8 +117,8 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     }
 
 
-    fun onTextChanged(et: TextInputEditText){
-        when(et.id){
+    fun onTextChanged(et: TextInputEditText) {
+        when (et.id) {
             R.id.et_first_name -> firstNameError.set("")
             R.id.et_last_name -> lastNameError.set("")
             R.id.et_email -> emailAddressError.set("")
@@ -126,9 +129,8 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
         }
     }
 
-    /*  date = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT).format(transferDate.get()),*/
     @SuppressLint("SimpleDateFormat")
-    fun submitBankTransfer(requestFile: RequestBody?) {
+    fun submitBankTransfer() {
         if (isValidData(getApplication())) {
 
 
@@ -141,20 +143,24 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
                     amount = transferAmount.get(),
                     recipient = recipient,
                     method = transferMethods,
-                    date = "2018-05-29 21:05:56"
+                    date = SimpleDateFormat(Constants.YY_MM__DD_DATE_FORMAT).format(transferDate.get())
             )
 
-            AppRepository.submitBankTransfer(requestFile, attachmentFile, bankTransferRequest, object : ApiCallback<String> {
+            AppRepository.submitBankTransfer(attachmentFile, bankTransferRequest, object : ApiCallback<String> {
+                val apiResponse = ApiResponse<String>()
                 override fun onException(error: Throwable) {
-                    Utils.printLog(RegisterViewModel.COUNTRY_API_TAG, error.message!!)
+                    apiResponse.apiResponse = error.message
+                    bankTransferObservable.value = apiResponse
                 }
 
                 override fun onError(errorMsg: String) {
-                    Utils.printLog(RegisterViewModel.COUNTRY_API_TAG, errorMsg)
+                    apiResponse.apiResponse = errorMsg
+                    bankTransferObservable.value = apiResponse
                 }
 
-                override fun onSuccess(msg: String?) {
-                    Log.d("msg", msg)
+                override fun onSuccess(t: String?) {
+                    apiResponse.apiResponse = t
+                    bankTransferObservable.value = apiResponse
                 }
             })
         }
@@ -217,16 +223,16 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
         }
 
 
-        if(recipient == Constants.BANK_RECIPIENT_LABEL){
-            Toast.makeText(context, context.getString(R.string.empty_bank_recipient), Toast.LENGTH_SHORT ).show()
+        if (recipient == Constants.BANK_RECIPIENT_LABEL) {
+            Toast.makeText(context, context.getString(R.string.empty_bank_recipient), Toast.LENGTH_SHORT).show()
             isValid = false
-        }else if(transferMethods.equals(Constants.TRANSFER_METHOD_LABEL)){
-            Toast.makeText(context, context.getString(R.string.empty_transfer_method), Toast.LENGTH_SHORT ).show()
+        } else if (transferMethods.equals(Constants.TRANSFER_METHOD_LABEL)) {
+            Toast.makeText(context, context.getString(R.string.empty_transfer_method), Toast.LENGTH_SHORT).show()
             isValid = false
         }
 
-        if(attachmentFile == null){
-            Toast.makeText(context, context.getString(R.string.empty_attachment_file), Toast.LENGTH_SHORT ).show()
+        if (attachmentFile == null) {
+            Toast.makeText(context, context.getString(R.string.empty_attachment_file), Toast.LENGTH_SHORT).show()
             isValid = false
         }
         return isValid

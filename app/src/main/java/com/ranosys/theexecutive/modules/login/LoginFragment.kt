@@ -1,7 +1,6 @@
 package com.ranosys.theexecutive.modules.login
 
 import AppLog
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -24,7 +23,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
-import com.ranosys.theexecutive.DelamiBrandsApplication
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseFragment
@@ -77,6 +75,7 @@ class LoginFragment: BaseFragment() {
 
         //call backs for fb login
         callBackManager = CallbackManager.Factory.create()
+        callBackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().registerCallback(callBackManager, object : FacebookCallback<LoginResult>{
             override fun onError(error: FacebookException?) {
                 LoginManager.getInstance().logOut()
@@ -118,11 +117,13 @@ class LoginFragment: BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        callBackManager.onActivityResult(requestCode, resultCode, data)
+
 
         if (requestCode == RC_GMAIL_SIGN_IN) {
             val task :Task<GoogleSignInAccount> =  GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGmailSignInResult(task)
+        }else{
+            callBackManager.onActivityResult(requestCode, resultCode, data)
         }
     }
 
@@ -151,7 +152,7 @@ class LoginFragment: BaseFragment() {
 
                 btn_fb_login.id -> {
                     if (Utils.isConnectionAvailable(activity as Context)) {
-                        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday", "user_photos"))
+                        LoginManager.getInstance().logInWithReadPermissions(activity as DashBoardActivity, Arrays.asList("public_profile", "email", "user_birthday", "user_photos"))
 
                     } else {
                         showNetworkErrorDialog(activity as Context)

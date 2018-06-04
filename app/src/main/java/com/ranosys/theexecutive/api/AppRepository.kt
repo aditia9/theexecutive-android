@@ -1341,20 +1341,13 @@ object AppRepository {
     }
 
 
-    fun submitBankTransfer(requestFile: RequestBody?, file : File?, request: BankTransferRequest, callBack: ApiCallback<String>) {
+    fun submitBankTransfer(file : File?, request: BankTransferRequest, callBack: ApiCallback<String>) {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
 
-
-    //    val attachment = MultipartBody.Part.createFormData("attachment", "Testing", RequestBody.create(MediaType.parse("image/*"), file))
-       val attachment = MultipartBody.Part.createFormData("attachment", "Testing", RequestBody.create(MediaType.parse("image/*"), file))
-/*
-// Assume your file is PNG
-        val requestFile = RequestBody.create(MediaType.parse("image/png"), file)
-
-        val fileData = MultipartBody.Part.createFormData("file", fileName, requestFile)*/
-
+        val reqFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val part = MultipartBody.Part.createFormData("attachment", file?.name, reqFile)
 
         val name= RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.name)
         val email_submitter = RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.email_submitter)
@@ -1366,11 +1359,7 @@ object AppRepository {
         val method =RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.method)
         val date =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.date)
 
-
-
-        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.submitBankTransfer(ApiConstants.BEARER + userToken,  storeCode, attachment, name, email_submitter, orderid, bank_name, holder_account,amount,recipient,method,date)
-       // val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.submitBankTransfer(ApiConstants.BEARER + userToken,  storeCode, body, request.name, request.email_submitter, request.orderid, request.bank_name, request.holder_account,request.amount,request.recipient,request.method,request.date)
-      //  val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.submitBankTransfer(ApiConstants.BEARER + userToken,  storeCode, request)
+       val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.submitBankTransfer(ApiConstants.BEARER + userToken,   storeCode, part, name, email_submitter, orderid, bank_name, holder_account,amount,recipient,method,date)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {

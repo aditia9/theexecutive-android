@@ -1,7 +1,6 @@
 package com.ranosys.theexecutive.modules.bankTransfer
 
 import android.Manifest
-import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.DialogInterface
@@ -10,30 +9,30 @@ import android.database.Cursor
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Toast
 import com.ranosys.dochelper.MediaCallbackManager
 import com.ranosys.dochelper.MediaHelperActivity
+import com.ranosys.rtp.Helper
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
+import com.ranosys.theexecutive.api.ApiResponse
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentBankTransferBinding
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.Utils
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import okhttp3.MediaType
-import okhttp3.RequestBody
-import android.provider.MediaStore
-import android.view.WindowManager
-import com.ranosys.rtp.Helper
-import com.ranosys.theexecutive.activities.DashBoardActivity
-import com.ranosys.theexecutive.base.BaseActivity
 
 
 /**
@@ -41,11 +40,10 @@ import com.ranosys.theexecutive.base.BaseActivity
  * @Author Ranosys Technologies
  * @Date 1, June,2018
  */
-class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener{
+class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var bankTransferViewModel: BankTransferViewModel
-    private lateinit var mBinding : FragmentBankTransferBinding
+    private lateinit var mBinding: FragmentBankTransferBinding
     private lateinit var mediaPicker: MediaHelperActivity
-     var requestFile : RequestBody? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,7 +55,7 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener{
         bankTransferViewModel.getTransferMethodList()
         mediaPicker = (activity as DashBoardActivity).initMediaPicker()
 
-        mBinding.imgAttachment.setOnClickListener{view ->
+        mBinding.imgAttachment.setOnClickListener { view ->
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) run {
                 val permissionList = java.util.ArrayList<String>()
@@ -79,32 +77,44 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener{
         }
 
         mBinding.btnSubmit.setOnClickListener { view ->
-
-            bankTransferViewModel.submitBankTransfer(requestFile)
+            showLoading()
+            bankTransferViewModel.submitBankTransfer()
         }
-       // val calender: Calendar = Calendar.getInstance()
-        //calender.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DATE))
-        //val transferDate: Date = calender.time
-       // bankTransferViewModel.transferDate.set(transferDate)
-     //   val dateFormat = SimpleDateFormat(Constants.DD_MM_YY_DATE_FORMAT)
-        //mBinding.etTransferDate.setText(dateFormat.format(transferDate))
+
 
         mBinding.etTransferDate.setOnClickListener {
             showDate(Calendar.getInstance().get(Calendar.YEAR) - 1, 0, 1, R.style.DatePickerSpinner)
         }
 
-        observeApiFailure()
+        observeEvents()
+
         return mBinding.root
     }
 
 
-
-    private fun observeApiFailure() {
+    private fun observeEvents() {
         bankTransferViewModel.transferMethodsLabelObserVer?.observe(this, android.arch.lifecycle.Observer {
-          mBinding.spTransferMethod.setSelection(0)
+            mBinding.spTransferMethod.setSelection(0)
 
         })
+
+
+
+        bankTransferViewModel.bankTransferObservable.observe(this, android.arch.lifecycle.Observer<ApiResponse<String>> { apiResponse ->
+            hideLoading()
+            if (apiResponse?.error.isNullOrEmpty()) {
+                val response = apiResponse?.apiResponse
+                if (response is String) {
+                    Toast.makeText(activity, response, Toast.LENGTH_LONG).show()
+
+                }
+            } else {
+                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+            }
+        })
+
     }
+
     private fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
         val dpd = SpinnerDatePickerDialogBuilder()
                 .context(activity)
@@ -113,7 +123,7 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener{
                 .year(year)
                 .monthOfYear(monthOfYear)
                 .dayOfMonth(dayOfMonth)
-                .defaultStartYear(Calendar.getInstance().get(Calendar.YEAR) -1)
+                .defaultStartYear(Calendar.getInstance().get(Calendar.YEAR) - 1)
                 .build()
 
         dpd.show()
@@ -127,7 +137,8 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener{
         val transferDate: Date = calender.time
         bankTransferViewModel.transferDate.set(transferDate)
         val dateFormat = SimpleDateFormat(Constants.DD_MM_YY_DATE_FORMAT)
-        mBinding.etTransferDate.setText(dateFormat.format(transferDate))    }
+        mBinding.etTransferDate.setText(dateFormat.format(transferDate))
+    }
 
 
     private fun openAttachment() {
@@ -142,11 +153,6 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener{
 
                         mBinding.imgAttachment.setImageURI(uri)
                         bankTransferViewModel.attachmentFile = File(getRealPathFromUri(activity as Context, uri))
-
-                         requestFile = RequestBody.create(
-                                MediaType.parse(getRealPathFromUri(activity as Context, uri)),
-                                File(getRealPathFromUri(activity as Context, uri))
-                        )
                         dialog.dismiss()
                     }
                 })
@@ -188,14 +194,8 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener{
     }
 
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mediaPicker.onCallbackResult(requestCode, resultCode, data)
 
-      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-      Log.d("requestCode", ""+requestCode)
-      Log.d("resultCode", ""+resultCode)
-         // mediaPicker.onCallbackResult(requestCode, resultCode, data)
-
-             if(mediaPicker != null){
-                   mediaPicker!!.onCallbackResult(requestCode, resultCode, data)
-               }
     }
 }

@@ -17,7 +17,7 @@
     <string name="empty_new_password">New Password is required.</string>
     <string name="mobile_error">Mobile Number is required.</string>
     <string name="order_number_error">Order Number is required.</string>
-    <string name="bank_number_error">Bank number is required.</string>
+    <string name="bank_number_error">Bank Name is required.</string>
     <string name="holder_account_number_error">Holder account number is required.</string>
     <string name="transfer_amount_error">Transfer account is required.</string>
     <string name="transfer_date_error">Transfer date is required.</string>
@@ -221,7 +221,7 @@
     <string name="ok">OK</string>
     <string name="bank_account_information">Bank Account Information</string>
     <string name="order_number">Order Number</string>
-    <string name="bank_number">Bank Number</string>
+    <string name="bank_number">Bank Name</string>
     <string name="holder_acc_number">Holder Account Number</string>
     <string name="transaction_info">Transaction Information</string>
     <string name="transfer_amount">Transfer Amount</string>
