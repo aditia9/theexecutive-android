@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.shoppingBag
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
@@ -83,6 +84,10 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
             var updateQty = item?.qty
 
             itemBinding?.imgProduct?.setOnClickListener {
+                action(0, position, item, updateQty, null)
+            }
+
+            itemBinding?.tvProductName?.setOnClickListener{
                 action(0, position, item, updateQty, null)
             }
 
@@ -194,6 +199,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
 
     class ShoppingBagFooterHolder(var itemBinding: ShoppingBagFooterBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, mPromoCode: String, mGrandTotal: Int) {
 
             itemBinding?.btnApply?.setOnClickListener { view ->
@@ -211,7 +217,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
             }
 
             if (mGrandTotal != 0) {
-                itemBinding?.tvTotal?.text = Utils.getFromattedPrice(mGrandTotal.toString())
+                itemBinding?.tvTotal?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mGrandTotal.toString())
             }
 
             if (!TextUtils.isEmpty(mPromoCode)) {
