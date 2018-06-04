@@ -5,8 +5,10 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
+import android.view.View
 import android.util.Log
 import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.theexecutive.R
@@ -16,6 +18,7 @@ import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.modules.bankTransfer.BankTransferFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
@@ -25,6 +28,8 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
+import kotlinx.android.synthetic.main.activity_dashboard.*
+
 
 /**
  * @Details Dashboard screen for an app
@@ -35,6 +40,7 @@ class DashBoardActivity : BaseActivity() {
 
     lateinit var toolbarBinding: ActivityDashboardBinding
     private var mediaPicker: MediaHelperActivity? = null
+    private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +71,7 @@ class DashBoardActivity : BaseActivity() {
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener {
             override fun onBackStackChanged() {
                 val backStackCount = supportFragmentManager.backStackEntryCount
-                if(backStackCount > 0){
+                if (backStackCount > 0) {
                     val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
                     fragment?.run {
                         if (fragment is HomeFragment) {
@@ -95,18 +101,33 @@ class DashBoardActivity : BaseActivity() {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.notifications), 0, "", R.drawable.back, true, 0, false)
                             fragment.getNotification()
                         }
-                        if(fragment is ProductListingFragment){
-                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true ) }
-                        if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         (fragment as? ProductDetailFragment)?.onResume()
                         (fragment as? AddressBookFragment)?.onResume()
                         (fragment as? ShoppingBagFragment)?.onResume()
+                        (fragment as? CheckoutFragment)?.onResume()
 
                     }
                 }
             }
         })
+
+    }
+
+    fun showPromotionMsg(promoMsg: String? = "", url: String? = "", action: () -> Unit) {
+        if(promoMsg.isNullOrEmpty().not()){
+            tv_promo_msg.visibility = View.VISIBLE
+            tv_promo_msg.text = promoMsg
+
+            handler.postDelayed({
+                kotlin.run {
+                    tv_promo_msg.visibility = View.GONE
+                }
+            }, Constants.PROMOTION_TOAST_TIMEOUT)
+
+            tv_promo_msg.setOnClickListener {
+                action()
+            }
+        }
 
     }
 

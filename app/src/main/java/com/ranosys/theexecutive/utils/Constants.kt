@@ -4,6 +4,7 @@ package com.ranosys.theexecutive.utils
  * Created by Mohammad Sunny on 22/2/18.
  */
 object Constants {
+    const val API_URL = "http://magento.theexecutive.co.id/"
     const val ACCESS_TOKEN_KEY = "access_token"
     const val USER_ACCESS_TOKEN_KEY = "user_access_token"
     const val USER_CART_ID_KEY = "user_cart_id_key"
@@ -14,6 +15,7 @@ object Constants {
     const val SELECTED_STORE_ID_KEY = "selected_store_id"
     const val SELECTED_WEBSITE_ID_KEY = "selected_website_id"
     const val ANDROID_DEVICE_ID_KEY = "device_id"
+    const val OS_TYPE = "android"
     const val MESSAGE = "message"
     const val ERROR = "Error"
     const val MAINTENENCE_OFF = "0"
@@ -77,6 +79,7 @@ object Constants {
     const val SORT_TYPE_CATALOG: String = "catalog"
     const val SORT_TYPE_SEARCH: String = "search"
     const val SPLASH_TIMEOUT: Long = 3000
+    const val PROMOTION_TOAST_TIMEOUT: Long = 5000
     const val CLICK_TIMEOUT: Long = 3000
     const val ERROR_CODE_404: Int = 404
     const val ERROR_CODE_401: Int = 401
@@ -91,6 +94,11 @@ object Constants {
     const val LAST_NAME: String = "last_name"
     const val PRODUCT_SKU: String = "productSku"
     const val OPTIONS: String = "options"
+    const val ORDER_ID: String = "order_id"
+    const val PAYMENT_METHOD_BANK_TRANSFER_KEY: String = "banktransfer"
+    const val PAYMENT_METHOD_COD_KEY: String = "cashondelivery"
+    const val GRAND_TOTAL_KEY: String = "grand_total"
+    const val IDR: String = "IDR"
     const val NOTIFICATION_CHANNEL_ID = "4655"
     var notificationCounter = 0
     const val KEY_REDIRECTION_TYPE = "type"
@@ -109,6 +117,10 @@ object Constants {
     const val NOTIFICATION_TYPE_ORDER_LIST = "Order"
     const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
     const val USER_FCM_ID = "fcm_id"
+    const val STATUS = "status"
+    const val SUCCESS = "success"
+    const val FAILURE = "failure"
+    const val CANCEL = "cancelled"
     val IMAGE_RATIO: Double = 1.44
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"

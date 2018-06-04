@@ -14,9 +14,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.facebook.FacebookSdk.getApplicationContext
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
+import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import com.zopim.android.sdk.prechat.ZopimChatActivity
@@ -44,6 +49,15 @@ class HomeFragment : BaseFragment() {
 
         //initialize Zendesk chat setup
         Utils.setUpZendeskChat()
+
+        registerDeviceOnServer()
+
+        // show promotional message
+        val promoMsg = GlobalSingelton.instance?.configuration?.home_promotion_message
+        val promoUrl = GlobalSingelton.instance?.configuration?.home_promotion_message_url
+        (activity as DashBoardActivity).showPromotionMsg(promoMsg, promoUrl, {
+            prepareWebPageDialog(activity as Context, promoUrl, "")
+        })
 
         tv_chat.setOnClickListener {
             startActivity(Intent(getApplicationContext(), ZopimChatActivity::class.java))
@@ -164,5 +178,26 @@ class HomeFragment : BaseFragment() {
 
     companion object {
         var fragmentPosition : Int? = null
+    }
+
+
+    private fun registerDeviceOnServer() {
+        val request = DeviceRegisterRequest(Constants.OS_TYPE,
+                SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID),
+                SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+
+        AppRepository.registerDevice(request, object : ApiCallback<Boolean> {
+            override fun onSuccess(t: Boolean?) {
+                AppLog.d(t.toString())
+            }
+
+            override fun onException(error: Throwable) {
+                AppLog.d(error.message!!)
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.d(errorMsg)
+            }
+        })
     }
 }

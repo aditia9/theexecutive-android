@@ -67,7 +67,7 @@ class CategoryFragment : BaseFragment() {
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
-        promotionBinding?.root?.tv_promotion_text?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
+        promotionBinding?.tvPromotionText?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
         Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.CATEGORY_IMAGE_HEIGHT_RATIO)
         viewPager = promotionBinding.root?.viewpager!!
 
@@ -185,7 +185,6 @@ class CategoryFragment : BaseFragment() {
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
-
     }
 
     override fun onDestroy() {

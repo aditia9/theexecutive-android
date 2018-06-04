@@ -15,6 +15,7 @@ import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlideApp
 import com.ranosys.theexecutive.utils.GlobalSingelton
 
@@ -39,7 +40,7 @@ class BindingAdapters {
         fun captureSelectedValue(pAppCompatSpinner: Spinner): String {
             return pAppCompatSpinner.selectedItem.toString()
         }
-        
+
         @JvmStatic
         @BindingAdapter("android:src")
         fun setImageResource(imageView: ImageView, resource: Int) {
@@ -110,6 +111,38 @@ class BindingAdapters {
                         .into(imageView)
 
             }
+        }
+
+        //for images in order result page
+        @JvmStatic
+        @BindingAdapter("bind:orderResult")
+        fun showOrderStatus(imageView: ImageView, status: String?) {
+
+            var imageName = ""
+            when(status){
+                Constants.SUCCESS -> {
+                    imageName = "order_success"
+
+                }
+                Constants.CANCEL -> {
+                    imageName = "order_cancel"
+
+                }
+                Constants.FAILURE -> {
+                    imageName = "order_fail"
+
+                }
+            }
+
+            val iconId = imageView.context.getResources().getIdentifier(imageName, "drawable", imageView.context.packageName)
+
+            GlideApp.with(imageView.context)
+                    .asBitmap()
+                    .load(iconId)
+                    .centerCrop()
+                    .into(imageView)
+
+
         }
     }
 }
