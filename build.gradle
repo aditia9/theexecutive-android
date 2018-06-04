@@ -24,6 +24,9 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven {
+            url "https://dl.bintray.com/rtpldeveloper/dochelper"
+        }
     }
 }
 
@@ -51,4 +54,5 @@ ext{
     glideVersion = "4.6.1"
     versionCode = "2"
     versionName = "2.0.0"
+    dochelperVersion = "1.0.9"
 }

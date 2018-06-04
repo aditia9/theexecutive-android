@@ -52,7 +52,7 @@ public class DatePicker extends FrameLayout {
     /** Magic year that represents "no year" */
     public static int NO_YEAR = 0;
     private static final int MIN_AGE = 13;
-    private static final int DEFAULT_START_YEAR = 1900;
+    private static int DEFAULT_START_YEAR = 1900;
     private static int DEFAULT_END_YEAR = Calendar.getInstance().get(Calendar.YEAR) - MIN_AGE;
     private static final TwoDigitFormatter sTwoDigitFormatter = new TwoDigitFormatter();
 
@@ -90,7 +90,7 @@ public class DatePicker extends FrameLayout {
         void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth);
     }
 
-    public DatePicker(Context context, ViewGroup root, int numberPickerStyle) {
+    public DatePicker(Context context, ViewGroup root, int numberPickerStyle, int mDefaultStartYear,int mDefaultEndYear) {
         super(context, null, 0);
 
         LayoutInflater inflater = (LayoutInflater) new ContextThemeWrapper(context, numberPickerStyle).getSystemService(
@@ -98,6 +98,14 @@ public class DatePicker extends FrameLayout {
         inflater.inflate(R.layout.date_picker_container, this, true);
 
         mPickerContainer = findViewById(R.id.parent);
+
+        if(mDefaultStartYear != 0){
+            DEFAULT_START_YEAR = mDefaultStartYear;
+        }
+
+        if( mDefaultEndYear != 0){
+            DEFAULT_END_YEAR = mDefaultEndYear;
+        }
 
         mDayPicker = inflater.inflate(R.layout.number_picker_day_month, mPickerContainer, true).findViewById(R.id.number_picker);
         mDayPicker.setId(R.id.day);
@@ -345,7 +353,7 @@ public class DatePicker extends FrameLayout {
      */
     public void init(int year, int monthOfYear, int dayOfMonth,
                      OnDateChangedListener onDateChangedListener) {
-        init(year, monthOfYear, dayOfMonth, false,Calendar.getInstance().get(Calendar.YEAR) - 13, onDateChangedListener);
+        init(year, monthOfYear, dayOfMonth, false,Calendar.getInstance().get(Calendar.YEAR) - 13, onDateChangedListener, DEFAULT_START_YEAR, DEFAULT_END_YEAR );
     }
 
     /**
@@ -357,14 +365,15 @@ public class DatePicker extends FrameLayout {
      * @param onDateChangedListener How user is notified date is changed by user, can be null.
      */
     public void init(int year, int monthOfYear, int dayOfMonth, boolean yearOptional, int maxYear,
-                     OnDateChangedListener onDateChangedListener) {
+                     OnDateChangedListener onDateChangedListener, int mDefaultStartYear, int mDefaultEndYear) {
         mYear = (yearOptional && year == NO_YEAR) ? getCurrentYear() : year;
         mMonth = monthOfYear;
         mDay = dayOfMonth;
         mYearOptional = yearOptional;
         mHasYear = yearOptional ? (year != NO_YEAR) : true;
         mOnDateChangedListener = onDateChangedListener;
-        DEFAULT_END_YEAR = maxYear;
+        DEFAULT_END_YEAR = mDefaultEndYear;
+        DEFAULT_START_YEAR = mDefaultStartYear;
         updateSpinners();
     }
 

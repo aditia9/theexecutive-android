@@ -16,6 +16,11 @@
     <string name="empty_confirm_password">Confirm Password is required.</string>
     <string name="empty_new_password">New Password is required.</string>
     <string name="mobile_error">Mobile Number is required.</string>
+    <string name="order_number_error">Order Number is required.</string>
+    <string name="bank_number_error">Bank Name is required.</string>
+    <string name="holder_account_number_error">Holder account number is required.</string>
+    <string name="transfer_amount_error">Transfer account is required.</string>
+    <string name="transfer_date_error">Transfer date is required.</string>
     <string name="dob_error">Date of birth is required.</string>
     <string name="city_error">Please provide city.</string>
     <string name="state_error">Please provide state</string>
@@ -192,6 +197,7 @@
     <string name="payment_method">Payment Method</string>
     <string name="confirm_order"><![CDATA[confirm order & pay now]]></string>
     <string name="notifications">Notifications</string>
+    <string name="bank_transfer">Bank Transfer</string>
     <string name="change_password">Change Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
@@ -230,5 +236,20 @@
     <string name="order_no">ORDER NO.</string>
     <string name="return_qty">Return Qty</string>
     <string name="ok">OK</string>
+    <string name="bank_account_information">Bank Account Information</string>
+    <string name="order_number">Order Number</string>
+    <string name="bank_number">Bank Name</string>
+    <string name="holder_acc_number">Holder Account Number</string>
+    <string name="transaction_info">Transaction Information</string>
+    <string name="transfer_amount">Transfer Amount</string>
+    <string name="transfer_date_hint">Transfer Date</string>
+    <string name="attachment">Attachment</string>
+    <string name="empty_bank_recipient">Bank Recipient is required.</string>
+    <string name="empty_transfer_method">Transfer Method is required.</string>
+    <string name="empty_attachment_file">Attachment File is required.</string>
+    <string name="add_attachment">Add Attachment</string>
+
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
 
 </resources>

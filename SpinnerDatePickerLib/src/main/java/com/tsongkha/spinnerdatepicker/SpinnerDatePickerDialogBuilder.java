@@ -15,6 +15,7 @@ public class SpinnerDatePickerDialogBuilder {
     private boolean yearOptional = false;
     private int theme = -1;                 //default theme
     private int spinnerTheme = -1;          //default theme
+    private int defaultStartYear = 1900;
 
     public SpinnerDatePickerDialogBuilder context(Context context) {
         this.context = context;
@@ -46,6 +47,11 @@ public class SpinnerDatePickerDialogBuilder {
         return this;
     }
 
+
+    public SpinnerDatePickerDialogBuilder defaultStartYear(int defaultStartYear) {
+        this.defaultStartYear = defaultStartYear;
+        return this;
+    }
     public SpinnerDatePickerDialogBuilder dialogTheme(int theme) {
         this.theme = theme;
         return this;
@@ -64,6 +70,6 @@ public class SpinnerDatePickerDialogBuilder {
     public DatePickerDialog build() {
         if (context == null) throw new IllegalArgumentException("Context must not be null");
 
-        return new DatePickerDialog(context, theme, spinnerTheme, callBack, year, finalYear, monthOfYear, dayOfMonth, yearOptional);
+        return new DatePickerDialog(context, theme, spinnerTheme, callBack, year, finalYear, monthOfYear, dayOfMonth, yearOptional, defaultStartYear, finalYear);
     }
 }
