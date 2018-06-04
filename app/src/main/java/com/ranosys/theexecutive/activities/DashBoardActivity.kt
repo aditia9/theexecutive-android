@@ -168,6 +168,7 @@ class DashBoardActivity : BaseActivity() {
     fun initMediaPicker() : MediaHelperActivity{
         mediaPicker = MediaHelperActivity(this)
         return mediaPicker as MediaHelperActivity
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
