@@ -64,7 +64,6 @@
     <dimen name="three_hundred_dp">300dp</dimen>
     <dimen name="hundred_dp">100dp</dimen>
     <dimen name="eight_hundred_dp">800dp</dimen>
-    <dimen name="hundred_dp">100dp</dimen>
     <dimen name="five_hundred_dp">500dp</dimen>
     <dimen name="six_hundred_dp">600dp</dimen>
     <dimen name="eighty_dp">80dp</dimen>

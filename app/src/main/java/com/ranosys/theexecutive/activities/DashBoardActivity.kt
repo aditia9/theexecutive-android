@@ -9,7 +9,6 @@ import android.os.Handler
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import android.view.View
-import android.util.Log
 import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
