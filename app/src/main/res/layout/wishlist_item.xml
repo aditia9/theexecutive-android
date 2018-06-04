@@ -16,7 +16,7 @@
 
         <ImageView
             android:id="@+id/img_product"
-            android:layout_width="@dimen/one_fifty_dp"
+            android:layout_width="125dp"
             android:layout_height="@dimen/one_eighty_dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,13 +28,13 @@
 
         <ImageView
             android:id="@+id/img_product_overlay"
-            android:layout_width="@dimen/one_fifty_dp"
-            android:layout_height="@dimen/one_eighty_dp"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
             android:background="@color/blur_image_color"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toTopOf="@id/img_product"
+            app:layout_constraintBottom_toBottomOf="@id/img_product"
+            app:layout_constraintStart_toStartOf="@id/img_product"
+            app:layout_constraintEnd_toEndOf="@id/img_product"
             android:visibility="gone"
             android:contentDescription="@string/product_image"
             />

@@ -4,10 +4,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
-import android.view.View
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
@@ -24,7 +22,6 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
-import kotlinx.android.synthetic.main.activity_dashboard.*
 
 
 /**
@@ -35,7 +32,6 @@ import kotlinx.android.synthetic.main.activity_dashboard.*
 class DashBoardActivity : BaseActivity() {
 
     lateinit var toolbarBinding: ActivityDashboardBinding
-    private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,24 +102,6 @@ class DashBoardActivity : BaseActivity() {
                 }
             }
         })
-
-    }
-
-    fun showPromotionMsg(promoMsg: String? = "", url: String? = "", action: () -> Unit) {
-        if(promoMsg.isNullOrEmpty().not()){
-            tv_promo_msg.visibility = View.VISIBLE
-            tv_promo_msg.text = promoMsg
-
-            handler.postDelayed({
-                kotlin.run {
-                    tv_promo_msg.visibility = View.GONE
-                }
-            }, Constants.PROMOTION_TOAST_TIMEOUT)
-
-            tv_promo_msg.setOnClickListener {
-                action()
-            }
-        }
 
     }
 

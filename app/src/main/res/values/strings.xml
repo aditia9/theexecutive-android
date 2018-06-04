@@ -231,5 +231,6 @@
     <string name="order_no">ORDER NO.</string>
     <string name="return_qty">Return Qty</string>
     <string name="ok">OK</string>
+    <string name="select_payment_method_error">Please select payment method</string>
 
 </resources>
