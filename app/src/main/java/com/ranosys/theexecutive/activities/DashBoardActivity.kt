@@ -15,9 +15,12 @@ import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
+import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
+import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
@@ -100,6 +103,9 @@ class DashBoardActivity : BaseActivity() {
                         (fragment as? AddressBookFragment)?.onResume()
                         (fragment as? ShoppingBagFragment)?.onResume()
                         (fragment as? CheckoutFragment)?.onResume()
+                        (fragment as? OrderListFragment)?.onResume()
+                        (fragment as? OrderResultFragment)?.onResume()
+                        (fragment as? OrderDetailFragment)?.onResume()
 
                     }
 

@@ -138,7 +138,7 @@ class OrderReturnFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.order_no) + " " + orderId, 0, "", R.drawable.back, true, 0, false)
+        setToolBarParams(getString(R.string.returns), 0, "", R.drawable.back, true, 0, false)
     }
 
 }
