@@ -25,6 +25,7 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
 import com.ranosys.theexecutive.modules.shoppingBag.TotalResponse
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
+import com.ranosys.theexecutive.modules.wishlist.MoveToBagRequest
 import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
 import retrofit2.Call
 import retrofit2.http.*
@@ -417,7 +418,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
+        fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: String, @Body request: MoveToBagRequest ): Call<String>
 
     }
 
