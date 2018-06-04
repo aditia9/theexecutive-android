@@ -63,8 +63,10 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
             item?.stock_item?.run {
                 if(is_in_stock && qty > 0){
                     itemBinding?.tvOutOfStock?.visibility = View.GONE
+                    itemBinding?.imgProductOverlay?.visibility = View.GONE
                 }else{
                     itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
+                    itemBinding?.imgProductOverlay?.visibility = View.VISIBLE
                 }
             }
 

@@ -97,7 +97,7 @@ class DashBoardActivity : BaseActivity() {
                             fragment.getNotification()
                         }
                         (fragment as? ProductDetailFragment)?.onResume()
-                        (fragment as? AddressBookFragment)?.onResume()
+                        (fragment as? AddressBookFragment)?.setToolbarAndCallAddressApi()
                         (fragment as? ShoppingBagFragment)?.onResume()
                         (fragment as? CheckoutFragment)?.onResume()
 

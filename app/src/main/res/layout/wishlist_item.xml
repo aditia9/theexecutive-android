@@ -18,13 +18,24 @@
             android:id="@+id/img_product"
             android:layout_width="@dimen/one_fifty_dp"
             android:layout_height="@dimen/one_eighty_dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/placeholder"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             bind:baseUrlWithProductImageUrl="@{item.image}"
+            android:contentDescription="@string/product_image"
+            />
+
+        <ImageView
+            android:id="@+id/img_product_overlay"
+            android:layout_width="@dimen/one_fifty_dp"
+            android:layout_height="@dimen/one_eighty_dp"
+            android:background="@color/blur_image_color"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            android:visibility="gone"
             android:contentDescription="@string/product_image"
             />
 
