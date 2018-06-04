@@ -16,7 +16,7 @@
 
         <ImageView
             android:id="@+id/img_product"
-            android:layout_width="125dp"
+            android:layout_width="@dimen/one_twenty_five_dp"
             android:layout_height="@dimen/one_eighty_dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
