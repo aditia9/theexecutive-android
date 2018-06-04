@@ -19,6 +19,7 @@ import android.widget.ExpandableListView
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
@@ -26,12 +27,14 @@ import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
+import kotlinx.android.synthetic.main.toolbar_layout.view.*
 
 /**
  * @Details Class showing categories on Home screen
@@ -51,17 +54,20 @@ class CategoryFragment : BaseFragment() {
         categoryModelView = ViewModelProviders.of(this).get(CategoryModelView::class.java)
         mViewDataBinding?.categoryViewModel = categoryModelView
         mViewDataBinding?.executePendingBindings()
+
+        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
+            FragmentUtils.addFragment(context, ShoppingBagFragment(),null, ShoppingBagFragment::class.java.name, true )
+        }
         return mViewDataBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
 
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
-        promotionBinding?.root?.tv_promotion_text?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
+        promotionBinding?.tvPromotionText?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
         Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.CATEGORY_IMAGE_HEIGHT_RATIO)
         viewPager = promotionBinding.root?.viewpager!!
 
@@ -70,19 +76,19 @@ class CategoryFragment : BaseFragment() {
         pagerAdapter.setItemClickListener(listener = object: CustomViewPageAdapter.OnItemClickListener{
             override fun onItemClick(item: PromotionsResponseDataClass?) {
                 when(item?.type){
-                    Constants.PROMOTION_TYPE_CATEGORY -> {
+                    Constants.TYPE_CATEGORY -> {
                         val bundle = Bundle()
                         bundle.putInt(Constants.CATEGORY_ID, item.value.toInt())
                         bundle.putString(Constants.CATEGORY_NAME, item.title)
                         FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                     }
 
-                    Constants.PROMOTION_TYPE_PRODUCT -> {
+                    Constants.TYPE_PRODUCT -> {
                         val fragment = ProductDetailFragment.getInstance(null, item.value, item.title, 0)
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
 
-                    Constants.PROMOTION_TYPE_CMS_PAGE -> {
+                    Constants.TYPE_CMS_PAGE -> {
                         if(item.value.isNotBlank()){
                             prepareWebPageDialog(activity as Context, item.value ,item.title)
                         }
@@ -179,13 +185,11 @@ class CategoryFragment : BaseFragment() {
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
-
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        handler.removeCallbacksAndMessages(null)
+    override fun onDestroy() {
+        super.onDestroy()
+       handler.removeCallbacksAndMessages(null)
     }
 
     private fun getPromotions() {

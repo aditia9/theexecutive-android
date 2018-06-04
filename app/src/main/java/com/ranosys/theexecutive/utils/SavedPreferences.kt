@@ -7,7 +7,7 @@ import com.ranosys.theexecutive.DelamiBrandsApplication
 /**
  * Created by Mohammad Sunny on 20/2/18.
  */
-class SavedPreferences private constructor(){
+class SavedPreferences private constructor() {
 
     private var sharedPreferences: SharedPreferences? = null
     private var USER_EMAIL_KEY = "userEmail"
@@ -52,6 +52,7 @@ class SavedPreferences private constructor(){
         return app_name
     }
 
+
     private fun getEditor(): SharedPreferences.Editor? {
         return sharedPreferences?.edit()
     }
@@ -62,7 +63,7 @@ class SavedPreferences private constructor(){
         editor?.apply()
     }
 
-    fun getIsLogin():Boolean?{
+    fun getIsLogin(): Boolean? {
         val islogin: Boolean?
         islogin = getBooleanValue(IS_LOGIN_KEY)
         return islogin

@@ -4,6 +4,7 @@ package com.ranosys.theexecutive.utils
  * Created by Mohammad Sunny on 22/2/18.
  */
 object Constants {
+    const val API_URL = "http://magento.theexecutive.co.id/"
     const val ACCESS_TOKEN_KEY = "access_token"
     const val USER_ACCESS_TOKEN_KEY = "user_access_token"
     const val USER_CART_ID_KEY = "user_cart_id_key"
@@ -14,6 +15,7 @@ object Constants {
     const val SELECTED_STORE_ID_KEY = "selected_store_id"
     const val SELECTED_WEBSITE_ID_KEY = "selected_website_id"
     const val ANDROID_DEVICE_ID_KEY = "device_id"
+    const val OS_TYPE = "android"
     const val MESSAGE = "message"
     const val ERROR = "Error"
     const val MAINTENENCE_OFF = "0"
@@ -51,8 +53,6 @@ object Constants {
     const val NEW_FROM_DATE_LABEL: String = "news_from_date"
     const val NEW_TO_DATE_LABEL: String = "news_to_date"
     const val SHORT_DESCRIPTION: String = "short_description"
-    const val PRODUCT_SKU: String = "productSku"
-    const val OPTIONS: String = "options"
     const val COLOR: String = "color"
     const val COLOR_: String = "Color"
     const val SIZE: String = "size"
@@ -68,9 +68,10 @@ object Constants {
     const val NEW_TAG: String = "New"
     const val MEN: String = "MEN"
     const val WOMEN: String = "WOMEN"
-    const val PROMOTION_TYPE_CATEGORY: String = "Category"
-    const val PROMOTION_TYPE_PRODUCT: String = "Product"
-    const val PROMOTION_TYPE_CMS_PAGE: String = "CMS"
+    const val TYPE_CATEGORY: String = "Category"
+    const val TYPE_PRODUCT: String = "Product"
+    const val TYPE_CMS_PAGE: String = "CMS"
+    const val TYPE_ORDER: String = "Order"
     const val SEARCH_FROM_HOME_QUERY: String = "search_from_home_query"
     const val UNIVERSAL_CAT_ID: Int = 0
     const val URL_KEY: String = "url_key"
@@ -78,6 +79,8 @@ object Constants {
     const val SORT_TYPE_CATALOG: String = "catalog"
     const val SORT_TYPE_SEARCH: String = "search"
     const val SPLASH_TIMEOUT: Long = 3000
+    const val PROMOTION_TOAST_TIMEOUT: Long = 5000
+    const val CLICK_TIMEOUT: Long = 3000
     const val ERROR_CODE_404: Int = 404
     const val ERROR_CODE_401: Int = 401
     const val ERROR_CODE_400: Int = 400
@@ -89,5 +92,35 @@ object Constants {
     const val CATEGORY_IMAGE_HEIGHT_RATIO: Double = 1.5
     const val FIRST_NAME: String = "first_name"
     const val LAST_NAME: String = "last_name"
+    const val PRODUCT_SKU: String = "productSku"
+    const val OPTIONS: String = "options"
+    const val ORDER_ID: String = "order_id"
+    const val PAYMENT_METHOD_BANK_TRANSFER_KEY: String = "banktransfer"
+    const val PAYMENT_METHOD_COD_KEY: String = "cashondelivery"
+    const val GRAND_TOTAL_KEY: String = "grand_total"
+    const val IDR: String = "IDR"
+    const val NOTIFICATION_CHANNEL_ID = "4655"
+    var notificationCounter = 0
+    const val KEY_REDIRECTION_TYPE = "type"
+    const val KEY_REDIRECTION_VALUE = "typeId"
+    const val KEY_IMAGE = "image_url"
+    const val KEY_TITLE = "title"
+    const val KEY_BODY = "body"
+    const val KEY_REDIRECTION_TITLE = "redirect_title"
+    const val KEY_NOTIFICATION_TITLE = "gcm.notification.title"
+    const val KEY_NOTIFICATION_ALERT = "notification_alert"
+    const val KEY_NOTIFICATION_ID = "notification_id"
+    const val KEY_NOTIFICATION_MESSAGE = "gcm.notification.body"
+    const val NOTIFICATION_TYPE_CMS = "cms"
+    const val NOTIFICATION_TYPE_PRODUCT_DETAIL = "Product"
+    const val NOTIFICATION_TYPE_CATALOG = "Category"
+    const val NOTIFICATION_TYPE_ORDER_LIST = "Order"
+    const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
+    const val USER_FCM_ID = "fcm_id"
+    const val STATUS = "status"
+    const val SUCCESS = "success"
+    const val FAILURE = "failure"
+    const val CANCEL = "cancelled"
+    val IMAGE_RATIO: Double = 1.44
 
 }

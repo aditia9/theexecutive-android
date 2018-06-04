@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.ApiClient
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
@@ -30,6 +32,7 @@ import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.rangeBar.RangeSeekBar
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.dialog_filter_option.*
 import kotlinx.android.synthetic.main.fragment_product_listing.*
@@ -39,7 +42,7 @@ import java.util.*
  * @Details fragment shows product listing
  * @Author Ranosys Technologies
  * @Date 16,Apr,2018
-*/
+ */
 class ProductListingFragment: BaseFragment() {
 
     private lateinit var mBinding: FragmentProductListingBinding
@@ -52,6 +55,8 @@ class ProductListingFragment: BaseFragment() {
     private lateinit var filterOptionDialog: Dialog
     private lateinit var sortOptionDialog: Dialog
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var mLastClickTime: Long = 0
+    private var promotionalToastShown = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +67,15 @@ class ProductListingFragment: BaseFragment() {
             categoryId = data.get(Constants.CATEGORY_ID) as Int? ?: 0
             categoryName = data.get(Constants.CATEGORY_NAME) as String? ?: ""
         }
+    }
 
+    private fun showPromotionalToast() {
+        promotionalToastShown = true
+        val promoMsg = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message
+        val promoUrl = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message_url
+        (activity as DashBoardActivity).showPromotionMsg(promoMsg, promoUrl, {
+            prepareWebPageDialog(activity as Context, promoUrl, "")
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -229,16 +242,15 @@ class ProductListingFragment: BaseFragment() {
             val range = priceFilter?.options?.get(0)?.value
             val min = range?.split("-")?.get(0)?.toLong()
             val max = range?.split("-")?.get(1)?.toLong()
-            if(max == min){
-                filterOptionDialog.price_range_bar.visibility = View.GONE
-            }else{
-                filterOptionDialog.price_range_bar.visibility = View.VISIBLE
-                filterOptionBinding.priceRangeBar.setRangeValues(min, max)
-                filterOptionBinding.priceRangeBar.selectedMinValue = min
-                filterOptionBinding.priceRangeBar.selectedMaxValue = max
-                filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
-                filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
-            }
+            if(max == min)
+                filterOptionDialog.price_range_bar.isEnabled = false
+
+            filterOptionDialog.price_range_bar.visibility = View.VISIBLE
+            filterOptionBinding.priceRangeBar.setRangeValues(min, max)
+            filterOptionBinding.priceRangeBar.selectedMinValue = min
+            filterOptionBinding.priceRangeBar.selectedMaxValue = max
+            filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
+            filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
         })
     }
 
@@ -302,6 +314,10 @@ class ProductListingFragment: BaseFragment() {
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
                 Utils.hideSoftKeypad(activity as Context)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < Constants.CLICK_TIMEOUT){
+                    return
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 ApiClient.client?.dispatcher()?.cancelAll()
                 mViewModel.isLoading = false
                 val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
@@ -510,6 +526,11 @@ class ProductListingFragment: BaseFragment() {
                 productListAdapter.productList = partialProductList
                 productListAdapter.notifyDataSetChanged()
                 hideLoading()
+
+                //show promotional toast
+                if(promotionalToastShown.not()){
+                    showPromotionalToast()
+                }
             }
         })
     }
@@ -534,11 +555,6 @@ class ProductListingFragment: BaseFragment() {
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setToolBarParams(categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)
     }
 
     companion object {

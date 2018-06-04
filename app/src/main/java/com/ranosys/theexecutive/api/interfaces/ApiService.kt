@@ -7,12 +7,22 @@ import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordDataClass
+import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
+import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
+import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
+import com.ranosys.theexecutive.modules.order.orderList.OrderListResponse
+import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnRequest
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagQtyUpdateRequest
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
+import com.ranosys.theexecutive.modules.shoppingBag.TotalResponse
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
@@ -29,7 +39,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body loginRequest: LoginDataClass.LoginRequest?): Call<String>
+        fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body loginRequest: LoginDataClass.LoginRequest?): Call<String>
     }
 
     interface RegistrationService {
@@ -37,7 +47,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun registration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body registrationRequest: RegisterDataClass.RegisterRequest?): Call<RegisterDataClass.RegistrationResponse>
+        fun registration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body registrationRequest: RegisterDataClass.RegisterRequest?): Call<RegisterDataClass.RegistrationResponse>
     }
 
     interface StoresService {
@@ -45,7 +55,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getStores(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?): Call<ArrayList<StoreResponse>>
+        fun getStores(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?): Call<ArrayList<StoreResponse>>
     }
 
     interface ConfigurationService {
@@ -53,7 +63,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getConfiguration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String): Call<ConfigurationResponse>
+        fun getConfiguration(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String): Call<ConfigurationResponse>
     }
 
     interface IsEmailAvailableService {
@@ -61,7 +71,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun isEmailAvailableApi(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: LoginDataClass.IsEmailAvailableRequest?): Call<Boolean>
+        fun isEmailAvailableApi(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body request: LoginDataClass.IsEmailAvailableRequest?): Call<Boolean>
     }
 
     interface SocialLoginService {
@@ -69,7 +79,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun socialLogin(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String, @Body request: LoginDataClass.SocialLoginRequest?): Call<String>
+        fun socialLogin(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body request: LoginDataClass.SocialLoginRequest?): Call<String>
     }
 
     interface ForgotPasswordService {
@@ -77,7 +87,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun forgotPasswordApi(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body requets: ForgotPasswordDataClass.ForgotPasswordRequest): Call<Boolean>
+        fun forgotPasswordApi(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body requets: ForgotPasswordDataClass.ForgotPasswordRequest): Call<Boolean>
     }
 
 
@@ -86,15 +96,15 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun changePasswordApi(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body requets: ChangePasswordDataClass): Call<Boolean>
+        fun changePasswordApi(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body requets: ChangePasswordDataClass): Call<Boolean>
     }
 
-    interface PromotionService{
+    interface PromotionService {
         @GET("rest/{store_code}/V1/homepromotions/list")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getPromotions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String): Call<List<PromotionsResponseDataClass>>
+        fun getPromotions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String): Call<List<PromotionsResponseDataClass>>
 
     }
 
@@ -103,19 +113,19 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getCategories(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String): Call<CategoryResponseDataClass>
+        fun getCategories(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String): Call<CategoryResponseDataClass>
 
         @GET("rest/{store_code}/V1/categories/{categoryId}")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getCategoryData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String, @Path("categoryId") categoryId : String): Call<CategoryDataResponse>
+        fun getCategoryData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Path("categoryId") categoryId: String): Call<CategoryDataResponse>
 
         @GET("rest/{store_code}/V1/categories/list")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getAllCategoryData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode : String, @QueryMap queryMap : HashMap<String,String>?): Call<AllCategoryDataResponse>
+        fun getAllCategoryData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @QueryMap queryMap: HashMap<String, String>?): Call<AllCategoryDataResponse>
 
 
     }
@@ -125,7 +135,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun countryList(@Path("store_code") storeCode:String): Call<List<RegisterDataClass.Country>>
+        fun countryList(@Path("store_code") storeCode: String): Call<List<RegisterDataClass.Country>>
     }
 
     interface CityListService {
@@ -133,7 +143,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun cityList(@Path("store_code") storeCode:String, @Path("state_code") stateCode:String): Call<List<RegisterDataClass.City>>
+        fun cityList(@Path("store_code") storeCode: String, @Path("state_code") stateCode: String): Call<List<RegisterDataClass.City>>
     }
 
     interface NewsLetterSubscription {
@@ -141,7 +151,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun newsLetterSuscribe(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Body request: MyAccountDataClass.NewsletterSubscriptionRequest?): Call<String>
+        fun newsLetterSuscribe(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body request: MyAccountDataClass.NewsletterSubscriptionRequest?): Call<String>
     }
 
     interface SortOptionService {
@@ -149,7 +159,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getSortOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Query("type")type: String): Call<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>
+        fun getSortOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Query("type") type: String): Call<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>
     }
 
     interface FilterOptionService {
@@ -157,13 +167,13 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getFilterOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Query("id")categoryId: Int): Call<ProductListingDataClass.FilterOptionsResponse>
+        fun getFilterOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Query("id") categoryId: Int): Call<ProductListingDataClass.FilterOptionsResponse>
 
         @GET("rest/{store_code}/V1/layerednavigation/searchfilters/")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getSearchFilters(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Query("q")searchQuery: String): Call<ProductListingDataClass.FilterOptionsResponse>
+        fun getSearchFilters(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Query("q") searchQuery: String): Call<ProductListingDataClass.FilterOptionsResponse>
     }
 
     interface ProductListingService {
@@ -171,39 +181,39 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getProductList(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String, @Path("list_from", encoded = true) listFrom:String, @QueryMap requestMap: Map<String, String>): Call<ProductListingDataClass.ProductListingResponse>
+        fun getProductList(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Path("list_from", encoded = true) listFrom: String, @QueryMap requestMap: Map<String, String>): Call<ProductListingDataClass.ProductListingResponse>
     }
 
-    interface ProductDetailService{
+    interface ProductDetailService {
         @GET("rest/{store_code}/V1/products/{product_sku}")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getProductDetail(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?, @Path("product_sku") productSku : String?): Call<ProductListingDataClass.Item>
+        fun getProductDetail(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String?, @Path("product_sku") productSku: String?): Call<ProductListingDataClass.Item>
 
         @GET("rest/{store_code}/V1/configurable-products/{product_sku}/children")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getProductChildren(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?, @Path("product_sku") productSku : String?): Call<List<ChildProductsResponse>>
+        fun getProductChildren(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String?, @Path("product_sku") productSku: String?): Call<List<ChildProductsResponse>>
 
         @GET("rest/{store_code}/V1/products/attributes/{attribute_id}/options")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getProductOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?, @Path("attribute_id") attributeId : String?): Call<List<ProductOptionsResponse>>
+        fun getProductOptions(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String?, @Path("attribute_id") attributeId: String?): Call<List<ProductOptionsResponse>>
 
         @GET("rest/{store_code}/V1/productcontent/url")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getStaticPagesUrl(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String?): Call<StaticPagesUrlResponse>
+        fun getStaticPagesUrl(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String?): Call<StaticPagesUrlResponse>
 
 
         @POST("rest/{store_code}/V1/wishlist/mine/addproduct")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.CACHE_CONTROL)
-        fun addToWishList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body request: JsonObject): Call<String>
+        fun addToWishList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: JsonObject): Call<String>
 
     }
 
@@ -213,51 +223,180 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun createGuestCart(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken:String?, @Path("store_code") storeCode:String): Call<String>
+        fun createGuestCart(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String): Call<String>
 
         @POST("rest/{store_code}/V1/carts/mine")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun createUserCart(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode:String): Call<String>
+        fun createUserCart(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<String>
 
         @GET("rest/{store_code}/V1/cart/mine/count")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun cartCountUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode:String): Call<String>
+        fun cartCountUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<String>
 
         @GET("rest/{store_code}/V1/guest-carts/{cart_id}/items/count")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun cartCountGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode:String, @Path("cart_id") cartId:String): Call<String>
+        fun cartCountGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Path("cart_id") cartId: String): Call<String>
 
         @POST("rest/{store_code}/V1/carts/mine/items")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun addTOCartUser(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode:String, @Body request: AddToCartRequest): Call<AddToCartResponse>
+        fun addTOCartUser(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body request: AddToCartRequest): Call<AddToCartResponse>
 
         @POST("rest/{store_code}/V1/guest-carts/{cart_id}/items")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun addTOCartGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode:String, @Path("cart_id") cartId: String,  @Body request: AddToCartRequest): Call<AddToCartResponse>
+
+        @GET("rest/{store_code}/V1/cart/mine/mergecart/{guest_cart_id}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun mergeCart(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode:String, @Path("guest_cart_id") guestCartId:String): Call<String>
+
+        @GET("rest/{store_code}/V1/carts/mine/items")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getCartOfUser(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String): Call<List<ShoppingBagResponse>>
+
+        @GET("rest/{store_code}/V1/guest-carts/{cart_id}/items")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getCartOfGuest(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Path("cart_id") cartId: String): Call<List<ShoppingBagResponse>>
+
+
+        @DELETE("rest/{store_code}/V1/guest-carts/{cartId}/items/{itemId}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun deleteItemFromShoppingBagGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId") cartId: String?, @Path("itemId") itemId: Int?): Call<String>
+
+        @DELETE("rest/{store_code}/V1/carts/mine/items/{itemId}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun deleteItemFromShoppingBagUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("itemId") itemId: Int?): Call<String>
+
+        @PUT("rest/{store_code}/V1/wishlist/mine/movefromcart/{itemId}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun moveItemFromCart(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("itemId") itemId: Int?): Call<String>
+
+        @PUT("rest/{store_code}/V1/carts/mine/items/{itemId}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun updateItemFromShoppingBagUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("itemId") itemId: Int?, @Body request: ShoppingBagQtyUpdateRequest): Call<ShoppingBagQtyUpdateRequest>
+
+
+        @PUT("rest/{store_code}/V1/guest-carts/{cartId}/items/{itemId}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun updateItemFromShoppingBagGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId") cartId: String?, @Path("itemId") itemId: Int?, @Body request: ShoppingBagQtyUpdateRequest): Call<ShoppingBagQtyUpdateRequest>
+
+
+        @PUT("rest/{store_code}/V1/carts/mine/coupons/{couponCode}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun applyCouponCodeForUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("couponCode") couponCode: String?): Call<String>
+
+
+        @PUT("rest/{store_code}/V1/guest-carts/{cartId}/coupons/{couponCode}")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun applyCouponCodeForGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId") cartId: String?, @Path("couponCode") couponCode: String?): Call<String>
+
+
+        @GET("rest/{store_code}/V1/carts/mine/coupons")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getCouponCodeForUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<Any>
+
+
+        @GET("rest/{store_code}/V1/guest-carts/{cartId}/coupons")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getCouponCodeForGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId") cartId: String?): Call<Any>
+
+
+        @DELETE("rest/{store_code}/V1/carts/mine/coupons")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun deleteCouponCodeForUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<String>
+
+
+        @DELETE("rest/{store_code}/V1/guest-carts/{cartId}/coupons")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun deleteCouponCodeForGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId") cartId: String?): Call<String>
+
+        @GET("rest/{store_code}/V1/carts/mine/totals")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getTotalForUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<TotalResponse>
+
+
+        @GET("rest/{store_code}/V1/guest-carts/{cartId}/totals")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getTotalForGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId") cartId: String?): Call<TotalResponse>
+
+
     }
 
-    interface MyAccount {
+    interface MyOrdersService {
+        @GET("rest/{store_code}/V1/orders/mine")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getMyOrderList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String): Call<List<OrderListResponse>>
+
+        @GET("rest/{store_code}/V1/order/{order_id}/mine")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getOrderDetail(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Path("order_id") orderId:String ,@QueryMap queryMap: HashMap<String, String>?): Call<OrderDetailResponse>
+
+
+        @POST("rest/{store_code}/V1/rma/productreturn")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun returnProduct(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode:String,  @Body request: OrderReturnRequest): Call<String>
+
+    }
+
+    interface MyAccountService {
         @GET("rest/{store_code}/V1/customers/me")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getUserInfo(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String): Call<MyAccountDataClass.UserInfoResponse>
+        fun getUserInfo(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<MyAccountDataClass.UserInfoResponse>
 
         @PUT("rest/{store_code}/V1/customers/me")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun updateUserInfo(@Header(ApiConstants.AUTHORIZATION_KEY) userToken:String?, @Path("store_code") storeCode:String, @Body request: MyAccountDataClass.UpdateInfoRequest): Call<MyAccountDataClass.UserInfoResponse>
+        fun updateUserInfo(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: MyAccountDataClass.UpdateInfoRequest): Call<MyAccountDataClass.UserInfoResponse>
     }
 
     interface WishlistService {
@@ -281,4 +420,61 @@ interface ApiService {
         fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
 
     }
+
+    interface NotificationService {
+
+        @GET("rest/{store_code}/V1/notification/mine/list")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getNotificationList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<List<NotificationListResponse>>
+
+        @POST("rest/{store_code}/V1/notification/changestatus")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun changeNotificationStatus(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: NotificationChangeStatusRequest): Call<Boolean>
+
+
+        @POST("rest/{store_code}/V1/notification/registerdevice")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun registerDevice(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: DeviceRegisterRequest): Call<Boolean>
+    }
+
+    interface CheckoutService {
+
+        @GET("rest/{store_code}/V1/carts/mine/totals?fields=total_segments")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getTotalAmounts(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<CheckoutDataClass.Totals>
+
+        @POST("rest/{store_code}/V1/carts/mine/payment-information")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun placeOrder(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.PlaceOrderRequest): Call<String>
+
+        @POST("rest/{store_code}/V1/carts/mine/estimate-shipping-methods-by-address-id")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getShippingMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetShippingMethodsRequest): Call<List<CheckoutDataClass.GetShippingMethodsResponse>>
+
+        @POST("rest/{store_code}/V1/carts/mine/shipping-information?fields=payment_methods,totals[total_segments]")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getPaymentMethods(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: CheckoutDataClass.GetPaymentMethodsRequest): Call<CheckoutDataClass.PaymentMethodResponse>
+
+        @GET("rest/{store_code}/V1/carts/mine?fields=customer,extension_attributes")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getUserInfoNSelectedShipping(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<CheckoutDataClass.UserInfoNselectedShippingResponse>
+    }
+
+
 }

@@ -66,7 +66,7 @@ class ProductViewFragment : BaseFragment() {
     private var colorMap = HashMap<String, String>()
     private var sizeMap = HashMap<String, String>()
     private var childProductsMap = HashMap<String, ImagesWithPrice?>()
-    private var colorOptionList : List<ProductOptionsResponse>? = null
+    private var colorOptionList : List<ProductOptionsResponse>? = listOf()
     private var sizeOptionList : List<ProductOptionsResponse>? = null
     private lateinit var sizeDilaogBinding: BottomSizeLayoutBinding
     private lateinit var sizeDilaog: Dialog
@@ -92,6 +92,8 @@ class ProductViewFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, 40)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, 40)
 
         productItemViewModel.productItem?.run {
             setData()
@@ -127,8 +129,8 @@ class ProductViewFragment : BaseFragment() {
         setDescription()
         if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
             setPrice()
-            setProductImages(productItemViewModel.productItem?.media_gallery_entries)
         }
+        setProductImages(productItemViewModel.productItem?.media_gallery_entries)
         setWearWithProductsData()
         if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
             if(position == pagerPosition) {
@@ -204,9 +206,6 @@ class ProductViewFragment : BaseFragment() {
 
     private fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
 
-        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, 1.5)
-        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, 1.5)
-
         if(mediaGalleryList?.size!! > 0)
             productItemViewModel.urlOne.set(mediaGalleryList[0].file)
         if(mediaGalleryList.size > 1) {
@@ -220,7 +219,7 @@ class ProductViewFragment : BaseFragment() {
         for(i in 2..listSize.minus(1)){
             val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
             productImagesBinding?.mediaGalleryEntry = mediaGalleryList[i]
-            Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage!!, 1.5)
+            Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage!!, Constants.IMAGE_RATIO, 40)
             val view = productImagesBinding!!.root.img_product_image
             view.setOnClickListener {
                 val drawable=view.drawable as BitmapDrawable
@@ -336,6 +335,7 @@ class ProductViewFragment : BaseFragment() {
 
         productItemViewModel.productChildrenResponse?.observe(this, Observer<ApiResponse<List<ChildProductsResponse>>> { apiResponse ->
             val response = apiResponse?.apiResponse ?: apiResponse?.error
+            hideLoading()
             if (response is List<*>) {
                 val list = response as List<ChildProductsResponse>
 
@@ -384,7 +384,7 @@ class ProductViewFragment : BaseFragment() {
                 setSizeViewList()
 
                 AppLog.e("ChildProductsMap : " + childProductsMap.toString())
-                hideLoading()
+
 
             } else {
                 Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
@@ -521,13 +521,13 @@ class ProductViewFragment : BaseFragment() {
             if (response is ProductListingDataClass.Item) {
                 relatedProductList?.add(response)
                 if(productLinksList?.size == relatedProductList?.size){
-                    hideLoading()
                     val fragment = ProductDetailFragment.getInstance(relatedProductList, relatedSku , relatedName, relatedPosition)
                     FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+                    hideLoading()
                 }
             } else {
+                Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
                 hideLoading()
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
             }
         })
 
@@ -537,11 +537,14 @@ class ProductViewFragment : BaseFragment() {
         //check for logged in user
         if((SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY) ?: "").isBlank()){
             //show toast to user to login
-            Toast.makeText(activity as Context, getString(R.string.login_required_for_wishlist), Toast.LENGTH_SHORT).show()
-            setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
-            val bundle = Bundle()
-            bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
-            FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+            Utils.showDialog(activity, getString(R.string.login_required_error), getString(android.R.string.ok), "", object : DialogOkCallback {
+                override fun setDone(done: Boolean) {
+                    setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
+                    val bundle = Bundle()
+                    bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
+                    FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+                }
+            })
         }else{
             if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
                 openBottomSizeSheet(true)
@@ -578,7 +581,7 @@ class ProductViewFragment : BaseFragment() {
                 colorOptionList?.forEachIndexed { index, it ->
                     if (index == 0) {
                         colorsViewList?.add(ColorsView(it.label, colorAttrId, it.value, childProductsMap[it.value]?.list, childProductsMap[it.value]?.price, true))
-                        setProductImages(childProductsMap[it.value]?.list)
+                        //setProductImages(childProductsMap[it.value]?.list)
                         price = childProductsMap[it.value]?.price
                         tv_price.text = childProductsMap[it.value]?.price
                     } else {
@@ -591,6 +594,11 @@ class ProductViewFragment : BaseFragment() {
                     price = childProductsMap[colorValue]?.price
                     tv_price.text = childProductsMap[colorValue]?.price
                 }
+            }
+            if(colorOptionList?.size == 0){
+                colorsViewList?.add(ColorsView("", colorAttrId, "", productItemViewModel.productItem?.media_gallery_entries, childProductsMap[colorValue]?.price, true))
+                price = childProductsMap[colorValue]?.price
+                tv_price.text = childProductsMap[colorValue]?.price
             }
 
             AppLog.e("colorsViewList : " + productItemViewModel.productItem?.sku + " " + colorsViewList.toString())
@@ -611,8 +619,8 @@ class ProductViewFragment : BaseFragment() {
                         tv_price.text = item?.price
                         colorViewAdapter.notifyDataSetChanged()
                         item?.list?.let {
-                            ll_color_choice.removeAllViews()
-                            setProductImages(it)
+                            //ll_color_choice.removeAllViews()
+                            //setProductImages(it)
                         }
                     }
                 })

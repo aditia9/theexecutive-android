@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.login
 
+import AppLog
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
@@ -70,7 +71,9 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
 
     fun login(){
-        val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString())
+
+
+        val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString(), SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID), SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY), Constants.OS_TYPE)
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
@@ -87,7 +90,13 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             override fun onSuccess(userToken: String?) {
                 //save customer token
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
-                apiSuccessResponse?.value = userToken
+
+                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
+                if(guestCartId.isNotBlank()){
+                    mergeCart(guestCartId)
+                }else{
+                    apiSuccessResponse?.value = userToken
+                }
 
             }
         })
@@ -136,7 +145,8 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     }
 
     private fun callSocialLoginApi(userData: LoginDataClass.SocialLoginData) {
-        val request = LoginDataClass.SocialLoginRequest(userData.email, userData.type, userData.token)
+        val request = LoginDataClass.SocialLoginRequest(userData.email, userData.type, userData.token, SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID), Constants.OS_TYPE,
+                SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
         AppRepository.socialLogin(request, object: ApiCallback<String>{
             override fun onException(error: Throwable) {
                 apiFailureResponse?.value = Constants.UNKNOWN_ERROR
@@ -149,8 +159,33 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             override fun onSuccess(userToken: String?) {
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
                 email.set(userData.email)
-                apiSuccessResponse?.value = userToken
 
+                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
+                if(guestCartId.isNotBlank()){
+                    mergeCart(guestCartId)
+                }else{
+                    apiSuccessResponse?.value = userToken
+                }
+
+            }
+
+        })
+    }
+
+    private fun mergeCart(guestCartId: String) {
+        AppRepository.cartMergeApi(guestCartId, object: ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                AppLog.d("cart merge api : ${error.message}")
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.d("cart merge api : ${errorMsg}")
+            }
+
+            override fun onSuccess(t: String?) {
+                //delete guest cart id
+                SavedPreferences.getInstance()?.saveStringValue("", Constants.GUEST_CART_ID_KEY)
+                apiSuccessResponse?.value = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
             }
 
         })

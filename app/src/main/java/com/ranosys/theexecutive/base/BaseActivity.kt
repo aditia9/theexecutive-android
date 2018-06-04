@@ -57,7 +57,7 @@ open class BaseActivity: RunTimePermissionActivity(){
     override fun onBackPressed() {
         Utils.hideSoftKeypad(this)
         if(supportFragmentManager.backStackEntryCount > 1){
-            supportFragmentManager.popBackStackImmediate()
+            supportFragmentManager.popBackStack()
         }else{
             val fragment = FragmentUtils.getCurrentFragment(this@BaseActivity)
             fragment?.run {

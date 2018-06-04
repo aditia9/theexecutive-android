@@ -14,20 +14,25 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.facebook.FacebookSdk.getApplicationContext
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
+import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
-import com.zopim.android.sdk.api.ZopimChat
-import com.zopim.android.sdk.model.VisitorInfo
 import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
 /**
- * Created by Mohammad Sunny on 19/3/18.
+ * @Details A fragment for home
+ * @Author Ranosys Technologies
+ * @Date 19,Mar,2018
  */
 class HomeFragment : BaseFragment() {
 
@@ -39,10 +44,20 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
         setPagerAdapter()
 
         //initialize Zendesk chat setup
         Utils.setUpZendeskChat()
+
+        registerDeviceOnServer()
+
+        // show promotional message
+        val promoMsg = GlobalSingelton.instance?.configuration?.home_promotion_message
+        val promoUrl = GlobalSingelton.instance?.configuration?.home_promotion_message_url
+        (activity as DashBoardActivity).showPromotionMsg(promoMsg, promoUrl, {
+            prepareWebPageDialog(activity as Context, promoUrl, "")
+        })
 
         tv_chat.setOnClickListener {
             startActivity(Intent(getApplicationContext(), ZopimChatActivity::class.java))
@@ -101,7 +116,7 @@ class HomeFragment : BaseFragment() {
             }
         })
 
-        viewpager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -163,5 +178,26 @@ class HomeFragment : BaseFragment() {
 
     companion object {
         var fragmentPosition : Int? = null
+    }
+
+
+    private fun registerDeviceOnServer() {
+        val request = DeviceRegisterRequest(Constants.OS_TYPE,
+                SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID),
+                SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+
+        AppRepository.registerDevice(request, object : ApiCallback<Boolean> {
+            override fun onSuccess(t: Boolean?) {
+                AppLog.d(t.toString())
+            }
+
+            override fun onException(error: Throwable) {
+                AppLog.d(error.message!!)
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.d(errorMsg)
+            }
+        })
     }
 }
