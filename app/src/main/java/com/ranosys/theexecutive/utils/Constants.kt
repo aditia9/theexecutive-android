@@ -79,6 +79,7 @@ object Constants {
     const val SORT_TYPE_CATALOG: String = "catalog"
     const val SORT_TYPE_SEARCH: String = "search"
     const val SPLASH_TIMEOUT: Long = 3000
+    const val PROMOTION_TOAST_TIMEOUT: Long = 5000
     const val CLICK_TIMEOUT: Long = 3000
     const val ERROR_CODE_404: Int = 404
     const val ERROR_CODE_401: Int = 401

@@ -13,5 +13,8 @@ data class ConfigurationResponse(
 		val category_media_url: String,
 		val voucher_amount: String,
 		val subscription_message: String,
-		val home_promotion_message: String
+		val home_promotion_message: String,
+		val catalog_listing_promotion_message: String,
+		val home_promotion_message_url: String,
+		val catalog_listing_promotion_message_url: String
 )
