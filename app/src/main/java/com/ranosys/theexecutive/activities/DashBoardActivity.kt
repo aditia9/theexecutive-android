@@ -158,19 +158,12 @@ class DashBoardActivity : BaseActivity() {
             initMediaPicker().onCallbackResult(requestCode,resultCode, data)
             fragment.onActivityResult(requestCode,resultCode, data)
         }else if(fragment is HomeFragment){
-            //fragment.childFragmentManager.callBackManager.onActivityResult(requestCode, resultCode, data)
-
             if(HomeFragment.fragmentPosition == 1) {
                 val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                 if(TextUtils.isEmpty(isLogin)){
                     (fragment.childFragmentManager.fragments[2] as LoginFragment).onActivityResult(requestCode, resultCode, data!!)
-                 //   (fragment.childFragmentManager.fragments[2] as LoginFragment).callBackManager.onActivityResult(requestCode, resultCode, data!!)
-                    //fragment.onActivityResult(requestCode,resultCode, data)
-                }else{
-
                 }
             }
-
         }
     }
 }

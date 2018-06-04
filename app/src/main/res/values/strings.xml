@@ -232,4 +232,7 @@
     <string name="empty_attachment_file">Attachment File is required.</string>
     <string name="add_attachment">Add Attachment</string>
 
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
+
 </resources>

@@ -2,7 +2,6 @@ package com.ranosys.theexecutive
 
 import android.app.Application
 import com.crashlytics.android.Crashlytics
-import com.facebook.FacebookSdk
 import io.fabric.sdk.android.Fabric
 /**
  * @Details Application class

@@ -12,10 +12,8 @@ import android.view.Gravity
 import android.webkit.*
 import android.widget.RelativeLayout
 import android.widget.Toast
-import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.web_pages_layout.*
@@ -113,8 +111,6 @@ abstract class BaseFragment : LifecycleFragment() {
     fun getPermission(permissionList: List<String>, isPermissionGrantedInterface: IsPermissionGrantedInterface) {
         (activity as BaseActivity).getPermission(permissionList, isPermissionGrantedInterface)
     }
-
-
 
     private fun observeLeftIconClick() {
 

@@ -280,8 +280,8 @@
     </integer-array>
 
     <string-array name="attachment_option_array">
-        <item>Take Photo</item>
-        <item>Choose from Gallery</item>
-        <item>Cancel</item>
+        <item>@string/take_photo</item>
+        <item>@string/choose_from_gallery</item>
+        <item>@string/cancel</item>
     </string-array>
 </resources>
