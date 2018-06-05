@@ -144,7 +144,7 @@ abstract class BaseFragment : LifecycleFragment() {
         val orderSuccessUrl: String = "checkout/onepage/success"
 
 
-        val webPagesDialog = Dialog(context, R.style.MaterialDialogSheet)
+        val webPagesDialog = Dialog(context, R.style.Animation_Design_BottomSheetDialog)
         webPagesDialog.setContentView(R.layout.web_pages_layout)
         webPagesDialog.setCancelable(true)
         webPagesDialog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT /*+ rl_add_to_box.height*/)
