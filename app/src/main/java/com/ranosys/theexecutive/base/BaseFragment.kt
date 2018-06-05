@@ -17,6 +17,7 @@ import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
+import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.Constants
@@ -179,17 +180,17 @@ abstract class BaseFragment : LifecycleFragment() {
                     when{
                         url.contains(orderSuccessUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, Constants.SUCCESS)
+                            redirectToOrderResultPage(orderId, Constants.SUCCESS)
                         }
 
                         url.contains(orderFailureUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, Constants.FAILURE)
+                            redirectToOrderResultPage(orderId, Constants.FAILURE)
                         }
 
                         url.contains(orderCancelUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, Constants.CANCEL)
+                            redirectToOrderResultPage(orderId, Constants.CANCEL)
                         }
                     }
                 }
@@ -206,16 +207,17 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.webview.loadUrl(url)
         webPagesDialog.show()
         webPagesDialog.img_back.setOnClickListener {
+
+            val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
+            if(fragment != null && fragment is CheckoutFragment){
+                redirectToOrderResultPage(orderId, Constants.CANCEL)
+            }
             webPagesDialog.dismiss()
-//            val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
-//            if(fragment != null && fragment is CheckoutFragment){
-//                redirectTOOrderResultPage(orderId, "cancelled")
-//            }
         }
 
     }
 
-    private fun redirectTOOrderResultPage(orderId: String, status: String) {
+    private fun redirectToOrderResultPage(orderId: String, status: String) {
         popUpAllFragments()
         val orderResultFragment = OrderResultFragment.getInstance(orderId, status)
         FragmentUtils.addFragment(context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
