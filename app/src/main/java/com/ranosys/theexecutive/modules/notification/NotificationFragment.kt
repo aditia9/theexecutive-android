@@ -15,6 +15,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
@@ -104,7 +105,10 @@ class NotificationFragment : BaseFragment() {
             }
 
             Constants.TYPE_ORDER -> {
-                //ToDo Redirect to order screen
+                val bundle = Bundle()
+                bundle.putString(Constants.ORDER_ID, item.type_id)
+                FragmentUtils.addFragment(context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
+
             }
 
         }
