@@ -130,6 +130,10 @@ class CheckoutDataClass {
             val grand_total: String,
             val payment_method: String,
             val virtual_account_number: Any,
-            val base_currency_code: String
+            val base_currency_code: String,
+            val status_code: String,
+            val status_label: String,
+            val order_state: String
     )
+
 }

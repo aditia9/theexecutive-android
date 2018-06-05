@@ -21,6 +21,7 @@ import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.web_pages_layout.*
@@ -210,7 +211,12 @@ abstract class BaseFragment : LifecycleFragment() {
 
             val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
             if(fragment != null && fragment is CheckoutFragment){
-                redirectToOrderResultPage(orderId, Constants.CANCEL)
+
+                Utils.showDialog(activity, getString(R.string.delete_address_confirmation), getString(android.R.string.ok), getString(android.R.string.cancel), object: DialogOkCallback {
+                    override fun setDone(done: Boolean) {
+                        redirectToOrderResultPage(orderId, Constants.CANCEL)
+                    }
+                })
             }
             webPagesDialog.dismiss()
         }

@@ -255,7 +255,7 @@
     <string name="choose_from_gallery">Choose from Gallery</string>
     <string name="order_success_msg">order placed successfully</string>
     <string name="order_success_btn_text">view order</string>
-    <string name="order_success_info">Thank you for order. You will receive a confirmation email with detail of ypur order and link to track theYour oder has been placed successfully. Your oder has been placed successfully.</string>
+    <string name="order_success_info">Thank you for your order. You will receive a confirmation email with detail of your order and link to track your oder progress.</string>
 
     <string name="order_cancel_msg">order cancelled</string>
     <string name="order_cancel_btn_text">continue shopping</string>

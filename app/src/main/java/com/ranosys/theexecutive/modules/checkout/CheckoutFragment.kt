@@ -161,13 +161,13 @@ class CheckoutFragment : BaseFragment() {
             if(checkoutViewModel.totalSegmentVisible){
                 ll_total_segment.visibility = View.VISIBLE
                 tv_total_amount.visibility = View.GONE
-                img_total_segment.setImageResource(R.drawable.dropdown)
+                img_total_segment.setImageResource(R.drawable.upward)
                 BottomSheetBehavior.from(total_segment_bottom_sheet).state = BottomSheetBehavior.STATE_EXPANDED
 
             }else{
                 ll_total_segment.visibility = View.GONE
                 tv_total_amount.visibility = View.VISIBLE
-                img_total_segment.setImageResource(R.drawable.forward)
+                img_total_segment.setImageResource(R.drawable.dropdown)
             }
 
             getViewHeight(total_segment_bottom_sheet)
