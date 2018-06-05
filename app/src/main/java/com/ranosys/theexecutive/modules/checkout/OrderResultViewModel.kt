@@ -23,6 +23,7 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
     var status : ObservableField<String> = ObservableField("")
     var orderId : ObservableField<String> = ObservableField("")
     var incrementalOrderId : ObservableField<String> = ObservableField("")
+    var virtualAccountNumber : ObservableField<String> = ObservableField("")
     var statusMsg : ObservableField<String> = ObservableField("")
     var infoMsg : ObservableField<String> = ObservableField("")
     var btnAction : ObservableField<String> = ObservableField("")
@@ -42,6 +43,9 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
             override fun onSuccess(t: CheckoutDataClass.OrderStatusResponse?) {
                 orderStatus.value = t
                 incrementalOrderId.set(t?.order_id)
+                if(t?.virtual_account_number != null){
+                    virtualAccountNumber.set(t.virtual_account_number.toString())
+                }
                 processOrderStatus()
             }
 

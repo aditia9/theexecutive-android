@@ -74,6 +74,21 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_message"/>
 
         <TextView
+            android:id="@+id/tv_virtual_acc_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text='@{@string/virtual_acc_label + " " + vm.virtualAccountNumber}'
+            android:textStyle="bold"
+            android:visibility="@{TextUtils.isEmpty(vm.virtualAccountNumber)? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_order_number"/>
+
+
+        <TextView
             android:id="@+id/tv_additional_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -84,7 +99,7 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
-            app:layout_constraintTop_toBottomOf="@+id/tv_order_number"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_virtual_acc_number"/>
 
         <Button
             android:id="@+id/btn_action"

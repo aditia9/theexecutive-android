@@ -169,11 +169,7 @@ abstract class BaseFragment : LifecycleFragment() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 showLoading()
                 super.onPageStarted(view, url, favicon)
-            }
 
-            override fun onPageFinished(view: WebView?, url: String?) {
-                hideLoading()
-                super.onPageFinished(view, url)
                 AppLog.e("PAYMENT URL - : $url")
 
                 if(url!!.contains(BuildConfig.API_URL)){
@@ -195,11 +191,15 @@ abstract class BaseFragment : LifecycleFragment() {
                         }
                     }
                 }
+            }
 
-
+            override fun onPageFinished(view: WebView?, url: String?) {
+                hideLoading()
+                super.onPageFinished(view, url)
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                AppLog.e("PAYMENT URL - : ${request!!.url.toString()}")
                 view?.loadUrl(request!!.url.toString())
                 return true
             }
@@ -212,13 +212,16 @@ abstract class BaseFragment : LifecycleFragment() {
             val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
             if(fragment != null && fragment is CheckoutFragment){
 
-                Utils.showDialog(activity, getString(R.string.delete_address_confirmation), getString(android.R.string.ok), getString(android.R.string.cancel), object: DialogOkCallback {
+                Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(android.R.string.yes), getString(android.R.string.no), object: DialogOkCallback {
                     override fun setDone(done: Boolean) {
                         redirectToOrderResultPage(orderId, Constants.CANCEL)
+                        webPagesDialog.dismiss()
                     }
                 })
+            }else{
+                webPagesDialog.dismiss()
             }
-            webPagesDialog.dismiss()
+
         }
 
     }

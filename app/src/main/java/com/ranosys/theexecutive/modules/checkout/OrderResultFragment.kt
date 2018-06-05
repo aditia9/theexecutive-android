@@ -78,7 +78,7 @@ class OrderResultFragment: BaseFragment(){
                 Constants.SUCCESS -> {
                     popUpAllFragments()
                     val bundle = Bundle()
-                    bundle.putString(Constants.ORDER_ID, orderId)
+                    bundle.putString(Constants.ORDER_ID, orderResultViewModel.incrementalOrderId.get())
                     FragmentUtils.addFragment(activity as Context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                 }
 
