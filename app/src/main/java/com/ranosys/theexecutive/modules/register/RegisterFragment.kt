@@ -139,10 +139,11 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             Utils.hideSoftKeypad(activity as Context)
             if (Utils.isConnectionAvailable(activity as Context)) {
                 if(registerViewModel.isValidData(activity as Context)){
-                    showLoading()
-                    registerViewModel.callRegisterApi()
+                    if(registerViewModel.isValidData(activity as Context)){
+                        showLoading()
+                        registerViewModel.callRegisterApi()
+                    }
                 }
-
             } else {
                 Utils.showNetworkErrorDialog(activity as Context)
             }

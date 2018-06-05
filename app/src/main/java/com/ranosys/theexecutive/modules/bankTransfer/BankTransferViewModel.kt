@@ -53,6 +53,7 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     private lateinit var transferMethods: String
     var attachmentFile: File? = null
     var bankTransferObservable = MutableLiveData<ApiResponse<String>>()
+    var showLoading = MutableLiveData<ApiResponse<String>>()
 
 
     private val recipients: Recipients = Recipients(value = Constants.BANK_RECIPIENT_LABEL, label = Constants.BANK_RECIPIENT_LABEL)
@@ -132,8 +133,6 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     @SuppressLint("SimpleDateFormat")
     fun submitBankTransfer() {
         if (isValidData(getApplication())) {
-
-
             val bankTransferRequest = BankTransferRequest(
                     name = firstName.get() + " " + lastName.get(),
                     email_submitter = emailAddress.get(),
