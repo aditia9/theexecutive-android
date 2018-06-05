@@ -104,6 +104,7 @@ class DashBoardActivity : BaseActivity() {
                         (fragment as? AddressBookFragment)?.onResume()
                         (fragment as? ShoppingBagFragment)?.onResume()
                         (fragment as? CheckoutFragment)?.onResume()
+                        (fragment as? LoginFragment)?.onResume()
 
                     }
                 }
@@ -185,6 +186,8 @@ class DashBoardActivity : BaseActivity() {
                     (fragment.childFragmentManager.fragments[2] as LoginFragment).onActivityResult(requestCode, resultCode, data!!)
                 }
             }
+        }else if(fragment is LoginFragment){
+            fragment.onActivityResult(requestCode, resultCode, data!!)
         }
     }
 }
