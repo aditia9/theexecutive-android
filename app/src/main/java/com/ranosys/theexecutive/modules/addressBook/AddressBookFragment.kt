@@ -74,6 +74,7 @@ class AddressBookFragment: BaseFragment() {
     override fun onResume() {
         super.onResume()
         addressBookAdapter.addressList = GlobalSingelton.instance?.userInfo?.addresses
+        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
     }
 
     fun setToolbarAndCallAddressApi(){
