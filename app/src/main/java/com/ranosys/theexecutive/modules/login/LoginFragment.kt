@@ -241,7 +241,7 @@ class LoginFragment: BaseFragment() {
 
     private fun gmailSignIn() {
         val gmailSignInIntent = mGoogleSignInClient.signInIntent
-        activity?.startActivityForResult(gmailSignInIntent, RC_GMAIL_SIGN_IN)
+        (activity as DashBoardActivity).startActivityForResult(gmailSignInIntent, RC_GMAIL_SIGN_IN)
     }
 
     //method to get user data from FB
@@ -330,5 +330,9 @@ class LoginFragment: BaseFragment() {
         const val RC_GMAIL_SIGN_IN = 200
     }
 
+    override fun onResume() {
+        super.onResume()
+        setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false, true)
+    }
 }
 
