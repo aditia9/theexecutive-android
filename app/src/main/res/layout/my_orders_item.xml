@@ -24,18 +24,16 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
+            android:paddingStart="@dimen/fifteen_dp"
             android:layout_height="wrap_content">
-
 
             <ImageView
                 android:id="@+id/img_product_item"
-                android:layout_width="@dimen/hundred_dp"
-                android:layout_height="@dimen/hundred_dp"
+                android:layout_width="@dimen/nineteen_dp"
+                android:layout_height="@dimen/one_twenty_five_dp"
                 android:layout_margin="@dimen/ten_dp"
                 android:contentDescription="@string/image_one_detail"
-                android:scaleType="centerCrop"
-                android:src="@drawable/one"
-                android:paddingStart="@dimen/ten_dp"
+                android:src="@drawable/placeholder"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 bind:baseUrlWithProductImageUrl="@{item.image}" />
@@ -60,7 +58,7 @@
                 android:layout_marginTop="@dimen/twenty_dp"
                 android:hint="@string/app_name"
                 android:text='@{"Order no. "+item.id}'
-                android:textSize="@dimen/fourteen_sp"
+                android:textSize="@dimen/sixteen_sp"
                 app:layout_constraintStart_toEndOf="@id/img_product_item"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +69,7 @@
                 android:layout_marginStart="@dimen/ten_dp"
                 android:layout_marginTop="@dimen/ten_dp"
                 android:hint="@string/app_name"
-                android:textSize="@dimen/fourteen_sp"
+                android:textSize="@dimen/sixteen_sp"
                 app:layout_constraintStart_toEndOf="@id/img_product_item"
                 app:layout_constraintTop_toBottomOf="@id/tv_order_no" />
 
@@ -82,7 +80,7 @@
                 android:layout_marginStart="@dimen/ten_dp"
                 android:layout_marginTop="@dimen/ten_dp"
                 android:text="@{item.status}"
-                android:textSize="@dimen/fourteen_sp"
+                android:textSize="@dimen/sixteen_sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/img_product_item"
                 app:layout_constraintTop_toBottomOf="@id/tv_price" />

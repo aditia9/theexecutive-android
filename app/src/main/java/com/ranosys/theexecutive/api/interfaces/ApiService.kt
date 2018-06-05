@@ -2,6 +2,8 @@ package com.ranosys.theexecutive.api.interfaces
 
 import com.google.gson.JsonObject
 import com.ranosys.theexecutive.api.ApiConstants
+import com.ranosys.theexecutive.modules.bankTransfer.Recipients
+import com.ranosys.theexecutive.modules.bankTransfer.TransferMethodsDataClass
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryDataResponse
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
@@ -11,6 +13,7 @@ import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
@@ -24,7 +27,10 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
 import com.ranosys.theexecutive.modules.shoppingBag.TotalResponse
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
+import com.ranosys.theexecutive.modules.wishlist.MoveToBagRequest
 import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -416,7 +422,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
+        fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: String, @Body request: MoveToBagRequest ): Call<String>
 
     }
 
@@ -434,6 +440,34 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun changeNotificationStatus(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: NotificationChangeStatusRequest): Call<Boolean>
 
+
+        @POST("rest/{store_code}/V1/notification/registerdevice")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun registerDevice(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: DeviceRegisterRequest): Call<Boolean>
+    }
+
+
+    interface BankTransfer{
+
+        @GET("rest/{store_code}/V1/banktransfer/transfermethods")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getBankTransferMethod(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<List<TransferMethodsDataClass>>
+
+
+        @GET("rest/{store_code}/V1/banktransfer/recipients")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getRecipient(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<List<Recipients>>
+
+        @Multipart
+        @POST("rest/{store_code}/V1/banktransfer/submit")
+        @Headers(ApiConstants.CACHE_CONTROL)
+       fun submitBankTransfer(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Part file: MultipartBody.Part, @Part("name") name: RequestBody, @Part("email_submitter") email_submitter: RequestBody, @Part("orderid") orderid: RequestBody,@Part("bank_name") bank_name: RequestBody,@Part("holder_account") holder_account: RequestBody,@Part("amount") amount: RequestBody,@Part("recipient") recipient: RequestBody, @Part("method") method: RequestBody,@Part("date") date: RequestBody): Call<String>
     }
 
     interface CheckoutService {

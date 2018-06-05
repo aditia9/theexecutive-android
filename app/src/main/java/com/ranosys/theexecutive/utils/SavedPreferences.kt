@@ -52,18 +52,6 @@ class SavedPreferences private constructor() {
         return app_name
     }
 
-    fun storeFcmId(fcmId: String, key: String) {
-        val editor = sharedPreferences?.edit()
-        editor?.putString(key, fcmId)
-        editor?.apply()
-    }
-
-    fun getFcmID(key: String): String? {
-        var fcmId: String? = null
-        fcmId = getStringValue(key)
-        return fcmId
-    }
-
 
     private fun getEditor(): SharedPreferences.Editor? {
         return sharedPreferences?.edit()

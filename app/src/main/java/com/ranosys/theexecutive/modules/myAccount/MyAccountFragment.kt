@@ -16,6 +16,7 @@ import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.bankTransfer.BankTransferFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
 import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
@@ -141,7 +142,9 @@ class MyAccountFragment : BaseFragment() {
                         context.getString(R.string.notifications) -> {
                             FragmentUtils.addFragment(context, NotificationFragment(),null, NotificationFragment::class.java.name, true )
                         }
-
+                        context.getString(R.string.bank_transfer) -> {
+                            FragmentUtils.addFragment(context, BankTransferFragment(),null, BankTransferFragment::class.java.name, true )
+                        }
                     }
                 }
             }

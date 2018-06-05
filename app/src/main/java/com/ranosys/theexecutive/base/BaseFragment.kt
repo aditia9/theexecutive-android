@@ -19,6 +19,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.web_pages_layout.*
@@ -178,17 +179,17 @@ abstract class BaseFragment : LifecycleFragment() {
                     when{
                         url.contains(orderSuccessUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, "success")
+                            redirectTOOrderResultPage(orderId, Constants.SUCCESS)
                         }
 
                         url.contains(orderFailureUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, "failure")
+                            redirectTOOrderResultPage(orderId, Constants.FAILURE)
                         }
 
                         url.contains(orderCancelUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, "cancelled")
+                            redirectTOOrderResultPage(orderId, Constants.CANCEL)
                         }
                     }
                 }
@@ -203,6 +204,7 @@ abstract class BaseFragment : LifecycleFragment() {
         }
 
         webPagesDialog.webview.loadUrl(url)
+        webPagesDialog.show()
         webPagesDialog.img_back.setOnClickListener {
             webPagesDialog.dismiss()
 //            val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)

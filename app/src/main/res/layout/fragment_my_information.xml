@@ -128,7 +128,6 @@
                     android:overlapAnchor="false"
                     android:entries="@array/country_code"
                     android:background="@drawable/spinner"
-                    android:onItemSelected="@{(parent, view, pos, id) -> vm.onCountryCodeSelection(parent, pos)}"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toTopOf="@id/til_mobile_no"
                     app:layout_constraintEnd_toStartOf="@id/til_mobile_no"

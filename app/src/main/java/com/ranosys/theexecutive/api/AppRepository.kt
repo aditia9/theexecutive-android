@@ -4,6 +4,9 @@ import com.google.gson.JsonObject
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
+import com.ranosys.theexecutive.modules.bankTransfer.BankTransferRequest
+import com.ranosys.theexecutive.modules.bankTransfer.Recipients
+import com.ranosys.theexecutive.modules.bankTransfer.TransferMethodsDataClass
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordDataClass
@@ -11,6 +14,7 @@ import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
@@ -24,14 +28,19 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
 import com.ranosys.theexecutive.modules.shoppingBag.TotalResponse
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
+import com.ranosys.theexecutive.modules.wishlist.MoveToBagRequest
 import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 
@@ -1204,12 +1213,11 @@ object AppRepository {
     }
 
 
-    fun addToBagWishlistItem(itemId: Int?, callBack: ApiCallback<String>) {
+    fun addToBagWishlistItem(request: MoveToBagRequest, callBack: ApiCallback<String>) {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
-                ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.addToBagWishlistItem(ApiConstants.BEARER + userToken, storeCode, itemId)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.addToBagWishlistItem(ApiConstants.BEARER + userToken, storeCode, request.id, request)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1485,5 +1493,107 @@ object AppRepository {
         })
     }
 
+
+    fun getBankTransferMethod(callBack: ApiCallback<List<TransferMethodsDataClass>>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.getBankTransferMethod(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<List<TransferMethodsDataClass>> {
+            override fun onResponse(call: Call<List<TransferMethodsDataClass>>?, response: Response<List<TransferMethodsDataClass>>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<TransferMethodsDataClass>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+    fun getRecipient(callBack: ApiCallback<List<Recipients>>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.getRecipient(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<List<Recipients>> {
+            override fun onResponse(call: Call<List<Recipients>>?, response: Response<List<Recipients>>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<Recipients>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+    fun submitBankTransfer(file : File?, request: BankTransferRequest, callBack: ApiCallback<String>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        val reqFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val part = MultipartBody.Part.createFormData("attachment", file?.name, reqFile)
+
+        val name= RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.name)
+        val email_submitter = RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.email_submitter)
+        val orderid =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.orderid)
+        val bank_name = RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.bank_name)
+        val holder_account=  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.holder_account)
+        val amount =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.amount)
+        val recipient =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.recipient)
+        val method =RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.method)
+        val date =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.date)
+
+       val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.submitBankTransfer(ApiConstants.BEARER + userToken,   storeCode, part, name, email_submitter, orderid, bank_name, holder_account,amount,recipient,method,date)
+
+        callGet?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+
+    fun registerDevice(request: DeviceRegisterRequest, callBack: ApiCallback<Boolean>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.registerDevice(ApiConstants.BEARER + userToken,  storeCode, request)
+
+        callGet?.enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
 
 }
