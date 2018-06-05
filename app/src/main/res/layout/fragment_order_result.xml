@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
     <data>
+        <import type="android.view.View" />
+        <import type="android.text.TextUtils"/>
+
         <variable name="vm"
             type="com.ranosys.theexecutive.modules.checkout.OrderResultViewModel"/>
     </data>
@@ -63,8 +66,9 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
-            android:text='@{"Order no. " + vm.orderId}'
+            android:text='@{@string/order_no + " " + vm.incrementalOrderId}'
             android:textStyle="bold"
+            android:visibility="@{TextUtils.isEmpty(vm.incrementalOrderId)? View.INVISIBLE : View.VISIBLE}"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
             app:layout_constraintTop_toBottomOf="@+id/tv_message"/>

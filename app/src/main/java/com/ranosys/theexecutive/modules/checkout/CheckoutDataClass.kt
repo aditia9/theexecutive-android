@@ -122,4 +122,14 @@ class CheckoutDataClass {
     data class PlaceOrderPaymentMethod(
             val method: String
     )
+
+
+    data class OrderStatusResponse(
+            val order_id: String,
+            val shipping_method: String,
+            val grand_total: String,
+            val payment_method: String,
+            val virtual_account_number: Any,
+            val base_currency_code: String
+    )
 }

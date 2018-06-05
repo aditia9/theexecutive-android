@@ -1357,6 +1357,27 @@ object AppRepository {
         })
     }
 
+    fun getOrderStatus(orderId: String, callBack: ApiCallback<CheckoutDataClass.OrderStatusResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getOrderStatus(ApiConstants.BEARER + userToken, storeCode, orderId)
+
+        callGet?.enqueue(object : Callback<CheckoutDataClass.OrderStatusResponse> {
+            override fun onResponse(call: Call<CheckoutDataClass.OrderStatusResponse>?, response: Response<CheckoutDataClass.OrderStatusResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.OrderStatusResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
     fun placeOrder(request: CheckoutDataClass.PlaceOrderRequest, callBack: ApiCallback<String>) {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)

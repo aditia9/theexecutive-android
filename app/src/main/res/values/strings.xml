@@ -222,13 +222,24 @@
     <string name="product_available">product available</string>
     <string name="promo_code_invalid">The promo code you entered is not valid.</string>
     <string name="qty">Qty </string>
+    <string name="order_no">Order no. </string>
     <string name="shipping_cost">Shipping Cost</string>
     <string name="products">Products</string>
     <string name="order_return">Return</string>
     <string name="order_return_to">Return To</string>
     <string name="order_return_from">Return From</string>
-    <string name="order_no">ORDER NO.</string>
     <string name="return_qty">Return Qty</string>
     <string name="ok">OK</string>
+    <string name="order_success_msg">order placed successfully</string>
+    <string name="order_success_btn_text">view order</string>
+    <string name="order_success_info">Thank you for order. You will receive a confirmation email with detail of ypur order and link to track theYour oder has been placed successfully. Your oder has been placed successfully.</string>
+
+    <string name="order_cancel_msg">order cancelled</string>
+    <string name="order_cancel_btn_text">continue shopping</string>
+    <string name="order_cancel_info">Your order has been cancelled.</string>
+
+    <string name="order_failure_msg">order failed</string>
+    <string name="order_failure_btn_text">view order</string>
+    <string name="order_failure_info">Your order has been failed.</string>
 
 </resources>

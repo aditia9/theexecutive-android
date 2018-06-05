@@ -467,6 +467,12 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getUserInfoNSelectedShipping(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<CheckoutDataClass.UserInfoNselectedShippingResponse>
+
+        @GET("rest/{store_code}/V1/order/mine/{order_id}/information")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getOrderStatus(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("order_id") orderId: String): Call<CheckoutDataClass.OrderStatusResponse>
     }
 
 
