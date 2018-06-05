@@ -3,7 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tv_no_item_in_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_item_in_notification"
+        android:textColor="@color/hint_color"
+        android:theme="@style/sub_heading_theme"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/notification_list"
         android:layout_width="match_parent"
@@ -11,6 +30,8 @@
         android:background="@color/white"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/eighty_dp"/>
+    </android.support.constraint.ConstraintLayout>
 </layout>
