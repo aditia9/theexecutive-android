@@ -2,7 +2,6 @@ package com.ranosys.theexecutive.api.interfaces
 
 import com.google.gson.JsonObject
 import com.ranosys.theexecutive.api.ApiConstants
-import com.ranosys.theexecutive.modules.bankTransfer.BankTransferRequest
 import com.ranosys.theexecutive.modules.bankTransfer.Recipients
 import com.ranosys.theexecutive.modules.bankTransfer.TransferMethodsDataClass
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
@@ -28,12 +27,12 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
 import com.ranosys.theexecutive.modules.shoppingBag.TotalResponse
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
+import com.ranosys.theexecutive.modules.wishlist.MoveToBagRequest
 import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.io.File
 
 /**
  * Created by Mohammad Sunny on 21/2/18.
@@ -423,7 +422,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: Int?): Call<String>
+        fun addToBagWishlistItem(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("item_id") itemId: String, @Body request: MoveToBagRequest ): Call<String>
 
     }
 
