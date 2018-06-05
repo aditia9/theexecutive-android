@@ -61,3 +61,9 @@ data class StockItem(
 		val is_decimal_divided: Boolean,
 		val stock_status_changed_auto: Int
 )
+
+
+data class MoveToBagRequest(
+		val id: String,
+		val qty: String
+)

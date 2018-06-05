@@ -61,10 +61,12 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
             itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString())
 
             item?.stock_item?.run {
-                if(is_in_stock){
+                if(is_in_stock && qty > 0){
                     itemBinding?.tvOutOfStock?.visibility = View.GONE
+                    itemBinding?.imgProductOverlay?.visibility = View.GONE
                 }else{
                     itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
+                    itemBinding?.imgProductOverlay?.visibility = View.VISIBLE
                 }
             }
 
@@ -82,7 +84,7 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
                         }
                     }
                 }else{
-                    itemBinding?.layoutColorSize?.visibility = View.INVISIBLE
+                    itemBinding?.layoutColorSize?.visibility = View.GONE
                 }
             }
 
@@ -98,9 +100,7 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
             itemBinding?.imgDelete?.setOnClickListener{
                 view -> action(view.id, position, item)
             }
-
-
-
+            
         }
     }
 }

@@ -174,6 +174,9 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
         if (TextUtils.isEmpty(maskedAddress?.postalCode)){
             postalCodeError.set(context.getString(R.string.postal_error))
             isValid = false
+        }else if(!Utils.isValidPincode(maskedAddress?.postalCode!!)){
+            postalCodeError.set(context.getString(R.string.valid_postal_error))
+            isValid = false
         }
 
         return isValid

@@ -136,6 +136,21 @@
             app:layout_constraintTop_toBottomOf="@id/view_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+            <TextView
+                android:id="@+id/tv_promo_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/eight_dp"
+                android:background="@drawable/promotion_toast_bg"
+                android:gravity="center"
+                android:padding="@dimen/eight_dp"
+                android:textSize="@dimen/fourteen_sp"
+                android:textColor="@color/white"
+                app:layout_constraintLeft_toLeftOf="@id/guideline_left"
+                android:visibility="gone"
+                app:layout_constraintRight_toRightOf="@id/guideline_right"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>

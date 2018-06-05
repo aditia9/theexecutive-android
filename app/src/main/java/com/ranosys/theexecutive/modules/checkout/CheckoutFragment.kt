@@ -117,7 +117,7 @@ class CheckoutFragment : BaseFragment() {
             if(checkoutViewModel.selectedPaymentMethod != null){
                 callPlaceOrderApi()
             }else{
-                Utils.showErrorDialog(activity as Context, "U have to select payment method first")
+                Utils.showErrorDialog(activity as Context, getString(R.string.select_payment_method_error))
             }
 
         }
@@ -216,7 +216,7 @@ class CheckoutFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.checkout), 0, "", R.drawable.back, true, 0, true)
+        setToolBarParams(getString(R.string.checkout), 0, "", R.drawable.cancel, true, 0, true)
     }
 
     private fun initiateCheckoutProcess() {
@@ -303,9 +303,9 @@ class CheckoutFragment : BaseFragment() {
             val amount = totalAmts?.single { it.code == Constants.GRAND_TOTAL_KEY }?.value
 
             if(amount.isNullOrEmpty().not()){
-                tv_total_amount.text = "${Constants.IDR} ${amount}"
+                tv_total_amount.text = "${Constants.IDR} ${Utils.getFromattedPrice(amount!!)}"
             }else{
-                tv_total_amount.text = "${Constants.IDR} ${amount}"
+                tv_total_amount.text = ""
             }
             updateTotalSegment(totalAmts)
         })
@@ -313,8 +313,13 @@ class CheckoutFragment : BaseFragment() {
         //observe order id
         checkoutViewModel.orderId.observe(this, Observer { orderId ->
             hideLoading()
+            clearCartInfo()
             redirectToOrderResultScreen(orderId!!)
         })
+    }
+
+    private fun clearCartInfo() {
+
     }
 
     private fun redirectToOrderResultScreen(orderId: String) {
@@ -411,8 +416,11 @@ class CheckoutFragment : BaseFragment() {
     private fun addChildViewsToFooter(footerContainer: LinearLayout, totalSegment: CheckoutDataClass.TotalSegment, isLastItem: Boolean = false) {
 
         val convertView = LayoutInflater.from(activity).inflate(R.layout.total_segment_item, null)
-        convertView.item_name.text = totalSegment.title
-        convertView.item_value.text = "${Constants.IDR} ${totalSegment.value}"
+        totalSegment.value?.run {
+            convertView.item_name.text = totalSegment.title
+            convertView.item_value.text = "${Constants.IDR} ${Utils.getFromattedPrice(totalSegment.value)}"
+        }
+
 
         if(isLastItem){
             convertView.item_name.setTypeface(null, Typeface.BOLD)

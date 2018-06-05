@@ -110,10 +110,14 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setChannelId(Constants.NOTIFICATION_CHANNEL_ID)
                     .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                    .setStyle(NotificationCompat.BigPictureStyle()
-                            .bigPicture(getBitmapFromURL(notificationImageBaseUrl+notificationImg))
-                            .setBigContentTitle(title)
-                            .setSummaryText(body))
+
+            if(notificationImg.isBlank().not()){
+             notification.setStyle(NotificationCompat.BigPictureStyle()
+                     .bigPicture(getBitmapFromURL(notificationImageBaseUrl+notificationImg))
+                     .setBigContentTitle(title)
+                     .setSummaryText(body))
+            }
+
         } else {
             notification = NotificationCompat.Builder(this)
                     .setSmallIcon(getNotificationIcon())
@@ -124,10 +128,13 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setContentIntent(pendingIntent)
                     .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                    .setStyle(NotificationCompat.BigPictureStyle()
-                            .bigPicture(getBitmapFromURL(notificationImageBaseUrl+notificationImg))
-                            .setBigContentTitle(title)
-                            .setSummaryText(body))
+
+            if(notificationImg.isBlank().not()){
+                notification.setStyle(NotificationCompat.BigPictureStyle()
+                        .bigPicture(getBitmapFromURL(notificationImageBaseUrl+notificationImg))
+                        .setBigContentTitle(title)
+                        .setSummaryText(body))
+            }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notification.color = resources.getColor(R.color.black)

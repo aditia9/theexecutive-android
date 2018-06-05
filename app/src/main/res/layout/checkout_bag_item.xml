@@ -28,8 +28,8 @@
 
             <ImageView
                 android:id="@+id/img_product"
-                android:layout_width="130dp"
-                android:layout_height="@dimen/one_fifty_dp"
+                android:layout_width="@dimen/one_ten_dp"
+                android:layout_height="@dimen/one_sixty_dp"
                 android:contentDescription="@string/product_image"
                 app:layout_constraintBottom_toTopOf="@+id/tv_product_name"
                 app:layout_constraintEnd_toEndOf="parent"

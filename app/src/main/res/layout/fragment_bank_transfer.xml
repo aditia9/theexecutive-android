@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="bankTransferVM"
+            type="com.ranosys.theexecutive.modules.bankTransfer.BankTransferViewModel"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:paddingBottom="@dimen/sixteen_dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl_inside_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/twenty_four_dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
+
+
+                <TextView
+                    android:id="@+id/tv_bank_acc_info"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bank_account_information"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_first_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/sixteen_dp"
+                    android:hint="@string/first_name"
+                    android:labelFor="@+id/et_first_name_bank"
+                    android:maxLength="50"
+                    app:errorText="@{bankTransferVM.firstNameError}"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_bank_acc_info">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_first_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:inputType="text|textCapWords"
+                        android:maxLength="50"
+                        android:onTextChanged='@{() -> bankTransferVM.onTextChanged(etFirstName)}'
+                        android:text="@={bankTransferVM.firstName}"
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_last_name"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/last_name"
+                    android:labelFor="@+id/et_last_name"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{bankTransferVM.lastNameError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_first_name">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_last_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:inputType="text|textCapWords"
+                        android:onTextChanged='@{() -> bankTransferVM.onTextChanged(etLastName)}'
+                        android:text="@={bankTransferVM.lastName}"
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_email"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/email_address"
+                    android:labelFor="@+id/et_email"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{bankTransferVM.emailAddressError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_last_name">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:inputType="textEmailAddress"
+                        android:text="@={bankTransferVM.emailAddress}"
+                        android:onTextChanged='@{() -> bankTransferVM.onTextChanged(etEmail)}'
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_order_number"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/order_number"
+                    android:labelFor="@+id/et_order_number"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{bankTransferVM.orderNumberError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_email">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_order_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={bankTransferVM.orderNumber}"
+                        android:onTextChanged='@{() -> bankTransferVM.onTextChanged(etOrderNumber)}'
+                        android:focusable="true"
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_bank_number"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/bank_number"
+                    android:labelFor="@+id/et_bank_number"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{bankTransferVM.bankNumberError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_order_number">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_bank_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:text="@={bankTransferVM.bankNumber}"
+                        android:onTextChanged='@{() -> bankTransferVM.onTextChanged(etBankNumber)}'
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_holder_acc_number"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/holder_acc_number"
+                    android:labelFor="@+id/et_holder_acc_number"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{bankTransferVM.holderAccountError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_bank_number">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_holder_acc_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={bankTransferVM.holderAccountNumber}"
+                        android:onTextChanged='@{() -> bankTransferVM.onTextChanged(etHolderAccNumber)}'
+                        android:focusable="true"
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_transaction_info"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ten_dp"
+                    android:text="@string/transaction_info"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@+id/til_holder_acc_number" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_transfer_amount"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/transfer_amount"
+                    android:labelFor="@+id/et_transfer_amount"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{bankTransferVM.transferAmountError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/tv_transaction_info">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_transfer_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:focusable="true"
+                        android:text="@={bankTransferVM.transferAmount}"
+                        android:onTextChanged='@{() -> bankTransferVM.onTextChanged(etTransferAmount)}'
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/sp_bank_recipient"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:background="@drawable/spinner"
+                    android:overlapAnchor="false"
+                    android:padding="@dimen/ten_dp"
+                    android:spinnerMode="dropdown"
+                    android:entries="@{bankTransferVM.recipientsLabel}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> bankTransferVM.onRecipientSelection(pos)}"
+                    android:theme="@style/spinnerItemStyle"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_transfer_amount" />
+
+
+                <Spinner
+                    android:id="@+id/sp_transfer_method"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:background="@drawable/spinner"
+                    android:overlapAnchor="false"
+                    android:padding="@dimen/ten_dp"
+                    android:entries="@{bankTransferVM.transferMethodsLabel}"
+                    android:onItemSelected="@{(parent, view, pos, id) -> bankTransferVM.onTransferMethodsSelection(pos)}"
+                    android:spinnerMode="dropdown"
+                    android:theme="@style/spinnerItemStyle"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/sp_bank_recipient" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_transfer_date"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/transfer_date_hint"
+                    android:labelFor="@+id/et_dob"
+                    android:theme="@style/tilTheme"
+                    app:errorText="@{bankTransferVM.transferDateError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/sp_transfer_method">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_transfer_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/calender"
+                        android:focusable="false"
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_attachment"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ten_dp"
+                    android:text="@string/attachment"
+                    android:textColor="@color/hint_color"
+                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@+id/til_transfer_date" />
+
+                
+                <ImageView
+                    android:id="@+id/img_attachment"
+                    android:layout_width="@dimen/eighty_dp"
+                    android:layout_height="@dimen/eighty_dp"
+                    android:padding="@dimen/five_dp"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_attachment"
+                    android:background="@drawable/attachment_bg"
+                    android:src="@drawable/attachment_icon"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitXY"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    />
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/black_button_bg"
+                    android:text="@string/submit"
+                    android:theme="@style/button_theme"
+                    android:layout_marginTop="@dimen/forty_dp"
+                    android:layout_marginRight="@dimen/twenty_four_dp"
+                    android:layout_marginLeft="@dimen/twenty_four_dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_attachment"/>
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+    </android.support.constraint.ConstraintLayout>
+</layout>

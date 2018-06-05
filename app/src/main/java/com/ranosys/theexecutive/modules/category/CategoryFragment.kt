@@ -177,6 +177,10 @@ class CategoryFragment : BaseFragment() {
             false
         })
 
+        promotionBinding.tvPromotionText.setOnClickListener {
+            prepareWebPageDialog(activity,GlobalSingelton.instance?.configuration?.home_promotion_message_url, "" )
+        }
+
         observePromotionsApiResponse()
         observeCategoryApiResponse()
         if (Utils.isConnectionAvailable(activity as Context)) {

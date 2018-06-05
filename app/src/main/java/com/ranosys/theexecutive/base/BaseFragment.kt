@@ -204,6 +204,7 @@ abstract class BaseFragment : LifecycleFragment() {
         }
 
         webPagesDialog.webview.loadUrl(url)
+        webPagesDialog.show()
         webPagesDialog.img_back.setOnClickListener {
             webPagesDialog.dismiss()
 //            val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)

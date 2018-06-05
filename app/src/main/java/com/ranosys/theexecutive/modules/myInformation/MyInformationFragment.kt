@@ -10,7 +10,10 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentMyInformationBinding
@@ -33,6 +36,7 @@ class MyInformationFragment: BaseFragment() {
         mBinding.vm = mViewModel
 
         observeUserInfoResponse()
+        observeUpdateUserInfoResponse()
         getUserInformation()
 
         return mBinding.root
@@ -87,7 +91,22 @@ class MyInformationFragment: BaseFragment() {
             }
         }
 
+        spinner_country_code.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
 
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                mViewModel.maskedUserInfo.get()?.run {
+                    if(mViewModel.maskedUserInfo.get()._countryCode == (parent as Spinner).selectedItem){
+                        btn_save.background = (activity as Context).getDrawable(R.color.hint_color)
+                    }else{
+
+                        btn_save.background = (activity as Context).getDrawable(R.drawable.black_button_bg)
+                    }
+                }
+
+            }
+        }
     }
 
     override fun onResume() {
@@ -104,6 +123,22 @@ class MyInformationFragment: BaseFragment() {
                 mBinding.info = mViewModel.maskedUserInfo.get()
                 mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode))
             }
+
+
+        })
+    }
+
+    private fun observeUpdateUserInfoResponse() {
+        mViewModel.updateUserInfoApiResponse.observe(this, Observer { apiResponse ->
+            hideLoading()
+            if(apiResponse?.error.isNullOrBlank().not()){
+                Utils.showDialog(activity, getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
+            }else{
+                Toast.makeText(activity, getString(R.string.udate_profile_success_msg), Toast.LENGTH_SHORT).show()
+                mBinding.info = mViewModel.maskedUserInfo.get()
+                mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode))
+            }
+
 
         })
     }
