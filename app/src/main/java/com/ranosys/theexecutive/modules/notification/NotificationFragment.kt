@@ -46,8 +46,13 @@ class NotificationFragment : BaseFragment() {
             hideLoading()
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             if (response is List<*>) {
-                notificationList = response as List<NotificationListResponse>
-                setNotificationAdapter()
+                if(response.size > 0){
+                    notificationList = response as List<NotificationListResponse>
+                    setNotificationAdapter()
+                }else{
+                    tv_no_item_in_notification.visibility = View.VISIBLE
+                    notification_list.visibility = View.GONE
+                }
             } else {
                 Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
             }

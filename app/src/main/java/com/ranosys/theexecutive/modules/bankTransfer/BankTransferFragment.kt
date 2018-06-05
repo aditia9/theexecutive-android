@@ -77,7 +77,6 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
         }
 
         mBinding.btnSubmit.setOnClickListener { view ->
-            showLoading()
             bankTransferViewModel.submitBankTransfer()
         }
 
