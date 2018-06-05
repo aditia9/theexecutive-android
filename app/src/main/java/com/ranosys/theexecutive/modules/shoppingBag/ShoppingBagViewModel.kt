@@ -27,6 +27,7 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
     var mutualPromoCodeDeleteResponse = MutableLiveData<ApiResponse<String>>()
     var shoppingBagListResponse: ObservableField<MutableList<ShoppingBagResponse>>? = ObservableField()
     var guestCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
 
     fun getShoppingBagForUser() {
         val apiResponse = ApiResponse<List<ShoppingBagResponse>>()
@@ -37,11 +38,13 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
             }
 
             override fun onException(error: Throwable) {
-                mutualShoppingBagListResponse.value?.throwable = error
+                apiResponse.throwable = error
+                mutualShoppingBagListResponse.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                mutualShoppingBagListResponse.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                mutualShoppingBagListResponse.value = apiResponse
             }
         })
     }
@@ -372,6 +375,27 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
                 apiResponse.apiResponse = t
                 SavedPreferences.getInstance()?.saveStringValue(t, Constants.GUEST_CART_ID_KEY)
                 guestCartIdResponse?.value = apiResponse
+            }
+
+        })
+    }
+
+
+    fun getCartIdForUser(){
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createUserCart(object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                userCartIdResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartIdResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
+                userCartIdResponse?.value = apiResponse
             }
 
         })

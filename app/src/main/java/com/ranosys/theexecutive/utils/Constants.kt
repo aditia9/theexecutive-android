@@ -122,5 +122,6 @@ object Constants {
     const val FAILURE = "failure"
     const val CANCEL = "cancelled"
     val IMAGE_RATIO: Double = 1.44
+    const val CART_DE_ACTIVE = "cart de-active"
 
 }
