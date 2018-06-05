@@ -1,4 +1,5 @@
 package com.ranosys.theexecutive.modules.home
+import AppLog
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -14,14 +15,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.facebook.FacebookSdk.getApplicationContext
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
 import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import com.zopim.android.sdk.prechat.ZopimChatActivity
@@ -51,13 +50,6 @@ class HomeFragment : BaseFragment() {
         Utils.setUpZendeskChat()
 
         registerDeviceOnServer()
-
-        // show promotional message
-        val promoMsg = GlobalSingelton.instance?.configuration?.home_promotion_message
-        val promoUrl = GlobalSingelton.instance?.configuration?.home_promotion_message_url
-        (activity as DashBoardActivity).showPromotionMsg(promoMsg, promoUrl, {
-            prepareWebPageDialog(activity as Context, promoUrl, "")
-        })
 
         tv_chat.setOnClickListener {
             startActivity(Intent(getApplicationContext(), ZopimChatActivity::class.java))

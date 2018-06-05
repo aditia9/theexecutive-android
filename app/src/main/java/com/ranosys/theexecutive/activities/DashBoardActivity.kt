@@ -5,10 +5,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
-import android.view.View
 import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
@@ -18,16 +16,18 @@ import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
 import com.ranosys.theexecutive.modules.bankTransfer.BankTransferFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
+import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
+import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
-import kotlinx.android.synthetic.main.activity_dashboard.*
 
 
 /**
@@ -39,7 +39,6 @@ class DashBoardActivity : BaseActivity() {
 
     lateinit var toolbarBinding: ActivityDashboardBinding
     private var mediaPicker: MediaHelperActivity? = null
-    private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,33 +100,18 @@ class DashBoardActivity : BaseActivity() {
                             fragment.getNotification()
                         }
                         (fragment as? ProductDetailFragment)?.onResume()
-                        (fragment as? AddressBookFragment)?.onResume()
+                        (fragment as? AddressBookFragment)?.setToolbarAndCallAddressApi()
                         (fragment as? ShoppingBagFragment)?.onResume()
                         (fragment as? CheckoutFragment)?.onResume()
+                        (fragment as? OrderListFragment)?.onResume()
+                        (fragment as? OrderResultFragment)?.onResume()
+                        (fragment as? OrderDetailFragment)?.onResume()
                         (fragment as? LoginFragment)?.onResume()
 
                     }
                 }
             }
         })
-
-    }
-
-    fun showPromotionMsg(promoMsg: String? = "", url: String? = "", action: () -> Unit) {
-        if(promoMsg.isNullOrEmpty().not()){
-            tv_promo_msg.visibility = View.VISIBLE
-            tv_promo_msg.text = promoMsg
-
-            handler.postDelayed({
-                kotlin.run {
-                    tv_promo_msg.visibility = View.GONE
-                }
-            }, Constants.PROMOTION_TOAST_TIMEOUT)
-
-            tv_promo_msg.setOnClickListener {
-                action()
-            }
-        }
 
     }
 
