@@ -355,7 +355,7 @@ class ProductViewFragment : BaseFragment() {
                             }
 
                             val ss = Utils.getDisplayPrice(configurePrice, configureSpecialPrice)
-                            childProductsMap[colorValue] = ImagesWithPrice(ss, it.media_gallery_entries)
+                            childProductsMap[colorValue] = ImagesWithPrice(ss, productItemViewModel.productItem?.media_gallery_entries)
 
                         }
 
