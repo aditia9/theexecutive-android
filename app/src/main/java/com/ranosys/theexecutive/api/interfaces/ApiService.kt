@@ -2,7 +2,6 @@ package com.ranosys.theexecutive.api.interfaces
 
 import com.google.gson.JsonObject
 import com.ranosys.theexecutive.api.ApiConstants
-import com.ranosys.theexecutive.modules.bankTransfer.BankTransferRequest
 import com.ranosys.theexecutive.modules.bankTransfer.Recipients
 import com.ranosys.theexecutive.modules.bankTransfer.TransferMethodsDataClass
 import com.ranosys.theexecutive.modules.category.AllCategoryDataResponse
@@ -34,7 +33,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
-import java.io.File
 
 /**
  * Created by Mohammad Sunny on 21/2/18.

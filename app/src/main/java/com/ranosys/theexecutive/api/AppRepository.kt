@@ -33,6 +33,8 @@ import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -40,12 +42,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-
-
-
-
 
 
 /**

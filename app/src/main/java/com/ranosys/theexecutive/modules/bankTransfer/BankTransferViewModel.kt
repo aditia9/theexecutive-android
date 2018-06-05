@@ -7,7 +7,6 @@ import android.content.Context
 import android.databinding.ObservableField
 import android.support.design.widget.TextInputEditText
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
