@@ -85,7 +85,7 @@ object Constants {
     const val ERROR_CODE_401: Int = 401
     const val ERROR_CODE_400: Int = 400
     const val ZENDESK_CHAT: String = "4gHlsXEXVL3ZjRJ6jA5W66wwYYcJPdef"
-    const val ZERO: String = "0.0"
+    const val ZERO: String = "0"
     const val INVALID_CREDENTIALS: String = "The email address or password do not match with our system, Kindly enter the valid credentials"
     const val NO_USER_EXIST : String = "No user exists with this email id"
     const val ALREADY_REGISTERED : String = "It seems like you are already registered with us, kindly login"
@@ -122,5 +122,7 @@ object Constants {
     const val FAILURE = "failure"
     const val CANCEL = "cancelled"
     val IMAGE_RATIO: Double = 1.44
+    const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
+    const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
 
 }

@@ -75,7 +75,7 @@
     <dimen name="one_thirty_dp">130dp</dimen>
     <dimen name="two_twelve_dp">212dp</dimen>
     <dimen name="notification_image_size">250dp</dimen>
-    <dimen name="one_ten_dp">110dp</dimen>
+    <dimen name="nineteen_dp">90dp</dimen>
     <dimen name="one_twenty_five_dp">125dp</dimen>
-
+    <dimen name="one_ten_dp">110dp</dimen>
 </resources>

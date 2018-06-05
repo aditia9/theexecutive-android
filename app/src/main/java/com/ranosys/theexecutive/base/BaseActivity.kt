@@ -114,6 +114,8 @@ open class BaseActivity: RunTimePermissionActivity(){
         toolbarViewModel?.isRightIconVisible?.set(isVisible)
     }
 
+
+
     private fun changeStatusBarColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window
