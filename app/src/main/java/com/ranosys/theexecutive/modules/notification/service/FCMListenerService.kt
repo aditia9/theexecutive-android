@@ -14,7 +14,6 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.modules.splash.SplashActivity
@@ -41,7 +40,6 @@ class FCMListenerService : FirebaseMessagingService() {
     internal lateinit var body: String
     private lateinit var notificationId: String
     private lateinit var notification: NotificationCompat.Builder
-    private val notificationImageBaseUrl: String = BuildConfig.API_URL
     private var vibrationArray = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
 
 
@@ -113,7 +111,7 @@ class FCMListenerService : FirebaseMessagingService() {
 
             if(notificationImg.isBlank().not()){
              notification.setStyle(NotificationCompat.BigPictureStyle()
-                     .bigPicture(getBitmapFromURL(notificationImageBaseUrl+notificationImg))
+                     .bigPicture(getBitmapFromURL(notificationImg))
                      .setBigContentTitle(title)
                      .setSummaryText(body))
             }
@@ -131,7 +129,7 @@ class FCMListenerService : FirebaseMessagingService() {
 
             if(notificationImg.isBlank().not()){
                 notification.setStyle(NotificationCompat.BigPictureStyle()
-                        .bigPicture(getBitmapFromURL(notificationImageBaseUrl+notificationImg))
+                        .bigPicture(getBitmapFromURL(notificationImg))
                         .setBigContentTitle(title)
                         .setSummaryText(body))
             }

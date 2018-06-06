@@ -17,11 +17,10 @@ import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
+import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.web_pages_layout.*
 
 
@@ -167,11 +166,7 @@ abstract class BaseFragment : LifecycleFragment() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 showLoading()
                 super.onPageStarted(view, url, favicon)
-            }
 
-            override fun onPageFinished(view: WebView?, url: String?) {
-                hideLoading()
-                super.onPageFinished(view, url)
                 AppLog.e("PAYMENT URL - : $url")
 
                 if(url!!.contains(BuildConfig.API_URL)){
@@ -179,43 +174,66 @@ abstract class BaseFragment : LifecycleFragment() {
                     when{
                         url.contains(orderSuccessUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, Constants.SUCCESS)
+                            redirectToOrderResultPage(orderId, Constants.SUCCESS)
                         }
 
                         url.contains(orderFailureUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, Constants.FAILURE)
+                            redirectToOrderResultPage(orderId, Constants.FAILURE)
                         }
 
                         url.contains(orderCancelUrl) -> {
                             webPagesDialog.dismiss()
-                            redirectTOOrderResultPage(orderId, Constants.CANCEL)
+                            redirectToOrderResultPage(orderId, Constants.CANCEL)
                         }
                     }
                 }
+            }
 
-
+            override fun onPageFinished(view: WebView?, url: String?) {
+                hideLoading()
+                super.onPageFinished(view, url)
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                AppLog.e("PAYMENT URL - : ${request!!.url.toString()}")
                 view?.loadUrl(request!!.url.toString())
                 return true
             }
         }
 
+        webPagesDialog.setOnDismissListener {
+
+            //condition to check if user press back in webview during payment
+            checkIfPaymentIsCancelled(webPagesDialog, orderId)
+        }
+
         webPagesDialog.webview.loadUrl(url)
         webPagesDialog.show()
         webPagesDialog.img_back.setOnClickListener {
-            webPagesDialog.dismiss()
-//            val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
-//            if(fragment != null && fragment is CheckoutFragment){
-//                redirectTOOrderResultPage(orderId, "cancelled")
-//            }
+
+            //condition to check if user press back in web view during payment
+            checkIfPaymentIsCancelled(webPagesDialog, orderId)
         }
 
     }
 
-    private fun redirectTOOrderResultPage(orderId: String, status: String) {
+    private fun checkIfPaymentIsCancelled(webPagesDialog: Dialog, orderId: String) {
+        val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
+        if(fragment != null && fragment is CheckoutFragment && GlobalSingelton.instance?.paymentInitiated ?: false){
+
+            Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(android.R.string.yes), getString(android.R.string.no), object: DialogOkCallback {
+                override fun setDone(done: Boolean) {
+                    redirectToOrderResultPage(orderId, Constants.CANCEL)
+                    webPagesDialog.dismiss()
+                }
+            })
+        }else{
+            webPagesDialog.dismiss()
+        }
+    }
+
+    private fun redirectToOrderResultPage(orderId: String, status: String) {
         popUpAllFragments()
         val orderResultFragment = OrderResultFragment.getInstance(orderId, status)
         FragmentUtils.addFragment(context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)

@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.checkout
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -11,9 +12,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentOrderResultBinding
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_order_result.*
 
 /**
@@ -38,12 +37,35 @@ class OrderResultFragment: BaseFragment(){
         mBinding.vm = orderResultViewModel
         orderResultViewModel.orderId.set(orderId)
         orderResultViewModel.status.set(status)
-        orderResultViewModel.getOrderDetails()
+
+        observeEvents()
+        callOrderStatusApi()
+
 
         //update user cart count
         Utils.updateCartCount( 0)
 
         return mBinding.root
+    }
+
+    private fun callOrderStatusApi() {
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            orderResultViewModel.getOrderDetails()
+        }
+    }
+
+    private fun observeEvents() {
+        orderResultViewModel.apiError.observe(this, Observer { error ->
+            handleError(error)
+        })
+    }
+
+    private fun handleError(error: String?) {
+        Utils.showDialog(activity as Context, error, (activity as Context).getString(android.R.string.ok), "", object: DialogOkCallback {
+            override fun setDone(done: Boolean) {
+                activity?.onBackPressed()
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +75,7 @@ class OrderResultFragment: BaseFragment(){
                 Constants.SUCCESS -> {
                     popUpAllFragments()
                     val bundle = Bundle()
-                    bundle.putString(Constants.ORDER_ID, orderId)
+                    bundle.putString(Constants.ORDER_ID, orderResultViewModel.incrementalOrderId.get())
                     FragmentUtils.addFragment(activity as Context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                 }
 
@@ -81,6 +103,12 @@ class OrderResultFragment: BaseFragment(){
             bundle.putString(Constants.STATUS, status)
             val orderResultFragment = OrderResultFragment()
             orderResultFragment.arguments = bundle
+
+            //clear payment initiated flag
+            GlobalSingelton.instance?.paymentInitiated = false
+
+            //clearing orderId form global singleton
+            GlobalSingelton.instance?.orderId = ""
 
             return orderResultFragment
         }
