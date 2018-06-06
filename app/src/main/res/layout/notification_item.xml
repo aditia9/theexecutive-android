@@ -25,8 +25,8 @@
             android:layout_width="@dimen/ten_dp"
             android:layout_height="@dimen/ten_dp"
             android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/twenty_dp"
             android:contentDescription="@string/app_name"
+            android:layout_marginTop="@dimen/five_dp"
             android:src="@{notification.isRead ? @drawable/notification_read : @drawable/notification_unread}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
@@ -64,7 +64,6 @@
             android:layout_marginTop="@dimen/three_dp"
             android:textSize="@dimen/fourteen_sp"
             android:textColor="@color/hint_color"
-            android:text="@{notification.sent_date}"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
 
@@ -75,10 +74,18 @@
             android:layout_marginTop="@dimen/ten_dp"
             android:contentDescription="@string/app_name"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="@{TextUtils.isEmpty(notification.imgUrl)? View.GONE : View.VISIBLE}"
-            bind:baseUrlWithProductImageUrl="@{notification.imgUrl}"
+            android:visibility="@{TextUtils.isEmpty(notification.image)? View.GONE : View.VISIBLE}"
+            bind:imageUrl="@{notification.image}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_date_time" />
 
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/one_dp"
+            android:background="@color/divider_color"
+            android:layout_marginTop="@dimen/ten_dp"
+            app:layout_constraintTop_toBottomOf="@+id/img_notification"
+            />
     </android.support.constraint.ConstraintLayout>
 </layout>

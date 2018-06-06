@@ -42,6 +42,7 @@ import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.zopim.android.sdk.api.ZopimChat
 import com.zopim.android.sdk.model.VisitorInfo
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
@@ -64,7 +65,7 @@ object Utils {
 
     /*fun isValidEmail(email: String?): Boolean {
         // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
-        val p = Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
+        val p = Pattern.compile("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}")
         val m = p.matcher(email)
         return m.matches()
     }*/
@@ -331,7 +332,7 @@ object Utils {
             val name = SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME) + " " + SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME)
             val visitorInfo = VisitorInfo.Builder()
                     .email(email)
-                   // .name(name)
+                    // .name(name)
                     .build()
 
             // visitor info can be set at any point when that information becomes available
@@ -339,7 +340,6 @@ object Utils {
         }else{
             val visitorInfo = VisitorInfo.Builder()
                     .email("")
-                    // .name("")
                     .build()
             ZopimChat.setVisitorInfo(visitorInfo)
         }
@@ -363,6 +363,12 @@ object Utils {
         }else{
             return null
         }
+
+    }
+
+    fun getAddressFromId(addId: String): MyAccountDataClass.Address?{
+        val info = GlobalSingelton.instance?.userInfo
+        return info?.addresses?.single { it.id == addId }
 
     }
 
@@ -410,4 +416,18 @@ object Utils {
         return isInBackground;
     }
 
+
+    fun getDateFormat(strDate : String): String {
+        var format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val newDate = format.parse(strDate)
+        format = SimpleDateFormat("dd-MM-yyyy")
+        return format.format(newDate)
+    }
+
+    fun getDateTimeFormat(strDate : String): String {
+        var format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val newDate = format.parse(strDate)
+        format = SimpleDateFormat("dd-MM-yyyy, hh:mm a")
+        return format.format(newDate)
+    }
 }

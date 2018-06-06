@@ -259,9 +259,17 @@
         <item>Subscribe to Newsletter</item>
         <item>Select Language</item>
         <item>Change Password</item>
+        <item>Bank Transfer Confirmation</item>
         <item>Buying Guide</item>
         <item>Contact Us</item>
         <item>Settings</item>
+    </string-array>
+
+
+    <string-array name="reason_array">
+        <item>Bad Quality</item>
+        <item>Bad Quality 2</item>
+        <item>Bad Quality 3</item>
     </string-array>
 
     <integer-array name="my_account_option_icon_array">
@@ -272,8 +280,15 @@
         <item>@drawable/newsletter</item>
         <item>@drawable/language</item>
         <item>@drawable/change_password</item>
+        <item>@drawable/bank_transfer</item>
         <item>@drawable/buying_guide</item>
         <item>@drawable/contact</item>
         <item>@drawable/setting</item>
     </integer-array>
+
+    <string-array name="attachment_option_array">
+        <item>@string/take_photo</item>
+        <item>@string/choose_from_gallery</item>
+        <item>@string/cancel</item>
+    </string-array>
 </resources>

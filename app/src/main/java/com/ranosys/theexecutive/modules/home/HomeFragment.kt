@@ -1,4 +1,5 @@
 package com.ranosys.theexecutive.modules.home
+import AppLog
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil

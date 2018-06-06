@@ -69,7 +69,7 @@ class ProductDetailFragment : BaseFragment() {
             pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get(), position)
             product_viewpager.adapter = pagerAdapter
             product_viewpager.adapter?.notifyDataSetChanged()
-            product_viewpager.offscreenPageLimit = 5
+            product_viewpager.offscreenPageLimit = 2
             product_viewpager.currentItem = position!!
         }
 
@@ -79,10 +79,11 @@ class ProductDetailFragment : BaseFragment() {
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 pagerPosition = position
-                setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+
             }
 
             override fun onPageSelected(position: Int) {
+                setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
             }
         })
 
@@ -112,7 +113,7 @@ class ProductDetailFragment : BaseFragment() {
                 setToolBarParams(productList?.get(position!!)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
                 pagerAdapter = ProductStatePagerAdapter(childFragmentManager,productDetailViewModel.productList?.get(), position)
                 product_viewpager.adapter = pagerAdapter
-                product_viewpager.offscreenPageLimit = 3
+                product_viewpager.offscreenPageLimit = 2
                 product_viewpager.adapter?.notifyDataSetChanged()
 
             } else {

@@ -39,7 +39,7 @@
                 android:id="@+id/chk_default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/twenty_four_dp"
+                android:layout_marginEnd="20dp"
                 android:checked="@{isDefault}"
                 android:enabled="@{!isDefault}"
                 android:text="@string/set_as_default"
@@ -53,14 +53,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_four_dp"
-                android:layout_marginTop="@dimen/twelve_dp"
+                android:layout_marginTop="2dp"
                 android:maxLines="2"
                 android:text='@{address.firstname + " " +address.lastname}'
                 android:textSize="@dimen/twenty_sp"
                 app:layout_constraintEnd_toStartOf="@id/chk_default"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/chk_default" />
 
             <TextView
                 android:id="@+id/tv_address"
@@ -69,8 +69,8 @@
                 android:layout_marginEnd="@dimen/twenty_four_dp"
                 android:layout_marginStart="@dimen/twenty_four_dp"
                 android:layout_marginTop="@dimen/eight_dp"
-                android:maxLines="2"
-                android:text='@{address.street[0] + " " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +", " + country}'
+                android:maxLines="5"
+                android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +"\n" + address.city + ", " + address.region.region + ", " + country}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_name" />
@@ -94,6 +94,7 @@
                 android:text='@{" " + address.telephone}'
                 app:layout_constraintBaseline_toBaselineOf="@id/tv_mobile"
                 app:layout_constraintStart_toEndOf="@id/tv_mobile"
+                app:layout_constraintTop_toTopOf="@id/tv_mobile"
                 app:layout_constraintBottom_toBottomOf="@id/tv_mobile"/>
 
             <View

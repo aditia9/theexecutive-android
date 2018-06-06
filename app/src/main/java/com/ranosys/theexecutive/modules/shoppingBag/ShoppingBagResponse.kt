@@ -4,7 +4,7 @@ package com.ranosys.theexecutive.modules.shoppingBag
 data class ShoppingBagResponse(
         val item_id: Int,
         val sku: String,
-        val qty: Int,
+        var qty: Int,
         val name: String,
         val price: Int,
         val product_type: String,

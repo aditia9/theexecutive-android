@@ -62,7 +62,8 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
 
     fun addToBagWishlistItem(itemId : Int?){
         val apiResponse = ApiResponse<String>()
-        AppRepository.addToBagWishlistItem(itemId, callBack = object : ApiCallback<String> {
+        val request = MoveToBagRequest(id = itemId.toString(), qty = "1")
+        AppRepository.addToBagWishlistItem(request, callBack = object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
                 mutualAddToBagItemResponse.value = apiResponse

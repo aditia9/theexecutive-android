@@ -34,7 +34,7 @@ open class BaseActivity: RunTimePermissionActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       // changeStatusBarColor(R.color.white)
+        // changeStatusBarColor(R.color.white)
         requestedOrientation = if(Utils.isTablet(this)){
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }else{
@@ -57,7 +57,7 @@ open class BaseActivity: RunTimePermissionActivity(){
     override fun onBackPressed() {
         Utils.hideSoftKeypad(this)
         if(supportFragmentManager.backStackEntryCount > 1){
-            supportFragmentManager.popBackStackImmediate()
+            supportFragmentManager.popBackStack()
         }else{
             val fragment = FragmentUtils.getCurrentFragment(this@BaseActivity)
             fragment?.run {
@@ -113,6 +113,8 @@ open class BaseActivity: RunTimePermissionActivity(){
     fun setRightIconVisibility(isVisible: Boolean){
         toolbarViewModel?.isRightIconVisible?.set(isVisible)
     }
+
+
 
     private fun changeStatusBarColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

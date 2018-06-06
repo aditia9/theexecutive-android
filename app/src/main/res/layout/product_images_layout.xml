@@ -17,7 +17,6 @@
             android:layout_height="@dimen/six_hundred_dp"
             bind:baseUrlWithProductImageUrl="@{mediaGalleryEntry.file}"
             android:layout_marginBottom="@dimen/twenty_dp"
-            android:scaleType="centerCrop"
             android:contentDescription="@string/image_one_detail"
             />
 

@@ -2,25 +2,33 @@ package com.ranosys.theexecutive.activities
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
+import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.bankTransfer.BankTransferFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
+import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
+import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
+import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
+
 
 /**
  * @Details Dashboard screen for an app
@@ -30,6 +38,7 @@ import com.ranosys.theexecutive.utils.SavedPreferences
 class DashBoardActivity : BaseActivity() {
 
     lateinit var toolbarBinding: ActivityDashboardBinding
+    private var mediaPicker: MediaHelperActivity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +69,7 @@ class DashBoardActivity : BaseActivity() {
         supportFragmentManager.addOnBackStackChangedListener(object : FragmentManager.OnBackStackChangedListener {
             override fun onBackStackChanged() {
                 val backStackCount = supportFragmentManager.backStackEntryCount
-                if(backStackCount > 0){
+                if (backStackCount > 0) {
                     val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
                     fragment?.run {
                         if (fragment is HomeFragment) {
@@ -90,13 +99,14 @@ class DashBoardActivity : BaseActivity() {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.notifications), 0, "", R.drawable.back, true, 0, false)
                             fragment.getNotification()
                         }
-                        if(fragment is ProductListingFragment){
-                            (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true ) }
-                        if(fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login),0, "", 0,false, 0, false, true) }
                         (fragment as? ProductDetailFragment)?.onResume()
-                        (fragment as? AddressBookFragment)?.onResume()
+                        (fragment as? AddressBookFragment)?.setToolbarAndCallAddressApi()
                         (fragment as? ShoppingBagFragment)?.onResume()
+                        (fragment as? CheckoutFragment)?.onResume()
+                        (fragment as? OrderListFragment)?.onResume()
+                        (fragment as? OrderResultFragment)?.onResume()
+                        (fragment as? OrderDetailFragment)?.onResume()
+                        (fragment as? LoginFragment)?.onResume()
 
                     }
                 }
@@ -129,14 +139,41 @@ class DashBoardActivity : BaseActivity() {
                 }
 
                 Constants.NOTIFICATION_TYPE_ORDER_LIST -> {
-                    //ToDo Redirect to order list
+                    val bundle = Bundle()
+                    bundle.putString(Constants.ORDER_ID, redirectValue)
+                    FragmentUtils.addFragment(this, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                 }
 
                 else -> {
-                    //ToDo Redirect to notification list
+                    FragmentUtils.addFragment(this, OrderDetailFragment(), null, NotificationFragment::class.java.name, true)
                 }
             }
         }
     }
 
+
+    fun initMediaPicker() : MediaHelperActivity{
+        mediaPicker = MediaHelperActivity(this)
+        return mediaPicker as MediaHelperActivity
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        val fragment = FragmentUtils.getCurrentFragment(this@DashBoardActivity)
+
+        if(fragment is BankTransferFragment){
+            initMediaPicker().onCallbackResult(requestCode,resultCode, data)
+            fragment.onActivityResult(requestCode,resultCode, data)
+        }else if(fragment is HomeFragment){
+            if(HomeFragment.fragmentPosition == 1) {
+                val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                if(TextUtils.isEmpty(isLogin)){
+                    (fragment.childFragmentManager.fragments[2] as LoginFragment).onActivityResult(requestCode, resultCode, data!!)
+                }
+            }
+        }else if(fragment is LoginFragment){
+            fragment.onActivityResult(requestCode, resultCode, data!!)
+        }
+    }
 }

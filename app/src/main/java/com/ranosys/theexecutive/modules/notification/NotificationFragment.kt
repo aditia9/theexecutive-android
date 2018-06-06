@@ -15,6 +15,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
 import com.ranosys.theexecutive.utils.Constants
@@ -46,8 +47,13 @@ class NotificationFragment : BaseFragment() {
             hideLoading()
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             if (response is List<*>) {
-                notificationList = response as List<NotificationListResponse>
-                setNotificationAdapter()
+                if(response.size > 0){
+                    notificationList = response as List<NotificationListResponse>
+                    setNotificationAdapter()
+                }else{
+                    tv_no_item_in_notification.visibility = View.VISIBLE
+                    notification_list.visibility = View.GONE
+                }
             } else {
                 Toast.makeText(activity, apiResponse?.error, Toast.LENGTH_LONG).show()
             }
@@ -99,7 +105,10 @@ class NotificationFragment : BaseFragment() {
             }
 
             Constants.TYPE_ORDER -> {
-                //ToDo Redirect to order screen
+                val bundle = Bundle()
+                bundle.putString(Constants.ORDER_ID, item.type_id)
+                FragmentUtils.addFragment(context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
+
             }
 
         }

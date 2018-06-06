@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.addressBook
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -33,6 +34,9 @@ class AddressBookFragment: BaseFragment() {
     private lateinit var mViewModel: AddressBookViewModel
     private var addressList: MutableList<MyAccountDataClass.Address>? = null
     private lateinit var addressBookAdapter: AddressBookAdapter
+    private var isFromCheckout: Boolean  = false
+    private var liveAddress: MutableLiveData<MyAccountDataClass.Address>?  = null
+    private var deleteAddressId: String? = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -69,8 +73,11 @@ class AddressBookFragment: BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
         addressBookAdapter.addressList = GlobalSingelton.instance?.userInfo?.addresses
+    }
+
+    fun setToolbarAndCallAddressApi(){
+        setToolBarParams(getString(R.string.address_book), 0, "", R.drawable.back, true, R.drawable.add , true)
         getAddressList()
     }
 
@@ -91,6 +98,12 @@ class AddressBookFragment: BaseFragment() {
                 addressList = apiResponse?.apiResponse?.addresses
                 addressBookAdapter.addressList = addressList
                 addressBookAdapter.notifyDataSetChanged()
+
+                //to update selected address with default address at checkout screen when selected address deleted
+                if(deleteAddressId == liveAddress?.value?.id){
+                    liveAddress?.value = Utils.getDefaultAddress()
+                    deleteAddressId = ""
+                }
 
             }else{
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
@@ -120,6 +133,7 @@ class AddressBookFragment: BaseFragment() {
                     addressList = apiResponse?.apiResponse
                     addressBookAdapter.addressList = addressList
                     addressBookAdapter.notifyDataSetChanged()
+
                 }
 
             }else{
@@ -144,7 +158,21 @@ class AddressBookFragment: BaseFragment() {
                 changeDefaultAddress(addressPosition)
             }
 
+            else -> {
+                if(isFromCheckout){
+                    addressSelection(addressPosition)
+                }
+            }
+
         }
+    }
+
+    private fun addressSelection(addressPosition: Int) {
+        //perform only if from checkout
+        Toast.makeText(activity, "Address selected", Toast.LENGTH_SHORT).show()
+        liveAddress?.value = addressList?.get(addressPosition)
+        activity?.onBackPressed()
+
     }
 
     private fun changeDefaultAddress(addressPosition: Int) {
@@ -159,7 +187,7 @@ class AddressBookFragment: BaseFragment() {
     }
 
     private fun editAddress(addressPosition: Int) {
-        val editAddressFragment = EditAddressFragment.getInstance(addressList?.get(addressPosition))
+        val editAddressFragment = EditAddressFragment.getInstance(addressList?.get(addressPosition), liveAddress)
         FragmentUtils.addFragment(context, editAddressFragment,null, EditAddressFragment::class.java.name, true )
     }
 
@@ -168,7 +196,7 @@ class AddressBookFragment: BaseFragment() {
     }
 
     private fun removeAddress(addressPosition: Int) {
-        if(addressList?.get(addressPosition) == Utils.getDefaultAddress()){
+        if(addressList?.get(addressPosition)?.default_billing == true && addressList?.get(addressPosition)?.default_shipping == true){
             Utils.showDialog(activity, getString(R.string.dafault_address_delete_warning), getString(android.R.string.ok), "", null)
         }else{
             Utils.showDialog(activity, getString(R.string.delete_address_confirmation), getString(android.R.string.ok), getString(android.R.string.cancel), object: DialogOkCallback{
@@ -183,9 +211,19 @@ class AddressBookFragment: BaseFragment() {
     private fun callRemoveAddressApi(addressPosition: Int) {
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
+            deleteAddressId = addressList?.get(addressPosition)?.id
             mViewModel.removeAddress(addressList?.get(addressPosition))
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
+        }
+    }
+
+    companion object {
+        fun getInstance(isFromCheckout : Boolean  = false, liveAddress: MutableLiveData<MyAccountDataClass.Address>? = null): AddressBookFragment{
+            return AddressBookFragment().apply {
+                this.isFromCheckout = isFromCheckout
+                this.liveAddress = liveAddress
+            }
         }
     }
 

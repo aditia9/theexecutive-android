@@ -4,6 +4,7 @@ package com.ranosys.theexecutive.utils
  * Created by Mohammad Sunny on 22/2/18.
  */
 object Constants {
+    const val API_URL = "http://magento.theexecutive.co.id/"
     const val ACCESS_TOKEN_KEY = "access_token"
     const val USER_ACCESS_TOKEN_KEY = "user_access_token"
     const val USER_CART_ID_KEY = "user_cart_id_key"
@@ -78,12 +79,13 @@ object Constants {
     const val SORT_TYPE_CATALOG: String = "catalog"
     const val SORT_TYPE_SEARCH: String = "search"
     const val SPLASH_TIMEOUT: Long = 3000
+    const val PROMOTION_TOAST_TIMEOUT: Long = 3000
     const val CLICK_TIMEOUT: Long = 3000
     const val ERROR_CODE_404: Int = 404
     const val ERROR_CODE_401: Int = 401
     const val ERROR_CODE_400: Int = 400
     const val ZENDESK_CHAT: String = "4gHlsXEXVL3ZjRJ6jA5W66wwYYcJPdef"
-    const val ZERO: String = "0.0"
+    const val ZERO: String = "0"
     const val INVALID_CREDENTIALS: String = "The email address or password do not match with our system, Kindly enter the valid credentials"
     const val NO_USER_EXIST : String = "No user exists with this email id"
     const val ALREADY_REGISTERED : String = "It seems like you are already registered with us, kindly login"
@@ -92,6 +94,11 @@ object Constants {
     const val LAST_NAME: String = "last_name"
     const val PRODUCT_SKU: String = "productSku"
     const val OPTIONS: String = "options"
+    const val ORDER_ID: String = "order_id"
+    const val PAYMENT_METHOD_BANK_TRANSFER_KEY: String = "banktransfer"
+    const val PAYMENT_METHOD_COD_KEY: String = "cashondelivery"
+    const val GRAND_TOTAL_KEY: String = "grand_total"
+    const val IDR: String = "IDR"
     const val NOTIFICATION_CHANNEL_ID = "4655"
     var notificationCounter = 0
     const val KEY_REDIRECTION_TYPE = "type"
@@ -110,6 +117,13 @@ object Constants {
     const val NOTIFICATION_TYPE_ORDER_LIST = "Order"
     const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
     const val USER_FCM_ID = "fcm_id"
+    const val STATUS = "status"
+    const val SUCCESS = "success"
+    const val FAILURE = "failure"
+    const val CANCEL = "cancelled"
     val IMAGE_RATIO: Double = 1.44
+    const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
+    const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
+    const val CART_DE_ACTIVE = "cart de-active"
 
 }

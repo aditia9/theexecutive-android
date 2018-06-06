@@ -59,6 +59,8 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
     private int mFinalYear;
     private int mInitialMonth;
     private int mInitialDay;
+    private int mDefaultStartYear;
+    private int mDefaultEndYear;
 
     /**
      * The callback used to indicate the user is done filling in the date.
@@ -83,7 +85,10 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
                      int finalYear,
                      int monthOfYear,
                      int dayOfMonth,
-                     boolean yearOptional) {
+                     boolean yearOptional,
+                     int defaultStartYear,
+                     int defaultEndYear) {
+
         super(context, theme);
 
         mCallBack = callBack;
@@ -91,6 +96,8 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
         mFinalYear = finalYear;
         mInitialMonth = monthOfYear;
         mInitialDay = dayOfMonth;
+        mDefaultEndYear = defaultEndYear;
+        mDefaultStartYear = defaultStartYear;
 
         mTitleDateFormat = DateFormat.getDateInstance(DateFormat.LONG);
         mTitleNoYearDateFormat = DateUtils.getLocalizedDateFormatWithoutYear(getContext());
@@ -106,8 +113,8 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
                 (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.date_picker_dialog_container, null);
         setView(view);
-        mDatePicker = new DatePicker(context, (ViewGroup) view, spinnerTheme);
-        mDatePicker.init(mInitialYear, mInitialMonth, mInitialDay, yearOptional, finalYear,this);
+        mDatePicker = new DatePicker(context, (ViewGroup) view, spinnerTheme, mDefaultStartYear, mDefaultEndYear);
+        mDatePicker.init(mInitialYear, mInitialMonth, mInitialDay, yearOptional, finalYear,this, mDefaultStartYear, mDefaultEndYear);
     }
 
     @Override
@@ -160,7 +167,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
         int month = savedInstanceState.getInt(MONTH);
         int day = savedInstanceState.getInt(DAY);
         boolean yearOptional = savedInstanceState.getBoolean(YEAR_OPTIONAL);
-        mDatePicker.init(year, month, day, yearOptional,finalYear, this);
+        mDatePicker.init(year, month, day, yearOptional,finalYear, this, mDefaultStartYear,mDefaultEndYear);
         //updateTitle(year, month, day);
     }
 }

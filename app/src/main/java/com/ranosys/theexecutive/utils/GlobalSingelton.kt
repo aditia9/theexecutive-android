@@ -18,6 +18,8 @@ class GlobalSingelton private constructor(){
     var staticPagesResponse: StaticPagesUrlResponse? = null
     var configuration: ConfigurationResponse? = null
     var userInfo: MyAccountDataClass.UserInfoResponse? = null
+    var paymentInitiated: Boolean = false
+    var orderId: String = ""
 
     var cartCount: MutableLiveData<Int> = MutableLiveData()
 

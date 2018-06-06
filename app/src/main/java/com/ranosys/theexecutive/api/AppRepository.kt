@@ -4,15 +4,22 @@ import com.google.gson.JsonObject
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
+import com.ranosys.theexecutive.modules.bankTransfer.BankTransferRequest
+import com.ranosys.theexecutive.modules.bankTransfer.Recipients
+import com.ranosys.theexecutive.modules.bankTransfer.TransferMethodsDataClass
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordDataClass
+import com.ranosys.theexecutive.modules.checkout.CheckoutDataClass
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordDataClass
 import com.ranosys.theexecutive.modules.login.LoginDataClass
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
+import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
+import com.ranosys.theexecutive.modules.order.orderList.OrderListResponse
+import com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnRequest
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.*
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 import com.ranosys.theexecutive.modules.register.RegisterDataClass
@@ -21,14 +28,19 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
 import com.ranosys.theexecutive.modules.shoppingBag.TotalResponse
 import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
+import com.ranosys.theexecutive.modules.wishlist.MoveToBagRequest
 import com.ranosys.theexecutive.modules.wishlist.WishlistResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 
 
@@ -765,8 +777,12 @@ object AppRepository {
         callPost?.enqueue(object : Callback<List<ShoppingBagResponse>> {
             override fun onResponse(call: Call<List<ShoppingBagResponse>>?, response: Response<List<ShoppingBagResponse>>?) {
                 if (!response!!.isSuccessful) {
-                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
-
+                    if (response.code() == Constants.ERROR_CODE_400) {
+                        val errorBody = Constants.CART_DE_ACTIVE
+                        callBack.onError(errorBody)
+                    }else{
+                        parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                    }
                 } else {
                     callBack.onSuccess(response.body())
                 }
@@ -1103,7 +1119,7 @@ object AppRepository {
 
     fun getCouponCodeForGuestUser(cartId: String, callBack: ApiCallback<Any>) {
         val retrofit = ApiClient.retrofit
-        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
@@ -1217,12 +1233,11 @@ object AppRepository {
     }
 
 
-    fun addToBagWishlistItem(itemId: Int?, callBack: ApiCallback<String>) {
+    fun addToBagWishlistItem(request: MoveToBagRequest, callBack: ApiCallback<String>) {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
-                ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.addToBagWishlistItem(ApiConstants.BEARER + userToken, storeCode, itemId)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.addToBagWishlistItem(ApiConstants.BEARER + userToken, storeCode, request.id, request)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1255,6 +1270,202 @@ object AppRepository {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getOrdersList(callBack: ApiCallback<List<OrderListResponse>>){
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getMyOrderList(ApiConstants.BEARER + userToken, storeCode)
+        callGet?.enqueue(object : Callback<List<OrderListResponse>> {
+
+            override fun onResponse(call: Call<List<OrderListResponse>>?, response: Response<List<OrderListResponse>>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<OrderListResponse>>?, t: Throwable?) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+    fun getOrdersDetail(orderId : String, callBack: ApiCallback<OrderDetailResponse>){
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val params = HashMap<String, String>()
+        params.put("fields", "items,grand_total,subtotal_incl_tax,shipping_incl_tax,billing_address,extension_attributes[returnto_address,formatted_shipping_address]")
+        val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getOrderDetail(ApiConstants.BEARER + userToken, storeCode, orderId, params)
+        callGet?.enqueue(object : Callback<OrderDetailResponse> {
+
+            override fun onResponse(call: Call<OrderDetailResponse>?, response: Response<OrderDetailResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<OrderDetailResponse>?, t: Throwable?) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+    fun returnProduct(request: OrderReturnRequest, callBack: ApiCallback<String>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
+                ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.returnProduct(ApiConstants.BEARER + userToken, storeCode, request)
+        callPost?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getShippingMethods(request: CheckoutDataClass.GetShippingMethodsRequest, callBack: ApiCallback<List<CheckoutDataClass.GetShippingMethodsResponse>>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getShippingMethods(ApiConstants.BEARER + userToken, storeCode, request)
+
+        callPost?.enqueue(object : Callback<List<CheckoutDataClass.GetShippingMethodsResponse>> {
+            override fun onResponse(call: Call<List<CheckoutDataClass.GetShippingMethodsResponse>>?, response: Response<List<CheckoutDataClass.GetShippingMethodsResponse>>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<CheckoutDataClass.GetShippingMethodsResponse>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getPaymentMethods(request: CheckoutDataClass.GetPaymentMethodsRequest, callBack: ApiCallback<CheckoutDataClass.PaymentMethodResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getPaymentMethods(ApiConstants.BEARER + userToken, storeCode, request)
+
+        callPost?.enqueue(object : Callback<CheckoutDataClass.PaymentMethodResponse> {
+            override fun onResponse(call: Call<CheckoutDataClass.PaymentMethodResponse>?, response: Response<CheckoutDataClass.PaymentMethodResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.PaymentMethodResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getOrderStatus(orderId: String, callBack: ApiCallback<CheckoutDataClass.OrderStatusResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getOrderStatus(ApiConstants.BEARER + userToken, storeCode, orderId)
+
+        callGet?.enqueue(object : Callback<CheckoutDataClass.OrderStatusResponse> {
+            override fun onResponse(call: Call<CheckoutDataClass.OrderStatusResponse>?, response: Response<CheckoutDataClass.OrderStatusResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.OrderStatusResponse>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun placeOrder(request: CheckoutDataClass.PlaceOrderRequest, callBack: ApiCallback<String>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.placeOrder(ApiConstants.BEARER + userToken, storeCode, request)
+
+        callPost?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getTotalAmounts(callBack: ApiCallback<CheckoutDataClass.Totals>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getTotalAmounts(ApiConstants.BEARER + userToken, storeCode)
+
+        callGet?.enqueue(object : Callback<CheckoutDataClass.Totals> {
+            override fun onResponse(call: Call<CheckoutDataClass.Totals>?, response: Response<CheckoutDataClass.Totals>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.Totals>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+    fun getUserInfoNSelectedShipping(callBack: ApiCallback<CheckoutDataClass.UserInfoNselectedShippingResponse>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
+
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getUserInfoNSelectedShipping(ApiConstants.BEARER + userToken, storeCode)
+
+        callGet?.enqueue(object : Callback<CheckoutDataClass.UserInfoNselectedShippingResponse> {
+            override fun onResponse(call: Call<CheckoutDataClass.UserInfoNselectedShippingResponse>?, response: Response<CheckoutDataClass.UserInfoNselectedShippingResponse>?) {
+                if (!response!!.isSuccessful) {
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<CheckoutDataClass.UserInfoNselectedShippingResponse>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })
@@ -1297,6 +1508,86 @@ object AppRepository {
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+    fun getBankTransferMethod(callBack: ApiCallback<List<TransferMethodsDataClass>>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.getBankTransferMethod(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<List<TransferMethodsDataClass>> {
+            override fun onResponse(call: Call<List<TransferMethodsDataClass>>?, response: Response<List<TransferMethodsDataClass>>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<TransferMethodsDataClass>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+    fun getRecipient(callBack: ApiCallback<List<Recipients>>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.getRecipient(ApiConstants.BEARER + userToken,  storeCode)
+
+        callGet?.enqueue(object : Callback<List<Recipients>> {
+            override fun onResponse(call: Call<List<Recipients>>?, response: Response<List<Recipients>>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<List<Recipients>>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
+    fun submitBankTransfer(file : File?, request: BankTransferRequest, callBack: ApiCallback<String>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        val reqFile = RequestBody.create(MediaType.parse("image/*"), file)
+        val part = MultipartBody.Part.createFormData("attachment", file?.name, reqFile)
+
+        val name= RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.name)
+        val email_submitter = RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.email_submitter)
+        val orderid =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.orderid)
+        val bank_name = RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.bank_name)
+        val holder_account=  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.holder_account)
+        val amount =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.amount)
+        val recipient =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.recipient)
+        val method =RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.method)
+        val date =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.date)
+
+       val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.submitBankTransfer(ApiConstants.BEARER + userToken,   storeCode, part, name, email_submitter, orderid, bank_name, holder_account,amount,recipient,method,date)
+
+        callGet?.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>?, response: Response<String>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 callBack.onError(Constants.ERROR)
             }
         })

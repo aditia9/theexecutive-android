@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.shoppingBag
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
@@ -22,6 +23,7 @@ import com.ranosys.theexecutive.utils.Utils
 
 const val TYPE_FOOTER = 0
 const val TYPE_ITEM = 1
+var isOutOfProductInCart : Boolean =  false
 
 class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: List<ShoppingBagResponse>?, promoCode: String, grandTotal: Int, private val action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -29,12 +31,13 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
     private var mPromoCode: String
     private var mGrandTotal: Int = 0
 
-    private var clickListener: ShoppingBagAdapter.OnItemClickListener? = null
+    private var clickListener: OnItemClickListener? = null
 
     init {
         mContext = context
         mPromoCode = promoCode
         mGrandTotal = grandTotal
+        isOutOfProductInCart = false
     }
 
     interface OnItemClickListener {
@@ -84,6 +87,10 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                 action(0, position, item, updateQty, null)
             }
 
+            itemBinding?.tvProductName?.setOnClickListener{
+                action(0, position, item, updateQty, null)
+            }
+
             item?.product_option?.extension_attributes?.configurable_item_options.run {
 
                 if (item?.product_option?.extension_attributes?.configurable_item_options != null && item.product_option.extension_attributes.configurable_item_options.isNotEmpty()) {
@@ -115,8 +122,11 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                 item?.extension_attributes?.stock_item?.run {
                     if (is_in_stock) {
                         itemBinding?.tvOutOfStock?.visibility = View.GONE
+                        itemBinding?.imgProductBlur?.visibility = View.GONE
                     } else {
                         itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
+                        itemBinding?.imgProductBlur?.visibility = View.VISIBLE
+                        isOutOfProductInCart = true
                     }
                 }
 
@@ -124,12 +134,12 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
 
                     if (item?.extension_attributes?.stock_item?.is_in_stock!!) {
                         if (item.qty > 1) {
-                            updateQty = item.qty
                             updateQty = (updateQty!! - 1)
-                            if(item.qty > item.extension_attributes.stock_item.qty){
+                            if(item.qty > item.extension_attributes.stock_item.qty && updateQty!! > item.extension_attributes.stock_item.qty){
                                 val fullMsg = context?.getString(R.string.only) + " "+ item.extension_attributes.stock_item.qty + " " + context?.getString(R.string.product_available)
                                 itemBinding?.tvQtyMsg?.text = fullMsg
                                 itemBinding?.tvQtyMsg?.visibility = View.VISIBLE
+                                itemBinding?.tvQuantity?.text = updateQty.toString()
                             }else{
                                 itemBinding?.tvQtyMsg?.visibility = View.GONE
                                 action(view.id, position, item, updateQty, null)
@@ -181,7 +191,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder is Holder) {
-            holder.bind(mContext, getItem(position), position, action)
+            holder.bind(mContext, getItem(position), position,  action)
         } else if (holder is ShoppingBagFooterHolder) {
             holder.bind(mContext, null, position, action, mPromoCode, mGrandTotal)
         }
@@ -189,6 +199,7 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
 
     class ShoppingBagFooterHolder(var itemBinding: ShoppingBagFooterBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, mPromoCode: String, mGrandTotal: Int) {
 
             itemBinding?.btnApply?.setOnClickListener { view ->
@@ -197,11 +208,16 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                 }
             }
 
-            itemBinding?.btnCheckout?.setOnClickListener {
+            itemBinding?.btnCheckout?.setOnClickListener { view->
+                if(isOutOfProductInCart){
+                    Toast.makeText(context, context?.getText(R.string.cart_out_of_stock), Toast.LENGTH_SHORT).show()
+                }else{
+                    action(view.id, position, item, null, itemBinding!!.etPromoCode.text.toString())
+                }
             }
 
             if (mGrandTotal != 0) {
-                itemBinding?.tvTotal?.text = Utils.getFromattedPrice(mGrandTotal.toString())
+                itemBinding?.tvTotal?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mGrandTotal.toString())
             }
 
             if (!TextUtils.isEmpty(mPromoCode)) {
