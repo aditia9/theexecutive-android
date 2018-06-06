@@ -35,7 +35,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body loginRequest: LoginDataClass.LoginRequest?): Call<String>
+        fun getLoginData(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body loginRequest: LoginDataClass.LoginRequest?,  @QueryMap queryMap: HashMap<String, String>?): Call<String>
     }
 
     interface RegistrationService {
