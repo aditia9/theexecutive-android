@@ -106,6 +106,7 @@ class DashBoardActivity : BaseActivity() {
                         (fragment as? OrderListFragment)?.onResume()
                         (fragment as? OrderResultFragment)?.onResume()
                         (fragment as? OrderDetailFragment)?.onResume()
+                        (fragment as? LoginFragment)?.onResume()
 
                     }
                 }
@@ -138,11 +139,13 @@ class DashBoardActivity : BaseActivity() {
                 }
 
                 Constants.NOTIFICATION_TYPE_ORDER_LIST -> {
-                    //ToDo Redirect to order list
+                    val bundle = Bundle()
+                    bundle.putString(Constants.ORDER_ID, redirectValue)
+                    FragmentUtils.addFragment(this, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                 }
 
                 else -> {
-                    //ToDo Redirect to notification list
+                    FragmentUtils.addFragment(this, OrderDetailFragment(), null, NotificationFragment::class.java.name, true)
                 }
             }
         }
@@ -169,6 +172,8 @@ class DashBoardActivity : BaseActivity() {
                     (fragment.childFragmentManager.fragments[2] as LoginFragment).onActivityResult(requestCode, resultCode, data!!)
                 }
             }
+        }else if(fragment is LoginFragment){
+            fragment.onActivityResult(requestCode, resultCode, data!!)
         }
     }
 }

@@ -124,5 +124,6 @@ object Constants {
     val IMAGE_RATIO: Double = 1.44
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
+    const val CART_DE_ACTIVE = "cart de-active"
 
 }

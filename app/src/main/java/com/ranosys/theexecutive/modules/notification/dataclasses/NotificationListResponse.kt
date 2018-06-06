@@ -15,5 +15,5 @@ data class NotificationListResponse(val id: Int,
                                     val isRead: Boolean = false,
                                     val store_id: Int,
                                     val sent_date: String,
-                                    val imgUrl: String
+                                    val image: String
 )

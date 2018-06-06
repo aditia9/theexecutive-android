@@ -565,7 +565,7 @@ class ProductListingFragment: BaseFragment() {
 
             handler.postDelayed({
                 kotlin.run {
-                    tv_promo_msg.visibility = View.GONE
+                    mBinding.tvPromoMsg.visibility = View.GONE
                 }
             }, Constants.PROMOTION_TOAST_TIMEOUT)
 
