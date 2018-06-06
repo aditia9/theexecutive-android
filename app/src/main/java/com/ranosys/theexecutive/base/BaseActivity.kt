@@ -34,7 +34,7 @@ open class BaseActivity: RunTimePermissionActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       // changeStatusBarColor(R.color.white)
+        // changeStatusBarColor(R.color.white)
         requestedOrientation = if(Utils.isTablet(this)){
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }else{

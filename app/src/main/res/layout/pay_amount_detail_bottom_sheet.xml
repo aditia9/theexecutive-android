@@ -11,7 +11,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/ten_dp">
+        android:padding="@dimen/twenty_four_dp"
+        android:paddingTop="@dimen/twelve_dp">
 
         <ImageView
             android:id="@+id/img_total_segment"
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/eight_dp"
             android:contentDescription="@string/bottom_sheet_behavior"
-            android:src="@drawable/forward"
+            android:src="@drawable/dropdown"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 

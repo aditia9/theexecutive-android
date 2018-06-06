@@ -216,6 +216,7 @@
     <string name="checkout">checkout</string>
     <string name="dafault_address_delete_warning">Default address cannot be removed</string>
     <string name="delete_address_confirmation">Are you sure you want to remove this address? </string>
+    <string name="cancel_order_confirmation">Do you want to cancel your order? </string>
     <string name="address_edit_success_msg">Address is updated successfully</string>
     <string name="add_address_success_msg">Address is added successfully</string>
     <string name="contact_us">Contact Us</string>
@@ -229,12 +230,13 @@
     <string name="product_available">product available</string>
     <string name="promo_code_invalid">The promo code you entered is not valid</string>
     <string name="qty">Qty </string>
+    <string name="order_no">Order no. </string>
+    <string name="virtual_acc_label">Your Virtual Account number is : </string>
     <string name="shipping_cost">Shipping Cost</string>
     <string name="products">Products</string>
     <string name="order_return">Return</string>
     <string name="order_return_to">Return To</string>
     <string name="order_return_from">Return From</string>
-    <string name="order_no">ORDER NO.</string>
     <string name="return_qty">Return Qty</string>
     <string name="ok">OK</string>
     <string name="select_payment_method_error">Please select payment method</string>
@@ -254,5 +256,16 @@
     <string name="take_photo">Take Photo</string>
     <string name="choose_from_gallery">Choose from Gallery</string>
     <string name="no_item_in_notification">No item in Notification</string>
+    <string name="order_success_msg">order placed successfully</string>
+    <string name="order_success_btn_text">view order</string>
+    <string name="order_success_info">Thank you for your order. You will receive a confirmation email with detail of your order and link to track your oder progress.</string>
+
+    <string name="order_cancel_msg">order cancelled</string>
+    <string name="order_cancel_btn_text">continue shopping</string>
+    <string name="order_cancel_info">Your order has been cancelled.</string>
+
+    <string name="order_failure_msg">order failed</string>
+    <string name="order_failure_btn_text">view order</string>
+    <string name="order_failure_info">Your order has been failed.</string>
 
 </resources>
