@@ -247,10 +247,8 @@ class CategoryFragment : BaseFragment() {
         var currentPage = 0
         val runnable = object : Runnable {
             override fun run() {
-                if (currentPage == count) {
-                    currentPage = 0
-                }
-                viewPager.setCurrentItem(currentPage++, true)
+                currentPage = currentPage % count
+                viewPager.setCurrentItem(currentPage++, false)
                 handler.postDelayed(this, 3000)
             }
         }

@@ -21,6 +21,7 @@
     <dimen name="twenty_two_sp">22sp</dimen>
     <dimen name="thirty_six_dp">36dp</dimen>
     <dimen name="half_dip">0.5dip</dimen>
+    <dimen name="thin_divider">0.1dip</dimen>
     <dimen name="two_fifty_dp">250dp</dimen>
     <dimen name="six_dp">6dp</dimen>
     <dimen name="three_dp">3dp</dimen>

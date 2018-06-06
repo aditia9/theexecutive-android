@@ -88,6 +88,7 @@ class BindingAdapters {
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
+                        .centerCrop()
                         .into(imageView)
             }
         }
