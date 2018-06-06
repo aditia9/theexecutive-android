@@ -12,10 +12,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentOrderResultBinding
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.DialogOkCallback
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_order_result.*
 
 /**
@@ -106,6 +103,12 @@ class OrderResultFragment: BaseFragment(){
             bundle.putString(Constants.STATUS, status)
             val orderResultFragment = OrderResultFragment()
             orderResultFragment.arguments = bundle
+
+            //clear payment initiated flag
+            GlobalSingelton.instance?.paymentInitiated = false
+
+            //clearing orderId form global singleton
+            GlobalSingelton.instance?.orderId = ""
 
             return orderResultFragment
         }

@@ -20,10 +20,7 @@ import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.DialogOkCallback
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.web_pages_layout.*
 
 
@@ -205,25 +202,35 @@ abstract class BaseFragment : LifecycleFragment() {
             }
         }
 
+        webPagesDialog.setOnDismissListener {
+
+            //condition to check if user press back in webview during payment
+            checkIfPaymentIsCancelled(webPagesDialog, orderId)
+        }
+
         webPagesDialog.webview.loadUrl(url)
         webPagesDialog.show()
         webPagesDialog.img_back.setOnClickListener {
 
-            val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
-            if(fragment != null && fragment is CheckoutFragment){
-
-                Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(android.R.string.yes), getString(android.R.string.no), object: DialogOkCallback {
-                    override fun setDone(done: Boolean) {
-                        redirectToOrderResultPage(orderId, Constants.CANCEL)
-                        webPagesDialog.dismiss()
-                    }
-                })
-            }else{
-                webPagesDialog.dismiss()
-            }
-
+            //condition to check if user press back in web view during payment
+            checkIfPaymentIsCancelled(webPagesDialog, orderId)
         }
 
+    }
+
+    private fun checkIfPaymentIsCancelled(webPagesDialog: Dialog, orderId: String) {
+        val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
+        if(fragment != null && fragment is CheckoutFragment && GlobalSingelton.instance?.paymentInitiated ?: false){
+
+            Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(android.R.string.yes), getString(android.R.string.no), object: DialogOkCallback {
+                override fun setDone(done: Boolean) {
+                    redirectToOrderResultPage(orderId, Constants.CANCEL)
+                    webPagesDialog.dismiss()
+                }
+            })
+        }else{
+            webPagesDialog.dismiss()
+        }
     }
 
     private fun redirectToOrderResultPage(orderId: String, status: String) {

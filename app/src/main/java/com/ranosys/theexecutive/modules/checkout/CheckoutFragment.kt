@@ -314,7 +314,13 @@ class CheckoutFragment : BaseFragment() {
         checkoutViewModel.orderId.observe(this, Observer { orderId ->
             hideLoading()
             clearCartInfo()
-            redirectToOrderResultScreen(orderId!!)
+
+            //flag to keep track that payment has been initiated
+            GlobalSingelton.instance?.paymentInitiated = true
+            //save order id in singleton to use when user press back during ongoing payment
+            GlobalSingelton.instance?.orderId = orderId!!
+
+            redirectToOrderResultScreen(orderId)
         })
     }
 
@@ -323,8 +329,7 @@ class CheckoutFragment : BaseFragment() {
     }
 
     private fun redirectToOrderResultScreen(orderId: String) {
-        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?: Constants.DEFAULT_STORE_CODE
+
 
         when(checkoutViewModel.selectedPaymentMethod?.code){
             Constants.PAYMENT_METHOD_BANK_TRANSFER_KEY -> {
@@ -340,6 +345,8 @@ class CheckoutFragment : BaseFragment() {
             }
 
             else -> {
+                val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?: Constants.DEFAULT_STORE_CODE
                 createOrderUrl(orderId, storeCode, userToken)
             }
         }
@@ -406,7 +413,6 @@ class CheckoutFragment : BaseFragment() {
             }
         }
     }
-
 
     private fun createOrderUrl(orderId: String?, storeCode: String, userToken: String?) {
         val url = "${BuildConfig.API_URL}apppayment/?___store=$storeCode&orderid=$orderId&token=$userToken"
