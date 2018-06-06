@@ -77,7 +77,10 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
         }
 
         mBinding.btnSubmit.setOnClickListener { view ->
-            bankTransferViewModel.submitBankTransfer()
+           if(bankTransferViewModel.isValidData(activity as Context)){
+                showLoading()
+                bankTransferViewModel.submitBankTransfer()
+            }
         }
 
 
@@ -147,7 +150,7 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
         builder.setItems((activity as Context).resources.getStringArray(R.array.attachment_option_array), { dialog, item ->
 
             if (items[item] == (activity as Context).resources.getStringArray(R.array.attachment_option_array)[0]) {
-                mediaPicker.chooseFromCamera(false, object : MediaCallbackManager.MediaCallback {
+                mediaPicker.chooseFromCamera(true, object : MediaCallbackManager.MediaCallback {
                     override fun onMediaSelected(uri: Uri, path: String) {
 
                         mBinding.imgAttachment.setImageURI(uri)
@@ -156,7 +159,7 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
                     }
                 })
             } else if (items[item] == (activity as Context).resources.getStringArray(R.array.attachment_option_array)[1]) {
-                mediaPicker.chooseFromGallery(false, false, object : MediaCallbackManager.MediaCallback {
+                mediaPicker.chooseFromGallery(true, false, object : MediaCallbackManager.MediaCallback {
                     override fun onMediaSelected(uri: Uri, path: String) {
                         mBinding.imgAttachment.setImageURI(uri)
                         bankTransferViewModel.attachmentFile = File(getRealPathFromUri(activity as Context, uri))
