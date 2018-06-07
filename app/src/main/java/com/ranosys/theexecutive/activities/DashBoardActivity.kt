@@ -24,6 +24,7 @@ import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
 import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
+import com.ranosys.theexecutive.modules.settings.SettingsFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -107,6 +108,7 @@ class DashBoardActivity : BaseActivity() {
                         (fragment as? OrderResultFragment)?.onResume()
                         (fragment as? OrderDetailFragment)?.onResume()
                         (fragment as? LoginFragment)?.onResume()
+                        (fragment as? SettingsFragment)?.onResume()
 
                     }
                 }
