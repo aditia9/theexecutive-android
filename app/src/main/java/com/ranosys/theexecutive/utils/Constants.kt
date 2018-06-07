@@ -125,5 +125,6 @@ object Constants {
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
     const val CART_DE_ACTIVE = "cart de-active"
+    const val IS_NOTIFICATION_SHOW = "notificatin show"
 
 }

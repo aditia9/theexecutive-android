@@ -31,6 +31,7 @@ class OrderReturnFragment : BaseFragment() {
     private var orderId: String = ""
     private lateinit var orderReturnViewModel: OrderReturnViewModel
     private var isReturnable = false
+    private var isReason = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -100,11 +101,13 @@ class OrderReturnFragment : BaseFragment() {
                 R.id.btn_return -> {
                     isReturnable = false
                     getOrderReturnRequest()
-                    if (isReturnable){
+                    if (isReturnable && isReason){
                         showLoading()
                         orderReturnViewModel.returnProduct(getOrderReturnRequest())
-                    }else{
+                    }else if(!isReturnable){
                         Toast.makeText(activity, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show()
+                    }else if(!isReason){
+                        Toast.makeText(activity, getString(R.string.no_reason_selected), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -114,7 +117,6 @@ class OrderReturnFragment : BaseFragment() {
     }
 
     private fun getOrderReturnRequest(): OrderReturnRequest {
-
         val list = orderReturnViewModel.orderDetailObservable?.get()?.items
 
         var i = 0
@@ -126,8 +128,13 @@ class OrderReturnFragment : BaseFragment() {
                 mutableItemList.add(i, item)
                 isReturnable = true
             }
+
+            if(!orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.request_reason!!.equals(getString(R.string.select_reason))){
+                isReason = true
+            }
             i++
         }
+
         val rmaData = RmaData(orderId, mutableItemList)
         return OrderReturnRequest(rmaData)
     }

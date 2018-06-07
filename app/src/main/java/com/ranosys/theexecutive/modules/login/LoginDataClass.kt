@@ -6,10 +6,7 @@ package com.ranosys.theexecutive.modules.login
 class LoginDataClass {
 
     data class LoginRequest(var username: String,
-                            var password: String,
-                            var registration_id :  String?,
-                            var device_id:  String?,
-                            var device_type : String?
+                            var password: String
                             )
 
     data class IsEmailAvailableRequest(var customerEmail: String,

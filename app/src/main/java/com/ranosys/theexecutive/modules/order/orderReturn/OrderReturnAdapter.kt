@@ -89,7 +89,8 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
         fun bind(context: Context?, orderItem: Item?, item: OrderDetailResponse?, position: Int) {
             itemBinding?.item = orderItem
             orderItem?.request_reason = context?.resources?.getStringArray(R.array.reason_array)?.get(0).toString()
-            orderItem?.request_qty = 1
+            orderItem?.request_qty = (item?.items!![position].qty_ordered)
+            itemBinding?.txtQuantity?.text = (item.items[position].qty_ordered).toString()
 
             if (item?.items?.get(position)?.extension_attributes != null && item.items[position].extension_attributes?.options != null) {
                 item.items[position].extension_attributes?.options?.forEach {

@@ -23,6 +23,7 @@ import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
 import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
 import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
+import com.ranosys.theexecutive.modules.settings.SettingsFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
@@ -144,6 +145,10 @@ class MyAccountFragment : BaseFragment() {
                         }
                         context.getString(R.string.bank_transfer) -> {
                             FragmentUtils.addFragment(context, BankTransferFragment(),null, BankTransferFragment::class.java.name, true )
+                        }
+
+                        context.getString(R.string.settings) ->{
+                            FragmentUtils.addFragment(context, SettingsFragment(),null, SettingsFragment::class.java.name, true )
                         }
                     }
                 }
