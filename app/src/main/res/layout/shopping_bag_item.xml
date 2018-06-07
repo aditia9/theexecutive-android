@@ -18,11 +18,11 @@
 
         <ImageView
             android:id="@+id/img_product"
-            android:layout_width="@dimen/one_fifty_dp"
+            android:layout_width="@dimen/one_twenty_five_dp"
             android:layout_height="@dimen/one_eighty_dp"
             android:contentDescription="@string/product_image"
-            android:scaleType="centerCrop"
             android:src="@drawable/placeholder"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             bind:baseUrlWithProductImageUrl="@{item.extension_attributes.image}" />
@@ -31,7 +31,7 @@
 
         <ImageView
             android:id="@+id/img_product_blur"
-            android:layout_width="@dimen/one_fifty_dp"
+            android:layout_width="@dimen/one_twenty_five_dp"
             android:layout_height="@dimen/one_eighty_dp"
             android:contentDescription="@string/product_image"
             app:layout_constraintStart_toStartOf="parent"

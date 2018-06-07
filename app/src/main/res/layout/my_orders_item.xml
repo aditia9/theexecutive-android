@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/img_product_item"
-                android:layout_width="@dimen/nineteen_dp"
-                android:layout_height="@dimen/one_twenty_five_dp"
+                android:layout_width="@dimen/eighty_dp"
+                android:layout_height="@dimen/one_ten_dp"
                 android:layout_margin="@dimen/ten_dp"
                 android:contentDescription="@string/image_one_detail"
                 android:src="@drawable/placeholder"
