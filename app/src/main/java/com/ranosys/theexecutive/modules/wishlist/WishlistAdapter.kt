@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.WishlistItemBinding
-import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 
 /**
@@ -61,7 +60,7 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
             itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString())
 
             item?.stock_item?.run {
-                if(is_in_stock && qty > 0){
+                if(is_in_stock){
                     itemBinding?.tvOutOfStock?.visibility = View.GONE
                     itemBinding?.imgProductOverlay?.visibility = View.GONE
                 }else{
@@ -69,25 +68,6 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
                     itemBinding?.imgProductOverlay?.visibility = View.VISIBLE
                 }
             }
-
-            item?.options?.run{
-                if(item.options.isNotEmpty()){
-                    itemBinding?.layoutColorSize?.visibility = View.VISIBLE
-                    item.options.forEach {
-                        when(it?.label){
-                            Constants.COLOR_ -> {
-                                itemBinding?.tvProductColor?.text =  it.value
-                            }
-                            Constants.SIZE_ -> {
-                                itemBinding?.tvProductSize?.text =  it.value
-                            }
-                        }
-                    }
-                }else{
-                    itemBinding?.layoutColorSize?.visibility = View.GONE
-                }
-            }
-
 
             itemView.setOnClickListener {
                 view -> action(0, position, item)

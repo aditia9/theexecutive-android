@@ -131,9 +131,9 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
         fun bind(context: Context?, item: OrderDetailResponse?, position: Int) {
             itemBinding?.item = item
 
-            itemBinding?.tvProductPrice?.text = item?.subtotal_incl_tax.toString()
-            itemBinding?.tvShippingPrice?.text = item?.shipping_incl_tax.toString()
-            itemBinding?.tvTotalPrice?.text = item?.grand_total.toString()
+            itemBinding?.tvProductPrice?.text = Utils.getDisplayPrice(item?.subtotal_incl_tax.toString(), item?.subtotal_incl_tax.toString())
+            itemBinding?.tvShippingPrice?.text = Utils.getDisplayPrice(item?.shipping_incl_tax.toString(), item?.shipping_incl_tax.toString())
+            itemBinding?.tvTotalPrice?.text = Utils.getDisplayPrice(item?.grand_total.toString(), item?.grand_total.toString())
             itemBinding?.tvProductQty?.text = (item?.items?.size.toString() + " " + context?.getString(R.string.products))
         }
     }

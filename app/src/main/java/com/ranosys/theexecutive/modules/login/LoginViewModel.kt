@@ -73,7 +73,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     fun login(){
 
 
-        val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString(), SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID), SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY), Constants.OS_TYPE)
+        val loginRequest = LoginDataClass.LoginRequest(email.get().toString(), password.get().toString())
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {

@@ -131,7 +131,6 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
 
     @SuppressLint("SimpleDateFormat")
     fun submitBankTransfer() {
-        if (isValidData(getApplication())) {
             val bankTransferRequest = BankTransferRequest(
                     name = firstName.get() + " " + lastName.get(),
                     email_submitter = emailAddress.get(),
@@ -161,7 +160,6 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
                     bankTransferObservable.value = apiResponse
                 }
             })
-        }
     }
 
     fun onRecipientSelection(position: Int) {
@@ -173,7 +171,7 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     }
 
 
-    private fun isValidData(context: Context): Boolean {
+    fun isValidData(context: Context): Boolean {
         var isValid = true
 
         if (TextUtils.isEmpty(firstName.get())) {

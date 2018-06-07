@@ -267,6 +267,7 @@
 
 
     <string-array name="reason_array">
+        <item>Select Reason</item>
         <item>Bad Quality</item>
         <item>Bad Quality 2</item>
         <item>Bad Quality 3</item>

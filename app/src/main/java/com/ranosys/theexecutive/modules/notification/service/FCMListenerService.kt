@@ -18,6 +18,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.modules.splash.SplashActivity
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -137,8 +138,9 @@ class FCMListenerService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notification.color = resources.getColor(R.color.black)
         }
-        notificationManager.notify(Calendar.getInstance().timeInMillis.toInt(), notification.build())
-
+        if(SavedPreferences.getInstance()?.getBooleanValue(Constants.IS_NOTIFICATION_SHOW)!!){
+            notificationManager.notify(Calendar.getInstance().timeInMillis.toInt(), notification.build())
+        }
     }
 
     private fun getNotificationIcon(): Int {

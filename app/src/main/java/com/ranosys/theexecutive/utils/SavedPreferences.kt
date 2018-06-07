@@ -69,10 +69,16 @@ class SavedPreferences private constructor() {
         return islogin
     }
 
-    private fun getBooleanValue(key: String): Boolean? {
-        return sharedPreferences?.getBoolean(key, false)
+    fun getBooleanValue(key: String): Boolean? {
+        return sharedPreferences?.getBoolean(key, true)
     }
 
+
+    fun setBooleanValue(key: String, value : Boolean) {
+        val editor = sharedPreferences?.edit()
+        editor?.putBoolean(key, value)
+        editor?.apply()
+    }
     companion object {
 
         val user_pref = "APP_DATA"

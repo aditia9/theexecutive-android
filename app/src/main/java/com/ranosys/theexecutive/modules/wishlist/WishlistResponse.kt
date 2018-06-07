@@ -16,6 +16,7 @@ data class WishlistResponse(
 data class Item(
 		val id: Int,
 		val product_id: Int,
+		val type_id: String,
 		val qty: Int,
 		val sku: String,
 		val name: String,
