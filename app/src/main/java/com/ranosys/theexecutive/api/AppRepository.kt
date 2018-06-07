@@ -234,7 +234,13 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.SocialLoginService>(ApiService.SocialLoginService::class.java)?.socialLogin(ApiConstants.BEARER + adminToken, storeCode, request = request)
+
+        val data = HashMap<String, String>()
+        data.put("device_id", SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY).toString())
+        data.put("registration_id", SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID).toString())
+        data.put("device_type", Constants.OS_TYPE)
+
+        val callPost = retrofit?.create<ApiService.SocialLoginService>(ApiService.SocialLoginService::class.java)?.socialLogin(ApiConstants.BEARER + adminToken, storeCode, request, data)
 
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {

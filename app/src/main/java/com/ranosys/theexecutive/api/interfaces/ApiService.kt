@@ -84,7 +84,7 @@ interface ApiService {
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun socialLogin(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body request: LoginDataClass.SocialLoginRequest?): Call<String>
+        fun socialLogin(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body request: LoginDataClass.SocialLoginRequest?, @QueryMap queryMap: HashMap<String, String>): Call<String>
     }
 
     interface ForgotPasswordService {
