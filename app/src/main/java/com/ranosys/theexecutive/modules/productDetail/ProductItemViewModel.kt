@@ -121,13 +121,8 @@ class ProductItemViewModel(application: Application) : BaseViewModel(application
         val apiResponse = ApiResponse<String>()
 
         val jsonObject = JsonObject()
-        val jsonOptionObject = JsonObject().apply {
-            addProperty(colorAttr, colorValue)
-            addProperty(sizeAttr, sizeValue)
-        }
         jsonObject.run {
             addProperty(Constants.PRODUCT_SKU, productItem?.sku)
-            add(Constants.OPTIONS ,jsonOptionObject)
         }
 
         AppRepository.addToWishList(jsonObject, object : ApiCallback<String> {
