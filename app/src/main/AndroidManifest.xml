@@ -19,7 +19,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_icon"
         android:largeHeap="true"
-        android:hardwareAccelerated="false"
         android:supportsRtl="true"
         android:theme="@style/myAppTheme">
         <activity android:name=".modules.splash.SplashActivity"

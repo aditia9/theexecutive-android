@@ -562,12 +562,17 @@ class ProductListingFragment: BaseFragment() {
         if(promoMsg.isNullOrEmpty().not()){
             tv_promo_msg.visibility = View.VISIBLE
             tv_promo_msg.text = promoMsg
-
-            handler.postDelayed({
-                kotlin.run {
-                    mBinding.tvPromoMsg.visibility = View.GONE
+            tv_promo_msg.postDelayed({
+                tv_promo_msg?.run {
+                    tv_promo_msg.visibility = View.GONE
                 }
             }, Constants.PROMOTION_TOAST_TIMEOUT)
+
+//            handler.postDelayed({
+//                kotlin.run {
+//                    mBinding.tvPromoMsg.visibility = View.GONE
+//                }
+//            }, Constants.PROMOTION_TOAST_TIMEOUT)
 
             tv_promo_msg.setOnClickListener {
                 action()

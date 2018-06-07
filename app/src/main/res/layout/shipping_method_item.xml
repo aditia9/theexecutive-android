@@ -11,8 +11,9 @@
         android:id="@+id/rb_shipping_method"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/four_dp"
         android:text='@{(shippingMethod.carrier_title ?? "") + " " + (shippingMethod.method_title ?? "")}'
         android:button="@null"
-        android:padding="@dimen/eight_dp"
+        android:buttonTint="@color/theme_radio_btn_color"
         android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"/>
 </layout>

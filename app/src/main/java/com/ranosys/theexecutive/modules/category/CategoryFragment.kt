@@ -55,14 +55,17 @@ class CategoryFragment : BaseFragment() {
         mViewDataBinding?.categoryViewModel = categoryModelView
         mViewDataBinding?.executePendingBindings()
 
-        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
-            FragmentUtils.addFragment(context, ShoppingBagFragment(),null, ShoppingBagFragment::class.java.name, true )
-        }
         return mViewDataBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.run {
+            (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
+                FragmentUtils.addFragment(context, ShoppingBagFragment(),null, ShoppingBagFragment::class.java.name, true )
+            }
+        }
 
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
