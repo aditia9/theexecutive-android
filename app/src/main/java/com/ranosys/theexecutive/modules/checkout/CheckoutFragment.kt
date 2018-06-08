@@ -231,6 +231,7 @@ class CheckoutFragment : BaseFragment() {
 
     private fun observeCommonError() {
         checkoutViewModel.commonError.observe(this, Observer { error ->
+            hideLoading()
             handleError(error)
         })
     }

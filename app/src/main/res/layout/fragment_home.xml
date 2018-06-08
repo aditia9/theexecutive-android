@@ -50,7 +50,7 @@
             app:tabGravity="fill"
             android:elevation="@dimen/six_dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/sixty_five_dp"
             android:paddingTop="@dimen/five_dp"
             android:paddingBottom="@dimen/five_dp"
             android:layout_alignParentBottom="true"
