@@ -134,7 +134,7 @@ class ProductListingFragment: BaseFragment() {
                 if(count <= 0){
                     mBinding.productList.visibility = View.GONE
                     mBinding.tvNoProductAvailable.visibility = View.VISIBLE
-                    mBinding.tvNoProductAvailable.text = getString(R.string.no_product_available_error)
+                    mBinding.tvNoProductAvailable.text = "${getString(R.string.no_product_available_error)} \"${mViewModel.lastSearchQuery}\""
                 }else{
                     mBinding.productList.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.visibility = View.GONE

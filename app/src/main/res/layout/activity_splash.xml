@@ -6,10 +6,12 @@
     android:background="@color/white">
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/match_constraint"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
+        android:src="@drawable/splash_icon"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="14.36:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
