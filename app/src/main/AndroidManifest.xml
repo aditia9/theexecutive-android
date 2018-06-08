@@ -21,10 +21,11 @@
         android:largeHeap="true"
         android:hardwareAccelerated="false"
         android:supportsRtl="true"
-        android:theme="@style/myAppTheme">
+        android:theme="@style/AppTheme"
+        >
         <activity android:name=".modules.splash.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"
+            android:theme="@style/myAppTheme"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

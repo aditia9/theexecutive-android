@@ -35,7 +35,8 @@ data class ExtensionAttributesConfigurableItemOption(
 data class ExtensionAttributes(
         val regular_price: Int,
         val image: String,
-        val stock_item: StockItem
+        val stock_item: StockItem,
+        val configurable_sku : String
 )
 
 data class StockItem(

@@ -55,9 +55,6 @@ class CategoryFragment : BaseFragment() {
         mViewDataBinding?.categoryViewModel = categoryModelView
         mViewDataBinding?.executePendingBindings()
 
-        (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
-            FragmentUtils.addFragment(context, ShoppingBagFragment(),null, ShoppingBagFragment::class.java.name, true )
-        }
         return mViewDataBinding?.root
     }
 

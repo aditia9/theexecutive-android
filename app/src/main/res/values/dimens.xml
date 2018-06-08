@@ -26,6 +26,7 @@
     <dimen name="three_dp">3dp</dimen>
     <dimen name="sixty_dp">60dp</dimen>
 
+
     <dimen name="two_dp">2dp</dimen>
     <dimen name="two_px">2px</dimen>
     <dimen name="four_dp">4dp</dimen>
@@ -86,4 +87,5 @@
     <dimen name="price_text_size">13sp</dimen>
     <dimen name="status_text_size">13sp</dimen>
     <dimen name="return_text_size">13sp</dimen>
+    <dimen name="sixty_five_dp">65dp</dimen>
 </resources>

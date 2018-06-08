@@ -115,10 +115,11 @@ class ShoppingBagFragment : BaseFragment() {
                         getShoppingBag()
                     }
                 }
+                tv_invalid.visibility = View.GONE
             } else {
                 hideLoading()
                 et_promo_code.setText("")
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                tv_invalid.visibility = View.VISIBLE
             }
         })
 
@@ -223,7 +224,7 @@ class ShoppingBagFragment : BaseFragment() {
 
                 when (id) {
                     0 -> {
-                        val fragment = ProductDetailFragment.getInstance(null, item?.sku, item?.name, 0)
+                        val fragment = ProductDetailFragment.getInstance(null, item?.extension_attributes?.configurable_sku, item?.name, 0)
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
 
