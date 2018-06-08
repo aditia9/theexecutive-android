@@ -189,6 +189,7 @@ object Utils {
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
         updateCartCount(0)
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
+        GlobalSingelton.instance?.userInfo = null
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
 
     }
@@ -332,7 +333,7 @@ object Utils {
             val name = SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME) + " " + SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME)
             val visitorInfo = VisitorInfo.Builder()
                     .email(email)
-                    // .name(name)
+                    .name(name)
                     .build()
 
             // visitor info can be set at any point when that information becomes available

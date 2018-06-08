@@ -12,7 +12,9 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 
@@ -91,6 +93,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 //save customer token
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
 
+                //get users complete info
+                getUserInformation()
+
+                //merge user and guest cart
                 val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
                 if(guestCartId.isNotBlank()){
                     mergeCart(guestCartId)
@@ -98,6 +104,29 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                     apiSuccessResponse?.value = userToken
                 }
 
+            }
+        })
+    }
+
+    private fun getUserInformation() {
+        AppRepository.getUserInfo(object: ApiCallback<MyAccountDataClass.UserInfoResponse> {
+            override fun onException(error: Throwable) {
+                AppLog.e("My Information API : ${error.message}")
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.e("My Information API : $errorMsg")
+            }
+
+            override fun onSuccess(t: MyAccountDataClass.UserInfoResponse?) {
+                //update info saved at singleton
+                GlobalSingelton.instance?.userInfo = t
+
+                //save username and email in sharedpreference too because Global singleton will
+                // not persist data when app got killed.
+                SavedPreferences.getInstance()?.saveStringValue(t?.email, Constants.USER_EMAIL)
+                SavedPreferences.getInstance()?.saveStringValue(t?.firstname, Constants.FIRST_NAME)
+                SavedPreferences.getInstance()?.saveStringValue(t?.lastname, Constants.LAST_NAME)
             }
         })
     }
