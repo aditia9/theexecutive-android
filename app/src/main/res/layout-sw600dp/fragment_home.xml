@@ -21,13 +21,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tabLayout"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:background="@color/theme_black_color"
             android:text="@string/chat"
             android:textSize="@dimen/fourteen_sp"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:drawableLeft="@drawable/chat"
+            android:drawableStart="@drawable/chat"
             android:paddingLeft="@dimen/ten_dp"
             android:paddingRight="@dimen/ten_dp"
             android:paddingTop="@dimen/eight_dp"
@@ -43,16 +43,12 @@
             app:tabMaxWidth="@dimen/match_constraint"
             app:tabGravity="fill"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/sixty_five_dp"
             android:paddingTop="@dimen/five_dp"
             android:paddingBottom="@dimen/five_dp"
             android:layout_alignParentBottom="true"
             app:tabIndicatorHeight="@dimen/match_constraint"
             android:background="@color/white"
             />
-
-
     </RelativeLayout>
-
-
 </layout>

@@ -1308,7 +1308,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
         val params = HashMap<String, String>()
-        params.put("fields", "items,grand_total,subtotal_incl_tax,shipping_incl_tax,billing_address,extension_attributes[returnto_address,formatted_shipping_address]")
+        params.put("fields", "items,grand_total,subtotal_incl_tax,shipping_incl_tax,billing_address,payment,extension_attributes[virtual_account_number,returnto_address,formatted_shipping_address]")
         val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getOrderDetail(ApiConstants.BEARER + userToken, storeCode, orderId, params)
         callGet?.enqueue(object : Callback<OrderDetailResponse> {
 
