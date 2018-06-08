@@ -40,6 +40,8 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+       setContentView(R.layout.activity_splash)
+
         //check for auth token in SP if not get from assets
         if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))) {
             val token: String = getAuthToken()
