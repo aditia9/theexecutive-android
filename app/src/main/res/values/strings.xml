@@ -271,5 +271,6 @@
     <string name="no_reason_selected">No reason selected.</string>
     <string name="invalid_promo_code">The promo code you entered is not valid.</string>
     <string name="sku">SKU </string>
+    <string name="payment_id">Payment ID</string>
 
 </resources>
