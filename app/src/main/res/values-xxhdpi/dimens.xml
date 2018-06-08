@@ -6,4 +6,5 @@
     <dimen name="price_text_size">16sp</dimen>
     <dimen name="status_text_size">16sp</dimen>
     <dimen name="return_text_size">14sp</dimen>
+    <dimen name="right_item_size">18sp</dimen>
 </resources>

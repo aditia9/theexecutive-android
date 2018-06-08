@@ -8,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Mohammad Sunny on 25/1/18.
@@ -57,6 +58,7 @@ class ApiClient {
             field = field ?: OkHttpClient.Builder()
                     .addInterceptor(interceptor)
                     .dispatcher(dispatcher)
+                    .connectTimeout(ApiConstants.CONNECT_TIMEOUT.toLong(), TimeUnit.SECONDS)
                     .build()
             return  field
         }

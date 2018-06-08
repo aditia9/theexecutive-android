@@ -12,6 +12,7 @@ import com.ranosys.rtp.RunTimePermissionActivity
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
@@ -80,6 +81,10 @@ open class BaseActivity: RunTimePermissionActivity(){
             }
 
         }
+    }
+
+    fun setShoppingBagFragment(){
+        FragmentUtils.addFragment(this, ShoppingBagFragment(), null, ShoppingBagFragment::class.java.name, true)
     }
 
     fun setShowLogo(showLogo: Boolean){

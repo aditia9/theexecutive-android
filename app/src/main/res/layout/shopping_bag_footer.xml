@@ -44,6 +44,7 @@
             android:layout_marginTop="@dimen/twenty_dp"
             android:text="@string/total"
             android:textSize="@dimen/sixteen_sp"
+            android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/guideline_left_1"
             app:layout_constraintTop_toBottomOf="@+id/view1" />
@@ -54,6 +55,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/sixteen_sp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
             app:layout_constraintTop_toTopOf="@+id/label_total" />
 
@@ -65,6 +67,7 @@
             android:layout_marginTop="@dimen/ten_dp"
             android:text="@string/promo_code"
             android:textSize="@dimen/sixteen_sp"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@id/guideline_left_1"
             app:layout_constraintTop_toBottomOf="@+id/tv_total" />
 
@@ -72,13 +75,28 @@
             android:id="@+id/et_promo_code"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/twenty_dp"
+            android:layout_marginEnd="@dimen/fifty_dp"
             android:layout_marginTop="@dimen/ten_dp"
             android:hint="@string/enter_your_promo_code"
+            android:textSize="@dimen/fourteen_sp"
             android:maxLines="1"
             app:layout_constraintEnd_toStartOf="@id/btn_apply"
             app:layout_constraintStart_toStartOf="@id/tv_promo_code"
             app:layout_constraintTop_toBottomOf="@+id/tv_promo_code" />
+
+        <TextView
+            android:id="@+id/tv_invalid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/invalid_promo_code"
+            android:textColor="@color/red"
+            android:drawableLeft="@drawable/error"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/ten_dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_promo_code"
+            android:drawablePadding="@dimen/five_dp"
+            />
 
 
         <Button
@@ -87,8 +105,16 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ghost_btn_bg"
             android:text="@string/btn_apply"
+            android:minHeight="@dimen/match_constraint"
+            android:minWidth="@dimen/match_constraint"
+            android:paddingStart="@dimen/twenty_dp"
+            android:paddingEnd="@dimen/twenty_dp"
+            app:layout_constraintTop_toTopOf="@+id/et_promo_code"
+            android:paddingTop="@dimen/ten_dp"
+            android:paddingBottom="@dimen/ten_dp"
+            android:layout_marginEnd="@dimen/five_dp"
             app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
-            app:layout_constraintBottom_toBottomOf="@+id/et_promo_code" />
+             />
 
 
         <TextView
@@ -98,12 +124,12 @@
             android:layout_marginTop="@dimen/ten_dp"
             android:text="@string/promo_code"
             android:textSize="@dimen/sixteen_sp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:padding="@dimen/ten_dp"
             android:textColor="@color/light_green"
             android:background="@drawable/applied_promo_code_bg"
             app:layout_constraintStart_toStartOf="@id/guideline_left_1"
-            app:layout_constraintTop_toBottomOf="@+id/et_promo_code" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_invalid" />
 
         <ImageView
             android:id="@+id/imv_delete_promo_code"
@@ -125,8 +151,9 @@
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/twenty_dp"
-            android:background="@color/btn_checkout_bg"
+            android:background="@drawable/green_button_bg"
             android:text="@string/checkout"
+            android:theme="@style/button_theme"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
             app:layout_constraintStart_toStartOf="@id/guideline_left_1"

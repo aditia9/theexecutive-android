@@ -158,10 +158,10 @@
     <string name="email_sent">We have sent you an email, please follow the instruction to reset password</string>
     <string name="password_change_msg">Your password successfully changed</string>
     <string name="logout_text">Are you sure you want to logout from application?</string>
+    <string name="no_product_available_error">No results found for the search</string>
     <string name="empty_shipping_method_error">Oops... seems there is no shipping available for selected address. Please change address</string>
     <string name="empty_payment_method_error">Oops... seems there is no payment available</string>
     <string name="empty_sort_option_selection_error">Please select at least one option</string>
-    <string name="no_product_available_error">Oops.. we couldn\'t find what you need</string>
     <string name="empty_filter_option_selection_error">Please select at least one option</string>
     <string name="enter_search_error">Please enter search keyword</string>
     <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app</string>
@@ -269,5 +269,7 @@
     <string name="order_failure_info">Your order has been failed.</string>
     <string name="select_reason">Select Reason</string>
     <string name="no_reason_selected">No reason selected.</string>
+    <string name="invalid_promo_code">The promo code you entered is not valid.</string>
+    <string name="sku">SKU </string>
 
 </resources>
