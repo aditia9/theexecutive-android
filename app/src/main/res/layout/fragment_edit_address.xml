@@ -104,6 +104,9 @@
                     android:overlapAnchor="false"
                     android:entries="@array/country_code"
                     android:background="@drawable/spinner"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    style="@android:style/Widget.Holo.Light.Spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toTopOf="@id/til_mobile_no"
                     app:layout_constraintEnd_toStartOf="@id/til_mobile_no"
@@ -172,41 +175,49 @@
                         android:inputType="text|textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.v7.widget.AppCompatSpinner
+                <Spinner
                     android:id="@+id/spinner_country"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:entries="@{vm.countryList}"
                     android:onItemSelected="@{(parent, view, pos, id) -> vm.onCountrySelection(pos)}"
-                    android:padding="@dimen/ten_dp"
-                    android:theme="@style/spinnerItemStyle"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:overlapAnchor="false"
                     android:background="@drawable/spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintTop_toBottomOf="@id/til_address_2" />
 
-                <android.support.v7.widget.AppCompatSpinner
+                <Spinner
                     android:id="@+id/spinner_state"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:entries="@{vm.stateList}"
-                    android:padding="@dimen/ten_dp"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:overlapAnchor="false"
                     android:onItemSelected="@{(parent, view, pos, id) -> vm.onStateSelection(pos)}"
                     android:background="@drawable/spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintTop_toBottomOf="@id/spinner_country" />
 
-                <android.support.v7.widget.AppCompatSpinner
+                <Spinner
                     android:id="@+id/spinner_city"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:padding="@dimen/ten_dp"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    style="@android:style/Widget.Holo.Light.Spinner"
                     android:entries="@{vm.cityList}"
                     android:background="@drawable/spinner"
+                    android:overlapAnchor="false"
                     android:spinnerMode="dropdown"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"

@@ -42,6 +42,10 @@ class ToolbarViewModel(application: Application): BaseViewModel(application) {
             R.id.toolbar_left_icon->{
                 leftIconClicked?.value = view.id
             }
+
+            R.id.toolbar_right_icon->{
+                rightIconClicked?.value = view.id
+            }
         }
     }
 

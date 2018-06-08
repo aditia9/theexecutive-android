@@ -38,6 +38,7 @@ abstract class BaseFragment : LifecycleFragment() {
         super.onCreate(savedInstanceState)
         mContext = activity
         observeLeftIconClick()
+        observeRightIconClick()
     }
 
     fun showLoading() {
@@ -129,6 +130,18 @@ abstract class BaseFragment : LifecycleFragment() {
                 R.id.toolbar_right_icon -> {
                     getToolBarViewModel()?.rightIconClicked?.value = null
                     (activity as BaseActivity).onBackPressed()
+                }
+            }
+        })
+    }
+
+    private fun observeRightIconClick() {
+
+        getToolBarViewModel()?.rightIconClicked?.observe(this, Observer<Int> {  id ->
+            when(id) {
+                R.id.toolbar_right_icon -> {
+                    getToolBarViewModel()?.rightIconClicked?.value = null
+                    (activity as BaseActivity).setShoppingBagFragment()
                 }
             }
         })
