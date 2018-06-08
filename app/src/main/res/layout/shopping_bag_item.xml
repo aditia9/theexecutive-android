@@ -63,7 +63,7 @@
             android:layout_marginStart="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/five_dp"
             android:ellipsize="end"
-            android:text='@{"SKU " +item.extension_attributes.configurable_sku}'
+            android:text='@{@string/sku+ " " +item.extension_attributes.configurable_sku}'
             android:textColor="@color/hint_color"
             android:maxLines="1"
             android:textSize="@dimen/twelve_sp"
