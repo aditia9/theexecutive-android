@@ -77,7 +77,6 @@ class NotificationFragment : BaseFragment() {
         notification_list.adapter = notificationAdapter
         notificationAdapter.setItemClickListener(object : NotificationAdapter.OnItemClickListener {
             override fun onItemClick(item: NotificationListResponse?) {
-                Toast.makeText(activity, item?.description, Toast.LENGTH_SHORT).show()
                 if(item?.isRead?.not()!!) {
                     val request = NotificationChangeStatusRequest(item.notification_id.toString(),
                             SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID),

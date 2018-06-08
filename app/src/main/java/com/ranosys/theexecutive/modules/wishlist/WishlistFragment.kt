@@ -16,6 +16,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentWishlistBinding
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
@@ -51,7 +52,7 @@ class WishlistFragment : BaseFragment() {
                     tv_wishlist_count.text = getString(R.string.wishlist_items_count, response.items_count)
                     setWishlistAdapter()
                 }
-             }else {
+            }else {
                 Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
             }
         })
@@ -102,7 +103,7 @@ class WishlistFragment : BaseFragment() {
                     R.id.img_bag -> {
                         if(item?.stock_item?.is_in_stock!!) {
                             itemPosition = pos
-                            callAddToBagItemFromWishlist(item.id)
+                            callAddToBagItemFromWishlist(item)
                         }else{
                             Toast.makeText(activity, getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
                         }
@@ -142,12 +143,21 @@ class WishlistFragment : BaseFragment() {
         }
     }
 
-    private fun callAddToBagItemFromWishlist(itemId : Int?){
-        if (Utils.isConnectionAvailable(activity as Context)) {
-            showLoading()
-            wishlistModelView?.addToBagWishlistItem(itemId)
-        } else {
-            Utils.showNetworkErrorDialog(activity as Context)
+    private fun callAddToBagItemFromWishlist(item: Item?){
+        //check if product is simple or configurable
+        if(item?.type_id == Constants.CONFIGURABLE){
+            //move to product details
+            val fragment = ProductDetailFragment.getInstance(null, item.sku, item.name, 0)
+            FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
+        }else{
+            if (Utils.isConnectionAvailable(activity as Context)) {
+                showLoading()
+                wishlistModelView?.addToBagWishlistItem(item?.id)
+            } else {
+                Utils.showNetworkErrorDialog(activity as Context)
+            }
+
         }
+
     }
 }

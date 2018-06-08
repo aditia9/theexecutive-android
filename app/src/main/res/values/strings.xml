@@ -267,5 +267,7 @@
     <string name="order_failure_msg">order failed</string>
     <string name="order_failure_btn_text">view order</string>
     <string name="order_failure_info">Your order has been failed.</string>
+    <string name="select_reason">Select Reason</string>
+    <string name="no_reason_selected">No reason selected.</string>
 
 </resources>

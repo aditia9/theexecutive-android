@@ -546,12 +546,13 @@ class ProductViewFragment : BaseFragment() {
                 }
             })
         }else{
-            if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
-                openBottomSizeSheet(true)
-            }
-            else{
-                callWishListApi()
-            }
+            callWishListApi()
+//            if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
+//                openBottomSizeSheet(true)
+//            }
+//            else{
+//                callWishListApi()
+//            }
         }
 
     }
