@@ -257,7 +257,6 @@
                     android:paddingBottom="@dimen/ten_dp"
                     android:paddingTop="@dimen/ten_dp"
                     style="@android:style/Widget.Holo.Light.Spinner"
-                    android:theme="@style/spinnerItemStyle"
                     android:background="@drawable/spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"

@@ -159,7 +159,6 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             registerViewModel.isSubscribed.set(isChecked)
         }
 
-
     }
 
     private fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {

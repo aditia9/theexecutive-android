@@ -137,7 +137,7 @@
                     android:ellipsize="end"
                     android:maxLines="5"
                     android:visibility="@{TextUtils.isEmpty(address.firstname)? View.INVISIBLE : View.VISIBLE}"
-                    android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +"\n" + address.city + ", " + address.region.region + "," + country}'
+                    android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.region.region +"\n" + address.city + ", " + address.postcode + "," + country}'
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toStartOf="@id/address_expand_view"
                     app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -302,7 +302,7 @@
                     android:id="@+id/offset_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/one_fifty_dp"
+                    android:minHeight="@dimen/one_eighty_dp"
                     app:layout_constraintTop_toBottomOf="@id/divider_payment_method_below"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>

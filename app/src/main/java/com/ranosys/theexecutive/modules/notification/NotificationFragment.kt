@@ -12,7 +12,6 @@ import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
-import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationListResponse
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
@@ -71,8 +70,6 @@ class NotificationFragment : BaseFragment() {
     private fun setNotificationAdapter(){
         linearLayoutManager = LinearLayoutManager(activity as Context)
         notification_list.layoutManager = linearLayoutManager
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
-        notification_list.addItemDecoration(itemDecor)
         val notificationAdapter = NotificationAdapter(notificationList)
         notification_list.adapter = notificationAdapter
         notificationAdapter.setItemClickListener(object : NotificationAdapter.OnItemClickListener {
