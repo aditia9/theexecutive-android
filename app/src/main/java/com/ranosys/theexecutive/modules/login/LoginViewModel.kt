@@ -189,6 +189,9 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
                 email.set(userData.email)
 
+                //get users complete info
+                getUserInformation()
+
                 val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
                 if(guestCartId.isNotBlank()){
                     mergeCart(guestCartId)
