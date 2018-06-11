@@ -71,7 +71,9 @@ class CategoryFragment : BaseFragment() {
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
         promotionBinding?.tvPromotionText?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
-        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.CATEGORY_IMAGE_HEIGHT_RATIO)
+
+        // update height of promotion view pager according to ration 1.5
+        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.IMAGE_RATIO)
         viewPager = promotionBinding.root?.viewpager!!
 
         pagerAdapter = CustomViewPageAdapter(view.context, categoryModelView?.promotionResponse?.get())
