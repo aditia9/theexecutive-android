@@ -84,7 +84,7 @@
     <string name="postcode">Zip/ Postal Code</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="subscribe">Suscribe to get IDR %1$s Voucher</string>
-    <string name="term_and_condition"><![CDATA[By creating your account, you agree to our Terms & Conditions and Privacy Policy]]></string>
+    <string name="term_and_condition">By creating your account, you agree to our \u0020</string>
     <string name="dob_hint">DD/MM/YYYY</string>
     <string name="street_address_1">Street Address Line 1 </string>
     <string name="street_address_error">Street Address Line 1 is required.</string>
@@ -272,5 +272,8 @@
     <string name="invalid_promo_code">The promo code you entered is not valid.</string>
     <string name="sku">SKU </string>
     <string name="payment_id">Payment ID</string>
+    <string name="t_and_c">Terms and Condition</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="and">\u0020 and \u0020</string>
 
 </resources>
