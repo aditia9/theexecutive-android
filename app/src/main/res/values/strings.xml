@@ -272,7 +272,7 @@
     <string name="invalid_promo_code">The promo code you entered is not valid.</string>
     <string name="sku">SKU </string>
     <string name="payment_id">Payment ID</string>
-    <string name="t_and_c">Terms and Condition</string>
+    <string name="t_and_c">Terms &amp; Condition</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="and">\u0020 and \u0020</string>
 
