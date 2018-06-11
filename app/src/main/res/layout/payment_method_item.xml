@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text='@{paymentMethod.title}'
         android:button="@null"
-        android:padding="@dimen/eight_dp"
+        android:padding="@dimen/four_dp"
+        android:buttonTint="@color/theme_radio_btn_color"
         android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"/>
 </layout>

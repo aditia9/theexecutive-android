@@ -51,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/bank_account_information"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left" />
 
@@ -209,6 +210,7 @@
                     android:layout_marginTop="@dimen/ten_dp"
                     android:text="@string/transaction_info"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@+id/til_holder_acc_number" />

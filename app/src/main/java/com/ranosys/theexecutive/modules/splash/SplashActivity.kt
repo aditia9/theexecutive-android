@@ -15,6 +15,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -129,14 +130,38 @@ class SplashActivity : BaseActivity() {
     private fun getCartIdAndCount() {
         //if user logged in get his cart count and cart id
         val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
-        val guestCardId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)
-                ?: ""
+        val guestCardId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY) ?: ""
 
         if (userToken.isNullOrBlank().not()) {
             getCartIdForUser()
+            // to get user info and save in global singleton
+            getUserInformation()
         } else if (guestCardId.isNotBlank()) {
             getGuestCartCount(guestCardId)
         }
+    }
+
+    private fun getUserInformation() {
+        AppRepository.getUserInfo(object: ApiCallback<MyAccountDataClass.UserInfoResponse> {
+            override fun onException(error: Throwable) {
+                AppLog.e("My Information API : ${error.message}")
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.e("My Information API : $errorMsg")
+            }
+
+            override fun onSuccess(t: MyAccountDataClass.UserInfoResponse?) {
+                //update info saved at singleton
+                GlobalSingelton.instance?.userInfo = t
+
+                //save username and email in sharedpreference too because Global singleton will
+                // not persist data when app got killed.
+                SavedPreferences.getInstance()?.saveStringValue(t?.email, Constants.USER_EMAIL)
+                SavedPreferences.getInstance()?.saveStringValue(t?.firstname, Constants.FIRST_NAME)
+                SavedPreferences.getInstance()?.saveStringValue(t?.lastname, Constants.LAST_NAME)
+            }
+        })
     }
 
     private fun getStoresApi() {

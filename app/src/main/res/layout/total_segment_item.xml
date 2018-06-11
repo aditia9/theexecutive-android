@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/eight_dp"
-    android:layout_marginTop="@dimen/four_dp"
-    android:layout_marginBottom="@dimen/four_dp">
+    android:paddingTop="@dimen/four_dp"
+    android:paddingBottom="@dimen/four_dp">
 
     <TextView
         android:id="@+id/item_name"

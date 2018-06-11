@@ -61,11 +61,19 @@ class CategoryFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.run {
+            (activity as DashBoardActivity).toolbarBinding.root.toolbar_right_icon.setOnClickListener {
+                FragmentUtils.addFragment(context, ShoppingBagFragment(),null, ShoppingBagFragment::class.java.name, true )
+            }
+        }
+
         val inflater = LayoutInflater.from(context)
         val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
         promotionBinding?.categoryModel = categoryModelView
         promotionBinding?.tvPromotionText?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
-        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.CATEGORY_IMAGE_HEIGHT_RATIO)
+
+        // update height of promotion view pager according to ration 1.5
+        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.IMAGE_RATIO)
         viewPager = promotionBinding.root?.viewpager!!
 
         pagerAdapter = CustomViewPageAdapter(view.context, categoryModelView?.promotionResponse?.get())
@@ -244,10 +252,8 @@ class CategoryFragment : BaseFragment() {
         var currentPage = 0
         val runnable = object : Runnable {
             override fun run() {
-                if (currentPage == count) {
-                    currentPage = 0
-                }
-                viewPager.setCurrentItem(currentPage++, true)
+                currentPage = currentPage % count
+                viewPager.setCurrentItem(currentPage++, false)
                 handler.postDelayed(this, 3000)
             }
         }

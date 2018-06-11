@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/img_product_item"
-                android:layout_width="@dimen/nineteen_dp"
-                android:layout_height="@dimen/one_twenty_five_dp"
+                android:layout_width="@dimen/seventy_dp"
+                android:layout_height="@dimen/hundred_dp"
                 android:layout_margin="@dimen/ten_dp"
                 android:contentDescription="@string/image_one_detail"
                 android:src="@drawable/placeholder"
@@ -52,21 +52,24 @@
 
             <TextView
                 android:id="@+id/tv_order_no"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/match_constraint"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/ten_dp"
+                android:layout_marginStart="@dimen/eight_dp"
                 android:layout_marginTop="@dimen/twenty_dp"
-                android:text='@{"Order no. "+item.id}'
                 android:textSize="@dimen/order_number_text_size"
+                android:maxLines="2"
+                android:text='@{"Order no. "+item.id}'
                 android:textColor="@color/black"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@id/img_product_item"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_date"/>
 
             <TextView
                 android:id="@+id/tv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/ten_dp"
+                android:layout_marginStart="@dimen/eight_dp"
                 android:layout_marginTop="@dimen/ten_dp"
                 android:textSize="@dimen/price_text_size"
                 android:textColor="@color/black"
@@ -77,7 +80,7 @@
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/ten_dp"
+                android:layout_marginStart="@dimen/eight_dp"
                 android:layout_marginTop="@dimen/ten_dp"
                 android:text="@{item.status}"
                 android:textSize="@dimen/status_text_size"

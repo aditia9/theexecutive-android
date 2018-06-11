@@ -428,11 +428,11 @@ interface ApiService {
 
     interface NotificationService {
 
-        @GET("rest/{store_code}/V1/notification/mine/list")
+        @POST("rest/{store_code}/V1/notification/mine/list")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
-        fun getNotificationList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<List<NotificationListResponse>>
+        fun getNotificationList(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: DeviceRegisterRequest): Call<List<NotificationListResponse>>
 
         @POST("rest/{store_code}/V1/notification/changestatus")
         @Headers(ApiConstants.CONTENT_TYPE,
@@ -446,6 +446,14 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun registerDevice(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: DeviceRegisterRequest): Call<Boolean>
+
+
+        @POST("rest/{store_code}/V1/notification/mine/logout")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun logoutNotification(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: NotificationChangeStatusRequest): Call<Boolean>
+
     }
 
 
