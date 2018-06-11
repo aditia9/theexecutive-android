@@ -173,10 +173,11 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     private fun  clickableTextView(textView: TextView, termAndCodition:String,tc:String, pp:String) {
         val spanText =  SpannableStringBuilder(termAndCodition)
+        val url=GlobalSingelton.instance?.configuration?.terms_and_condition_url
         spanText.append(tc);
         spanText.setSpan(object :ClickableSpan() {
             override fun onClick(p0: View?) {
-                openWebPage(activity as Context,"",getString(R.string.t_and_c))
+                openWebPage(activity as Context,url!!,getString(R.string.t_and_c))
             }
 
             override  fun updateDrawState(ds: TextPaint?) {
@@ -190,7 +191,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         spanText.append(pp)
         spanText.setSpan(object :ClickableSpan() {
             override fun onClick(p0: View?) {
-                openWebPage(activity as Context,"",getString(R.string.privacy_policy))
+                openWebPage(activity as Context,url!!,getString(R.string.privacy_policy))
             }
 
             override fun updateDrawState(ds: TextPaint?) {
@@ -208,7 +209,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     private fun openWebPage(context: Context, url: String, title: String) {
         val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
         fragment?.run {
-            (fragment as BaseFragment).prepareWebPageDialog(context, Constants.API_URL, title)
+            (fragment as BaseFragment).prepareWebPageDialog(context, url, title)
         }
     }
     private fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
