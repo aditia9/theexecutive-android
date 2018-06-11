@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/back"
                 android:layout_centerVertical="true"
-                android:padding="@dimen/six_dp"
+                android:padding="@dimen/ten_dp"
                 android:layout_marginStart="@dimen/ten_dp"
                 android:contentDescription="@string/back"
                 />

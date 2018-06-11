@@ -6,6 +6,7 @@ import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.PromotionViewBinding
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
@@ -38,7 +39,7 @@ class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDat
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view == `object` as View
+        return view == `object` as RelativeLayout
     }
 
     override fun getCount(): Int {
@@ -61,6 +62,6 @@ class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDat
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as View)
+        container.removeView(`object` as RelativeLayout)
     }
 }

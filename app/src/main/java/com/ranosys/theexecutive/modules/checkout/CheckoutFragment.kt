@@ -304,7 +304,7 @@ class CheckoutFragment : BaseFragment() {
             val amount = totalAmts?.single { it.code == Constants.GRAND_TOTAL_KEY }?.value
 
             if(amount.isNullOrEmpty().not()){
-                tv_total_amount.text = "${Constants.IDR} ${Utils.getFromattedPrice(amount!!)}"
+                tv_total_amount.text = "${activity?.getString(R.string.total)} ${Constants.IDR} ${Utils.getFromattedPrice(amount!!)}"
             }else{
                 tv_total_amount.text = ""
             }

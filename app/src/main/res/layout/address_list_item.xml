@@ -70,7 +70,7 @@
                 android:layout_marginStart="@dimen/twenty_four_dp"
                 android:layout_marginTop="@dimen/eight_dp"
                 android:maxLines="5"
-                android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.postcode +"\n" + address.city + ", " + address.region.region + ", " + country}'
+                android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.region.region +"\n" + address.city + ", " + address.postcode + ", " + country}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_name" />
@@ -90,12 +90,14 @@
                 android:id="@+id/tv_mobile_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/four_dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:text='@{" " + address.telephone}'
-                app:layout_constraintBaseline_toBaselineOf="@id/tv_mobile"
-                app:layout_constraintStart_toEndOf="@id/tv_mobile"
-                app:layout_constraintTop_toTopOf="@id/tv_mobile"
-                app:layout_constraintBottom_toBottomOf="@id/tv_mobile"/>
+                app:layout_constraintTop_toTopOf="@+id/tv_mobile"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_mobile"
+                app:layout_constraintStart_toEndOf="@+id/tv_mobile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"/>
 
             <View
                 android:id="@+id/view_upper"

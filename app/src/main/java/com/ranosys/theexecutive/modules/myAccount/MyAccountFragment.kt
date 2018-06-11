@@ -12,6 +12,9 @@ import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiResponse
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
@@ -178,12 +181,37 @@ class MyAccountFooterHolder(val item: View, context: Context) : RecyclerView.Vie
                             .build()
 
                     val mGoogleSignInClient = GoogleSignIn.getClient(context as Activity, gso)
+
+                    notificationLogout()
                     Utils.logout(item.context, mGoogleSignInClient)
 
                 }
             })
         })
     }
+
+    fun notificationLogout(){
+        val apiResponse = ApiResponse<Boolean>()
+        AppRepository.logoutNotification(object : ApiCallback<Boolean> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+
+
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+
+            }
+
+            override fun onSuccess(t: Boolean?) {
+                apiResponse.apiResponse = t
+
+            }
+        })
+    }
+
+
 
 }
 

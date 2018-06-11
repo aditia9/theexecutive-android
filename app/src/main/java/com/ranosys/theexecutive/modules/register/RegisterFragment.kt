@@ -130,6 +130,8 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        tv_subscribe_msg.text = GlobalSingelton.instance?.configuration?.subscription_message
+
         if(isFromSocialLogin && !TextUtils.isEmpty(socialLoginEmail)){
             et_email_address.isEnabled = false
         }
@@ -153,11 +155,10 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             showDate(Calendar.getInstance().get(Calendar.YEAR) - Constants.MINIMUM_AGE, 0, 1, R.style.DatePickerSpinner)
         }
 
-        cb_subscribe.text = GlobalSingelton.instance?.configuration?.subscription_message
-
         cb_subscribe.setOnCheckedChangeListener { buttonView, isChecked ->
             registerViewModel.isSubscribed.set(isChecked)
         }
+
     }
 
     private fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
