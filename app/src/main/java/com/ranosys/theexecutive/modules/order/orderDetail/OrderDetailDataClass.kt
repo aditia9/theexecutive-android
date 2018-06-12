@@ -13,8 +13,20 @@ data class OrderDetailResponse(
 
 data class ExtensionAttributesReturnto(
         val returnto_address: ReturntoAddress,
-        val virtual_account_number : String
+        val virtual_account_number : String,
+        val payment_method : String,
+        val formatted_shipping_address : FormattedShippingAddress
 )
+
+
+data class FormattedShippingAddress(
+        val extension_attributes: ExtensionAttributesCountry
+)
+
+data class ExtensionAttributesCountry(
+        val country_name: String
+)
+
 
 data class ReturntoAddress(
         val returnto_name: String,

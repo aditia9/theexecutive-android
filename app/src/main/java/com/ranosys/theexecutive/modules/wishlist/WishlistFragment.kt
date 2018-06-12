@@ -7,6 +7,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +17,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentWishlistBinding
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.DialogOkCallback
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_wishlist.*
 
 /**
@@ -36,8 +34,16 @@ class WishlistFragment : BaseFragment() {
         val mViewDataBinding : FragmentWishlistBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_wishlist, container, false)
         wishlistModelView = ViewModelProviders.of(this).get(WishlistViewModel::class.java)
         mViewDataBinding?.executePendingBindings()
-        observeEvents()
-        callWishlistApi()
+
+        val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+         if(TextUtils.isEmpty(isLogin)) {
+             mViewDataBinding?.tvNoItems?.visibility = View.VISIBLE
+             mViewDataBinding?.tvNoItems?.text = activity?.getString(R.string.login_required_for_wishlist)
+        }else{
+             observeEvents()
+             callWishlistApi()
+             mViewDataBinding?.tvNoItems?.visibility = View.GONE
+         }
         return mViewDataBinding?.root
     }
 

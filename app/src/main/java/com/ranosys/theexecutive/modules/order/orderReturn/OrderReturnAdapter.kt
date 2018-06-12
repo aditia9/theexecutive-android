@@ -90,7 +90,21 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
             itemBinding?.item = orderItem
             orderItem?.request_reason = context?.resources?.getStringArray(R.array.reason_array)?.get(0).toString()
             orderItem?.request_qty = (item?.items!![position].qty_ordered)
+            val rightArrow = context?.getResources()?.getDrawable(R.drawable.forward)
+            rightArrow?.alpha = Constants.ALFA_SET
+            itemBinding?.imgIncrement!!.setImageDrawable(rightArrow)
+
             itemBinding?.txtQuantity?.text = (item.items[position].qty_ordered).toString()
+
+            if(item.items[position].qty_ordered == 1){
+                val rightArrow = context?.getResources()?.getDrawable(R.drawable.forward)
+                rightArrow?.alpha = Constants.ALFA_SET
+                itemBinding?.imgIncrement!!.setImageDrawable(rightArrow)
+
+                val leftArrow = context?.getResources()?.getDrawable(R.drawable.back)
+                leftArrow?.alpha = Constants.ALFA_SET
+                itemBinding?.imgDecrement!!.setImageDrawable(leftArrow)
+            }
 
             if (item?.items?.get(position)?.extension_attributes != null && item.items[position].extension_attributes?.options != null) {
                 item.items[position].extension_attributes?.options?.forEach {
@@ -122,6 +136,13 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 if (qty < item?.items!![position].qty_ordered) {
                     itemBinding!!.txtQuantity.text = (qty.plus(1)).toString()
                     orderItem?.request_qty = (qty.plus(1))
+                    val rightArrow = context?.getResources()?.getDrawable(R.drawable.forward)
+                    rightArrow?.alpha = 1
+                    itemBinding?.imgIncrement!!.setImageDrawable(rightArrow)
+                }else{
+                    val rightArrow = context?.getResources()?.getDrawable(R.drawable.forward)
+                    rightArrow?.alpha = Constants.ALFA_SET
+                    itemBinding?.imgIncrement!!.setImageDrawable(rightArrow)
                 }
             }
 
@@ -148,6 +169,13 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 if (qty > 1) {
                     itemBinding!!.txtQuantity.text = (qty.minus(1)).toString()
                     orderItem?.request_qty = (qty.minus(1))
+                    val leftArrow = context?.getResources()?.getDrawable(R.drawable.back)
+                    leftArrow?.alpha = 1
+                    itemBinding?.imgDecrement!!.setImageDrawable(leftArrow)
+                }else{
+                    val leftArrow = context?.getResources()?.getDrawable(R.drawable.back)
+                    leftArrow?.alpha = Constants.ALFA_SET
+                    itemBinding?.imgDecrement!!.setImageDrawable(leftArrow)
                 }
             }
 
@@ -165,6 +193,11 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
 
             itemBinding?.tvUserName?.text = item?.billing_address?.firstname + " " + item?.billing_address?.lastname
             itemBinding?.tvUserEmailId?.text = item?.billing_address?.email
+
+            if(!TextUtils.isEmpty(item?.billing_address?.telephone)){
+                itemBinding?.tvUserNumber?.text = item?.billing_address?.telephone
+            }
+
             val size = item?.billing_address?.street?.size
             var street = ""
 
@@ -174,7 +207,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 } else if (size > 1) {
                     street = item.billing_address.street[0] + ", "+ item.billing_address.street[1]
                 }
-                val address = street + ", " + item.billing_address.city + ", " + item.billing_address.postcode + ", " + item.billing_address.country_id
+                val address = street + ", " + item.billing_address.city + ", " + item.billing_address.postcode + ", " + item.extension_attributes.formatted_shipping_address.extension_attributes.country_name
                 itemBinding?.tvUserAddress?.text = address
 
 
@@ -183,7 +216,11 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 }
 
                 if(!TextUtils.isEmpty(item.extension_attributes.returnto_address.returnto_address)){
-                    itemBinding?.tvOfficeAddress?.text = item.extension_attributes.returnto_address.returnto_address + ", " + item.extension_attributes.returnto_address.returnto_contact
+                    itemBinding?.tvOfficeAddress?.text = item.extension_attributes.returnto_address.returnto_address
+                }
+
+                if(!TextUtils.isEmpty(item.extension_attributes.returnto_address.returnto_contact)){
+                    itemBinding?.tvOfficeMobileNumber?.text = item.extension_attributes.returnto_address.returnto_contact
                 }
 
                 itemBinding?.btnReturn?.setOnClickListener { view ->

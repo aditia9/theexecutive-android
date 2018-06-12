@@ -126,5 +126,6 @@ object Constants {
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
     const val CART_DE_ACTIVE = "cart de-active"
     const val IS_NOTIFICATION_SHOW = "notificatin show"
+    const val ALFA_SET = 180
 
 }

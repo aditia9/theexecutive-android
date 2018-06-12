@@ -31,6 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:theme="@style/sub_heading_theme"
+            android:padding="@dimen/five_dp"
             android:textColor="@color/hint_color"
             android:gravity="center"
             android:text="@string/no_item"

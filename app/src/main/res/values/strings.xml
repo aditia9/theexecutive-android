@@ -225,7 +225,7 @@
     <string name="udate_profile_success_msg">Your profile is now updated</string>
     <string name="edit_addresse">Edit Address</string>
 
-    <string name="items_in_your_cart">Total %1$d items in your cart</string>
+    <string name="items_in_your_cart">Total %1$d item(s) in your cart</string>
     <string name="only">Only</string>
     <string name="product_available">product available</string>
     <string name="promo_code_invalid">The promo code you entered is not valid</string>
@@ -272,5 +272,6 @@
     <string name="invalid_promo_code">The promo code you entered is not valid.</string>
     <string name="sku">SKU </string>
     <string name="payment_id">Payment ID</string>
-
+    <string name="bank_recipient">Bank Recipient</string>
+    <string name="no_item_shopping_bag">No items available right now, Please add some item.</string>
 </resources>

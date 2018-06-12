@@ -74,8 +74,8 @@ class NotificationFragment : BaseFragment() {
         notification_list.adapter = notificationAdapter
         notificationAdapter.setItemClickListener(object : NotificationAdapter.OnItemClickListener {
             override fun onItemClick(item: NotificationListResponse?) {
-                if(item?.isRead?.not()!!) {
-                    val request = NotificationChangeStatusRequest(item.notification_id.toString(),
+                if(item?.is_read?.not()!!) {
+                    val request = NotificationChangeStatusRequest(item.id.toString(),
                             SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
                     changeNotificationStatus(request)
                 }
