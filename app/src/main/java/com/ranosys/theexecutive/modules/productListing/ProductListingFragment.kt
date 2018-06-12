@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -75,6 +76,7 @@ class ProductListingFragment: BaseFragment() {
         val promoMsg = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message
         val promoUrl = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message_url
         showPromotionMsg(promoMsg, promoUrl, {
+            if(!TextUtils.isEmpty(promoUrl))
             prepareWebPageDialog(activity as Context, promoUrl, "")
         })
     }

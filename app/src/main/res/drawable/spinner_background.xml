@@ -3,6 +3,7 @@
     <item><layer-list>
         <item><shape>
             <stroke android:width="@dimen/half_dip" android:color="@color/black" />
+            <corners android:radius="@dimen/two_dp"/>
             <padding android:bottom="@dimen/five_dp" android:left="@dimen/five_dp" android:right="@dimen/ten_dp" android:top="@dimen/five_dp" />
         </shape></item>
         <item ><bitmap android:gravity="right|center" android:src="@drawable/dropdown" />

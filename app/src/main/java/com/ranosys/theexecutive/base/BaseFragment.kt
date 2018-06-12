@@ -169,7 +169,7 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.webview.settings.displayZoomControls = false
         webPagesDialog.webview.webViewClient = object : WebViewClient() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
-                Toast.makeText(activity, description, Toast.LENGTH_SHORT).show()
+
             }
 
             @TargetApi(android.os.Build.VERSION_CODES.M)
