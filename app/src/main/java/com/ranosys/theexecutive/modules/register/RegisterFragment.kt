@@ -5,14 +5,21 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.DialogInterface
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
 import android.text.TextUtils
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentRegisterBinding
 import com.ranosys.theexecutive.modules.home.HomeFragment
@@ -160,8 +167,53 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             registerViewModel.isSubscribed.set(isChecked)
         }
 
+
+        clickableTextView(tv_terms_and_conditions,getString(R.string.term_and_condition),getString(R.string.t_and_c),getString(R.string.privacy_policy))
     }
 
+
+
+    private fun  clickableTextView(textView: TextView, termAndCodition:String,tc:String, pp:String) {
+        val spanText =  SpannableStringBuilder(termAndCodition)
+        val url=GlobalSingelton.instance?.configuration?.terms_and_condition_url
+        spanText.append(tc);
+        spanText.setSpan(object :ClickableSpan() {
+            override fun onClick(p0: View?) {
+                openWebPage(activity as Context,url!!,getString(R.string.t_and_c))
+            }
+
+            override  fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds!!.color = Color.BLACK
+                ds.isUnderlineText = true
+            }
+
+        }, spanText.length - tc.length, spanText.length, 0);
+        spanText.append(getString(R.string.and))
+        spanText.append(pp)
+        spanText.setSpan(object :ClickableSpan() {
+            override fun onClick(p0: View?) {
+                openWebPage(activity as Context,url!!,getString(R.string.privacy_policy))
+            }
+
+            override fun updateDrawState(ds: TextPaint?) {
+                super.updateDrawState(ds)
+                ds!!.color = Color.BLACK
+                ds.isUnderlineText = true
+            }
+
+        },spanText.length - pp.length, spanText.length, 0);
+
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setText(spanText, TextView.BufferType.SPANNABLE);
+
+    }
+    private fun openWebPage(context: Context, url: String, title: String) {
+        val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
+        fragment?.run {
+            (fragment as BaseFragment).prepareWebPageDialog(context, url, title)
+        }
+    }
     private fun showDate(year: Int, monthOfYear: Int, dayOfMonth: Int, spinnerTheme: Int) {
         val dpd = SpinnerDatePickerDialogBuilder()
                 .context(activity)

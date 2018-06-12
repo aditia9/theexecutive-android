@@ -16,5 +16,6 @@ data class ConfigurationResponse(
 		val home_promotion_message: String,
 		val catalog_listing_promotion_message: String,
 		val home_promotion_message_url: String,
-		val catalog_listing_promotion_message_url: String
+		val catalog_listing_promotion_message_url: String,
+		val terms_and_condition_url:String
 )
