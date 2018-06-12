@@ -145,12 +145,13 @@
                     app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
                     app:layout_constraintTop_toBottomOf="@id/til_email_address"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_mobile_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingStart="@dimen/field_start_padding"
-                        android:text="@{info.mobile}"
+                        android:text="@={info.mobile}"
                         android:onTextChanged='@{() -> vm.onTextChanged(etMobileNumber)}'
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>

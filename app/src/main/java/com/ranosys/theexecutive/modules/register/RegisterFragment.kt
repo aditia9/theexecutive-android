@@ -42,6 +42,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val data = arguments
         data?.run {
             isFromSocialLogin = (data.get(Constants.FROM_SOCIAL_LOGIN)) as Boolean

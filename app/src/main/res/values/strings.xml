@@ -256,15 +256,15 @@
     <string name="take_photo">Take Photo</string>
     <string name="choose_from_gallery">Choose from Gallery</string>
     <string name="no_item_in_notification">No item in Notification</string>
-    <string name="order_success_msg">order placed successfully</string>
+    <string name="order_success_msg">Order Placed Successfully</string>
     <string name="order_success_btn_text">view order</string>
-    <string name="order_success_info">Thank you for your order. You will receive a confirmation email with detail of your order and link to track your oder progress.</string>
+    <string name="order_success_info">Thank you for your order. You will receive a confirmation email with detail of your order and link to track your order progress.</string>
 
-    <string name="order_cancel_msg">order cancelled</string>
+    <string name="order_cancel_msg">Order Cancelled</string>
     <string name="order_cancel_btn_text">continue shopping</string>
     <string name="order_cancel_info">Your order has been cancelled.</string>
 
-    <string name="order_failure_msg">order failed</string>
+    <string name="order_failure_msg">Order Failed</string>
     <string name="order_failure_btn_text">view order</string>
     <string name="order_failure_info">Your order has been failed.</string>
     <string name="select_reason">Select Reason</string>
