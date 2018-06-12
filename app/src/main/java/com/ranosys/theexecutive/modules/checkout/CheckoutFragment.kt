@@ -326,7 +326,7 @@ class CheckoutFragment : BaseFragment() {
     }
 
     private fun clearCartInfo() {
-
+        Utils.updateCartCount(0)
     }
 
     private fun redirectToOrderResultScreen(orderId: String) {
