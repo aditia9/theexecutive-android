@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v4.view.ViewPager
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -178,6 +179,7 @@ class CategoryFragment : BaseFragment() {
         })
 
         promotionBinding.tvPromotionText.setOnClickListener {
+            if(!TextUtils.isEmpty(GlobalSingelton.instance?.configuration?.home_promotion_message_url))
             prepareWebPageDialog(activity,GlobalSingelton.instance?.configuration?.home_promotion_message_url, "" )
         }
 

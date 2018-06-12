@@ -156,7 +156,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_return" />
 
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/sp_reason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -168,6 +168,9 @@
             android:paddingBottom="@dimen/five_dp"
             android:paddingEnd="@dimen/twenty_dp"
             android:textSize="@dimen/twelve_sp"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown"
+            style="@android:style/Widget.Holo.Light.Spinner"
             android:layout_marginStart="@dimen/fifteen_dp"
             android:background="@drawable/spinner_background"
             app:layout_constraintStart_toEndOf="@id/img_product"
