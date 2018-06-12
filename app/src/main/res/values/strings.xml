@@ -274,4 +274,9 @@
     <string name="payment_id">Payment ID</string>
     <string name="bank_recipient">Bank Recipient</string>
     <string name="no_item_shopping_bag">No items available right now, Please add some item.</string>
+
+    <string name="t_and_c">Terms &amp; Condition</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="and">\u0020 and \u0020</string>
+
 </resources>
