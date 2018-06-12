@@ -136,11 +136,13 @@
             android:layout_height="wrap_content"
             android:text="@string/one"
             android:textSize="@dimen/sixteen_sp"
-            android:layout_marginTop="@dimen/five_dp"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@id/img_increment"
             app:layout_constraintStart_toStartOf="@id/img_decrement"
-            app:layout_constraintTop_toBottomOf="@id/tv_return" />
+            app:layout_constraintTop_toTopOf="@+id/img_increment"
+            app:layout_constraintBottom_toBottomOf="@+id/img_increment"
+            android:layout_marginBottom="@dimen/five_dp"
+             />
 
         <ImageView
             android:id="@+id/img_increment"

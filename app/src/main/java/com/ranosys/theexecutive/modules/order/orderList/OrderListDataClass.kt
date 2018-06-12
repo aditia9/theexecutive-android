@@ -11,5 +11,6 @@ data class OrderListResponse(
     val status: String,
     val date: String,
     val image: String,
-    val is_refundable: Boolean
+    val is_refundable: Boolean,
+    val payment_method: String
 )

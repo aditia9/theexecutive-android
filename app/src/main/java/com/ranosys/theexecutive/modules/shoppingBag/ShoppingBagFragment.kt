@@ -60,6 +60,8 @@ class ShoppingBagFragment : BaseFragment() {
                     }else{
                         c2_main_layout.visibility = View.GONE
                         tv_no_items.visibility = View.VISIBLE
+                        cartQty = 0
+                        setCartTitle()
                     }
                     shoppingBagViewModel.shoppingBagListResponse?.set(response as MutableList<ShoppingBagResponse>?)
                 }
@@ -279,7 +281,8 @@ class ShoppingBagFragment : BaseFragment() {
         } else {
             c2_main_layout.visibility = View.GONE
             tv_no_items.visibility = View.VISIBLE
-
+            cartQty = 0
+            setCartTitle()
         }
     }
 

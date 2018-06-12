@@ -12,7 +12,7 @@ data class NotificationListResponse(val id: Int,
                                     val type: String,
                                     val type_id: String,
                                     val redirection_title: String,
-                                    val isRead: Boolean = false,
+                                    val is_read: Boolean,
                                     val store_id: Int,
                                     val sent_date: String,
                                     val image: String

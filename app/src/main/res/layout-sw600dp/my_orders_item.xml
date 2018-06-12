@@ -86,6 +86,18 @@
                 app:layout_constraintStart_toEndOf="@id/img_product_item"
                 app:layout_constraintTop_toBottomOf="@id/tv_price" />
 
+            <TextView
+                android:id="@+id/tv_payment_method"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/eight_dp"
+                android:layout_marginTop="@dimen/five_dp"
+                android:textSize="@dimen/status_text_size"
+                android:paddingBottom="@dimen/five_dp"
+                android:textColor="@color/light_green"
+                app:layout_constraintStart_toEndOf="@id/img_product_item"
+                app:layout_constraintTop_toBottomOf="@id/tv_status" />
+
             <Button
                 android:id="@+id/btn_return"
                 android:layout_width="wrap_content"

@@ -45,7 +45,7 @@
                 android:id="@+id/tv_user_email_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/fifteen_dp"
+                android:layout_marginTop="@dimen/ten_dp"
                 android:textSize="@dimen/sixteen_sp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
