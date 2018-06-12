@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.WishlistItemBinding
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 
 /**
@@ -58,6 +59,12 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
             itemBinding?.item = item
 
             itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString())
+            if(item?.type_id == Constants.CONFIGURABLE){
+                itemBinding?.imgBag?.setImageResource(R.drawable.eye)
+            }else{
+                itemBinding?.imgBag?.setImageResource(R.drawable.bag)
+            }
+
 
             item?.stock_item?.run {
                 if(is_in_stock){

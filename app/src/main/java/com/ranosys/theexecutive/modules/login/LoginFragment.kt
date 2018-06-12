@@ -30,7 +30,10 @@ import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.register.RegisterFragment
-import com.ranosys.theexecutive.utils.*
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.DialogOkCallback
+import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.Utils
 import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
@@ -220,8 +223,6 @@ class LoginFragment: BaseFragment() {
             hideLoading()
             //api to get cart id
             loginViewModel.getCartIdForUser(token)
-            SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
-            SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
             FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
         })
 
@@ -330,9 +331,5 @@ class LoginFragment: BaseFragment() {
         const val RC_GMAIL_SIGN_IN = 200
     }
 
-    override fun onResume() {
-        super.onResume()
-        setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false, true)
-    }
 }
 

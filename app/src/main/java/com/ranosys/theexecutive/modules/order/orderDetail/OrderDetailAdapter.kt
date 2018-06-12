@@ -135,6 +135,18 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             itemBinding?.tvShippingPrice?.text = Utils.getDisplayPrice(item?.shipping_incl_tax.toString(), item?.shipping_incl_tax.toString())
             itemBinding?.tvTotalPrice?.text = Utils.getDisplayPrice(item?.grand_total.toString(), item?.grand_total.toString())
             itemBinding?.tvProductQty?.text = (item?.items?.size.toString() + " " + context?.getString(R.string.products))
+
+            if(!TextUtils.isEmpty(item?.extension_attributes?.virtual_account_number)){
+                itemBinding?.tvPaymentId?.visibility = View.VISIBLE
+                itemBinding?.tvPayId?.visibility = View.VISIBLE
+                itemBinding?.tvPaymentId?.text = item?.extension_attributes?.virtual_account_number
+            }
+
+            if(!TextUtils.isEmpty(item?.extension_attributes?.payment_method)){
+                itemBinding?.tvPaymentMethod?.visibility = View.VISIBLE
+                itemBinding?.tvPayMethod?.visibility = View.VISIBLE
+                itemBinding?.tvPaymentMethod?.text = item?.extension_attributes?.payment_method
+            }
         }
     }
 
@@ -161,7 +173,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             } else if (size > 1) {
                 street = item.billing_address.street[0] + item.billing_address.street[1]
             }
-            val address = street + ", " + item.billing_address.city +", "+item.billing_address.postcode + ", " + item.billing_address.country_id
+            val address = street + ", " + item.billing_address.city +", "+item.billing_address.postcode + ", " + item.extension_attributes.formatted_shipping_address.extension_attributes.country_name
             itemBinding?.tvUserAddress?.text = address
         }
     }

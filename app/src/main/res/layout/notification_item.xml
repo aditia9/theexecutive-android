@@ -17,8 +17,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/sixteen_dp"
-        android:background="@{notification.isRead ? @color/notification_read_bg : @android:color/white}">
+        android:paddingTop="@dimen/sixteen_dp"
+        android:background="@{notification.is_read ? @color/notification_read_bg : @android:color/white}">
 
         <ImageView
             android:id="@+id/img_bullet"
@@ -27,7 +27,7 @@
             android:layout_marginStart="@dimen/twenty_dp"
             android:contentDescription="@string/app_name"
             android:layout_marginTop="@dimen/five_dp"
-            android:src="@{notification.isRead ? @drawable/notification_read : @drawable/notification_unread}"
+            android:src="@{notification.is_read ? @drawable/notification_read : @drawable/notification_unread}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
 
@@ -38,6 +38,7 @@
             android:layout_marginEnd="@dimen/twenty_dp"
             android:layout_marginStart="@dimen/fifteen_dp"
             android:text="@{notification.title}"
+            android:textColor="@{notification.is_read ? @color/hint_color :@color/black}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintHorizontal_bias="0"
@@ -51,6 +52,7 @@
             android:layout_marginTop="@dimen/four_dp"
             android:textSize="@dimen/fourteen_sp"
             android:text="@{notification.description}"
+            android:textColor="@{notification.is_read ? @color/hint_color :@color/black}"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
@@ -69,7 +71,7 @@
 
         <ImageView
             android:id="@+id/img_notification"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="@dimen/notification_image_size"
             android:layout_marginTop="@dimen/ten_dp"
             android:contentDescription="@string/app_name"

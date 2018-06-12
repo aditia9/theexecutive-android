@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import com.ranosys.dochelper.MediaHelperActivity
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.ActivityDashboardBinding
@@ -20,6 +22,7 @@ import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.login.LoginFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
+import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
 import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
@@ -29,6 +32,7 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.Utils
 
 
 /**
@@ -95,7 +99,7 @@ class DashBoardActivity : BaseActivity() {
                         if (fragment is ProductListingFragment)
                             (fragment as BaseFragment).setToolBarParams(ProductListingFragment.categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)
                         if (fragment is LoginFragment) {
-                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", 0, false, 0, false, true) }
+                            (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "",  R.drawable.cancel, true, 0, false, true) }
                         if (fragment is NotificationFragment) {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.notifications), 0, "", R.drawable.back, true, 0, false)
                             fragment.getNotification()
@@ -124,10 +128,14 @@ class DashBoardActivity : BaseActivity() {
         val redirectType = extras.getString(Constants.KEY_REDIRECTION_TYPE)
         val redirectValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
         val redirectTitle = extras.getString(Constants.KEY_REDIRECTION_TITLE)
+        val notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
 
         if (!TextUtils.isEmpty(redirectType)) {
-            when (redirectType) {
+            val request = NotificationChangeStatusRequest(notificationId,
+                    SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+            changeNotificationStatus(request)
 
+            when (redirectType) {
                 Constants.NOTIFICATION_TYPE_PRODUCT_DETAIL -> {
                     val fragment = ProductDetailFragment.getInstance(null, redirectValue, redirectTitle, 0)
                     FragmentUtils.addFragment(this, fragment, null, ProductDetailFragment::class.java.name, true)
@@ -171,11 +179,36 @@ class DashBoardActivity : BaseActivity() {
             if(HomeFragment.fragmentPosition == 1) {
                 val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                 if(TextUtils.isEmpty(isLogin)){
-                    (fragment.childFragmentManager.fragments[2] as LoginFragment).onActivityResult(requestCode, resultCode, data!!)
+                    for (i in fragment.childFragmentManager.fragments.indices) {
+                       if(fragment.childFragmentManager.fragments[i] is LoginFragment){
+                           (fragment.childFragmentManager.fragments[i] as LoginFragment).onActivityResult(requestCode, resultCode, data!!)
+                       }
+                    }
                 }
             }
         }else if(fragment is LoginFragment){
             fragment.onActivityResult(requestCode, resultCode, data!!)
+        }
+    }
+
+
+    private fun changeNotificationStatus(request: NotificationChangeStatusRequest) {
+        if (Utils.isConnectionAvailable(this)) {
+            AppRepository.changeNotificationStatus(request, object : ApiCallback<Boolean> {
+                override fun onException(error: Throwable) {
+                    AppLog.d(error.message!!)
+                }
+
+                override fun onError(errorMsg: String) {
+                    AppLog.d(errorMsg)
+                }
+
+                override fun onSuccess(t: Boolean?) {
+                  AppLog.d(""+t)
+                }
+            })
+        } else {
+            Utils.showNetworkErrorDialog(this)
         }
     }
 }

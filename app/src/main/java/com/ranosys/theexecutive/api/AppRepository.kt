@@ -1308,7 +1308,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
         val params = HashMap<String, String>()
-        params.put("fields", "items,grand_total,subtotal_incl_tax,shipping_incl_tax,billing_address,extension_attributes[returnto_address,formatted_shipping_address]")
+        params.put("fields", "items,grand_total,subtotal_incl_tax,shipping_incl_tax,billing_address,payment,extension_attributes[virtual_account_number,returnto_address,formatted_shipping_address,payment_method]")
         val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getOrderDetail(ApiConstants.BEARER + userToken, storeCode, orderId, params)
         callGet?.enqueue(object : Callback<OrderDetailResponse> {
 
@@ -1481,7 +1481,10 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.getNotificationList(ApiConstants.BEARER + userToken,  storeCode)
+
+       var request = DeviceRegisterRequest("", "", SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.getNotificationList(ApiConstants.BEARER + userToken,  storeCode, request)
 
         callGet?.enqueue(object : Callback<List<NotificationListResponse>> {
             override fun onResponse(call: Call<List<NotificationListResponse>>?, response: Response<List<NotificationListResponse>>?) {
@@ -1621,5 +1624,33 @@ object AppRepository {
             }
         })
     }
+
+
+
+
+    fun logoutNotification( callBack: ApiCallback<Boolean>) {
+        val retrofit = ApiClient.retrofit
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
+
+        var request = NotificationChangeStatusRequest("",  SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.logoutNotification(ApiConstants.BEARER + userToken,  storeCode, request)
+
+        callGet?.enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
+                if(!response!!.isSuccessful){
+                    parseError(response as Response<Any>, callBack as ApiCallback<Any>)
+                } else {
+                    callBack.onSuccess(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callBack.onError(Constants.ERROR)
+            }
+        })
+    }
+
+
 
 }

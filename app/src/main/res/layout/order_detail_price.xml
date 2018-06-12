@@ -19,14 +19,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/five_dp" />
+            app:layout_constraintGuide_end="@dimen/one_dp" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline_left_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/five_dp" />
+            app:layout_constraintGuide_begin="@dimen/one_dp" />
 
         <TextView
             android:id="@+id/tv_product_qty"
@@ -95,6 +95,53 @@
             app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
             app:layout_constraintTop_toBottomOf="@+id/tv_shipping_price" />
 
+
+
+        <TextView
+            android:id="@+id/tv_pay_method"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:text="@string/payment_method"
+            android:textSize="@dimen/sixteen_sp"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_total" />
+
+        <TextView
+            android:id="@+id/tv_payment_method"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:textSize="@dimen/sixteen_sp"
+            android:textColor="@color/light_green"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_total_price" />
+
+        <TextView
+            android:id="@+id/tv_pay_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:text="@string/payment_id"
+            android:textSize="@dimen/sixteen_sp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_pay_method" />
+
+        <TextView
+            android:id="@+id/tv_payment_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ten_dp"
+            android:textSize="@dimen/sixteen_sp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_payment_method" />
     </android.support.constraint.ConstraintLayout>
 
 </layout>

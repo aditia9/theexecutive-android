@@ -6,13 +6,27 @@ data class OrderDetailResponse(
         val subtotal_incl_tax: Int,
         val items: List<Item>,
         val billing_address: BillingAddress,
-        val extension_attributes: ExtensionAttributesReturnto
+        val extension_attributes: ExtensionAttributesReturnto,
+        val payment : Payment
 )
 
 
 data class ExtensionAttributesReturnto(
-        val returnto_address: ReturntoAddress
+        val returnto_address: ReturntoAddress,
+        val virtual_account_number : String,
+        val payment_method : String,
+        val formatted_shipping_address : FormattedShippingAddress
 )
+
+
+data class FormattedShippingAddress(
+        val extension_attributes: ExtensionAttributesCountry
+)
+
+data class ExtensionAttributesCountry(
+        val country_name: String
+)
+
 
 data class ReturntoAddress(
         val returnto_name: String,
@@ -105,6 +119,19 @@ data class Option(
         val value: String,
         val option_id: Int,
         val option_value: String
+)
+
+data class Payment(
+        val account_status: Any,
+        val additional_information: List<String>,
+        val amount_ordered: Int,
+        val base_amount_ordered: Int,
+        val base_shipping_amount: Int,
+        val cc_last4: Any,
+        val entity_id: Int,
+        val method: String,
+        val parent_id: Int,
+        val shipping_amount: Int
 )
 
 data class ParentItem(
