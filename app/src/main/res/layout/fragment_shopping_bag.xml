@@ -16,8 +16,6 @@
         android:clickable="true"
         android:focusable="true"
         android:background="@color/white"
-        android:clickable="true"
-        android:focusable="true"
         android:visibility="visible">
 
         <android.support.constraint.ConstraintLayout
