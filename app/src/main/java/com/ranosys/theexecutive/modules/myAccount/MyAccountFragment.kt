@@ -51,7 +51,7 @@ class MyAccountFragment : BaseFragment() {
         linearLayoutManager = LinearLayoutManager(activity as Context)
         my_account_options_list.layoutManager = linearLayoutManager
 
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),2)
         my_account_options_list.addItemDecoration(itemDecor)
         my_account_options_list.adapter = MyAccountAdapter(getAccountOptions(), activity as Context)
 

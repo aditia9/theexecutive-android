@@ -40,7 +40,7 @@ class ChangeLanguageFragment: BaseFragment() {
         linearLayoutManager = LinearLayoutManager(activity as Context)
         language_list.layoutManager = linearLayoutManager
 
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),1)
         language_list.addItemDecoration(itemDecor)
 
         val selectedStoreCode: String = if(TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY))){
