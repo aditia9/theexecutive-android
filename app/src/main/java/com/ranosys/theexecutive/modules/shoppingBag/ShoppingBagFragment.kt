@@ -206,7 +206,7 @@ class ShoppingBagFragment : BaseFragment() {
             }
         }
         cartQty = 0
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),1)
         rv_shopping_bag_list.addItemDecoration(itemDecor)
         rv_shopping_bag_list.layoutManager = linearLayoutManager
 

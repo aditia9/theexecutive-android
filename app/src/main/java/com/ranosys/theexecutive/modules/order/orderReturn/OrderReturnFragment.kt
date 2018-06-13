@@ -91,7 +91,7 @@ class OrderReturnFragment : BaseFragment() {
         }
 
         rv_order_return_list.layoutManager = linearLayoutManager
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),1)
         rv_order_return_list.addItemDecoration(itemDecor)
         tv_order_id.text = getString(R.string.order_no) +" " +orderId
 
