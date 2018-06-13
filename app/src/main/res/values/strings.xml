@@ -258,7 +258,7 @@
     <string name="no_item_in_notification">No item in Notification</string>
     <string name="order_success_msg">Order Placed Successfully</string>
     <string name="order_success_btn_text">view order</string>
-    <string name="order_success_info">Thank you for your order. You will receive a confirmation email with detail of your order and link to track your order progress.</string>
+    <string name="order_success_info">Thank you for your order.\n You will receive a confirmation email with detail of your order and link to track your order progress.</string>
 
     <string name="order_cancel_msg">Order Cancelled</string>
     <string name="order_cancel_btn_text">continue shopping</string>
@@ -278,5 +278,7 @@
     <string name="t_and_c">Terms &amp; Condition</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="and">\u0020 and \u0020</string>
+    <string name="move_to_wishlist">Are you sure you want to move item to wishlist.</string>
+    <string name="move_to_bag">Are you sure you want to move item to bag.</string>
 
 </resources>
