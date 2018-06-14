@@ -7,6 +7,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -75,6 +76,7 @@ class ProductViewFragment : BaseFragment() {
     private var maxQuantityList : MutableList<MaxQuantity>? = mutableListOf()
     private var relatedProductList : MutableList<ProductListingDataClass.Item>? = mutableListOf()
     private var productLinksList : List<ProductListingDataClass.ProductLinks?>? = listOf()
+    private lateinit var productImagesBinding : ProductImagesLayoutBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val listGroupBinding: ProductDetailViewBinding? = DataBindingUtil.inflate(inflater, R.layout.product_detail_view, container, false)
@@ -217,7 +219,7 @@ class ProductViewFragment : BaseFragment() {
 
         val listSize = mediaGalleryList.size
         for(i in 2..listSize.minus(1)){
-            val productImagesBinding : ProductImagesLayoutBinding? = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
+            productImagesBinding = DataBindingUtil.inflate(activity?.layoutInflater, R.layout.product_images_layout, null, false)
             productImagesBinding?.mediaGalleryEntry = mediaGalleryList[i]
             Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage!!, Constants.IMAGE_RATIO, 40)
             val view = productImagesBinding!!.root.img_product_image
@@ -867,6 +869,14 @@ class ProductViewFragment : BaseFragment() {
                     this.position = position
                     this.pagerPosition = pagerPosition
                 }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, 40)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, 40)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage, Constants.IMAGE_RATIO, 40)
+
     }
 
 }
