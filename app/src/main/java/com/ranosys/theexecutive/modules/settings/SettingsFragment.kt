@@ -15,6 +15,11 @@ class SettingsFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
+
+        if(SavedPreferences.getInstance()?.getBooleanValue(Constants.IS_NOTIFICATION_SHOW)!!){
+            view.sw_notification.isChecked = SavedPreferences.getInstance()?.getBooleanValue(Constants.IS_NOTIFICATION_SHOW)!!
+        }
+
         view.sw_notification.setOnCheckedChangeListener({ buttonView, isChecked ->
             SavedPreferences.getInstance()?.setBooleanValue(Constants.IS_NOTIFICATION_SHOW, isChecked)
         })
