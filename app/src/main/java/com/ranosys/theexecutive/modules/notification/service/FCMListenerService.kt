@@ -145,7 +145,7 @@ class FCMListenerService : FirebaseMessagingService() {
 
     private fun getNotificationIcon(): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            R.mipmap.app_icon
+            R.mipmap.tras_app_icon
         } else {
             R.mipmap.app_icon
         }
