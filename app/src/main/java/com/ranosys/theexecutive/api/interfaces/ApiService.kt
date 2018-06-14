@@ -254,7 +254,7 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun addTOCartUser(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String, @Body request: AddToCartRequest): Call<AddToCartResponse>
 
-        @POST("rest/{store_code}/V1/guest-carts/{cart_id}/items")
+        @POST("rest/{store_code}/V1/guest-carts/{cart_id}/items?from_mobile=1")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
@@ -266,13 +266,13 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun mergeCart(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode:String, @Path("guest_cart_id") guestCartId:String): Call<String>
 
-        @GET("rest/{store_code}/V1/carts/mine/items")
+        @GET("rest/{store_code}/V1/carts/mine/items?from_mobile=1")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getCartOfUser(@Header(ApiConstants.AUTHORIZATION_KEY) adminToken: String?, @Path("store_code") storeCode: String): Call<List<ShoppingBagResponse>>
 
-        @GET("rest/{store_code}/V1/guest-carts/{cart_id}/items")
+        @GET("rest/{store_code}/V1/guest-carts/{cart_id}/items?from_mobile=1")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
@@ -311,14 +311,14 @@ interface ApiService {
         fun updateItemFromShoppingBagGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId") cartId: String?, @Path("itemId") itemId: Int?, @Body request: ShoppingBagQtyUpdateRequest): Call<ShoppingBagQtyUpdateRequest>
 
 
-        @PUT("rest/{store_code}/V1/carts/mine/coupons/{couponCode}")
+        @PUT("rest/{store_code}/V1/carts/mine/coupons/{couponCode}?from_mobile=1")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun applyCouponCodeForUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("couponCode") couponCode: String?): Call<String>
 
 
-        @PUT("rest/{store_code}/V1/guest-carts/{cartId}/coupons/{couponCode}")
+        @PUT("rest/{store_code}/V1/guest-carts/{cartId}/coupons/{couponCode}?from_mobile=1")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
@@ -352,14 +352,14 @@ interface ApiService {
                 ApiConstants.CACHE_CONTROL)
         fun deleteCouponCodeForGuestUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("cartId") cartId: String?): Call<String>
 
-        @GET("rest/{store_code}/V1/carts/mine/totals")
+        @GET("rest/{store_code}/V1/carts/mine/totals?from_mobile=1")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getTotalForUser(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String): Call<TotalResponse>
 
 
-        @GET("rest/{store_code}/V1/guest-carts/{cartId}/totals")
+        @GET("rest/{store_code}/V1/guest-carts/{cartId}/totals?from_mobile=1")
         @Headers(ApiConstants.CONTENT_TYPE,
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)

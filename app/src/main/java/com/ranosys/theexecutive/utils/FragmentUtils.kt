@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseActivity
 import java.util.*
 
@@ -53,4 +54,7 @@ object FragmentUtils {
         return currentFragment
     }
 
+    fun popFragment(baseActivity: DashBoardActivity){
+        baseActivity.supportFragmentManager.popBackStack();
+    }
 }
