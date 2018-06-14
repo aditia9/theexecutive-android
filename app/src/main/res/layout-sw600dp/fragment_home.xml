@@ -51,7 +51,7 @@
             app:tabMaxWidth="@dimen/match_constraint"
             app:tabGravity="fill"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/sixty_five_dp"
+            android:layout_height="wrap_content"
             android:paddingTop="@dimen/five_dp"
             android:paddingBottom="@dimen/five_dp"
             android:layout_alignParentBottom="true"

@@ -11,12 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentOrderReturnBinding
 import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_order_return.*
 
@@ -73,6 +75,7 @@ class OrderReturnFragment : BaseFragment() {
                 val response = apiResponse?.apiResponse
                 if (response is String) {
                     Toast.makeText(activity, response, Toast.LENGTH_LONG).show()
+                    FragmentUtils.popFragment(activity as DashBoardActivity)
                 }
             } else {
                 hideLoading()
