@@ -89,6 +89,7 @@ class CheckoutFragment : BaseFragment() {
                 }
             }
 
+            scroll_view.smoothScrollBy(0,cv_shipping_method.height)
         }
 
         tv_payment_method.setOnClickListener {
@@ -105,6 +106,8 @@ class CheckoutFragment : BaseFragment() {
                     payment_method_expand_img.setImageResource(R.drawable.forward)
                 }
             }
+
+            scroll_view.smoothScrollBy(0,cv_payment_method.height)
 
         }
 
@@ -124,7 +127,7 @@ class CheckoutFragment : BaseFragment() {
 
         checkoutBinding.shippingMethodRg.setOnCheckedChangeListener { buttonView, _ ->
             val position = buttonView.checkedRadioButtonId
-
+            checkoutViewModel.selectedPaymentMethod = null
             if(position != -1){
                 if(position < checkoutViewModel.shippingMethodList.value!!.size){
                     val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position) ?: null
@@ -144,6 +147,8 @@ class CheckoutFragment : BaseFragment() {
                     checkoutViewModel.selectedPaymentMethod = paymentMethod
                 }
 
+            }else{
+                checkoutViewModel.selectedPaymentMethod = null
             }
 
             if(checkoutViewModel.selectedPaymentMethod != null){
@@ -151,9 +156,7 @@ class CheckoutFragment : BaseFragment() {
             }else{
                 btn_pay.background = (activity as Context).getDrawable(R.drawable.black_button_bg)
             }
-
         }
-
 
         img_total_segment.setOnClickListener {
             checkoutViewModel.totalSegmentVisible = checkoutViewModel.totalSegmentVisible.not()

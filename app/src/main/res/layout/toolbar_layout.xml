@@ -43,11 +43,12 @@
                 android:id="@+id/toolbar_right_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{toolbarViewModel.cartCount == 0 ? "" : Integer.toString(toolbarViewModel.cartCount)}'
+                android:text='@{toolbarViewModel.cartCount}'
                 android:layout_marginRight="@dimen/sixteen_dp"
-                android:paddingTop="@dimen/five_dp"
-                android:textSize="@dimen/twelve_sp"
+                android:paddingTop="@dimen/six_dp"
+                android:layout_marginTop="@dimen/six_dp"
                 android:gravity="center_vertical|center_horizontal"
+                android:textSize='@{toolbarViewModel.cartCount == "99+" ? @dimen/nine_sp : @dimen/twelve_sp}'
                 android:contentDescription="@string/toolbar_right_icon"
                 android:visibility="@{(toolbarViewModel.isRightIconVisible() &amp;&amp; toolbarViewModel.rightIcon == R.drawable.bag)? View.VISIBLE : View.GONE,  default = visible}"
                 android:background="@{ContextCompat.getDrawable(context, toolbarViewModel.rightIcon)}"
@@ -123,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sixteen_sp"
-                        android:textColor="@color/theme_black_color"
+                        android:textColor="@color/hint_color"
                         android:text="@{toolbarViewModel.subTitle}"
                         android:visibility="@{TextUtils.isEmpty(toolbarViewModel.subTitle) ? View.GONE : View.VISIBLE,  default = gone}"
                         app:layout_constraintRight_toRightOf="parent"

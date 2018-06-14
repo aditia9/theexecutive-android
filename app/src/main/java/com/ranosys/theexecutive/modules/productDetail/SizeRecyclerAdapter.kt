@@ -4,6 +4,7 @@ import AppLog
 import android.annotation.SuppressLint
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -70,10 +71,12 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
             if(sizeView?.isSelected!!){
                 itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.drawable.size_border)
                 itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT_BOLD)
+                itemBinding?.tvSize?.setTextColor(Color.BLACK)
             }
             else{
                 itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
                 itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
+                itemBinding?.tvSize?.setTextColor(Color.BLACK)
             }
             try {
                 inStock = inStockList?.filter {
@@ -88,7 +91,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                     itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
                     itemBinding?.tvSize?.isEnabled = false
                     itemBinding?.tvSize?.isClickable = false
-                    itemBinding?.tvSize?.setTextColor(R.color.divider_color)
+                    itemBinding?.tvSize?.setTextColor(Color.GRAY)
                     itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
 
                 }

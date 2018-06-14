@@ -43,6 +43,7 @@
     <dimen name="four_sp">4sp</dimen>
     <dimen name="eight_sp">8sp</dimen>
     <dimen name="ten_sp">10sp</dimen>
+    <dimen name="nine_sp">9sp</dimen>
     <dimen name="fourteen_sp">14sp</dimen>
     <dimen name="fifteen_sp">15sp</dimen>
     <dimen name="sixteen_sp">16sp</dimen>

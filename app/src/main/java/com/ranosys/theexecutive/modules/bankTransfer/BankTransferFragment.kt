@@ -27,6 +27,7 @@ import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentBankTransferBinding
 import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.Utils
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
@@ -90,6 +91,14 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
 
         observeEvents()
 
+
+        val calender: Calendar = Calendar.getInstance()
+        calender.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
+        val transferDate: Date = calender.time
+        bankTransferViewModel.transferDate.set(transferDate)
+        val dateFormat = SimpleDateFormat(Constants.DD_MM_YY_DATE_FORMAT)
+        mBinding.etTransferDate.setText(dateFormat.format(transferDate))
+
         return mBinding.root
     }
 
@@ -108,6 +117,7 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
                 val response = apiResponse?.apiResponse
                 if (response is String) {
                     Toast.makeText(activity, response, Toast.LENGTH_LONG).show()
+                    FragmentUtils.popFragment(activity as DashBoardActivity)
 
                 }
             } else {
@@ -198,6 +208,5 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mediaPicker.onCallbackResult(requestCode, resultCode, data)
-
     }
 }

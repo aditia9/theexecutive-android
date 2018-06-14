@@ -154,7 +154,7 @@ class ProductListingFragment: BaseFragment() {
         linearLayoutManager = LinearLayoutManager(activity as Context)
         sortOptionBinding.sortOptionList.layoutManager = linearLayoutManager
 
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),1)
         sortOptionBinding.sortOptionList.addItemDecoration(itemDecor)
 
         sortOptionAdapter.setItemClickListener(object: SortOptionAdapter.OnItemClickListener {

@@ -180,7 +180,7 @@
     <string name="mobile_number_label">Mobile Number : </string>
     <string name="remove">Remove</string>
     <string name="add_addresse">Add Address</string>
-    <string name="wishlist_items_count">Total %1$d items in your wishlist</string>
+    <string name="wishlist_items_count">Total %1$d item(s) in your wishlist</string>
     <string name="bag_icon">Bag Icon</string>
     <string name="delete_icon">Delete Icon</string>
     <string name="remove_item_text">Are you sure you want to remove item from your wishlist?</string>
@@ -258,14 +258,14 @@
     <string name="no_item_in_notification">No item in Notification</string>
     <string name="order_success_msg">Order Placed Successfully</string>
     <string name="order_success_btn_text">view order</string>
-    <string name="order_success_info">Thank you for your order. You will receive a confirmation email with detail of your order and link to track your order progress.</string>
+    <string name="order_success_info">Thank you for your order.\n You will receive a confirmation email with detail of your order and link to track your order progress.</string>
 
     <string name="order_cancel_msg">Order Cancelled</string>
     <string name="order_cancel_btn_text">continue shopping</string>
     <string name="order_cancel_info">Your order has been cancelled.</string>
 
     <string name="order_failure_msg">Order Failed</string>
-    <string name="order_failure_btn_text">view order</string>
+    <string name="order_failure_btn_text">continue shopping</string>
     <string name="order_failure_info">Your order has been failed.</string>
     <string name="select_reason">Select Reason</string>
     <string name="no_reason_selected">No reason selected.</string>

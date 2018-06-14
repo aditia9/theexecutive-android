@@ -70,7 +70,7 @@ class OrderDetailFragment : BaseFragment() {
             }
         }
         rv_order_detail_list.layoutManager = linearLayoutManager
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),1)
         rv_order_detail_list.addItemDecoration(itemDecor)
 
         val orderDetailAdapter = OrderDetailAdapter(activity as Context, orderDetailViewModel.orderDetailObservable?.get())
