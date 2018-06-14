@@ -51,7 +51,11 @@ open class BaseActivity: RunTimePermissionActivity(){
 
     private fun observeCartCount() {
         GlobalSingelton.instance?.cartCount?.observe(this, Observer { count ->
-            toolbarViewModel?.cartCount?.set(count)
+            when(count){
+                0 -> toolbarViewModel?.cartCount?.set("")
+                in 1..99 -> toolbarViewModel?.cartCount?.set(count.toString())
+                else -> toolbarViewModel?.cartCount?.set("99+")
+            }
         })
     }
 

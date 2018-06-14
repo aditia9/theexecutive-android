@@ -115,7 +115,8 @@ class CheckoutFragment : BaseFragment() {
 
         btn_pay.setOnClickListener {
             if(checkoutViewModel.selectedPaymentMethod != null){
-                callPlaceOrderApi()
+                //callPlaceOrderApi()
+                Utils.showErrorDialog(activity as Context, "order placed")
             }else{
                 Utils.showErrorDialog(activity as Context, getString(R.string.select_payment_method_error))
             }
@@ -124,7 +125,7 @@ class CheckoutFragment : BaseFragment() {
 
         checkoutBinding.shippingMethodRg.setOnCheckedChangeListener { buttonView, _ ->
             val position = buttonView.checkedRadioButtonId
-
+            checkoutViewModel.selectedPaymentMethod = null
             if(position != -1){
                 if(position < checkoutViewModel.shippingMethodList.value!!.size){
                     val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position) ?: null
@@ -144,6 +145,8 @@ class CheckoutFragment : BaseFragment() {
                     checkoutViewModel.selectedPaymentMethod = paymentMethod
                 }
 
+            }else{
+                checkoutViewModel.selectedPaymentMethod = null
             }
 
             if(checkoutViewModel.selectedPaymentMethod != null){

@@ -16,6 +16,7 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -61,6 +62,9 @@ class SplashActivity : BaseActivity() {
 
         // get data from notification
         dataFromNotification()
+
+        //register device on server
+        registerDeviceOnServer()
 
         handler.postDelayed({
             kotlin.run {
@@ -328,6 +332,26 @@ class SplashActivity : BaseActivity() {
             }
         })
 
+    }
+
+    private fun registerDeviceOnServer() {
+        val request = DeviceRegisterRequest(Constants.OS_TYPE,
+                SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID),
+                SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+
+        AppRepository.registerDevice(request, object : ApiCallback<Boolean> {
+            override fun onSuccess(t: Boolean?) {
+                AppLog.d(t.toString())
+            }
+
+            override fun onException(error: Throwable) {
+                AppLog.d(error.message!!)
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.d(errorMsg)
+            }
+        })
     }
 
 }

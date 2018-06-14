@@ -7,7 +7,6 @@ import android.app.ActivityManager
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -195,9 +194,10 @@ object Utils {
     }
 
     fun isTablet(context: Context): Boolean {
-        val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
-        val large = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
-        return xlarge || large
+//        val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
+//        val large = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
+//        return xlarge || large
+        return true
     }
 
     fun openCmsPage(context: Context, url: String) {
@@ -268,7 +268,12 @@ object Utils {
     }
 
     fun updateCartCount(count: Int) {
-        GlobalSingelton.instance?.cartCount?.value = count
+        if(count == 2){
+            GlobalSingelton.instance?.cartCount?.value = 116
+        }else{
+            GlobalSingelton.instance?.cartCount?.value = count
+        }
+
     }
 
     fun getFromattedPrice(price: String): String {

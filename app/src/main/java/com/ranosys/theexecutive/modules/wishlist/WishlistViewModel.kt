@@ -77,6 +77,7 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
                 mutualAddToBagItemResponse.value = apiResponse
+                //get cart count
             }
 
         })
