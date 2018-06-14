@@ -38,15 +38,16 @@
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/twenty_dp"
-            android:text="@{item.name}"
             android:maxLines="2"
             android:textSize="@dimen/sixteen_sp"
             android:textColor="@color/black"
+            android:text="@{item.name}"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/img_product"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/fifteen_dp"
+             />
 
         <TextView
             android:id="@+id/tv_product_sku"
@@ -82,14 +83,14 @@
                 android:id="@+id/view_vertical"
                 android:layout_width="@dimen/one_dp"
                 android:layout_height="@dimen/twenty_dp"
-                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/ten_dp"
                 android:background="@color/divider_color" />
 
             <TextView
                 android:id="@+id/tv_product_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/ten_dp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/fourteen_sp"/>
 
@@ -111,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/return_qty"
-            android:textSize="@dimen/fourteen_sp"
+            android:textSize="@dimen/sixteen_dp"
             android:layout_margin="@dimen/five_dp"
             app:layout_constraintEnd_toEndOf="@id/img_product"
             app:layout_constraintStart_toStartOf="@id/img_product"
@@ -122,13 +123,14 @@
             android:id="@+id/img_decrement"
             android:layout_width="@dimen/twenty_dp"
             android:layout_height="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/ten_dp"
             android:contentDescription="@string/app_name"
             android:layout_marginBottom="@dimen/thirty_dp"
             android:padding="@dimen/three_dp"
             android:src="@drawable/back"
-            app:layout_constraintStart_toStartOf="@id/img_product"
-            app:layout_constraintTop_toBottomOf="@+id/tv_return" />
+            android:layout_marginEnd="@dimen/five_dp"
+            app:layout_constraintStart_toStartOf="@id/tv_return"
+            app:layout_constraintEnd_toStartOf="@id/txt_quantity"
+            app:layout_constraintTop_toTopOf="@+id/txt_quantity" />
 
         <TextView
             android:id="@+id/txt_quantity"
@@ -137,10 +139,10 @@
             android:text="@string/one"
             android:textSize="@dimen/sixteen_sp"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="@id/img_increment"
-            app:layout_constraintStart_toStartOf="@id/img_decrement"
-            app:layout_constraintTop_toTopOf="@+id/img_increment"
-            app:layout_constraintBottom_toBottomOf="@+id/img_increment"
+            app:layout_constraintStart_toStartOf="@id/tv_return"
+            app:layout_constraintEnd_toEndOf="@id/tv_return"
+            app:layout_constraintTop_toBottomOf="@+id/tv_return"
+            android:layout_marginTop="@dimen/six_dp"
             android:layout_marginBottom="@dimen/five_dp"
              />
 
@@ -148,12 +150,14 @@
             android:id="@+id/img_increment"
             android:layout_width="@dimen/twenty_dp"
             android:layout_height="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/ten_dp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/forward"
             android:padding="@dimen/three_dp"
+            android:layout_marginStart="@dimen/five_dp"
             app:layout_constraintEnd_toEndOf="@id/tv_return"
-            app:layout_constraintTop_toBottomOf="@+id/tv_return" />
+            app:layout_constraintTop_toTopOf="@+id/txt_quantity"
+            app:layout_constraintStart_toEndOf="@id/txt_quantity"
+            />
 
 
         <Spinner
