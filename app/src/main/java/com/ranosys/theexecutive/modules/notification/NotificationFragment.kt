@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationLis
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
+import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
@@ -103,7 +105,13 @@ class NotificationFragment : BaseFragment() {
                 val bundle = Bundle()
                 bundle.putString(Constants.ORDER_ID, item.type_id)
                 FragmentUtils.addFragment(context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
+            }
 
+            Constants.NOTIFICATION_TYPE_ABANDONED -> {
+                val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                if(!TextUtils.isEmpty(isLogin)){
+                    FragmentUtils.addFragment(context, ShoppingBagFragment(), null, ShoppingBagFragment::class.java.name, true)
+                }
             }
 
         }
