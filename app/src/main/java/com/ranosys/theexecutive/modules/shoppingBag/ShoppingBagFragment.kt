@@ -40,7 +40,6 @@ class ShoppingBagFragment : BaseFragment() {
     private var totalPrice: Int = 0
     private lateinit var viewBinder: FragmentShoppingBagBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         viewBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_shopping_bag, container, false)
         shoppingBagViewModel = ViewModelProviders.of(this).get(ShoppingBagViewModel::class.java)
         viewBinder?.shoppingBagViewModel = shoppingBagViewModel
@@ -349,6 +348,10 @@ class ShoppingBagFragment : BaseFragment() {
                     ?: ""
             if (guestCartId.isNotBlank()) {
                 shoppingBagViewModel.getShoppingBagForGuestUser(guestCartId)
+            }else{
+                hideLoading()
+                viewBinder.c2MainLayout.visibility = View.GONE
+                viewBinder.tvNoItems.visibility = View.VISIBLE
             }
         }
     }

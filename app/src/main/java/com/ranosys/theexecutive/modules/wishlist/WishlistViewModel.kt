@@ -7,6 +7,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
+import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Details View model for wishlist screen
@@ -19,6 +20,7 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
     var mutualDeleteItemResponse = MutableLiveData<ApiResponse<String>>()
     var mutualAddToBagItemResponse = MutableLiveData<ApiResponse<String>>()
     var wishlistResponse: ObservableField<WishlistResponse>? = ObservableField()
+
 
     fun getWishlist(){
         val apiResponse = ApiResponse<WishlistResponse>()
@@ -77,11 +79,31 @@ class WishlistViewModel(application: Application) : BaseViewModel(application) {
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
                 mutualAddToBagItemResponse.value = apiResponse
-                //get cart count
+                getUserCartCount()
             }
 
         })
     }
 
+
+    fun getUserCartCount() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountUser(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                Utils.updateCartCount(t?.toInt() ?: 0)
+            }
+
+        })
+
+    }
 
 }
