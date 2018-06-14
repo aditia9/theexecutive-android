@@ -118,8 +118,7 @@ class CheckoutFragment : BaseFragment() {
 
         btn_pay.setOnClickListener {
             if(checkoutViewModel.selectedPaymentMethod != null){
-                //callPlaceOrderApi()
-                Utils.showErrorDialog(activity as Context, "order placed")
+                callPlaceOrderApi()
             }else{
                 Utils.showErrorDialog(activity as Context, getString(R.string.select_payment_method_error))
             }
