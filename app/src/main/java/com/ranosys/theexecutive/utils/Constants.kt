@@ -115,6 +115,7 @@ object Constants {
     const val NOTIFICATION_TYPE_PRODUCT_DETAIL = "Product"
     const val NOTIFICATION_TYPE_CATALOG = "Category"
     const val NOTIFICATION_TYPE_ORDER_LIST = "Order"
+    const val NOTIFICATION_TYPE_ABANDONED = "Abandoned"
     const val NOTIFICATION_TYPE_NOTIFICATION_LIST = "Notify List"
     const val USER_FCM_ID = "fcm_id"
     const val STATUS = "status"
