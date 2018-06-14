@@ -399,10 +399,10 @@ object AppRepository {
 
     fun subscribeNewsletterApi(request: MyAccountDataClass.NewsletterSubscriptionRequest, callBack: ApiCallback<String>) {
         val retrofit = ApiClient.retrofit
-        val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.NewsLetterSubscription>(ApiService.NewsLetterSubscription::class.java)?.newsLetterSuscribe(ApiConstants.BEARER + adminToken, storeCode, request)
+        val callPost = retrofit?.create<ApiService.NewsLetterSubscription>(ApiService.NewsLetterSubscription::class.java)?.newsLetterSuscribe(ApiConstants.BEARER + userToken, storeCode, request)
 
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
