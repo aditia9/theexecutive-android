@@ -136,7 +136,8 @@ class CheckoutFragment : BaseFragment() {
                 if(position < checkoutViewModel.shippingMethodList.value!!.size){
                     val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position) ?: null
                     checkoutViewModel.selectedShippingMethod = shippingMethod
-                    checkoutViewModel.getPaymentMethods(shippingMethod!!)
+                    getPaymentMethod(shippingMethod!!)
+
                 }
 
             }
@@ -178,6 +179,15 @@ class CheckoutFragment : BaseFragment() {
             }
 
             getViewHeight(total_segment_bottom_sheet)
+        }
+    }
+
+    private fun getPaymentMethod(shippingMethod: CheckoutDataClass.GetShippingMethodsResponse) {
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            checkoutViewModel.getPaymentMethods(shippingMethod!!)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
         }
     }
 
@@ -297,6 +307,7 @@ class CheckoutFragment : BaseFragment() {
 
         //observe payment methods
         checkoutViewModel.paymentMethodList.observe(this, Observer { paymentMethodList ->
+            hideLoading()
             if (paymentMethodList?.size ?: 0 <= 0) {
                 Utils.showErrorDialog(activity as Context, (activity as Context).getString(R.string.empty_payment_method_error))
             } else {

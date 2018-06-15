@@ -13,7 +13,6 @@ import android.view.Gravity
 import android.view.KeyEvent
 import android.webkit.*
 import android.widget.RelativeLayout
-import android.widget.Toast
 import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
@@ -169,12 +168,13 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.webview.settings.displayZoomControls = false
         webPagesDialog.webview.webViewClient = object : WebViewClient() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
-
+                hideLoading()
             }
 
             @TargetApi(android.os.Build.VERSION_CODES.M)
             override fun onReceivedError(view: WebView, req: WebResourceRequest, rerr: WebResourceError) {
                 onReceivedError(view, rerr.errorCode, rerr.description.toString(), req.url.toString())
+                hideLoading()
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -230,6 +230,11 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.img_back.setOnClickListener {
 
             checkIfPaymentIsCancelled(webPagesDialog, orderId)
+        }
+
+        //stop loader when dialog dismissed
+        webPagesDialog.setOnDismissListener {
+            hideLoading()
         }
 
     }
