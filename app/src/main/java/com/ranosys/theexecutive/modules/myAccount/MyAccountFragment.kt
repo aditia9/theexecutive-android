@@ -27,7 +27,10 @@ import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
 import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
 import com.ranosys.theexecutive.modules.settings.SettingsFragment
-import com.ranosys.theexecutive.utils.*
+import com.ranosys.theexecutive.utils.DialogOkCallback
+import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.GlobalSingelton
+import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_my_account.*
 import kotlinx.android.synthetic.main.logout_btn.view.*
 
@@ -127,14 +130,14 @@ class MyAccountFragment : BaseFragment() {
 
                         context.getString(R.string.buying_guide) ->{
                             val url = GlobalSingelton.instance?.configuration?.buying_guide_url
-                            if (url != null) {
+                            if (url != null && url.isNotEmpty()) {
                                 openWebPage(context, url, context.getString(R.string.buying_guide))
                             }
                         }
 
                         context.getString(R.string.contact_us) ->{
                             val url = GlobalSingelton.instance?.configuration?.contact_us_url
-                            if (url != null) {
+                            if (url != null && url.isNotEmpty()) {
                                 openWebPage(context, url, context.getString(R.string.contact_us))
                             }
                         }
