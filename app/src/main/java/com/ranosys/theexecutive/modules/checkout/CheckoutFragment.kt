@@ -80,6 +80,8 @@ class CheckoutFragment : BaseFragment() {
                     cv_shipping_method.visibility = View.VISIBLE
                     divider_shipping_method_below.visibility = View.GONE
                     cv_payment_method.visibility = View.GONE
+                    divider_payment_method_below.visibility = View.VISIBLE
+                    payment_method_expand_img.setImageResource(R.drawable.forward)
                     shipping_method_expand_img.setImageResource(R.drawable.dropdown)
 
                 }else if(cv_shipping_method.visibility == View.VISIBLE){
@@ -98,6 +100,8 @@ class CheckoutFragment : BaseFragment() {
                 if(cv_payment_method.visibility == View.GONE && checkoutViewModel.selectedShippingMethod != null && checkoutViewModel.paymentMethodList.value!!.isNotEmpty()){
                     cv_payment_method.visibility = View.VISIBLE
                     cv_shipping_method.visibility = View.GONE
+                    divider_shipping_method_below.visibility = View.VISIBLE
+                    shipping_method_expand_img.setImageResource(R.drawable.forward)
                     divider_payment_method_below.visibility = View.GONE
                     payment_method_expand_img.setImageResource(R.drawable.dropdown)
                 }else if(cv_payment_method.visibility == View.VISIBLE || checkoutViewModel.selectedShippingMethod == null){
