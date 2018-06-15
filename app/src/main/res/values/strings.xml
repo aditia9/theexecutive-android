@@ -198,6 +198,7 @@
     <string name="confirm_order"><![CDATA[confirm order & pay now]]></string>
     <string name="notifications">Notifications</string>
     <string name="bank_transfer">Bank Transfer Confirmation</string>
+    <string name="current_password">Current Password</string>
     <string name="change_password">Change Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
@@ -233,7 +234,7 @@
     <string name="order_no">Order no. </string>
     <string name="virtual_acc_label">Your Virtual Account number is : </string>
     <string name="shipping_cost">Shipping Cost</string>
-    <string name="products">Products</string>
+    <string name="products">Product(s)</string>
     <string name="order_return">Return</string>
     <string name="order_return_to">Return To</string>
     <string name="order_return_from">Return From</string>

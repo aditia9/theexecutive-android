@@ -107,12 +107,21 @@ class WishlistFragment : BaseFragment() {
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
                     R.id.img_bag -> {
-                        if(item?.stock_item?.is_in_stock!!) {
-                            itemPosition = pos
-                            callAddToBagItemFromWishlist(item)
+                        //check if product is simple or configurable
+                        if(item?.type_id == Constants.CONFIGURABLE){
+                            //move to product details
+                            val fragment = ProductDetailFragment.getInstance(null, item.sku, item.name, 0)
+                            FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                         }else{
-                            Toast.makeText(activity, getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
+
+                            if(item?.stock_item?.is_in_stock!!) {
+                                itemPosition = pos
+                                callAddToBagItemFromWishlist(item)
+                            }else{
+                                Toast.makeText(activity, getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
+                            }
                         }
+
                     }
                     R.id.img_delete -> {
                         Utils.showDialog(context, getString(R.string.remove_item_text),
@@ -150,20 +159,13 @@ class WishlistFragment : BaseFragment() {
     }
 
     private fun callAddToBagItemFromWishlist(item: Item?){
-        //check if product is simple or configurable
-        if(item?.type_id == Constants.CONFIGURABLE){
-            //move to product details
-            val fragment = ProductDetailFragment.getInstance(null, item.sku, item.name, 0)
-            FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
-        }else{
-            if (Utils.isConnectionAvailable(activity as Context)) {
-                showLoading()
-                wishlistModelView?.addToBagWishlistItem(item?.id)
-            } else {
-                Utils.showNetworkErrorDialog(activity as Context)
-            }
-
+        if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
+            wishlistModelView?.addToBagWishlistItem(item?.id)
+        } else {
+            Utils.showNetworkErrorDialog(activity as Context)
         }
+
 
     }
 }

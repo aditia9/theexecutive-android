@@ -198,6 +198,7 @@ object Utils {
         val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
         val large = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
         return xlarge || large
+
     }
 
     fun openCmsPage(context: Context, url: String) {
@@ -426,7 +427,7 @@ object Utils {
     }
 
     fun getDateTimeFormat(strDate : String): String {
-        var format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        var format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         format.timeZone = TimeZone.getTimeZone("GMT");
         val newDate = format.parse(strDate)
         format = SimpleDateFormat("dd-MM-yyyy, hh:mm a")

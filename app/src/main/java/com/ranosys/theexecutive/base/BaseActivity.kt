@@ -72,7 +72,8 @@ open class BaseActivity: RunTimePermissionActivity(){
                             Utils.showDialog(this@BaseActivity, getString(R.string.close_app_text),
                                     getString(R.string.yes), getString(R.string.no), object : DialogOkCallback {
                                 override fun setDone(done: Boolean) {
-                                    finish()
+
+                                    finishAndRemoveTask()
                                 }
                             })
                         }
