@@ -234,7 +234,7 @@
     <string name="order_no">Order no. </string>
     <string name="virtual_acc_label">Your Virtual Account number is : </string>
     <string name="shipping_cost">Shipping Cost</string>
-    <string name="products">Products</string>
+    <string name="products">Product(s)</string>
     <string name="order_return">Return</string>
     <string name="order_return_to">Return To</string>
     <string name="order_return_from">Return From</string>
