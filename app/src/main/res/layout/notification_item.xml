@@ -62,7 +62,7 @@
             android:id="@+id/tv_date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/ten_dp"
+            android:layout_marginStart="@dimen/fifteen_dp"
             android:layout_marginTop="@dimen/three_dp"
             android:textSize="@dimen/fourteen_sp"
             android:textColor="@color/hint_color"

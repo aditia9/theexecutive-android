@@ -154,6 +154,13 @@ class DashBoardActivity : BaseActivity() {
                     FragmentUtils.addFragment(this, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                 }
 
+                Constants.NOTIFICATION_TYPE_ABANDONED -> {
+                    val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                    if(!TextUtils.isEmpty(isLogin)){
+                        FragmentUtils.addFragment(this, ShoppingBagFragment(), null, ShoppingBagFragment::class.java.name, true)
+                    }
+                }
+
                 else -> {
                     FragmentUtils.addFragment(this, OrderDetailFragment(), null, NotificationFragment::class.java.name, true)
                 }
