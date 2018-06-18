@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/eight_dp"
-        android:layout_marginStart="@dimen/eight_dp"
+        android:layout_marginStart="@dimen/five_dp"
         android:layout_marginBottom="@dimen/thirty_six_dp"
         android:background="?selectableItemBackground">
 
@@ -28,6 +28,7 @@
             bind:baseUrlWithProductImageUrl="@{productItem.imageUrl}"
             android:layout_marginTop="@dimen/four_dp"
             android:adjustViewBounds="true"
+            android:layout_marginLeft="@dimen/three_dp"
             android:contentDescription="@string/product_image"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -38,10 +39,10 @@
             android:id="@+id/new_tag_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
             android:src="@drawable/new_tag"
             android:visibility="@{TextUtils.isEmpty(productItem.type)? View.GONE : View.VISIBLE}"
-            app:layout_constraintLeft_toLeftOf="@id/image"
-            app:layout_constraintTop_toTopOf="@id/image" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -72,13 +73,14 @@
             android:text="@{productItem.collectionTag}"
             android:paddingTop="@dimen/three_dp"
             android:paddingBottom="@dimen/three_dp"
+            android:layout_marginLeft="@dimen/three_dp"
             android:visibility="@{TextUtils.isEmpty(productItem.collectionTag)? View.GONE : View.VISIBLE}"
             android:ellipsize="end"
             app:layout_constraintVertical_bias="1"
             app:layout_constraintTop_toTopOf="@id/image"
             app:layout_constraintBottom_toBottomOf="@id/image"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintRight_toRightOf="@id/image"
+            app:layout_constraintLeft_toLeftOf="@id/image"/>
 
         <TextView
             android:id="@+id/tv_name"
@@ -91,8 +93,8 @@
             android:ellipsize="end"
             android:textSize="@dimen/fourteen_sp"
             android:layout_marginTop="@dimen/twelve_dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/image"
+            app:layout_constraintRight_toRightOf="@id/image"
             app:layout_constraintTop_toBottomOf="@id/image"/>
 
         <TextView
@@ -105,8 +107,8 @@
             android:textSize="@dimen/twelve_sp"
             android:text="@{productItem.displayPrice}"
             android:visibility="@{TextUtils.isEmpty(productItem.displayPrice)? View.GONE : View.VISIBLE}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/image"
+            app:layout_constraintRight_toRightOf="@id/image"
             app:layout_constraintTop_toBottomOf="@id/tv_name"/>
 
     </android.support.constraint.ConstraintLayout>

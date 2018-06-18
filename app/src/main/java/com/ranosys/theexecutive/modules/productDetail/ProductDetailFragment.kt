@@ -32,7 +32,7 @@ class ProductDetailFragment : BaseFragment() {
     var position : Int? = 0
     var pagerPosition : Int? = 0
     var productSku : String? = ""
-    var productName : String = ""
+    var productName : String? = ""
     private var pagerAdapter : ProductStatePagerAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -70,7 +70,7 @@ class ProductDetailFragment : BaseFragment() {
             pagerAdapter = ProductStatePagerAdapter(childFragmentManager, productDetailViewModel.productList?.get(), position)
             product_viewpager.adapter = pagerAdapter
             product_viewpager.adapter?.notifyDataSetChanged()
-            product_viewpager.offscreenPageLimit = 0
+            product_viewpager.offscreenPageLimit = 2
             product_viewpager.currentItem = position!!
         }
 
@@ -85,7 +85,7 @@ class ProductDetailFragment : BaseFragment() {
 
             override fun onPageSelected(position: Int) {
                 productDetailViewModel.productName = productDetailViewModel.productList?.get()?.get(position)?.name
-                setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+                setToolBarParams(productDetailViewModel.productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
             }
         })
 
@@ -140,7 +140,7 @@ class ProductDetailFragment : BaseFragment() {
                 ProductDetailFragment().apply {
                     this.productList = productList
                     this.productSku = productSku
-                    this.productName = productName!!
+                    this.productName = productName
                     this.position = position
                 }
 

@@ -19,7 +19,7 @@ class ProductDetailViewModel(application: Application): BaseViewModel(applicatio
     var productDetailResponse: MutableLiveData<ApiResponse<ProductListingDataClass.Item>>? = MutableLiveData()
     var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
-    var productName: String? = ""
+    var productName : String? = ""
 
     fun getProductDetail(productSku : String?){
         val apiResponse = ApiResponse<ProductListingDataClass.Item>()

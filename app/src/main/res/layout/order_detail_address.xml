@@ -38,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/fourteen_sp"
+                android:textColor="@color/hint_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/five_dp"
-                android:maxLines="2"
+                android:maxLines="4"
                 android:textSize="@dimen/sixteen_sp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
