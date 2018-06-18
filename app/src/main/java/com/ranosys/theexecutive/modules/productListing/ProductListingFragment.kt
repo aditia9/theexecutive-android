@@ -599,6 +599,5 @@ class ProductListingFragment: BaseFragment() {
             productListAdapter.notifyDataSetChanged()
         }
 
-
     }
 }

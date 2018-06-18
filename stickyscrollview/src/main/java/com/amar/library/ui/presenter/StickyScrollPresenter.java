@@ -16,6 +16,7 @@ public class StickyScrollPresenter {
     private IStickyScrollPresentation mStickyScrollPresentation;
 
     private int mDeviceHeight;
+    private int mDeviceWidth;
 
     private int mStickyFooterHeight;
     private int mStickyFooterInitialTranslation;
@@ -28,6 +29,7 @@ public class StickyScrollPresenter {
 
     public StickyScrollPresenter(IStickyScrollPresentation stickyScrollPresentation, IScreenInfoProvider screenInfoProvider, IResourceProvider typedArrayResourceProvider) {
         mDeviceHeight = screenInfoProvider.getScreenHeight();
+        mDeviceWidth = screenInfoProvider.getScreenWidth();
         mTypedArrayResourceProvider = typedArrayResourceProvider;
         mStickyScrollPresentation = stickyScrollPresentation;
     }
@@ -44,10 +46,16 @@ public class StickyScrollPresenter {
         //mTypedArrayResourceProvider.recycle();
     }
 
-    public void initStickyFooter(int measuredHeight, int initialStickyFooterLocation) {
+    public void initStickyFooter(int measuredHeight, int initialStickyFooterLocation, boolean isLandScape) {
         mStickyFooterHeight = measuredHeight;
         mStickyFooterInitialLocation = initialStickyFooterLocation;
-        mStickyFooterInitialTranslation = mDeviceHeight - initialStickyFooterLocation - mStickyFooterHeight;
+
+        if(isLandScape){
+            mStickyFooterInitialTranslation = mDeviceWidth - initialStickyFooterLocation - mStickyFooterHeight;
+        }else {
+            mStickyFooterInitialTranslation = mDeviceHeight - initialStickyFooterLocation - mStickyFooterHeight;
+        }
+
         if (mStickyFooterInitialLocation > mDeviceHeight - mStickyFooterHeight) {
             mStickyScrollPresentation.stickFooter(mStickyFooterInitialTranslation);
             mIsFooterSticky = true;
@@ -92,9 +100,14 @@ public class StickyScrollPresenter {
         return mIsHeaderSticky;
     }
 
-    public void recomputeFooterLocation(int footerTop, int footerLocation){
+    public void recomputeFooterLocation(int footerTop, int footerLocation, boolean isLandScape){
         if(mScrolled){
-            mStickyFooterInitialTranslation = mDeviceHeight - footerTop - mStickyFooterHeight;
+
+            if(isLandScape){
+                mStickyFooterInitialTranslation = mDeviceWidth - footerTop - mStickyFooterHeight;
+            }else {
+                mStickyFooterInitialTranslation = mDeviceHeight - footerTop - mStickyFooterHeight;
+            }
             mStickyFooterInitialLocation = footerTop;
             if (footerLocation > mDeviceHeight - mStickyFooterHeight) {
                 mStickyScrollPresentation.stickFooter(mStickyFooterInitialTranslation);
@@ -104,7 +117,7 @@ public class StickyScrollPresenter {
                 mIsFooterSticky = false;
             }
         }else{
-            initStickyFooter(mStickyFooterHeight, footerTop);
+            initStickyFooter(mStickyFooterHeight, footerTop, isLandScape);
         }
     }
 }

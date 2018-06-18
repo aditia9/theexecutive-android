@@ -338,7 +338,6 @@ class ProductViewFragment : BaseFragment() {
             hideLoading()
             if (response is List<*>) {
                 val list = response as List<ChildProductsResponse>
-
                 maxQuantityList?.clear()
                 list.forEach { it ->
                     try {
@@ -792,13 +791,10 @@ class ProductViewFragment : BaseFragment() {
                         }
                         sizeValue = item?.value
 
-                        if(priceList?.isNotEmpty() ?: false){
-                            val selectedSizePrice = priceList?.single {
-                                it.colorValue == colorValue && it.sizeValue == sizeValue
-                            }?.price
-                            sizeDilaog.tv_product_price.text = selectedSizePrice
-                        }
-
+                        val selectedSizePrice = priceList?.single {
+                            it.colorValue == colorValue && it.sizeValue == sizeValue
+                        }?.price
+                        sizeDilaog.tv_product_price.text = selectedSizePrice
 
                         if (productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
                             itemQty = productItemViewModel.productItem?.extension_attributes?.stock_item?.qty ?: 0
@@ -876,30 +872,9 @@ class ProductViewFragment : BaseFragment() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-
-        fragmentManager!!.beginTransaction().detach(this@ProductViewFragment).attach(this@ProductViewFragment).commit()
-        touch()
-
-
-
-        //product_scroll_view.visibility=View.VISIBLE
-       // Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, 40)
-       // Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, 40)
-       // Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage, Constants.IMAGE_RATIO, 40)
+       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
+       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
+       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage, Constants.IMAGE_RATIO, 40)
     }
 
-    private fun touch(){
-        var downTime = SystemClock.uptimeMillis()
-        var eventTime = SystemClock.uptimeMillis() + 100
-        var x = 0.0f
-        var y = 0.0f
-        var metaState = 0;
-        var event= MotionEvent.obtain(downTime,
-                eventTime,
-                MotionEvent.ACTION_UP,
-                x,
-                y,
-                metaState)
-        product_scroll_view.dispatchTouchEvent(event)
-    }
 }
