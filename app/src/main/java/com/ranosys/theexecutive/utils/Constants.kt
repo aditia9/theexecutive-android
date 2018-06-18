@@ -122,6 +122,7 @@ object Constants {
     const val FAILURE = "failure"
     const val CANCEL = "cancelled"
     val IMAGE_RATIO: Double = 1.44
+    val WIDTH_MARGIN : Int = 40
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
     const val CART_DE_ACTIVE = "cart de-active"

@@ -338,7 +338,7 @@ class ProductViewFragment : BaseFragment() {
             hideLoading()
             if (response is List<*>) {
                 val list = response as List<ChildProductsResponse>
-
+                maxQuantityList?.clear()
                 list.forEach { it ->
                     try {
                         val colorValue = it.custom_attributes.single { s ->
@@ -631,6 +631,7 @@ class ProductViewFragment : BaseFragment() {
     }
 
     private fun setSizeViewList(){
+        sizeViewList?.clear()
         sizeOptionList?.forEachIndexed { index, it ->
             if(index == 0)
                 sizeViewList?.add(SizeView(it.label, sizeAttrId, it.value,false))
@@ -871,38 +872,9 @@ class ProductViewFragment : BaseFragment() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        showLoading()
-        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
-        {
-            fragmentManager!!.beginTransaction().detach(this@ProductViewFragment).attach(this@ProductViewFragment).commit()
-            hideLoading()
-            touch()
-        }else{
-            fragmentManager!!.beginTransaction().detach(this@ProductViewFragment).attach(this@ProductViewFragment).commit()
-            hideLoading()
-            touch()
-        }
-
-
-
-        //product_scroll_view.visibility=View.VISIBLE
-       // Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, 40)
-       // Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, 40)
-       // Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage, Constants.IMAGE_RATIO, 40)
+       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
+       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
+       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage, Constants.IMAGE_RATIO, 40)
     }
 
-    private fun touch(){
-        var downTime = SystemClock.uptimeMillis()
-        var eventTime = SystemClock.uptimeMillis() + 100
-        var x = 0.0f
-        var y = 0.0f
-        var metaState = 0;
-        var event=MotionEvent.obtain(downTime,
-                eventTime,
-                MotionEvent.ACTION_UP,
-                x,
-                y,
-                metaState)
-        product_scroll_view.dispatchTouchEvent(event)
-    }
 }
