@@ -12,12 +12,14 @@ import android.databinding.DataBindingUtil
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.os.SystemClock
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.SpannableStringBuilder
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.facebook.FacebookSdk
