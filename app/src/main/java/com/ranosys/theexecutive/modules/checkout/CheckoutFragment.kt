@@ -137,7 +137,6 @@ class CheckoutFragment : BaseFragment() {
                     val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position) ?: null
                     checkoutViewModel.selectedShippingMethod = shippingMethod
                     getPaymentMethod(shippingMethod!!)
-
                 }
 
             }

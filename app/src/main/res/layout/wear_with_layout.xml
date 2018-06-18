@@ -14,17 +14,15 @@
 
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/one_sixty_dp"
         android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="@dimen/ten_dp"
         >
 
         <ImageView
             android:id="@+id/product_image"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/two_fifty_dp"
-            android:scaleType="centerCrop"
+            android:layout_width="@dimen/one_sixty_dp"
+            android:layout_height="@dimen/two_thirty_dp"
             bind:baseUrlWithProductImageUrl="@{productLinks.extension_attributes.linked_product_image}"
             android:contentDescription="@string/product_image"
             app:layout_constraintRight_toRightOf="parent"
@@ -38,14 +36,13 @@
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:maxLines="1"
+            android:maxLines="2"
             android:textAllCaps="true"
-            android:textSize="@dimen/fourteen_sp"
+            android:textSize="@dimen/twelve_sp"
             android:text="@{productLinks.extension_attributes.linked_product_name}"
-            android:ellipsize="end"
             android:layout_marginTop="@dimen/twelve_dp"
-            app:layout_constraintLeft_toLeftOf="@id/product_image"
-            app:layout_constraintRight_toRightOf="@id/product_image"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/product_image"/>
 
         <TextView
@@ -62,6 +59,7 @@
             app:layout_constraintRight_toRightOf="@id/product_image"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             android:layout_marginBottom="@dimen/ten_dp"
+            android:paddingBottom="@dimen/twenty_dp"
             />
 
     </android.support.constraint.ConstraintLayout>
