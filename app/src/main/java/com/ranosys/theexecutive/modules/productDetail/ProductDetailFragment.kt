@@ -39,6 +39,7 @@ class ProductDetailFragment : BaseFragment() {
         val mViewDataBinding : FragmentProductDetailBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container, false)
         productDetailViewModel = ViewModelProviders.of(this).get(ProductDetailViewModel::class.java)
         productDetailViewModel.productList?.set(productList)
+        productDetailViewModel.productName = productName
         mViewDataBinding?.productDetailVM = productDetailViewModel
         mViewDataBinding?.executePendingBindings()
 
@@ -59,7 +60,7 @@ class ProductDetailFragment : BaseFragment() {
         if(null == productDetailViewModel.productList?.get()){
             if (Utils.isConnectionAvailable(activity as Context)) {
                 showLoading()
-                setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+                setToolBarParams(productDetailViewModel.productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
                 getProductDetail(productSku)
             } else {
                 Utils.showNetworkErrorDialog(activity as Context)
@@ -83,7 +84,8 @@ class ProductDetailFragment : BaseFragment() {
             }
 
             override fun onPageSelected(position: Int) {
-                setToolBarParams(productDetailViewModel.productList?.get()?.get(position)?.name, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+                productDetailViewModel.productName = productDetailViewModel.productList?.get()?.get(position)?.name
+                setToolBarParams(productDetailViewModel.productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
             }
         })
 
@@ -91,7 +93,7 @@ class ProductDetailFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
+        setToolBarParams(productDetailViewModel.productName, 0,"", R.drawable.cancel, true, R.drawable.bag, true )
     }
 
     private fun getStaticPagesUrl(){
