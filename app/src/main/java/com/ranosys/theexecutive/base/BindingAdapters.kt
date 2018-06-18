@@ -108,7 +108,6 @@ class BindingAdapters {
                         .placeholder(R.drawable.placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
-                        .centerCrop()
                         .into(imageView)
 
             }

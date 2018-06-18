@@ -86,7 +86,7 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
     @Override
     public void initFooterView(int id) {
         stickyFooterView = findViewById(id);
-        mStickyScrollPresenter.initStickyFooter(stickyFooterView.getMeasuredHeight(), getRelativeTop(stickyFooterView), isLandScape);
+        mStickyScrollPresenter.initStickyFooter(stickyFooterView.getMeasuredHeight(), getRelativeTop(stickyFooterView));
     }
 
     @Override

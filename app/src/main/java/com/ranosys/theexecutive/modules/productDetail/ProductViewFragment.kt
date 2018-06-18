@@ -874,7 +874,7 @@ class ProductViewFragment : BaseFragment() {
         super.onConfigurationChanged(newConfig)
        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
-       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding?.imgProductImage, Constants.IMAGE_RATIO, 40)
+       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding!!.root.img_product_image, Constants.IMAGE_RATIO, 40)
     }
 
 }
