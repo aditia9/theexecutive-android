@@ -113,7 +113,6 @@
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@id/tv_status"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 />
         </android.support.constraint.ConstraintLayout>
 

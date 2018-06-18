@@ -70,6 +70,8 @@ class OrderListAdapter(var context: Context, private var orderList: List<OrderLi
                 itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.amount, item.amount).toString()
                 if(!item.is_refundable){
                     itemBinding?.btnReturn?.visibility = View.GONE
+                }else{
+                    itemBinding?.btnReturn?.visibility = View.VISIBLE
                 }
             }
 
