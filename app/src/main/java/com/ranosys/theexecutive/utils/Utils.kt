@@ -52,6 +52,25 @@ import java.util.regex.Pattern
  */
 object Utils {
 
+    fun setLocale(context: Context, lang: String): Context{
+
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        var ctx = context
+        val res = context.resources
+        var config = Configuration(context.resources.configuration)
+
+        if (Build.VERSION.SDK_INT >= 17) {
+            config.setLocale(locale)
+            ctx = context.createConfigurationContext(config);
+        } else {
+            config.locale = locale;
+            res.updateConfiguration(config, res.displayMetrics)
+        }
+
+        return ctx
+    }
+
     fun printLog(TAG:String, message: String){
         if(BuildConfig.DEBUG){
             Log.e(TAG, message)
