@@ -207,7 +207,7 @@ class ProductViewFragment : BaseFragment() {
     }
 
     private fun setProductImages(mediaGalleryList : List<ProductListingDataClass.MediaGalleryEntry>?){
-
+        ll_color_choice.removeAllViews()
         if(mediaGalleryList?.size!! > 0)
             productItemViewModel.urlOne.set(mediaGalleryList[0].file)
         if(mediaGalleryList.size > 1) {
@@ -876,7 +876,7 @@ class ProductViewFragment : BaseFragment() {
         super.onConfigurationChanged(newConfig)
        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
-       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, productImagesBinding!!.root.img_product_image, Constants.IMAGE_RATIO, 40)
+        setProductImages(productItemViewModel.productItem?.media_gallery_entries)
     }
 
 }
