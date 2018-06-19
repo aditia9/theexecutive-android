@@ -78,7 +78,8 @@ class NotificationFragment : BaseFragment() {
             override fun onItemClick(item: NotificationListResponse?) {
                 if(item?.is_read?.not()!!) {
                     val request = NotificationChangeStatusRequest(item.id.toString(),
-                            SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+                            SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY),
+                            SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY))
                     changeNotificationStatus(request)
                 }
                 redirectToFragment(item)

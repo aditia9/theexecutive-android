@@ -35,6 +35,7 @@ class SplashActivity : BaseActivity() {
 
     private val handler = Handler()
     private var canNavigateToHome: Boolean = false
+    private var fromNotifcation: String? = null
     private var redirectType: String? = null
     private var notificationIntent: Intent? = null
 
@@ -76,6 +77,7 @@ class SplashActivity : BaseActivity() {
         notificationIntent = intent
         val extras = notificationIntent?.extras
         notificationIntent?.extras?.run {
+            fromNotifcation = extras?.getString(Constants.FROM_NOTIFICATION)
             redirectType = extras?.getString(Constants.KEY_REDIRECTION_TYPE)
         }
     }

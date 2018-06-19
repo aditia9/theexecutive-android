@@ -29,7 +29,7 @@
             android:layout_marginTop="@dimen/five_dp"
             android:src="@{notification.is_read ? @drawable/notification_read : @drawable/notification_unread}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tv_title"
@@ -39,6 +39,7 @@
             android:layout_marginStart="@dimen/fifteen_dp"
             android:text="@{notification.title}"
             android:textColor="@{notification.is_read ? @color/notification_gry :@color/black}"
+            android:visibility="@{TextUtils.isEmpty(notification.title)? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintHorizontal_bias="0"
