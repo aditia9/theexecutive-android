@@ -783,7 +783,7 @@ object AppRepository {
         callPost?.enqueue(object : Callback<List<ShoppingBagResponse>> {
             override fun onResponse(call: Call<List<ShoppingBagResponse>>?, response: Response<List<ShoppingBagResponse>>?) {
                 if (!response!!.isSuccessful) {
-                    if (response.code() == Constants.ERROR_CODE_400) {
+                    if (response.code() == Constants.ERROR_CODE_400 || response.code() == Constants.ERROR_CODE_404) {
                         val errorBody = Constants.CART_DE_ACTIVE
                         callBack.onError(errorBody)
                     }else{
@@ -1633,7 +1633,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
 
-        var request = NotificationChangeStatusRequest("",  SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+        var request = NotificationChangeStatusRequest("",  SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY), SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY))
         val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.logoutNotification(ApiConstants.BEARER + userToken,  storeCode, request)
 
         callGet?.enqueue(object : Callback<Boolean> {
