@@ -37,7 +37,7 @@ class SavedPreferences private constructor() {
     fun removeValue(key: String) {
         val editor = getEditor()
         editor?.clear()
-        editor?.remove(key)
+        editor?.commit()
     }
 
     fun storeUserEmail(app_name: String) {
