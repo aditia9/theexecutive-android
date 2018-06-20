@@ -8,6 +8,7 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="header_text_color">#8c8888</color>
+    <color name="email_color">#FF807E7E</color>
     <color name="theme_radio_btn_color">#232021</color>
     <color name="theme_accent_color">#999999</color>
 

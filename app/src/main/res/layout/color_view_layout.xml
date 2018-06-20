@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/img_color"
-            android:layout_width="@dimen/fifty_five_dp"
-            android:layout_height="@dimen/seventy_dp"
+            android:layout_width="@dimen/fifty_dp"
+            android:layout_height="@dimen/seventy_two_dp"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/available_colors"
             android:padding="@dimen/half_dip"

@@ -25,9 +25,11 @@ public class StickyScrollPresenter {
     private boolean mIsFooterSticky;
     private boolean mIsHeaderSticky;
     public boolean mScrolled;
+    private IScreenInfoProvider mScreenInfoProvider;
 
     public StickyScrollPresenter(IStickyScrollPresentation stickyScrollPresentation, IScreenInfoProvider screenInfoProvider, IResourceProvider typedArrayResourceProvider) {
         mDeviceHeight = screenInfoProvider.getScreenHeight();
+        mScreenInfoProvider = screenInfoProvider;
         mTypedArrayResourceProvider = typedArrayResourceProvider;
         mStickyScrollPresentation = stickyScrollPresentation;
     }
@@ -93,6 +95,8 @@ public class StickyScrollPresenter {
     }
 
     public void recomputeFooterLocation(int footerTop, int footerLocation){
+        mDeviceHeight = mScreenInfoProvider.getScreenHeight();
+
         if(mScrolled){
             mStickyFooterInitialTranslation = mDeviceHeight - footerTop - mStickyFooterHeight;
             mStickyFooterInitialLocation = footerTop;
