@@ -166,7 +166,6 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.webview.settings.defaultZoom = WebSettings.ZoomDensity.FAR
         webPagesDialog.webview.settings.builtInZoomControls = true
         webPagesDialog.webview.settings.displayZoomControls = false
-        showLoading()
         webPagesDialog.webview.webViewClient = object : WebViewClient() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 hideLoading()
@@ -205,8 +204,8 @@ abstract class BaseFragment : LifecycleFragment() {
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
-                hideLoading()
                 super.onPageFinished(view, url)
+                hideLoading()
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
@@ -227,6 +226,7 @@ abstract class BaseFragment : LifecycleFragment() {
 
         webPagesDialog.webview.loadUrl(url)
         webPagesDialog.show()
+        showLoading()
         webPagesDialog.img_back.setOnClickListener {
 
             checkIfPaymentIsCancelled(webPagesDialog, orderId)
