@@ -148,7 +148,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
 
 
             if(item?.items?.get(position)?.original_price != 0){
-                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item?.items?.get(position)?.original_price.toString(), item?.items?.get(position)?.original_price.toString())
+                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item?.items?.get(position)?.price.toString(), item?.items?.get(position)?.price.toString())
             }
 
             itemBinding?.spReason?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
