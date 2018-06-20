@@ -23,6 +23,7 @@
     <dimen name="half_dip">0.5dip</dimen>
     <dimen name="thin_divider">0.1dip</dimen>
     <dimen name="two_fifty_dp">250dp</dimen>
+    <dimen name="two_thirty_dp">230dp</dimen>
     <dimen name="six_dp">6dp</dimen>
     <dimen name="three_dp">3dp</dimen>
     <dimen name="sixty_dp">60dp</dimen>

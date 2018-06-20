@@ -1,6 +1,7 @@
 package com.amar.library.ui;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -30,6 +31,7 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
 
     private StickyScrollPresenter mStickyScrollPresenter;
     int[] updatedFooterLocation = new int[2];
+    boolean isLandScape = false;
 
     public StickyScrollView(Context context) {
         this(context, null);
@@ -58,7 +60,12 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
         super.onLayout(changed, l, t, r, b);
         if(stickyFooterView != null && !changed) {
             stickyFooterView.getLocationInWindow(updatedFooterLocation);
-            mStickyScrollPresenter.recomputeFooterLocation(getRelativeTop(stickyFooterView), updatedFooterLocation[1]);
+            mStickyScrollPresenter.recomputeFooterLocation(getRelativeTop(stickyFooterView), updatedFooterLocation[1], isLandScape);
+        }else {
+            if(null != stickyFooterView){
+                stickyFooterView.getLocationInWindow(updatedFooterLocation);
+                mStickyScrollPresenter.recomputeFooterLocation(getRelativeTop(stickyFooterView), updatedFooterLocation[1], isLandScape);
+            }
         }
     }
 
@@ -165,4 +172,13 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
         super.onRestoreInstanceState(state);
     }
 
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            isLandScape  = true;
+        }else{
+            isLandScape = false;
+        }
+    }
 }

@@ -30,6 +30,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     var isEmailNotAvailable: MutableLiveData<LoginDataClass.SocialLoginData>? = MutableLiveData()
     var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var loginRequiredPrompt: Boolean = false
 
 
     var clickedBtnId: MutableLiveData<Int>? = null
@@ -127,6 +128,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 SavedPreferences.getInstance()?.saveStringValue(t?.email, Constants.USER_EMAIL)
                 SavedPreferences.getInstance()?.saveStringValue(t?.firstname, Constants.FIRST_NAME)
                 SavedPreferences.getInstance()?.saveStringValue(t?.lastname, Constants.LAST_NAME)
+                Utils.setUpZendeskChat()
             }
         })
     }

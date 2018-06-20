@@ -91,7 +91,12 @@ class CheckoutFragment : BaseFragment() {
                 }
             }
 
-            scroll_view.smoothScrollBy(0,cv_shipping_method.height)
+            cv_shipping_method.viewTreeObserver.addOnGlobalLayoutListener(object: OnGlobalLayoutListener{
+                override fun onGlobalLayout() {
+                    cv_shipping_method.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    scroll_view.smoothScrollBy(0,scroll_view.height)
+                }
+            })
         }
 
         tv_payment_method.setOnClickListener {
@@ -111,7 +116,12 @@ class CheckoutFragment : BaseFragment() {
                 }
             }
 
-            scroll_view.smoothScrollBy(0,cv_payment_method.height)
+            tv_payment_method.viewTreeObserver.addOnGlobalLayoutListener(object: OnGlobalLayoutListener{
+                override fun onGlobalLayout() {
+                    cv_shipping_method.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    scroll_view.smoothScrollBy(0,scroll_view.height)
+                }
+            })
 
         }
 
@@ -137,7 +147,6 @@ class CheckoutFragment : BaseFragment() {
                     val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position) ?: null
                     checkoutViewModel.selectedShippingMethod = shippingMethod
                     getPaymentMethod(shippingMethod!!)
-
                 }
 
             }

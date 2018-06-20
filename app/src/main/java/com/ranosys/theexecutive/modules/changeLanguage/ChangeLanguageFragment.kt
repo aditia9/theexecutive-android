@@ -1,6 +1,7 @@
 package com.ranosys.theexecutive.modules.changeLanguage
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
@@ -8,14 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseFragment
-import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
+import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.change_language_fragment.*
 
 /**
@@ -56,6 +57,7 @@ class ChangeLanguageFragment: BaseFragment() {
             override fun onItemClick(item: StoreResponse) {
                 storeListAdapter.selectedStoreCode = item.code
                 selectedStore = item
+
                 storeListAdapter.notifyDataSetChanged()
             }
 
@@ -64,10 +66,16 @@ class ChangeLanguageFragment: BaseFragment() {
 
         btn_continue.setOnClickListener {
             //store selected language code
+            //change language
+            Utils.setLocale(activity?.applicationContext!!, selectedStore.code)
             SavedPreferences.getInstance()?.saveStringValue(storeListAdapter.selectedStoreCode, Constants.SELECTED_STORE_CODE_KEY)
             SavedPreferences.getInstance()?.saveIntValue(selectedStore.website_id, Constants.SELECTED_WEBSITE_ID_KEY)
             SavedPreferences.getInstance()?.saveIntValue(selectedStore.id, Constants.SELECTED_STORE_ID_KEY)
-            FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, true)
+            //FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, true)
+
+            val refresh = Intent(activity, DashBoardActivity::class.java)
+            activity?.startActivity(refresh)
+            activity?.finish()
 
         }
     }

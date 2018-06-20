@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.text.TextUtils
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
@@ -67,6 +68,7 @@ class LoginFragment: BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        loginViewModel.loginRequiredPrompt = loginRequiredPrompt
         mBinding.loginVM = loginViewModel
 
         observeEvent()
@@ -221,9 +223,21 @@ class LoginFragment: BaseFragment() {
     private fun observeApiSuccess() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
-            //api to get cart id
             loginViewModel.getCartIdForUser(token)
-            FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+
+            //send locan broadcast on successfull login
+            // Create intent with action
+            val loginIntent = Intent("LOGIN")
+            LocalBroadcastManager.getInstance(activity as Context).sendBroadcast(loginIntent)
+
+
+            if(loginViewModel.loginRequiredPrompt){
+                loginViewModel.loginRequiredPrompt = false
+                activity?.onBackPressed()
+            }else{
+
+                FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+            }
         })
 
     }

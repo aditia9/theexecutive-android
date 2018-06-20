@@ -23,19 +23,22 @@ public class ScreenInfoProvider implements IScreenInfoProvider{
 
     @Override
     public int getScreenHeight() {
-        return getDeviceDimension().y;
+        return getDeviceHeightDimension();
     }
 
     @Override
     public int getScreenWidth() {
-        return getDeviceDimension().x;
+        return getDeviceWidthDimension();
     }
 
-    Point getDeviceDimension() {
-        Point lPoint = new Point();
+    int getDeviceWidthDimension() {
         DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        lPoint.x = metrics.widthPixels;
-        lPoint.y = metrics.heightPixels;
-        return lPoint;
+        return metrics.widthPixels;
+    }
+
+
+    int getDeviceHeightDimension() {
+        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+        return metrics.heightPixels;
     }
 }

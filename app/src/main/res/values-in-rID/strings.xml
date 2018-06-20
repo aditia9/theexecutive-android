@@ -59,7 +59,7 @@
     <string name="forgot_password_title">Forgot Password</string>
 
     <!--Home Screen-->
-    <string name="home">Home</string>
+    <string name="home">Rumah</string>
     <string name="my_account">My Account</string>
     <string name="wishlist">Wishlist</string>
     <string name="search">Search</string>
@@ -168,7 +168,7 @@
     <string name="loading_data">Loading…</string>
     <string name="add_to_cart_success_msg">Product added to bag</string>
     <string name="available_colors">Color</string>
-    <string name="wishlist_success_msg">added to wishlist</string>
+    <string name="wishlist_success_msg">Product added to wishlist</string>
     <string name="out_of_stock">Out of stock</string>
     <string name="common_error">Something went wrong, Please try again</string>
     <string name="select_size_err">Please select size</string>
@@ -212,8 +212,7 @@
     <string name="enter_your_promo_code">Enter your Promo Code</string>
     <string name="btn_apply">APPLY</string>
     <string name="shopping_bag">Shopping Bag</string>
-    <string name="login_required_for_wishlist">Please login before adding items to your wishlist</string>
-    <string name="login_required_for_checkout">Please login before checkout</string>
+    <string name="login_required_for_wishlist">Please login before adding items to your wish list</string>
     <string name="address_remove_success_msg">Address removed successfully</string>
     <string name="checkout">checkout</string>
     <string name="dafault_address_delete_warning">Default address cannot be removed</string>
