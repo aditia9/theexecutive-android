@@ -168,7 +168,7 @@
     <string name="loading_data">Loading…</string>
     <string name="add_to_cart_success_msg">Product added to bag</string>
     <string name="available_colors">Color</string>
-    <string name="wishlist_success_msg">Product added to wishlist</string>
+    <string name="wishlist_success_msg">added to wishlist</string>
     <string name="out_of_stock">Out of stock</string>
     <string name="common_error">Something went wrong, Please try again</string>
     <string name="select_size_err">Please select size</string>
