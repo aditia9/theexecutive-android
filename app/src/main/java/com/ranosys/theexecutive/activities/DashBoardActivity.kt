@@ -130,10 +130,12 @@ class DashBoardActivity : BaseActivity() {
         val redirectValue = extras.getString(Constants.KEY_REDIRECTION_VALUE)
         val redirectTitle = extras.getString(Constants.KEY_REDIRECTION_TITLE)
         val notificationId = extras.getString(Constants.KEY_NOTIFICATION_ID)
+        //TODO("FOR RESOLVE NOTIFICATION ISSUE")
+        val fromNotification = extras.getString(Constants.FROM_NOTIFICATION)
 
         if (!TextUtils.isEmpty(redirectType)) {
             val request = NotificationChangeStatusRequest(notificationId,
-                    SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+                    SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY), SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY))
             changeNotificationStatus(request)
 
             when (redirectType) {

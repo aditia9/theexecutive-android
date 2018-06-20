@@ -121,7 +121,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             }
 
             if(item?.items!![position - 1].original_price != 0){
-                itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item.items[position - 1].original_price.toString(), item.items[position - 1].original_price.toString())
+                itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item.items[position - 1].price.toString(), item.items[position - 1].price.toString())
             }
         }
     }

@@ -421,7 +421,7 @@ class ProductViewFragment : BaseFragment() {
             if(apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is String) {
-                    Toast.makeText(activity as Context, getString(R.string.wishlist_success_msg), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity as Context, "${productItemViewModel.productItem?.name} ${getString(R.string.wishlist_success_msg)}", Toast.LENGTH_SHORT).show()
                 }
             }else{
                 Toast.makeText(activity as Context, apiResponse?.error, Toast.LENGTH_SHORT).show()

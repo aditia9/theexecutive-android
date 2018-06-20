@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import android.text.TextUtils
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.ranosys.theexecutive.R
@@ -76,14 +77,15 @@ class FCMListenerService : FirebaseMessagingService() {
         }
 
         intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
+        if(!TextUtils.isEmpty(redirectTitle))
         intent.putExtra(Constants.KEY_REDIRECTION_TITLE, redirectTitle)
         intent.putExtra(Constants.KEY_REDIRECTION_VALUE, redirectValue)
+        intent.putExtra(Constants.FROM_NOTIFICATION, Constants.IS_NOTIFICATION_SHOW)
         intent.putExtra(Constants.KEY_NOTIFICATION_ID, notificationId)
         intent.putExtra(Constants.KEY_NOTIFICATION_TITLE, title)
         intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, body)
         intent.putExtra(Constants.KEY_IMAGE, notificationImg)
 
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         val pendingIntent = PendingIntent.getActivity(this, Calendar.getInstance().timeInMillis.toInt(), intent,
                 PendingIntent.FLAG_ONE_SHOT)
 
@@ -101,7 +103,6 @@ class FCMListenerService : FirebaseMessagingService() {
             notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(getNotificationIcon())
                     .setVibrate(vibrationArray)
-                    .setContentTitle(title)
                     .setContentText(body)
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
@@ -110,6 +111,9 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setChannelId(Constants.NOTIFICATION_CHANNEL_ID)
                     .setPriority(NotificationManager.IMPORTANCE_HIGH)
 
+            if(!TextUtils.isEmpty(redirectTitle)){
+                notification.setContentTitle(title)
+            }
             if(notificationImg.isBlank().not()){
              notification.setStyle(NotificationCompat.BigPictureStyle()
                      .bigPicture(getBitmapFromURL(notificationImg))
@@ -120,13 +124,16 @@ class FCMListenerService : FirebaseMessagingService() {
         } else {
             notification = NotificationCompat.Builder(this)
                     .setSmallIcon(getNotificationIcon())
-                    .setContentTitle(title)
                     .setContentText(body)
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setContentIntent(pendingIntent)
                     .setPriority(NotificationManager.IMPORTANCE_HIGH)
+
+            if(!TextUtils.isEmpty(redirectTitle)){
+                notification.setContentTitle(title)
+            }
 
             if(notificationImg.isBlank().not()){
                 notification.setStyle(NotificationCompat.BigPictureStyle()
@@ -156,7 +163,7 @@ class FCMListenerService : FirebaseMessagingService() {
         Constants.notificationCounter--
     }
 
-    fun getBitmapFromURL(strURL: String): Bitmap? {
+    private fun getBitmapFromURL(strURL: String): Bitmap? {
         try {
             val url = URL(strURL)
             val connection = url.openConnection() as HttpURLConnection
