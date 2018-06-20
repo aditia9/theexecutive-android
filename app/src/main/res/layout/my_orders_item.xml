@@ -19,7 +19,7 @@
         android:layout_margin="@dimen/ten_dp"
         card_view:cardBackgroundColor="@color/address_item_bg_color"
         card_view:cardCornerRadius="@dimen/card_corner_radius"
-        card_view:cardElevation="@dimen/four_dp">
+        card_view:cardElevation="@dimen/two_dp">
 
 
         <android.support.constraint.ConstraintLayout

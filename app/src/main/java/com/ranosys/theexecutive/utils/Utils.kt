@@ -52,6 +52,25 @@ import java.util.regex.Pattern
  */
 object Utils {
 
+    fun setLocale(context: Context, lang: String): Context{
+
+        val locale = Locale(lang)
+        Locale.setDefault(locale)
+        var ctx = context
+        val res = context.resources
+        var config = Configuration(context.resources.configuration)
+
+        if (Build.VERSION.SDK_INT >= 17) {
+            config.setLocale(locale)
+            ctx = context.createConfigurationContext(config);
+        } else {
+            config.locale = locale;
+            res.updateConfiguration(config, res.displayMetrics)
+        }
+
+        return ctx
+    }
+
     fun printLog(TAG:String, message: String){
         if(BuildConfig.DEBUG){
             Log.e(TAG, message)
@@ -187,6 +206,9 @@ object Utils {
         LoginManager.getInstance().logOut()
         mGoogleSignInClient.signOut()
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_EMAIL)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.FIRST_NAME)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.LAST_NAME)
         updateCartCount(0)
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         GlobalSingelton.instance?.userInfo = null

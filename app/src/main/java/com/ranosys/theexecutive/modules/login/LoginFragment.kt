@@ -51,14 +51,15 @@ class LoginFragment: BaseFragment() {
     private lateinit var mBinding: FragmentLoginBinding
     lateinit var callBackManager: CallbackManager
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private var loginRequiredPrompt: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
         val data = arguments
         data?.let {
-            loginRequiredPrompt = data.get(Constants.LOGIN_REQUIRED_PROMPT) as Boolean
+            loginViewModel.loginRequiredPrompt = data.get(Constants.LOGIN_REQUIRED_PROMPT) as Boolean
         }
 
     }
@@ -66,7 +67,6 @@ class LoginFragment: BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-        loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         mBinding.loginVM = loginViewModel
 
         observeEvent()

@@ -270,7 +270,7 @@ class ShoppingBagFragment : BaseFragment() {
                         if (userToken.isNullOrBlank().not()) {
                             FragmentUtils.addFragment(context, CheckoutFragment(),null, CheckoutFragment::class.java.name, true )
                         } else {
-                            FragmentUtils.addFragment(context, LoginFragment(), null, LoginFragment::class.java.name, true)
+                            redirectToLogin()
                         }
                     }
 
@@ -283,6 +283,12 @@ class ShoppingBagFragment : BaseFragment() {
             cartQty = 0
             setCartTitle()
         }
+    }
+
+    private fun redirectToLogin() {
+        val bundle = Bundle()
+        bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
+        FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
     }
 
     private fun updateCartItem(shoppingBagQtyUpdateRequest: ShoppingBagQtyUpdateRequest) {
@@ -319,7 +325,7 @@ class ShoppingBagFragment : BaseFragment() {
             showLoading()
             shoppingBagViewModel.moveItemFromCart(item_id)
         } else {
-            FragmentUtils.addFragment(context, LoginFragment(), null, LoginFragment::class.java.name, true)
+            LoginFragment()
         }
     }
 

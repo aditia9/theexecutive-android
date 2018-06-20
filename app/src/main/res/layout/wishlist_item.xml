@@ -73,7 +73,7 @@
             android:id="@+id/tv_product_sku"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:text="@{item.sku}"
+            android:text='@{@string/sku+ " " +item.sku}'
             android:textColor="@color/hint_color"
             android:textSize="@dimen/twelve_sp"
             android:layout_marginTop="@dimen/six_dp"

@@ -84,7 +84,7 @@ class SavedPreferences private constructor() {
         val user_pref = "APP_DATA"
         var savedPreferences: SavedPreferences? = null
 
-        private fun init(context: Context) {
+         fun init(context: Context) {
             savedPreferences = SavedPreferences()
             savedPreferences?.sharedPreferences = context.getSharedPreferences(user_pref, Context.MODE_PRIVATE)
         }
