@@ -244,16 +244,21 @@ class CategoryFragment : BaseFragment() {
         })
     }
 
+
+
     private fun startScrollViewPager(viewPager : ViewPager, count : Int){
-        var currentPage = 0
         val runnable = object : Runnable {
             override fun run() {
-                currentPage = currentPage % count
-                viewPager.setCurrentItem(currentPage++, false)
-                handler.postDelayed(this, 3000)
+                if (viewPager.currentItem < count - 1) {
+                    viewPager.currentItem = viewPager.currentItem + 1
+                } else {
+                    viewPager.setCurrentItem(0,false)
+                }
+                handler.postDelayed(this, Constants.SPLASH_TIMEOUT)
             }
         }
-        handler.postDelayed(runnable, 3000)
+        handler.postDelayed(runnable, Constants.SPLASH_TIMEOUT)
+
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
