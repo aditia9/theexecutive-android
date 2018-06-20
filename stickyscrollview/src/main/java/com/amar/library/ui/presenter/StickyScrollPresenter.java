@@ -51,11 +51,7 @@ public class StickyScrollPresenter {
     public void initStickyFooter(int measuredHeight, int initialStickyFooterLocation) {
         mStickyFooterHeight = measuredHeight;
         mStickyFooterInitialLocation = initialStickyFooterLocation;
-
-
         mStickyFooterInitialTranslation = mDeviceHeight - initialStickyFooterLocation - mStickyFooterHeight;
-
-
         if (mStickyFooterInitialLocation > mDeviceHeight - mStickyFooterHeight) {
             mStickyScrollPresentation.stickFooter(mStickyFooterInitialTranslation);
             mIsFooterSticky = true;

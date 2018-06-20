@@ -126,7 +126,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sixteen_sp"
-                        android:textColor="@color/hint_color"
+                        android:textColor="@color/email_color"
                         android:text="@{toolbarViewModel.subTitle}"
                         android:visibility="@{TextUtils.isEmpty(toolbarViewModel.subTitle) ? View.GONE : View.VISIBLE,  default = gone}"
                         app:layout_constraintRight_toRightOf="parent"

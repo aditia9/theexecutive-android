@@ -4,10 +4,12 @@ import AppLog
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.TextUtils
@@ -93,6 +95,12 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
             if(!TextUtils.isEmpty(token)){
                 hideLoading()
                 Toast.makeText(activity, getString(R.string.register_successfull), Toast.LENGTH_SHORT).show()
+
+
+                //send locan broadcast on successfull login
+                // Create intent with action
+                val loginIntent = Intent("LOGIN")
+                LocalBroadcastManager.getInstance(activity as Context).sendBroadcast(loginIntent)
 
                 //api to get cart id
                 registerViewModel.getCartIdForUser(token)

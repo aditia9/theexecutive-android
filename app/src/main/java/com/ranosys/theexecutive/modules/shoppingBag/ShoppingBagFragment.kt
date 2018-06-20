@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.shopping_bag_footer.*
 class ShoppingBagFragment : BaseFragment() {
 
     private lateinit var shoppingBagViewModel: ShoppingBagViewModel
-    private val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+    private var userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
     private var itemPosition: Int = 0
     private var cartQty = 0
     private var updateQty = 0
@@ -267,6 +267,7 @@ class ShoppingBagFragment : BaseFragment() {
                     }
 
                     R.id.btn_checkout -> {
+                        var userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                         if (userToken.isNullOrBlank().not()) {
                             FragmentUtils.addFragment(context, CheckoutFragment(),null, CheckoutFragment::class.java.name, true )
                         } else {
