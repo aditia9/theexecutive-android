@@ -60,7 +60,7 @@ object Utils {
         val res = context.resources
         var config = Configuration(context.resources.configuration)
 
-        if (Build.VERSION.SDK_INT >= 17) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             config.setLocale(locale)
             ctx = context.createConfigurationContext(config);
         } else {
@@ -205,10 +205,13 @@ object Utils {
         //fb and g mail logout
         LoginManager.getInstance().logOut()
         mGoogleSignInClient.signOut()
-        SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
-        SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_EMAIL)
-        SavedPreferences.getInstance()?.saveStringValue("", Constants.FIRST_NAME)
-        SavedPreferences.getInstance()?.saveStringValue("", Constants.LAST_NAME)
+        SavedPreferences.getInstance()?.removeValue(Constants.USER_ACCESS_TOKEN_KEY)
+//        SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_EMAIL)
+//        SavedPreferences.getInstance()?.saveStringValue("", Constants.FIRST_NAME)
+//        SavedPreferences.getInstance()?.saveStringValue("", Constants.LAST_NAME)
+        SavedPreferences.getInstance()?.removeValue(Constants.USER_EMAIL)
+        SavedPreferences.getInstance()?.removeValue(Constants.FIRST_NAME)
+        SavedPreferences.getInstance()?.removeValue(Constants.LAST_NAME)
         updateCartCount(0)
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         GlobalSingelton.instance?.userInfo = null
