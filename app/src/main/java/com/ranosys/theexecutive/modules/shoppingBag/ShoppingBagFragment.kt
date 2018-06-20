@@ -286,9 +286,14 @@ class ShoppingBagFragment : BaseFragment() {
     }
 
     private fun redirectToLogin() {
-        val bundle = Bundle()
-        bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
-        FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+        Utils.showDialog(activity, getString(R.string.login_required_for_checkout), getString(android.R.string.ok), getString(android.R.string.cancel), object : DialogOkCallback {
+            override fun setDone(done: Boolean) {
+                setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
+                val bundle = Bundle()
+                bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
+                FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+            }
+        })
     }
 
     private fun updateCartItem(shoppingBagQtyUpdateRequest: ShoppingBagQtyUpdateRequest) {
