@@ -242,6 +242,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                 SavedPreferences.getInstance()?.saveStringValue(emailAddress.get(), Constants.USER_EMAIL)
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+                Utils.setUpZendeskChat()
 
                 val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
                 if(guestCartId.isNotBlank()){

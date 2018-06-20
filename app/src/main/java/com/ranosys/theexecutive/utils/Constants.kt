@@ -110,6 +110,7 @@ object Constants {
     const val KEY_NOTIFICATION_TITLE = "gcm.notification.title"
     const val KEY_NOTIFICATION_ALERT = "notification_alert"
     const val KEY_NOTIFICATION_ID = "notification_id"
+    const val FROM_NOTIFICATION = "from_notification"
     const val KEY_NOTIFICATION_MESSAGE = "gcm.notification.body"
     const val NOTIFICATION_TYPE_CMS = "cms"
     const val NOTIFICATION_TYPE_PRODUCT_DETAIL = "Product"
@@ -127,7 +128,7 @@ object Constants {
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
     const val CART_DE_ACTIVE = "cart de-active"
-    const val IS_NOTIFICATION_SHOW = "notificatin show"
+    const val IS_NOTIFICATION_SHOW = "notification"
     const val ALFA_SET = 180
 
 }

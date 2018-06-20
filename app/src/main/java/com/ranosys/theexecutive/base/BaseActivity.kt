@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.base
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
@@ -13,10 +14,7 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
-import com.ranosys.theexecutive.utils.DialogOkCallback
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.GlobalSingelton
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
@@ -136,6 +134,11 @@ open class BaseActivity: RunTimePermissionActivity(){
 
     fun hideToolBar(){
         supportActionBar?.hide()
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        val lang = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
+        super.attachBaseContext(Utils.setLocale(base!!, lang ?: Constants.DEFAULT_STORE_CODE))
     }
 
 }

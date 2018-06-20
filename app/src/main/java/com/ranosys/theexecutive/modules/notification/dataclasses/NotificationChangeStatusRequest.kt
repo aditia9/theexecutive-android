@@ -6,7 +6,8 @@ package com.ranosys.theexecutive.modules.notification.dataclasses
  * @Date 22,May,2018
  */
 class NotificationChangeStatusRequest(val notification_id: String?,
-                                      val device_id: String?)
+                                      val device_id: String?,
+                                      val customer_token: String?)
 
 
 class DeviceRegisterRequest(val device_type: String?,
