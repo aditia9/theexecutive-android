@@ -234,6 +234,9 @@ abstract class BaseFragment : LifecycleFragment() {
 
         //stop loader when dialog dismissed
         webPagesDialog.setOnDismissListener {
+            webview?.run {
+                webview.clearCache(true)
+            }
             hideLoading()
         }
 
