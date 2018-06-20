@@ -16,6 +16,7 @@ public class StickyScrollPresenter {
     private IStickyScrollPresentation mStickyScrollPresentation;
 
     private int mDeviceHeight;
+    private int mDeviceWidth;
 
     private int mStickyFooterHeight;
     private int mStickyFooterInitialTranslation;
@@ -25,9 +26,12 @@ public class StickyScrollPresenter {
     private boolean mIsFooterSticky;
     private boolean mIsHeaderSticky;
     public boolean mScrolled;
+    private IScreenInfoProvider mScreenInfoProvider;
 
     public StickyScrollPresenter(IStickyScrollPresentation stickyScrollPresentation, IScreenInfoProvider screenInfoProvider, IResourceProvider typedArrayResourceProvider) {
+       mScreenInfoProvider = screenInfoProvider;
         mDeviceHeight = screenInfoProvider.getScreenHeight();
+        mDeviceWidth = screenInfoProvider.getScreenWidth();
         mTypedArrayResourceProvider = typedArrayResourceProvider;
         mStickyScrollPresentation = stickyScrollPresentation;
     }
@@ -47,7 +51,11 @@ public class StickyScrollPresenter {
     public void initStickyFooter(int measuredHeight, int initialStickyFooterLocation) {
         mStickyFooterHeight = measuredHeight;
         mStickyFooterInitialLocation = initialStickyFooterLocation;
+
+
         mStickyFooterInitialTranslation = mDeviceHeight - initialStickyFooterLocation - mStickyFooterHeight;
+
+
         if (mStickyFooterInitialLocation > mDeviceHeight - mStickyFooterHeight) {
             mStickyScrollPresentation.stickFooter(mStickyFooterInitialTranslation);
             mIsFooterSticky = true;
@@ -92,9 +100,15 @@ public class StickyScrollPresenter {
         return mIsHeaderSticky;
     }
 
-    public void recomputeFooterLocation(int footerTop, int footerLocation){
+    public void recomputeFooterLocation(int footerTop, int footerLocation, boolean isLandScape){
+
+        mDeviceHeight = mScreenInfoProvider.getScreenHeight();
+        mDeviceWidth = mScreenInfoProvider.getScreenWidth();
+
         if(mScrolled){
+
             mStickyFooterInitialTranslation = mDeviceHeight - footerTop - mStickyFooterHeight;
+
             mStickyFooterInitialLocation = footerTop;
             if (footerLocation > mDeviceHeight - mStickyFooterHeight) {
                 mStickyScrollPresentation.stickFooter(mStickyFooterInitialTranslation);

@@ -121,7 +121,6 @@ class WishlistFragment : BaseFragment() {
                                 Toast.makeText(activity, getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
                             }
                         }
-
                     }
                     R.id.img_delete -> {
                         Utils.showDialog(context, getString(R.string.remove_item_text),

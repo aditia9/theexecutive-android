@@ -60,13 +60,10 @@ object Utils {
         val res = context.resources
         var config = Configuration(context.resources.configuration)
 
-        if (Build.VERSION.SDK_INT >= 17) {
+       /* if (Build.VERSION.SDK_INT >= 17) {
             config.setLocale(locale)
             ctx = context.createConfigurationContext(config);
-        } else {
-            config.locale = locale;
-            res.updateConfiguration(config, res.displayMetrics)
-        }
+        }*/
 
         return ctx
     }
@@ -239,7 +236,7 @@ object Utils {
         return displayMetrics.widthPixels
     }
 
-    private fun getDeviceHeight(context: Context?) : Int{
+     fun getDeviceHeight(context: Context?) : Int{
         val displayMetrics = DisplayMetrics()
         (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.heightPixels
