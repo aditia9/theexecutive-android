@@ -52,22 +52,6 @@ import java.util.regex.Pattern
  */
 object Utils {
 
-    fun setLocale(context: Context, lang: String): Context{
-
-        val locale = Locale(lang)
-        Locale.setDefault(locale)
-        var ctx = context
-        val res = context.resources
-        var config = Configuration(context.resources.configuration)
-
-       /* if (Build.VERSION.SDK_INT >= 17) {
-            config.setLocale(locale)
-            ctx = context.createConfigurationContext(config);
-        }*/
-
-        return ctx
-    }
-
     fun printLog(TAG:String, message: String){
         if(BuildConfig.DEBUG){
             Log.e(TAG, message)
@@ -214,7 +198,7 @@ object Utils {
     }
 
     fun isTablet(context: Context): Boolean {
-       /* val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
+     /*   val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
         val large = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
         return xlarge || large*/
         return true

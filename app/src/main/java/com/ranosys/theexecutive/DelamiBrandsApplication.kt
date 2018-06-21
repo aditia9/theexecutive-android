@@ -17,6 +17,8 @@ class DelamiBrandsApplication : Application(){
 
     companion object {
         var samleApplication: DelamiBrandsApplication? = null
+        var deviceHeight : Int = 0
+        var deviceWidth : Int = 0
     }
 
     override fun onCreate() {
@@ -24,10 +26,12 @@ class DelamiBrandsApplication : Application(){
         samleApplication = this
         SavedPreferences.init(this)
         Fabric.with(this, Crashlytics())
-    }
+        deviceHeight = resources.displayMetrics.heightPixels
+        deviceWidth = resources.displayMetrics.widthPixels
 
-    override fun attachBaseContext(base: Context?) {
-        val lang = SavedPreferences.savedPreferences?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
-        super.attachBaseContext(Utils.setLocale(base!!, lang ?: Constants.DEFAULT_STORE_CODE))
+        if(SavedPreferences.getInstance()?.getIntValue(Constants.HEIGHT) == 0){
+            SavedPreferences.getInstance()?.saveIntValue( deviceHeight, Constants.HEIGHT)
+            SavedPreferences.getInstance()?.saveIntValue( deviceWidth, Constants.WIDTH)
+        }
     }
 }

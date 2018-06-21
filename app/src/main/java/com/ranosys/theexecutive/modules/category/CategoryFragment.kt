@@ -28,10 +28,7 @@ import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.GlobalSingelton
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
 
@@ -269,6 +266,12 @@ class CategoryFragment : BaseFragment() {
             pagerAdapter.refresh(0)
         }else{
             pagerAdapter.refresh(1)
+        }
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            SavedPreferences.getInstance()?.setBooleanValue(Constants.ORIENTATION, true)
+        } else {
+            SavedPreferences.getInstance()?.setBooleanValue( Constants.ORIENTATION, false)
         }
     }
 }
