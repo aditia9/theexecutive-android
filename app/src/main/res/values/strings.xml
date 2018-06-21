@@ -52,6 +52,7 @@
     <string name="exit">Exit</string>
     <string name="maintenance_msg">Application is under maintenance</string>
     <string name="force_update_msg">New Version application is available</string>
+    <string name="soft_update_msg">New Version application is available(SOFT)</string>
     <string name="please_enter_your_email_address_below">Please enter your Email address below.</string>
     <string name="password_info">* You will receive a link to reset your password</string>
     <string name="submit">Submit</string>
@@ -280,5 +281,8 @@
     <string name="t_and_c">Terms &amp; Condition</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="and">\u0020 and \u0020</string>
+    <string name="update">Update</string>
+    <string name="ignore">Ignore</string>
+    <string name="no_address_available_error">No address available. Please add address to checkout.</string>
 
 </resources>

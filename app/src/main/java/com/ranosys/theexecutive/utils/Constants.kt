@@ -103,6 +103,7 @@ object Constants {
     var notificationCounter = 0
     const val KEY_REDIRECTION_TYPE = "type"
     const val KEY_REDIRECTION_VALUE = "typeId"
+    const val KEY_APP_IN_BACKGROUND = "appInBackground"
     const val KEY_IMAGE = "image_url"
     const val KEY_TITLE = "title"
     const val KEY_BODY = "body"
