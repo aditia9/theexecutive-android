@@ -185,7 +185,7 @@
     <string name="delete_icon">Delete Icon</string>
     <string name="remove_item_text">Are you sure you want to remove item from your wishlist?</string>
     <string name="remove_item_text_bag">Are you sure you want to remove item from your Shopping bag?</string>
-    <string name="no_item">No items available</string>
+    <string name="no_item">You have not placed an order.</string>
     <string name="no_item_selected">No items selected.</string>
 
     <string name="view_all">View All</string>
@@ -220,7 +220,7 @@
     <string name="cancel_order_confirmation">Do you want to cancel your order? </string>
     <string name="address_edit_success_msg">Address is updated successfully</string>
     <string name="add_address_success_msg">Address is added successfully</string>
-    <string name="contact_us">Contact Us</string>
+    <string name="contact_us">Contact us.</string>
     <string name="settings">Settings</string>
     <string name="add_address_failure_msg">Oops.. this is on us, please retry</string>
     <string name="udate_profile_success_msg">Your profile is now updated</string>
@@ -274,10 +274,11 @@
     <string name="sku">SKU </string>
     <string name="payment_id">Payment ID</string>
     <string name="bank_recipient">Bank Recipient</string>
-    <string name="no_item_shopping_bag">No items available right now, Please add some item.</string>
+    <string name="no_item_shopping_bag">Your Cart is empty!</string>
 
     <string name="t_and_c">Terms &amp; Condition</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="and">\u0020 and \u0020</string>
+    <string name="no_item_wishlist">Your wishlist is empty!</string>
 
 </resources>
