@@ -258,8 +258,8 @@
         <item>Notifications</item>
         <item>Subscribe to Newsletter</item>
         <item>Select Language</item>
-        <item>Change Password</item>
         <item>Bank Transfer Confirmation</item>
+        <item>Change Password</item>
         <item>Buying Guide</item>
         <item>Contact Us</item>
         <item>Settings</item>
@@ -280,8 +280,8 @@
         <item>@drawable/notification</item>
         <item>@drawable/newsletter</item>
         <item>@drawable/language</item>
-        <item>@drawable/change_password</item>
         <item>@drawable/bank_transfer</item>
+        <item>@drawable/change_password</item>
         <item>@drawable/buying_guide</item>
         <item>@drawable/contact</item>
         <item>@drawable/setting</item>
