@@ -36,7 +36,7 @@ class OrderResultFragment: BaseFragment(){
         orderResultViewModel = ViewModelProviders.of(this).get(OrderResultViewModel::class.java)
         mBinding.vm = orderResultViewModel
         orderResultViewModel.orderId.set(orderId)
-        orderResultViewModel.status.set(status)
+        orderResultViewModel.status = status
 
         observeEvents()
         callOrderStatusApi()

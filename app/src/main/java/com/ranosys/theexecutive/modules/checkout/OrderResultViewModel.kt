@@ -20,7 +20,8 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
 
     val apiError: MutableLiveData<String> = MutableLiveData()
     val orderStatus: MutableLiveData<CheckoutDataClass.OrderStatusResponse> = MutableLiveData()
-    var status : ObservableField<String> = ObservableField("")
+    var status : String = ""
+    var statusImg : ObservableField<String> = ObservableField("")
     var orderId : ObservableField<String> = ObservableField("")
     var incrementalOrderId : ObservableField<String> = ObservableField("")
     var virtualAccountNumber : ObservableField<String> = ObservableField("")
@@ -59,7 +60,11 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
         var btnStr = ""
         var infoStr = ""
 
-        when(status.get()){
+        if(orderStatus.value?.order_state == Constants.CANCEL_STATUS){
+            status = Constants.CANCEL
+        }
+
+        when(status){
             Constants.SUCCESS -> {
                 statusStr = getApplication<Application>().resources.getString(R.string.order_success_msg)
                 btnStr = getApplication<Application>().resources.getString(R.string.order_success_btn_text)
@@ -80,6 +85,7 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
         statusMsg.set(statusStr)
         infoMsg.set(infoStr)
         btnAction.set(btnStr)
+        statusImg.set(status)
     }
 
 }

@@ -264,7 +264,7 @@ abstract class BaseFragment : LifecycleFragment() {
     private fun redirectToOrderResultPage(orderId: String, status: String) {
         popUpAllFragments()
         val orderResultFragment = OrderResultFragment.getInstance(orderId, status)
-        FragmentUtils.addFragment(context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
+        FragmentUtils.addFragment(activity, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
     }
 
     //method to remove all fragment except home
