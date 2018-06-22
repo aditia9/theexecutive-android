@@ -246,6 +246,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
+                getUserCartCount()
                 SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
                 userCartIdResponse?.value = apiResponse
             }
@@ -267,11 +268,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
                 userCartCountResponse?.value = apiResponse
+                Utils.updateCartCount(t!!.toInt())
             }
 
         })
-
     }
-
 }
 
