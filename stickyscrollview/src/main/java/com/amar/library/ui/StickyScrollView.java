@@ -28,13 +28,12 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
 
     private static final String SCROLL_STATE = "scroll_state";
     private static final String SUPER_STATE = "super_state";
+    private static final String sharePreHeight = "height";
     private SharedPreferences sharedPreferences;
 
     private StickyScrollPresenter mStickyScrollPresenter;
     int[] updatedFooterLocation = new int[2];
     boolean isLandScape = false;
-    private int height = 0;
-    private int width = 0;
 
     public StickyScrollView(Context context ) {
         this(context, null);
@@ -47,9 +46,12 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
     public StickyScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        sharedPreferences = context.getSharedPreferences("APP_DATA", Context.MODE_PRIVATE);
-        height = sharedPreferences.getInt("height", 0);
-        width = sharedPreferences.getInt("width", 0);
+        String sharePre = "APP_DATA";
+        String sharePreHeight = "height";
+        String sharePreWidth = "width";
+        sharedPreferences = context.getSharedPreferences(sharePre, Context.MODE_PRIVATE);
+        int height = sharedPreferences.getInt(sharePreHeight, 0);
+        int width = sharedPreferences.getInt(sharePreWidth, 0);
 
         IScreenInfoProvider screenInfoProvider = new ScreenInfoProvider(context, height, width);
         IResourceProvider resourceProvider = new ResourceProvider(context, attrs, R.styleable.StickyScrollView);
