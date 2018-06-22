@@ -130,5 +130,6 @@ object Constants {
     const val CART_DE_ACTIVE = "cart de-active"
     const val IS_NOTIFICATION_SHOW = "notification"
     const val ALFA_SET = 180
+    const val IGNORE="ignore"
 
 }
