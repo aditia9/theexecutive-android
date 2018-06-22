@@ -47,7 +47,11 @@ class HomeFragment : BaseFragment() {
         //recieve local broadcast receiver
         br = object: BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
-                setPagerAdapter()
+                try{
+                    setPagerAdapter()
+                }catch (exception : Exception){
+
+                }
             }
 
         }
@@ -59,7 +63,11 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
-        setPagerAdapter()
+        try{
+            setPagerAdapter()
+        }catch (exception : Exception){
+
+        }
 
         //initialize Zendesk chat setup
         Utils.setUpZendeskChat()
