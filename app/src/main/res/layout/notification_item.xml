@@ -66,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/fifteen_dp"
             android:layout_marginTop="@dimen/three_dp"
+            android:paddingBottom="@dimen/three_dp"
             android:textSize="@dimen/fourteen_sp"
             android:textColor="@color/hint_color"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
@@ -74,7 +75,7 @@
         <ImageView
             android:id="@+id/img_notification"
             android:layout_width="@dimen/match_constraint"
-            android:layout_height="@dimen/notification_image_size"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/app_name"
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="@{TextUtils.isEmpty(notification.image)? View.GONE : View.VISIBLE}"
