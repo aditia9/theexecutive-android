@@ -47,7 +47,7 @@ class NotificationAdapter(private var notificationListData: List<NotificationLis
             }
 
             if(!TextUtils.isEmpty(notificationResponse?.sent_date)){
-                itemBinding?.tvDateTime?.text = Utils.getDateTimeFormat(notificationResponse!!.sent_date)
+                itemBinding?.tvDateTime?.text = Utils.getDateTimeFormat(notificationResponse!!.sent_date, itemBinding?.tvDateTime!!.context)
             }
 
         }

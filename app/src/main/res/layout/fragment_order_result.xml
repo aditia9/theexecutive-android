@@ -37,7 +37,7 @@
             android:layout_width="@dimen/sixty_dp"
             android:layout_height="@dimen/sixty_dp"
             android:layout_margin="@dimen/eight_dp"
-            bind:orderResult="@{vm.status}"
+            bind:orderResult="@{vm.statusImg}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
