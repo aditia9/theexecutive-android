@@ -16,29 +16,23 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class ScreenInfoProvider implements IScreenInfoProvider{
 
     private final Context mContext;
+    private int mWidth;
+    private int mHeight;
 
-    public ScreenInfoProvider(Context context) {
+    public ScreenInfoProvider(Context context, int height, int width) {
         mContext = context;
+        mHeight = height;
+        mWidth = width;
     }
 
     @Override
     public int getScreenHeight() {
-        return getDeviceHeightDimension();
+        return mHeight;
     }
 
     @Override
     public int getScreenWidth() {
-        return getDeviceWidthDimension();
+        return mWidth;
     }
 
-    int getDeviceWidthDimension() {
-        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        return metrics.widthPixels;
-    }
-
-
-    int getDeviceHeightDimension() {
-        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
-        return metrics.heightPixels;
-    }
 }

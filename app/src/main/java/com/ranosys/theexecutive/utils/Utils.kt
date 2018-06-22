@@ -52,22 +52,6 @@ import java.util.regex.Pattern
  */
 object Utils {
 
-    fun setLocale(context: Context, lang: String): Context{
-
-        val locale = Locale(lang)
-        Locale.setDefault(locale)
-        var ctx = context
-        val res = context.resources
-        var config = Configuration(context.resources.configuration)
-
-       /* if (Build.VERSION.SDK_INT >= 17) {
-            config.setLocale(locale)
-            ctx = context.createConfigurationContext(config);
-        }*/
-
-        return ctx
-    }
-
     fun printLog(TAG:String, message: String){
         if(BuildConfig.DEBUG){
             Log.e(TAG, message)
@@ -214,7 +198,7 @@ object Utils {
     }
 
     fun isTablet(context: Context): Boolean {
-       /* val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
+     /*   val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
         val large = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
         return xlarge || large*/
         return true
@@ -446,11 +430,27 @@ object Utils {
         return format.format(newDate)
     }
 
-    fun getDateTimeFormat(strDate : String): String {
+    @SuppressLint("SimpleDateFormat")
+    fun getDateTimeFormat(strDate : String, ctx : Context): String {
         var format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         format.timeZone = TimeZone.getTimeZone("GMT")
         val newDate = format.parse(strDate)
         format = SimpleDateFormat("dd-MM-yyyy, hh:mm a")
-        return format.format(newDate)
+
+        val d = Date()
+        val systemDateFormat = SimpleDateFormat("dd-MM-yyyy")
+        val systemTimeString = systemDateFormat.format(d.time)
+        val compareDateString = systemDateFormat.format(newDate.time)
+
+        val systemCurrentTimeString = systemDateFormat.parse(systemTimeString)
+        val compareTimeString = systemDateFormat.parse(compareDateString)
+
+        val text = StringBuffer("")
+        if(systemCurrentTimeString.compareTo(compareTimeString) == 0){
+            format = SimpleDateFormat(" hh:mm a")
+            return text.append(ctx.getString(R.string.today) + ""+format.format(newDate)).toString()
+        }else{
+            return format.format(newDate)
+        }
     }
 }

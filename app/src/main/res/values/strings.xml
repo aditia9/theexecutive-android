@@ -281,5 +281,6 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="and">\u0020 and \u0020</string>
     <string name="no_item_wishlist">Your wishlist is empty!</string>
+    <string name="today">Today,</string>
 
 </resources>

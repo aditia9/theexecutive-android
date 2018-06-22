@@ -874,9 +874,15 @@ class ProductViewFragment : BaseFragment() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
-       Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
+        Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, Constants.WIDTH_MARGIN)
         setProductImages(productItemViewModel.productItem?.media_gallery_entries)
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            SavedPreferences.getInstance()?.setBooleanValue(Constants.ORIENTATION, true)
+        } else {
+            SavedPreferences.getInstance()?.setBooleanValue( Constants.ORIENTATION, false)
+        }
     }
 
 }
