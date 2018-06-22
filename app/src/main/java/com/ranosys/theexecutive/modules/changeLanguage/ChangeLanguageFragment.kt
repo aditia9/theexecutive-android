@@ -67,7 +67,6 @@ class ChangeLanguageFragment: BaseFragment() {
         btn_continue.setOnClickListener {
             //store selected language code
             //change language
-            Utils.setLocale(activity?.applicationContext!!, selectedStore.code)
             SavedPreferences.getInstance()?.saveStringValue(storeListAdapter.selectedStoreCode, Constants.SELECTED_STORE_CODE_KEY)
             SavedPreferences.getInstance()?.saveIntValue(selectedStore.website_id, Constants.SELECTED_WEBSITE_ID_KEY)
             SavedPreferences.getInstance()?.saveIntValue(selectedStore.id, Constants.SELECTED_STORE_ID_KEY)

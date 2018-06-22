@@ -17,6 +17,9 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import android.annotation.TargetApi
+import android.content.res.Configuration
+import java.util.*
 
 
 /**
@@ -70,7 +73,6 @@ open class BaseActivity: RunTimePermissionActivity(){
                             Utils.showDialog(this@BaseActivity, getString(R.string.close_app_text),
                                     getString(R.string.yes), getString(R.string.no), object : DialogOkCallback {
                                 override fun setDone(done: Boolean) {
-
                                     finishAndRemoveTask()
                                 }
                             })
@@ -139,9 +141,42 @@ open class BaseActivity: RunTimePermissionActivity(){
         supportActionBar?.hide()
     }
 
-    override fun attachBaseContext(base: Context?) {
-        val lang = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
-        super.attachBaseContext(Utils.setLocale(base!!, lang ?: Constants.DEFAULT_STORE_CODE))
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(updateBaseContextLocale(base))
     }
 
+    private fun updateBaseContextLocale(context: Context): Context {
+        val language = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) // Helper method to get saved language from SharedPreferences
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            updateResourcesLocale(context, locale)
+        } else updateResourcesLocaleLegacy(context, locale)
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private fun updateResourcesLocale(context: Context, locale: Locale): Context {
+        val configuration = context.resources.configuration
+        configuration.setLocale(locale)
+        return context.createConfigurationContext(configuration)
+    }
+
+    private fun updateResourcesLocaleLegacy(context: Context, locale: Locale): Context {
+        val resources = context.resources
+        val configuration = resources.configuration
+        configuration.locale = locale
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        return context
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            SavedPreferences.getInstance()?.setBooleanValue(Constants.ORIENTATION, true)
+        } else {
+            SavedPreferences.getInstance()?.setBooleanValue( Constants.ORIENTATION, false)
+        }
+    }
 }

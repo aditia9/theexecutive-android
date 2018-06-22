@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
@@ -590,5 +591,13 @@ class ProductListingFragment: BaseFragment() {
         var categoryName: String? = null
         var categoryId: Int? = null
         var homeSearchQuery: String = ""
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        activity?.runOnUiThread {
+            productListAdapter.notifyDataSetChanged()
+        }
+
     }
 }

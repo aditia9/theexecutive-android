@@ -1,6 +1,8 @@
 package com.amar.library.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -26,12 +28,14 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
 
     private static final String SCROLL_STATE = "scroll_state";
     private static final String SUPER_STATE = "super_state";
-
+    private static final String sharePreHeight = "height";
+    private SharedPreferences sharedPreferences;
 
     private StickyScrollPresenter mStickyScrollPresenter;
     int[] updatedFooterLocation = new int[2];
+    boolean isLandScape = false;
 
-    public StickyScrollView(Context context) {
+    public StickyScrollView(Context context ) {
         this(context, null);
     }
 
@@ -41,7 +45,15 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
 
     public StickyScrollView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        IScreenInfoProvider screenInfoProvider = new ScreenInfoProvider(context);
+
+        String sharePre = "APP_DATA";
+        String sharePreHeight = "height";
+        String sharePreWidth = "width";
+        sharedPreferences = context.getSharedPreferences(sharePre, Context.MODE_PRIVATE);
+        int height = sharedPreferences.getInt(sharePreHeight, 0);
+        int width = sharedPreferences.getInt(sharePreWidth, 0);
+
+        IScreenInfoProvider screenInfoProvider = new ScreenInfoProvider(context, height, width);
         IResourceProvider resourceProvider = new ResourceProvider(context, attrs, R.styleable.StickyScrollView);
         mStickyScrollPresenter = new StickyScrollPresenter(this, screenInfoProvider, resourceProvider);
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -58,7 +70,14 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
         super.onLayout(changed, l, t, r, b);
         if(stickyFooterView != null && !changed) {
             stickyFooterView.getLocationInWindow(updatedFooterLocation);
-            mStickyScrollPresenter.recomputeFooterLocation(getRelativeTop(stickyFooterView), updatedFooterLocation[1]);
+            isLandScape = sharedPreferences.getBoolean("orientation",  false);
+            mStickyScrollPresenter.recomputeFooterLocation(getRelativeTop(stickyFooterView), updatedFooterLocation[1], isLandScape);
+        }else {
+            if(null != stickyFooterView){
+                stickyFooterView.getLocationInWindow(updatedFooterLocation);
+                isLandScape = sharedPreferences.getBoolean("orientation",  false);
+                mStickyScrollPresenter.recomputeFooterLocation(getRelativeTop(stickyFooterView), updatedFooterLocation[1], isLandScape);
+            }
         }
     }
 
@@ -79,7 +98,7 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
     @Override
     public void initFooterView(int id) {
         stickyFooterView = findViewById(id);
-        mStickyScrollPresenter.initStickyFooter(stickyFooterView.getMeasuredHeight(), getRelativeTop(stickyFooterView));
+        mStickyScrollPresenter.initStickyFooter(stickyFooterView.getMeasuredHeight(), getRelativeTop(stickyFooterView), isLandScape);
     }
 
     @Override
@@ -165,4 +184,13 @@ public class StickyScrollView extends ScrollView implements IStickyScrollPresent
         super.onRestoreInstanceState(state);
     }
 
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            isLandScape  = true;
+        }else{
+            isLandScape = false;
+        }
+    }
 }
