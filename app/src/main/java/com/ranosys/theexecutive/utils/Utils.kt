@@ -430,11 +430,27 @@ object Utils {
         return format.format(newDate)
     }
 
-    fun getDateTimeFormat(strDate : String): String {
+    @SuppressLint("SimpleDateFormat")
+    fun getDateTimeFormat(strDate : String, ctx : Context): String {
         var format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         format.timeZone = TimeZone.getTimeZone("GMT");
         val newDate = format.parse(strDate)
         format = SimpleDateFormat("dd-MM-yyyy, hh:mm a")
-        return format.format(newDate)
+
+        val d = Date()
+        val systemDateFormat = SimpleDateFormat("dd-MM-yyyy")
+        val systemTimeString = systemDateFormat.format(d.time)
+        val compareDateString = systemDateFormat.format(newDate.time)
+
+        val systemCurrentTimeString = systemDateFormat.parse(systemTimeString)
+        val compareTimeString = systemDateFormat.parse(compareDateString)
+
+        val text = StringBuffer("")
+        if(systemCurrentTimeString.compareTo(compareTimeString) == 0){
+            format = SimpleDateFormat(" hh:mm a")
+            return text.append(ctx.getString(R.string.today) + ""+format.format(newDate)).toString()
+        }else{
+            return format.format(newDate)
+        }
     }
 }
