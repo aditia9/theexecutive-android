@@ -265,16 +265,27 @@ class CheckoutFragment : BaseFragment() {
     private fun observeApiResponse() {
         checkoutViewModel.selectedAddress.observe(this, Observer { address ->
             hideLoading()
-            checkoutBinding.address = address
 
-            //call shipping method api according to updated address
-            checkoutViewModel.getShippingMethodsApi(address?.id!!)
-            if(checkoutBinding.cvShippingMethod.visibility == View.VISIBLE){
-                checkoutBinding.cvShippingMethod.visibility = View.GONE
-                divider_shipping_method_below.visibility = View.VISIBLE
-                shipping_method_expand_img.setImageResource(R.drawable.forward)
+            if(address != null){
+                checkoutBinding.address = address
+                //call shipping method api according to updated address
+                address.id?.run {
+                    checkoutViewModel.getShippingMethodsApi(address.id!!)
+                    if(checkoutBinding.cvShippingMethod.visibility == View.VISIBLE){
+                        checkoutBinding.cvShippingMethod.visibility = View.GONE
+                        divider_shipping_method_below.visibility = View.VISIBLE
+                        shipping_method_expand_img.setImageResource(R.drawable.forward)
 
+                    }
+
+                    tv_no_address.visibility = View.GONE
+                }
+
+            }else{
+                checkoutBinding.address = null
+                tv_no_address.visibility = View.VISIBLE
             }
+
 
 
         })

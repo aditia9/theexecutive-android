@@ -82,6 +82,8 @@ open class BaseActivity: RunTimePermissionActivity(){
                         }
                     }
 
+                }else{
+                    finish()
                 }
             }
 

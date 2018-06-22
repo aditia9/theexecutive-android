@@ -4,6 +4,7 @@ import AppLog
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
@@ -101,33 +102,46 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun manageConfiguration(configuration: ConfigurationResponse?) {
+        val ignore = SavedPreferences.getInstance()?.getStringValue(Constants.IGNORE)
+
         if (configuration?.maintenance == Constants.MAINTENENCE_OFF) {
-
             GlobalSingelton.instance?.configuration = configuration
-
-            //call store api
-            getStoresApi()
-
-            //get cart id and count
-            getCartIdAndCount()
-
             //check version
-            if (configuration.version.toFloat() >= BuildConfig.VERSION_CODE + 1) {
+            if (configuration.version.toDouble().toInt() > BuildConfig.VERSION_NAME.toDouble().toInt()) {
                 //force update
                 AppLog.d("Config Api : FORCE UPDATE")
-                showExitApplicationDialog(getString(R.string.force_update_msg), pAction = {
-                    //redirect to play store
-                })
-            } else if (configuration.version.toFloat() >= BuildConfig.VERSION_NAME.toFloat()) {
+                showExitApplicationDialog(getString(R.string.force_update_msg), pText = getString(R.string.update), nText = getString(R.string.exit) ,pAction = {
+                    redirectToPlaystore()
+                }, nAction = {finish()})
+
+            } else if (configuration.version.toFloat() > BuildConfig.VERSION_NAME.toFloat()&& ignore.isNullOrBlank()) {
                 //soft update
-                AppLog.d("Config Api : SOFT UPDATE")
+                showExitApplicationDialog(getString(R.string.soft_update_msg), pText = getString(R.string.update), nText = getString(R.string.ignore), pAction = {
+                    redirectToPlaystore()
+                }, nAction = {
+                    //call store api
+                    SavedPreferences.getInstance()?.saveStringValue(getString(R.string.ignore), Constants.IGNORE)
+                    getStoresApi()
+                    //get cart id and count
+                    getCartIdAndCount()
+                })
+            }else{
+                //call store api
+                getStoresApi()
+                //get cart id and count
+                getCartIdAndCount()
             }
         } else {
             //stop app with maintenance message
             AppLog.d("Config Api : MAINTENANCE MODE")
-            showExitApplicationDialog(getString(R.string.maintenance_msg), pAction = { finish() })
+            showExitApplicationDialog(configuration?.message_maintenance ?: getString(R.string.maintenance_msg), nText = "",  pAction = { finish() })
 
         }
+    }
+
+    private fun redirectToPlaystore() {
+        startActivity( Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.project.CK")))
+        finish()
     }
 
     private fun getCartIdAndCount() {
@@ -211,8 +225,11 @@ class SplashActivity : BaseActivity() {
                     dialog.cancel()
                     nAction()
                 }
+
         val alert = builder.create()
         alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.theme_black_color))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.theme_black_color))
     }
 
     private fun moveToHome() {

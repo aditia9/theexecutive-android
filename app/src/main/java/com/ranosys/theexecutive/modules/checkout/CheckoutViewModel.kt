@@ -8,6 +8,7 @@ import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 
@@ -100,23 +101,28 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
     fun getShippingMethodsApi(addressId: String){
 
-        val request = CheckoutDataClass.GetShippingMethodsRequest(addressId)
-        AppRepository.getShippingMethods(request, object : ApiCallback<List<CheckoutDataClass.GetShippingMethodsResponse>>{
+        if (addressId.isNotEmpty()){
+            val request = CheckoutDataClass.GetShippingMethodsRequest(addressId)
+            AppRepository.getShippingMethods(request, object : ApiCallback<List<CheckoutDataClass.GetShippingMethodsResponse>>{
 
-            override fun onSuccess(t: List<CheckoutDataClass.GetShippingMethodsResponse>?) {
-                shippingMethodList.value = t
-            }
+                override fun onSuccess(t: List<CheckoutDataClass.GetShippingMethodsResponse>?) {
+                    shippingMethodList.value = t
+                }
 
-            override fun onException(error: Throwable) {
-                commonError.value = "shipping methods: ${error.message}"
-            }
+                override fun onException(error: Throwable) {
+                    commonError.value = "shipping methods: ${error.message}"
+                }
 
-            override fun onError(errorMsg: String) {
-                commonError.value = "shipping methods: $errorMsg"
-            }
+                override fun onError(errorMsg: String) {
+                    commonError.value = "shipping methods: $errorMsg"
+                }
 
 
-        })
+            })
+        }else{
+            commonError.value = "shipping methods: ${Constants.UNKNOWN_ERROR}"
+        }
+
     }
 
     fun getPaymentMethods(shippingMethod: CheckoutDataClass.GetShippingMethodsResponse) {

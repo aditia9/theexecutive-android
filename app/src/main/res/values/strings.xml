@@ -52,6 +52,7 @@
     <string name="exit">Exit</string>
     <string name="maintenance_msg">Application is under maintenance</string>
     <string name="force_update_msg">New Version application is available</string>
+    <string name="soft_update_msg">New Version application is available(SOFT)</string>
     <string name="please_enter_your_email_address_below">Please enter your Email address below.</string>
     <string name="password_info">* You will receive a link to reset your password</string>
     <string name="submit">Submit</string>
@@ -185,7 +186,7 @@
     <string name="delete_icon">Delete Icon</string>
     <string name="remove_item_text">Are you sure you want to remove item from your wishlist?</string>
     <string name="remove_item_text_bag">Are you sure you want to remove item from your Shopping bag?</string>
-    <string name="no_item">You have not placed an order.</string>
+    <string name="no_item">No items available</string>
     <string name="no_item_selected">No items selected.</string>
 
     <string name="view_all">View All</string>
@@ -282,5 +283,8 @@
     <string name="and">\u0020 and \u0020</string>
     <string name="no_item_wishlist">Your wishlist is empty!</string>
     <string name="today">Today,</string>
+    <string name="update">Update</string>
+    <string name="ignore">Ignore</string>
+    <string name="no_address_available_error">No address available. Please add address to checkout.</string>
 
 </resources>
