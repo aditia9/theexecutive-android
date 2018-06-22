@@ -206,6 +206,7 @@ abstract class BaseFragment : LifecycleFragment() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 hideLoading()
+                view?.clearCache(true)
                 super.onPageFinished(view, url)
             }
 
