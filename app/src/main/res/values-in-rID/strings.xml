@@ -23,7 +23,7 @@
     <string name="transfer_date_error">Transfer date is required.</string>
     <string name="dob_error">Masukan tanggal lahir</string>
     <string name="city_error">Please provide city.</string>
-    <string name="state_error">Please provide state</string>
+    <string name="state_error">Please provide state.</string>
     <string name="first_name_error">Masukan nama depan</string>
     <string name="last_name_error">Masukan nama belakang</string>
     <string name="empty_description">Please provide Description.</string>
@@ -50,8 +50,8 @@
     <string name="title_register">Mendaftar</string>
     <string name="something_went_wrong_error">Something went wrong</string>
     <string name="exit">Exit</string>
-    <string name="maintenance_msg">Application is under maintenance</string>
-    <string name="force_update_msg">New Version application is available</string>
+    <string name="maintenance_msg">Aplikasi sedang dalam perbaikan</string>
+    <string name="force_update_msg">Versi terbaru telah tersedia</string>
     <string name="please_enter_your_email_address_below">Masukan alamat email</string>
     <string name="password_info">Kami telah mengirimkan tautan untuk mengubah kata sandi</string>
     <string name="submit">Lanjutkan</string>
@@ -83,7 +83,7 @@
     <string name="address">Alamat</string>
     <string name="postcode">Kode Pos</string>
     <string name="confirm_password">Masukan kembali kata sandi</string>
-    <string name="subscribe">Suscribe to get IDR %1$s Voucher</string>
+    <string name="subscribe">Subscribe untuk mendapatkan voucher senilai %1$s rupiah</string>
     <string name="term_and_condition">By creating your account, you agree to our \u0020</string>
     <string name="dob_hint">DD/MM/YYYY</string>
     <string name="street_address_1">Alamat 1 </string>
@@ -136,7 +136,7 @@
     <string name="price_range_label">Harga</string>
     <string name="apply_filters">Terapkan</string>
     <string name="filter_dialog_title">FILTER</string>
-    <string name="sort_dialog_title">SORT BY</string>
+    <string name="sort_dialog_title">Atur Berdasarkan</string>
     <string name="clear">Hapus</string>
     <string name="image_one_detail">Product first image showing at top</string>
     <string name="image_two_detail">Product second image is showing</string>
@@ -157,7 +157,7 @@
     <string name="cancel">Cancel</string>
     <string name="email_sent">Kami telah mengirimkan email, mohon ikuti instruksi untuk mengubah kata sandi</string>
     <string name="password_change_msg">Your password successfully changed</string>
-    <string name="logout_text">Are you sure you want to logout from application?</string>
+    <string name="logout_text">Apakah anda yakin akan keluar dari aplikasi?</string>
     <string name="no_product_available_error">No results found for the search</string>
     <string name="empty_shipping_method_error">Metode pengiriman tidak tersedia untuk alamat yang dimasukan. Mohon untuk mengubah alamat</string>
     <string name="empty_payment_method_error">Tidak ada pembayaran</string>
@@ -180,7 +180,7 @@
     <string name="mobile_number_label">Nomor Telepon </string>
     <string name="remove">Hapus</string>
     <string name="add_addresse">Tambah Alamat</string>
-    <string name="wishlist_items_count">Total %1$d item(s) in your wishlist</string>
+    <string name="wishlist_items_count">%1$d Produk telah tersimpan di Wishlist</string>
     <string name="bag_icon">Bag Icon</string>
     <string name="delete_icon">Delete Icon</string>
     <string name="remove_item_text">Apakah anda yakin untuk menghapus produk pada Wishlist?</string>
