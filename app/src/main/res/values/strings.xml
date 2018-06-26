@@ -51,8 +51,8 @@
     <string name="something_went_wrong_error">Something went wrong</string>
     <string name="exit">Exit</string>
     <string name="maintenance_msg">Application is under maintenance</string>
-    <string name="force_update_msg">New Version application is available</string>
-    <string name="soft_update_msg">New Version application is available(SOFT)</string>
+    <string name="force_update_msg">A new version of the The Executive App is available. Please update to access the latest features.</string>
+    <string name="soft_update_msg">A new version of the The Executive App is available. Please update to access the latest features.</string>
     <string name="please_enter_your_email_address_below">Please enter your Email address below.</string>
     <string name="password_info">* You will receive a link to reset your password</string>
     <string name="submit">Submit</string>

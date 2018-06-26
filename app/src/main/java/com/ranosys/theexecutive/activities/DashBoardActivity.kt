@@ -115,7 +115,7 @@ class DashBoardActivity : BaseActivity() {
                         (fragment as? LoginFragment)?.onResume()
                         (fragment as? SettingsFragment)?.onResume()
 
-                        //refresh/load shoppinh bag list
+                        //refresh/load shopping bag list
                         if(fragment is ShoppingBagFragment){
                             fragment.getShoppingBag()
                         }

@@ -136,5 +136,8 @@ object Constants {
     const val IS_NOTIFICATION_SHOW = "notification"
     const val ALFA_SET = 180
     const val IGNORE="ignore"
+    const val COUNTRY_CODE_ID = "ID"
+    const val COUNTRY_CODE_IN = "in"
+    const val COUNTRY_CODE_US = "US"
 
 }
