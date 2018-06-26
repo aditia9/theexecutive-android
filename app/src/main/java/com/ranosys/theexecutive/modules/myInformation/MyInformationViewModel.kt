@@ -13,6 +13,7 @@ import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 
@@ -58,19 +59,26 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                 }else{
                     mobileNo = defaultAdd?.telephone ?: ""
                 }
-                val country = GlobalSingelton.instance?.storeList?.single { it.code.toString() == defaultAdd?.country_id}
+
+                var country : StoreResponse? = null
+                country = if(defaultAdd == null){
+                    null
+                }else{
+                    GlobalSingelton.instance?.storeList?.single { it.code.toString() == defaultAdd?.country_id}
+                }
+
                 val userInfo = MyAccountDataClass.MaskedUserInfo(
                         _id = t?.id.toString(),
                         _firstName = t?.firstname,
                         _lastName = t?.lastname,
                         _email = t?.email,
-                        _country = country?.name,
-                        _city = defaultAdd?.city,
-                        _state = defaultAdd?.region?.region,
-                        _streedAdd1 = defaultAdd?.street?.get(0),
-                        _streedAdd2 = if (defaultAdd?.street?.size!! > 1) defaultAdd.street.get(1) else "",
+                        _country = country?.name ?: "",
+                        _city = defaultAdd?.city ?: "",
+                        _state = defaultAdd?.region?.region ?: "",
+                        _streedAdd1 = defaultAdd?.street?.get(0) ?: "",
+                        _streedAdd2 = if (defaultAdd?.street?.size ?: 0 > 1) defaultAdd?.street?.get(1) else "",
                         _mobile = mobileNo,
-                        _postalCode = defaultAdd.postcode,
+                        _postalCode = defaultAdd?.postcode ?: "",
                         _countryCode = countryCode
                 )
 
@@ -109,7 +117,7 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
         )
 
         updateInfoRequest.customer.addresses?.single { it?.id == updateInfoRequest.customer.default_shipping }?.telephone = if(maskedUserInfo.get()._countryCode.isNullOrEmpty().not()) "${maskedUserInfo.get()._countryCode}-${maskedUserInfo.get()._mobile}"
-            else "${maskedUserInfo.get()._mobile}"
+        else "${maskedUserInfo.get()._mobile}"
 
 
         val apiResponse = ApiResponse<Any>()
