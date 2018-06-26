@@ -146,13 +146,22 @@ open class BaseActivity: RunTimePermissionActivity(){
     }
 
     private fun updateBaseContextLocale(context: Context): Context {
-        val language = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) // Helper method to get saved language from SharedPreferences
-        val locale = Locale(language)
-        Locale.setDefault(locale)
+        var language = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) // Helper method to get saved language from SharedPreferences
+        var countryCode = ""
+       when(language){
+          Constants.COUNTRY_CODE_ID ->{
+               countryCode = Constants.COUNTRY_CODE_IN
+               language = Constants.COUNTRY_CODE_ID
+          }
 
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            updateResourcesLocale(context, locale)
-        } else updateResourcesLocaleLegacy(context, locale)
+           Constants.DEFAULT_STORE_CODE ->{
+               countryCode = Constants.COUNTRY_CODE_US
+               language =  Constants.DEFAULT_STORE_CODE
+           }
+       }
+        val locale = Locale(language, countryCode)
+        Locale.setDefault(locale)
+       return updateResourcesLocale(context, locale)
 
     }
 
