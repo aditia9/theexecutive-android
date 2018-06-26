@@ -33,7 +33,6 @@
                 android:layout_height="@dimen/one_twenty_five_dp"
                 android:layout_margin="@dimen/ten_dp"
                 android:contentDescription="@string/image_one_detail"
-                android:src="@drawable/placeholder"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 bind:baseUrlWithProductImageUrl="@{item.image}" />
