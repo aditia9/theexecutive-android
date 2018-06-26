@@ -165,20 +165,12 @@ open class BaseActivity: RunTimePermissionActivity(){
 
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
     private fun updateResourcesLocale(context: Context, locale: Locale): Context {
         val configuration = context.resources.configuration
         configuration.setLocale(locale)
         return context.createConfigurationContext(configuration)
     }
 
-    private fun updateResourcesLocaleLegacy(context: Context, locale: Locale): Context {
-        val resources = context.resources
-        val configuration = resources.configuration
-        configuration.locale = locale
-        resources.updateConfiguration(configuration, resources.displayMetrics)
-        return context
-    }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
