@@ -22,7 +22,6 @@
             android:layout_height="@dimen/one_twenty_five_dp"
             android:contentDescription="@string/product_image"
             app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/placeholder"
             bind:baseUrlWithProductImageUrl="@{item.extension_attributes.image}"
             app:layout_constraintTop_toTopOf="parent" />
 

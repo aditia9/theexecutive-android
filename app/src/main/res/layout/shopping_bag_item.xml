@@ -21,7 +21,6 @@
             android:layout_width="@dimen/one_twenty_five_dp"
             android:layout_height="@dimen/one_eighty_dp"
             android:contentDescription="@string/product_image"
-            android:src="@drawable/placeholder"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

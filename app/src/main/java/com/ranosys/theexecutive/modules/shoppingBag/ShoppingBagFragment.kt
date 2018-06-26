@@ -43,7 +43,6 @@ class ShoppingBagFragment : BaseFragment() {
         viewBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_shopping_bag, container, false)
         shoppingBagViewModel = ViewModelProviders.of(this).get(ShoppingBagViewModel::class.java)
         viewBinder?.shoppingBagViewModel = shoppingBagViewModel
-        getShoppingBag()
         observeEvents()
         return viewBinder?.root
     }
@@ -351,8 +350,9 @@ class ShoppingBagFragment : BaseFragment() {
     }
 
 
-    private fun getShoppingBag() {
+    fun getShoppingBag() {
         showLoading()
+        userToken =  SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         if (userToken.isNullOrBlank().not()) {
             shoppingBagViewModel.getShoppingBagForUser()
         } else {
