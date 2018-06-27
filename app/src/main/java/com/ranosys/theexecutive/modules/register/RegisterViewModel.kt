@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.Toast
+import com.ranosys.theexecutive.DelamiBrandsApplication
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
@@ -56,9 +57,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
     var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
     var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
-    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = Constants.COUNTRY_LABEL)
-    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = Constants.STATE_LABEL)
-    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
+    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = application.applicationContext.getString(R.string.country))
+    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = application.applicationContext.getString(R.string.state_label))
+    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = application.applicationContext.getString(R.string.city))
 
     var isSocialLogin: Boolean = false
 
@@ -230,7 +231,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
-                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
+                apiFailureResponse?.value = DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)
 
             }
 

@@ -3,12 +3,13 @@ package com.ranosys.theexecutive.modules.checkout
 import AppLog
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
+import com.ranosys.theexecutive.DelamiBrandsApplication
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagResponse
-import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 
@@ -37,13 +38,13 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
         AppRepository.getUserInfoNSelectedShipping(object: ApiCallback<CheckoutDataClass.UserInfoNselectedShippingResponse> {
             override fun onException(error: Throwable) {
                 AppLog.e("My Information API : ${error.message}")
-                commonError.value = "user info: ${error.message}"
+                commonError.value = error.message
 
             }
 
             override fun onError(errorMsg: String) {
                 AppLog.e("My Information API : $errorMsg")
-                commonError.value = "user info: $errorMsg"
+                commonError.value = errorMsg
             }
 
             override fun onSuccess(t: CheckoutDataClass.UserInfoNselectedShippingResponse?) {
@@ -90,11 +91,11 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
             }
 
             override fun onException(error: Throwable) {
-                commonError.value = "cart items: ${error.message}"
+                commonError.value = error.message
             }
 
             override fun onError(errorMsg: String) {
-                commonError.value = "cart items: $errorMsg"
+                commonError.value = errorMsg
             }
         })
     }
@@ -110,17 +111,17 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
                 }
 
                 override fun onException(error: Throwable) {
-                    commonError.value = "shipping methods: ${error.message}"
+                    commonError.value = error.message
                 }
 
                 override fun onError(errorMsg: String) {
-                    commonError.value = "shipping methods: $errorMsg"
+                    commonError.value = errorMsg
                 }
 
 
             })
         }else{
-            commonError.value = "shipping methods: ${Constants.UNKNOWN_ERROR}"
+            commonError.value = DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)
         }
 
     }
@@ -130,11 +131,11 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.getPaymentMethods(request, object: ApiCallback<CheckoutDataClass.PaymentMethodResponse>{
             override fun onException(error: Throwable) {
-                commonError.value = "payment methods: ${error.message}"
+                commonError.value = error.message
             }
 
             override fun onError(errorMsg: String) {
-                commonError.value = "payment methods: $errorMsg"
+                commonError.value = errorMsg
             }
 
             override fun onSuccess(t: CheckoutDataClass.PaymentMethodResponse?) {
@@ -184,11 +185,11 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.placeOrder(request, object: ApiCallback<String>{
             override fun onException(error: Throwable) {
-                commonError.value = "place order: ${error.message}"
+                commonError.value = error.message
             }
 
             override fun onError(errorMsg: String) {
-                commonError.value = "place order: $errorMsg"
+                commonError.value = errorMsg
             }
 
             override fun onSuccess(t: String?) {
@@ -201,11 +202,11 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
     fun getTotalAmountsApi() {
         AppRepository.getTotalAmounts(callBack = object : ApiCallback<CheckoutDataClass.Totals> {
             override fun onException(error: Throwable) {
-                commonError.value = "total amount: ${error.message}"
+                commonError.value = error.message
             }
 
             override fun onError(errorMsg: String) {
-                commonError.value = "total amount: $errorMsg"
+                commonError.value = errorMsg
             }
 
             override fun onSuccess(t: CheckoutDataClass.Totals?) {
