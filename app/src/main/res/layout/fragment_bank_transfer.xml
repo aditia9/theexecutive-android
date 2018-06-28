@@ -241,22 +241,32 @@
                         android:paddingStart="@dimen/field_start_padding" />
                 </android.support.design.widget.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/sp_bank_recipient"
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_bank_recipient"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:background="@drawable/spinner"
-                    android:overlapAnchor="false"
-                    android:paddingBottom="@dimen/ten_dp"
-                    android:paddingTop="@dimen/ten_dp"
-                    android:spinnerMode="dropdown"
-                    style="@android:style/Widget.Holo.Light.Spinner"
-                    android:entries="@{bankTransferVM.recipientsLabel}"
-                    android:onItemSelected="@{(parent, view, pos, id) -> bankTransferVM.onRecipientSelection(pos)}"
-                    app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                    app:layout_constraintStart_toStartOf="@id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/til_transfer_amount" />
+                    android:hint="@string/bank_recipient"
+                    android:labelFor="@+id/et_transfer_amount"
+                    android:theme="@style/tilTheme"
+                    android:focusable="false"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_left"
+                    app:layout_constraintTop_toBottomOf="@id/til_transfer_amount">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_bank_recipient"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:textColor="@color/hint_color"
+                        android:text="@={bankTransferVM.bankRecipient}"
+                        android:paddingStart="@dimen/field_start_padding" />
+                </android.support.design.widget.TextInputLayout>
+
 
 
                 <Spinner
@@ -274,7 +284,7 @@
                     android:paddingTop="@dimen/ten_dp"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
-                    app:layout_constraintTop_toBottomOf="@id/sp_bank_recipient" />
+                    app:layout_constraintTop_toBottomOf="@id/til_bank_recipient" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_transfer_date"
@@ -317,11 +327,12 @@
                     android:id="@+id/img_attachment"
                     android:layout_width="@dimen/eighty_dp"
                     android:layout_height="@dimen/eighty_dp"
-                    android:padding="@dimen/eight_dp"
+                    android:padding="@dimen/five_dp"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@+id/tv_attachment"
                     android:background="@drawable/attachment_bg"
                     android:src="@drawable/attachment_icon"
+                    android:scaleType="center"
                     android:contentDescription="@string/app_name"
                     android:layout_marginTop="@dimen/twenty_dp"
                     />
