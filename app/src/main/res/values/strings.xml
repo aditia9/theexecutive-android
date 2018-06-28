@@ -279,5 +279,7 @@
     <string name="t_and_c">Terms &amp; Condition</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="and">\u0020 and \u0020</string>
+    <string name="version">Version:</string>
+
 
 </resources>
