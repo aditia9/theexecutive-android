@@ -214,7 +214,7 @@
     <string name="shopping_bag">Tas Belanja</string>
     <string name="login_required_for_wishlist">Untuk menambahkan wishlist, mohon Login/Register terlebih dahulu</string>
     <string name="address_remove_success_msg">Alamat telah berhasil dihapus</string>
-    <string name="checkout">Lakukan Pembayaran</string>
+    <string name="checkout">Checkout</string>
     <string name="dafault_address_delete_warning">Alamat tidak dapat dihapus</string>
     <string name="delete_address_confirmation">Apakah anda yakin untuk menghapus alamat ini?</string>
     <string name="cancel_order_confirmation">Do you want to cancel your order? </string>
