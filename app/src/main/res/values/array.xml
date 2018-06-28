@@ -269,8 +269,8 @@
     <string-array name="reason_array">
         <item>Select Reason</item>
         <item>Bad Quality</item>
-        <item>Bad Quality 2</item>
-        <item>Bad Quality 3</item>
+        <item>Defect</item>
+        <item>Item Torn</item>
     </string-array>
 
     <integer-array name="my_account_option_icon_array">

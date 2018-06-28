@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
@@ -192,6 +193,8 @@ class MyAccountFooterHolder(val item: View, context: Context) : RecyclerView.Vie
                 }
             })
         })
+
+        itemView.tv_app_version.text = context.getString(R.string.version) +" "+BuildConfig.VERSION_NAME
     }
 
     fun notificationLogout(){
