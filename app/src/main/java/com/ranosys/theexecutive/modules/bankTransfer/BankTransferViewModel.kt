@@ -39,12 +39,12 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     var holderAccountNumber: ObservableField<String> = ObservableField()
     var holderAccountError: ObservableField<String> = ObservableField()
     var transferAmount: ObservableField<String> = ObservableField()
+    var bankRecipient: ObservableField<String> = ObservableField()
     var transferAmountError: ObservableField<String> = ObservableField()
     var transferDate: ObservableField<Date> = ObservableField()
     var transferDateError: ObservableField<String> = ObservableField()
 
     var transferMethodsList: MutableList<TransferMethodsDataClass> = mutableListOf()
-    var recipientsLabel: MutableList<String> = mutableListOf()
     var transferMethodsLabel: MutableList<String> = mutableListOf()
     var transferMethodsLabelObserVer: MutableLiveData<List<TransferMethodsDataClass>>? = MutableLiveData()
     var recipientsList: MutableList<Recipients> = mutableListOf()
@@ -55,13 +55,10 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     var showLoading = MutableLiveData<ApiResponse<String>>()
 
 
-    private val recipients: Recipients = Recipients(value = Constants.BANK_RECIPIENT_LABEL, label = Constants.BANK_RECIPIENT_LABEL)
     private val transferMethodsData: TransferMethodsDataClass = TransferMethodsDataClass(value = Constants.TRANSFER_METHOD_LABEL, label = Constants.TRANSFER_METHOD_LABEL)
 
 
     init {
-        recipientsList.add(recipients)
-        recipientsLabel.add(Constants.BANK_RECIPIENT_LABEL)
         transferMethodsList.add(transferMethodsData)
         transferMethodsLabel.add(Constants.TRANSFER_METHOD_LABEL)
     }
@@ -104,13 +101,8 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
 
             override fun onSuccess(recipients: List<Recipients>?) {
                 if (null != recipients && recipients.isNotEmpty()) {
-                    recipientsList.addAll(recipients as ArrayList<Recipients>)
-
-                    val length = recipientsList.size
-                    for (i in 1..length - 1) {
-                        recipientsLabel.add(i, recipientsList[i].value)
-                    }
-
+                    bankRecipient.set(recipients[0].value)
+                    recipient = recipients[0].value
                 }
             }
         })
