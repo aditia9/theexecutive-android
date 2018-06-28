@@ -96,7 +96,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode = Constants.ALL
-        val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java)?.getConfiguration(ApiConstants.BEARER + adminToken, storeCode)
+        val callGet = retrofit?.create<ApiService.ConfigurationService>(ApiService.ConfigurationService::class.java)?.getConfiguration(ApiConstants.BEARER + adminToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<ConfigurationResponse> {
             override fun onResponse(call: Call<ConfigurationResponse>?, response: Response<ConfigurationResponse>?) {
@@ -135,7 +135,7 @@ object AppRepository {
         val registration_id= RequestBody.create(okhttp3.MediaType.parse("text/plain"), loginRequest?.registration_id)
 */
 
-        val callPost = retrofit?.create<ApiService.LoginService>(ApiService.LoginService::class.java)?.getLoginData(ApiConstants.BEARER + adminToken, storeCode, loginRequest, data)
+        val callPost = retrofit?.create<ApiService.LoginService>(ApiService.LoginService::class.java)?.getLoginData(ApiConstants.BEARER + adminToken, storeCode, loginRequest, data, storeCode)
 
 
         callPost?.enqueue(object : Callback<String> {
@@ -162,7 +162,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.PromotionService>(ApiService.PromotionService::class.java)?.getPromotions(ApiConstants.BEARER + adminToken, storeCode)
+        val callGet = retrofit?.create<ApiService.PromotionService>(ApiService.PromotionService::class.java)?.getPromotions(ApiConstants.BEARER + adminToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<List<PromotionsResponseDataClass>> {
             override fun onResponse(call: Call<List<PromotionsResponseDataClass>>?, response: Response<List<PromotionsResponseDataClass>>?) {
@@ -186,7 +186,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.CategoryService>(ApiService.CategoryService::class.java)?.getCategories(ApiConstants.BEARER + adminToken, storeCode)
+        val callGet = retrofit?.create<ApiService.CategoryService>(ApiService.CategoryService::class.java)?.getCategories(ApiConstants.BEARER + adminToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<CategoryResponseDataClass> {
             override fun onResponse(call: Call<CategoryResponseDataClass>?, response: Response<CategoryResponseDataClass>?) {
@@ -210,7 +210,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.IsEmailAvailableService>(ApiService.IsEmailAvailableService::class.java)?.isEmailAvailableApi(ApiConstants.BEARER + adminToken, storeCode = storeCode, request = request)
+        val callPost = retrofit?.create<ApiService.IsEmailAvailableService>(ApiService.IsEmailAvailableService::class.java)?.isEmailAvailableApi(ApiConstants.BEARER + adminToken,  storeCode,  request, storeCode)
 
         callPost?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
@@ -241,7 +241,7 @@ object AppRepository {
         data.put("registration_id", SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID).toString())
         data.put("device_type", Constants.OS_TYPE)
 
-        val callPost = retrofit?.create<ApiService.SocialLoginService>(ApiService.SocialLoginService::class.java)?.socialLogin(ApiConstants.BEARER + adminToken, storeCode, request, data)
+        val callPost = retrofit?.create<ApiService.SocialLoginService>(ApiService.SocialLoginService::class.java)?.socialLogin(ApiConstants.BEARER + adminToken, storeCode, request, data, storeCode)
 
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -266,7 +266,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPut = retrofit?.create<ApiService.ForgotPasswordService>(ApiService.ForgotPasswordService::class.java)?.forgotPasswordApi(ApiConstants.BEARER + adminToken, storeCode, request)
+        val callPut = retrofit?.create<ApiService.ForgotPasswordService>(ApiService.ForgotPasswordService::class.java)?.forgotPasswordApi(ApiConstants.BEARER + adminToken, storeCode, request, storeCode)
 
         callPut?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
@@ -299,7 +299,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPut = retrofit?.create<ApiService.ChangePasswordService>(ApiService.ChangePasswordService::class.java)?.changePasswordApi(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPut = retrofit?.create<ApiService.ChangePasswordService>(ApiService.ChangePasswordService::class.java)?.changePasswordApi(ApiConstants.BEARER + userToken, storeCode, request, storeCode)
 
         callPut?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
@@ -329,7 +329,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.CountryListService>(ApiService.CountryListService::class.java)?.countryList(storeCode)
+        val callGet = retrofit?.create<ApiService.CountryListService>(ApiService.CountryListService::class.java)?.countryList(storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<List<RegisterDataClass.Country>> {
             override fun onResponse(call: Call<List<RegisterDataClass.Country>>?, response: Response<List<RegisterDataClass.Country>>?) {
@@ -351,7 +351,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.CityListService>(ApiService.CityListService::class.java)?.cityList(storeCode, stateCode)
+        val callGet = retrofit?.create<ApiService.CityListService>(ApiService.CityListService::class.java)?.cityList(storeCode, stateCode, storeCode)
 
         callGet?.enqueue(object : Callback<List<RegisterDataClass.City>> {
             override fun onResponse(call: Call<List<RegisterDataClass.City>>?, response: Response<List<RegisterDataClass.City>>?) {
@@ -374,7 +374,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.RegistrationService>(ApiService.RegistrationService::class.java)?.registration(ApiConstants.BEARER + adminToken, storeCode, registrationRequest)
+        val callPost = retrofit?.create<ApiService.RegistrationService>(ApiService.RegistrationService::class.java)?.registration(ApiConstants.BEARER + adminToken, storeCode, registrationRequest, storeCode)
 
         callPost?.enqueue(object : Callback<RegisterDataClass.RegistrationResponse> {
             override fun onResponse(call: Call<RegisterDataClass.RegistrationResponse>?, response: Response<RegisterDataClass.RegistrationResponse>?) {
@@ -401,7 +401,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.NewsLetterSubscription>(ApiService.NewsLetterSubscription::class.java)?.newsLetterSuscribe(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPost = retrofit?.create<ApiService.NewsLetterSubscription>(ApiService.NewsLetterSubscription::class.java)?.newsLetterSuscribe(ApiConstants.BEARER + userToken, storeCode, request, storeCode)
 
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -429,7 +429,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.SortOptionService>(ApiService.SortOptionService::class.java)?.getSortOptions(ApiConstants.BEARER + adminToken, storeCode, type)
+        val callGet = retrofit?.create<ApiService.SortOptionService>(ApiService.SortOptionService::class.java)?.getSortOptions(ApiConstants.BEARER + adminToken, storeCode, type, storeCode)
 
         callGet?.enqueue(object : Callback<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>> {
             override fun onResponse(call: Call<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>?, response: Response<java.util.ArrayList<ProductListingDataClass.SortOptionResponse>>?) {
@@ -451,7 +451,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.FilterOptionService>(ApiService.FilterOptionService::class.java)?.getFilterOptions(ApiConstants.BEARER + adminToken, storeCode, categoryId = categoryId)
+        val callGet = retrofit?.create<ApiService.FilterOptionService>(ApiService.FilterOptionService::class.java)?.getFilterOptions(ApiConstants.BEARER + adminToken, storeCode,  categoryId, storeCode)
 
         callGet?.enqueue(object : Callback<ProductListingDataClass.FilterOptionsResponse> {
             override fun onResponse(call: Call<ProductListingDataClass.FilterOptionsResponse>?, response: Response<ProductListingDataClass.FilterOptionsResponse>?) {
@@ -473,7 +473,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.FilterOptionService>(ApiService.FilterOptionService::class.java)?.getSearchFilters(ApiConstants.BEARER + adminToken, storeCode, searchQuery = query)
+        val callGet = retrofit?.create<ApiService.FilterOptionService>(ApiService.FilterOptionService::class.java)?.getSearchFilters(ApiConstants.BEARER + adminToken, storeCode, query, storeCode)
 
         callGet?.enqueue(object : Callback<ProductListingDataClass.FilterOptionsResponse> {
             override fun onResponse(call: Call<ProductListingDataClass.FilterOptionsResponse>?, response: Response<ProductListingDataClass.FilterOptionsResponse>?) {
@@ -496,7 +496,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
         val listFrom = if (fromSearch) "catalogsearch/list" else "productslist"
-        val callGet = retrofit?.create<ApiService.ProductListingService>(ApiService.ProductListingService::class.java)?.getProductList(ApiConstants.BEARER + adminToken, storeCode, listFrom, requestMap)
+        val callGet = retrofit?.create<ApiService.ProductListingService>(ApiService.ProductListingService::class.java)?.getProductList(ApiConstants.BEARER + adminToken, storeCode, listFrom, requestMap, storeCode)
 
         callGet?.enqueue(object : Callback<ProductListingDataClass.ProductListingResponse> {
             override fun onResponse(call: Call<ProductListingDataClass.ProductListingResponse>?, response: Response<ProductListingDataClass.ProductListingResponse>?) {
@@ -518,7 +518,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getProductDetail(ApiConstants.BEARER + adminToken, storeCode, productSku)
+        val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getProductDetail(ApiConstants.BEARER + adminToken, storeCode, productSku, storeCode)
 
         callGet?.enqueue(object : Callback<ProductListingDataClass.Item> {
             override fun onResponse(call: Call<ProductListingDataClass.Item>?, response: Response<ProductListingDataClass.Item>?) {
@@ -542,7 +542,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getProductChildren(ApiConstants.BEARER + adminToken, storeCode, productSku)
+        val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getProductChildren(ApiConstants.BEARER + adminToken, storeCode, productSku, storeCode)
 
         callGet?.enqueue(object : Callback<List<ChildProductsResponse>> {
             override fun onResponse(call: Call<List<ChildProductsResponse>>?, response: Response<List<ChildProductsResponse>>?) {
@@ -566,7 +566,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getProductOptions(ApiConstants.BEARER + adminToken, storeCode, attributeId)
+        val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getProductOptions(ApiConstants.BEARER + adminToken, storeCode, attributeId, storeCode)
 
         callGet?.enqueue(object : Callback<List<ProductOptionsResponse>> {
             override fun onResponse(call: Call<List<ProductOptionsResponse>>?, response: Response<List<ProductOptionsResponse>>?) {
@@ -590,7 +590,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getStaticPagesUrl(ApiConstants.BEARER + adminToken, storeCode)
+        val callGet = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.getStaticPagesUrl(ApiConstants.BEARER + adminToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<StaticPagesUrlResponse> {
             override fun onResponse(call: Call<StaticPagesUrlResponse>?, response: Response<StaticPagesUrlResponse>?) {
@@ -614,7 +614,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.addToWishList(ApiConstants.BEARER + userToken, storeCode, requestMap)
+        val callPost = retrofit?.create<ApiService.ProductDetailService>(ApiService.ProductDetailService::class.java)?.addToWishList(ApiConstants.BEARER + userToken, storeCode, requestMap, storeCode)
 
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -637,7 +637,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.createGuestCart(ApiConstants.BEARER + adminToken, storeCode)
+        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.createGuestCart(ApiConstants.BEARER + adminToken, storeCode, storeCode)
 
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -660,7 +660,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.createUserCart(ApiConstants.BEARER + userToken, storeCode)
+        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.createUserCart(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -683,7 +683,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.cartCountUser(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.cartCountUser(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -706,7 +706,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.cartCountGuest(ApiConstants.BEARER + adminToken, storeCode, cartId)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.cartCountGuest(ApiConstants.BEARER + adminToken, storeCode, cartId, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -729,7 +729,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.addTOCartGuest(ApiConstants.BEARER + adminToken, storeCode, cartId, request)
+        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.addTOCartGuest(ApiConstants.BEARER + adminToken, storeCode, cartId, request, storeCode)
 
         callPost?.enqueue(object : Callback<AddToCartResponse> {
             override fun onResponse(call: Call<AddToCartResponse>?, response: Response<AddToCartResponse>?) {
@@ -753,7 +753,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.addTOCartUser(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.addTOCartUser(ApiConstants.BEARER + userToken, storeCode, request, storeCode)
 
         callPost?.enqueue(object : Callback<AddToCartResponse> {
             override fun onResponse(call: Call<AddToCartResponse>?, response: Response<AddToCartResponse>?) {
@@ -777,7 +777,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCartOfUser(ApiConstants.BEARER + userToken, storeCode)
+        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCartOfUser(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callPost?.enqueue(object : Callback<List<ShoppingBagResponse>> {
             override fun onResponse(call: Call<List<ShoppingBagResponse>>?, response: Response<List<ShoppingBagResponse>>?) {
@@ -805,7 +805,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCartOfGuest((ApiConstants.BEARER + adminToken), storeCode, cartId)
+        val callPost = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCartOfGuest((ApiConstants.BEARER + adminToken), storeCode, cartId, storeCode)
 
         callPost?.enqueue(object : Callback<List<ShoppingBagResponse>> {
             override fun onResponse(call: Call<List<ShoppingBagResponse>>?, response: Response<List<ShoppingBagResponse>>?) {
@@ -828,7 +828,7 @@ object AppRepository {
         val adminToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.FilterOptionService>(ApiService.FilterOptionService::class.java)?.getSearchFilters(ApiConstants.BEARER + adminToken, storeCode, searchQuery = searchQuery)
+        val callGet = retrofit?.create<ApiService.FilterOptionService>(ApiService.FilterOptionService::class.java)?.getSearchFilters(ApiConstants.BEARER + adminToken, storeCode, searchQuery, storeCode)
 
         callGet?.enqueue(object : Callback<ProductListingDataClass.FilterOptionsResponse> {
             override fun onResponse(call: Call<ProductListingDataClass.FilterOptionsResponse>?, response: Response<ProductListingDataClass.FilterOptionsResponse>?) {
@@ -850,7 +850,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.MyAccountService>(ApiService.MyAccountService::class.java)?.getUserInfo(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.MyAccountService>(ApiService.MyAccountService::class.java)?.getUserInfo(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<MyAccountDataClass.UserInfoResponse> {
             override fun onResponse(call: Call<MyAccountDataClass.UserInfoResponse>?, response: Response<MyAccountDataClass.UserInfoResponse>?) {
@@ -872,7 +872,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPut = retrofit?.create<ApiService.MyAccountService>(ApiService.MyAccountService::class.java)?.updateUserInfo(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPut = retrofit?.create<ApiService.MyAccountService>(ApiService.MyAccountService::class.java)?.updateUserInfo(ApiConstants.BEARER + userToken, storeCode, request, storeCode)
 
         callPut?.enqueue(object : Callback<MyAccountDataClass.UserInfoResponse> {
             override fun onResponse(call: Call<MyAccountDataClass.UserInfoResponse>?, response: Response<MyAccountDataClass.UserInfoResponse>?) {
@@ -894,7 +894,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.getWishlist(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.getWishlist(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<WishlistResponse> {
             override fun onResponse(call: Call<WishlistResponse>?, response: Response<WishlistResponse>?) {
@@ -916,7 +916,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.deleteWishlistItem(ApiConstants.BEARER + userToken, storeCode, itemId)
+        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.deleteWishlistItem(ApiConstants.BEARER + userToken, storeCode, itemId, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -940,7 +940,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteItemFromShoppingBagGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId, itemId)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteItemFromShoppingBagGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId, itemId, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -964,7 +964,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.updateItemFromShoppingBagGuestUser(ApiConstants.BEARER + adminToken, storeCode, guestCartId, shoppingBagQtyUpdateRequest.cartItem.item_id.toInt(), shoppingBagQtyUpdateRequest)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.updateItemFromShoppingBagGuestUser(ApiConstants.BEARER + adminToken, storeCode, guestCartId, shoppingBagQtyUpdateRequest.cartItem.item_id.toInt(), shoppingBagQtyUpdateRequest, storeCode)
 
         callGet?.enqueue(object : Callback<ShoppingBagQtyUpdateRequest> {
             override fun onResponse(call: Call<ShoppingBagQtyUpdateRequest>?, response: Response<ShoppingBagQtyUpdateRequest>?) {
@@ -989,7 +989,7 @@ object AppRepository {
                 ?: Constants.DEFAULT_STORE_CODE
 
         val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.updateItemFromShoppingBagUser(ApiConstants.BEARER + userToken, storeCode, shoppingBagQtyUpdateRequest.cartItem.item_id.toInt()
-                , shoppingBagQtyUpdateRequest)
+                , shoppingBagQtyUpdateRequest, storeCode)
 
         callGet?.enqueue(object : Callback<ShoppingBagQtyUpdateRequest> {
             override fun onResponse(call: Call<ShoppingBagQtyUpdateRequest>?, response: Response<ShoppingBagQtyUpdateRequest>?) {
@@ -1012,7 +1012,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteItemFromShoppingBagUser(ApiConstants.BEARER + userToken, storeCode, itemId)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteItemFromShoppingBagUser(ApiConstants.BEARER + userToken, storeCode, itemId, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1035,7 +1035,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.moveItemFromCart(ApiConstants.BEARER + userToken, storeCode, itemId)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.moveItemFromCart(ApiConstants.BEARER + userToken, storeCode, itemId, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1059,7 +1059,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.applyCouponCodeForUser(ApiConstants.BEARER + userToken, storeCode, couponCode)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.applyCouponCodeForUser(ApiConstants.BEARER + userToken, storeCode, couponCode, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1082,7 +1082,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.applyCouponCodeForGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId, couponCode)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.applyCouponCodeForGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId, couponCode, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1105,7 +1105,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCouponCodeForUser(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCouponCodeForUser(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<Any> {
             override fun onResponse(call: Call<Any>?, response: Response<Any>?) {
@@ -1128,7 +1128,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCouponCodeForGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getCouponCodeForGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId, storeCode)
 
         callGet?.enqueue(object : Callback<Any> {
             override fun onResponse(call: Call<Any>?, response: Response<Any>?) {
@@ -1151,7 +1151,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getTotalForUser(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getTotalForUser(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<TotalResponse> {
             override fun onResponse(call: Call<TotalResponse>?, response: Response<TotalResponse>?) {
@@ -1174,7 +1174,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getTotalForGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.getTotalForGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId, storeCode)
 
         callGet?.enqueue(object : Callback<TotalResponse> {
             override fun onResponse(call: Call<TotalResponse>?, response: Response<TotalResponse>?) {
@@ -1197,7 +1197,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteCouponCodeForUser(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteCouponCodeForUser(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1220,7 +1220,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteCouponCodeForGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.deleteCouponCodeForGuestUser(ApiConstants.BEARER + userToken, storeCode, cartId, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1242,7 +1242,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.addToBagWishlistItem(ApiConstants.BEARER + userToken, storeCode, request.id, request)
+        val callGet = retrofit?.create<ApiService.WishlistService>(ApiService.WishlistService::class.java)?.addToBagWishlistItem(ApiConstants.BEARER + userToken, storeCode, request.id, request, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1263,7 +1263,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.mergeCart(ApiConstants.BEARER + userToken,  storeCode, guestCartId = guestCartId)
+        val callGet = retrofit?.create<ApiService.CartService>(ApiService.CartService::class.java)?.mergeCart(ApiConstants.BEARER + userToken,  storeCode,  guestCartId, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1284,7 +1284,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getMyOrderList(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getMyOrderList(ApiConstants.BEARER + userToken, storeCode, storeCode)
         callGet?.enqueue(object : Callback<List<OrderListResponse>> {
 
             override fun onResponse(call: Call<List<OrderListResponse>>?, response: Response<List<OrderListResponse>>?) {
@@ -1308,7 +1308,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
         val params = HashMap<String, String>()
         params.put("fields", "items,grand_total,subtotal_incl_tax,shipping_incl_tax,billing_address,payment,extension_attributes[virtual_account_number,returnto_address,formatted_shipping_address,payment_method]")
-        val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getOrderDetail(ApiConstants.BEARER + userToken, storeCode, orderId, params)
+        val callGet = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.getOrderDetail(ApiConstants.BEARER + userToken, storeCode, orderId, params, storeCode)
         callGet?.enqueue(object : Callback<OrderDetailResponse> {
 
             override fun onResponse(call: Call<OrderDetailResponse>?, response: Response<OrderDetailResponse>?) {
@@ -1331,7 +1331,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)
                 ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.returnProduct(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPost = retrofit?.create<ApiService.MyOrdersService>(ApiService.MyOrdersService::class.java)?.returnProduct(ApiConstants.BEARER + userToken, storeCode, request, storeCode)
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
@@ -1352,7 +1352,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getShippingMethods(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getShippingMethods(ApiConstants.BEARER + userToken, storeCode, request, storeCode)
 
         callPost?.enqueue(object : Callback<List<CheckoutDataClass.GetShippingMethodsResponse>> {
             override fun onResponse(call: Call<List<CheckoutDataClass.GetShippingMethodsResponse>>?, response: Response<List<CheckoutDataClass.GetShippingMethodsResponse>>?) {
@@ -1373,7 +1373,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getPaymentMethods(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getPaymentMethods(ApiConstants.BEARER + userToken, storeCode, request, storeCode)
 
         callPost?.enqueue(object : Callback<CheckoutDataClass.PaymentMethodResponse> {
             override fun onResponse(call: Call<CheckoutDataClass.PaymentMethodResponse>?, response: Response<CheckoutDataClass.PaymentMethodResponse>?) {
@@ -1394,7 +1394,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getOrderStatus(ApiConstants.BEARER + userToken, storeCode, orderId)
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getOrderStatus(ApiConstants.BEARER + userToken, storeCode, orderId, storeCode)
 
         callGet?.enqueue(object : Callback<CheckoutDataClass.OrderStatusResponse> {
             override fun onResponse(call: Call<CheckoutDataClass.OrderStatusResponse>?, response: Response<CheckoutDataClass.OrderStatusResponse>?) {
@@ -1415,7 +1415,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
-        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.placeOrder(ApiConstants.BEARER + userToken, storeCode, request)
+        val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.placeOrder(ApiConstants.BEARER + userToken, storeCode, request, storeCode)
 
         callPost?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1437,7 +1437,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getTotalAmounts(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getTotalAmounts(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<CheckoutDataClass.Totals> {
             override fun onResponse(call: Call<CheckoutDataClass.Totals>?, response: Response<CheckoutDataClass.Totals>?) {
@@ -1459,7 +1459,7 @@ object AppRepository {
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
 
-        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getUserInfoNSelectedShipping(ApiConstants.BEARER + userToken, storeCode)
+        val callGet = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.getUserInfoNSelectedShipping(ApiConstants.BEARER + userToken, storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<CheckoutDataClass.UserInfoNselectedShippingResponse> {
             override fun onResponse(call: Call<CheckoutDataClass.UserInfoNselectedShippingResponse>?, response: Response<CheckoutDataClass.UserInfoNselectedShippingResponse>?) {
@@ -1483,7 +1483,7 @@ object AppRepository {
 
        var request = DeviceRegisterRequest("", "", SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
 
-        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.getNotificationList(ApiConstants.BEARER + userToken,  storeCode, request)
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.getNotificationList(ApiConstants.BEARER + userToken,  storeCode, request, storeCode)
 
         callGet?.enqueue(object : Callback<List<NotificationListResponse>> {
             override fun onResponse(call: Call<List<NotificationListResponse>>?, response: Response<List<NotificationListResponse>>?) {
@@ -1504,7 +1504,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.changeNotificationStatus(ApiConstants.BEARER + userToken,  storeCode, request)
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.changeNotificationStatus(ApiConstants.BEARER + userToken,  storeCode, request, storeCode)
 
         callGet?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
@@ -1526,7 +1526,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.getBankTransferMethod(ApiConstants.BEARER + userToken,  storeCode)
+        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.getBankTransferMethod(ApiConstants.BEARER + userToken,  storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<List<TransferMethodsDataClass>> {
             override fun onResponse(call: Call<List<TransferMethodsDataClass>>?, response: Response<List<TransferMethodsDataClass>>?) {
@@ -1548,7 +1548,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.getRecipient(ApiConstants.BEARER + userToken,  storeCode)
+        val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.getRecipient(ApiConstants.BEARER + userToken,  storeCode, storeCode)
 
         callGet?.enqueue(object : Callback<List<Recipients>> {
             override fun onResponse(call: Call<List<Recipients>>?, response: Response<List<Recipients>>?) {
@@ -1584,7 +1584,7 @@ object AppRepository {
         val method =RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.method)
         val date =  RequestBody.create(okhttp3.MediaType.parse("text/plain"), request.date)
 
-       val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.submitBankTransfer(ApiConstants.BEARER + userToken,   storeCode, part, name, email_submitter, orderid, bank_name, holder_account,amount,recipient,method,date)
+       val callGet = retrofit?.create<ApiService.BankTransfer>(ApiService.BankTransfer::class.java)?.submitBankTransfer(ApiConstants.BEARER + userToken,   storeCode, part, name, email_submitter, orderid, bank_name, holder_account,amount,recipient,method,date, storeCode)
 
         callGet?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
@@ -1607,7 +1607,7 @@ object AppRepository {
         val retrofit = ApiClient.retrofit
         val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
-        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.registerDevice(ApiConstants.BEARER + userToken,  storeCode, request)
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.registerDevice(ApiConstants.BEARER + userToken,  storeCode, request, storeCode)
 
         callGet?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
@@ -1633,7 +1633,7 @@ object AppRepository {
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY)?:Constants.DEFAULT_STORE_CODE
 
         var request = NotificationChangeStatusRequest("",  SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY), SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY))
-        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.logoutNotification(ApiConstants.BEARER + userToken,  storeCode, request)
+        val callGet = retrofit?.create<ApiService.NotificationService>(ApiService.NotificationService::class.java)?.logoutNotification(ApiConstants.BEARER + userToken,  storeCode, request, storeCode)
 
         callGet?.enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
