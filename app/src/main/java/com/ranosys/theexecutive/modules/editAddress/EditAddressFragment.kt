@@ -53,7 +53,7 @@ class EditAddressFragment:BaseFragment() {
                 activity?.onBackPressed()
 
             }else{
-                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(R.string.ok), "", null)
             }
         })
     }
@@ -104,7 +104,7 @@ class EditAddressFragment:BaseFragment() {
                 mBinding.spinnerState.setSelection(mViewModel.countryList.flatMap { it.available_regions }.toList().indexOf(temp2))
 
             }else{
-                Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", object: DialogOkCallback {
+                Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(R.string.ok), "", object: DialogOkCallback {
                     override fun setDone(done: Boolean) {
                         activity?.onBackPressed()
                     }

@@ -68,7 +68,7 @@ class ShoppingBagFragment : BaseFragment() {
                 if(apiResponse?.error.equals(Constants.CART_DE_ACTIVE)){
                     shoppingBagViewModel.getCartIdForUser()
                 }else{
-                    Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                    Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
                 }
             }
         })
@@ -83,7 +83,7 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -101,7 +101,7 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -133,7 +133,7 @@ class ShoppingBagFragment : BaseFragment() {
                     getShoppingBag()
                 }
             } else {
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
                 hideLoading()
             }
         })
@@ -149,7 +149,7 @@ class ShoppingBagFragment : BaseFragment() {
                 setCartTitle()
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -164,7 +164,7 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -191,7 +191,7 @@ class ShoppingBagFragment : BaseFragment() {
                 getShoppingBag()
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -286,7 +286,7 @@ class ShoppingBagFragment : BaseFragment() {
     }
 
     private fun redirectToLogin() {
-        Utils.showDialog(activity, getString(R.string.login_required_for_checkout), getString(android.R.string.ok), getString(android.R.string.cancel), object : DialogOkCallback {
+        Utils.showDialog(activity, getString(R.string.login_required_for_checkout), getString(R.string.ok), getString(R.string.cancel), object : DialogOkCallback {
             override fun setDone(done: Boolean) {
                 setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
                 val bundle = Bundle()

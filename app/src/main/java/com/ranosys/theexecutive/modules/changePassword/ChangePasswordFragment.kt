@@ -12,6 +12,7 @@ import android.view.WindowManager
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentChangePasswordBinding
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_change_password.*
@@ -58,7 +59,11 @@ class ChangePasswordFragment : BaseFragment() {
     private fun observeApiFailure() {
         changePassVM.apiFailureResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Utils.showDialog(activity, msg, getString(android.R.string.ok), "", object : DialogOkCallback {
+            var errorMsg = msg
+            if(msg == Constants.ERROR_CODE_404.toString()){
+                errorMsg = getString(R.string.error_no_user_exist)
+            }
+            Utils.showDialog(activity, errorMsg, getString(R.string.ok), "", object : DialogOkCallback {
                 override fun setDone(done: Boolean) {
                 }
             })
@@ -69,7 +74,7 @@ class ChangePasswordFragment : BaseFragment() {
         changePassVM.apiSuccessResponse?.observe(this, Observer<Boolean> { isLinkSent ->
             if (isLinkSent!!) {
                 hideLoading()
-                Utils.showDialog(activity as Context, getString(R.string.password_change_msg), context?.getString(android.R.string.ok), "", object : DialogOkCallback {
+                Utils.showDialog(activity as Context, getString(R.string.password_change_msg), context?.getString(R.string.ok), "", object : DialogOkCallback {
                     override fun setDone(done: Boolean) {
                         activity?.onBackPressed()
                     }

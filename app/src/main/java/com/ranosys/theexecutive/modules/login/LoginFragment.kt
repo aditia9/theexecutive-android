@@ -188,7 +188,7 @@ class LoginFragment: BaseFragment() {
                 loginViewModel.getUserCartCount()
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -204,7 +204,7 @@ class LoginFragment: BaseFragment() {
                 }
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -213,7 +213,12 @@ class LoginFragment: BaseFragment() {
     private fun observeApiFailure() {
         loginViewModel.apiFailureResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
+            var errorMsg = msg
+            if(msg == Constants.ERROR_CODE_401.toString()){
+                errorMsg = getString(R.string.error_invalid_login_credential)
+            }
+
+            Utils.showDialog(activity, errorMsg, getString(R.string.ok),"", object : DialogOkCallback{
                 override fun setDone(done: Boolean) {
                 }
             })
@@ -326,7 +331,7 @@ class LoginFragment: BaseFragment() {
         } catch (e : ApiException ) {
             AppLog.printStackTrace(e)
             mGoogleSignInClient.signOut()
-            Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", null)
+            Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(R.string.ok), "", null)
         }
     }
 
