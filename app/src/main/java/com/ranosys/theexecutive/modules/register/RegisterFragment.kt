@@ -64,6 +64,12 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentRegisterBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
+
+        registerViewModel.countryHint = RegisterDataClass.Country(full_name_locale = getString(R.string.country))
+        registerViewModel.stateHint = RegisterDataClass.State(name = getString(R.string.state_label))
+        registerViewModel.cityHint = RegisterDataClass.City(name = getString(R.string.city))
+        registerViewModel.initSpinnerHints()
+
         mViewDataBinding?.registerViewModel =  registerViewModel
 
         registerViewModel.isSocialLogin = isFromSocialLogin
@@ -82,7 +88,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     private fun observeApiSuccess() {
         registerViewModel.apiDirectRegSuccessResponse?.observe(this, android.arch.lifecycle.Observer { response ->
             hideLoading()
-            Utils.showDialog(activity as Context, getString(R.string.verify_email_message), context?.getString(android.R.string.ok), "", object: DialogOkCallback{
+            Utils.showDialog(activity as Context, getString(R.string.verify_email_message), context?.getString(R.string.ok), "", object: DialogOkCallback{
                 override fun setDone(done: Boolean) {
                     //FragmentUtils.addFragment(activity as Context, LoginFragment(), null, LoginFragment::class.java.name, false)
                     activity?.onBackPressed()
@@ -116,7 +122,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
                 registerViewModel.getUserCartCount()
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
         })
 
@@ -130,7 +136,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
                 }
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
         })
 
@@ -140,10 +146,13 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         registerViewModel.apiFailureResponse?.observe(this, android.arch.lifecycle.Observer { errorMsg ->
             hideLoading()
             var msg = errorMsg
-            if(errorMsg == Constants.ERROR_CODE_401.toString()){
+            if(errorMsg == Constants.ERROR_CODE_400.toString()){
                 msg = getString(R.string.error_user_already_exist)
+            }else if(errorMsg == Constants.ERROR_CODE_401.toString()){
+                msg = getString(R.string.error_invalid_login_credential)
+
             }
-            Utils.showDialog(activity as Context, msg, context?.getString(android.R.string.ok), "", null)
+            Utils.showDialog(activity as Context, msg, context?.getString(R.string.ok), "", null)
         })
     }
 

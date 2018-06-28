@@ -270,7 +270,7 @@
     <string name="order_failure_info">Your order has been failed.</string>
     <string name="select_reason">Select Reason</string>
     <string name="no_reason_selected">No reason selected.</string>
-    <string name="invalid_promo_code">The promo code you entered is not valid.</string>
+    <string name="invalid_promo_code">Kode promo yang dimasukan salah.</string>
     <string name="sku">SKU </string>
     <string name="payment_id">Payment ID</string>
     <string name="bank_recipient">Bank Recipient</string>

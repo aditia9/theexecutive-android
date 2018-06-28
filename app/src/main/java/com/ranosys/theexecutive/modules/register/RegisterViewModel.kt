@@ -57,9 +57,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
     var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
     var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
-    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = application.applicationContext.getString(R.string.country))
-    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = application.applicationContext.getString(R.string.state_label))
-    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = application.applicationContext.getString(R.string.city))
+    var countryHint:RegisterDataClass.Country? = null
+    var stateHint:RegisterDataClass.State? = null
+    var cityHint:RegisterDataClass.City? = null
 
     var isSocialLogin: Boolean = false
 
@@ -81,10 +81,10 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         val LOGIN_API_TAG = "Login Api"
     }
 
-    init {
-        countryList.add(countryHint)
-        stateList.add(stateHint)
-        cityList.add(cityHint)
+    fun initSpinnerHints() {
+        countryList.add(countryHint!!)
+        stateList.add(stateHint!!)
+        cityList.add(cityHint!!)
 
         selectedcountry.set(countryHint)
         selectedState.set(stateHint)
@@ -122,7 +122,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         }else{
             stateList.clear()
-            stateList.add(stateHint)
+            stateList.add(stateHint!!)
             selectedState.set(stateHint)
             selectedCity.set(cityHint)
         }
@@ -135,7 +135,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             callCityApi(selectedState.get().id)
         }else{
             cityList.clear()
-            cityList.add(cityHint)
+            cityList.add(cityHint!!)
             selectedCity.set(cityHint)
         }
         citySpinner.setSelection(0)

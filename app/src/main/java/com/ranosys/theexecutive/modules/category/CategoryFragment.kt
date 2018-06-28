@@ -213,7 +213,7 @@ class CategoryFragment : BaseFragment() {
                 pagerAdapter.notifyDataSetChanged()
                 startScrollViewPager(viewPager, response.size)
             } else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -236,7 +236,7 @@ class CategoryFragment : BaseFragment() {
                 categoryModelView?.categoryResponse?.set(response)
 
             } else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
         })
     }

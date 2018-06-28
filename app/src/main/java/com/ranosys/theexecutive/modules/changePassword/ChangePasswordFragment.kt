@@ -63,7 +63,7 @@ class ChangePasswordFragment : BaseFragment() {
             if(msg == Constants.ERROR_CODE_404.toString()){
                 errorMsg = getString(R.string.error_no_user_exist)
             }
-            Utils.showDialog(activity, errorMsg, getString(android.R.string.ok), "", object : DialogOkCallback {
+            Utils.showDialog(activity, errorMsg, getString(R.string.ok), "", object : DialogOkCallback {
                 override fun setDone(done: Boolean) {
                 }
             })
@@ -74,7 +74,7 @@ class ChangePasswordFragment : BaseFragment() {
         changePassVM.apiSuccessResponse?.observe(this, Observer<Boolean> { isLinkSent ->
             if (isLinkSent!!) {
                 hideLoading()
-                Utils.showDialog(activity as Context, getString(R.string.password_change_msg), context?.getString(android.R.string.ok), "", object : DialogOkCallback {
+                Utils.showDialog(activity as Context, getString(R.string.password_change_msg), context?.getString(R.string.ok), "", object : DialogOkCallback {
                     override fun setDone(done: Boolean) {
                         activity?.onBackPressed()
                     }

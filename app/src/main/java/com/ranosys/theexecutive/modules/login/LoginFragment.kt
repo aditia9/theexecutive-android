@@ -188,7 +188,7 @@ class LoginFragment: BaseFragment() {
                 loginViewModel.getUserCartCount()
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -204,7 +204,7 @@ class LoginFragment: BaseFragment() {
                 }
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -331,7 +331,7 @@ class LoginFragment: BaseFragment() {
         } catch (e : ApiException ) {
             AppLog.printStackTrace(e)
             mGoogleSignInClient.signOut()
-            Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", null)
+            Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(R.string.ok), "", null)
         }
     }
 

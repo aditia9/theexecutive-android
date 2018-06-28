@@ -78,7 +78,7 @@ class ForgotPasswordFragment: BaseFragment() {
         forgotPassVM.apiSuccessResponse?.observe(this, Observer<Boolean> { isLinkSent ->
             if(isLinkSent!!) {
                 hideLoading()
-                Utils.showDialog(activity as Context, getString(R.string.email_sent), context?.getString(android.R.string.ok), "", object: DialogOkCallback{
+                Utils.showDialog(activity as Context, getString(R.string.email_sent), context?.getString(R.string.ok), "", object: DialogOkCallback{
                     override fun setDone(done: Boolean) {
                         activity?.onBackPressed()
                     }
