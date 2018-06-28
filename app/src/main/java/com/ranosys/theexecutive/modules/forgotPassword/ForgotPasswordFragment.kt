@@ -61,7 +61,7 @@ class ForgotPasswordFragment: BaseFragment() {
     private fun observeApiFailure() {
         forgotPassVM.apiFailureResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback {
+            Utils.showDialog(activity, msg, getString(R.string.ok),"", object : DialogOkCallback {
                 override fun setDone(done: Boolean) {
                 }
             })
