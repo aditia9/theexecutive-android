@@ -31,6 +31,14 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="@dimen/twenty_four_dp" />
 
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_icons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintGuide_begin="@dimen/forty_dp" />
+
         <ImageView
             android:id="@+id/option_icon_iv"
             android:layout_width="wrap_content"
@@ -49,7 +57,7 @@
             android:layout_marginLeft="@dimen/twenty_four_dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/option_icon_iv"/>
+            app:layout_constraintLeft_toRightOf="@id/guideline_icons"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

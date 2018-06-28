@@ -137,10 +137,14 @@ object Utils {
 
     fun showDialog(context: Context?, title: String?, positiveMessage: String?, negativeMessage: String?, dialogOkCallback: DialogOkCallback?) {
         if (context != null) {
+            var errorTitle = title
+            if(title == Constants.ERROR){
+                errorTitle = context.getString(R.string.common_error)
+            }
             val dialog : Dialog? = Dialog(context)
             dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog?.setContentView(R.layout.alert_dialog)
-            dialog?.findViewById<TextView>(R.id.tv_title)?.text = title
+            dialog?.findViewById<TextView>(R.id.tv_title)?.text = errorTitle
             if(TextUtils.isEmpty(negativeMessage).not()){
                 dialog?.findViewById<TextView>(R.id.tv_no)?.visibility = View.VISIBLE
                 dialog?.findViewById<TextView>(R.id.tv_no)?.text = negativeMessage

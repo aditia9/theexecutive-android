@@ -2,8 +2,6 @@ package com.ranosys.theexecutive.api
 
 import com.google.gson.JsonObject
 import com.ranosys.theexecutive.BuildConfig
-import com.ranosys.theexecutive.DelamiBrandsApplication
-import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
 import com.ranosys.theexecutive.modules.bankTransfer.BankTransferRequest
@@ -60,11 +58,11 @@ object AppRepository {
             callBack.onError(errorBody)
 
         } catch (e: JSONException) {
-            callBack.onException(Throwable(DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)))
+            callBack.onException(Throwable(Constants.ERROR))
             if (BuildConfig.DEBUG)
                 e.printStackTrace()
         } catch (e: IOException) {
-            callBack.onException(Throwable(DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)))
+            callBack.onException(Throwable(Constants.ERROR))
             if (BuildConfig.DEBUG)
                 e.printStackTrace()
         }
