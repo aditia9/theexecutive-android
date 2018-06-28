@@ -1,7 +1,7 @@
 <resources>
     <!--<string name="app_name">The Executive</string>-->
     <string name="app_title">The Executive</string>
-    <string name="login">Login</string>
+    <string name="login">Masuk</string>
     <string name="user_id">User ID</string>
     <string name="empty_user_name">Please provide User Name.</string>
     <string name="empty_user_mobile">Please provide Mobile Number.</string>
@@ -48,7 +48,7 @@
     <string name="title_login">Masuk</string>
     <string name="error_invalid_email">Invalid mail id.</string>
     <string name="title_register">Mendaftar</string>
-    <string name="something_went_wrong_error">Something went wrong</string>
+    <string name="something_went_wrong_error">Mohon coba kembali</string>
     <string name="exit">Exit</string>
     <string name="maintenance_msg">Aplikasi sedang dalam perbaikan</string>
     <string name="force_update_msg">Versi terbaru telah tersedia</string>
@@ -214,7 +214,7 @@
     <string name="shopping_bag">Tas Belanja</string>
     <string name="login_required_for_wishlist">Untuk menambahkan wishlist, mohon Login/Register terlebih dahulu</string>
     <string name="address_remove_success_msg">Alamat telah berhasil dihapus</string>
-    <string name="checkout">Lakukan Pembayaran</string>
+    <string name="checkout">Checkout</string>
     <string name="dafault_address_delete_warning">Alamat tidak dapat dihapus</string>
     <string name="delete_address_confirmation">Apakah anda yakin untuk menghapus alamat ini?</string>
     <string name="cancel_order_confirmation">Do you want to cancel your order? </string>
@@ -270,7 +270,7 @@
     <string name="order_failure_info">Your order has been failed.</string>
     <string name="select_reason">Select Reason</string>
     <string name="no_reason_selected">No reason selected.</string>
-    <string name="invalid_promo_code">The promo code you entered is not valid.</string>
+    <string name="invalid_promo_code">Kode promo yang dimasukan salah.</string>
     <string name="sku">SKU </string>
     <string name="payment_id">Payment ID</string>
     <string name="bank_recipient">Bank Recipient</string>
@@ -280,5 +280,10 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="and">\u0020 and \u0020</string>
     <string name="no_item_wishlist">Your wishlist is empty!</string>
+
+    <string name="error_invalid_login_credential">Email atau Kata Sandi tidak sesuai, mohon masukan Email atau Kata Sandi yang sesuai</string>
+    <string name="error_no_user_exist">Alamat email tidak terdaftar</string>
+    <string name="error_user_already_exist">Email anda sudah terdaftar, Login untuk masuk</string>
+    <string name="state_label">Provinsi</string>
 
 </resources>

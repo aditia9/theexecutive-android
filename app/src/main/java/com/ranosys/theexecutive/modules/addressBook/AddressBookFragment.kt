@@ -107,7 +107,7 @@ class AddressBookFragment: BaseFragment() {
                 }
 
             }else{
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
     }
@@ -121,7 +121,7 @@ class AddressBookFragment: BaseFragment() {
                 addressBookAdapter.notifyDataSetChanged()
 
             }else{
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
     }
@@ -138,7 +138,7 @@ class AddressBookFragment: BaseFragment() {
                 }
 
             }else{
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
 
         })
@@ -198,9 +198,9 @@ class AddressBookFragment: BaseFragment() {
 
     private fun removeAddress(addressPosition: Int) {
         if(addressList?.get(addressPosition)?.default_billing == true && addressList?.get(addressPosition)?.default_shipping == true){
-            Utils.showDialog(activity, getString(R.string.dafault_address_delete_warning), getString(android.R.string.ok), "", null)
+            Utils.showDialog(activity, getString(R.string.dafault_address_delete_warning), getString(R.string.ok), "", null)
         }else{
-            Utils.showDialog(activity, getString(R.string.delete_address_confirmation), getString(android.R.string.ok), getString(android.R.string.cancel), object: DialogOkCallback{
+            Utils.showDialog(activity, getString(R.string.delete_address_confirmation), getString(R.string.ok), getString(R.string.cancel), object: DialogOkCallback{
                 override fun setDone(done: Boolean) {
                     callRemoveAddressApi(addressPosition)
                 }

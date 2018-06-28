@@ -61,7 +61,7 @@ class OrderResultFragment: BaseFragment(){
     }
 
     private fun handleError(error: String?) {
-        Utils.showDialog(activity as Context, error, (activity as Context).getString(android.R.string.ok), "", object: DialogOkCallback {
+        Utils.showDialog(activity as Context, error, (activity as Context).getString(R.string.ok), "", object: DialogOkCallback {
             override fun setDone(done: Boolean) {
                 activity?.onBackPressed()
             }

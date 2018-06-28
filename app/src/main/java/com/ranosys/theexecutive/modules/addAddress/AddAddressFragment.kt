@@ -46,7 +46,7 @@ class AddAddressFragment: BaseFragment() {
                 Toast.makeText(activity,getString(R.string.add_address_success_msg), Toast.LENGTH_SHORT).show()
                 activity?.onBackPressed()
             }else{
-                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(R.string.ok), "", null)
             }
         })
     }
@@ -86,7 +86,7 @@ class AddAddressFragment: BaseFragment() {
         mViewModel.countryListApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             if(apiResponse?.error.isNullOrBlank().not()){
-                Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", object: DialogOkCallback {
+                Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(R.string.ok), "", object: DialogOkCallback {
                     override fun setDone(done: Boolean) {
                         activity?.onBackPressed()
                     }

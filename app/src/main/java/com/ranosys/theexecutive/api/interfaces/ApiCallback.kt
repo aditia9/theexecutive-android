@@ -6,5 +6,6 @@ package com.ranosys.theexecutive.api.interfaces
 interface ApiCallback<T>{
     fun onException(error : Throwable)
     fun onError(errorMsg : String)
+    fun onErrorCode(errorCode : Int){}
     fun onSuccess(t : T?)
 }

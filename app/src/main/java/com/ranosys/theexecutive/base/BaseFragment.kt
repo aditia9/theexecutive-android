@@ -248,7 +248,7 @@ abstract class BaseFragment : LifecycleFragment() {
             val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
             if(fragment != null && fragment is CheckoutFragment && GlobalSingelton.instance?.paymentInitiated ?: false){
 
-                Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(android.R.string.yes), getString(android.R.string.no), object: DialogOkCallback {
+                Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(R.string.yes), getString(R.string.no), object: DialogOkCallback {
                     override fun setDone(done: Boolean) {
                         redirectToOrderResultPage(orderId, Constants.CANCEL)
                         webPagesDialog.dismiss()

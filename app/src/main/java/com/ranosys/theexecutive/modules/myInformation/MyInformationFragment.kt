@@ -118,7 +118,7 @@ class MyInformationFragment: BaseFragment() {
         mViewModel.userInfoApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             if(apiResponse?.error.isNullOrBlank().not()){
-                Utils.showDialog(activity, getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, getString(R.string.add_address_failure_msg), getString(R.string.ok), "", null)
             }else{
                 mBinding.info = mViewModel.maskedUserInfo.get()
                 mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode))
@@ -132,7 +132,7 @@ class MyInformationFragment: BaseFragment() {
         mViewModel.updateUserInfoApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             if(apiResponse?.error.isNullOrBlank().not()){
-                Utils.showDialog(activity, getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, getString(R.string.add_address_failure_msg), getString(R.string.ok), "", null)
             }else{
                 Toast.makeText(activity, getString(R.string.udate_profile_success_msg), Toast.LENGTH_SHORT).show()
                 mBinding.info = mViewModel.maskedUserInfo.get()

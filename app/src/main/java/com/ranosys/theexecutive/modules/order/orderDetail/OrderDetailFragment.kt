@@ -57,7 +57,7 @@ class OrderDetailFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 

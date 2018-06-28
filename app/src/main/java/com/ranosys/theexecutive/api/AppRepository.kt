@@ -2,6 +2,8 @@ package com.ranosys.theexecutive.api
 
 import com.google.gson.JsonObject
 import com.ranosys.theexecutive.BuildConfig
+import com.ranosys.theexecutive.DelamiBrandsApplication
+import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.api.interfaces.ApiService
 import com.ranosys.theexecutive.modules.bankTransfer.BankTransferRequest
@@ -58,11 +60,11 @@ object AppRepository {
             callBack.onError(errorBody)
 
         } catch (e: JSONException) {
-            callBack.onException(Throwable(Constants.ERROR))
+            callBack.onException(Throwable(DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)))
             if (BuildConfig.DEBUG)
                 e.printStackTrace()
         } catch (e: IOException) {
-            callBack.onException(Throwable(Constants.ERROR))
+            callBack.onException(Throwable(DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)))
             if (BuildConfig.DEBUG)
                 e.printStackTrace()
         }
@@ -140,8 +142,7 @@ object AppRepository {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_401) {
-                        val errorBody = Constants.INVALID_CREDENTIALS
-                        callBack.onError(errorBody)
+                        callBack.onErrorCode(Constants.ERROR_CODE_401)
                     } else {
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                     }
@@ -271,8 +272,8 @@ object AppRepository {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_404) {
-                        val errorBody = Constants.NO_USER_EXIST
-                        callBack.onError(errorBody)
+                        callBack.onErrorCode(Constants.ERROR_CODE_404)
+
                     } else {
 
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
@@ -304,8 +305,7 @@ object AppRepository {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_404) {
-                        val errorBody = Constants.NO_USER_EXIST
-                        callBack.onError(errorBody)
+                        callBack.onErrorCode(Constants.ERROR_CODE_404)
                     } else {
 
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
@@ -380,8 +380,7 @@ object AppRepository {
             override fun onResponse(call: Call<RegisterDataClass.RegistrationResponse>?, response: Response<RegisterDataClass.RegistrationResponse>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_400) {
-                        val errorBody = Constants.ALREADY_REGISTERED
-                        callBack.onError(errorBody)
+                        callBack.onErrorCode(Constants.ERROR_CODE_400)
 
                     } else {
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
@@ -408,8 +407,8 @@ object AppRepository {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_404) {
-                        val errorBody = Constants.NO_USER_EXIST
-                        callBack.onError(errorBody)
+//
+                        callBack.onErrorCode(Constants.ERROR_CODE_404)
                     } else {
 
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)

@@ -167,7 +167,7 @@ object Utils {
     }
 
     fun showNetworkErrorDialog(context: Context){
-        showDialog(context, context.getString(R.string.network_err_text),context.getString(android.R.string.ok), "", object : DialogOkCallback{
+        showDialog(context, context.getString(R.string.network_err_text),context.getString(R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
 
             }
@@ -175,7 +175,7 @@ object Utils {
     }
 
     fun showErrorDialog(context: Context, error : String){
-        showDialog(context, error, context.getString(android.R.string.ok), "", object : DialogOkCallback{
+        showDialog(context, error, context.getString(R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
 
             }

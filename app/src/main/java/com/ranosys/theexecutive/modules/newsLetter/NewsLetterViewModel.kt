@@ -34,6 +34,9 @@ class NewsLetterViewModel(application: Application): BaseViewModel(application) 
                 apiFailureResponse?.value = errorMsg
             }
 
+            override fun onErrorCode(errorCode: Int) {
+                apiFailureResponse?.value = errorCode.toString()
+            }
             override fun onSuccess(message: String?) {
                 apiSuccessResponse?.value = message
             }
