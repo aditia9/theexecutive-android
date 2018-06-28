@@ -792,10 +792,12 @@ class ProductViewFragment : BaseFragment() {
                             sizeViewList?.get(index)?.isSelected = index == position
                         }
                         sizeValue = item?.value
-
-                        val selectedSizePrice = priceList?.single {
-                            it.colorValue == colorValue && it.sizeValue == sizeValue
-                        }?.price
+                        var selectedSizePrice = ""
+                        if(priceList?.size!! > 0){
+                            selectedSizePrice  = priceList?.single {
+                                it.colorValue == colorValue && it.sizeValue == sizeValue
+                            }?.price.toString()
+                        }
                         sizeDilaog.tv_product_price.text = selectedSizePrice
 
                         if (productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
