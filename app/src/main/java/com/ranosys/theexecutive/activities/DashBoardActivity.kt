@@ -105,7 +105,6 @@ class DashBoardActivity : BaseActivity() {
                             (fragment as BaseFragment).setToolBarParams(getString(R.string.notifications), 0, "", R.drawable.back, true, 0, false)
                             fragment.getNotification()
                         }
-
                         (fragment as? ProductDetailFragment)?.onResume()
                         (fragment as? AddressBookFragment)?.setToolbarAndCallAddressApi()
                         (fragment as? ShoppingBagFragment)?.onResume()
@@ -116,6 +115,10 @@ class DashBoardActivity : BaseActivity() {
                         (fragment as? LoginFragment)?.onResume()
                         (fragment as? SettingsFragment)?.onResume()
 
+                        //refresh/load shopping bag list
+                        if(fragment is ShoppingBagFragment){
+                            fragment.getShoppingBag()
+                        }
                     }
                 }
             }

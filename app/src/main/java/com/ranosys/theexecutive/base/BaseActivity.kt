@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.base
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
@@ -13,12 +14,12 @@ import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
-import com.ranosys.theexecutive.utils.DialogOkCallback
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.GlobalSingelton
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import android.annotation.TargetApi
+import android.content.res.Configuration
+import java.util.*
 
 
 /**
@@ -72,7 +73,6 @@ open class BaseActivity: RunTimePermissionActivity(){
                             Utils.showDialog(this@BaseActivity, getString(R.string.close_app_text),
                                     getString(R.string.yes), getString(R.string.no), object : DialogOkCallback {
                                 override fun setDone(done: Boolean) {
-
                                     finishAndRemoveTask()
                                 }
                             })
@@ -82,6 +82,8 @@ open class BaseActivity: RunTimePermissionActivity(){
                         }
                     }
 
+                }else{
+                    finish()
                 }
             }
 
@@ -139,4 +141,43 @@ open class BaseActivity: RunTimePermissionActivity(){
         supportActionBar?.hide()
     }
 
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(updateBaseContextLocale(base))
+    }
+
+    private fun updateBaseContextLocale(context: Context): Context {
+        var language = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) // Helper method to get saved language from SharedPreferences
+        var countryCode = ""
+       when(language){
+          Constants.COUNTRY_CODE_ID ->{
+               countryCode = Constants.COUNTRY_CODE_IN
+               language = Constants.COUNTRY_CODE_ID
+          }
+
+           Constants.DEFAULT_STORE_CODE ->{
+               countryCode = Constants.COUNTRY_CODE_US
+               language =  Constants.DEFAULT_STORE_CODE
+           }
+       }
+        val locale = Locale(language, countryCode)
+        Locale.setDefault(locale)
+       return updateResourcesLocale(context, locale)
+
+    }
+
+    private fun updateResourcesLocale(context: Context, locale: Locale): Context {
+        val configuration = context.resources.configuration
+        configuration.setLocale(locale)
+        return context.createConfigurationContext(configuration)
+    }
+
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            SavedPreferences.getInstance()?.setBooleanValue(Constants.ORIENTATION, true)
+        } else {
+            SavedPreferences.getInstance()?.setBooleanValue( Constants.ORIENTATION, false)
+        }
+    }
 }

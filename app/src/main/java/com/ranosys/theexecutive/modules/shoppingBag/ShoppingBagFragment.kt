@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.shopping_bag_footer.*
 class ShoppingBagFragment : BaseFragment() {
 
     private lateinit var shoppingBagViewModel: ShoppingBagViewModel
-    private val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+    private var userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
     private var itemPosition: Int = 0
     private var cartQty = 0
     private var updateQty = 0
@@ -43,7 +43,6 @@ class ShoppingBagFragment : BaseFragment() {
         viewBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_shopping_bag, container, false)
         shoppingBagViewModel = ViewModelProviders.of(this).get(ShoppingBagViewModel::class.java)
         viewBinder?.shoppingBagViewModel = shoppingBagViewModel
-        getShoppingBag()
         observeEvents()
         return viewBinder?.root
     }
@@ -69,7 +68,7 @@ class ShoppingBagFragment : BaseFragment() {
                 if(apiResponse?.error.equals(Constants.CART_DE_ACTIVE)){
                     shoppingBagViewModel.getCartIdForUser()
                 }else{
-                    Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                    Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
                 }
             }
         })
@@ -84,7 +83,7 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -102,7 +101,7 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -134,7 +133,7 @@ class ShoppingBagFragment : BaseFragment() {
                     getShoppingBag()
                 }
             } else {
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
                 hideLoading()
             }
         })
@@ -150,7 +149,7 @@ class ShoppingBagFragment : BaseFragment() {
                 setCartTitle()
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -165,7 +164,7 @@ class ShoppingBagFragment : BaseFragment() {
                 }
             } else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -192,7 +191,7 @@ class ShoppingBagFragment : BaseFragment() {
                 getShoppingBag()
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -267,10 +266,11 @@ class ShoppingBagFragment : BaseFragment() {
                     }
 
                     R.id.btn_checkout -> {
+                        var userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                         if (userToken.isNullOrBlank().not()) {
                             FragmentUtils.addFragment(context, CheckoutFragment(),null, CheckoutFragment::class.java.name, true )
                         } else {
-                            FragmentUtils.addFragment(context, LoginFragment(), null, LoginFragment::class.java.name, true)
+                            redirectToLogin()
                         }
                     }
 
@@ -283,6 +283,17 @@ class ShoppingBagFragment : BaseFragment() {
             cartQty = 0
             setCartTitle()
         }
+    }
+
+    private fun redirectToLogin() {
+        Utils.showDialog(activity, getString(R.string.login_required_for_checkout), getString(R.string.ok), getString(R.string.cancel), object : DialogOkCallback {
+            override fun setDone(done: Boolean) {
+                setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
+                val bundle = Bundle()
+                bundle.putBoolean(Constants.LOGIN_REQUIRED_PROMPT, true)
+                FragmentUtils.addFragment(activity as Context, LoginFragment(), bundle, LoginFragment::class.java.name, true)
+            }
+        })
     }
 
     private fun updateCartItem(shoppingBagQtyUpdateRequest: ShoppingBagQtyUpdateRequest) {
@@ -319,7 +330,7 @@ class ShoppingBagFragment : BaseFragment() {
             showLoading()
             shoppingBagViewModel.moveItemFromCart(item_id)
         } else {
-            FragmentUtils.addFragment(context, LoginFragment(), null, LoginFragment::class.java.name, true)
+            LoginFragment()
         }
     }
 
@@ -339,8 +350,9 @@ class ShoppingBagFragment : BaseFragment() {
     }
 
 
-    private fun getShoppingBag() {
+    fun getShoppingBag() {
         showLoading()
+        userToken =  SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         if (userToken.isNullOrBlank().not()) {
             shoppingBagViewModel.getShoppingBagForUser()
         } else {

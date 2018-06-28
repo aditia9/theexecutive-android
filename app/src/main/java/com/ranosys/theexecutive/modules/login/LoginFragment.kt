@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.text.TextUtils
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
@@ -67,6 +68,7 @@ class LoginFragment: BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        loginViewModel.loginRequiredPrompt = loginRequiredPrompt
         mBinding.loginVM = loginViewModel
 
         observeEvent()
@@ -186,7 +188,7 @@ class LoginFragment: BaseFragment() {
                 loginViewModel.getUserCartCount()
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -202,7 +204,7 @@ class LoginFragment: BaseFragment() {
                 }
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -211,7 +213,12 @@ class LoginFragment: BaseFragment() {
     private fun observeApiFailure() {
         loginViewModel.apiFailureResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
+            var errorMsg = msg
+            if(msg == Constants.ERROR_CODE_401.toString()){
+                errorMsg = getString(R.string.error_invalid_login_credential)
+            }
+
+            Utils.showDialog(activity, errorMsg, getString(R.string.ok),"", object : DialogOkCallback{
                 override fun setDone(done: Boolean) {
                 }
             })
@@ -221,9 +228,21 @@ class LoginFragment: BaseFragment() {
     private fun observeApiSuccess() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
-            //api to get cart id
             loginViewModel.getCartIdForUser(token)
-            FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+
+            //send locan broadcast on successfull login
+            // Create intent with action
+            val loginIntent = Intent("LOGIN")
+            LocalBroadcastManager.getInstance(activity as Context).sendBroadcast(loginIntent)
+
+
+            if(loginViewModel.loginRequiredPrompt){
+                loginViewModel.loginRequiredPrompt = false
+                activity?.onBackPressed()
+            }else{
+
+                FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+            }
         })
 
     }
@@ -312,7 +331,7 @@ class LoginFragment: BaseFragment() {
         } catch (e : ApiException ) {
             AppLog.printStackTrace(e)
             mGoogleSignInClient.signOut()
-            Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", null)
+            Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(R.string.ok), "", null)
         }
     }
 

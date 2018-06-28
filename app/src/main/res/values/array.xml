@@ -252,17 +252,17 @@
     </string-array>
 
     <string-array name="my_account_option_title_array">
-        <item>My Information</item>
-        <item>My Orders</item>
-        <item>Shipping Address</item>
-        <item>Notifications</item>
-        <item>Subscribe to Newsletter</item>
-        <item>Select Language</item>
-        <item>Change Password</item>
-        <item>Bank Transfer Confirmation</item>
-        <item>Buying Guide</item>
-        <item>Contact Us</item>
-        <item>Settings</item>
+        <item>@string/my_information_option</item>
+        <item>@string/my_orders</item>
+        <item>@string/shipping_address</item>
+        <item>@string/notifications</item>
+        <item>@string/news_letter_option</item>
+        <item>@string/select_lang_title</item>
+        <item>@string/bank_transfer</item>
+        <item>@string/change_password</item>
+        <item>@string/buying_guide</item>
+        <item>@string/contact_us</item>
+        <item>@string/settings</item>
     </string-array>
 
 
@@ -280,8 +280,8 @@
         <item>@drawable/notification</item>
         <item>@drawable/newsletter</item>
         <item>@drawable/language</item>
-        <item>@drawable/change_password</item>
         <item>@drawable/bank_transfer</item>
+        <item>@drawable/change_password</item>
         <item>@drawable/buying_guide</item>
         <item>@drawable/contact</item>
         <item>@drawable/setting</item>

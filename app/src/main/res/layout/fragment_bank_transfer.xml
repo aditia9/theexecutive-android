@@ -317,13 +317,12 @@
                     android:id="@+id/img_attachment"
                     android:layout_width="@dimen/eighty_dp"
                     android:layout_height="@dimen/eighty_dp"
-                    android:padding="@dimen/five_dp"
+                    android:padding="@dimen/eight_dp"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toBottomOf="@+id/tv_attachment"
                     android:background="@drawable/attachment_bg"
                     android:src="@drawable/attachment_icon"
                     android:contentDescription="@string/app_name"
-                    android:scaleType="fitXY"
                     android:layout_marginTop="@dimen/twenty_dp"
                     />
 

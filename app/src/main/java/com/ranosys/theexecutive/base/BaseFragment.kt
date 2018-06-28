@@ -166,7 +166,6 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.webview.settings.defaultZoom = WebSettings.ZoomDensity.FAR
         webPagesDialog.webview.settings.builtInZoomControls = true
         webPagesDialog.webview.settings.displayZoomControls = false
-        showLoading()
         webPagesDialog.webview.webViewClient = object : WebViewClient() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                 hideLoading()
@@ -205,8 +204,9 @@ abstract class BaseFragment : LifecycleFragment() {
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
-                hideLoading()
                 super.onPageFinished(view, url)
+                hideLoading()
+                view?.clearCache(true)
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
@@ -227,6 +227,7 @@ abstract class BaseFragment : LifecycleFragment() {
 
         webPagesDialog.webview.loadUrl(url)
         webPagesDialog.show()
+        showLoading()
         webPagesDialog.img_back.setOnClickListener {
 
             checkIfPaymentIsCancelled(webPagesDialog, orderId)
@@ -234,6 +235,9 @@ abstract class BaseFragment : LifecycleFragment() {
 
         //stop loader when dialog dismissed
         webPagesDialog.setOnDismissListener {
+            webview?.run {
+                webview.clearCache(true)
+            }
             hideLoading()
         }
 
@@ -244,7 +248,7 @@ abstract class BaseFragment : LifecycleFragment() {
             val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
             if(fragment != null && fragment is CheckoutFragment && GlobalSingelton.instance?.paymentInitiated ?: false){
 
-                Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(android.R.string.yes), getString(android.R.string.no), object: DialogOkCallback {
+                Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(R.string.yes), getString(R.string.no), object: DialogOkCallback {
                     override fun setDone(done: Boolean) {
                         redirectToOrderResultPage(orderId, Constants.CANCEL)
                         webPagesDialog.dismiss()
@@ -260,7 +264,7 @@ abstract class BaseFragment : LifecycleFragment() {
     private fun redirectToOrderResultPage(orderId: String, status: String) {
         popUpAllFragments()
         val orderResultFragment = OrderResultFragment.getInstance(orderId, status)
-        FragmentUtils.addFragment(context, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
+        FragmentUtils.addFragment(activity, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
     }
 
     //method to remove all fragment except home

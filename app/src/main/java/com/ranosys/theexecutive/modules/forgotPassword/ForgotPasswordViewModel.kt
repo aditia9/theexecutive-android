@@ -36,14 +36,18 @@ class ForgotPasswordViewModel(application: Application): BaseViewModel(applicati
                 apiFailureResponse?.value = errorMsg
             }
 
-                override fun onSuccess(linkSent: Boolean?) {
-                    apiSuccessResponse?.value = linkSent
-                }
+            override fun onErrorCode(errorCode: Int) {
+                apiFailureResponse?.value = errorCode.toString()
+            }
+
+            override fun onSuccess(linkSent: Boolean?) {
+                apiSuccessResponse?.value = linkSent
+            }
 
         })
     }
 
-     fun validateData(context: Context): Boolean {
+    fun validateData(context: Context): Boolean {
 
         if (TextUtils.isEmpty(email.get())) {
             emailError.set(context.getString(R.string.empty_email))

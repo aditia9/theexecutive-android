@@ -15,6 +15,9 @@ object Constants {
     const val SELECTED_STORE_ID_KEY = "selected_store_id"
     const val SELECTED_WEBSITE_ID_KEY = "selected_website_id"
     const val ANDROID_DEVICE_ID_KEY = "device_id"
+    const val HEIGHT = "height"
+    const val ORIENTATION = "orientation"
+    const val WIDTH = "width"
     const val OS_TYPE = "android"
     const val MESSAGE = "message"
     const val ERROR = "Error"
@@ -103,6 +106,7 @@ object Constants {
     var notificationCounter = 0
     const val KEY_REDIRECTION_TYPE = "type"
     const val KEY_REDIRECTION_VALUE = "typeId"
+    const val KEY_APP_IN_BACKGROUND = "appInBackground"
     const val KEY_IMAGE = "image_url"
     const val KEY_TITLE = "title"
     const val KEY_BODY = "body"
@@ -123,11 +127,17 @@ object Constants {
     const val SUCCESS = "success"
     const val FAILURE = "failure"
     const val CANCEL = "cancelled"
+    const val CANCEL_STATUS = "canceled"
     val IMAGE_RATIO: Double = 1.44
+    val WIDTH_MARGIN : Int = 40
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
     const val CART_DE_ACTIVE = "cart de-active"
     const val IS_NOTIFICATION_SHOW = "notification"
     const val ALFA_SET = 180
+    const val IGNORE="ignore"
+    const val COUNTRY_CODE_ID = "ID"
+    const val COUNTRY_CODE_IN = "in"
+    const val COUNTRY_CODE_US = "US"
 
 }

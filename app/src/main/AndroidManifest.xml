@@ -25,6 +25,7 @@
         <activity android:name=".modules.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/myAppTheme"
+            android:configChanges="orientation"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,6 +39,7 @@
             />
         <activity android:name=".activities.DashBoardActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
+            android:configChanges="orientation|screenSize"
             />
 
         <!--fb integration-->

@@ -58,7 +58,7 @@ class CheckoutFragment : BaseFragment() {
 
     private fun handleError(error: String?) {
 
-        Utils.showDialog(activity as Context, error, (activity as Context).getString(android.R.string.ok), "", object: DialogOkCallback{
+        Utils.showDialog(activity as Context, error, (activity as Context).getString(R.string.ok), "", object: DialogOkCallback{
             override fun setDone(done: Boolean) {
                 activity?.onBackPressed()
             }
@@ -91,7 +91,12 @@ class CheckoutFragment : BaseFragment() {
                 }
             }
 
-            scroll_view.smoothScrollBy(0,cv_shipping_method.height)
+            cv_shipping_method.viewTreeObserver.addOnGlobalLayoutListener(object: OnGlobalLayoutListener{
+                override fun onGlobalLayout() {
+                    cv_shipping_method.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    scroll_view.smoothScrollBy(0,scroll_view.height)
+                }
+            })
         }
 
         tv_payment_method.setOnClickListener {
@@ -111,7 +116,12 @@ class CheckoutFragment : BaseFragment() {
                 }
             }
 
-            scroll_view.smoothScrollBy(0,cv_payment_method.height)
+            tv_payment_method.viewTreeObserver.addOnGlobalLayoutListener(object: OnGlobalLayoutListener{
+                override fun onGlobalLayout() {
+                    cv_shipping_method.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    scroll_view.smoothScrollBy(0,scroll_view.height)
+                }
+            })
 
         }
 
@@ -137,7 +147,6 @@ class CheckoutFragment : BaseFragment() {
                     val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position) ?: null
                     checkoutViewModel.selectedShippingMethod = shippingMethod
                     getPaymentMethod(shippingMethod!!)
-
                 }
 
             }
@@ -256,16 +265,27 @@ class CheckoutFragment : BaseFragment() {
     private fun observeApiResponse() {
         checkoutViewModel.selectedAddress.observe(this, Observer { address ->
             hideLoading()
-            checkoutBinding.address = address
 
-            //call shipping method api according to updated address
-            checkoutViewModel.getShippingMethodsApi(address?.id!!)
-            if(checkoutBinding.cvShippingMethod.visibility == View.VISIBLE){
-                checkoutBinding.cvShippingMethod.visibility = View.GONE
-                divider_shipping_method_below.visibility = View.VISIBLE
-                shipping_method_expand_img.setImageResource(R.drawable.forward)
+            if(address != null){
+                checkoutBinding.address = address
+                //call shipping method api according to updated address
+                address.id?.run {
+                    checkoutViewModel.getShippingMethodsApi(address.id!!)
+                    if(checkoutBinding.cvShippingMethod.visibility == View.VISIBLE){
+                        checkoutBinding.cvShippingMethod.visibility = View.GONE
+                        divider_shipping_method_below.visibility = View.VISIBLE
+                        shipping_method_expand_img.setImageResource(R.drawable.forward)
 
+                    }
+
+                    tv_no_address.visibility = View.GONE
+                }
+
+            }else{
+                checkoutBinding.address = null
+                tv_no_address.visibility = View.VISIBLE
             }
+
 
 
         })

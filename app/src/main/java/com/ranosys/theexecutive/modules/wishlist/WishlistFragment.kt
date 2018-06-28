@@ -59,7 +59,7 @@ class WishlistFragment : BaseFragment() {
                     setWishlistAdapter()
                 }
             }else {
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -73,7 +73,7 @@ class WishlistFragment : BaseFragment() {
                 }
             }else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -88,7 +88,7 @@ class WishlistFragment : BaseFragment() {
                     callWishlistApi()
                 }
             }else {
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
     }
@@ -121,7 +121,6 @@ class WishlistFragment : BaseFragment() {
                                 Toast.makeText(activity, getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
                             }
                         }
-
                     }
                     R.id.img_delete -> {
                         Utils.showDialog(context, getString(R.string.remove_item_text),

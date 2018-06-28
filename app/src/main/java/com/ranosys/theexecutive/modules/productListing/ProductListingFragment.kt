@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
@@ -77,7 +78,7 @@ class ProductListingFragment: BaseFragment() {
         val promoUrl = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message_url
         showPromotionMsg(promoMsg, promoUrl, {
             if(!TextUtils.isEmpty(promoUrl))
-            prepareWebPageDialog(activity as Context, promoUrl, "")
+                prepareWebPageDialog(activity as Context, promoUrl, "")
         })
     }
 
@@ -136,7 +137,14 @@ class ProductListingFragment: BaseFragment() {
                 if(count <= 0){
                     mBinding.productList.visibility = View.GONE
                     mBinding.tvNoProductAvailable.visibility = View.VISIBLE
-                    mBinding.tvNoProductAvailable.text = "${getString(R.string.no_product_available_error)} \"${mViewModel.lastSearchQuery}\""
+                    val errorMessage  = if(mViewModel.lastSearchQuery.isEmpty()){
+                        getString(R.string.no_product_available_error)
+                    }else{
+                        "${getString(R.string.no_product_available_error_search)} \"${mViewModel.lastSearchQuery}\""
+
+                    }
+                    mBinding.tvNoProductAvailable.text = errorMessage
+
                 }else{
                     mBinding.productList.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.visibility = View.GONE
@@ -590,5 +598,13 @@ class ProductListingFragment: BaseFragment() {
         var categoryName: String? = null
         var categoryId: Int? = null
         var homeSearchQuery: String = ""
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        activity?.runOnUiThread {
+            productListAdapter.notifyDataSetChanged()
+        }
+
     }
 }

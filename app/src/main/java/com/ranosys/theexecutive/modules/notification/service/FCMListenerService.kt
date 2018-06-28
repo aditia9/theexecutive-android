@@ -12,9 +12,11 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.modules.splash.SplashActivity
@@ -72,8 +74,11 @@ class FCMListenerService : FirebaseMessagingService() {
         val intent : Intent
         if(Utils.isAppIsInBackground(this)){
             intent = Intent(this, SplashActivity::class.java)
+            intent.putExtra(Constants.KEY_APP_IN_BACKGROUND, true)
+
         }else{
             intent = Intent(this, DashBoardActivity::class.java)
+            intent.putExtra(Constants.KEY_APP_IN_BACKGROUND, false)
         }
 
         intent.putExtra(Constants.KEY_REDIRECTION_TYPE, redirectType)
@@ -86,19 +91,23 @@ class FCMListenerService : FirebaseMessagingService() {
         intent.putExtra(Constants.KEY_NOTIFICATION_MESSAGE, body)
         intent.putExtra(Constants.KEY_IMAGE, notificationImg)
 
+        //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         val pendingIntent = PendingIntent.getActivity(this, Calendar.getInstance().timeInMillis.toInt(), intent,
                 PendingIntent.FLAG_ONE_SHOT)
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val notificationChannel = NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID, resources.getString(R.string.app_name), importance)
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.RED
-            notificationChannel.enableVibration(true)
-            notificationManager.createNotificationChannel(notificationChannel)
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                val notificationChannel = NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID, resources.getString(R.string.app_name), importance)
+                notificationChannel.enableLights(true)
+                notificationChannel.lightColor = Color.RED
+                notificationChannel.enableVibration(true)
+                notificationManager.createNotificationChannel(notificationChannel)
+            }
 
             notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(getNotificationIcon())
@@ -107,9 +116,11 @@ class FCMListenerService : FirebaseMessagingService() {
                     .setAutoCancel(true)
                     .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent)
+                    .setGroup(BuildConfig.APPLICATION_ID)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setChannelId(Constants.NOTIFICATION_CHANNEL_ID)
                     .setPriority(NotificationManager.IMPORTANCE_HIGH)
+
 
             if(!TextUtils.isEmpty(redirectTitle)){
                 notification.setContentTitle(title)
@@ -145,9 +156,32 @@ class FCMListenerService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notification.color = resources.getColor(R.color.black)
         }
+
         if(SavedPreferences.getInstance()?.getBooleanValue(Constants.IS_NOTIFICATION_SHOW)!!){
             notificationManager.notify(Calendar.getInstance().timeInMillis.toInt(), notification.build())
+
+            /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                val summary = buildSummary(body)
+                notificationManager.notify(0, summary!!.build())
+            }*/
         }
+    }
+
+    private fun buildSummary(notificationBody: String): NotificationCompat.Builder? {
+        val intent = Intent(this, SplashActivity::class.java)
+        intent.putExtra(Constants.KEY_REDIRECTION_TYPE, "")
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return NotificationCompat.Builder(this, BuildConfig.APPLICATION_ID)
+                .setContentText(notificationBody)
+                .setSmallIcon(getNotificationIcon())
+                .setShowWhen(true)
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(notificationBody))
+                .setGroup(BuildConfig.APPLICATION_ID)
+                .setGroupSummary(true)
+                .setContentIntent(pendingIntent)
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
     }
 
     private fun getNotificationIcon(): Int {

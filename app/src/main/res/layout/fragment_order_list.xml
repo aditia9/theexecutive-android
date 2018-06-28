@@ -34,7 +34,7 @@
             android:padding="@dimen/five_dp"
             android:textColor="@color/hint_color"
             android:gravity="center"
-            android:text="@string/no_item"
+            android:text="@string/no_item_order_list"
             android:visibility="gone"
             />
 

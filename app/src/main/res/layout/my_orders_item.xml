@@ -19,7 +19,7 @@
         android:layout_margin="@dimen/ten_dp"
         card_view:cardBackgroundColor="@color/address_item_bg_color"
         card_view:cardCornerRadius="@dimen/card_corner_radius"
-        card_view:cardElevation="@dimen/four_dp">
+        card_view:cardElevation="@dimen/two_dp">
 
 
         <android.support.constraint.ConstraintLayout
@@ -33,7 +33,6 @@
                 android:layout_height="@dimen/hundred_dp"
                 android:layout_margin="@dimen/ten_dp"
                 android:contentDescription="@string/image_one_detail"
-                android:src="@drawable/placeholder"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 bind:baseUrlWithProductImageUrl="@{item.image}" />

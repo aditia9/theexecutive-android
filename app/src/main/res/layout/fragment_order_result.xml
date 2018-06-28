@@ -37,7 +37,7 @@
             android:layout_width="@dimen/sixty_dp"
             android:layout_height="@dimen/sixty_dp"
             android:layout_margin="@dimen/eight_dp"
-            bind:orderResult="@{vm.status}"
+            bind:orderResult="@{vm.statusImg}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline_right"
             app:layout_constraintStart_toStartOf="@+id/guideline_left"
@@ -75,11 +75,12 @@
 
         <TextView
             android:id="@+id/tv_virtual_acc_number"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:gravity="center"
             android:text='@{@string/virtual_acc_label + " " + vm.virtualAccountNumber}'
             android:textStyle="bold"
             android:visibility="@{TextUtils.isEmpty(vm.virtualAccountNumber)? View.GONE : View.VISIBLE}"

@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.modules.category
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
@@ -20,7 +21,6 @@ import android.widget.ExpandableListView
 import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
-import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentCategoryBinding
@@ -28,14 +28,9 @@ import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
-import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.GlobalSingelton
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
-import kotlinx.android.synthetic.main.toolbar_layout.view.*
 
 /**
  * @Details Class showing categories on Home screen
@@ -48,6 +43,7 @@ class CategoryFragment : BaseFragment() {
     private var handler = Handler(Looper.getMainLooper())
     private lateinit var viewPager : ViewPager
     private lateinit var pagerAdapter:CustomViewPageAdapter
+    private lateinit var promotionBinding : HomeViewPagerBinding
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,12 +60,12 @@ class CategoryFragment : BaseFragment() {
 
 
         val inflater = LayoutInflater.from(context)
-        val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
-        promotionBinding?.categoryModel = categoryModelView
-        promotionBinding?.tvPromotionText?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
+        promotionBinding = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
+        promotionBinding.categoryModel = categoryModelView
+        promotionBinding.tvPromotionText.text = GlobalSingelton.instance?.configuration?.home_promotion_message
 
         // update height of promotion view pager according to ration 1.5
-        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.IMAGE_RATIO)
+        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding.viewpager, Constants.IMAGE_RATIO)
         viewPager = promotionBinding.root?.viewpager!!
 
         pagerAdapter = CustomViewPageAdapter(view.context, categoryModelView?.promotionResponse?.get())
@@ -217,7 +213,7 @@ class CategoryFragment : BaseFragment() {
                 pagerAdapter.notifyDataSetChanged()
                 startScrollViewPager(viewPager, response.size)
             } else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -240,21 +236,42 @@ class CategoryFragment : BaseFragment() {
                 categoryModelView?.categoryResponse?.set(response)
 
             } else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
         })
     }
 
+
+
     private fun startScrollViewPager(viewPager : ViewPager, count : Int){
-        var currentPage = 0
         val runnable = object : Runnable {
             override fun run() {
-                currentPage = currentPage % count
-                viewPager.setCurrentItem(currentPage++, false)
-                handler.postDelayed(this, 3000)
+                if (viewPager.currentItem < count - 1) {
+                    viewPager.currentItem = viewPager.currentItem + 1
+                } else {
+                    viewPager.setCurrentItem(0,false)
+                }
+                handler.postDelayed(this, Constants.SPLASH_TIMEOUT)
             }
         }
-        handler.postDelayed(runnable, 3000)
+        handler.postDelayed(runnable, Constants.SPLASH_TIMEOUT)
+
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // Checks the orientation of the screen
+        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            pagerAdapter.refresh(0)
+        }else{
+            pagerAdapter.refresh(1)
+        }
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            SavedPreferences.getInstance()?.setBooleanValue(Constants.ORIENTATION, true)
+        } else {
+            SavedPreferences.getInstance()?.setBooleanValue( Constants.ORIENTATION, false)
+        }
+    }
 }

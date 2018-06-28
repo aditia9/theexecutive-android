@@ -79,7 +79,6 @@
                     android:layout_height="@dimen/half_dip"
                     android:layout_marginTop="@dimen/sixteen_dp"
                     android:background="@color/divider_color"
-                    android:visibility="@{tvShipping.visibility}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_shipping"/>
@@ -90,7 +89,6 @@
                     android:layout_height="@dimen/half_dip"
                     android:layout_marginTop="@dimen/eight_dp"
                     android:background="@color/divider_color"
-                    android:visibility="@{tvShipping.visibility}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_mobile"/>
@@ -110,7 +108,6 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/forward"
                     android:padding="@dimen/eight_dp"
-                    android:visibility="@{tvShipping.visibility}"
                     android:contentDescription="@string/address"
                     app:layout_constraintTop_toTopOf="@id/address_expand_view"
                     app:layout_constraintBottom_toBottomOf="@id/address_expand_view"
@@ -154,6 +151,23 @@
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toStartOf="@id/address_expand_view"
                     app:layout_constraintTop_toBottomOf="@id/tv_address"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_no_address"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/match_constraint"
+                    android:background="@color/white"
+                    android:maxLines="2"
+                    android:text="@string/no_address_available_error"
+                    android:textSize="@dimen/sixteen_sp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/hint_color"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintEnd_toStartOf="@id/address_expand_view"
+                    app:layout_constraintTop_toBottomOf="@id/divider_address_above"
+                    app:layout_constraintBottom_toTopOf="@id/divider_address_below"
                     />
 
 

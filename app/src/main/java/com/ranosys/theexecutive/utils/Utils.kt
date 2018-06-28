@@ -167,7 +167,7 @@ object Utils {
     }
 
     fun showNetworkErrorDialog(context: Context){
-        showDialog(context, context.getString(R.string.network_err_text),context.getString(android.R.string.ok), "", object : DialogOkCallback{
+        showDialog(context, context.getString(R.string.network_err_text),context.getString(R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
 
             }
@@ -175,7 +175,7 @@ object Utils {
     }
 
     fun showErrorDialog(context: Context, error : String){
-        showDialog(context, error, context.getString(android.R.string.ok), "", object : DialogOkCallback{
+        showDialog(context, error, context.getString(R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
 
             }
@@ -187,6 +187,9 @@ object Utils {
         LoginManager.getInstance().logOut()
         mGoogleSignInClient.signOut()
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_EMAIL)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.FIRST_NAME)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.LAST_NAME)
         updateCartCount(0)
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         GlobalSingelton.instance?.userInfo = null
@@ -198,7 +201,6 @@ object Utils {
         val xlarge = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
         val large = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
         return xlarge || large
-
     }
 
     fun openCmsPage(context: Context, url: String) {
@@ -217,7 +219,7 @@ object Utils {
         return displayMetrics.widthPixels
     }
 
-    private fun getDeviceHeight(context: Context?) : Int{
+     fun getDeviceHeight(context: Context?) : Int{
         val displayMetrics = DisplayMetrics()
         (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.heightPixels
@@ -426,11 +428,27 @@ object Utils {
         return format.format(newDate)
     }
 
-    fun getDateTimeFormat(strDate : String): String {
+    @SuppressLint("SimpleDateFormat")
+    fun getDateTimeFormat(strDate : String, ctx : Context): String {
         var format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        format.timeZone = TimeZone.getTimeZone("GMT");
+        format.timeZone = TimeZone.getTimeZone("GMT")
         val newDate = format.parse(strDate)
         format = SimpleDateFormat("dd-MM-yyyy, hh:mm a")
-        return format.format(newDate)
+
+        val d = Date()
+        val systemDateFormat = SimpleDateFormat("dd-MM-yyyy")
+        val systemTimeString = systemDateFormat.format(d.time)
+        val compareDateString = systemDateFormat.format(newDate.time)
+
+        val systemCurrentTimeString = systemDateFormat.parse(systemTimeString)
+        val compareTimeString = systemDateFormat.parse(compareDateString)
+
+        val text = StringBuffer("")
+        if(systemCurrentTimeString.compareTo(compareTimeString) == 0){
+            format = SimpleDateFormat(" hh:mm a")
+            return text.append(ctx.getString(R.string.today) + ""+format.format(newDate)).toString()
+        }else{
+            return format.format(newDate)
+        }
     }
 }

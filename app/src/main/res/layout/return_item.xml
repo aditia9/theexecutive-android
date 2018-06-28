@@ -27,7 +27,6 @@
             android:layout_height="@dimen/one_twenty_five_dp"
             android:layout_marginStart="@dimen/forty_dp"
             android:layout_marginTop="@dimen/twenty_dp"
-            android:src="@drawable/placeholder"
             android:contentDescription="@string/app_name"
             bind:baseUrlWithProductImageUrl="@{item.extension_attributes.image}"
             app:layout_constraintStart_toStartOf="parent"

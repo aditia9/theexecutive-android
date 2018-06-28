@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentBankTransferBinding
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
@@ -50,8 +52,15 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bank_transfer, container, false)
         bankTransferViewModel = ViewModelProviders.of(this).get(BankTransferViewModel::class.java)
-        mBinding.bankTransferVM = bankTransferViewModel
 
+        val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        if(!TextUtils.isEmpty(isLogin)) {
+            bankTransferViewModel.emailAddress.set(SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL))
+            bankTransferViewModel.firstName.set(SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME))
+            bankTransferViewModel.lastName.set(SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME))
+        }
+
+        mBinding.bankTransferVM = bankTransferViewModel
         bankTransferViewModel.getRecipientsList()
         bankTransferViewModel.getTransferMethodList()
         mediaPicker = (activity as DashBoardActivity).initMediaPicker()
@@ -121,7 +130,7 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
 
                 }
             } else {
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 

@@ -33,18 +33,20 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/sixteen_dp">
+            android:paddingTop="@dimen/four_dp">
 
             <CheckBox
                 android:id="@+id/chk_default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="@dimen/sixteen_dp"
                 android:checked="@{isDefault}"
                 android:enabled="@{!isDefault}"
+                android:scaleX="0.90"
+                android:scaleY="0.90"
+                contentPadding="0dp"
                 android:text="@string/set_as_default"
                 android:textColor="@color/hint_color"
-                android:textSize="@dimen/fourteen_sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,7 +55,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_four_dp"
-                android:layout_marginTop="@dimen/two_dp"
                 android:maxLines="2"
                 android:text='@{address.firstname + " " +address.lastname}'
                 android:textSize="@dimen/twenty_sp"
@@ -68,9 +69,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/twenty_four_dp"
                 android:layout_marginStart="@dimen/twenty_four_dp"
-                android:layout_marginTop="@dimen/eight_dp"
+                android:layout_marginTop="@dimen/two_dp"
                 android:maxLines="5"
-                android:minHeight="@dimen/forty_eight_dp"
+                android:minHeight="@dimen/forty_dp"
                 android:text='@{address.street[0] + ", " +(address.street[1] == null ? "" : address.street[1]) + " " + address.region.region +"\n" + address.city + ", " + address.postcode + ", " + country}'
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +82,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/twenty_four_dp"
-                android:layout_marginTop="@dimen/six_dp"
                 android:labelFor="@+id/tv_mobile_number"
                 android:text="@string/mobile_number_label"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,7 +115,7 @@
                 android:id="@+id/tv_remove_address"
                 android:layout_width="@dimen/match_constraint"
                 android:layout_height="@dimen/forty_four_dp"
-                android:layout_marginTop="@dimen/eighteen_dp"
+                android:layout_marginTop="@dimen/twelve_dp"
                 android:gravity="center"
                 android:text="@string/remove"
                 android:textColor="@color/hint_color"
@@ -140,7 +140,7 @@
                 android:id="@+id/tv_edit_address"
                 android:layout_width="@dimen/match_constraint"
                 android:layout_height="@dimen/forty_four_dp"
-                android:layout_marginTop="@dimen/eighteen_dp"
+                android:layout_marginTop="@dimen/twelve_dp"
                 android:gravity="center"
                 android:text="@string/edit"
                 android:textStyle="bold"

@@ -7,6 +7,7 @@ import android.content.Context
 import android.databinding.ObservableField
 import android.text.TextUtils
 import android.view.View
+import com.ranosys.theexecutive.DelamiBrandsApplication
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
@@ -30,6 +31,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
     var isEmailNotAvailable: MutableLiveData<LoginDataClass.SocialLoginData>? = MutableLiveData()
     var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
     var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var loginRequiredPrompt: Boolean = false
 
 
     var clickedBtnId: MutableLiveData<Int>? = null
@@ -80,7 +82,6 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 Utils.printLog("Login Api", "error")
-                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
 
             }
 
@@ -89,6 +90,9 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 apiFailureResponse?.value = errorMsg
             }
 
+            override fun onErrorCode(errorCode: Int) {
+                apiFailureResponse?.value = errorCode.toString()
+            }
             override fun onSuccess(userToken: String?) {
                 //save customer token
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
@@ -127,6 +131,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 SavedPreferences.getInstance()?.saveStringValue(t?.email, Constants.USER_EMAIL)
                 SavedPreferences.getInstance()?.saveStringValue(t?.firstname, Constants.FIRST_NAME)
                 SavedPreferences.getInstance()?.saveStringValue(t?.lastname, Constants.LAST_NAME)
+                Utils.setUpZendeskChat()
             }
         })
     }
@@ -155,7 +160,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         val request = LoginDataClass.IsEmailAvailableRequest(userData.email, SavedPreferences.getInstance()?.getIntValue(Constants.SELECTED_WEBSITE_ID_KEY)?:  1)
         AppRepository.isEmailAvailable(request, object : ApiCallback<Boolean>{
             override fun onException(error: Throwable) {
-                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
+                apiFailureResponse?.value = DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)
             }
 
             override fun onError(errorMsg: String) {
@@ -178,7 +183,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
         AppRepository.socialLogin(request, object: ApiCallback<String>{
             override fun onException(error: Throwable) {
-                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
+                apiFailureResponse?.value = DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)
             }
 
             override fun onError(errorMsg: String) {
@@ -244,6 +249,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
+                getUserCartCount()
                 SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
                 userCartIdResponse?.value = apiResponse
             }
@@ -265,11 +271,10 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
                 userCartCountResponse?.value = apiResponse
+                Utils.updateCartCount(t!!.toInt())
             }
 
         })
-
     }
-
 }
 
