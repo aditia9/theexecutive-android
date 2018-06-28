@@ -292,5 +292,5 @@
     <string name="error_no_user_exist">No user exists with this email id</string>
     <string name="error_user_already_exist">It seems like you are already registered with us, kindly login</string>
     <string name="state_label">State/ Province</string>
-
+    <string name="version">Version:</string>
 </resources>
