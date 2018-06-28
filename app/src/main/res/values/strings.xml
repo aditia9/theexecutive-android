@@ -287,5 +287,5 @@
     <string name="ignore">Ignore</string>
     <string name="no_address_available_error">No address available. Please add address to checkout.</string>
     <string name="no_item_order_list">You have not placed an order.</string>
-
+    <string name="version">Version:</string>
 </resources>
