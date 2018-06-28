@@ -447,7 +447,7 @@ class ProductViewFragment : BaseFragment() {
                 }
             }else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -539,7 +539,7 @@ class ProductViewFragment : BaseFragment() {
         //check for logged in user
         if((SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY) ?: "").isBlank()){
             //show toast to user to login
-            Utils.showDialog(activity, getString(R.string.login_required_error), getString(android.R.string.ok), getString(android.R.string.cancel), object : DialogOkCallback {
+            Utils.showDialog(activity, getString(R.string.login_required_error), getString(R.string.ok), getString(R.string.cancel), object : DialogOkCallback {
                 override fun setDone(done: Boolean) {
                     setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
                     val bundle = Bundle()

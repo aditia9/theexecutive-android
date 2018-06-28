@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.Toast
+import com.ranosys.theexecutive.DelamiBrandsApplication
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
@@ -56,9 +57,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
     var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
     var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
-    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = Constants.COUNTRY_LABEL)
-    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = Constants.STATE_LABEL)
-    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
+    var countryHint:RegisterDataClass.Country? = null
+    var stateHint:RegisterDataClass.State? = null
+    var cityHint:RegisterDataClass.City? = null
 
     var isSocialLogin: Boolean = false
 
@@ -80,10 +81,10 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         val LOGIN_API_TAG = "Login Api"
     }
 
-    init {
-        countryList.add(countryHint)
-        stateList.add(stateHint)
-        cityList.add(cityHint)
+    fun initSpinnerHints() {
+        countryList.add(countryHint!!)
+        stateList.add(stateHint!!)
+        cityList.add(cityHint!!)
 
         selectedcountry.set(countryHint)
         selectedState.set(stateHint)
@@ -121,7 +122,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         }else{
             stateList.clear()
-            stateList.add(stateHint)
+            stateList.add(stateHint!!)
             selectedState.set(stateHint)
             selectedCity.set(cityHint)
         }
@@ -134,7 +135,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             callCityApi(selectedState.get().id)
         }else{
             cityList.clear()
-            cityList.add(cityHint)
+            cityList.add(cityHint!!)
             selectedCity.set(cityHint)
         }
         citySpinner.setSelection(0)
@@ -217,6 +218,10 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     apiFailureResponse?.value = errorMsg
                 }
 
+                override fun onErrorCode(errorCode: Int) {
+                    apiFailureResponse?.value = errorCode.toString()
+                }
+
                 override fun onSuccess(response: RegisterDataClass.RegistrationResponse?) {
                     if(isSocialLogin) callLoginApi() else apiDirectRegSuccessResponse?.value = response
                 }
@@ -230,8 +235,12 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
-                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
+                apiFailureResponse?.value = DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)
 
+            }
+
+            override fun onErrorCode(errorCode: Int) {
+                apiFailureResponse?.value = errorCode.toString()
             }
 
             override fun onError(errorMsg: String) {

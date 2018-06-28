@@ -78,7 +78,7 @@ class ProductListingFragment: BaseFragment() {
         val promoUrl = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message_url
         showPromotionMsg(promoMsg, promoUrl, {
             if(!TextUtils.isEmpty(promoUrl))
-            prepareWebPageDialog(activity as Context, promoUrl, "")
+                prepareWebPageDialog(activity as Context, promoUrl, "")
         })
     }
 
@@ -137,7 +137,14 @@ class ProductListingFragment: BaseFragment() {
                 if(count <= 0){
                     mBinding.productList.visibility = View.GONE
                     mBinding.tvNoProductAvailable.visibility = View.VISIBLE
-                    mBinding.tvNoProductAvailable.text = "${getString(R.string.no_product_available_error)} \"${mViewModel.lastSearchQuery}\""
+                    val errorMessage  = if(mViewModel.lastSearchQuery.isEmpty()){
+                        getString(R.string.no_product_available_error)
+                    }else{
+                        "${getString(R.string.no_product_available_error_search)} \"${mViewModel.lastSearchQuery}\""
+
+                    }
+                    mBinding.tvNoProductAvailable.text = errorMessage
+
                 }else{
                     mBinding.productList.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.visibility = View.GONE

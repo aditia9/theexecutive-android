@@ -159,7 +159,8 @@
     <string name="email_sent">We have sent you an email, please follow the instruction to reset password</string>
     <string name="password_change_msg">Your password successfully changed</string>
     <string name="logout_text">Are you sure you want to logout from application?</string>
-    <string name="no_product_available_error">No results found for the search</string>
+    <string name="no_product_available_error_search">No results found for the search</string>
+    <string name="no_product_available_error">Oops.. we couldn\'t find what you need.</string>
     <string name="empty_shipping_method_error">Oops... seems there is no shipping available for selected address. Please change address</string>
     <string name="empty_payment_method_error">Oops... seems there is no payment available</string>
     <string name="empty_sort_option_selection_error">Please select at least one option</string>
@@ -287,5 +288,9 @@
     <string name="ignore">Ignore</string>
     <string name="no_address_available_error">No address available. Please add address to checkout.</string>
     <string name="no_item_order_list">You have not placed an order.</string>
-    <string name="version">Version:</string>
+    <string name="error_invalid_login_credential">The email address or password do not match with our system, Kindly enter the valid credentials</string>
+    <string name="error_no_user_exist">No user exists with this email id</string>
+    <string name="error_user_already_exist">It seems like you are already registered with us, kindly login</string>
+    <string name="state_label">State/ Province</string>
+
 </resources>

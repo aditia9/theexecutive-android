@@ -66,14 +66,18 @@ class NewsLetterFragment: BaseFragment() {
     private fun observeApiFailure() {
         mViewModel.apiFailureResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", null)
+            var errorMsg = msg
+            if(msg == Constants.ERROR_CODE_404.toString()){
+                errorMsg = getString(R.string.error_no_user_exist)
+            }
+            Utils.showDialog(activity, errorMsg, getString(R.string.ok),"", null)
         })
     }
 
     private fun observeApiSuccess() {
         mViewModel.apiSuccessResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", null)
+            Utils.showDialog(activity, msg, getString(R.string.ok),"", null)
         })
     }
 }
