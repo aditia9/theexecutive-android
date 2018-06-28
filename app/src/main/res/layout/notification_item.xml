@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/twenty_dp"
             android:layout_marginStart="@dimen/fifteen_dp"
+            android:textStyle="bold"
             android:text="@{notification.title}"
             android:textColor="@{notification.is_read ? @color/notification_gry :@color/black}"
             android:visibility="@{TextUtils.isEmpty(notification.title)? View.GONE : View.VISIBLE}"
