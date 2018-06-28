@@ -139,7 +139,11 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     private fun observeApiFailure() {
         registerViewModel.apiFailureResponse?.observe(this, android.arch.lifecycle.Observer { errorMsg ->
             hideLoading()
-            Utils.showDialog(activity as Context, errorMsg, context?.getString(android.R.string.ok), "", null)
+            var msg = errorMsg
+            if(errorMsg == Constants.ERROR_CODE_401.toString()){
+                msg = getString(R.string.error_user_already_exist)
+            }
+            Utils.showDialog(activity as Context, msg, context?.getString(android.R.string.ok), "", null)
         })
     }
 

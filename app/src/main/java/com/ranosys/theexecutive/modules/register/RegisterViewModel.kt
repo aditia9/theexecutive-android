@@ -218,6 +218,10 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     apiFailureResponse?.value = errorMsg
                 }
 
+                override fun onErrorCode(errorCode: Int) {
+                    apiFailureResponse?.value = errorCode.toString()
+                }
+
                 override fun onSuccess(response: RegisterDataClass.RegistrationResponse?) {
                     if(isSocialLogin) callLoginApi() else apiDirectRegSuccessResponse?.value = response
                 }
@@ -233,6 +237,10 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             override fun onException(error: Throwable) {
                 apiFailureResponse?.value = DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)
 
+            }
+
+            override fun onErrorCode(errorCode: Int) {
+                apiFailureResponse?.value = errorCode.toString()
             }
 
             override fun onError(errorMsg: String) {

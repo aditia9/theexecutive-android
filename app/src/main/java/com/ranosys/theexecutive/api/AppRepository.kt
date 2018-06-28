@@ -142,8 +142,7 @@ object AppRepository {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_401) {
-                        val errorBody = DelamiBrandsApplication.samleApplication?.applicationContext?.getString(R.string.error_invalid_login_credential) ?: Constants.UNKNOWN_ERROR
-                        callBack.onError(errorBody)
+                        callBack.onErrorCode(Constants.ERROR_CODE_401)
                     } else {
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
                     }
@@ -273,8 +272,8 @@ object AppRepository {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_404) {
-                        val errorBody = DelamiBrandsApplication.samleApplication?.applicationContext?.getString(R.string.error_no_user_exist) ?: Constants.UNKNOWN_ERROR
-                        callBack.onError(errorBody)
+                        callBack.onErrorCode(Constants.ERROR_CODE_404)
+
                     } else {
 
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
@@ -306,8 +305,7 @@ object AppRepository {
             override fun onResponse(call: Call<Boolean>?, response: Response<Boolean>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_404) {
-                        val errorBody = DelamiBrandsApplication.samleApplication?.applicationContext?.getString(R.string.error_no_user_exist) ?: Constants.UNKNOWN_ERROR
-                        callBack.onError(errorBody)
+                        callBack.onErrorCode(Constants.ERROR_CODE_404)
                     } else {
 
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
@@ -382,8 +380,7 @@ object AppRepository {
             override fun onResponse(call: Call<RegisterDataClass.RegistrationResponse>?, response: Response<RegisterDataClass.RegistrationResponse>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_400) {
-                        val errorBody = DelamiBrandsApplication.samleApplication?.applicationContext?.getString(R.string.error_user_already_exist) ?: Constants.UNKNOWN_ERROR
-                        callBack.onError(errorBody)
+                        callBack.onErrorCode(Constants.ERROR_CODE_400)
 
                     } else {
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)
@@ -410,8 +407,8 @@ object AppRepository {
             override fun onResponse(call: Call<String>?, response: Response<String>?) {
                 if (!response!!.isSuccessful) {
                     if (response.code() == Constants.ERROR_CODE_404) {
-                        val errorBody = DelamiBrandsApplication.samleApplication?.applicationContext?.getString(R.string.error_no_user_exist) ?: Constants.UNKNOWN_ERROR
-                        callBack.onError(errorBody)
+//
+                        callBack.onErrorCode(Constants.ERROR_CODE_404)
                     } else {
 
                         parseError(response as Response<Any>, callBack as ApiCallback<Any>)

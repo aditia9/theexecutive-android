@@ -213,7 +213,12 @@ class LoginFragment: BaseFragment() {
     private fun observeApiFailure() {
         loginViewModel.apiFailureResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
+            var errorMsg = msg
+            if(msg == Constants.ERROR_CODE_401.toString()){
+                errorMsg = getString(R.string.error_invalid_login_credential)
+            }
+
+            Utils.showDialog(activity, errorMsg, getString(R.string.ok),"", object : DialogOkCallback{
                 override fun setDone(done: Boolean) {
                 }
             })

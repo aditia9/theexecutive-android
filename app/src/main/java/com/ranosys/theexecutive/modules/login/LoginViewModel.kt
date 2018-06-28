@@ -82,7 +82,6 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 Utils.printLog("Login Api", "error")
-                apiFailureResponse?.value = DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)
 
             }
 
@@ -91,6 +90,9 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
                 apiFailureResponse?.value = errorMsg
             }
 
+            override fun onErrorCode(errorCode: Int) {
+                apiFailureResponse?.value = errorCode.toString()
+            }
             override fun onSuccess(userToken: String?) {
                 //save customer token
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
