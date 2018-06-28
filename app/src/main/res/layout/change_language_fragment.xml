@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/sixteen_dp"
     android:paddingTop="@dimen/sixteen_dp"
+    android:clickable="true"
+    android:focusable="true"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 

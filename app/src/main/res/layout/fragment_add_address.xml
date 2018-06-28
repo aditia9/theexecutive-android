@@ -254,7 +254,7 @@
                     android:layout_marginRight="@dimen/twenty_four_dp"
                     android:layout_marginTop="@dimen/forty_dp"
                     android:background="@drawable/black_button_bg"
-                    android:text="@string/add"
+                    android:text="@string/save"
                     android:theme="@style/button_theme"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
