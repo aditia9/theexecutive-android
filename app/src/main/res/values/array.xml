@@ -267,10 +267,10 @@
 
 
     <string-array name="reason_array">
-        <item>Select Reason</item>
-        <item>Bad Quality</item>
-        <item>Defect</item>
-        <item>Item Torn</item>
+        <item>@string/select_reason</item>
+        <item>@string/bad_qty</item>
+        <item>@string/defect</item>
+        <item>@string/item_torn</item>
     </string-array>
 
     <integer-array name="my_account_option_icon_array">

@@ -160,13 +160,13 @@
     <string name="password_change_msg">Your password successfully changed</string>
     <string name="logout_text">Are you sure you want to logout from application?</string>
     <string name="no_product_available_error_search">No results found for the search</string>
-    <string name="no_product_available_error">Oops.. we couldn\'t find what you need.</string>
-    <string name="empty_shipping_method_error">Oops... seems there is no shipping available for selected address. Please change address</string>
-    <string name="empty_payment_method_error">Oops... seems there is no payment available</string>
+    <string name="no_product_available_error">We couldn\'t find what you need.</string>
+    <string name="empty_shipping_method_error">Seems there is no shipping available for selected address. Please change address</string>
+    <string name="empty_payment_method_error">Seems there is no payment available</string>
     <string name="empty_sort_option_selection_error">Please select at least one option</string>
     <string name="empty_filter_option_selection_error">Please select at least one option</string>
     <string name="enter_search_error">Please enter search keyword</string>
-    <string name="login_required_error">Oops.. we couldn\'t connect to your wishlist, Kindly login/Register to the app</string>
+    <string name="login_required_error">We couldn\'t connect to your wishlist, Kindly login/Register to the app</string>
     <string name="loading_data">Loading…</string>
     <string name="add_to_cart_success_msg">Product added to bag</string>
     <string name="available_colors">Color</string>
@@ -225,7 +225,7 @@
     <string name="add_address_success_msg">Address is added successfully</string>
     <string name="contact_us">Contact us</string>
     <string name="settings">Settings</string>
-    <string name="add_address_failure_msg">Oops.. this is on us, please retry</string>
+    <string name="add_address_failure_msg">This is on us, please retry</string>
     <string name="udate_profile_success_msg">Your profile is now updated</string>
     <string name="edit_addresse">Edit Address</string>
 
@@ -293,6 +293,18 @@
     <string name="error_user_already_exist">It seems like you are already registered with us, kindly login</string>
     <string name="state_label">State/ Province</string>
     <string name="version">Version:</string>
+    <string name="bad_qty">Bad Quality</string>
+    <string name="defect">Defect</string>
+    <string name="item_torn">Item Torn</string>
+
+
+    <string name="courier">Return via courier (ex: JNE, RPX, SAP, etc.)</string>
+    <string name="alfamart">Return via Alfamart (Free)</string>
+    <string name="return_mode">Return Mode</string>
+    <string name="return_mode_courier">courier</string>
+    <string name="return_mode_alfamart">alfamart</string>
+
+
 
 
 </resources>

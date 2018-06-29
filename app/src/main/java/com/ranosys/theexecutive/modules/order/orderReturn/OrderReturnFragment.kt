@@ -34,6 +34,7 @@ class OrderReturnFragment : BaseFragment() {
     private lateinit var orderReturnViewModel: OrderReturnViewModel
     private var isReturnable = false
     private var isReason = false
+    private var returnMode = ""
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -98,11 +99,12 @@ class OrderReturnFragment : BaseFragment() {
         rv_order_return_list.addItemDecoration(itemDecor)
         tv_order_id.text = getString(R.string.order_no) +" " +orderId
 
-        val orderReturnAdapter = OrderReturnAdapter(activity as Context, orderReturnViewModel.orderDetailObservable?.get(), { id: Int ->
+        val orderReturnAdapter = OrderReturnAdapter(activity as Context, orderReturnViewModel.orderDetailObservable?.get(), { id: Int, return_mode : String ->
 
             when (id) {
                 R.id.btn_return -> {
                     isReturnable = false
+                    returnMode = return_mode
                     getOrderReturnRequest()
                     if (isReturnable && isReason){
                         showLoading()
@@ -138,7 +140,11 @@ class OrderReturnFragment : BaseFragment() {
             i++
         }
 
-        val rmaData = RmaData(orderId, mutableItemList)
+
+
+
+
+        val rmaData = RmaData(orderId, returnMode, mutableItemList)
         return OrderReturnRequest(rmaData)
     }
 
