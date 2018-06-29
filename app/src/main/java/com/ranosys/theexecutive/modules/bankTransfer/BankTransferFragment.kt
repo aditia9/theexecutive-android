@@ -101,8 +101,6 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
         observeEvents()
 
 
-      //  val calender: Calendar = Calendar.getInstance()
-        //calender.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
         val transferDate: Date = Date()
         bankTransferViewModel.transferDate.set(transferDate)
         val dateFormat = SimpleDateFormat(Constants.DD_MM_YY_DATE_FORMAT)
