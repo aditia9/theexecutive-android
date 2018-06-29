@@ -129,7 +129,7 @@
     <string name="chat">Hubungi Kami</string>
     <string name="close_app_text">Apakah anda yakin akan keluar dari aplikasi?</string>
     <string name="network_err_text">Jaringan internet tidak ditemukan</string>
-    <string name="verify_email_message">Welcome aboard, you are now a member of The Executive. Kindly Verify your email.</string>
+    <string name="verify_email_message">Selamat datang, Anda sekarang menjadi anggota The Executive. Mohon verifikasi email Anda.</string>
     <string name="register_successfull">Selamat, anda telah terdaftar sebagai member The Executive</string>
     <string name="logout_success_message">Anda telah sukses keluar</string>
     <string name="non_breakable_apace">\u00A0</string>
@@ -197,7 +197,7 @@
     <string name="payment_method">Metode Pembayaran</string>
     <string name="confirm_order">Lakukan Pembayaran</string>
     <string name="notifications">Notifikasi</string>
-    <string name="bank_transfer">Bank Transfer Confirmation</string>
+    <string name="bank_transfer">Konfirmasi Bank Transfer</string>
     <string name="current_password">Kata Sandi</string>
     <string name="change_password">Ubah Kata Sandi</string>
     <string name="new_password">Kata Sandi Baru</string>
@@ -206,7 +206,7 @@
     <string name="forward_icon">Forward icon</string>
     <string name="one">1</string>
     <string name="product_out_of_stock">Produk tidak tersedia</string>
-    <string name="cart_out_of_stock">Tidak ada barang dalam Tas Belanja</string>
+    <string name="cart_out_of_stock">Silakan hapus atau kurang jumlah produk atau pindah ke daftar keinginan produk Anda yang kehabisan stok atau lebih dari kuantitas yang tersedia.</string>
     <string name="total">Jumlah</string>
     <string name="promo_code">Kode Promo</string>
     <string name="enter_your_promo_code">Masukan Kode Promo</string>
