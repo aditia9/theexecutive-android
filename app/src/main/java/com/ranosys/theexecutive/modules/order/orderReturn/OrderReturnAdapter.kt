@@ -28,7 +28,7 @@ const val ORDER_ADDRESS = 1
  * @author Ranosys Technologies
  * @Date 24-May-2018
  */
-class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDetailResponse?, private val action: (Int) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDetailResponse?, private val action: (Int, String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var clickListener: OnItemClickListener? = null
 
@@ -188,7 +188,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
     class OrderDetailAddressHolder(var itemBinding: OrderReturnAddressBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: OrderDetailResponse?, action: (Int) -> Unit) {
+        fun bind(item: OrderDetailResponse?, action: (Int, String) -> Unit) {
             itemBinding?.item = item
 
             itemBinding?.tvUserName?.text = item?.billing_address?.firstname + " " + item?.billing_address?.lastname
@@ -223,8 +223,17 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                     itemBinding?.tvOfficeMobileNumber?.text = item.extension_attributes.returnto_address.returnto_contact
                 }
 
+                var returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_courier)
+                itemBinding?.radioGrp?.setOnCheckedChangeListener { group, checkedId ->
+                    if (itemBinding!!.rbCourier.isChecked) {
+                        returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_courier)
+                    } else if (itemBinding!!.rbAlfamart.isChecked) {
+                        returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_alfamart)                    }
+                }
+
+
                 itemBinding?.btnReturn?.setOnClickListener { view ->
-                    action(view.id)
+                    action(view.id, returnModeString)
                 }
             }
         }
