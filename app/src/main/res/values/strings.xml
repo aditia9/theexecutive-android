@@ -85,7 +85,7 @@
     <string name="postcode">Zip/ Postal Code</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="subscribe">Suscribe to get IDR %1$s Voucher</string>
-    <string name="term_and_condition">By creating your account, you agree to our \u0020</string>
+    <string name="term_and_condition">By creating an account, you agree to the applicable Terms &amp; Condition</string>
     <string name="dob_hint">DD/MM/YYYY</string>
     <string name="street_address_1">Street Address Line 1 </string>
     <string name="street_address_error">Street Address Line 1 is required.</string>
@@ -262,7 +262,7 @@
     <string name="no_item_in_notification">No item in Notification</string>
     <string name="order_success_msg">Order Placed Successfully</string>
     <string name="order_success_btn_text">view order</string>
-    <string name="order_success_info">Thank you for your order.\n You will receive a confirmation email with detail of your order and link to track your order progress.</string>
+    <string name="order_success_info">Thank you for your order.\n You will receive an order confirmation email with detail of your order and link to track your order progress.</string>
 
     <string name="order_cancel_msg">Order Cancelled</string>
     <string name="order_cancel_btn_text">continue shopping</string>

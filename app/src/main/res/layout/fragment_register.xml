@@ -159,29 +159,31 @@
                     android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onCountryCodeSelection(parent, pos)}"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toTopOf="@id/til_mobile_no"
-                    app:layout_constraintEnd_toStartOf="@id/til_mobile_no"
+
                     app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_mobile_no"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:hint="@string/mobile_number"
                     android:labelFor="@+id/et_mobile_number"
-                    app:errorText="@{registerViewModel.mobileNumberError}"
                     android:theme="@style/tilTheme"
-                    app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
-                    app:layout_constraintTop_toBottomOf="@id/til_email_address"
-                    app:layout_constraintEnd_toEndOf="@+id/guideline_right">
+                    app:errorText="@{registerViewModel.mobileNumberError}"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+                    app:layout_constraintStart_toEndOf="@+id/spinner_country_code"
+                    app:layout_constraintTop_toBottomOf="@id/til_email_address">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_mobile_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/field_start_padding"
-                        android:text="@={registerViewModel.mobileNumber}"
+                        android:inputType="number"
                         android:onTextChanged='@{() -> registerViewModel.onTextChanged(etMobileNumber)}'
-                        android:inputType="number" />
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={registerViewModel.mobileNumber}" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout

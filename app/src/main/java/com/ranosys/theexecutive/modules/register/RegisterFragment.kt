@@ -189,15 +189,16 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
         }
 
 
-        clickableTextView(tv_terms_and_conditions,getString(R.string.term_and_condition),getString(R.string.t_and_c),getString(R.string.privacy_policy))
+        clickableTextView(tv_terms_and_conditions,getString(R.string.term_and_condition),getString(R.string.t_and_c))
     }
 
 
 
-    private fun  clickableTextView(textView: TextView, termAndCodition:String,tc:String, pp:String) {
+    private fun  clickableTextView(textView: TextView, termAndCodition:String,tc:String) {
         val spanText =  SpannableStringBuilder(termAndCodition)
         val url=GlobalSingelton.instance?.configuration?.terms_and_condition_url
-        spanText.append(tc);
+        val startIndex: Int = termAndCodition.indexOf(tc)
+        val length = tc.length
         spanText.setSpan(object :ClickableSpan() {
             override fun onClick(p0: View?) {
                 openWebPage(activity as Context,url!!,getString(R.string.t_and_c))
@@ -209,21 +210,7 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
                 ds.isUnderlineText = true
             }
 
-        }, spanText.length - tc.length, spanText.length, 0);
-        spanText.append(getString(R.string.and))
-        spanText.append(pp)
-        spanText.setSpan(object :ClickableSpan() {
-            override fun onClick(p0: View?) {
-                openWebPage(activity as Context,url!!,getString(R.string.privacy_policy))
-            }
-
-            override fun updateDrawState(ds: TextPaint?) {
-                super.updateDrawState(ds)
-                ds!!.color = Color.BLACK
-                ds.isUnderlineText = true
-            }
-
-        },spanText.length - pp.length, spanText.length, 0);
+        }, startIndex, startIndex + length, 0)
 
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setText(spanText, TextView.BufferType.SPANNABLE);

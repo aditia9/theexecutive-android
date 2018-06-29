@@ -84,7 +84,7 @@
     <string name="postcode">Kode Pos</string>
     <string name="confirm_password">Masukan kembali kata sandi</string>
     <string name="subscribe">Subscribe untuk mendapatkan voucher senilai %1$s rupiah</string>
-    <string name="term_and_condition">By creating your account, you agree to our \u0020</string>
+    <string name="term_and_condition">Dengan membuat akun, anda menyetujui syarat dan ketentuan yang berlaku</string>
     <string name="dob_hint">DD/MM/YYYY</string>
     <string name="street_address_1">Alamat 1 </string>
     <string name="street_address_error">Masukan alamat 1</string>
@@ -259,7 +259,7 @@
     <string name="no_item_in_notification">Tidak Ada Notifikasi</string>
     <string name="order_success_msg">Pesanan anda telah berhasil</string>
     <string name="order_success_btn_text">Lihat pesanan</string>
-    <string name="order_success_info">Masukan No. Order untuk menelusuri pesanan anda</string>
+    <string name="order_success_info">Terima kasih untuk order Anda.\nAnda akan menerima email konfirmasi pesanan dengan detail pesanan dan tautan Anda untuk melacak kemajuan pesanan.</string>
 
     <string name="order_cancel_msg">Order telah dibatalkan</string>
     <string name="order_cancel_btn_text">Lanjut Belanja</string>
@@ -276,7 +276,7 @@
     <string name="bank_recipient">Bank Penerima</string>
     <string name="no_item_shopping_bag">Tas Belanja anda kosong</string>
 
-    <string name="t_and_c">Persyaratan dan Ketentuan</string>
+    <string name="t_and_c">syarat dan ketentuan</string>
     <string name="privacy_policy">Kebijakan Privasi</string>
     <string name="and">\u0020 Dan \u0020</string>
     <string name="no_item_wishlist">Daftar Wishlist anda kosong</string>
