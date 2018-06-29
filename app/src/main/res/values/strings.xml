@@ -48,7 +48,7 @@
     <string name="title_login">Login</string>
     <string name="error_invalid_email">Invalid mail id.</string>
     <string name="title_register">Register</string>
-    <string name="something_went_wrong_error">Something went wrong</string>
+    <string name="something_went_wrong_error">Something went wrong, Please try again.</string>
     <string name="exit">Exit</string>
     <string name="maintenance_msg">Application is under maintenance</string>
     <string name="force_update_msg">A new version of the The Executive App is available. Please update to access the latest features.</string>
