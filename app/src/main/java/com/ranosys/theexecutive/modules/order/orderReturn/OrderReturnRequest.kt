@@ -12,6 +12,7 @@ data class OrderReturnRequest(
 
 data class RmaData(
         var orderId: String,
+        var return_mode: String,
         val items: MutableList<Item>
 )
 
