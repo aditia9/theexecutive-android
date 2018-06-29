@@ -1,6 +1,8 @@
 package com.ranosys.theexecutive.modules.myAccount
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -41,6 +43,23 @@ import kotlinx.android.synthetic.main.logout_btn.view.*
 class MyAccountFragment : BaseFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var vm: MyAccountViewModel
+    private lateinit var myAccountAdapter: MyAccountAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        vm = ViewModelProviders.of(this).get(MyAccountViewModel::class.java)
+        notifyNotificationCount()
+        myAccountAdapter = MyAccountAdapter(getAccountOptions(), activity as Context)
+        vm.notificationCount.observe(this, Observer { count ->
+            myAccountAdapter.notifyItemChanged(3)
+        })
+
+    }
+
+    fun notifyNotificationCount() {
+        vm.getNotificationCount()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_my_account, container, false)
@@ -54,7 +73,7 @@ class MyAccountFragment : BaseFragment() {
 
         val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),2)
         my_account_options_list.addItemDecoration(itemDecor)
-        my_account_options_list.adapter = MyAccountAdapter(getAccountOptions(), activity as Context)
+        my_account_options_list.adapter = myAccountAdapter
 
     }
 
@@ -107,6 +126,15 @@ class MyAccountFragment : BaseFragment() {
 
             fun bind(option: MyAccountDataClass.MyAccountOption, context: Context) {
                 itemBinding.option = option
+                if(option.title == context.getString(R.string.notifications) && GlobalSingelton.instance?.notificationCount?.get() ?: 0 > 0){
+
+                    itemBinding.tvNotificationCount.visibility = View.VISIBLE
+                    itemBinding.tvNotificationCount.text = GlobalSingelton.instance?.notificationCount?.get().toString()
+                }
+                else{
+                    itemBinding.tvNotificationCount.visibility = View.GONE
+                }
+
 
                 itemView.setOnClickListener {
                     when (option.title) {

@@ -21,7 +21,9 @@ import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.home.HomeViewPager
 import com.ranosys.theexecutive.modules.login.LoginFragment
+import com.ranosys.theexecutive.modules.myAccount.MyAccountFragment
 import com.ranosys.theexecutive.modules.notification.NotificationFragment
 import com.ranosys.theexecutive.modules.notification.dataclasses.NotificationChangeStatusRequest
 import com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailFragment
@@ -34,6 +36,7 @@ import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 /**
@@ -90,6 +93,14 @@ class DashBoardActivity : BaseActivity() {
                                     }else{
                                         val email = SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL)
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.my_account_title), 0, email, 0, false, 0, false)
+
+                                        val adapter = (fragment.viewpager.adapter as HomeViewPager)
+                                        if(adapter != null){
+                                            val frag = adapter.getItemAt(1)
+                                            if(frag is MyAccountFragment){
+                                                frag.notifyNotificationCount()
+                                            }
+                                        }
                                     }
                                 }
                                 2 -> {

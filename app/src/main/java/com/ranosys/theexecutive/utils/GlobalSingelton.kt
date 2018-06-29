@@ -1,6 +1,7 @@
 package com.ranosys.theexecutive.utils
 
 import android.arch.lifecycle.MutableLiveData
+import android.databinding.ObservableField
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.ProductOptionsResponse
 import com.ranosys.theexecutive.modules.productDetail.dataClassess.StaticPagesUrlResponse
@@ -20,6 +21,7 @@ class GlobalSingelton private constructor(){
     var userInfo: MyAccountDataClass.UserInfoResponse? = null
     var paymentInitiated: Boolean = false
     var orderId: String = ""
+    var notificationCount: ObservableField<Int> = ObservableField(0)
 
     var cartCount: MutableLiveData<Int> = MutableLiveData()
 

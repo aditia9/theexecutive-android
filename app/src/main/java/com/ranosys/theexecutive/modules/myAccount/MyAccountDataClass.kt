@@ -15,6 +15,10 @@ class MyAccountDataClass {
     data class NewsletterSubscriptionRequest(val email: String)
 
 
+    data class NotificationCountRequest(
+            val deviceId: String
+    )
+
     data class UserInfoResponse(
             val id: Int?,
             val group_id: Int?,
