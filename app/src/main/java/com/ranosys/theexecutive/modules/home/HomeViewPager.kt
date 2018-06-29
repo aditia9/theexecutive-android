@@ -28,6 +28,11 @@ class HomeViewPager(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
     }
 
 
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
+        val fragment = super.instantiateItem(container, position) as Fragment
+        sparseArray?.put(position, fragment)
+        return fragment
+    }
     override fun getCount(): Int {
         return 3
     }

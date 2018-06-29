@@ -94,4 +94,5 @@
     <dimen name="return_text_size">13sp</dimen>
     <dimen name="sixty_five_dp">65dp</dimen>
     <dimen name="forty_four_dp">44dp</dimen>
+    <dimen name="notification_count_size">14dp</dimen>
 </resources>

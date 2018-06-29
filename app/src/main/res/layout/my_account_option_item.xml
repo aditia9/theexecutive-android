@@ -50,6 +50,20 @@
             android:src="@{option.icon}"/>
 
         <TextView
+            android:id="@+id/tv_notification_count"
+            android:layout_width="@dimen/notification_count_size"
+            android:layout_height="@dimen/notification_count_size"
+            android:background="@drawable/notification_count_background"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/ten_sp"
+            app:layout_constraintCircle="@id/option_icon_iv"
+            app:layout_constraintCircleAngle="40"
+            app:layout_constraintCircleRadius="@dimen/ten_dp"
+
+            />
+
+        <TextView
             android:id="@+id/option_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

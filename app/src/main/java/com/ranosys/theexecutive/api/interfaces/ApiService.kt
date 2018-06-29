@@ -402,6 +402,12 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun updateUserInfo(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: MyAccountDataClass.UpdateInfoRequest, @Query("___store") addOnStoreCode : String): Call<MyAccountDataClass.UserInfoResponse>
+
+        @POST("rest/{store_code}/V1/notification/mine/count")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun getNotificationCount(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Body request: MyAccountDataClass.NotificationCountRequest, @Query("___store") addOnStoreCode : String): Call<Int>
     }
 
     interface WishlistService {
