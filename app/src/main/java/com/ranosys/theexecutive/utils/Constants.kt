@@ -134,7 +134,7 @@ object Constants {
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
     const val CART_DE_ACTIVE = "cart de-active"
     const val IS_NOTIFICATION_SHOW = "notification"
-    const val ALFA_SET = 180
+    const val ALFA_SET = 128
     const val IGNORE="ignore"
     const val COUNTRY_CODE_ID = "ID"
     const val COUNTRY_CODE_IN = "in"

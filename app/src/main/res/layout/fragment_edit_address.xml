@@ -99,20 +99,19 @@
 
                 <Spinner
                     android:id="@+id/spinner_country_code"
-                    android:layout_height="@dimen/match_constraint"
+                    style="@android:style/Widget.Holo.Light.Spinner"
                     android:layout_width="wrap_content"
-                    android:minWidth="@dimen/match_constraint"
-                    android:spinnerMode="dropdown"
-                    android:overlapAnchor="false"
-                    android:entries="@array/country_code"
+                    android:layout_height="@dimen/match_constraint"
                     android:background="@drawable/spinner"
+                    android:entries="@array/country_code"
+                    android:minWidth="@dimen/match_constraint"
+                    android:overlapAnchor="false"
                     android:paddingBottom="@dimen/ten_dp"
                     android:paddingTop="@dimen/ten_dp"
-                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:spinnerMode="dropdown"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
-                    app:layout_constraintTop_toTopOf="@id/til_mobile_no"
-                    app:layout_constraintEnd_toStartOf="@id/til_mobile_no"
-                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
+                    app:layout_constraintTop_toTopOf="@id/til_mobile_no" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_mobile_no"
@@ -123,7 +122,7 @@
                     app:errorText="@{vm.mobileNumberError}"
                     android:labelFor="@+id/et_mobile_number"
                     android:theme="@style/tilTheme"
-                    app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
+                    app:layout_constraintStart_toEndOf="@id/spinner_country_code"
                     app:layout_constraintTop_toBottomOf="@id/til_last_name"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right">
 

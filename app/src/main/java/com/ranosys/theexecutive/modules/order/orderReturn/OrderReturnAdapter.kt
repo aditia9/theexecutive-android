@@ -90,20 +90,13 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
             itemBinding?.item = orderItem
             orderItem?.request_reason = context?.resources?.getStringArray(R.array.reason_array)?.get(0).toString()
             orderItem?.request_qty = (item?.items!![position].qty_ordered)
-            val rightArrow = context?.getResources()?.getDrawable(R.drawable.forward)
-            rightArrow?.alpha = Constants.ALFA_SET
-            itemBinding?.imgIncrement!!.setImageDrawable(rightArrow)
+            itemBinding?.imgIncrement!!.alpha = 0.5f
+            itemBinding?.imgDecrement!!.alpha = 1.0f
 
             itemBinding?.txtQuantity?.text = (item.items[position].qty_ordered).toString()
 
             if(item.items[position].qty_ordered == 1){
-                val rightArrow = context?.getResources()?.getDrawable(R.drawable.forward)
-                rightArrow?.alpha = Constants.ALFA_SET
-                itemBinding?.imgIncrement!!.setImageDrawable(rightArrow)
-
-                val leftArrow = context?.getResources()?.getDrawable(R.drawable.back)
-                leftArrow?.alpha = Constants.ALFA_SET
-                itemBinding?.imgDecrement!!.setImageDrawable(leftArrow)
+                itemBinding?.imgIncrement!!.alpha = 0.5f
             }
 
             if (item?.items?.get(position)?.extension_attributes != null && item.items[position].extension_attributes?.options != null) {
@@ -131,24 +124,52 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 itemBinding?.layoutColorSize?.visibility = View.GONE
             }
 
+            //define arrows
+//            val enableIncrementArrow = context?.getResources()?.getDrawable(R.drawable.forward)
+//            val disableIncrementArrow = context?.getResources()?.getDrawable(R.drawable.forward)
+//            disableIncrementArrow?.alpha = Constants.ALFA_SET
+//            val enableDecrementArrow = context?.getResources()?.getDrawable(R.drawable.back)
+//            val disableDecrementArrow = context?.getResources()?.getDrawable(R.drawable.back)
+//            disableDecrementArrow?.alpha = Constants.ALFA_SET
+
             itemBinding?.imgIncrement?.setOnClickListener {
-                val qty = (itemBinding!!.txtQuantity.text.toString()).toInt()
-                if (qty < item?.items!![position].qty_ordered) {
-                    itemBinding!!.txtQuantity.text = (qty.plus(1)).toString()
-                    orderItem?.request_qty = (qty.plus(1))
-                    val rightArrow = context?.getResources()?.getDrawable(R.drawable.forward)
-                    rightArrow?.alpha = 1
-                    itemBinding?.imgIncrement!!.setImageDrawable(rightArrow)
-                }else{
-                    val rightArrow = context?.getResources()?.getDrawable(R.drawable.forward)
-                    rightArrow?.alpha = Constants.ALFA_SET
-                    itemBinding?.imgIncrement!!.setImageDrawable(rightArrow)
+                var qty = (itemBinding!!.txtQuantity.text.toString()).toInt()
+
+                if(qty < item.items[position].qty_ordered){
+                    qty += 1
+                    itemBinding!!.txtQuantity.text = qty.toString()
+                    orderItem?.request_qty = qty
+
+                    itemBinding?.imgDecrement!!.alpha = 1.0f
+                    if(qty == item.items[position].qty_ordered){
+                        itemBinding?.imgIncrement!!.alpha = 0.5f
+                    }else{
+                        itemBinding?.imgIncrement!!.alpha = 1.0f
+                    }
+                }
+            }
+
+            itemBinding?.imgDecrement?.setOnClickListener {
+
+                var qty = (itemBinding!!.txtQuantity.text.toString()).toInt()
+
+                if (qty > 1) {
+                    qty -= 1
+                    itemBinding!!.txtQuantity.text = qty.toString()
+                    orderItem?.request_qty = qty
+
+                    itemBinding?.imgIncrement!!.alpha = 1.0f
+                    if(qty == 1){
+                        itemBinding?.imgDecrement!!.alpha = 0.5f
+                    }else{
+                        itemBinding?.imgDecrement!!.alpha = 1.0f
+                    }
                 }
             }
 
 
-            if(item?.items?.get(position)?.original_price != 0){
-                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item?.items?.get(position)?.price.toString(), item?.items?.get(position)?.price.toString())
+            if(item.items.get(position).original_price != 0){
+                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.items.get(position).price.toString(), item.items.get(position).price.toString())
             }
 
             itemBinding?.spReason?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -163,21 +184,6 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
             }
 
 
-            itemBinding?.imgDecrement?.setOnClickListener {
-
-                val qty = (itemBinding!!.txtQuantity.text.toString()).toInt()
-                if (qty > 1) {
-                    itemBinding!!.txtQuantity.text = (qty.minus(1)).toString()
-                    orderItem?.request_qty = (qty.minus(1))
-                    val leftArrow = context?.getResources()?.getDrawable(R.drawable.back)
-                    leftArrow?.alpha = 1
-                    itemBinding?.imgDecrement!!.setImageDrawable(leftArrow)
-                }else{
-                    val leftArrow = context?.getResources()?.getDrawable(R.drawable.back)
-                    leftArrow?.alpha = Constants.ALFA_SET
-                    itemBinding?.imgDecrement!!.setImageDrawable(leftArrow)
-                }
-            }
 
             itemBinding?.chkSelect?.setOnCheckedChangeListener { compoundButton, isReturn ->
                 orderItem?.request_return = isReturn
