@@ -53,7 +53,7 @@ class SplashActivity : BaseActivity() {
             //call configuration API
             getConfigurationApi()
         } else {
-            Utils.showNetworkErrorDialog(this)
+            showExitApplicationDialog(getString(R.string.network_err_text), pAction = { finish() }, nText = "")
         }
 
         //fetch device id

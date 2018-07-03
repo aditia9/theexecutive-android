@@ -170,10 +170,10 @@ object Utils {
 
     }
 
-    fun showNetworkErrorDialog(context: Context){
+    fun showNetworkErrorDialog(context: Context, action: () -> Unit = {}){
         showDialog(context, context.getString(R.string.network_err_text),context.getString(R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
-
+                action()
             }
         })
     }
@@ -197,6 +197,7 @@ object Utils {
         updateCartCount(0)
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         GlobalSingelton.instance?.userInfo = null
+        GlobalSingelton.instance?.notificationCount?.set(0)
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
 
     }
