@@ -128,6 +128,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                         }
                     }
                 }
+                itemBinding?.tvProductQty?.text = item?.items?.get(position).qty_ordered.toString() +" "+itemBinding?.tvProductQty?.context?.getString(R.string.item)
             } else {
                 itemBinding?.layoutColorSize?.visibility = View.GONE
             }

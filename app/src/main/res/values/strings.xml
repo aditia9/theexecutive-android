@@ -301,7 +301,10 @@
     <string name="courier">Return via courier (ex: JNE, RPX, SAP, etc.)</string>
     <string name="alfamart">Return via Alfamart (Free)</string>
     <string name="return_mode">Return Mode</string>
-
+    <string name="product_total">Product Total</string>
+    <string name="discount">Discount</string>
+    <string name="grand_total">Grand Total</string>
+    <string name="item">item(s) </string>
 
 
 

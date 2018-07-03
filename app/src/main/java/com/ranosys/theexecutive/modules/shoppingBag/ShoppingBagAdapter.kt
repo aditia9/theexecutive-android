@@ -25,18 +25,19 @@ const val TYPE_FOOTER = 0
 const val TYPE_ITEM = 1
 var isOutOfProductInCart : Boolean =  false
 
-class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: List<ShoppingBagResponse>?, promoCode: String, grandTotal: Int, private val action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShoppingBagAdapter(var context: Context, private var shoppingBagList: List<ShoppingBagResponse>?, promoCode: String, totalResponse: TotalResponse?, private val action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mContext: Context? = null
     private var mPromoCode: String
-    private var mGrandTotal: Int = 0
+    private var mTotalResponse : TotalResponse ?= null
+    //private var mGrandTotal: Int = 0
 
     private var clickListener: OnItemClickListener? = null
 
     init {
         mContext = context
         mPromoCode = promoCode
-        mGrandTotal = grandTotal
+        mTotalResponse = totalResponse
         isOutOfProductInCart = false
     }
 
@@ -193,14 +194,14 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
         if (holder is Holder) {
             holder.bind(mContext, getItem(position), position,  action)
         } else if (holder is ShoppingBagFooterHolder) {
-            holder.bind(mContext, null, position, action, mPromoCode, mGrandTotal)
+            holder.bind(mContext, null, position, action, mPromoCode, mTotalResponse!!)
         }
     }
 
     class ShoppingBagFooterHolder(var itemBinding: ShoppingBagFooterBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, mPromoCode: String, mGrandTotal: Int) {
+        fun bind(context: Context?, item: ShoppingBagResponse?, position: Int, action: (Int, Int, ShoppingBagResponse?, Int?, String?) -> Unit, mPromoCode: String, mTotalResponse: TotalResponse) {
 
             itemBinding?.btnApply?.setOnClickListener { view ->
                 if (!TextUtils.isEmpty(itemBinding!!.etPromoCode.text.toString())) {
@@ -216,8 +217,18 @@ class ShoppingBagAdapter(var context: Context, private var  shoppingBagList: Lis
                 }
             }
 
-            if (mGrandTotal != 0) {
-                itemBinding?.tvTotal?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mGrandTotal.toString())
+            if (mTotalResponse.subtotal != 0) {
+                itemBinding?.tvTotal?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mTotalResponse.subtotal.toString())
+            }
+
+            if(!TextUtils.isEmpty(mPromoCode)){
+                itemBinding?.labelDiscount?.visibility = View.VISIBLE
+                itemBinding?.tvDiscount?.visibility = View.VISIBLE
+                itemBinding?.labelGrandTotal?.visibility = View.VISIBLE
+                itemBinding?.tvGrandTotal?.visibility = View.VISIBLE
+
+                itemBinding?.tvDiscount?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mTotalResponse.discount_amount.toString())
+                itemBinding?.tvGrandTotal?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mTotalResponse.subtotal_with_discount.toString())
             }
 
             if (!TextUtils.isEmpty(mPromoCode)) {
