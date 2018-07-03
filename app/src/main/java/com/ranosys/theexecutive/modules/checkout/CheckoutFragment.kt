@@ -146,6 +146,7 @@ class CheckoutFragment : BaseFragment() {
                 if(position < checkoutViewModel.shippingMethodList.value!!.size){
                     val shippingMethod = checkoutViewModel.shippingMethodList.value?.get(position) ?: null
                     checkoutViewModel.selectedShippingMethod = shippingMethod
+                    tv_shipping_method.text = "${getString(R.string.shipping_method)} (${shippingMethod?.method_title})"
                     getPaymentMethod(shippingMethod!!)
                 }
 
@@ -159,6 +160,7 @@ class CheckoutFragment : BaseFragment() {
                 if(position < checkoutViewModel.paymentMethodList.value!!.size){
                     val paymentMethod = checkoutViewModel.paymentMethodList.value?.get(position)
                     checkoutViewModel.selectedPaymentMethod = paymentMethod
+                    tv_payment_method.text = "${getString(R.string.payment_method)} (${paymentMethod?.title})"
                 }
 
             }else{
@@ -424,6 +426,7 @@ class CheckoutFragment : BaseFragment() {
 
         if(checkoutViewModel.oldShippingMethodCode.isEmpty()){
             (checkoutBinding.shippingMethodRg.getChildAt(0)as RadioButton).isChecked = true
+
         }
 
         //reset old shipping method

@@ -287,8 +287,8 @@
     <string name="state_label">Provinsi</string>
     <string name="version">Version:</string>
     <string name="bad_qty">Kualitas buruk</string>
-    <string name="not_accordence">Not Accordance</string>
-    <string name="other">Other</string>
+    <string name="not_accordence">Tidak Sesuai</string>
+    <string name="other">Lain</string>
 
 
 
