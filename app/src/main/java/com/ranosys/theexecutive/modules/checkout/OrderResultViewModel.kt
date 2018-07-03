@@ -31,7 +31,7 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
 
     fun getOrderDetails() {
 
-        //API call to get order address
+        //API call to get order status
         AppRepository.getOrderStatus(orderId.get(), object : ApiCallback<CheckoutDataClass.OrderStatusResponse>{
             override fun onException(error: Throwable) {
                 apiError.value = error.message

@@ -521,6 +521,12 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun getOrderStatus(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("order_id") orderId: String, @Query("___store") addOnStoreCode : String): Call<CheckoutDataClass.OrderStatusResponse>
+
+        @PUT("rest/{store_code}/V1/order/mine/{order_id}/cancel")
+        @Headers(ApiConstants.CONTENT_TYPE,
+                ApiConstants.X_REQUESTED_WITH,
+                ApiConstants.CACHE_CONTROL)
+        fun cancelOrder(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode:String, @Path("order_id") orderId: String, @Query("___store") addOnStoreCode : String): Call<Boolean>
     }
 
 
