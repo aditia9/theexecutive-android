@@ -294,7 +294,5 @@
     <string name="courier">Return via courier (ex: JNE, RPX, SAP, etc.)</string>
     <string name="alfamart">Return via Alfamart (Free)</string>
     <string name="return_mode">Return Mode</string>
-    <string name="return_mode_courier">courier</string>
-    <string name="return_mode_alfamart">alfamart</string>
 
 </resources>

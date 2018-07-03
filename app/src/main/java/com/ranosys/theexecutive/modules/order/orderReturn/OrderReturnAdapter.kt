@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiConstants
 import com.ranosys.theexecutive.databinding.OrderReturnAddressBinding
 import com.ranosys.theexecutive.databinding.ReturnItemBinding
 import com.ranosys.theexecutive.modules.order.orderDetail.Item
@@ -229,12 +230,12 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                     itemBinding?.tvOfficeMobileNumber?.text = item.extension_attributes.returnto_address.returnto_contact
                 }
 
-                var returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_courier)
+                var returnModeString = ApiConstants.RETURN_MODE_COURIER
                 itemBinding?.radioGrp?.setOnCheckedChangeListener { group, checkedId ->
                     if (itemBinding!!.rbCourier.isChecked) {
-                        returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_courier)
+                        returnModeString = ApiConstants.RETURN_MODE_COURIER
                     } else if (itemBinding!!.rbAlfamart.isChecked) {
-                        returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_alfamart)                    }
+                        returnModeString =  ApiConstants.RETURN_MODE_ALFATEX                 }
                 }
 
 
