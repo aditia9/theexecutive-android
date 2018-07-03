@@ -53,7 +53,7 @@ class AddressBookViewModel(application: Application): BaseViewModel(application)
             addList.remove(tempAddress)
         }
 
-        var updatedInfo = GlobalSingelton.instance?.userInfo?.copy()
+        val updatedInfo = GlobalSingelton.instance?.userInfo?.copy()
         updatedInfo?.addresses = addList
         updatedInfo?.let {
 

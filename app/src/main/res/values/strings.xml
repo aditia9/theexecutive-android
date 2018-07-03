@@ -1,16 +1,8 @@
 <resources>
     <!--<string name="app_name">The Executive</string>-->
-    <string name="app_title">The Executive</string>
     <string name="login">Log In</string>
-    <string name="user_id">User ID</string>
-    <string name="empty_user_name">Please provide User Name.</string>
-    <string name="empty_user_mobile">Please provide Mobile Number.</string>
     <string name="provide_valid_email">Email address is required in valid format.</string>
-    <string name="privacy_policy_error">Please accept Privacy Policy.</string>
-    <string name="terms_condition_error">Please accept Terms and Conditions.</string>
     <string name="empty_email">Email Address is required.</string>
-    <string name="empty_full_name">Please provide Full Name.</string>
-    <string name="empty_user_id">Please provide NRIC /FIN /Passport.</string>
     <string name="empty_password">Password is required.</string>
     <string name="empty_current_password">Current Password is required.</string>
     <string name="empty_confirm_password">Confirm Password is required.</string>
@@ -22,32 +14,19 @@
     <string name="transfer_amount_error">Transfer account is required.</string>
     <string name="transfer_date_error">Transfer date is required.</string>
     <string name="dob_error">Date of birth is required.</string>
-    <string name="city_error">Please provide city.</string>
-    <string name="state_error">Please provide state</string>
     <string name="first_name_error">First Name is required.</string>
     <string name="last_name_error">Last Name is required.</string>
-    <string name="empty_description">Please provide Description.</string>
-    <string name="name">Name</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="signup">Signup</string>
-    <string name="create_new_account">Create New Account.</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="state">State</string>
     <string name="city">City</string>
-    <string name="blood_group">Blood Group</string>
-    <string name="gender">Gender</string>
-    <string name="mobile">Mobile</string>
-    <string name="email_id">Email Id</string>
     <string name="edit">Edit</string>
     <string name="toolbar_left_icon">Toolbar left icon</string>
     <string name="toolbar_right_icon">Toolbar right icon</string>
 
     <!--titles-->
-    <string name="title_login">Login</string>
-    <string name="error_invalid_email">Invalid mail id.</string>
-    <string name="title_register">Register</string>
     <string name="something_went_wrong_error">Something went wrong, Please try again.</string>
     <string name="exit">Exit</string>
     <string name="maintenance_msg">Application is under maintenance</string>
@@ -84,7 +63,6 @@
     <string name="address">Address</string>
     <string name="postcode">Zip/ Postal Code</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="subscribe">Suscribe to get IDR %1$s Voucher</string>
     <string name="term_and_condition">By creating an account, you agree to the applicable Terms &amp; Condition</string>
     <string name="dob_hint">DD/MM/YYYY</string>
     <string name="street_address_1">Street Address Line 1 </string>
@@ -95,7 +73,6 @@
     <string name="valid_mobile_error">Length should be between 8 to 16.</string>
     <string name="valid_postal_error">Length should be 5.</string>
     <string name="confirm_password_error">The password does not match, kindly enter the same password as above.</string>
-    <string name="same_password_error">It seems the password same as before, kindly enter new password.</string>
     <string name="select_lang_title">Select Language</string>
     <string name="select_option">Select Option</string>
     <string name="continue_btn">Continue</string>
@@ -113,9 +90,7 @@
 
 
     <!--wishlist-->
-    <string name="my_wishlist">My Wishlist</string>
     <string name="promotion_image">Image for promotion</string>
-    <string name="network_error">Network Error</string>
     <string name="select_gender_label">Select Gender</string>
     <string name="no_state_available_error">No state available for this country</string>
     <string name="no_cities_available_error">No cities available</string>
@@ -132,8 +107,6 @@
     <string name="network_err_text">No Internet Connection</string>
     <string name="verify_email_message">Welcome aboard, you are now a member of The Executive. Kindly Verify your email.</string>
     <string name="register_successfull">Welcome aboard, you are now a member of The Executive.</string>
-    <string name="logout_success_message">Logout successfully</string>
-    <string name="non_breakable_apace">\u00A0</string>
     <string name="price_range_label">Price Range</string>
     <string name="apply_filters">apply</string>
     <string name="filter_dialog_title">FILTER</string>
@@ -204,7 +177,6 @@
     <string name="change_password">Change Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
-    <string name="add">Add</string>
     <string name="forward_icon">Forward icon</string>
     <string name="one">1</string>
     <string name="product_out_of_stock">This product is out of stock</string>
@@ -232,7 +204,6 @@
     <string name="items_in_your_cart">Total %1$d item(s) in your cart</string>
     <string name="only">Only</string>
     <string name="product_available">product available</string>
-    <string name="promo_code_invalid">The promo code you entered is not valid</string>
     <string name="qty">Qty </string>
     <string name="order_no">Order no. </string>
     <string name="virtual_acc_label">Your Virtual Account number is : </string>
@@ -280,8 +251,6 @@
     <string name="no_item_shopping_bag">Your Cart is empty!</string>
 
     <string name="t_and_c">Terms &amp; Condition</string>
-    <string name="privacy_policy">Privacy policy</string>
-    <string name="and">\u0020 and \u0020</string>
     <string name="no_item_wishlist">Your wishlist is empty!</string>
     <string name="today">Today,</string>
     <string name="update">Update</string>

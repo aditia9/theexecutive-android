@@ -12,7 +12,7 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
  * @Author Ranosys Technologies
  * @Date 11,Apr,2018
  */
-class ProductStatePagerAdapter(fm : FragmentManager?, productList : List<ProductListingDataClass.Item>?, var pagerPosition : Int?) : FragmentStatePagerAdapter(fm){
+class ProductStatePagerAdapter(fm : FragmentManager?, productList : List<ProductListingDataClass.Item>?, private var pagerPosition : Int?) : FragmentStatePagerAdapter(fm){
 
     private var mProductList : List<ProductListingDataClass.Item>?
 

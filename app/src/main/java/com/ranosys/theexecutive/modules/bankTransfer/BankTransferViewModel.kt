@@ -47,7 +47,7 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
     var transferMethodsList: MutableList<TransferMethodsDataClass> = mutableListOf()
     var transferMethodsLabel: MutableList<String> = mutableListOf()
     var transferMethodsLabelObserVer: MutableLiveData<List<TransferMethodsDataClass>>? = MutableLiveData()
-    var recipientsList: MutableList<Recipients> = mutableListOf()
+    private var recipientsList: MutableList<Recipients> = mutableListOf()
     private lateinit var recipient: String
     private lateinit var transferMethods: String
     var attachmentFile: File? = null
@@ -152,10 +152,6 @@ class BankTransferViewModel(application: Application) : BaseViewModel(applicatio
                     bankTransferObservable.value = apiResponse
                 }
             })
-    }
-
-    fun onRecipientSelection(position: Int) {
-        recipient = recipientsList[position].value
     }
 
     fun onTransferMethodsSelection(position: Int) {

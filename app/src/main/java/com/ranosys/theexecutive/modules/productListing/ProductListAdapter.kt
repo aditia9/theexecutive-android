@@ -37,7 +37,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
     override fun getItemCount() = productList.size
 
-    class Holder(val itemBinding: ProductListItemBinding, val ctx: Context): RecyclerView.ViewHolder(itemBinding.root) {
+    class Holder(val itemBinding: ProductListItemBinding, private val ctx: Context): RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(productItem: ProductListingDataClass.Item, position : Int, listener: ProductListAdapter.OnItemClickListener){
 

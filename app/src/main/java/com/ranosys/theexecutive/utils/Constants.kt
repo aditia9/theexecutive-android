@@ -4,7 +4,6 @@ package com.ranosys.theexecutive.utils
  * Created by Mohammad Sunny on 22/2/18.
  */
 object Constants {
-    const val API_URL = "http://magento.theexecutive.co.id/"
     const val ACCESS_TOKEN_KEY = "access_token"
     const val USER_ACCESS_TOKEN_KEY = "user_access_token"
     const val USER_CART_ID_KEY = "user_cart_id_key"
@@ -27,7 +26,6 @@ object Constants {
     const val ALL: String = "all"
     const val TYPE_FACEBOOK: String = "facebook"
     const val TYPE_GMAIL: String = "google"
-    const val UNKNOWN_ERROR: String = "Something went wrong"
     const val CATEGORY_ID: String = "categoryId"
     const val LOGIN_REQUIRED_PROMPT: String = "login_required_prompt"
     const val CATEGORY_NAME: String = "categoryName"
@@ -40,8 +38,6 @@ object Constants {
     const val FROM_SOCIAL_LOGIN_EMAIL: String = "from_social_email"
     const val DD_MM_YY_DATE_FORMAT: String = "dd/MM/yyyy"
     const val YY_MM__DD_DATE_FORMAT: String = "yyyy-MM-dd"
-    const val COUNTRY_LABEL: String = "Country"
-    const val STATE_LABEL: String = "State/ Province"
     const val CITY_LABEL: String = "City"
     const val USER_EMAIL: String = "user_email"
     const val LIST_PAGE_ITEM_COUNT: Int = 20
@@ -69,8 +65,6 @@ object Constants {
     const val DESC: String = "desc"
     const val ASC: String = "asc"
     const val NEW_TAG: String = "New"
-    const val MEN: String = "MEN"
-    const val WOMEN: String = "WOMEN"
     const val TYPE_CATEGORY: String = "Category"
     const val TYPE_PRODUCT: String = "Product"
     const val TYPE_CMS_PAGE: String = "CMS"
@@ -89,14 +83,9 @@ object Constants {
     const val ERROR_CODE_400: Int = 400
     const val ZENDESK_CHAT: String = "4gHlsXEXVL3ZjRJ6jA5W66wwYYcJPdef"
     const val ZERO: String = "0"
-    const val INVALID_CREDENTIALS: String = "The email address or password do not match with our system, Kindly enter the valid credentials"
-    const val NO_USER_EXIST : String = "No user exists with this email id"
-    const val ALREADY_REGISTERED : String = "It seems like you are already registered with us, kindly login"
-    const val CATEGORY_IMAGE_HEIGHT_RATIO: Double = 1.5
     const val FIRST_NAME: String = "first_name"
     const val LAST_NAME: String = "last_name"
     const val PRODUCT_SKU: String = "productSku"
-    const val OPTIONS: String = "options"
     const val ORDER_ID: String = "order_id"
     const val PAYMENT_METHOD_BANK_TRANSFER_KEY: String = "banktransfer"
     const val PAYMENT_METHOD_COD_KEY: String = "cashondelivery"
@@ -128,13 +117,12 @@ object Constants {
     const val FAILURE = "failure"
     const val CANCEL = "cancelled"
     const val CANCEL_STATUS = "canceled"
-    val IMAGE_RATIO: Double = 1.44
-    val WIDTH_MARGIN : Int = 40
+    const val IMAGE_RATIO: Double = 1.44
+    const val WIDTH_MARGIN : Int = 40
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
     const val CART_DE_ACTIVE = "cart de-active"
     const val IS_NOTIFICATION_SHOW = "notification"
-    const val ALFA_SET = 128
     const val IGNORE="ignore"
     const val COUNTRY_CODE_ID = "ID"
     const val COUNTRY_CODE_IN = "in"

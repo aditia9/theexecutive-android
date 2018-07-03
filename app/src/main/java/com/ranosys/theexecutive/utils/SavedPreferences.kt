@@ -81,8 +81,8 @@ class SavedPreferences private constructor() {
     }
     companion object {
 
-        val user_pref = "APP_DATA"
-        var savedPreferences: SavedPreferences? = null
+        private const val user_pref = "APP_DATA"
+        private var savedPreferences: SavedPreferences? = null
 
          fun init(context: Context) {
             savedPreferences = SavedPreferences()

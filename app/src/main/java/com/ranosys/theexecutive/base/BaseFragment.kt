@@ -13,7 +13,6 @@ import android.view.Gravity
 import android.view.KeyEvent
 import android.webkit.*
 import android.widget.RelativeLayout
-import com.ranosys.rtp.IsPermissionGrantedInterface
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
@@ -73,49 +72,45 @@ abstract class BaseFragment : LifecycleFragment() {
         (activity as BaseActivity).setShowLogo(showLogo)
     }
 
-    protected fun getToolBarViewModel() : ToolbarViewModel?{
+    private fun getToolBarViewModel() : ToolbarViewModel?{
         return  (activity as BaseActivity).toolbarViewModel
     }
 
-    fun setTitle(title: String? = getString(R.string.app_name)){
+    private fun setTitle(title: String? = getString(R.string.app_name)){
         (activity as BaseActivity).setScreenTitle(title)
     }
 
-    fun setTitleBackground(background: Int? = 0){
+    private fun setTitleBackground(background: Int? = 0){
         if(background == 0)
             (activity as BaseActivity).setTitleBackground(android.R.color.transparent)
         else
             (activity as BaseActivity).setTitleBackground(background)
     }
 
-    fun setSubTitle(subTitle: String?){
+    private fun setSubTitle(subTitle: String?){
         (activity as BaseActivity).setSubTitle(subTitle)
     }
 
-    fun setLeftIcon(icon: Int? = R.drawable.ic_action_backward){
+    private fun setLeftIcon(icon: Int? = R.drawable.ic_action_backward){
         if(icon == 0)
             (activity as BaseActivity).setLeftIcon(android.R.color.transparent)
         else
             (activity as BaseActivity).setLeftIcon(icon)
     }
 
-    fun setLeftIconVisibilty(isVisible: Boolean = true){
+    private fun setLeftIconVisibilty(isVisible: Boolean = true){
         (activity as BaseActivity).setLeftIconVisibility(isVisible)
     }
 
-    fun setRightIcon(icon: Int? = R.drawable.ic_action_backward){
+    private fun setRightIcon(icon: Int? = R.drawable.ic_action_backward){
         if(icon == 0)
             (activity as BaseActivity).setRightIcon(android.R.color.transparent)
         else
             (activity as BaseActivity).setRightIcon(icon)
     }
 
-    fun setRightIconVisibilty(isVisible: Boolean = true){
+    private fun setRightIconVisibilty(isVisible: Boolean = true){
         (activity as BaseActivity).setRightIconVisibility(isVisible)
-    }
-
-    fun getPermission(permissionList: List<String>, isPermissionGrantedInterface: IsPermissionGrantedInterface) {
-        (activity as BaseActivity).getPermission(permissionList, isPermissionGrantedInterface)
     }
 
     private fun observeLeftIconClick() {
@@ -210,14 +205,14 @@ abstract class BaseFragment : LifecycleFragment() {
             }
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-                AppLog.e("PAYMENT URL - : ${request!!.url.toString()}")
+                AppLog.e("PAYMENT URL - : ${request!!.url}")
                 view?.loadUrl(request!!.url.toString())
                 return true
             }
         }
 
         webPagesDialog.setOnKeyListener { dialog, keyCode, event ->
-            if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP){
+            if(keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP){
                 checkIfPaymentIsCancelled(webPagesDialog, orderId)
             }
              true

@@ -50,7 +50,7 @@ class LoginFragment: BaseFragment() {
 
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var mBinding: FragmentLoginBinding
-    lateinit var callBackManager: CallbackManager
+    private lateinit var callBackManager: CallbackManager
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private var loginRequiredPrompt: Boolean = false
 

@@ -12,7 +12,6 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.support.v4.app.NotificationCompat
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -41,7 +40,7 @@ class FCMListenerService : FirebaseMessagingService() {
     private lateinit var redirectTitle: String
     private lateinit var notificationImg: String
     private lateinit var title: String
-    internal lateinit var body: String
+    private lateinit var body: String
     private lateinit var notificationId: String
     private lateinit var notification: NotificationCompat.Builder
     private var vibrationArray = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
@@ -167,23 +166,6 @@ class FCMListenerService : FirebaseMessagingService() {
         }
     }
 
-    private fun buildSummary(notificationBody: String): NotificationCompat.Builder? {
-        val intent = Intent(this, SplashActivity::class.java)
-        intent.putExtra(Constants.KEY_REDIRECTION_TYPE, "")
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        return NotificationCompat.Builder(this, BuildConfig.APPLICATION_ID)
-                .setContentText(notificationBody)
-                .setSmallIcon(getNotificationIcon())
-                .setShowWhen(true)
-                .setWhen(System.currentTimeMillis())
-                .setAutoCancel(true)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(notificationBody))
-                .setGroup(BuildConfig.APPLICATION_ID)
-                .setGroupSummary(true)
-                .setContentIntent(pendingIntent)
-                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-    }
-
     private fun getNotificationIcon(): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             R.mipmap.tras_app_icon
@@ -198,16 +180,16 @@ class FCMListenerService : FirebaseMessagingService() {
     }
 
     private fun getBitmapFromURL(strURL: String): Bitmap? {
-        try {
+        return try {
             val url = URL(strURL)
             val connection = url.openConnection() as HttpURLConnection
             connection.doInput = true
             connection.connect()
             val input = connection.inputStream
-            return BitmapFactory.decodeStream(input)
+            BitmapFactory.decodeStream(input)
         } catch (e: IOException) {
             e.printStackTrace()
-            return null
+            null
         }
 
     }

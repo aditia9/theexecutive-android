@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="toolBarColor">#c22f25</color>
     <color name="dark_gray">#2d2c2c</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
-    <color name="header_text_color">#8c8888</color>
     <color name="email_color">#FF807E7E</color>
     <color name="theme_radio_btn_color">#232021</color>
     <color name="theme_accent_color">#999999</color>
 
-    <color name="colorText">#ffffff</color>
-    <color name="light_background">#F6F6F6</color>
     <color name="translucent_bg">#99f6f6f6</color>
     <color name="btn_checkout_bg">#2A6577</color>
 
@@ -21,13 +14,11 @@
     <color name="theme_black_color">#232021</color>
     <color name="hint_color">#999999</color>
     <color name="divider_color">#DDDDDD</color>
-    <color name="transparent_white">#90ffffff</color>
     <color name="trans_black">#26000000</color>
     <color name="transparent_bottom_sheet_color">#CCFFFFFF</color>
     <color name="address_item_bg_color">#f8f6f7</color>
     <color name="light_green">#0d9344</color>
 
-    <color name="bottom_sheet_btn">#2A6577</color>
 
     <color name="red">#FF2842</color>
     <color name="blur_image_color">#CCFFFFFF</color>
@@ -36,7 +27,6 @@
     <color name="notification_green">#0d9344</color>
     <color name="notification_gry">#a1a1a1</color>
     <color name="notification_read_bg">#f4f4f4</color>
-    <color name="black_tran">#E6000000</color>
     <color name="black_translucent">#BF000000</color>
     <color name="trans_white">#0000ffff</color>
     <color name="setting_green">#1c9244</color>

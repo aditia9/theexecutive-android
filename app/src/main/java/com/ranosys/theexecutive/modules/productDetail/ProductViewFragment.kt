@@ -739,7 +739,7 @@ class ProductViewFragment : BaseFragment() {
                 extension_attributes = null
         )
 
-        AppLog.e("AddToCartRequest : " + colorValue + sizeValue + selectedQty)
+        AppLog.e("AddToCartRequest : $colorValue$sizeValue$selectedQty")
 
         return AddToCartRequest(cartItem)
     }

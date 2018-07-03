@@ -64,7 +64,7 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                 country = if(defaultAdd == null){
                     null
                 }else{
-                    GlobalSingelton.instance?.storeList?.single { it.code.toString() == defaultAdd?.country_id}
+                    GlobalSingelton.instance?.storeList?.single { it.code == defaultAdd?.country_id}
                 }
 
                 val userInfo = MyAccountDataClass.MaskedUserInfo(
