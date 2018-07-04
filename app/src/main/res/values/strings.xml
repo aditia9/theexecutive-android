@@ -294,8 +294,8 @@
     <string name="state_label">State/ Province</string>
     <string name="version">Version:</string>
     <string name="bad_qty">Bad Quality</string>
-    <string name="defect">Defect</string>
-    <string name="item_torn">Item Torn</string>
+    <string name="not_accordence">Not Accordance</string>
+    <string name="other">Other</string>
 
 
     <string name="courier">Return via courier (ex: JNE, RPX, SAP, etc.)</string>
