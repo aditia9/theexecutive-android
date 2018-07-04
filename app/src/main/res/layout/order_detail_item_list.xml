@@ -88,6 +88,23 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/fourteen_sp" />
 
+
+            <View
+                android:id="@+id/view_vertical1"
+                android:layout_width="@dimen/one_dp"
+                android:layout_height="@dimen/twenty_dp"
+                android:layout_marginStart="@dimen/ten_dp"
+                android:background="@color/divider_color" />
+
+
+            <TextView
+                android:id="@+id/tv_product_qty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ten_dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/fourteen_sp" />
+
         </LinearLayout>
 
 
