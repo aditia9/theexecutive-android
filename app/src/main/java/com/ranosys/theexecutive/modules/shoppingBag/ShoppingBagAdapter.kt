@@ -30,7 +30,7 @@ class ShoppingBagAdapter(var context: Context, private var shoppingBagList: List
     private var mContext: Context? = null
     private var mPromoCode: String
     private var mTotalResponse : TotalResponse ?= null
-    //private var mGrandTotal: Int = 0
+
 
     private var clickListener: OnItemClickListener? = null
 
