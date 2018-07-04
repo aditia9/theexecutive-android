@@ -24,6 +24,7 @@ import com.ranosys.theexecutive.utils.Utils
 const val ORDER_PRICE = 2
 const val ORDER_ITEM = 1
 const val ORDER_ADDRESS = 0
+private var totalProductQty = 0
 
 class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDetailResponse?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -33,6 +34,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
 
     init {
         listSize = OrderDetail?.items?.size!!
+        totalProductQty = 0
     }
 
     interface OnItemClickListener {
@@ -117,6 +119,8 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
                     }
                 }
                 itemBinding?.tvProductQty?.text = item?.items?.get(position -1).qty_ordered.toString() +" "+itemBinding?.tvProductQty?.context?.getString(R.string.item)
+
+                totalProductQty = totalProductQty + item?.items?.get(position - 1).qty_ordered
             }else{
                 itemBinding?.layoutColorSize?.visibility = View.GONE
             }
@@ -135,7 +139,8 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             itemBinding?.tvProductPrice?.text = Utils.getDisplayPrice(item?.subtotal_incl_tax.toString(), item?.subtotal_incl_tax.toString())
             itemBinding?.tvShippingPrice?.text = Utils.getDisplayPrice(item?.shipping_incl_tax.toString(), item?.shipping_incl_tax.toString())
             itemBinding?.tvTotalPrice?.text = Utils.getDisplayPrice(item?.grand_total.toString(), item?.grand_total.toString())
-            itemBinding?.tvProductQty?.text = (item?.items?.size.toString() + " " + context?.getString(R.string.products))
+
+            itemBinding?.tvProductQty?.text = (totalProductQty.toString() + " " + context?.getString(R.string.products))
 
             if(!TextUtils.isEmpty(item?.extension_attributes?.virtual_account_number)){
                 itemBinding?.tvPaymentId?.visibility = View.VISIBLE
