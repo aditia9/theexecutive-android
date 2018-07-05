@@ -129,7 +129,12 @@ class MyAccountFragment : BaseFragment() {
                 if(option.title == context.getString(R.string.notifications) && GlobalSingelton.instance?.notificationCount?.get() ?: 0 > 0){
 
                     itemBinding.tvNotificationCount.visibility = View.VISIBLE
-                    itemBinding.tvNotificationCount.text = GlobalSingelton.instance?.notificationCount?.get().toString()
+                    var notificationText = GlobalSingelton.instance?.notificationCount?.get().toString()
+                    if(GlobalSingelton.instance?.notificationCount?.get() ?: 0 > 99){
+                        notificationText = "99+"
+                    }
+
+                    itemBinding.tvNotificationCount.text = notificationText
                 }
                 else{
                     itemBinding.tvNotificationCount.visibility = View.GONE

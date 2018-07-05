@@ -37,7 +37,7 @@ class ShoppingBagFragment : BaseFragment() {
     private var cartQty = 0
     private var updateQty = 0
     private var promoCode: String = ""
-    private var totalPrice: Int = 0
+    private var totalResponse : TotalResponse ?= null
     private lateinit var viewBinder: FragmentShoppingBagBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewBinder = DataBindingUtil.inflate(inflater, R.layout.fragment_shopping_bag, container, false)
@@ -159,7 +159,7 @@ class ShoppingBagFragment : BaseFragment() {
             if (apiResponse?.error.isNullOrEmpty()) {
                 val response = apiResponse?.apiResponse
                 if (response is TotalResponse) {
-                    totalPrice = response.subtotal
+                    totalResponse = response
                     getPromoCode()
                 }
             } else {
@@ -220,7 +220,7 @@ class ShoppingBagFragment : BaseFragment() {
             }
             setCartTitle()
 
-            val shoppingBagAdapter = ShoppingBagAdapter(activity as Context, shoppingBagViewModel.shoppingBagListResponse!!.get(), promoCode, totalPrice, { id: Int, pos: Int, item: ShoppingBagResponse?, qty: Int?, promoCode: String? ->
+            val shoppingBagAdapter = ShoppingBagAdapter(activity as Context, shoppingBagViewModel.shoppingBagListResponse!!.get(), promoCode, totalResponse, { id: Int, pos: Int, item: ShoppingBagResponse?, qty: Int?, promoCode: String? ->
 
                 when (id) {
                     0 -> {

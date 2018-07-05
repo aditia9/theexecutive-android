@@ -12,7 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/four_dp"
-        android:text='@{(shippingMethod.carrier_title ?? "") + " " + (shippingMethod.method_title ?? "")}'
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text='@{(shippingMethod.method_title ?? "")}'
         android:button="@null"
         android:buttonTint="@color/theme_radio_btn_color"
         android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"/>

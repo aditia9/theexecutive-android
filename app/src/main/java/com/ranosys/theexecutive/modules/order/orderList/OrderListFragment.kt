@@ -44,9 +44,10 @@ class OrderListFragment : BaseFragment() {
 
     private fun callOrderListApi() {
         if (Utils.isConnectionAvailable(activity as Context)) {
+            showLoading()
             orderListModelView?.getOrderList()
         } else {
-            Utils.showNetworkErrorDialog(activity as Context)
+            Utils.showNetworkErrorDialog(activity as Context, action = { activity?.run { onBackPressed() }})
         }
     }
 
@@ -54,9 +55,6 @@ class OrderListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         linearLayoutManager = LinearLayoutManager(activity as Context)
         rv_order_list.layoutManager = linearLayoutManager
-
-        showLoading()
-        observeEvents()
     }
 
     private fun observeEvents() {

@@ -16,6 +16,8 @@ import android.widget.RelativeLayout
 import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
 import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
@@ -245,6 +247,9 @@ abstract class BaseFragment : LifecycleFragment() {
 
                 Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(R.string.yes), getString(R.string.no), object: DialogOkCallback {
                     override fun setDone(done: Boolean) {
+                        //cancel the order
+                        callCancelOrderAPi(orderId)
+
                         redirectToOrderResultPage(orderId, Constants.CANCEL)
                         webPagesDialog.dismiss()
                     }
@@ -255,6 +260,19 @@ abstract class BaseFragment : LifecycleFragment() {
         }
 
     }
+
+    private fun callCancelOrderAPi(orderId: String) {
+        AppRepository.cancelOrder(orderId, object: ApiCallback<Boolean>{
+            override fun onException(error: Throwable) {
+            }
+
+            override fun onError(errorMsg: String) {
+            }
+
+            override fun onSuccess(t: Boolean?) {
+            }
+
+        })    }
 
     private fun redirectToOrderResultPage(orderId: String, status: String) {
         popUpAllFragments()

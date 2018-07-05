@@ -30,6 +30,7 @@ class BindingAdapters {
         fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
             view.error = errorMessage
             view.isErrorEnabled = !TextUtils.isEmpty(errorMessage)
+            view.requestFocus()
         }
 
         @JvmStatic

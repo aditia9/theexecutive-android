@@ -207,6 +207,7 @@
     <string name="qty">Qty </string>
     <string name="order_no">Order no. </string>
     <string name="virtual_acc_label">Your Virtual Account number is : </string>
+    <string name="virtual_acc_message">Bank Account: BCA\n</string>
     <string name="shipping_cost">Shipping Cost</string>
     <string name="products">Product(s)</string>
     <string name="order_return">Return</string>
@@ -263,15 +264,17 @@
     <string name="state_label">State/ Province</string>
     <string name="version">Version:</string>
     <string name="bad_qty">Bad Quality</string>
-    <string name="defect">Defect</string>
-    <string name="item_torn">Item Torn</string>
+    <string name="not_accordence">Not Accordance</string>
+    <string name="other">Other</string>
 
 
     <string name="courier">Return via courier (ex: JNE, RPX, SAP, etc.)</string>
     <string name="alfamart">Return via Alfamart (Free)</string>
     <string name="return_mode">Return Mode</string>
-    <string name="return_mode_courier">courier</string>
-    <string name="return_mode_alfamart">alfamart</string>
+    <string name="product_total">Product Total</string>
+    <string name="discount">Discount</string>
+    <string name="grand_total">Grand Total</string>
+    <string name="item">item(s) </string>
 
 
 

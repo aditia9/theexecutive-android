@@ -39,7 +39,6 @@
             android:layout_marginStart="@dimen/fifteen_dp"
             android:textStyle="bold"
             android:text="@{notification.title}"
-            android:textColor="@{notification.is_read ? @color/notification_gry :@color/black}"
             android:visibility="@{TextUtils.isEmpty(notification.title)? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
@@ -55,7 +54,6 @@
             android:layout_marginTop="@dimen/four_dp"
             android:textSize="@dimen/fourteen_sp"
             android:text="@{notification.description}"
-            android:textColor="@{notification.is_read ? @color/notification_gry :@color/black}"
             app:layout_constraintStart_toEndOf="@id/img_bullet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />

@@ -204,6 +204,7 @@
     <string name="qty">Jumlah Barang </string>
     <string name="order_no">No. Order</string>
     <string name="virtual_acc_label">No. Virtual Account anda adalah :</string>
+    <string name="virtual_acc_message">Akun bank: BCA\n</string>
     <string name="shipping_cost">Biaya Pengiriman</string>
     <string name="products">Produk</string>
     <string name="order_return">Retur</string>
@@ -255,13 +256,16 @@
     <string name="state_label">Provinsi</string>
     <string name="version">Version:</string>
     <string name="bad_qty">Kualitas buruk</string>
-    <string name="defect">Rusak</string>
-    <string name="item_torn">Barang Rusak</string>
+    <string name="not_accordence">Tidak Sesuai</string>
+    <string name="other">Lain</string>
 
 
-    <string name="courier">Return via courier (ex: JNE, RPX, SAP, etc.)</string>
-    <string name="alfamart">Return via Alfamart (Free)</string>
-    <string name="return_mode">Return Mode</string>
     <string name="return_mode_courier">courier</string>
+    <string name="discount">Diskon</string>
+    <string name="product_total">Total Produk</string>
+    <string name="grand_total">Total keseluruhan</string>
+    <string name="courier">Kembalikan melalui kurir (mis: JNE, RPX, SAP, dll.)</string>
+    <string name="alfamart">Kembali via Alfamart (Gratis)</string>
+    <string name="return_mode">Mode Pengembalian</string>
 
 </resources>

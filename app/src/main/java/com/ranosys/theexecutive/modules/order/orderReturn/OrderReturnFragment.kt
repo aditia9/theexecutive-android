@@ -130,7 +130,7 @@ class OrderReturnFragment : BaseFragment() {
         list?.forEach {
             if (orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.request_return!!) {
                 item = Item(orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.item_id!!, orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.request_reason!!, orderReturnViewModel.orderDetailObservable?.get()?.items?.get(i)?.request_qty!!)
-                mutableItemList.add(i, item)
+                mutableItemList.add(item)
                 isReturnable = true
             }
 

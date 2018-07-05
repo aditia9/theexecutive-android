@@ -262,8 +262,8 @@
     <string-array name="reason_array">
         <item>@string/select_reason</item>
         <item>@string/bad_qty</item>
-        <item>@string/defect</item>
-        <item>@string/item_torn</item>
+        <item>@string/not_accordence</item>
+        <item>@string/other</item>
     </string-array>
 
     <integer-array name="my_account_option_icon_array">

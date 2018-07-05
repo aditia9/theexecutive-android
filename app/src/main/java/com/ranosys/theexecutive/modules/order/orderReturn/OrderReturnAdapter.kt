@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiConstants
 import com.ranosys.theexecutive.databinding.OrderReturnAddressBinding
 import com.ranosys.theexecutive.databinding.ReturnItemBinding
 import com.ranosys.theexecutive.modules.order.orderDetail.Item
@@ -33,6 +34,8 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
     private var clickListener: OnItemClickListener? = null
 
     private var listSize: Int = 0
+
+    private val reasonArray = context.applicationContext?.resources?.getStringArray(R.array.reason_array)
 
     init {
         listSize = OrderDetail?.items?.size!!
@@ -84,11 +87,11 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
         }
     }
 
-    class OrderDetailItemHolder(var itemBinding: ReturnItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
+    inner class OrderDetailItemHolder(var itemBinding: ReturnItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
         fun bind(context: Context?, orderItem: Item?, item: OrderDetailResponse?, position: Int) {
             itemBinding?.item = orderItem
-            orderItem?.request_reason = context?.resources?.getStringArray(R.array.reason_array)?.get(0).toString()
+            //orderItem?.request_reason = context?.resources?.getStringArray(R.array.reason_array)?.get(0).toString()
             orderItem?.request_qty = (item?.items!![position].qty_ordered)
             itemBinding?.imgIncrement!!.alpha = 0.5f
             itemBinding?.imgDecrement!!.alpha = 1.0f
@@ -120,6 +123,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                         }
                     }
                 }
+                itemBinding?.tvProductQty?.text = item?.items?.get(position).qty_ordered.toString() +" "+itemBinding?.tvProductQty?.context?.getString(R.string.item)
             } else {
                 itemBinding?.layoutColorSize?.visibility = View.GONE
             }
@@ -172,6 +176,12 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.items.get(position).price.toString(), item.items.get(position).price.toString())
             }
 
+            var pos = 0
+            if(orderItem?.request_reason.isNullOrEmpty().not()){
+                pos = reasonArray?.indexOf(orderItem?.request_reason) ?: 0
+            }
+
+            itemBinding?.spReason?.setSelection(pos)
             itemBinding?.spReason?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -229,12 +239,12 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                     itemBinding?.tvOfficeMobileNumber?.text = item.extension_attributes.returnto_address.returnto_contact
                 }
 
-                var returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_courier)
+                var returnModeString = ApiConstants.RETURN_MODE_COURIER
                 itemBinding?.radioGrp?.setOnCheckedChangeListener { group, checkedId ->
                     if (itemBinding!!.rbCourier.isChecked) {
-                        returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_courier)
+                        returnModeString = ApiConstants.RETURN_MODE_COURIER
                     } else if (itemBinding!!.rbAlfamart.isChecked) {
-                        returnModeString = itemBinding?.radioGrp!!.context.getString(R.string.return_mode_alfamart)                    }
+                        returnModeString =  ApiConstants.RETURN_MODE_ALFATEX                 }
                 }
 
 
