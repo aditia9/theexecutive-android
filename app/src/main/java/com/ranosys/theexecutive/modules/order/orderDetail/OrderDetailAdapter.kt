@@ -140,7 +140,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             itemBinding?.tvShippingPrice?.text = Utils.getDisplayPrice(item?.shipping_incl_tax.toString(), item?.shipping_incl_tax.toString())
             itemBinding?.tvTotalPrice?.text = Utils.getDisplayPrice(item?.grand_total.toString(), item?.grand_total.toString())
 
-            itemBinding?.tvProductQty?.text = (totalProductQty.toString() + " " + context?.getString(R.string.products))
+            itemBinding?.tvProductQty?.text = (totalProductQty.toString() + " " + context?.getString(R.string.item))
 
             if(!TextUtils.isEmpty(item?.extension_attributes?.virtual_account_number)){
                 itemBinding?.tvPaymentId?.visibility = View.VISIBLE

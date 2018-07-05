@@ -267,5 +267,6 @@
     <string name="courier">Kembalikan melalui kurir (mis: JNE, RPX, SAP, dll.)</string>
     <string name="alfamart">Kembali via Alfamart (Gratis)</string>
     <string name="return_mode">Mode Pengembalian</string>
+    <string name="item">barang</string>
 
 </resources>
