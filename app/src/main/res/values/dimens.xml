@@ -72,4 +72,5 @@
     <dimen name="return_text_size">13sp</dimen>
     <dimen name="forty_four_dp">44dp</dimen>
     <dimen name="notification_count_size">16dp</dimen>
+    <dimen name="fifteen_sp">15sp</dimen>
 </resources>
