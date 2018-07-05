@@ -4,7 +4,6 @@ import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
 import android.databinding.ObservableField
 import android.support.design.widget.TextInputLayout
-import android.support.v4.view.ViewPager
 import android.text.TextUtils
 import android.widget.ExpandableListView
 import android.widget.ImageView
@@ -12,9 +11,8 @@ import android.widget.Spinner
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
-import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
-import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlideApp
 import com.ranosys.theexecutive.utils.GlobalSingelton
 
@@ -32,6 +30,7 @@ class BindingAdapters {
         fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
             view.error = errorMessage
             view.isErrorEnabled = !TextUtils.isEmpty(errorMessage)
+            view.requestFocus()
         }
 
         @JvmStatic
@@ -39,7 +38,7 @@ class BindingAdapters {
         fun captureSelectedValue(pAppCompatSpinner: Spinner): String {
             return pAppCompatSpinner.selectedItem.toString()
         }
-        
+
         @JvmStatic
         @BindingAdapter("android:src")
         fun setImageResource(imageView: ImageView, resource: Int) {
@@ -53,12 +52,6 @@ class BindingAdapters {
             view.setAdapter(adapter)
         }
 
-        @JvmStatic
-        @BindingAdapter("promotionData")
-        fun bindViewPager(view: ViewPager, response: List<PromotionsResponseDataClass>?) {
-            val customViewPagerAdapter = CustomViewPageAdapter(view.context, response)
-            view.adapter = customViewPagerAdapter
-        }
 
         //for images at home promotion
         @JvmStatic
@@ -83,30 +76,63 @@ class BindingAdapters {
             imageUrl?.run {
                 GlideApp.with(imageView.context)
                         .load(baseUrl+imageUrl)
-                        .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
-                        .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
+                        .centerCrop()
                         .into(imageView)
             }
         }
 
 
-        //for images in product listing
+        //for images in product listing product details
         @JvmStatic
         @BindingAdapter("bind:baseUrlWithProductImageUrl")
         fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
             val baseUrl = GlobalSingelton.instance?.configuration?.product_media_url
-            imageUrl?.run {
+            if(imageUrl.isNullOrEmpty().not()){
                 GlideApp.with(imageView.context)
                         .asBitmap()
                         .load(baseUrl+imageUrl)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
+                        .placeholder(R.drawable.placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .into(imageView)
+
             }
+        }
+
+        //for images in order result page
+        @JvmStatic
+        @BindingAdapter("bind:orderResult")
+        fun showOrderStatus(imageView: ImageView, status: String?) {
+
+            var imageName = ""
+            when(status){
+                Constants.SUCCESS -> {
+                    imageName = "order_success"
+
+                }
+                Constants.CANCEL -> {
+                    imageName = "order_cancel"
+
+                }
+                Constants.FAILURE -> {
+                    imageName = "order_fail"
+
+                }
+            }
+
+            val iconId = imageView.context.resources.getIdentifier(imageName, "drawable", imageView.context.packageName)
+
+            GlideApp.with(imageView.context)
+                    .asBitmap()
+                    .load(iconId)
+                    .centerCrop()
+                    .into(imageView)
+
+
         }
     }
 }

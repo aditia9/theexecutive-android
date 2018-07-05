@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.editAddress
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -28,6 +29,7 @@ class EditAddressFragment:BaseFragment() {
     private lateinit var mViewModel: EditAddressViewModel
     private lateinit var mBinding: FragmentEditAddressBinding
     private var address: MyAccountDataClass.Address? = null
+    private var liveAddress: MutableLiveData<MyAccountDataClass.Address>?  = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_address, container, false)
@@ -45,11 +47,13 @@ class EditAddressFragment:BaseFragment() {
         mViewModel.updateAddressApiResponse.observe(this, Observer { apiResponse ->
             hideLoading()
             if(apiResponse?.error.isNullOrBlank()){
+                //to update selected address at checkout screen when address updated
+                liveAddress?.value = apiResponse?.apiResponse?.addresses?.single { it.id == liveAddress?.value?.id }
                 Toast.makeText(activity,getString(R.string.address_edit_success_msg), Toast.LENGTH_SHORT).show()
                 activity?.onBackPressed()
 
             }else{
-                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity,getString(R.string.add_address_failure_msg), getString(R.string.ok), "", null)
             }
         })
     }
@@ -100,7 +104,7 @@ class EditAddressFragment:BaseFragment() {
                 mBinding.spinnerState.setSelection(mViewModel.countryList.flatMap { it.available_regions }.toList().indexOf(temp2))
 
             }else{
-                Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(android.R.string.ok), "", object: DialogOkCallback {
+                Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(R.string.ok), "", object: DialogOkCallback {
                     override fun setDone(done: Boolean) {
                         activity?.onBackPressed()
                     }
@@ -114,14 +118,15 @@ class EditAddressFragment:BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setToolBarParams(getString(R.string.add_addresse), 0, "", R.drawable.back, true, 0 , false)
+        setToolBarParams(getString(R.string.edit_addresse), 0, "", R.drawable.back, true, 0 , false)
     }
 
     companion object {
 
-        fun getInstance(address : MyAccountDataClass.Address?) =
+        fun getInstance(address : MyAccountDataClass.Address?, liveAddress: MutableLiveData<MyAccountDataClass.Address>? = null) =
                 EditAddressFragment().apply {
                     this.address = address
+                    this.liveAddress = liveAddress
                 }
     }
 }

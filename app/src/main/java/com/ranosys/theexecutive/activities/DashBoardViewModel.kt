@@ -12,7 +12,7 @@ import com.ranosys.theexecutive.base.BaseViewModel
  */
 class DashBoardViewModel(application: Application) : BaseViewModel(application) {
 
-    private val isCreated: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
+    private val isCreated: MutableLiveData<Boolean>? = MutableLiveData()
 
     fun manageFragments(): MutableLiveData<Boolean> {
         if(isCreated?.value == null){

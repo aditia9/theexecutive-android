@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.modules.register
 
+import AppLog
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
@@ -10,7 +11,9 @@ import android.view.View
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.Toast
+import com.ranosys.theexecutive.DelamiBrandsApplication
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
@@ -38,7 +41,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var emailAddress: ObservableField<String> = ObservableField()
     var mobileNumber: ObservableField<String> = ObservableField()
     var countryCode: ObservableField<String> = ObservableField()
-    var selectedGender: ObservableField<Int> = ObservableField(MALE)
+    private var selectedGender: ObservableField<Int> = ObservableField(MALE)
     var dob: ObservableField<Date> = ObservableField()
     var dobError: ObservableField<String> = ObservableField()
     var streetAddress1: ObservableField<String> = ObservableField()
@@ -48,38 +51,38 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var confirmPassword: ObservableField<String> = ObservableField()
     val isSubscribed = ObservableField<Boolean>(false)
 
-    var countryList :MutableList<RegisterDataClass.Country> = mutableListOf<RegisterDataClass.Country>()
-    var stateList :MutableList<RegisterDataClass.State> = mutableListOf<RegisterDataClass.State>()
-    var cityList :MutableList<RegisterDataClass.City> = mutableListOf<RegisterDataClass.City>()
-    var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
-    var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
-    var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
-    val countryHint:RegisterDataClass.Country = RegisterDataClass.Country(full_name_locale = Constants.COUNTRY_LABEL)
-    val stateHint:RegisterDataClass.State = RegisterDataClass.State(name = Constants.STATE_LABEL)
-    val cityHint:RegisterDataClass.City = RegisterDataClass.City(name = Constants.CITY_LABEL)
+    var countryList :MutableList<RegisterDataClass.Country> = mutableListOf()
+    var stateList :MutableList<RegisterDataClass.State> = mutableListOf()
+    var cityList :MutableList<RegisterDataClass.City> = mutableListOf()
+    private var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
+    private var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
+    private var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
+    var countryHint:RegisterDataClass.Country? = null
+    var stateHint:RegisterDataClass.State? = null
+    var cityHint:RegisterDataClass.City? = null
 
     var isSocialLogin: Boolean = false
 
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
     var apiSocialRegResponse: MutableLiveData<String>? = MutableLiveData()
     var apiDirectRegSuccessResponse: MutableLiveData<RegisterDataClass.RegistrationResponse>? = MutableLiveData()
+    var userCartIdResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
+    var userCartCountResponse: MutableLiveData<ApiResponse<String>>? = MutableLiveData()
 
     companion object {
         const val MALE = 1
         const val FEMALE = 2
 
         //error tags
-        val ERROR_TAG = "error"
-        val COUNTRY_API_TAG = "Country Api"
-        val CITY_API_TAG = "City Api"
-        val REGISTRATION_API_TAG = "Registration Api"
-        val LOGIN_API_TAG = "Login Api"
+        const val ERROR_TAG = "error"
+        const val COUNTRY_API_TAG = "Country Api"
+        const val CITY_API_TAG = "City Api"
     }
 
-    init {
-        countryList.add(countryHint)
-        stateList.add(stateHint)
-        cityList.add(cityHint)
+    fun initSpinnerHints() {
+        countryList.add(countryHint!!)
+        stateList.add(stateHint!!)
+        cityList.add(cityHint!!)
 
         selectedcountry.set(countryHint)
         selectedState.set(stateHint)
@@ -117,7 +120,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         }else{
             stateList.clear()
-            stateList.add(stateHint)
+            stateList.add(stateHint!!)
             selectedState.set(stateHint)
             selectedCity.set(cityHint)
         }
@@ -130,7 +133,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             callCityApi(selectedState.get().id)
         }else{
             cityList.clear()
-            cityList.add(cityHint)
+            cityList.add(cityHint!!)
             selectedCity.set(cityHint)
         }
         citySpinner.setSelection(0)
@@ -154,7 +157,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
             override fun onError(errorMsg: String) {
                 Utils.printLog(CITY_API_TAG, ERROR_TAG)
-                Toast.makeText(getApplication<Application>(), errorMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplication(), errorMsg, Toast.LENGTH_SHORT).show()
             }
 
             override fun onSuccess(cities: List<RegisterDataClass.City>?) {
@@ -172,7 +175,6 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
 
     fun callRegisterApi() {
-        if(isValidData(getApplication())){
             val address = RegisterDataClass.Address(region_id = selectedState.get().id,
                     firstname = firstName.get(),
                     lastname = lastName.get(),
@@ -214,12 +216,15 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
                     apiFailureResponse?.value = errorMsg
                 }
 
+                override fun onErrorCode(errorCode: Int) {
+                    apiFailureResponse?.value = errorCode.toString()
+                }
+
                 override fun onSuccess(response: RegisterDataClass.RegistrationResponse?) {
                     if(isSocialLogin) callLoginApi() else apiDirectRegSuccessResponse?.value = response
                 }
 
             })
-        }
     }
 
 
@@ -228,8 +233,12 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         AppRepository.login(loginRequest, object : ApiCallback<String> {
             override fun onException(error: Throwable) {
-                apiFailureResponse?.value = Constants.UNKNOWN_ERROR
+                apiFailureResponse?.value = DelamiBrandsApplication.samleApplication?.getString(R.string.something_went_wrong_error)
 
+            }
+
+            override fun onErrorCode(errorCode: Int) {
+                apiFailureResponse?.value = errorCode.toString()
             }
 
             override fun onError(errorMsg: String) {
@@ -237,11 +246,79 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             }
 
             override fun onSuccess(userToken: String?) {
+                SavedPreferences.getInstance()?.saveStringValue(emailAddress.get(), Constants.USER_EMAIL)
                 SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
-                apiSocialRegResponse?.value = userToken
+                SavedPreferences.getInstance()?.saveStringValue(userToken!!, Constants.USER_ACCESS_TOKEN_KEY)
+                Utils.setUpZendeskChat()
+
+                val guestCartId = SavedPreferences.getInstance()?.getStringValue(Constants.GUEST_CART_ID_KEY)?: ""
+                if(guestCartId.isNotBlank()){
+                    mergeCart(guestCartId)
+                }else{
+                    apiSocialRegResponse?.value = userToken
+                }
 
             }
         })
+    }
+
+    private fun mergeCart(guestCartId: String) {
+        AppRepository.cartMergeApi(guestCartId, object: ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                AppLog.d("cart merge api : ${error.message}")
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.d("cart merge api : $errorMsg")
+            }
+
+            override fun onSuccess(t: String?) {
+                //delete guest cart id
+                SavedPreferences.getInstance()?.saveStringValue("", Constants.GUEST_CART_ID_KEY)
+                apiSocialRegResponse?.value = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+            }
+
+        })
+    }
+
+    fun getCartIdForUser(userToken: String?){
+        val apiResponse = ApiResponse<String>()
+        AppRepository.createUserCart(object : ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                userCartIdResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartIdResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                SavedPreferences.getInstance()?.saveStringValue(t, Constants.USER_CART_ID_KEY)
+                userCartIdResponse?.value = apiResponse
+            }
+
+        })
+    }
+
+    fun getUserCartCount() {
+        val apiResponse = ApiResponse<String>()
+        AppRepository.cartCountUser(object : ApiCallback<String>{
+            override fun onException(error: Throwable) {
+                userCartCountResponse?.value?.throwable = error
+            }
+
+            override fun onError(errorMsg: String) {
+                userCartCountResponse?.value?.error = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                apiResponse.apiResponse = t
+                userCartCountResponse?.value = apiResponse
+            }
+
+        })
+
     }
 
     fun onGenderSelection(view: RadioGroup, id:Int){
@@ -318,6 +395,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
         if (TextUtils.isEmpty(postalCode.get())){
             postalCodeError.set(context.getString(R.string.postal_error))
+            isValid = false
+        }else if(!Utils.isValidPincode(postalCode.get())){
+            postalCodeError.set(context.getString(R.string.valid_postal_error))
             isValid = false
         }
 

@@ -11,6 +11,8 @@ class ApiConstants {
         const val CACHE_CONTROL = "Cache-Control: no-cache"
         const val AUTHORIZATION_KEY = "Authorization"
         const val BEARER = "Bearer "
+        const val CONNECT_TIMEOUT = 60
+        const val RETURN_MODE_COURIER = "courier"
+        const val RETURN_MODE_ALFATEX = "alfatrex"
     }
-
 }

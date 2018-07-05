@@ -22,14 +22,14 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var lastSearchQuery: String = ""
 
 
-    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>()
-    var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData<MutableList<ProductListingDataClass.Filter>>()
+    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData()
+    var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData()
     var priceFilter: MutableLiveData<ProductListingDataClass.Filter> = MutableLiveData()
     var noProductAvailable: MutableLiveData<Int> = MutableLiveData()
     var selectedFilterMap = hashMapOf<String, String>()
     var selectedPriceRange = ProductListingDataClass.PriceRange()
     var selectedSortOption = ProductListingDataClass.SortOptionResponse("", "")
-
+    var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
     var productListResponse: ProductListingDataClass.ProductListingResponse? = null
 
     fun getSortOptions(type: String) {
@@ -130,10 +130,12 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
         AppRepository.getProductList(prepareProductListingRequest(catId ?: Constants.UNIVERSAL_CAT_ID, query,fromSearch), fromSearch,  object: ApiCallback<ProductListingDataClass.ProductListingResponse>{
             override fun onException(error: Throwable) {
+                apiFailureResponse?.value = error.message
                 Utils.printLog("product listing", error.message?: "exception")
             }
 
             override fun onError(errorMsg: String) {
+                apiFailureResponse?.value = errorMsg
                 Utils.printLog("product listing", errorMsg)
             }
 
@@ -174,7 +176,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         }
     }
 
-    fun getProductOptions(attributeId : String?, label : String?){
+    private fun getProductOptions(attributeId : String?, label : String?){
         AppRepository.getProductOptions(attributeId, object : ApiCallback<List<ProductOptionsResponse>> {
             override fun onException(error: Throwable) {
             }
@@ -224,7 +226,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         }
 
         if(selectedPriceRange.min.isNotBlank() && selectedPriceRange.max.isNotBlank()){
-            selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.toFloat().toInt().toString() + "-" + selectedPriceRange.max.toFloat().toInt().toString())
+            selectedFilterMap.put(Constants.FILTER_PRICE_KEY, selectedPriceRange.min.replace(".","") + "-" + selectedPriceRange.max.replace(".",""))
         }
 
         for((key, value) in selectedFilterMap){
@@ -235,7 +237,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
 
         requestMap.put(Constants.REQUEST_PAGE_LIMIT_LABEL, Constants.LIST_PAGE_ITEM_COUNT.toString())
-        val page = (productList.value?.size)?.div(10)?.plus(1) ?: 1
+        val page = (productList.value?.size)?.div(Constants.LIST_PAGE_ITEM_COUNT)?.plus(1) ?: 1
         requestMap.put(Constants.REQUEST_PAGE_LABEL, page.toString())
 
         return requestMap

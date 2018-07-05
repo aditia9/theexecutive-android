@@ -3,6 +3,7 @@ package com.ranosys.theexecutive.utils
 import AppLog
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -12,10 +13,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
-import android.net.Uri
-import android.net.wifi.WifiManager
 import android.os.Build
-import android.telephony.TelephonyManager
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
@@ -23,6 +21,7 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StrikethroughSpan
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Patterns
 import android.util.TypedValue
 import android.view.View
 import android.view.Window
@@ -36,10 +35,11 @@ import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.zopim.android.sdk.api.ZopimChat
 import com.zopim.android.sdk.model.VisitorInfo
-import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
@@ -55,27 +55,28 @@ object Utils {
         }
     }
 
-    val isMarshmallowOrAbove: Boolean?
-        get() {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        }
 
-    fun isValidEmail(email: String?): Boolean {
-        // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
-        val p = Pattern.compile( "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
-        val m = p.matcher(email)
-        return m.matches()
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     fun isValidPassword(password: String): Boolean {
 
-        val p = Pattern.compile("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#\$%^&+=])(?=\\S+\$).{8,}\$")
+        val p = Pattern.compile("^(?=.*[0-9])(?=.*[a-zA-Z])(?=\\S+\$).{8,}\$")
         val m = p.matcher(password)
         return m.matches()
     }
 
     fun isValidMobile(mobile: String): Boolean {
         if(mobile.length in 8..16){
+            return true
+        }
+        return false
+
+    }
+
+    fun isValidPincode(pincode: String): Boolean {
+        if(pincode.length == 5){
             return true
         }
         return false
@@ -122,10 +123,14 @@ object Utils {
 
     fun showDialog(context: Context?, title: String?, positiveMessage: String?, negativeMessage: String?, dialogOkCallback: DialogOkCallback?) {
         if (context != null) {
+            var errorTitle = title
+            if(title == Constants.ERROR){
+                errorTitle = context.getString(R.string.common_error)
+            }
             val dialog : Dialog? = Dialog(context)
             dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
             dialog?.setContentView(R.layout.alert_dialog)
-            dialog?.findViewById<TextView>(R.id.tv_title)?.text = title
+            dialog?.findViewById<TextView>(R.id.tv_title)?.text = errorTitle
             if(TextUtils.isEmpty(negativeMessage).not()){
                 dialog?.findViewById<TextView>(R.id.tv_no)?.visibility = View.VISIBLE
                 dialog?.findViewById<TextView>(R.id.tv_no)?.text = negativeMessage
@@ -151,16 +156,16 @@ object Utils {
 
     }
 
-    fun showNetworkErrorDialog(context: Context){
-        showDialog(context, context.getString(R.string.network_err_text),context.getString(android.R.string.ok), "", object : DialogOkCallback{
+    fun showNetworkErrorDialog(context: Context, action: () -> Unit = {}){
+        showDialog(context, context.getString(R.string.network_err_text),context.getString(R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
-
+                action()
             }
         })
     }
 
     fun showErrorDialog(context: Context, error : String){
-        showDialog(context, error, context.getString(android.R.string.ok), "", object : DialogOkCallback{
+        showDialog(context, error, context.getString(R.string.ok), "", object : DialogOkCallback{
             override fun setDone(done: Boolean) {
 
             }
@@ -172,8 +177,13 @@ object Utils {
         LoginManager.getInstance().logOut()
         mGoogleSignInClient.signOut()
         SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_ACCESS_TOKEN_KEY)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.USER_EMAIL)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.FIRST_NAME)
+        SavedPreferences.getInstance()?.saveStringValue("", Constants.LAST_NAME)
         updateCartCount(0)
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
+        GlobalSingelton.instance?.userInfo = null
+        GlobalSingelton.instance?.notificationCount?.set(0)
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
 
     }
@@ -184,11 +194,6 @@ object Utils {
         return xlarge || large
     }
 
-    fun openCmsPage(context: Context, url: String) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(url)
-        context.startActivity(intent)
-    }
 
     fun compareDrawable(context: Context, d1: Drawable, d2: Drawable): Boolean{
         return (d1 as BitmapDrawable).bitmap == (d2 as BitmapDrawable).bitmap
@@ -200,7 +205,7 @@ object Utils {
         return displayMetrics.widthPixels
     }
 
-    private fun getDeviceHeight(context: Context?) : Int{
+     private fun getDeviceHeight(context: Context?) : Int{
         val displayMetrics = DisplayMetrics()
         (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.heightPixels
@@ -208,27 +213,14 @@ object Utils {
 
     fun convertDpIntoPx(context: Context?, dp : Float) : Int{
         val r = context?.resources
-        val px = Math.round(TypedValue.applyDimension(
+        return Math.round(TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, dp, r?.displayMetrics))
-        return px
     }
 
-    fun setImageViewHeight(context: Context?, imageView : ImageView?, percentage : Int?){
-        val height = getDeviceHeight(context)
-        val removeHeight = height.times(percentage!!).div(100)
-        imageView?.layoutParams?.height = height - removeHeight
-    }
-
-    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double){
-        val width = getDeviceWidth(context)
+    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double, widthMargin: Int = 0, column: Int = 1){
+        val width = (getDeviceWidth(context) - convertDpIntoPx(context, widthMargin.toFloat())) / column
         val height = width.times(times)
         imageView.layoutParams?.height = height.toInt()
-    }
-
-    fun setViewHeightWrtDeviceHeight(context: Context, view: View, times: Double){
-        val width = getDeviceHeight(context)
-        val height = width.times(times)
-        view.layoutParams?.height = height.toInt()
     }
 
     fun setViewHeightWrtDeviceWidth(context: Context, view: View, times: Double){
@@ -253,11 +245,11 @@ object Utils {
         var newPrice = ""
         try {
             val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
-            if (price.isNotBlank()) {
+            newPrice = if (price.isNotBlank()) {
                 val p = price.toDouble()
-                newPrice = numberFormatter.format(p).replace(",", ".")
+                numberFormatter.format(p).replace(",", ".")
             } else {
-                newPrice = price
+                price
             }
         }catch (e : NumberFormatException){
             AppLog.printStackTrace(e)
@@ -266,15 +258,6 @@ object Utils {
 
     }
 
-    fun getDoubleFromFormattedPrice(price: String): Double {
-        var newPrice = 0.0
-        try {
-            newPrice = price.replace(",", "").toDouble()
-        }catch (e : NumberFormatException){
-            AppLog.printStackTrace(e)
-        }
-        return newPrice
-    }
 
     fun getStringFromFormattedPrice(price: String): String {
         var newPrice = ""
@@ -286,23 +269,6 @@ object Utils {
         return newPrice
     }
 
-    @SuppressLint("ServiceCast")
-    fun getDeviceId(context: Context): String {
-        var IMEI = ""
-        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        IMEI = telephonyManager.deviceId
-        if (TextUtils.isEmpty(IMEI)) {
-            val manager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val info = manager.connectionInfo
-            val address = info.macAddress
-            return if (!TextUtils.isEmpty(address)) {
-                address
-            } else {
-                "0000000000000000"
-            }
-        }
-        return IMEI
-    }
 
     fun setUpZendeskChat() {
         val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
@@ -311,7 +277,7 @@ object Utils {
             val name = SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME) + " " + SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME)
             val visitorInfo = VisitorInfo.Builder()
                     .email(email)
-                   // .name(name)
+                    .name(name)
                     .build()
 
             // visitor info can be set at any point when that information becomes available
@@ -319,16 +285,14 @@ object Utils {
         }else{
             val visitorInfo = VisitorInfo.Builder()
                     .email("")
-                    // .name("")
                     .build()
             ZopimChat.setVisitorInfo(visitorInfo)
         }
         ZopimChat.init(Constants.ZENDESK_CHAT)
     }
 
-
     fun getCountryName(id: String): String{
-        return GlobalSingelton.instance?.storeList?.single { it.code.toString() == id }.let { it?.name } ?: ""
+        return GlobalSingelton.instance?.storeList?.single { it.code == id }.let { it?.name } ?: ""
 
     }
 
@@ -339,11 +303,17 @@ object Utils {
 
     fun getDefaultAddress(): MyAccountDataClass.Address?{
         val info = GlobalSingelton.instance?.userInfo
-        if(info?.default_shipping.isNullOrBlank().not()){
-            return info?.addresses?.single { it?.id == info.default_shipping }
+        return if(info?.default_shipping.isNullOrBlank().not()){
+            info?.addresses?.single { it?.id == info.default_shipping }
         }else{
-            return null
+            null
         }
+
+    }
+
+    fun getAddressFromId(addId: String): MyAccountDataClass.Address?{
+        val info = GlobalSingelton.instance?.userInfo
+        return info?.addresses?.single { it.id == addId }
 
     }
 
@@ -355,11 +325,71 @@ object Utils {
             SpannableStringBuilder(displayPrice).apply {
                 setSpan(StrikethroughSpan(), 0, normalP.length, 0)
                 setSpan(ForegroundColorSpan(Color.RED), normalP.length, displayPrice.length, 0)
-                setSpan(RelativeSizeSpan(1.3f), normalP.length, displayPrice.length, 0)
+                setSpan(RelativeSizeSpan(1.1f), normalP.length, displayPrice.length, 0)
             }
         }else{
             val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
             SpannableStringBuilder(normalP)
+        }
+    }
+
+    /**
+     * Method checks if the app is in background or not
+     */
+    fun isAppIsInBackground(context : Context) : Boolean{
+        var isInBackground = true
+        val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            val runningProcesses = am.runningAppProcesses
+            for (processInfo in runningProcesses) {
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (activeProcess in processInfo.pkgList) {
+                        if (activeProcess.equals(context.packageName)) {
+                            isInBackground = false
+                        }
+                    }
+                }
+            }
+        } else {
+            val taskInfo = am.getRunningTasks(1)
+            val componentInfo = taskInfo.get(0).topActivity
+            if (componentInfo.packageName.equals(context.packageName)) {
+                isInBackground = false
+            }
+        }
+
+        return isInBackground
+    }
+
+
+    fun getDateFormat(strDate : String): String {
+        var format = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val newDate = format.parse(strDate)
+        format = SimpleDateFormat("dd-MM-yyyy")
+        return format.format(newDate)
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getDateTimeFormat(strDate : String, ctx : Context): String {
+        var format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        format.timeZone = TimeZone.getTimeZone("GMT")
+        val newDate = format.parse(strDate)
+        format = SimpleDateFormat("dd-MM-yyyy, hh:mm a")
+
+        val d = Date()
+        val systemDateFormat = SimpleDateFormat("dd-MM-yyyy")
+        val systemTimeString = systemDateFormat.format(d.time)
+        val compareDateString = systemDateFormat.format(newDate.time)
+
+        val systemCurrentTimeString = systemDateFormat.parse(systemTimeString)
+        val compareTimeString = systemDateFormat.parse(compareDateString)
+
+        val text = StringBuffer("")
+        return if(systemCurrentTimeString.compareTo(compareTimeString) == 0){
+            format = SimpleDateFormat(" hh:mm a")
+            text.append(ctx.getString(R.string.today) + ""+format.format(newDate)).toString()
+        }else{
+            format.format(newDate)
         }
     }
 }

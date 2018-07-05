@@ -3,12 +3,14 @@ package com.ranosys.theexecutive.modules.category
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.view.ViewPager
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -26,10 +28,7 @@ import com.ranosys.theexecutive.databinding.HomeViewPagerBinding
 import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.modules.productListing.ProductListingFragment
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.GlobalSingelton
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.home_view_pager.view.*
 
@@ -44,6 +43,7 @@ class CategoryFragment : BaseFragment() {
     private var handler = Handler(Looper.getMainLooper())
     private lateinit var viewPager : ViewPager
     private lateinit var pagerAdapter:CustomViewPageAdapter
+    private lateinit var promotionBinding : HomeViewPagerBinding
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,18 +51,21 @@ class CategoryFragment : BaseFragment() {
         categoryModelView = ViewModelProviders.of(this).get(CategoryModelView::class.java)
         mViewDataBinding?.categoryViewModel = categoryModelView
         mViewDataBinding?.executePendingBindings()
+
         return mViewDataBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
+
 
         val inflater = LayoutInflater.from(context)
-        val promotionBinding : HomeViewPagerBinding? = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
-        promotionBinding?.categoryModel = categoryModelView
-        promotionBinding?.root?.tv_promotion_text?.text = GlobalSingelton.instance?.configuration?.home_promotion_message
-        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding?.viewpager!!, Constants.CATEGORY_IMAGE_HEIGHT_RATIO)
+        promotionBinding = DataBindingUtil.inflate(inflater, R.layout.home_view_pager, null, false)
+        promotionBinding.categoryModel = categoryModelView
+        promotionBinding.tvPromotionText.text = GlobalSingelton.instance?.configuration?.home_promotion_message
+
+        // update height of promotion view pager according to ration 1.5
+        Utils.setViewHeightWrtDeviceWidth(activity as Context, promotionBinding.viewpager, Constants.IMAGE_RATIO)
         viewPager = promotionBinding.root?.viewpager!!
 
         pagerAdapter = CustomViewPageAdapter(view.context, categoryModelView?.promotionResponse?.get())
@@ -70,19 +73,19 @@ class CategoryFragment : BaseFragment() {
         pagerAdapter.setItemClickListener(listener = object: CustomViewPageAdapter.OnItemClickListener{
             override fun onItemClick(item: PromotionsResponseDataClass?) {
                 when(item?.type){
-                    Constants.PROMOTION_TYPE_CATEGORY -> {
+                    Constants.TYPE_CATEGORY -> {
                         val bundle = Bundle()
                         bundle.putInt(Constants.CATEGORY_ID, item.value.toInt())
                         bundle.putString(Constants.CATEGORY_NAME, item.title)
                         FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
                     }
 
-                    Constants.PROMOTION_TYPE_PRODUCT -> {
+                    Constants.TYPE_PRODUCT -> {
                         val fragment = ProductDetailFragment.getInstance(null, item.value, item.title, 0)
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
 
-                    Constants.PROMOTION_TYPE_CMS_PAGE -> {
+                    Constants.TYPE_CMS_PAGE -> {
                         if(item.value.isNotBlank()){
                             prepareWebPageDialog(activity as Context, item.value ,item.title)
                         }
@@ -171,6 +174,11 @@ class CategoryFragment : BaseFragment() {
             false
         })
 
+        promotionBinding.tvPromotionText.setOnClickListener {
+            if(!TextUtils.isEmpty(GlobalSingelton.instance?.configuration?.home_promotion_message_url))
+            prepareWebPageDialog(activity,GlobalSingelton.instance?.configuration?.home_promotion_message_url, "" )
+        }
+
         observePromotionsApiResponse()
         observeCategoryApiResponse()
         if (Utils.isConnectionAvailable(activity as Context)) {
@@ -179,13 +187,11 @@ class CategoryFragment : BaseFragment() {
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
-
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        handler.removeCallbacksAndMessages(null)
+    override fun onDestroy() {
+        super.onDestroy()
+       handler.removeCallbacksAndMessages(null)
     }
 
     private fun getPromotions() {
@@ -207,7 +213,7 @@ class CategoryFragment : BaseFragment() {
                 pagerAdapter.notifyDataSetChanged()
                 startScrollViewPager(viewPager, response.size)
             } else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -230,23 +236,42 @@ class CategoryFragment : BaseFragment() {
                 categoryModelView?.categoryResponse?.set(response)
 
             } else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
         })
     }
 
+
+
     private fun startScrollViewPager(viewPager : ViewPager, count : Int){
-        var currentPage = 0
         val runnable = object : Runnable {
             override fun run() {
-                if (currentPage == count) {
-                    currentPage = 0
+                if (viewPager.currentItem < count - 1) {
+                    viewPager.currentItem = viewPager.currentItem + 1
+                } else {
+                    viewPager.setCurrentItem(0,false)
                 }
-                viewPager.setCurrentItem(currentPage++, true)
-                handler.postDelayed(this, 3000)
+                handler.postDelayed(this, Constants.SPLASH_TIMEOUT)
             }
         }
-        handler.postDelayed(runnable, 3000)
+        handler.postDelayed(runnable, Constants.SPLASH_TIMEOUT)
+
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // Checks the orientation of the screen
+        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT)
+        {
+            pagerAdapter.refresh(0)
+        }else{
+            pagerAdapter.refresh(1)
+        }
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            SavedPreferences.getInstance()?.setBooleanValue(Constants.ORIENTATION, true)
+        } else {
+            SavedPreferences.getInstance()?.setBooleanValue( Constants.ORIENTATION, false)
+        }
+    }
 }

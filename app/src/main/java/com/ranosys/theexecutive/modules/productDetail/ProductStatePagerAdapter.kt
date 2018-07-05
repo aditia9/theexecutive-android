@@ -3,6 +3,8 @@ package com.ranosys.theexecutive.modules.productDetail
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
 
 /**
@@ -10,7 +12,7 @@ import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
  * @Author Ranosys Technologies
  * @Date 11,Apr,2018
  */
-class ProductStatePagerAdapter(fm : FragmentManager?, productList : List<ProductListingDataClass.Item>?, var pagerPosition : Int?) : FragmentStatePagerAdapter(fm){
+class ProductStatePagerAdapter(fm : FragmentManager?, productList : List<ProductListingDataClass.Item>?, private var pagerPosition : Int?) : FragmentStatePagerAdapter(fm){
 
     private var mProductList : List<ProductListingDataClass.Item>?
 
@@ -19,7 +21,7 @@ class ProductStatePagerAdapter(fm : FragmentManager?, productList : List<Product
     }
 
     override fun getItem(position: Int): Fragment {
-           return ProductViewFragment.getInstance(mProductList?.get(position), mProductList?.get(position)?.sku, position, pagerPosition)
+        return ProductViewFragment.getInstance(mProductList?.get(position), mProductList?.get(position)?.sku, position, pagerPosition)
     }
 
     override fun getCount(): Int {
@@ -27,5 +29,11 @@ class ProductStatePagerAdapter(fm : FragmentManager?, productList : List<Product
             return size
         }
         return 0
+    }
+
+    override fun destroyItem(container: ViewGroup, position: Int, o: Any) {
+        super.destroyItem(container, position, o)
+        Glide.get(container.context).clearMemory()
+
     }
 }

@@ -14,10 +14,9 @@
         <ImageView
             android:id="@+id/img_product_image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/six_hundred_dp"
+            android:layout_height="0dp"
             bind:baseUrlWithProductImageUrl="@{mediaGalleryEntry.file}"
             android:layout_marginBottom="@dimen/twenty_dp"
-            android:scaleType="centerCrop"
             android:contentDescription="@string/image_one_detail"
             />
 

@@ -1,5 +1,6 @@
 package com.ranosys.theexecutive.base
 
+import AppLog
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Dialog
@@ -9,13 +10,18 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Gravity
+import android.view.KeyEvent
 import android.webkit.*
 import android.widget.RelativeLayout
-import android.widget.Toast
-import com.ranosys.rtp.IsPermissionGrantedInterface
+import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
+import com.ranosys.theexecutive.modules.checkout.CheckoutFragment
+import com.ranosys.theexecutive.modules.checkout.OrderResultFragment
+import com.ranosys.theexecutive.modules.home.HomeFragment
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.web_pages_layout.*
 
 
@@ -33,6 +39,7 @@ abstract class BaseFragment : LifecycleFragment() {
         super.onCreate(savedInstanceState)
         mContext = activity
         observeLeftIconClick()
+        observeRightIconClick()
     }
 
     fun showLoading() {
@@ -67,49 +74,45 @@ abstract class BaseFragment : LifecycleFragment() {
         (activity as BaseActivity).setShowLogo(showLogo)
     }
 
-    protected fun getToolBarViewModel() : ToolbarViewModel?{
+    private fun getToolBarViewModel() : ToolbarViewModel?{
         return  (activity as BaseActivity).toolbarViewModel
     }
 
-    fun setTitle(title: String? = getString(R.string.app_name)){
+    private fun setTitle(title: String? = getString(R.string.app_name)){
         (activity as BaseActivity).setScreenTitle(title)
     }
 
-    fun setTitleBackground(background: Int? = 0){
+    private fun setTitleBackground(background: Int? = 0){
         if(background == 0)
             (activity as BaseActivity).setTitleBackground(android.R.color.transparent)
         else
             (activity as BaseActivity).setTitleBackground(background)
     }
 
-    fun setSubTitle(subTitle: String?){
+    private fun setSubTitle(subTitle: String?){
         (activity as BaseActivity).setSubTitle(subTitle)
     }
 
-    fun setLeftIcon(icon: Int? = R.drawable.ic_action_backward){
+    private fun setLeftIcon(icon: Int? = R.drawable.ic_action_backward){
         if(icon == 0)
             (activity as BaseActivity).setLeftIcon(android.R.color.transparent)
         else
             (activity as BaseActivity).setLeftIcon(icon)
     }
 
-    fun setLeftIconVisibilty(isVisible: Boolean = true){
+    private fun setLeftIconVisibilty(isVisible: Boolean = true){
         (activity as BaseActivity).setLeftIconVisibility(isVisible)
     }
 
-    fun setRightIcon(icon: Int? = R.drawable.ic_action_backward){
+    private fun setRightIcon(icon: Int? = R.drawable.ic_action_backward){
         if(icon == 0)
             (activity as BaseActivity).setRightIcon(android.R.color.transparent)
         else
             (activity as BaseActivity).setRightIcon(icon)
     }
 
-    fun setRightIconVisibilty(isVisible: Boolean = true){
+    private fun setRightIconVisibilty(isVisible: Boolean = true){
         (activity as BaseActivity).setRightIconVisibility(isVisible)
-    }
-
-    fun getPermission(permissionList: List<String>, isPermissionGrantedInterface: IsPermissionGrantedInterface) {
-        (activity as BaseActivity).getPermission(permissionList, isPermissionGrantedInterface)
     }
 
     private fun observeLeftIconClick() {
@@ -129,9 +132,28 @@ abstract class BaseFragment : LifecycleFragment() {
         })
     }
 
+    private fun observeRightIconClick() {
+
+        getToolBarViewModel()?.rightIconClicked?.observe(this, Observer<Int> {  id ->
+            when(id) {
+                R.id.toolbar_right_icon -> {
+                    getToolBarViewModel()?.rightIconClicked?.value = null
+                    (activity as BaseActivity).setShoppingBagFragment()
+                }
+            }
+        })
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
-    fun prepareWebPageDialog(context : Context?, url : String?, title : String?) {
-        val webPagesDialog = Dialog(context, R.style.MaterialDialogSheet)
+    fun prepareWebPageDialog(context : Context?, url : String?, title : String?, orderId: String = "") {
+
+        //success and failure url for ip88
+        val orderCancelUrl: String = "checkout/onepage/cancelled"
+        val orderFailureUrl: String = "checkout/onepage/failure"
+        val orderSuccessUrl: String = "checkout/onepage/success"
+
+
+        val webPagesDialog = Dialog(context, R.style.Animation_Design_BottomSheetDialog)
         webPagesDialog.setContentView(R.layout.web_pages_layout)
         webPagesDialog.setCancelable(true)
         webPagesDialog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT /*+ rl_add_to_box.height*/)
@@ -143,28 +165,124 @@ abstract class BaseFragment : LifecycleFragment() {
         webPagesDialog.webview.settings.displayZoomControls = false
         webPagesDialog.webview.webViewClient = object : WebViewClient() {
             override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
-                Toast.makeText(activity, description, Toast.LENGTH_SHORT).show()
+                hideLoading()
             }
 
             @TargetApi(android.os.Build.VERSION_CODES.M)
             override fun onReceivedError(view: WebView, req: WebResourceRequest, rerr: WebResourceError) {
                 onReceivedError(view, rerr.errorCode, rerr.description.toString(), req.url.toString())
+                hideLoading()
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                showLoading()
                 super.onPageStarted(view, url, favicon)
+
+                AppLog.e("PAYMENT URL - : $url")
+
+                if(url!!.contains(BuildConfig.API_URL)){
+
+                    when{
+                        url.contains(orderSuccessUrl) -> {
+                            webPagesDialog.dismiss()
+                            redirectToOrderResultPage(orderId, Constants.SUCCESS)
+                        }
+
+                        url.contains(orderFailureUrl) -> {
+                            webPagesDialog.dismiss()
+                            redirectToOrderResultPage(orderId, Constants.FAILURE)
+                        }
+
+                        url.contains(orderCancelUrl) -> {
+                            webPagesDialog.dismiss()
+                            redirectToOrderResultPage(orderId, Constants.CANCEL)
+                        }
+                    }
+                }
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
-                hideLoading()
                 super.onPageFinished(view, url)
+                hideLoading()
+                view?.clearCache(true)
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                AppLog.e("PAYMENT URL - : ${request!!.url}")
+                view?.loadUrl(request!!.url.toString())
+                return true
             }
         }
 
+        webPagesDialog.setOnKeyListener { dialog, keyCode, event ->
+            if(keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP){
+                checkIfPaymentIsCancelled(webPagesDialog, orderId)
+            }
+             true
+        }
+
+
+
         webPagesDialog.webview.loadUrl(url)
-        webPagesDialog.img_back.setOnClickListener { webPagesDialog.dismiss() }
         webPagesDialog.show()
+        showLoading()
+        webPagesDialog.img_back.setOnClickListener {
+
+            checkIfPaymentIsCancelled(webPagesDialog, orderId)
+        }
+
+        //stop loader when dialog dismissed
+        webPagesDialog.setOnDismissListener {
+            webview?.run {
+                webview.clearCache(true)
+            }
+            hideLoading()
+        }
+
+    }
+
+    private fun checkIfPaymentIsCancelled(webPagesDialog: Dialog, orderId: String) {
+        activity?.run {
+            val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
+            if(fragment != null && fragment is CheckoutFragment && GlobalSingelton.instance?.paymentInitiated ?: false){
+
+                Utils.showDialog(activity, getString(R.string.cancel_order_confirmation), getString(R.string.yes), getString(R.string.no), object: DialogOkCallback {
+                    override fun setDone(done: Boolean) {
+                        //cancel the order
+                        callCancelOrderAPi(orderId)
+
+                        redirectToOrderResultPage(orderId, Constants.CANCEL)
+                        webPagesDialog.dismiss()
+                    }
+                })
+            }else{
+                webPagesDialog.dismiss()
+            }
+        }
+
+    }
+
+    private fun callCancelOrderAPi(orderId: String) {
+        AppRepository.cancelOrder(orderId, object: ApiCallback<Boolean>{
+            override fun onException(error: Throwable) {
+            }
+
+            override fun onError(errorMsg: String) {
+            }
+
+            override fun onSuccess(t: Boolean?) {
+            }
+
+        })    }
+
+    private fun redirectToOrderResultPage(orderId: String, status: String) {
+        popUpAllFragments()
+        val orderResultFragment = OrderResultFragment.getInstance(orderId, status)
+        FragmentUtils.addFragment(activity, orderResultFragment, null, OrderResultFragment.javaClass.name, true)
+    }
+
+    //method to remove all fragment except home
+    fun popUpAllFragments() {
+        activity?.supportFragmentManager?.popBackStack(HomeFragment::class.java.name, 0)
     }
 
 

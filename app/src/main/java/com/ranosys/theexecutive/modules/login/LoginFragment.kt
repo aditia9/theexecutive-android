@@ -1,13 +1,13 @@
 package com.ranosys.theexecutive.modules.login
 
 import AppLog
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.text.TextUtils
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
@@ -25,12 +25,16 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.gson.Gson
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.activities.DashBoardActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentLoginBinding
 import com.ranosys.theexecutive.modules.forgotPassword.ForgotPasswordFragment
 import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.register.RegisterFragment
-import com.ranosys.theexecutive.utils.*
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.DialogOkCallback
+import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.Utils
 import com.ranosys.theexecutive.utils.Utils.showNetworkErrorDialog
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.json.JSONException
@@ -52,6 +56,7 @@ class LoginFragment: BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val data = arguments
         data?.let {
             loginRequiredPrompt = data.get(Constants.LOGIN_REQUIRED_PROMPT) as Boolean
@@ -63,6 +68,7 @@ class LoginFragment: BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        loginViewModel.loginRequiredPrompt = loginRequiredPrompt
         mBinding.loginVM = loginViewModel
 
         observeEvent()
@@ -71,7 +77,9 @@ class LoginFragment: BaseFragment() {
         observeIsEmailAvailableResponse()
 
 
+
         //call backs for fb login
+        callBackManager = CallbackManager.Factory.create()
         callBackManager = CallbackManager.Factory.create()
         LoginManager.getInstance().registerCallback(callBackManager, object : FacebookCallback<LoginResult>{
             override fun onError(error: FacebookException?) {
@@ -107,18 +115,20 @@ class LoginFragment: BaseFragment() {
                 .requestProfile()
                 .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(activity as Activity, gso)
+        mGoogleSignInClient = GoogleSignIn.getClient(activity as DashBoardActivity, gso)
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        callBackManager.onActivityResult(requestCode, resultCode, data)
+
 
         if (requestCode == RC_GMAIL_SIGN_IN) {
             val task :Task<GoogleSignInAccount> =  GoogleSignIn.getSignedInAccountFromIntent(data)
             handleGmailSignInResult(task)
+        }else{
+            callBackManager.onActivityResult(requestCode, resultCode, data)
         }
     }
 
@@ -147,7 +157,7 @@ class LoginFragment: BaseFragment() {
 
                 btn_fb_login.id -> {
                     if (Utils.isConnectionAvailable(activity as Context)) {
-                        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday", "user_photos"))
+                        LoginManager.getInstance().logInWithReadPermissions(activity as DashBoardActivity, Arrays.asList("public_profile", "email", "user_birthday", "user_photos"))
 
                     } else {
                         showNetworkErrorDialog(activity as Context)
@@ -178,7 +188,7 @@ class LoginFragment: BaseFragment() {
                 loginViewModel.getUserCartCount()
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -194,7 +204,7 @@ class LoginFragment: BaseFragment() {
                 }
             }
             else {
-                Toast.makeText(activity, Constants.ERROR, Toast.LENGTH_LONG).show()
+                Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
 
         })
@@ -203,7 +213,12 @@ class LoginFragment: BaseFragment() {
     private fun observeApiFailure() {
         loginViewModel.apiFailureResponse?.observe(this, Observer { msg ->
             hideLoading()
-            Utils.showDialog(activity, msg, getString(android.R.string.ok),"", object : DialogOkCallback{
+            var errorMsg = msg
+            if(msg == Constants.ERROR_CODE_401.toString()){
+                errorMsg = getString(R.string.error_invalid_login_credential)
+            }
+
+            Utils.showDialog(activity, errorMsg, getString(R.string.ok),"", object : DialogOkCallback{
                 override fun setDone(done: Boolean) {
                 }
             })
@@ -213,11 +228,21 @@ class LoginFragment: BaseFragment() {
     private fun observeApiSuccess() {
         loginViewModel.apiSuccessResponse?.observe(this, Observer { token ->
             hideLoading()
-            //api to get cart id
             loginViewModel.getCartIdForUser(token)
-            SavedPreferences.getInstance()?.saveStringValue(token, Constants.USER_ACCESS_TOKEN_KEY)
-            SavedPreferences.getInstance()?.saveStringValue(loginViewModel.email.get(), Constants.USER_EMAIL)
-            FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+
+            //send locan broadcast on successfull login
+            // Create intent with action
+            val loginIntent = Intent("LOGIN")
+            LocalBroadcastManager.getInstance(activity as Context).sendBroadcast(loginIntent)
+
+
+            if(loginViewModel.loginRequiredPrompt){
+                loginViewModel.loginRequiredPrompt = false
+                activity?.onBackPressed()
+            }else{
+
+                FragmentUtils.addFragment(activity, HomeFragment(), null, HomeFragment::class.java.name, false)
+            }
         })
 
     }
@@ -236,7 +261,7 @@ class LoginFragment: BaseFragment() {
 
     private fun gmailSignIn() {
         val gmailSignInIntent = mGoogleSignInClient.signInIntent
-        startActivityForResult(gmailSignInIntent, RC_GMAIL_SIGN_IN)
+        (activity as DashBoardActivity).startActivityForResult(gmailSignInIntent, RC_GMAIL_SIGN_IN)
     }
 
     //method to get user data from FB
@@ -273,7 +298,9 @@ class LoginFragment: BaseFragment() {
                 firstName = fbDataResult.first_name
                 lastName = fbDataResult.last_name
                 email = fbDataResult.email
-                gender = fbDataResult.gender
+                if(fbDataResult.gender != null){
+                    gender = fbDataResult.gender
+                }
             }
 
         } catch (e: JSONException) {
@@ -303,6 +330,8 @@ class LoginFragment: BaseFragment() {
 
         } catch (e : ApiException ) {
             AppLog.printStackTrace(e)
+            mGoogleSignInClient.signOut()
+            Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(R.string.ok), "", null)
         }
     }
 

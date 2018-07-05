@@ -6,9 +6,13 @@ import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.PromotionViewBinding
 import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
+import com.ranosys.theexecutive.utils.Constants
+import com.ranosys.theexecutive.utils.Utils
 
 /**
  * @Details adapter for promotion banners
@@ -17,6 +21,8 @@ import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
  */
 
 class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDataClass>?) : PagerAdapter() {
+
+    private var orientationOrder = 0
 
     interface OnItemClickListener {
         fun onItemClick(item : PromotionsResponseDataClass?)
@@ -38,7 +44,15 @@ class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDat
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        return view == `object` as View
+        Utils.setImageViewHeightWrtDeviceWidth((view as RelativeLayout).getChildAt(0).context, (view as RelativeLayout).getChildAt(0) as ImageView, Constants.IMAGE_RATIO)
+        if(orientationOrder == 0){
+            ((view as RelativeLayout).getChildAt(0) as ImageView).scaleType = ImageView.ScaleType.CENTER_CROP
+
+        }else{
+            ((view as RelativeLayout).getChildAt(0) as ImageView).scaleType = ImageView.ScaleType.FIT_XY
+        }
+
+        return view == `object` as RelativeLayout
     }
 
     override fun getCount(): Int {
@@ -61,6 +75,11 @@ class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDat
     }
 
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-        container.removeView(`object` as View)
+        container.removeView(`object` as RelativeLayout)
+    }
+
+    fun refresh(orientation:Int){
+        orientationOrder = orientation
+        notifyDataSetChanged()
     }
 }

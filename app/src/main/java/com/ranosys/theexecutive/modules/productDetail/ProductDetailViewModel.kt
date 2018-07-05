@@ -19,16 +19,19 @@ class ProductDetailViewModel(application: Application): BaseViewModel(applicatio
     var productDetailResponse: MutableLiveData<ApiResponse<ProductListingDataClass.Item>>? = MutableLiveData()
     var staticPagesUrlResponse: MutableLiveData<ApiResponse<StaticPagesUrlResponse>>? = MutableLiveData()
     var staticPages : StaticPagesUrlResponse? = null
+    var productName : String? = ""
 
     fun getProductDetail(productSku : String?){
         val apiResponse = ApiResponse<ProductListingDataClass.Item>()
         AppRepository.getProductDetail(productSku, object : ApiCallback<ProductListingDataClass.Item> {
             override fun onException(error: Throwable) {
-                productDetailResponse?.value?.throwable = error
+                apiResponse.error = error.message
+                productDetailResponse?.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
-                productDetailResponse?.value?.error = errorMsg
+                apiResponse.error = errorMsg
+                productDetailResponse?.value = apiResponse
             }
 
             override fun onSuccess(t: ProductListingDataClass.Item?) {

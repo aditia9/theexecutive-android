@@ -1,6 +1,8 @@
 package com.ranosys.theexecutive.modules.myAccount
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -11,17 +13,26 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.ranosys.theexecutive.BuildConfig
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.ApiResponse
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.MyAccountOptionItemBinding
 import com.ranosys.theexecutive.modules.addressBook.AddressBookFragment
+import com.ranosys.theexecutive.modules.bankTransfer.BankTransferFragment
 import com.ranosys.theexecutive.modules.changeLanguage.ChangeLanguageFragment
 import com.ranosys.theexecutive.modules.changePassword.ChangePasswordFragment
 import com.ranosys.theexecutive.modules.myInformation.MyInformationFragment
 import com.ranosys.theexecutive.modules.newsLetter.NewsLetterFragment
+import com.ranosys.theexecutive.modules.notification.NotificationFragment
+import com.ranosys.theexecutive.modules.order.orderList.OrderListFragment
+import com.ranosys.theexecutive.modules.settings.SettingsFragment
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_my_account.*
 import kotlinx.android.synthetic.main.logout_btn.view.*
@@ -32,6 +43,23 @@ import kotlinx.android.synthetic.main.logout_btn.view.*
 class MyAccountFragment : BaseFragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var vm: MyAccountViewModel
+    private lateinit var myAccountAdapter: MyAccountAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        vm = ViewModelProviders.of(this).get(MyAccountViewModel::class.java)
+        notifyNotificationCount()
+        myAccountAdapter = MyAccountAdapter(getAccountOptions(), activity as Context)
+        vm.notificationCount.observe(this, Observer { count ->
+            myAccountAdapter.notifyItemChanged(3)
+        })
+
+    }
+
+    fun notifyNotificationCount() {
+        vm.getNotificationCount()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_my_account, container, false)
@@ -43,9 +71,9 @@ class MyAccountFragment : BaseFragment() {
         linearLayoutManager = LinearLayoutManager(activity as Context)
         my_account_options_list.layoutManager = linearLayoutManager
 
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),2)
         my_account_options_list.addItemDecoration(itemDecor)
-        my_account_options_list.adapter = MyAccountAdapter(getAccountOptions(), activity as Context)
+        my_account_options_list.adapter = myAccountAdapter
 
     }
 
@@ -62,7 +90,7 @@ class MyAccountFragment : BaseFragment() {
         return optionList
     }
 
-    class MyAccountAdapter(val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class MyAccountAdapter(private val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         companion object {
             const val VIEW_TYPE_FOOTER = 2
@@ -76,13 +104,13 @@ class MyAccountFragment : BaseFragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            if (viewType == VIEW_TYPE_FOOTER) {
+            return if (viewType == VIEW_TYPE_FOOTER) {
                 val itemView = LayoutInflater.from(parent.context).inflate(R.layout.logout_btn, parent, false)
-                return MyAccountFooterHolder(itemView, context)
+                MyAccountFooterHolder(itemView, context)
 
             } else {
                 val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent, false)
-                return MyAccountAdapter.MyAccountHolder(binding)
+                MyAccountAdapter.MyAccountHolder(binding)
             }
 
         }
@@ -98,6 +126,20 @@ class MyAccountFragment : BaseFragment() {
 
             fun bind(option: MyAccountDataClass.MyAccountOption, context: Context) {
                 itemBinding.option = option
+                if(option.title == context.getString(R.string.notifications) && GlobalSingelton.instance?.notificationCount?.get() ?: 0 > 0){
+
+                    itemBinding.tvNotificationCount.visibility = View.VISIBLE
+                    var notificationText = GlobalSingelton.instance?.notificationCount?.get().toString()
+                    if(GlobalSingelton.instance?.notificationCount?.get() ?: 0 > 99){
+                        notificationText = "99+"
+                    }
+
+                    itemBinding.tvNotificationCount.text = notificationText
+                }
+                else{
+                    itemBinding.tvNotificationCount.visibility = View.GONE
+                }
+
 
                 itemView.setOnClickListener {
                     when (option.title) {
@@ -108,8 +150,8 @@ class MyAccountFragment : BaseFragment() {
                             FragmentUtils.addFragment(context, ChangePasswordFragment(), null, ChangePasswordFragment::class.java.name, true)
                         }
 
-                        context.getString(R.string.my_information_option) ->{
-                            FragmentUtils.addFragment(context, MyInformationFragment(),null, MyInformationFragment::class.java.name, true )
+                        context.getString(R.string.my_information_option) -> {
+                            FragmentUtils.addFragment(context, MyInformationFragment(), null, MyInformationFragment::class.java.name, true)
                         }
 
                         context.getString(R.string.select_lang_title) ->{
@@ -117,19 +159,38 @@ class MyAccountFragment : BaseFragment() {
                         }
 
                         context.getString(R.string.shipping_address) ->{
-                            FragmentUtils.addFragment(context, AddressBookFragment(),null, AddressBookFragment::class.java.name, true )
+                            FragmentUtils.addFragment(context, AddressBookFragment.getInstance(false),null, AddressBookFragment::class.java.name, true )
                         }
 
                         context.getString(R.string.buying_guide) ->{
-                            val url = ""
-                            openWebPage(context, url, context.getString(R.string.buying_guide))
+                            val url = GlobalSingelton.instance?.configuration?.buying_guide_url
+                            if (url != null && url.isNotEmpty()) {
+                                openWebPage(context, url, context.getString(R.string.buying_guide))
+                            }
                         }
 
                         context.getString(R.string.contact_us) ->{
-                            val url = ""
-                            openWebPage(context, url, context.getString(R.string.contact_us))
+                            val url = GlobalSingelton.instance?.configuration?.contact_us_url
+                            if (url != null && url.isNotEmpty()) {
+                                openWebPage(context, url, context.getString(R.string.contact_us))
+                            }
                         }
 
+
+                        context.getString(R.string.my_orders) -> {
+                            FragmentUtils.addFragment(context, OrderListFragment(),null, OrderListFragment::class.java.name, true )
+                        }
+
+                        context.getString(R.string.notifications) -> {
+                            FragmentUtils.addFragment(context, NotificationFragment(),null, NotificationFragment::class.java.name, true )
+                        }
+                        context.getString(R.string.bank_transfer) -> {
+                            FragmentUtils.addFragment(context, BankTransferFragment(),null, BankTransferFragment::class.java.name, true )
+                        }
+
+                        context.getString(R.string.settings) ->{
+                            FragmentUtils.addFragment(context, SettingsFragment(),null, SettingsFragment::class.java.name, true )
+                        }
                     }
                 }
             }
@@ -137,33 +198,60 @@ class MyAccountFragment : BaseFragment() {
             private fun openWebPage(context: Context, url: String, title: String) {
                 val fragment = FragmentUtils.getCurrentFragment(context as BaseActivity)
                 fragment?.run {
-                    (fragment as BaseFragment).prepareWebPageDialog(context, "http://magento.theexecutive.co.id/" , title)
+                    (fragment as BaseFragment).prepareWebPageDialog(context, url, title)
                 }
-
-            }
-        }
-
-        class MyAccountFooterHolder(val item: View, context: Context) : RecyclerView.ViewHolder(item) {
-            init {
-                itemView.btn_logout.setOnClickListener({
-                    Utils.showDialog(context, context.getString(R.string.logout_text),
-                            context.getString(R.string.yes), context.getString(R.string.no), object : DialogOkCallback {
-                        override fun setDone(done: Boolean) {
-
-                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                    .requestIdToken(context.getString(R.string.gmail_server_client_id))
-                                    .requestEmail()
-                                    .requestProfile()
-                                    .build()
-
-                            val mGoogleSignInClient = GoogleSignIn.getClient(context as Activity, gso)
-                            Utils.logout(item.context, mGoogleSignInClient)
-
-                        }
-                    })
-                })
             }
         }
     }
+}
+
+class MyAccountFooterHolder(val item: View, context: Context) : RecyclerView.ViewHolder(item) {
+    init {
+        itemView.btn_logout.setOnClickListener({
+            Utils.showDialog(context, context.getString(R.string.logout_text),
+                    context.getString(R.string.yes), context.getString(R.string.no), object : DialogOkCallback {
+                override fun setDone(done: Boolean) {
+
+                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(context.getString(R.string.gmail_server_client_id))
+                            .requestEmail()
+                            .requestProfile()
+                            .build()
+
+                    val mGoogleSignInClient = GoogleSignIn.getClient(context as Activity, gso)
+
+                    notificationLogout()
+                    Utils.logout(item.context, mGoogleSignInClient)
+
+                }
+            })
+        })
+
+        itemView.tv_app_version.text = context.getString(R.string.version) +" "+ BuildConfig.VERSION_NAME
+    }
+
+    fun notificationLogout(){
+        val apiResponse = ApiResponse<Boolean>()
+        AppRepository.logoutNotification(object : ApiCallback<Boolean> {
+            override fun onException(error: Throwable) {
+                apiResponse.error = error.message
+
+
+            }
+
+            override fun onError(errorMsg: String) {
+                apiResponse.error = errorMsg
+
+            }
+
+            override fun onSuccess(t: Boolean?) {
+                apiResponse.apiResponse = t
+
+            }
+        })
+    }
+
+
+
 }
 

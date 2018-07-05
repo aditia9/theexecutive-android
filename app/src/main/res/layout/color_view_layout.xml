@@ -21,13 +21,11 @@
 
         <ImageView
             android:id="@+id/img_color"
-            android:layout_width="55dp"
-            android:layout_height="70dp"
-            android:src="@drawable/placeholder"
-            android:padding="@dimen/two_dp"
-            android:scaleType="centerCrop"
+            android:layout_width="@dimen/fifty_dp"
+            android:layout_height="@dimen/seventy_two_dp"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/available_colors"
+            android:padding="@dimen/thin_divider"
             bind:baseUrlWithProductImageUrl='@{colorView.list.size() > 0 ? colorView.list.get(0).file : ""}'
             />
 

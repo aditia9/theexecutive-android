@@ -16,14 +16,41 @@
 
         <ImageView
             android:id="@+id/img_product"
-            android:layout_width="@dimen/one_fifty_dp"
+            android:layout_width="@dimen/one_twenty_five_dp"
             android:layout_height="@dimen/one_eighty_dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/placeholder"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
             bind:baseUrlWithProductImageUrl="@{item.image}"
             android:contentDescription="@string/product_image"
+            />
+
+        <ImageView
+            android:id="@+id/img_product_overlay"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            android:background="@color/blur_image_color"
+            app:layout_constraintTop_toTopOf="@id/img_product"
+            app:layout_constraintBottom_toBottomOf="@id/img_product"
+            app:layout_constraintStart_toStartOf="@id/img_product"
+            app:layout_constraintEnd_toEndOf="@id/img_product"
+            android:visibility="gone"
+            android:contentDescription="@string/product_image"
+            />
+
+        <TextView
+            android:id="@+id/tv_out_of_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/out_of_stock"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="@dimen/fourteen_sp"
+            android:visibility="visible"
+            android:layout_marginTop="@dimen/four_dp"
+            app:layout_constraintTop_toBottomOf="@id/img_product"
+            app:layout_constraintEnd_toEndOf="@id/img_product"
+            app:layout_constraintStart_toStartOf="@id/img_product"
             />
 
         <TextView
@@ -31,12 +58,12 @@
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:text="@{item.name}"
-            android:fontFamily="@font/dax_medium"
             android:textSize="@dimen/sixteen_sp"
             android:layout_marginStart="@dimen/twenty_dp"
-            app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintLeft_toRightOf="@id/img_product"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:textAllCaps="true"
             android:ellipsize="end"
             android:maxLines="2"
@@ -46,112 +73,64 @@
             android:id="@+id/tv_product_sku"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:hint="@{item.sku}"
+            android:text='@{@string/sku+ " " +item.sku}'
+            android:textColor="@color/hint_color"
             android:textSize="@dimen/twelve_sp"
-            android:layout_marginTop="@dimen/five_dp"
+            android:layout_marginTop="@dimen/six_dp"
             android:layout_marginStart="@dimen/twenty_dp"
             app:layout_constraintTop_toBottomOf="@id/tv_product_name"
             app:layout_constraintStart_toEndOf="@id/img_product"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
             android:ellipsize="end"
             android:maxLines="1"
             />
 
-        <LinearLayout
-            android:id="@+id/layout_color_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/twenty_dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_product_sku"
-            app:layout_constraintStart_toEndOf="@id/img_product">
-
-            <TextView
-                android:id="@+id/tv_product_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="@dimen/one_dp"
-                android:layout_height="@dimen/twenty_dp"
-                android:layout_marginStart="@dimen/twenty_dp"
-                android:background="@color/divider_color"
-                />
-
-            <TextView
-                android:id="@+id/tv_product_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/twenty_dp"
-                />
-
-        </LinearLayout>
-
-
         <TextView
             android:id="@+id/tv_regular_price"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/twelve_sp"
+            android:textSize="@dimen/fourteen_sp"
             android:layout_marginStart="@dimen/twenty_dp"
-            android:layout_marginTop="@dimen/twenty_dp"
+            android:layout_marginTop="@dimen/sixteen_dp"
             app:layout_constraintStart_toEndOf="@id/img_product"
-            app:layout_constraintTop_toBottomOf="@+id/layout_color_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_sku"
             />
 
         <ImageView
             android:id="@+id/img_bag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/bag"
-            android:padding="@dimen/five_dp"
             android:layout_marginStart="@dimen/twenty_dp"
             android:layout_marginTop="@dimen/sixteen_dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_regular_price"
+            android:contentDescription="@string/bag_icon"
+            android:padding="@dimen/five_dp"
+            android:src="@drawable/eye"
             app:layout_constraintBottom_toBottomOf="@+id/img_product"
             app:layout_constraintStart_toEndOf="@id/img_product"
-            android:contentDescription="@string/bag_icon"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tv_regular_price"
+            app:layout_constraintVertical_bias="0.0"/>
 
         <ImageView
             android:id="@+id/img_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/delete"
+            android:layout_marginStart="@dimen/sixteen_dp"
+            android:contentDescription="@string/delete_icon"
             android:padding="@dimen/eight_dp"
-            android:layout_marginTop="@dimen/sixteen_dp"
-            android:layout_marginStart="@dimen/twenty_dp"
-            app:layout_constraintStart_toEndOf="@id/img_bag"
-            app:layout_constraintBottom_toBottomOf="@+id/img_bag"
-            android:contentDescription="@string/delete_icon"
-            />
-
-        <TextView
-            android:id="@+id/tv_out_of_stock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:src="@drawable/delete"
-            android:padding="@dimen/six_dp"
-            android:layout_marginTop="@dimen/sixteen_dp"
-            android:layout_marginStart="@dimen/ten_dp"
-            app:layout_constraintStart_toEndOf="@id/img_delete"
             app:layout_constraintBottom_toBottomOf="@+id/img_bag"
-            android:contentDescription="@string/delete_icon"
-            android:text="@string/out_of_stock"
-            android:textColor="@android:color/holo_red_dark"
-            android:visibility="gone"
-            android:textSize="@dimen/twelve_sp"
-            />
+            app:layout_constraintStart_toEndOf="@id/img_bag"
+            app:layout_constraintTop_toTopOf="@+id/img_bag" />
 
         <View
             android:layout_width="@dimen/match_constraint"
             android:layout_height="@dimen/one_dp"
             android:background="@color/divider_color"
             android:layout_marginTop="@dimen/fifteen_dp"
-            app:layout_constraintTop_toBottomOf="@+id/img_product"
+            app:layout_constraintTop_toBottomOf="@+id/tv_out_of_stock"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />

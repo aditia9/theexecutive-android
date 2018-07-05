@@ -16,6 +16,8 @@
         android:paddingTop="@dimen/sixteen_dp"
         android:paddingBottom="@dimen/sixteen_dp"
         android:layout_width="match_parent"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_height="match_parent"
         android:background="@color/white">
 
@@ -95,43 +97,6 @@
                         android:inputType="text|textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
-                <Spinner
-                    android:id="@+id/spinner_country_code"
-                    android:layout_height="@dimen/match_constraint"
-                    android:layout_width="wrap_content"
-                    android:minWidth="@dimen/match_constraint"
-                    android:spinnerMode="dropdown"
-                    android:overlapAnchor="false"
-                    android:entries="@array/country_code"
-                    android:background="@drawable/spinner"
-                    app:layout_constraintStart_toStartOf="@id/guideline_left"
-                    app:layout_constraintTop_toTopOf="@id/til_mobile_no"
-                    app:layout_constraintEnd_toStartOf="@id/til_mobile_no"
-                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/til_mobile_no"
-                    android:layout_width="@dimen/match_constraint"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/twenty_dp"
-                    android:hint="@string/mobile_number"
-                    app:errorText="@{vm.mobileNumberError}"
-                    android:labelFor="@+id/et_mobile_number"
-                    android:theme="@style/tilTheme"
-                    app:layout_constraintLeft_toRightOf="@id/spinner_country_code"
-                    app:layout_constraintTop_toBottomOf="@id/til_last_name"
-                    app:layout_constraintEnd_toEndOf="@+id/guideline_right">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_mobile_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/field_start_padding"
-                        android:text="@={vm.maskedAddress.mobile}"
-                        android:onTextChanged='@{() -> vm.onTextChanged(etMobileNumber)}'
-                        android:inputType="number" />
-                </android.support.design.widget.TextInputLayout>
-
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_address_1"
                     android:layout_width="@dimen/match_constraint"
@@ -141,7 +106,7 @@
                     app:errorText="@{vm.streetAddress1Error}"
                     android:labelFor="@+id/et_last_name"
                     android:theme="@style/tilTheme"
-                    app:layout_constraintTop_toBottomOf="@id/til_mobile_no"
+                    app:layout_constraintTop_toBottomOf="@id/til_last_name"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left">
                     <android.support.design.widget.TextInputEditText
@@ -172,39 +137,87 @@
                         android:inputType="text|textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.v7.widget.AppCompatSpinner
+
+                <Spinner
+                    android:id="@+id/spinner_country_code"
+                    android:layout_height="@dimen/match_constraint"
+                    android:layout_width="wrap_content"
+                    android:minWidth="@dimen/match_constraint"
+                    android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
+                    android:entries="@array/country_code"
+                    android:background="@drawable/spinner"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintTop_toTopOf="@id/til_mobile_no"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_mobile_no"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/twenty_dp"
+                    android:hint="@string/mobile_number"
+                    app:errorText="@{vm.mobileNumberError}"
+                    android:labelFor="@+id/et_mobile_number"
+                    android:theme="@style/tilTheme"
+                    app:layout_constraintStart_toEndOf="@id/spinner_country_code"
+                    app:layout_constraintTop_toBottomOf="@id/til_address_2"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_right">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_mobile_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/field_start_padding"
+                        android:text="@={vm.maskedAddress.mobile}"
+                        android:onTextChanged='@{() -> vm.onTextChanged(etMobileNumber)}'
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
                     android:id="@+id/spinner_country"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:entries="@{vm.countryList}"
                     android:onItemSelected="@{(parent, view, pos, id) -> vm.onCountrySelection(pos)}"
-                    android:padding="@dimen/ten_dp"
-                    android:theme="@style/spinnerItemStyle"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    style="@android:style/Widget.Holo.Light.Spinner"
                     android:background="@drawable/spinner"
+                    android:overlapAnchor="false"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                    app:layout_constraintTop_toBottomOf="@id/til_address_2" />
+                    app:layout_constraintTop_toBottomOf="@id/til_mobile_no" />
 
-                <android.support.v7.widget.AppCompatSpinner
+                <Spinner
                     android:id="@+id/spinner_state"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
                     android:entries="@{vm.stateList}"
-                    android:padding="@dimen/ten_dp"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:overlapAnchor="false"
                     android:onItemSelected="@{(parent, view, pos, id) -> vm.onStateSelection(pos)}"
                     android:background="@drawable/spinner"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintEnd_toEndOf="@id/guideline_right"
                     app:layout_constraintTop_toBottomOf="@id/spinner_country" />
 
-                <android.support.v7.widget.AppCompatSpinner
+                <Spinner
                     android:id="@+id/spinner_city"
                     android:layout_height="wrap_content"
                     android:layout_width="@dimen/match_constraint"
                     android:layout_marginTop="@dimen/twenty_dp"
-                    android:padding="@dimen/ten_dp"
+                    android:paddingBottom="@dimen/ten_dp"
+                    android:paddingTop="@dimen/ten_dp"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:overlapAnchor="false"
                     android:entries="@{vm.cityList}"
                     android:background="@drawable/spinner"
                     android:spinnerMode="dropdown"
@@ -240,7 +253,7 @@
                     android:layout_marginRight="@dimen/twenty_four_dp"
                     android:layout_marginTop="@dimen/forty_dp"
                     android:background="@drawable/black_button_bg"
-                    android:text="@string/add"
+                    android:text="@string/save"
                     android:theme="@style/button_theme"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"

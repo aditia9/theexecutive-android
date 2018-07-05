@@ -16,6 +16,7 @@ data class WishlistResponse(
 data class Item(
 		val id: Int,
 		val product_id: Int,
+		val type_id: String,
 		val qty: Int,
 		val sku: String,
 		val name: String,
@@ -60,4 +61,10 @@ data class StockItem(
 		val low_stock_date: Any,
 		val is_decimal_divided: Boolean,
 		val stock_status_changed_auto: Int
+)
+
+
+data class MoveToBagRequest(
+		val id: String,
+		val qty: String
 )

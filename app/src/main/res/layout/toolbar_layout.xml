@@ -26,7 +26,7 @@
                 android:id="@+id/toolbar_left_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/six_dp"
+                android:padding="@dimen/ten_dp"
                 android:clickable="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/toolbar_left_icon"
@@ -36,18 +36,19 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                />
+                android:focusable="true" />
 
 
             <TextView
                 android:id="@+id/toolbar_right_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{toolbarViewModel.cartCount == 0 ? "" : Integer.toString(toolbarViewModel.cartCount)}'
+                android:text='@{toolbarViewModel.cartCount}'
                 android:layout_marginRight="@dimen/sixteen_dp"
-                android:paddingTop="@dimen/five_dp"
-                android:textSize="@dimen/twelve_sp"
+                android:paddingTop="@dimen/six_dp"
+                android:layout_marginTop="@dimen/six_dp"
                 android:gravity="center_vertical|center_horizontal"
+                android:textSize='@{toolbarViewModel.cartCount == "99+" ? @dimen/nine_sp : @dimen/twelve_sp}'
                 android:contentDescription="@string/toolbar_right_icon"
                 android:visibility="@{(toolbarViewModel.isRightIconVisible() &amp;&amp; toolbarViewModel.rightIcon == R.drawable.bag)? View.VISIBLE : View.GONE,  default = visible}"
                 android:background="@{ContextCompat.getDrawable(context, toolbarViewModel.rightIcon)}"
@@ -80,7 +81,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginRight="@dimen/eight_dp"
-                android:layout_marginLeft="@dimen/eight_dp"
                 app:layout_constraintLeft_toRightOf="@id/toolbar_left_icon"
                 app:layout_constraintRight_toLeftOf="@id/toolbar_right_icon">
 
@@ -88,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="@{toolbarViewModel.showLogo ? View.VISIBLE: View.GONE }"
-                    android:src="@drawable/home_logo"
+                    android:src="@drawable/logo"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -124,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/sixteen_sp"
-                        android:textColor="@color/theme_black_color"
+                        android:textColor="@color/email_color"
                         android:text="@{toolbarViewModel.subTitle}"
                         android:visibility="@{TextUtils.isEmpty(toolbarViewModel.subTitle) ? View.GONE : View.VISIBLE,  default = gone}"
                         app:layout_constraintRight_toRightOf="parent"

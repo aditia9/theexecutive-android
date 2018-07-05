@@ -5,6 +5,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
         android:background="@color/white">
 
         <TextView
@@ -40,7 +42,7 @@
             android:theme="@style/sub_heading_theme"
             android:textColor="@color/hint_color"
             android:gravity="center"
-            android:text="@string/no_item"
+            android:text="@string/no_item_wishlist"
             android:visibility="gone"
             />
 

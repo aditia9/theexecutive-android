@@ -1,11 +1,15 @@
 package com.ranosys.theexecutive.modules.home
+import AppLog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.databinding.DataBindingUtil
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.ViewPager
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -14,35 +18,61 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.facebook.FacebookSdk.getApplicationContext
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentHomeBinding
+import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterRequest
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
-import com.zopim.android.sdk.api.ZopimChat
-import com.zopim.android.sdk.model.VisitorInfo
 import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
 /**
- * Created by Mohammad Sunny on 19/3/18.
+ * @Details A fragment for home
+ * @Author Ranosys Technologies
+ * @Date 19,Mar,2018
  */
 class HomeFragment : BaseFragment() {
+
+    lateinit var br: BroadcastReceiver
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val mViewDataBinding : FragmentHomeBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         mViewDataBinding?.executePendingBindings()
+
+        //recieve local broadcast receiver
+        br = object: BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                try{
+                    setPagerAdapter()
+                }catch (exception : Exception){
+
+                }
+            }
+
+        }
+
+        LocalBroadcastManager.getInstance(activity as Context).registerReceiver(br, IntentFilter("LOGIN"))
         return mViewDataBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setPagerAdapter()
+        setToolBarParams("", R.drawable.logo, "", 0,false, R.drawable.bag, true, true )
+        try{
+            setPagerAdapter()
+        }catch (exception : Exception){
+
+        }
 
         //initialize Zendesk chat setup
         Utils.setUpZendeskChat()
+
+        registerDeviceOnServer()
 
         tv_chat.setOnClickListener {
             startActivity(Intent(getApplicationContext(), ZopimChatActivity::class.java))
@@ -67,41 +97,47 @@ class HomeFragment : BaseFragment() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                val view = tab?.customView as TextView
-                view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_accent_color))
-                view.setTypeface(null, Typeface.NORMAL)
-                when(tab.position){
-                    0 ->{
-                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home, 0, 0)
-                    }
-                    1 ->{
-                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.my_account, 0, 0)
-                    }
-                    2 ->{
-                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist, 0, 0)
+                tab?.customView?.run {
+                    val view = tab?.customView as TextView
+                    view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_accent_color))
+                    view.setTypeface(null, Typeface.NORMAL)
+                    when(tab.position){
+                        0 ->{
+                            view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home, 0, 0)
+                        }
+                        1 ->{
+                            view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.my_account, 0, 0)
+                        }
+                        2 ->{
+                            view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist, 0, 0)
+                        }
                     }
                 }
+
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val view = tab?.customView as TextView
-                view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_black_color))
-                view.setTypeface(null, Typeface.BOLD)
-                when(tab.position) {
-                    0 -> {
-                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
-                    }
-                    1 -> {
-                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.my_account_dark, 0, 0)
-                    }
-                    2 -> {
-                        view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist_dark, 0, 0)
+                tab?.customView?.run {
+                    val view = tab?.customView as TextView
+                    view.setTextColor(ContextCompat.getColor(activity as Context,R.color.theme_black_color))
+                    view.setTypeface(null, Typeface.BOLD)
+                    when(tab.position) {
+                        0 -> {
+                            view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_dark, 0, 0)
+                        }
+                        1 -> {
+                            view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.my_account_dark, 0, 0)
+                        }
+                        2 -> {
+                            view.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.wishlist_dark, 0, 0)
+                        }
                     }
                 }
+
             }
         })
 
-        viewpager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -163,5 +199,31 @@ class HomeFragment : BaseFragment() {
 
     companion object {
         var fragmentPosition : Int? = null
+    }
+
+
+    private fun registerDeviceOnServer() {
+        val request = DeviceRegisterRequest(Constants.OS_TYPE,
+                SavedPreferences.getInstance()?.getStringValue(Constants.USER_FCM_ID),
+                SavedPreferences.getInstance()?.getStringValue(Constants.ANDROID_DEVICE_ID_KEY))
+
+        AppRepository.registerDevice(request, object : ApiCallback<Boolean> {
+            override fun onSuccess(t: Boolean?) {
+                AppLog.d(t.toString())
+            }
+
+            override fun onException(error: Throwable) {
+                AppLog.d(error.message!!)
+            }
+
+            override fun onError(errorMsg: String) {
+                AppLog.d(errorMsg)
+            }
+        })
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(activity as Context).registerReceiver(br, IntentFilter("LOGIN"))
+        super.onDestroy()
     }
 }

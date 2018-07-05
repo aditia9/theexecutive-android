@@ -5,13 +5,17 @@ import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -30,6 +34,7 @@ import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.rangeBar.RangeSeekBar
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
+import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.dialog_filter_option.*
 import kotlinx.android.synthetic.main.fragment_product_listing.*
@@ -39,7 +44,7 @@ import java.util.*
  * @Details fragment shows product listing
  * @Author Ranosys Technologies
  * @Date 16,Apr,2018
-*/
+ */
 class ProductListingFragment: BaseFragment() {
 
     private lateinit var mBinding: FragmentProductListingBinding
@@ -52,6 +57,9 @@ class ProductListingFragment: BaseFragment() {
     private lateinit var filterOptionDialog: Dialog
     private lateinit var sortOptionDialog: Dialog
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var mLastClickTime: Long = 0
+    private var promotionalToastShown = false
+    private val handler = Handler()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +70,16 @@ class ProductListingFragment: BaseFragment() {
             categoryId = data.get(Constants.CATEGORY_ID) as Int? ?: 0
             categoryName = data.get(Constants.CATEGORY_NAME) as String? ?: ""
         }
+    }
 
+    private fun showPromotionalToast() {
+        promotionalToastShown = true
+        val promoMsg = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message
+        val promoUrl = GlobalSingelton.instance?.configuration?.catalog_listing_promotion_message_url
+        showPromotionMsg(promoMsg, promoUrl, {
+            if(!TextUtils.isEmpty(promoUrl))
+                prepareWebPageDialog(activity as Context, promoUrl, "")
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -102,14 +119,14 @@ class ProductListingFragment: BaseFragment() {
         filterOptionBinding.filterList.setAdapter(filterOptionAdapter)
         prepareFilterDialog()
 
-        callInitialApis()
-
-
         observeProductList()
+        observeApiErrors()
         observeNoProductAvailable()
         observeFilterOptions()
         observePriceFilter()
         observeSortOptions()
+
+        callInitialApis()
 
         return mBinding.root
     }
@@ -120,7 +137,14 @@ class ProductListingFragment: BaseFragment() {
                 if(count <= 0){
                     mBinding.productList.visibility = View.GONE
                     mBinding.tvNoProductAvailable.visibility = View.VISIBLE
-                    mBinding.tvNoProductAvailable.text = getString(R.string.no_product_available_error)
+                    val errorMessage  = if(mViewModel.lastSearchQuery.isEmpty()){
+                        getString(R.string.no_product_available_error)
+                    }else{
+                        "${getString(R.string.no_product_available_error_search)} \"${mViewModel.lastSearchQuery}\""
+
+                    }
+                    mBinding.tvNoProductAvailable.text = errorMessage
+
                 }else{
                     mBinding.productList.visibility = View.VISIBLE
                     mBinding.tvNoProductAvailable.visibility = View.GONE
@@ -138,7 +162,7 @@ class ProductListingFragment: BaseFragment() {
         linearLayoutManager = LinearLayoutManager(activity as Context)
         sortOptionBinding.sortOptionList.layoutManager = linearLayoutManager
 
-        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null))
+        val itemDecor = DividerDecoration(resources.getDrawable(R.drawable.horizontal_divider, null),1)
         sortOptionBinding.sortOptionList.addItemDecoration(itemDecor)
 
         sortOptionAdapter.setItemClickListener(object: SortOptionAdapter.OnItemClickListener {
@@ -229,16 +253,15 @@ class ProductListingFragment: BaseFragment() {
             val range = priceFilter?.options?.get(0)?.value
             val min = range?.split("-")?.get(0)?.toLong()
             val max = range?.split("-")?.get(1)?.toLong()
-            if(max == min){
-                filterOptionDialog.price_range_bar.visibility = View.GONE
-            }else{
-                filterOptionDialog.price_range_bar.visibility = View.VISIBLE
-                filterOptionBinding.priceRangeBar.setRangeValues(min, max)
-                filterOptionBinding.priceRangeBar.selectedMinValue = min
-                filterOptionBinding.priceRangeBar.selectedMaxValue = max
-                filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
-                filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
-            }
+            if(max == min)
+                filterOptionDialog.price_range_bar.isEnabled = false
+
+            filterOptionDialog.price_range_bar.visibility = View.VISIBLE
+            filterOptionBinding.priceRangeBar.setRangeValues(min, max)
+            filterOptionBinding.priceRangeBar.selectedMinValue = min
+            filterOptionBinding.priceRangeBar.selectedMaxValue = max
+            filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
+            filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
         })
     }
 
@@ -302,6 +325,10 @@ class ProductListingFragment: BaseFragment() {
         productListAdapter = ProductListAdapter(emptyList, object: ProductListAdapter.OnItemClickListener{
             override fun onItemClick(selectedProduct: ProductListingDataClass.ProductMaskedResponse, position: Int) {
                 Utils.hideSoftKeypad(activity as Context)
+                if (SystemClock.elapsedRealtime() - mLastClickTime < Constants.CLICK_TIMEOUT){
+                    return
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
                 ApiClient.client?.dispatcher()?.cancelAll()
                 mViewModel.isLoading = false
                 val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
@@ -510,9 +537,22 @@ class ProductListingFragment: BaseFragment() {
                 productListAdapter.productList = partialProductList
                 productListAdapter.notifyDataSetChanged()
                 hideLoading()
+
+                //show promotional toast
+                if(promotionalToastShown.not()){
+                    showPromotionalToast()
+                }
             }
         })
     }
+
+    private fun observeApiErrors() {
+        mViewModel.apiFailureResponse?.observe(this, Observer<String> { error ->
+            hideLoading()
+            Utils.showErrorDialog(activity as Context, getString(R.string.something_went_wrong_error))
+        })
+    }
+
 
     fun callProductListingApi(catId: Int? = 0, query: String = "", fromSearch:Boolean  = false, fromPagination: Boolean = false){
         if (Utils.isConnectionAvailable(activity as Context)) {
@@ -528,9 +568,27 @@ class ProductListingFragment: BaseFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        setToolBarParams(categoryName, 0, "", R.drawable.back, true, R.drawable.bag, true)
+    private fun showPromotionMsg(promoMsg: String? = "", url: String? = "", action: () -> Unit) {
+        if(promoMsg.isNullOrEmpty().not()){
+            tv_promo_msg.visibility = View.VISIBLE
+            tv_promo_msg.text = promoMsg
+            tv_promo_msg.postDelayed({
+                tv_promo_msg?.run {
+                    tv_promo_msg.visibility = View.GONE
+                }
+            }, Constants.PROMOTION_TOAST_TIMEOUT)
+
+//            handler.postDelayed({
+//                kotlin.run {
+//                    mBinding.tvPromoMsg.visibility = View.GONE
+//                }
+//            }, Constants.PROMOTION_TOAST_TIMEOUT)
+
+            tv_promo_msg.setOnClickListener {
+                action()
+            }
+        }
+
     }
 
     companion object {
@@ -540,5 +598,13 @@ class ProductListingFragment: BaseFragment() {
         var categoryName: String? = null
         var categoryId: Int? = null
         var homeSearchQuery: String = ""
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        activity?.runOnUiThread {
+            productListAdapter.notifyDataSetChanged()
+        }
+
     }
 }

@@ -5,8 +5,6 @@ package com.ranosys.theexecutive.modules.register
  */
 class RegisterDataClass {
 
-    data class RegisterResponse(var isSuccess: Boolean)
-
     data class Country(
             val id: String = "",
             val two_letter_abbreviation: String = "",

@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <string-array name="states_array">
-       <item>State</item>
-       <item>Rajasthan</item>
-       <item>Delhi</item>
-       <item>JK</item>
-   </string-array>
-
 
     <string-array name="country_code">
         <item>+62</item>
@@ -252,16 +245,25 @@
     </string-array>
 
     <string-array name="my_account_option_title_array">
-        <item>My Information</item>
-        <item>My Orders</item>
-        <item>Shipping Address</item>
-        <item>Notifications</item>
-        <item>Subscribe to Newsletter</item>
-        <item>Select Language</item>
-        <item>Change Password</item>
-        <item>Buying Guide</item>
-        <item>Contact Us</item>
-        <item>Settings</item>
+        <item>@string/my_information_option</item>
+        <item>@string/my_orders</item>
+        <item>@string/shipping_address</item>
+        <item>@string/notifications</item>
+        <item>@string/news_letter_option</item>
+        <item>@string/select_lang_title</item>
+        <item>@string/bank_transfer</item>
+        <item>@string/change_password</item>
+        <item>@string/buying_guide</item>
+        <item>@string/contact_us</item>
+        <item>@string/settings</item>
+    </string-array>
+
+
+    <string-array name="reason_array">
+        <item>@string/select_reason</item>
+        <item>@string/bad_qty</item>
+        <item>@string/not_accordence</item>
+        <item>@string/other</item>
     </string-array>
 
     <integer-array name="my_account_option_icon_array">
@@ -271,9 +273,16 @@
         <item>@drawable/notification</item>
         <item>@drawable/newsletter</item>
         <item>@drawable/language</item>
+        <item>@drawable/bank_transfer</item>
         <item>@drawable/change_password</item>
         <item>@drawable/buying_guide</item>
         <item>@drawable/contact</item>
         <item>@drawable/setting</item>
     </integer-array>
+
+    <string-array name="attachment_option_array">
+        <item>@string/take_photo</item>
+        <item>@string/choose_from_gallery</item>
+        <item>@string/cancel</item>
+    </string-array>
 </resources>

@@ -7,6 +7,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,7 @@ import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentWishlistBinding
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
-import com.ranosys.theexecutive.utils.DialogOkCallback
-import com.ranosys.theexecutive.utils.FragmentUtils
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_wishlist.*
 
 /**
@@ -35,8 +34,16 @@ class WishlistFragment : BaseFragment() {
         val mViewDataBinding : FragmentWishlistBinding? = DataBindingUtil.inflate(inflater, R.layout.fragment_wishlist, container, false)
         wishlistModelView = ViewModelProviders.of(this).get(WishlistViewModel::class.java)
         mViewDataBinding?.executePendingBindings()
-        observeEvents()
-        callWishlistApi()
+
+        val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+         if(TextUtils.isEmpty(isLogin)) {
+             mViewDataBinding?.tvNoItems?.visibility = View.VISIBLE
+             mViewDataBinding?.tvNoItems?.text = activity?.getString(R.string.login_required_for_wishlist)
+        }else{
+             observeEvents()
+             callWishlistApi()
+             mViewDataBinding?.tvNoItems?.visibility = View.GONE
+         }
         return mViewDataBinding?.root
     }
 
@@ -51,8 +58,8 @@ class WishlistFragment : BaseFragment() {
                     tv_wishlist_count.text = getString(R.string.wishlist_items_count, response.items_count)
                     setWishlistAdapter()
                 }
-             }else {
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+            }else {
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -66,7 +73,7 @@ class WishlistFragment : BaseFragment() {
                 }
             }else {
                 hideLoading()
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
 
@@ -81,7 +88,7 @@ class WishlistFragment : BaseFragment() {
                     callWishlistApi()
                 }
             }else {
-                Utils.showDialog(activity, apiResponse?.error, getString(android.R.string.ok), "", null)
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
             }
         })
     }
@@ -100,11 +107,19 @@ class WishlistFragment : BaseFragment() {
                         FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                     }
                     R.id.img_bag -> {
-                        if(item?.stock_item?.is_in_stock!!) {
-                            itemPosition = pos
-                            callAddToBagItemFromWishlist(item.id)
+                        //check if product is simple or configurable
+                        if(item?.type_id == Constants.CONFIGURABLE){
+                            //move to product details
+                            val fragment = ProductDetailFragment.getInstance(null, item.sku, item.name, 0)
+                            FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
                         }else{
-                            Toast.makeText(activity, getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
+
+                            if(item?.stock_item?.is_in_stock!!) {
+                                itemPosition = pos
+                                callAddToBagItemFromWishlist(item)
+                            }else{
+                                Toast.makeText(activity, getString(R.string.product_out_of_stock), Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                     R.id.img_delete -> {
@@ -142,12 +157,14 @@ class WishlistFragment : BaseFragment() {
         }
     }
 
-    private fun callAddToBagItemFromWishlist(itemId : Int?){
+    private fun callAddToBagItemFromWishlist(item: Item?){
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
-            wishlistModelView?.addToBagWishlistItem(itemId)
+            wishlistModelView?.addToBagWishlistItem(item?.id)
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
+
+
     }
 }

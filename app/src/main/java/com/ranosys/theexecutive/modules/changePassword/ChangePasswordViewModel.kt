@@ -38,6 +38,9 @@ class ChangePasswordViewModel(application: Application) : BaseViewModel(applicat
                     apiFailureResponse?.value = errorMsg
                 }
 
+                override fun onErrorCode(errorCode: Int) {
+                    apiFailureResponse?.value = errorCode.toString()
+                }
                 override fun onSuccess(t: Boolean?) {
                     apiSuccessResponse?.value = t
                 }

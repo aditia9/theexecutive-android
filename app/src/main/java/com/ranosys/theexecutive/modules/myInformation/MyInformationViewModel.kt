@@ -7,14 +7,13 @@ import android.content.Context
 import android.databinding.ObservableField
 import android.support.design.widget.TextInputEditText
 import android.text.TextUtils
-import android.view.View
-import android.widget.Spinner
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseViewModel
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
 
@@ -27,9 +26,9 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
 
     var maskedUserInfo : ObservableField<MyAccountDataClass.MaskedUserInfo> = ObservableField()
     var userInfoApiResponse : MutableLiveData<ApiResponse<Any>> = MutableLiveData()
+    var updateUserInfoApiResponse : MutableLiveData<ApiResponse<Any>> = MutableLiveData()
     var infoUpdated = false
     val mobileNumberError: ObservableField<String> = ObservableField()
-    private var countryCode: ObservableField<String> = ObservableField()
 
     fun callUserInfoApi() {
         val apiResponse = ApiResponse<Any>()
@@ -60,19 +59,26 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                 }else{
                     mobileNo = defaultAdd?.telephone ?: ""
                 }
-                val country = GlobalSingelton.instance?.storeList?.single { it.code.toString() == defaultAdd?.country_id}
+
+                var country : StoreResponse? = null
+                country = if(defaultAdd == null){
+                    null
+                }else{
+                    GlobalSingelton.instance?.storeList?.single { it.code == defaultAdd?.country_id}
+                }
+
                 val userInfo = MyAccountDataClass.MaskedUserInfo(
                         _id = t?.id.toString(),
                         _firstName = t?.firstname,
                         _lastName = t?.lastname,
                         _email = t?.email,
-                        _country = country?.name,
-                        _city = defaultAdd?.city,
-                        _state = defaultAdd?.region?.region,
-                        _streedAdd1 = defaultAdd?.street?.get(0),
-                        _streedAdd2 = if (defaultAdd?.street?.size!! > 1) defaultAdd.street.get(1) else "",
+                        _country = country?.name ?: "",
+                        _city = defaultAdd?.city ?: "",
+                        _state = defaultAdd?.region?.region ?: "",
+                        _streedAdd1 = defaultAdd?.street?.get(0) ?: "",
+                        _streedAdd2 = if (defaultAdd?.street?.size ?: 0 > 1) defaultAdd?.street?.get(1) else "",
                         _mobile = mobileNo,
-                        _postalCode = defaultAdd.postcode,
+                        _postalCode = defaultAdd?.postcode ?: "",
                         _countryCode = countryCode
                 )
 
@@ -84,10 +90,6 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
         })
     }
 
-
-    fun onCountryCodeSelection(countryCodeSpinner: View, position: Int){
-        countryCode.set((countryCodeSpinner as Spinner).selectedItem.toString())
-    }
 
     fun onTextChanged(et: TextInputEditText){
         when(et.id){
@@ -115,7 +117,7 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
         )
 
         updateInfoRequest.customer.addresses?.single { it?.id == updateInfoRequest.customer.default_shipping }?.telephone = if(maskedUserInfo.get()._countryCode.isNullOrEmpty().not()) "${maskedUserInfo.get()._countryCode}-${maskedUserInfo.get()._mobile}"
-            else "${maskedUserInfo.get()._mobile}"
+        else "${maskedUserInfo.get()._mobile}"
 
 
         val apiResponse = ApiResponse<Any>()
@@ -123,13 +125,13 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
             override fun onException(error: Throwable) {
                 AppLog.e("Update Information API : ${error.message}")
                 apiResponse.error = error.message
-                userInfoApiResponse.value = apiResponse
+                updateUserInfoApiResponse.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
                 AppLog.e("Update Information API : $errorMsg")
                 apiResponse.error = errorMsg
-                userInfoApiResponse.value = apiResponse
+                updateUserInfoApiResponse.value = apiResponse
             }
 
             override fun onSuccess(t: MyAccountDataClass.UserInfoResponse?) {
@@ -137,7 +139,7 @@ class MyInformationViewModel(application: Application): BaseViewModel(applicatio
                 GlobalSingelton.instance?.userInfo = t
 
                 apiResponse.apiResponse = t
-                userInfoApiResponse.value = apiResponse
+                updateUserInfoApiResponse.value = apiResponse
             }
         })
     }

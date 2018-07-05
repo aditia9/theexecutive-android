@@ -37,14 +37,14 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
     override fun getItemCount() = productList.size
 
-    class Holder(val itemBinding: ProductListItemBinding, val ctx: Context): RecyclerView.ViewHolder(itemBinding.root) {
+    class Holder(val itemBinding: ProductListItemBinding, private val ctx: Context): RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(productItem: ProductListingDataClass.Item, position : Int, listener: ProductListAdapter.OnItemClickListener){
 
             if((position + 1) % ProductListingFragment.COLUMN_CHANGE_FACTOR == 0){
-                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, 1.4)
+                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, Constants.IMAGE_RATIO, 32)
             }else{
-                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, .6)
+                Utils.setImageViewHeightWrtDeviceWidth(ctx, itemBinding.image, Constants.IMAGE_RATIO, 48, 2)
             }
 
 
@@ -106,7 +106,7 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
             var discount = 0
             if(specialPrice.isNotBlank()){
-                discount = Math.round((price.replace(".","").toDouble() - specialPrice.replace(".","").toDouble()).div(price.replace(".","").toDouble())).times(100).toInt()
+                discount = Math.round((price.replace(".","").toDouble() - specialPrice.replace(".","").toDouble()).div(price.replace(".","").toDouble()).times(100)).toInt()
                 //discount = Math.round((((Utils.getDoubleFromFormattedPrice(price) - Utils.getDoubleFromFormattedPrice(specialPrice)).div(Utils.getDoubleFromFormattedPrice(price))).times(100))).toInt()
             }
             var imgUrl = ""

@@ -13,7 +13,7 @@ import com.ranosys.theexecutive.databinding.SortOptionItemBinding
  * @Author Ranosys Technologies
  * @Date 11-Apr-2018
  */
-class SortOptionAdapter(val mViewModel: ProductListingViewModel, var sortOptions: MutableList<ProductListingDataClass.SortOptionResponse>?) : RecyclerView.Adapter<SortOptionAdapter.ViewHolder>() {
+class SortOptionAdapter(private val mViewModel: ProductListingViewModel, var sortOptions: MutableList<ProductListingDataClass.SortOptionResponse>?) : RecyclerView.Adapter<SortOptionAdapter.ViewHolder>() {
 
     var clickListener: OnItemClickListener? = null
 

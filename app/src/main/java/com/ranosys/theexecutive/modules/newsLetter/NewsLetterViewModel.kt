@@ -17,7 +17,7 @@ import com.ranosys.theexecutive.utils.Utils
  */
 class NewsLetterViewModel(application: Application): BaseViewModel(application) {
 
-    var email: ObservableField<String> = ObservableField<String>()
+    var email: ObservableField<String> = ObservableField()
     val emailError = ObservableField<String>()
     var apiSuccessResponse: MutableLiveData<String>? = MutableLiveData()
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()
@@ -34,6 +34,9 @@ class NewsLetterViewModel(application: Application): BaseViewModel(application) 
                 apiFailureResponse?.value = errorMsg
             }
 
+            override fun onErrorCode(errorCode: Int) {
+                apiFailureResponse?.value = errorCode.toString()
+            }
             override fun onSuccess(message: String?) {
                 apiSuccessResponse?.value = message
             }

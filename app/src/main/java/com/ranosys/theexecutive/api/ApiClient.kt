@@ -8,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Mohammad Sunny on 25/1/18.
@@ -25,17 +26,11 @@ class ApiClient {
                     .build()
             return field
         }
-        set(value) {
-            field = value
-        }
 
         private var gson : Gson? = null
         get() {
             field = field ?: GsonBuilder().create()
             return field
-        }
-        set(value) {
-            field = value
         }
 
         private var interceptor = HttpLoggingInterceptor()
@@ -46,9 +41,6 @@ class ApiClient {
                 field.level = HttpLoggingInterceptor.Level.NONE
             return field
         }
-        set(value) {
-            field = value
-        }
 
         var client : OkHttpClient? = null
         get() {
@@ -57,11 +49,9 @@ class ApiClient {
             field = field ?: OkHttpClient.Builder()
                     .addInterceptor(interceptor)
                     .dispatcher(dispatcher)
+                    .connectTimeout(ApiConstants.CONNECT_TIMEOUT.toLong(), TimeUnit.SECONDS)
                     .build()
             return  field
-        }
-        set(value) {
-            field = value
         }
 
     }

@@ -18,7 +18,7 @@ import com.ranosys.theexecutive.utils.Utils
  */
 class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val action: (Int, Int, Item?) -> Unit) : RecyclerView.Adapter<WishlistAdapter.Holder>() {
 
-    var mContext : Context? = null
+    private var mContext : Context? = null
     var clickListener: WishlistAdapter.OnItemClickListener? = null
 
     init {
@@ -59,30 +59,30 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
             itemBinding?.item = item
 
             itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString())
+            if(item?.type_id == Constants.CONFIGURABLE){
+                itemBinding?.imgBag?.setImageResource(R.drawable.eye)
+                itemBinding?.imgProductOverlay?.visibility = View.GONE
+                item.stock_item?.run {
+                    if(is_in_stock){
+                        itemBinding?.tvOutOfStock?.visibility = View.GONE
 
-            item?.stock_item?.run {
-                if(is_in_stock){
-                    itemBinding?.tvOutOfStock?.visibility = View.GONE
-                }else{
-                    itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
-                }
-            }
-
-            item?.options?.run{
-                if(item.options.isNotEmpty()){
-                    itemBinding?.layoutColorSize?.visibility = View.VISIBLE
-                    item.options.forEach {
-                        when(it?.label){
-                            Constants.COLOR_ -> {
-                                itemBinding?.tvProductColor?.text =  it.value
-                            }
-                            Constants.SIZE_ -> {
-                                itemBinding?.tvProductSize?.text =  it.value
-                            }
-                        }
+                    }else{
+                        itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
                     }
-                }else{
-                    itemBinding?.layoutColorSize?.visibility = View.INVISIBLE
+                }
+            }else{
+
+                item?.stock_item?.run {
+                    if(is_in_stock){
+                        itemBinding?.imgBag?.setImageResource(R.drawable.bag)
+                        itemBinding?.tvOutOfStock?.visibility = View.GONE
+                        itemBinding?.imgProductOverlay?.visibility = View.GONE
+
+                    }else{
+                        itemBinding?.imgBag?.setImageResource(R.drawable.bag_disable)
+                        itemBinding?.tvOutOfStock?.visibility = View.VISIBLE
+                        itemBinding?.imgProductOverlay?.visibility = View.VISIBLE
+                    }
                 }
             }
 
@@ -98,9 +98,7 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
             itemBinding?.imgDelete?.setOnClickListener{
                 view -> action(view.id, position, item)
             }
-
-
-
+            
         }
     }
 }
