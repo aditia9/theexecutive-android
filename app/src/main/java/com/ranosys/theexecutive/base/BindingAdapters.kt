@@ -4,7 +4,6 @@ import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
 import android.databinding.ObservableField
 import android.support.design.widget.TextInputLayout
-import android.support.v4.view.ViewPager
 import android.text.TextUtils
 import android.widget.ExpandableListView
 import android.widget.ImageView
@@ -12,9 +11,7 @@ import android.widget.Spinner
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
-import com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
-import com.ranosys.theexecutive.modules.category.adapters.CustomViewPageAdapter
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlideApp
 import com.ranosys.theexecutive.utils.GlobalSingelton
@@ -55,12 +52,6 @@ class BindingAdapters {
             view.setAdapter(adapter)
         }
 
-        @JvmStatic
-        @BindingAdapter("promotionData")
-        fun bindViewPager(view: ViewPager, response: List<PromotionsResponseDataClass>?) {
-            val customViewPagerAdapter = CustomViewPageAdapter(view.context, response)
-            view.adapter = customViewPagerAdapter
-        }
 
         //for images at home promotion
         @JvmStatic
@@ -133,7 +124,7 @@ class BindingAdapters {
                 }
             }
 
-            val iconId = imageView.context.getResources().getIdentifier(imageName, "drawable", imageView.context.packageName)
+            val iconId = imageView.context.resources.getIdentifier(imageName, "drawable", imageView.context.packageName)
 
             GlideApp.with(imageView.context)
                     .asBitmap()

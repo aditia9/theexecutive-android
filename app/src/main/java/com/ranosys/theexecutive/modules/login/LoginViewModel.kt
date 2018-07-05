@@ -216,7 +216,7 @@ class LoginViewModel(application: Application) : BaseViewModel(application){
             }
 
             override fun onError(errorMsg: String) {
-                AppLog.d("cart merge api : ${errorMsg}")
+                AppLog.d("cart merge api : $errorMsg")
             }
 
             override fun onSuccess(t: String?) {

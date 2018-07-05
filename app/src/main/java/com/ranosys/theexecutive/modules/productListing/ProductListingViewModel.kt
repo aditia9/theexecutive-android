@@ -22,8 +22,8 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     var lastSearchQuery: String = ""
 
 
-    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>()
-    var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData<MutableList<ProductListingDataClass.Filter>>()
+    var sortOptionList: MutableLiveData<MutableList<ProductListingDataClass.SortOptionResponse>>? = MutableLiveData()
+    var filterOptionList: MutableLiveData<MutableList<ProductListingDataClass.Filter>>? = MutableLiveData()
     var priceFilter: MutableLiveData<ProductListingDataClass.Filter> = MutableLiveData()
     var noProductAvailable: MutableLiveData<Int> = MutableLiveData()
     var selectedFilterMap = hashMapOf<String, String>()
@@ -176,7 +176,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
         }
     }
 
-    fun getProductOptions(attributeId : String?, label : String?){
+    private fun getProductOptions(attributeId : String?, label : String?){
         AppRepository.getProductOptions(attributeId, object : ApiCallback<List<ProductOptionsResponse>> {
             override fun onException(error: Throwable) {
             }

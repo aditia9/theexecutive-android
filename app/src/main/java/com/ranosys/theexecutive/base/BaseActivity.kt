@@ -6,10 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.view.WindowManager
 import com.ranosys.rtp.RunTimePermissionActivity
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.ToolbarViewModel
@@ -125,20 +122,6 @@ open class BaseActivity: RunTimePermissionActivity(){
         toolbarViewModel?.isRightIconVisible?.set(isVisible)
     }
 
-
-
-    private fun changeStatusBarColor(color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = ContextCompat.getColor(this,color)
-        }
-    }
-
-    fun hideToolBar(){
-        supportActionBar?.hide()
-    }
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(updateBaseContextLocale(base))

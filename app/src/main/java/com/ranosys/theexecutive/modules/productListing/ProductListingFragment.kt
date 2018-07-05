@@ -328,7 +328,7 @@ class ProductListingFragment: BaseFragment() {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < Constants.CLICK_TIMEOUT){
                     return
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTime = SystemClock.elapsedRealtime()
                 ApiClient.client?.dispatcher()?.cancelAll()
                 mViewModel.isLoading = false
                 val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
@@ -568,7 +568,7 @@ class ProductListingFragment: BaseFragment() {
         }
     }
 
-    fun showPromotionMsg(promoMsg: String? = "", url: String? = "", action: () -> Unit) {
+    private fun showPromotionMsg(promoMsg: String? = "", url: String? = "", action: () -> Unit) {
         if(promoMsg.isNullOrEmpty().not()){
             tv_promo_msg.visibility = View.VISIBLE
             tv_promo_msg.text = promoMsg

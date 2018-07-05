@@ -20,11 +20,11 @@ import com.ranosys.theexecutive.databinding.SizeViewLayoutBinding
  */
 class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragment.SizeView>?, colorValue: String?, maxQuantityList: MutableList<ProductViewFragment.MaxQuantity>?) : RecyclerView.Adapter<SizeRecyclerAdapter.Holder>() {
 
-    var mContext : Context? = null
-    var sizeViewList : List<ProductViewFragment.SizeView>? = null
+    private var mContext : Context? = null
+    private var sizeViewList : List<ProductViewFragment.SizeView>? = null
     var clickListener: SizeRecyclerAdapter.OnItemClickListener? = null
-    var colorValue: String? = ""
-    var isInStockList: MutableList<ProductViewFragment.MaxQuantity>? = null
+    private var colorValue: String? = ""
+    private var isInStockList: MutableList<ProductViewFragment.MaxQuantity>? = null
 
     init {
         mContext = context
@@ -70,12 +70,12 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
             itemBinding?.sizeView = sizeView
             if(sizeView?.isSelected!!){
                 itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.drawable.size_border)
-                itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT_BOLD)
+                itemBinding?.tvSize?.typeface = Typeface.DEFAULT_BOLD
                 itemBinding?.tvSize?.setTextColor(Color.BLACK)
             }
             else{
                 itemBinding?.tvSize?.background = context?.resources?.getDrawable(R.color.white)
-                itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
+                itemBinding?.tvSize?.typeface = Typeface.DEFAULT
                 itemBinding?.tvSize?.setTextColor(Color.BLACK)
             }
             try {
@@ -92,7 +92,7 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                     itemBinding?.tvSize?.isEnabled = false
                     itemBinding?.tvSize?.isClickable = false
                     itemBinding?.tvSize?.setTextColor(Color.GRAY)
-                    itemBinding?.tvSize?.setTypeface(Typeface.DEFAULT)
+                    itemBinding?.tvSize?.typeface = Typeface.DEFAULT
 
                 }
             }catch (e : Exception){

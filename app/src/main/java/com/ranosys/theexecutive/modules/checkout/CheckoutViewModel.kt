@@ -170,8 +170,7 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
                 shipping_method_code = shippingMethod.method_code
         )
 
-        val request = CheckoutDataClass.GetPaymentMethodsRequest(addressInformation)
-        return request
+        return CheckoutDataClass.GetPaymentMethodsRequest(addressInformation)
 
     }
 

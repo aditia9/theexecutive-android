@@ -13,7 +13,7 @@ import java.util.*
  */
 object FragmentUtils {
 
-    var sFragmentStack: Stack<String>? = Stack()
+    private var sFragmentStack: Stack<String>? = Stack()
 
     fun addFragment(context: Context?, fragment: Fragment?, bundle : Bundle?, fragmentId: String?, isAdded : Boolean?) : Fragment?{
         return fragment?.apply {
@@ -53,11 +53,10 @@ object FragmentUtils {
     }
 
     fun getCurrentFragment(baseActivity: BaseActivity): Fragment? {
-        val currentFragment = baseActivity.supportFragmentManager.findFragmentById(R.id.main_container)
-        return currentFragment
+        return baseActivity.supportFragmentManager.findFragmentById(R.id.main_container)
     }
 
     fun popFragment(baseActivity: DashBoardActivity){
-        baseActivity.supportFragmentManager.popBackStack();
+        baseActivity.supportFragmentManager.popBackStack()
     }
 }

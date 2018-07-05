@@ -98,7 +98,7 @@ class OrderResultFragment: BaseFragment(){
     companion object {
         fun getInstance(orderId: String, status: String): OrderResultFragment{
 
-            var bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString(Constants.ORDER_ID, orderId)
             bundle.putString(Constants.STATUS, status)
             val orderResultFragment = OrderResultFragment()

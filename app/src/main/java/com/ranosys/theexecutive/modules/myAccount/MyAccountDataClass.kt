@@ -21,26 +21,26 @@ class MyAccountDataClass {
 
     data class UserInfoResponse(
             val id: Int?,
-            val group_id: Int?,
+            private val group_id: Int?,
             var default_billing: String?,
             var default_shipping: String?,
-            val created_at: String?,
-            val updated_at: String?,
-            val created_in: String?,
-            val dob: String?,
+            private val created_at: String?,
+            private val updated_at: String?,
+            private val created_in: String?,
+            private val dob: String?,
             val email: String?,
             val firstname: String?,
             val lastname: String?,
-            var prefix: String?,
+            private var prefix: String?,
             val gender: Int?,
-            val store_id: Int?,
-            val website_id: Int?,
+            private val store_id: Int?,
+            private val website_id: Int?,
             var addresses: MutableList<Address>?,
-            val disable_auto_group_change: Int?
+            private val disable_auto_group_change: Int?
     ){
         fun copy(): UserInfoResponse{
 
-            var addressList = mutableListOf<Address>()
+            val addressList = mutableListOf<Address>()
             this.addresses?.let {
                 for(address in this.addresses!!){
                     addressList.add(address.copy(region = address.region?.copy(), street = address.street?.toMutableList()))

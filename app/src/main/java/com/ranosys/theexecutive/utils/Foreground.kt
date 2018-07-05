@@ -16,7 +16,7 @@ class Foreground: Application.ActivityLifecycleCallbacks {
     private var foreground = false
     private var paused = true
     private var handler: Handler = Handler()
-    private var listener: CopyOnWriteArrayList<Listener> = CopyOnWriteArrayList<Listener>()
+    private var listener: CopyOnWriteArrayList<Listener> = CopyOnWriteArrayList()
     private var check: Runnable? = null
     //private val CHECK_DELAY = 500
 
@@ -39,13 +39,13 @@ class Foreground: Application.ActivityLifecycleCallbacks {
         }
         fun get(context: Context):Foreground{
             if(instance == null){
-                var ctx = context.applicationContext
+                val ctx = context.applicationContext
                 if(ctx is Application){
                     init(ctx )
                 }
                 throw IllegalStateException(
                         "Foreground is not initialised and " +
-                                "cannot obtain the Application object");
+                                "cannot obtain the Application object")
             }
             return instance as Foreground
         }
@@ -89,7 +89,7 @@ class Foreground: Application.ActivityLifecycleCallbacks {
 
     override fun onActivityResumed(p0: Activity?) {
         paused = false
-        var wasBackground = !foreground
+        val wasBackground = !foreground
         foreground = true
         handler.removeCallbacks(check)
         if(wasBackground){

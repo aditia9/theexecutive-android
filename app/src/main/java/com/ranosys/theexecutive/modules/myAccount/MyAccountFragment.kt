@@ -90,7 +90,7 @@ class MyAccountFragment : BaseFragment() {
         return optionList
     }
 
-    class MyAccountAdapter(val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class MyAccountAdapter(private val optionArray: List<MyAccountDataClass.MyAccountOption>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         companion object {
             const val VIEW_TYPE_FOOTER = 2
@@ -104,13 +104,13 @@ class MyAccountFragment : BaseFragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            if (viewType == VIEW_TYPE_FOOTER) {
+            return if (viewType == VIEW_TYPE_FOOTER) {
                 val itemView = LayoutInflater.from(parent.context).inflate(R.layout.logout_btn, parent, false)
-                return MyAccountFooterHolder(itemView, context)
+                MyAccountFooterHolder(itemView, context)
 
             } else {
                 val binding: MyAccountOptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.my_account_option_item, parent, false)
-                return MyAccountAdapter.MyAccountHolder(binding)
+                MyAccountAdapter.MyAccountHolder(binding)
             }
 
         }

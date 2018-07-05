@@ -59,7 +59,7 @@ class OrderListAdapter(var context: Context, private var orderList: List<OrderLi
 
 
             if(itemBinding?.item?.date != null){
-                var date = itemBinding?.item?.date
+                val date = itemBinding?.item?.date
                 itemBinding?.tvDate?.text = Utils.getDateFormat(date!!)
             }
 

@@ -18,7 +18,7 @@ import com.ranosys.theexecutive.utils.Utils
  */
 class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val action: (Int, Int, Item?) -> Unit) : RecyclerView.Adapter<WishlistAdapter.Holder>() {
 
-    var mContext : Context? = null
+    private var mContext : Context? = null
     var clickListener: WishlistAdapter.OnItemClickListener? = null
 
     init {

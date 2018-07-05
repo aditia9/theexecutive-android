@@ -12,7 +12,7 @@ import com.ranosys.theexecutive.modules.splash.StoreResponse
 /**
  * Created by nikhil on 16/3/18.
  */
-class StoreListAdapter(var storeListData: List<StoreResponse>?, var selectedStoreCode: String): RecyclerView.Adapter<StoreListAdapter.Holder>() {
+class StoreListAdapter(private var storeListData: List<StoreResponse>?, var selectedStoreCode: String): RecyclerView.Adapter<StoreListAdapter.Holder>() {
 
     var clickListener: OnItemClickListener? = null
 

@@ -46,7 +46,7 @@ class ProductListingDataClass {
             val value: String){
         var _isSelected: ObservableField<Boolean>
         init {
-            _isSelected = ObservableField<Boolean>(false)
+            _isSelected = ObservableField(false)
         }
     }
 

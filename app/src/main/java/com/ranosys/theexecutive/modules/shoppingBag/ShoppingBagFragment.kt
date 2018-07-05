@@ -266,7 +266,7 @@ class ShoppingBagFragment : BaseFragment() {
                     }
 
                     R.id.btn_checkout -> {
-                        var userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+                        val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                         if (userToken.isNullOrBlank().not()) {
                             FragmentUtils.addFragment(context, CheckoutFragment(),null, CheckoutFragment::class.java.name, true )
                         } else {

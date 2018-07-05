@@ -26,17 +26,11 @@ class ApiClient {
                     .build()
             return field
         }
-        set(value) {
-            field = value
-        }
 
         private var gson : Gson? = null
         get() {
             field = field ?: GsonBuilder().create()
             return field
-        }
-        set(value) {
-            field = value
         }
 
         private var interceptor = HttpLoggingInterceptor()
@@ -46,9 +40,6 @@ class ApiClient {
             else
                 field.level = HttpLoggingInterceptor.Level.NONE
             return field
-        }
-        set(value) {
-            field = value
         }
 
         var client : OkHttpClient? = null
@@ -61,9 +52,6 @@ class ApiClient {
                     .connectTimeout(ApiConstants.CONNECT_TIMEOUT.toLong(), TimeUnit.SECONDS)
                     .build()
             return  field
-        }
-        set(value) {
-            field = value
         }
 
     }

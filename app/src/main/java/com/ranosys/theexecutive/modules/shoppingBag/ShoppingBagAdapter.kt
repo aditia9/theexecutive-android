@@ -232,7 +232,7 @@ class ShoppingBagAdapter(var context: Context, private var shoppingBagList: List
             }
 
             if (!TextUtils.isEmpty(mPromoCode)) {
-                itemBinding?.tvAppliedPromoCode?.setText(mPromoCode)
+                itemBinding?.tvAppliedPromoCode?.text = mPromoCode
                 itemBinding?.imvDeletePromoCode?.visibility = View.VISIBLE
                 itemBinding?.tvAppliedPromoCode?.visibility = View.VISIBLE
                 itemBinding?.etPromoCode?.visibility = View.GONE

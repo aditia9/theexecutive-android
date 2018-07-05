@@ -16,8 +16,8 @@ class CategoryModelView(application: Application) : BaseViewModel(application) {
 
     var mutualPromotionResponse = MutableLiveData<ApiResponse<List<PromotionsResponseDataClass>>>()
     var mutualHomeResponse = MutableLiveData<ApiResponse<CategoryResponseDataClass>>()
-    var categoryResponse: ObservableField<CategoryResponseDataClass>? = ObservableField<CategoryResponseDataClass>()
-    var promotionResponse: ObservableField<List<PromotionsResponseDataClass>>? = ObservableField<List<PromotionsResponseDataClass>>()
+    var categoryResponse: ObservableField<CategoryResponseDataClass>? = ObservableField()
+    var promotionResponse: ObservableField<List<PromotionsResponseDataClass>>? = ObservableField()
 
     fun getPromotions(){
         val apiResponse = ApiResponse<List<PromotionsResponseDataClass>>()

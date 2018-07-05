@@ -212,8 +212,8 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
         }, startIndex, startIndex + length, 0)
 
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setText(spanText, TextView.BufferType.SPANNABLE);
+        textView.movementMethod = LinkMovementMethod.getInstance()
+        textView.setText(spanText, TextView.BufferType.SPANNABLE)
 
     }
     private fun openWebPage(context: Context, url: String, title: String) {

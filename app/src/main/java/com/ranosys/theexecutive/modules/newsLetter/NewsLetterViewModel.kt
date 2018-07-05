@@ -17,7 +17,7 @@ import com.ranosys.theexecutive.utils.Utils
  */
 class NewsLetterViewModel(application: Application): BaseViewModel(application) {
 
-    var email: ObservableField<String> = ObservableField<String>()
+    var email: ObservableField<String> = ObservableField()
     val emailError = ObservableField<String>()
     var apiSuccessResponse: MutableLiveData<String>? = MutableLiveData()
     var apiFailureResponse: MutableLiveData<String>? = MutableLiveData()

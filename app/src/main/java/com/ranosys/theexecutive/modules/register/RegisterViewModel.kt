@@ -41,7 +41,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var emailAddress: ObservableField<String> = ObservableField()
     var mobileNumber: ObservableField<String> = ObservableField()
     var countryCode: ObservableField<String> = ObservableField()
-    var selectedGender: ObservableField<Int> = ObservableField(MALE)
+    private var selectedGender: ObservableField<Int> = ObservableField(MALE)
     var dob: ObservableField<Date> = ObservableField()
     var dobError: ObservableField<String> = ObservableField()
     var streetAddress1: ObservableField<String> = ObservableField()
@@ -51,12 +51,12 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
     var confirmPassword: ObservableField<String> = ObservableField()
     val isSubscribed = ObservableField<Boolean>(false)
 
-    var countryList :MutableList<RegisterDataClass.Country> = mutableListOf<RegisterDataClass.Country>()
-    var stateList :MutableList<RegisterDataClass.State> = mutableListOf<RegisterDataClass.State>()
-    var cityList :MutableList<RegisterDataClass.City> = mutableListOf<RegisterDataClass.City>()
-    var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
-    var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
-    var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
+    var countryList :MutableList<RegisterDataClass.Country> = mutableListOf()
+    var stateList :MutableList<RegisterDataClass.State> = mutableListOf()
+    var cityList :MutableList<RegisterDataClass.City> = mutableListOf()
+    private var selectedcountry: ObservableField<RegisterDataClass.Country> = ObservableField()
+    private var selectedState: ObservableField<RegisterDataClass.State> = ObservableField()
+    private var selectedCity: ObservableField<RegisterDataClass.City> = ObservableField()
     var countryHint:RegisterDataClass.Country? = null
     var stateHint:RegisterDataClass.State? = null
     var cityHint:RegisterDataClass.City? = null
@@ -74,11 +74,9 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         const val FEMALE = 2
 
         //error tags
-        val ERROR_TAG = "error"
-        val COUNTRY_API_TAG = "Country Api"
-        val CITY_API_TAG = "City Api"
-        val REGISTRATION_API_TAG = "Registration Api"
-        val LOGIN_API_TAG = "Login Api"
+        const val ERROR_TAG = "error"
+        const val COUNTRY_API_TAG = "Country Api"
+        const val CITY_API_TAG = "City Api"
     }
 
     fun initSpinnerHints() {
@@ -159,7 +157,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
             override fun onError(errorMsg: String) {
                 Utils.printLog(CITY_API_TAG, ERROR_TAG)
-                Toast.makeText(getApplication<Application>(), errorMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplication(), errorMsg, Toast.LENGTH_SHORT).show()
             }
 
             override fun onSuccess(cities: List<RegisterDataClass.City>?) {
@@ -271,7 +269,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
             }
 
             override fun onError(errorMsg: String) {
-                AppLog.d("cart merge api : ${errorMsg}")
+                AppLog.d("cart merge api : $errorMsg")
             }
 
             override fun onSuccess(t: String?) {

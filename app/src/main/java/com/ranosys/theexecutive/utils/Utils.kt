@@ -13,10 +13,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
-import android.net.Uri
-import android.net.wifi.WifiManager
 import android.os.Build
-import android.telephony.TelephonyManager
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
@@ -58,17 +55,6 @@ object Utils {
         }
     }
 
-    val isMarshmallowOrAbove: Boolean?
-        get() {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        }
-
-    /*fun isValidEmail(email: String?): Boolean {
-        // val p = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$")
-        val p = Pattern.compile("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}")
-        val m = p.matcher(email)
-        return m.matches()
-    }*/
 
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -208,11 +194,6 @@ object Utils {
         return xlarge || large
     }
 
-    fun openCmsPage(context: Context, url: String) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(url)
-        context.startActivity(intent)
-    }
 
     fun compareDrawable(context: Context, d1: Drawable, d2: Drawable): Boolean{
         return (d1 as BitmapDrawable).bitmap == (d2 as BitmapDrawable).bitmap
@@ -224,7 +205,7 @@ object Utils {
         return displayMetrics.widthPixels
     }
 
-     fun getDeviceHeight(context: Context?) : Int{
+     private fun getDeviceHeight(context: Context?) : Int{
         val displayMetrics = DisplayMetrics()
         (context as BaseActivity).windowManager.defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.heightPixels
@@ -232,33 +213,14 @@ object Utils {
 
     fun convertDpIntoPx(context: Context?, dp : Float) : Int{
         val r = context?.resources
-        val px = Math.round(TypedValue.applyDimension(
+        return Math.round(TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, dp, r?.displayMetrics))
-        return px
-    }
-
-    fun setImageViewHeight(context: Context?, imageView : ImageView?, percentage : Int?){
-        val height = getDeviceHeight(context)
-        val removeHeight = height.times(percentage!!).div(100)
-        imageView?.layoutParams?.height = height - removeHeight
     }
 
     fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double, widthMargin: Int = 0, column: Int = 1){
         val width = (getDeviceWidth(context) - convertDpIntoPx(context, widthMargin.toFloat())) / column
         val height = width.times(times)
         imageView.layoutParams?.height = height.toInt()
-    }
-
-    fun setImageViewHeightWrtWidth(context: Context, imageView: ImageView, times: Double){
-        val width = imageView.width
-        val height = width.times(times)
-        imageView.layoutParams?.height = height.toInt()
-    }
-
-    fun setViewHeightWrtDeviceHeight(context: Context, view: View, times: Double){
-        val width = getDeviceHeight(context)
-        val height = width.times(times)
-        view.layoutParams?.height = height.toInt()
     }
 
     fun setViewHeightWrtDeviceWidth(context: Context, view: View, times: Double){
@@ -283,11 +245,11 @@ object Utils {
         var newPrice = ""
         try {
             val numberFormatter = NumberFormat.getNumberInstance(Locale.US)
-            if (price.isNotBlank()) {
+            newPrice = if (price.isNotBlank()) {
                 val p = price.toDouble()
-                newPrice = numberFormatter.format(p).replace(",", ".")
+                numberFormatter.format(p).replace(",", ".")
             } else {
-                newPrice = price
+                price
             }
         }catch (e : NumberFormatException){
             AppLog.printStackTrace(e)
@@ -296,15 +258,6 @@ object Utils {
 
     }
 
-    fun getDoubleFromFormattedPrice(price: String): Double {
-        var newPrice = 0.0
-        try {
-            newPrice = price.replace(",", "").toDouble()
-        }catch (e : NumberFormatException){
-            AppLog.printStackTrace(e)
-        }
-        return newPrice
-    }
 
     fun getStringFromFormattedPrice(price: String): String {
         var newPrice = ""
@@ -316,23 +269,6 @@ object Utils {
         return newPrice
     }
 
-    @SuppressLint("ServiceCast")
-    fun getDeviceId(context: Context): String {
-        var IMEI = ""
-        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        IMEI = telephonyManager.deviceId
-        if (TextUtils.isEmpty(IMEI)) {
-            val manager = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val info = manager.connectionInfo
-            val address = info.macAddress
-            return if (!TextUtils.isEmpty(address)) {
-                address
-            } else {
-                "0000000000000000"
-            }
-        }
-        return IMEI
-    }
 
     fun setUpZendeskChat() {
         val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
@@ -356,7 +292,7 @@ object Utils {
     }
 
     fun getCountryName(id: String): String{
-        return GlobalSingelton.instance?.storeList?.single { it.code.toString() == id }.let { it?.name } ?: ""
+        return GlobalSingelton.instance?.storeList?.single { it.code == id }.let { it?.name } ?: ""
 
     }
 
@@ -367,10 +303,10 @@ object Utils {
 
     fun getDefaultAddress(): MyAccountDataClass.Address?{
         val info = GlobalSingelton.instance?.userInfo
-        if(info?.default_shipping.isNullOrBlank().not()){
-            return info?.addresses?.single { it?.id == info.default_shipping }
+        return if(info?.default_shipping.isNullOrBlank().not()){
+            info?.addresses?.single { it?.id == info.default_shipping }
         }else{
-            return null
+            null
         }
 
     }
@@ -401,28 +337,28 @@ object Utils {
      * Method checks if the app is in background or not
      */
     fun isAppIsInBackground(context : Context) : Boolean{
-        var isInBackground = true;
+        var isInBackground = true
         val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
-            val runningProcesses = am.getRunningAppProcesses()
+            val runningProcesses = am.runningAppProcesses
             for (processInfo in runningProcesses) {
                 if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                     for (activeProcess in processInfo.pkgList) {
-                        if (activeProcess.equals(context.getPackageName())) {
-                            isInBackground = false;
+                        if (activeProcess.equals(context.packageName)) {
+                            isInBackground = false
                         }
                     }
                 }
             }
         } else {
-            val taskInfo = am.getRunningTasks(1);
-            val componentInfo = taskInfo.get(0).topActivity;
-            if (componentInfo.getPackageName().equals(context.getPackageName())) {
-                isInBackground = false;
+            val taskInfo = am.getRunningTasks(1)
+            val componentInfo = taskInfo.get(0).topActivity
+            if (componentInfo.packageName.equals(context.packageName)) {
+                isInBackground = false
             }
         }
 
-        return isInBackground;
+        return isInBackground
     }
 
 
@@ -449,11 +385,11 @@ object Utils {
         val compareTimeString = systemDateFormat.parse(compareDateString)
 
         val text = StringBuffer("")
-        if(systemCurrentTimeString.compareTo(compareTimeString) == 0){
+        return if(systemCurrentTimeString.compareTo(compareTimeString) == 0){
             format = SimpleDateFormat(" hh:mm a")
-            return text.append(ctx.getString(R.string.today) + ""+format.format(newDate)).toString()
+            text.append(ctx.getString(R.string.today) + ""+format.format(newDate)).toString()
         }else{
-            return format.format(newDate)
+            format.format(newDate)
         }
     }
 }
