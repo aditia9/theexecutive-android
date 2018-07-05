@@ -128,13 +128,6 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 itemBinding?.layoutColorSize?.visibility = View.GONE
             }
 
-            //define arrows
-//            val enableIncrementArrow = context?.getResources()?.getDrawable(R.drawable.forward)
-//            val disableIncrementArrow = context?.getResources()?.getDrawable(R.drawable.forward)
-//            disableIncrementArrow?.alpha = Constants.ALFA_SET
-//            val enableDecrementArrow = context?.getResources()?.getDrawable(R.drawable.back)
-//            val disableDecrementArrow = context?.getResources()?.getDrawable(R.drawable.back)
-//            disableDecrementArrow?.alpha = Constants.ALFA_SET
 
             itemBinding?.imgIncrement?.setOnClickListener {
                 var qty = (itemBinding!!.txtQuantity.text.toString()).toInt()
