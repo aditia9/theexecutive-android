@@ -35,6 +35,8 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
 
     private var listSize: Int = 0
 
+    private val reasonArray = context.applicationContext?.resources?.getStringArray(R.array.reason_array)
+
     init {
         listSize = OrderDetail?.items?.size!!
     }
@@ -85,11 +87,11 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
         }
     }
 
-    class OrderDetailItemHolder(var itemBinding: ReturnItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
+    inner class OrderDetailItemHolder(var itemBinding: ReturnItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
         fun bind(context: Context?, orderItem: Item?, item: OrderDetailResponse?, position: Int) {
             itemBinding?.item = orderItem
-            orderItem?.request_reason = context?.resources?.getStringArray(R.array.reason_array)?.get(0).toString()
+            //orderItem?.request_reason = context?.resources?.getStringArray(R.array.reason_array)?.get(0).toString()
             orderItem?.request_qty = (item?.items!![position].qty_ordered)
             itemBinding?.imgIncrement!!.alpha = 0.5f
             itemBinding?.imgDecrement!!.alpha = 1.0f
@@ -174,6 +176,12 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.items.get(position).price.toString(), item.items.get(position).price.toString())
             }
 
+            var pos = 0
+            if(orderItem?.request_reason.isNullOrEmpty().not()){
+                pos = reasonArray?.indexOf(orderItem?.request_reason) ?: 0
+            }
+
+            itemBinding?.spReason?.setSelection(pos)
             itemBinding?.spReason?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
 

@@ -236,6 +236,7 @@
     <string name="qty">Qty </string>
     <string name="order_no">Order no. </string>
     <string name="virtual_acc_label">Your Virtual Account number is : </string>
+    <string name="virtual_acc_message">Bank Account: BCA\n</string>
     <string name="shipping_cost">Shipping Cost</string>
     <string name="products">Product(s)</string>
     <string name="order_return">Return</string>
