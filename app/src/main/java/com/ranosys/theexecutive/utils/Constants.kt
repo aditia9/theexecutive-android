@@ -127,5 +127,6 @@ object Constants {
     const val COUNTRY_CODE_ID = "ID"
     const val COUNTRY_CODE_IN = "in"
     const val COUNTRY_CODE_US = "US"
+    const val NOTIFICATION_ID_LIST: String = "USER_NOTIFICATION_IDS"
 
 }

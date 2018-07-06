@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Dialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -38,6 +39,7 @@ import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.zopim.android.sdk.api.ZopimChat
 import com.zopim.android.sdk.model.VisitorInfo
+import org.json.JSONArray
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -53,6 +55,11 @@ object Utils {
         if(BuildConfig.DEBUG){
             Log.e(TAG, message)
         }
+    }
+
+    fun isUserLoggedIn(): Boolean {
+        val userToken = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+         return (userToken.isNullOrEmpty().not() && userToken.isNullOrBlank().not())
     }
 
 
@@ -184,8 +191,32 @@ object Utils {
         SavedPreferences.getInstance()?.saveStringValue("",Constants.USER_CART_ID_KEY)
         GlobalSingelton.instance?.userInfo = null
         GlobalSingelton.instance?.notificationCount?.set(0)
+
+        //remove user specific notifications
+        removeUserNotification(context)
+
         FragmentUtils.addFragment(context, HomeFragment(), null, HomeFragment::class.java.name, false)
 
+    }
+
+    private fun removeUserNotification(context: Context) {
+        val sp = SavedPreferences.getInstance()
+        val ids = sp?.getStringValue(Constants.NOTIFICATION_ID_LIST)
+        if (!TextUtils.isEmpty(ids)) {
+            try {
+                val jsonArray = JSONArray(ids)
+                if (jsonArray.length() > 0) {
+                    val notifyManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    //notifyManager.cancelAll()
+                    for (i in 0 until jsonArray.length()) {
+                        notifyManager.cancel(jsonArray.getInt(i))
+                    }
+                }
+                sp?.saveStringValue("", Constants.NOTIFICATION_ID_LIST)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun isTablet(context: Context): Boolean {
@@ -392,4 +423,6 @@ object Utils {
             format.format(newDate)
         }
     }
+
+
 }
