@@ -183,15 +183,15 @@
 
         <Spinner
             android:id="@+id/sp_reason"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ten_dp"
             android:prompt="@string/app_name"
-            android:entries="@array/reason_array"
             android:paddingStart="@dimen/five_dp"
             android:paddingTop="@dimen/five_dp"
             android:paddingBottom="@dimen/five_dp"
             android:paddingEnd="@dimen/twenty_dp"
+            android:layout_marginEnd="@dimen/four_dp"
             android:textSize="@dimen/twelve_sp"
             android:overlapAnchor="false"
             android:spinnerMode="dropdown"
@@ -199,6 +199,7 @@
             android:layout_marginStart="@dimen/fifteen_dp"
             android:background="@drawable/spinner_background"
             app:layout_constraintStart_toEndOf="@id/img_product"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_price" />
 
         <CheckBox

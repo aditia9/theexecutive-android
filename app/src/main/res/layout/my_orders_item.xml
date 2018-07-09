@@ -58,7 +58,7 @@
                 android:layout_marginTop="@dimen/ten_dp"
                 android:textSize="@dimen/order_number_text_size"
                 android:maxLines="2"
-                android:text='@{"Order no. "+item.id}'
+                android:text='@{@string/order_no + item.id}'
                 android:textColor="@color/black"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@id/img_product_item"

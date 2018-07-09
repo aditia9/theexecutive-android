@@ -3,7 +3,6 @@ package com.ranosys.theexecutive.modules.order.orderReturn
 import android.annotation.SuppressLint
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.Log
@@ -11,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.TextView
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiConstants
 import com.ranosys.theexecutive.databinding.OrderReturnAddressBinding
@@ -35,7 +35,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
 
     private var listSize: Int = 0
 
-    private val reasonArray = context.applicationContext?.resources?.getStringArray(R.array.reason_array)
+    private val reasonArray = context.resources?.getStringArray(R.array.reason_array)
 
     init {
         listSize = OrderDetail?.items?.size!!
@@ -169,11 +169,15 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.items.get(position).price.toString(), item.items.get(position).price.toString())
             }
 
+
+
             var pos = 0
             if(orderItem?.request_reason.isNullOrEmpty().not()){
                 pos = reasonArray?.indexOf(orderItem?.request_reason) ?: 0
             }
 
+            val reasonAdapter = ReturnReasonAdapter(context!!, reasonArray)
+            itemBinding?.spReason?.adapter = reasonAdapter
             itemBinding?.spReason?.setSelection(pos)
             itemBinding?.spReason?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -181,7 +185,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
                 }
 
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    Log.d(context?.getString(R.string.app_name), "" + (view as AppCompatTextView).text)
+                    Log.d(context?.getString(R.string.app_name), "" + (view as TextView).text)
                     orderItem?.request_reason = view.text.toString()
                 }
             }

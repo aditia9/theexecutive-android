@@ -84,9 +84,5 @@
         <item name="android:colorControlNormal" tools:targetApi="lollipop">@color/hint_color</item>
     </style>
 
-    <style name="spinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="colorAccent">@color/theme_black_color</item>
-        <item name="colorControlNormal">@color/hint_color</item>
-    </style>
 
 </resources>

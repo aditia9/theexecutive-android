@@ -39,7 +39,6 @@ import com.ranosys.theexecutive.modules.home.HomeFragment
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
 import com.zopim.android.sdk.api.ZopimChat
 import com.zopim.android.sdk.model.VisitorInfo
-import org.json.JSONArray
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -202,7 +201,10 @@ object Utils {
     private fun removeUserNotification(context: Context) {
         val sp = SavedPreferences.getInstance()
         val ids = sp?.getStringValue(Constants.NOTIFICATION_ID_LIST)
-        if (!TextUtils.isEmpty(ids)) {
+        val notifyManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notifyManager.cancelAll()
+        sp?.saveStringValue("", Constants.NOTIFICATION_ID_LIST)
+        /*if (!TextUtils.isEmpty(ids)) {
             try {
                 val jsonArray = JSONArray(ids)
                 if (jsonArray.length() > 0) {
@@ -216,7 +218,8 @@ object Utils {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-        }
+        }*/
+
     }
 
     fun isTablet(context: Context): Boolean {
