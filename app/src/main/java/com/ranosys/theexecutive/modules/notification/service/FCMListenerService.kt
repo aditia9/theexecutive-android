@@ -22,6 +22,7 @@ import com.ranosys.theexecutive.modules.splash.SplashActivity
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
+import org.json.JSONArray
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -157,12 +158,38 @@ class FCMListenerService : FirebaseMessagingService() {
         }
 
         if(SavedPreferences.getInstance()?.getBooleanValue(Constants.IS_NOTIFICATION_SHOW)!!){
-            notificationManager.notify(Calendar.getInstance().timeInMillis.toInt(), notification.build())
+
+            //save user specific notification id
+            //every notification came during user logged in consider as user specific notification
+            var id = Calendar.getInstance().timeInMillis.toInt()
+            if(Utils.isUserLoggedIn() && notificationId.isNullOrEmpty().not()){
+                saveNotificationId(id.toString())
+            }
+
+            notificationManager.notify(id, notification.build())
 
             /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                 val summary = buildSummary(body)
                 notificationManager.notify(0, summary!!.build())
             }*/
+        }
+    }
+
+    private fun saveNotificationId(notificationId: String) {
+
+        val sp = SavedPreferences.getInstance()
+        val ids: String?
+        ids = sp?.getStringValue(Constants.NOTIFICATION_ID_LIST)
+        try {
+            val jsonArray: JSONArray
+            jsonArray = if (!TextUtils.isEmpty(ids))
+                JSONArray(ids)
+            else
+                JSONArray()
+            jsonArray.put(notificationId)
+            sp?.saveStringValue(jsonArray.toString(), Constants.NOTIFICATION_ID_LIST)
+        } catch (e: Exception) {
+
         }
     }
 

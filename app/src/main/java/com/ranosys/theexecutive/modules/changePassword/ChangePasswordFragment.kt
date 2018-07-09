@@ -27,6 +27,8 @@ class ChangePasswordFragment : BaseFragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_change_password, container, false)
         changePassVM = ViewModelProviders.of(this).get(ChangePasswordViewModel::class.java)
         mBinding.changePasswordViewModel = changePassVM
+        mBinding.notifyChange()
+
 
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         observeApiSuccess()

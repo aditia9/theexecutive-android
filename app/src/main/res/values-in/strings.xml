@@ -32,7 +32,7 @@
     <string name="maintenance_msg">Aplikasi sedang dalam perbaikan</string>
     <string name="force_update_msg">Versi terbaru telah tersedia</string>
     <string name="please_enter_your_email_address_below">Masukan alamat email</string>
-    <string name="password_info">Kami telah mengirimkan tautan untuk mengubah kata sandi</string>
+    <string name="password_info">Kami akan mengirimkan email untuk mengubah kata sandi anda</string>
     <string name="submit">Lanjutkan</string>
     <string name="subscribe_btn">Subscribe</string>
     <string name="forgot_password_title">Lupa kata sandi</string>
@@ -101,12 +101,12 @@
     <string name="logout">Keluar</string>
     <string name="existing_user_label">Pelanggan telah terdaftar</string>
     <string name="new_user_label">Pelanggan baru</string>
-    <string name="chat">Hubungi Kami</string>
+    <string name="chat">Chat</string>
     <string name="close_app_text">Apakah anda yakin akan keluar dari aplikasi?</string>
     <string name="network_err_text">Jaringan internet tidak ditemukan</string>
     <string name="verify_email_message">Selamat datang, Anda sekarang menjadi anggota The Executive. Mohon verifikasi email Anda.</string>
     <string name="register_successfull">Selamat, anda telah terdaftar sebagai member The Executive</string>
-    <string name="price_range_label">Harga</string>
+    <string name="price_range_label">Range Harga</string>
     <string name="apply_filters">Terapkan</string>
     <string name="filter_dialog_title">FILTER</string>
     <string name="sort_dialog_title">Atur Berdasarkan</string>
@@ -122,7 +122,7 @@
     <string name="buying_guide">Info pemesanan </string>
     <string name="add_to_wishlist">Tambahkan ke Wishlist</string>
     <string name="might_like">You Might Also Like</string>
-    <string name="add_to_bag">Tambahkan ke Tas Belanja</string>
+    <string name="add_to_bag">Pesan</string>
     <string name="select_size">Pilih ukuran</string>
     <string name="size_guide">Panduan ukuran</string>
     <string name="select_quantity">Pilih jumlah</string>
@@ -178,8 +178,8 @@
     <string name="forward_icon">Forward icon</string>
     <string name="one">1</string>
     <string name="product_out_of_stock">Produk tidak tersedia</string>
-    <string name="cart_out_of_stock">Silakan hapus atau kurang jumlah produk atau pindah ke daftar keinginan produk Anda yang kehabisan stok atau lebih dari kuantitas yang tersedia.</string>
-    <string name="total">Jumlah</string>
+    <string name="cart_out_of_stock">Ubah jumlah produk atau pindahkan ke wishlist Anda</string>
+    <string name="total">total</string>
     <string name="promo_code">Kode Promo</string>
     <string name="enter_your_promo_code">Masukan Kode Promo</string>
     <string name="btn_apply">Terapkan</string>
@@ -197,8 +197,7 @@
     <string name="add_address_failure_msg">Mohon coba kembali</string>
     <string name="udate_profile_success_msg">Profil telah diperbarui</string>
     <string name="edit_addresse">Ubah Alamat</string>
-
-    <string name="items_in_your_cart">Jumlah barang dalam Tas Belanja : %1$d</string>
+    <string name="items_in_your_cart">Total barang dalam Tas Belanja : %1$d</string>
     <string name="only">Hanya</string>
     <string name="product_available">Produk tersedia</string>
     <string name="qty">Jumlah Barang </string>
@@ -208,15 +207,15 @@
     <string name="shipping_cost">Biaya Pengiriman</string>
     <string name="products">Produk</string>
     <string name="order_return">Retur</string>
-    <string name="order_return_to">Dikembalikan kepada</string>
-    <string name="order_return_from">Dikembalikan dari</string>
+    <string name="order_return_to">Kepada</string>
+    <string name="order_return_from">Dari</string>
     <string name="return_qty">Jumlah barang retur</string>
     <string name="ok">Ya</string>
     <string name="select_payment_method_error">Mohon untuk memilih metode pembayaran</string>
     <string name="bank_account_information">Informasi Akun Bank</string>
     <string name="order_number">Nomor Order</string>
     <string name="bank_number">Nama Bank</string>
-    <string name="holder_acc_number">Nomor Akun Terdaftar</string>
+    <string name="holder_acc_number">No. Rekening Anda</string>
     <string name="transaction_info">Informasi transaksi</string>
     <string name="transfer_amount">Jumlah transfer</string>
     <string name="transfer_date_hint">Tanggal transfer</string>
@@ -231,7 +230,7 @@
     <string name="no_item_in_notification">Tidak Ada Notifikasi</string>
     <string name="order_success_msg">Pesanan anda telah berhasil</string>
     <string name="order_success_btn_text">Lihat pesanan</string>
-    <string name="order_success_info">Terima kasih untuk order Anda.\nAnda akan menerima email konfirmasi pesanan dengan detail pesanan dan tautan Anda untuk melacak kemajuan pesanan.</string>
+    <string name="order_success_info">Terima kasih untuk order Anda.\nAnda akan menerima email konfirmasi pesanan dengan detail pesanan Anda.</string>
 
     <string name="order_cancel_msg">Order telah dibatalkan</string>
     <string name="order_cancel_btn_text">Lanjut Belanja</string>
@@ -255,9 +254,12 @@
     <string name="error_user_already_exist">Email anda sudah terdaftar, Login untuk masuk</string>
     <string name="state_label">Provinsi</string>
     <string name="version">Version:</string>
-    <string name="bad_qty">Kualitas buruk</string>
-    <string name="not_accordence">Tidak Sesuai</string>
-    <string name="other">Lain</string>
+
+    <string name="product_not_fit">Ukuran tidak sesuai</string>
+    <string name="incorrect_product_received">Produk yang diterima tidak sesuai</string>
+    <string name="product_not_match_description"> Produk tidak sesuai dengan website</string>
+    <string name="product_not_match_expection"> Produk tidak sesuai ekspektasi</string>
+    <string name="quality_issue">Kualitas produk tidak baik</string>
 
 
     <string name="return_mode_courier">courier</string>

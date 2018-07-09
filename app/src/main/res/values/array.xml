@@ -261,9 +261,11 @@
 
     <string-array name="reason_array">
         <item>@string/select_reason</item>
-        <item>@string/bad_qty</item>
-        <item>@string/not_accordence</item>
-        <item>@string/other</item>
+        <item>@string/product_not_fit</item>
+        <item>@string/incorrect_product_received</item>
+        <item>@string/product_not_match_description</item>
+        <item>@string/product_not_match_expection</item>
+        <item>@string/quality_issue</item>
     </string-array>
 
     <integer-array name="my_account_option_icon_array">

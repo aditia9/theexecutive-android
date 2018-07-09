@@ -33,7 +33,7 @@
     <string name="force_update_msg">A new version of the The Executive App is available. Please update to access the latest features.</string>
     <string name="soft_update_msg">A new version of the The Executive App is available. Please update to access the latest features.</string>
     <string name="please_enter_your_email_address_below">Please enter your Email address below.</string>
-    <string name="password_info">* You will receive a link to reset your password</string>
+    <string name="password_info">* You will receive an email to reset your password</string>
     <string name="submit">Submit</string>
     <string name="subscribe_btn">Subscribe</string>
     <string name="forgot_password_title">Forgot Password</string>
@@ -180,7 +180,7 @@
     <string name="forward_icon">Forward icon</string>
     <string name="one">1</string>
     <string name="product_out_of_stock">This product is out of stock</string>
-    <string name="cart_out_of_stock">Please either delete or less the product quantity or move to wishlist your product that is out of stock or more than available quantity</string>
+    <string name="cart_out_of_stock">Please change the product qty or move it to your wishlist</string>
     <string name="total">Total </string>
     <string name="promo_code">Promo Code</string>
     <string name="enter_your_promo_code">Enter your Promo Code</string>
@@ -205,7 +205,7 @@
     <string name="only">Only</string>
     <string name="product_available">product available</string>
     <string name="qty">Qty </string>
-    <string name="order_no">Order no. </string>
+    <string name="order_no">Order # </string>
     <string name="virtual_acc_label">Your Virtual Account number is : </string>
     <string name="virtual_acc_message">Bank Account: BCA\n</string>
     <string name="shipping_cost">Shipping Cost</string>
@@ -234,7 +234,7 @@
     <string name="no_item_in_notification">No item in Notification</string>
     <string name="order_success_msg">Order Placed Successfully</string>
     <string name="order_success_btn_text">view order</string>
-    <string name="order_success_info">Thank you for your order.\n You will receive an order confirmation email with detail of your order and link to track your order progress.</string>
+    <string name="order_success_info">Thank you for your order.\n You will receive an order confirmation email with detail of your order.</string>
 
     <string name="order_cancel_msg">Order Cancelled</string>
     <string name="order_cancel_btn_text">continue shopping</string>
@@ -263,9 +263,12 @@
     <string name="error_user_already_exist">It seems like you are already registered with us, kindly login</string>
     <string name="state_label">State/ Province</string>
     <string name="version">Version:</string>
-    <string name="bad_qty">Bad Quality</string>
-    <string name="not_accordence">Not Accordance</string>
-    <string name="other">Other</string>
+
+    <string name="product_not_fit">Product does not fit</string>
+    <string name="incorrect_product_received">Incorrect product received</string>
+    <string name="product_not_match_description">Product does not match description on website</string>
+    <string name="product_not_match_expection">Product does not meet customer\'s expectations</string>
+    <string name="quality_issue">Quality issue</string>
 
 
     <string name="courier">Return via courier (ex: JNE, RPX, SAP, etc.)</string>

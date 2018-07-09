@@ -50,9 +50,9 @@ class ChangePasswordViewModel(application: Application) : BaseViewModel(applicat
 
     fun onTextChanged(et: TextInputEditText) {
         when (et.id) {
+            R.id.et_current_password -> currentPasswordError.set("")
             R.id.et_new_password -> newPasswordError.set("")
             R.id.et_confirm_new_password -> confirmPasswordError.set("")
-            R.id.et_current_password -> currentPasswordError.set("")
         }
     }
 
