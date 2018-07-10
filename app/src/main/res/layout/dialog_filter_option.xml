@@ -126,7 +126,7 @@
             android:layout_marginBottom="@dimen/twenty_four_dp"
             android:paddingTop="@dimen/eight_dp"
             android:paddingBottom="@dimen/eight_dp"
-            app:layout_constraintRight_toRightOf="@id/guideline_right"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/et_min_price"
             app:layout_constraintBottom_toTopOf="@+id/btn_apply"/>
