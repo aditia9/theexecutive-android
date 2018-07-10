@@ -90,15 +90,19 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
     inner class OrderDetailItemHolder(var itemBinding: ReturnItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
         fun bind(context: Context?, orderItem: Item?, item: OrderDetailResponse?, position: Int) {
+
+            if(orderItem?.request_qty == 0){
+                orderItem.request_qty = (item?.items!![position].qty_ordered)
+            }
+
             itemBinding?.item = orderItem
             //orderItem?.request_reason = context?.resources?.getStringArray(R.array.reason_array)?.get(0).toString()
-            orderItem?.request_qty = (item?.items!![position].qty_ordered)
+            //orderItem?.request_qty = (item?.items!![position].qty_ordered)
             itemBinding?.imgIncrement!!.alpha = 0.5f
             itemBinding?.imgDecrement!!.alpha = 1.0f
 
-            itemBinding?.txtQuantity?.text = (item.items[position].qty_ordered).toString()
 
-            if(item.items[position].qty_ordered == 1){
+            if(item!!.items[position].qty_ordered == 1){
                 itemBinding?.imgIncrement!!.alpha = 0.5f
             }
 
