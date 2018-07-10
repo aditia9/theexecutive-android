@@ -322,6 +322,7 @@ class CheckoutFragment : BaseFragment() {
                 checkoutBinding.shippingMethodRg.clearCheck()
                 populateShippingMethods(shippingMethods)
                 checkoutBinding.shippingMethodCount = shippingMethods?.size
+                tv_shipping_method.text = "${getString(R.string.shipping_method)}"
 
             }
 
@@ -336,6 +337,7 @@ class CheckoutFragment : BaseFragment() {
                 checkoutBinding.paymentMethodRg.clearCheck()
                 populatePaymentMethods(paymentMethodList)
                 checkoutBinding.paymentMethodCount = paymentMethodList?.size
+                tv_payment_method.text = "${getString(R.string.payment_method)}"
             }
         })
 

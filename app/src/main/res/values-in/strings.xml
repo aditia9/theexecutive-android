@@ -201,7 +201,7 @@
     <string name="only">Hanya</string>
     <string name="product_available">Produk tersedia</string>
     <string name="qty">Jumlah Barang </string>
-    <string name="order_no">No. Order</string>
+    <string name="order_no">Order #</string>
     <string name="virtual_acc_label">No. Virtual Account anda adalah :</string>
     <string name="virtual_acc_message">Akun bank: BCA\n</string>
     <string name="shipping_cost">Biaya Pengiriman</string>
@@ -218,6 +218,7 @@
     <string name="holder_acc_number">No. Rekening Anda</string>
     <string name="transaction_info">Informasi transaksi</string>
     <string name="transfer_amount">Jumlah transfer</string>
+    <string name="t_and_c">syarat dan ketentuan</string>
     <string name="transfer_date_hint">Tanggal transfer</string>
     <string name="attachment">Lampiran</string>
     <string name="empty_bank_recipient">Masukan Bukti Pembayaran</string>
