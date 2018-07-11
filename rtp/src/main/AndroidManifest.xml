@@ -3,7 +3,7 @@
     package="com.ranosys.rtp" >
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:label="@string/app_name" >
         <activity
             android:name=".RunTimePermissionActivity"

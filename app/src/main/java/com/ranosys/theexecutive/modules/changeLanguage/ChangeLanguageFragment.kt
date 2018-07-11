@@ -10,13 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.activities.DashBoardActivity
+import com.ranosys.theexecutive.api.AppRepository
+import com.ranosys.theexecutive.api.interfaces.ApiCallback
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
+import com.ranosys.theexecutive.modules.splash.ConfigurationResponse
 import com.ranosys.theexecutive.modules.splash.StoreResponse
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.SavedPreferences
-import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.change_language_fragment.*
 
 /**
@@ -72,11 +74,29 @@ class ChangeLanguageFragment: BaseFragment() {
             SavedPreferences.getInstance()?.saveIntValue(selectedStore.id, Constants.SELECTED_STORE_ID_KEY)
             //FragmentUtils.addFragment(activity as Context, HomeFragment(), null, HomeFragment::class.java.name, true)
 
+            //call configuration api to get updated(language) strings
+            getConfigurationApi()
+
             val refresh = Intent(activity, DashBoardActivity::class.java)
             activity?.startActivity(refresh)
             activity?.finish()
 
         }
+    }
+
+    private fun getConfigurationApi() {
+        AppRepository.getConfiguration(object : ApiCallback<ConfigurationResponse> {
+            override fun onException(error: Throwable) {
+            }
+
+            override fun onError(errorMsg: String) {
+            }
+
+            override fun onSuccess(configuration: ConfigurationResponse?) {
+                GlobalSingelton.instance?.configuration = configuration
+            }
+
+        })
     }
 
     override fun onResume() {
