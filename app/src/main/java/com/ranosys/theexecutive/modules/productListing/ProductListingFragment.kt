@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -23,6 +24,7 @@ import android.widget.ExpandableListView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.facebook.FacebookSdk
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiClient
 import com.ranosys.theexecutive.base.BaseFragment
@@ -36,6 +38,7 @@ import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.FragmentUtils
 import com.ranosys.theexecutive.utils.GlobalSingelton
 import com.ranosys.theexecutive.utils.Utils
+import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.dialog_filter_option.*
 import kotlinx.android.synthetic.main.fragment_product_listing.*
 import java.util.*
@@ -288,6 +291,9 @@ class ProductListingFragment: BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        tv_chat_catalog.setOnClickListener {
+            startActivity(Intent(FacebookSdk.getApplicationContext(), ZopimChatActivity::class.java))
+        }
 
         val gridLayoutManager = GridLayoutManager(view.context, COLUMN_TWO)
         gridLayoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup(){
@@ -575,6 +581,7 @@ class ProductListingFragment: BaseFragment() {
             tv_promo_msg.postDelayed({
                 tv_promo_msg?.run {
                     tv_promo_msg.visibility = View.GONE
+                    tv_chat_catalog.visibility = View.VISIBLE
                 }
             }, Constants.PROMOTION_TOAST_TIMEOUT)
 

@@ -1,7 +1,6 @@
 package com.ranosys.theexecutive.base
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.ActivityInfo
@@ -47,13 +46,13 @@ open class BaseActivity: RunTimePermissionActivity(){
     }
 
     private fun observeCartCount() {
-        GlobalSingelton.instance?.cartCount?.observe(this, Observer { count ->
+        GlobalSingelton.instance?.cartCount?.observeForever {count ->
             when(count){
                 0 -> toolbarViewModel?.cartCount?.set("")
                 in 1..99 -> toolbarViewModel?.cartCount?.set(count.toString())
                 else -> toolbarViewModel?.cartCount?.set("99+")
             }
-        })
+        }
     }
 
     override fun onBackPressed() {

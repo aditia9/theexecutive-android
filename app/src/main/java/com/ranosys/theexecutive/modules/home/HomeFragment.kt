@@ -16,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.facebook.FacebookSdk.getApplicationContext
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.AppRepository
 import com.ranosys.theexecutive.api.interfaces.ApiCallback
@@ -26,7 +25,6 @@ import com.ranosys.theexecutive.modules.notification.dataclasses.DeviceRegisterR
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.SavedPreferences
 import com.ranosys.theexecutive.utils.Utils
-import com.zopim.android.sdk.prechat.ZopimChatActivity
 import kotlinx.android.synthetic.main.fragment_category.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -74,9 +72,6 @@ class HomeFragment : BaseFragment() {
 
         registerDeviceOnServer()
 
-        tv_chat.setOnClickListener {
-            startActivity(Intent(getApplicationContext(), ZopimChatActivity::class.java))
-        }
     }
 
     private fun setPagerAdapter(){
@@ -148,14 +143,12 @@ class HomeFragment : BaseFragment() {
                         Utils.hideSoftKeypad(activity as Context)
                         fragmentPosition = 0
                         tabLayout.visibility = View.VISIBLE
-                        tv_chat.visibility = View.VISIBLE
                         setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true, true)
                     }
                     1 -> {
                         Utils.hideSoftKeypad(activity as Context)
                         elv_parent_category.smoothScrollToPosition(0)
                         fragmentPosition = 1
-                        tv_chat.visibility = View.GONE
                         val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                         if(TextUtils.isEmpty(isLogin)){
                             tabLayout.visibility = View.GONE
@@ -172,7 +165,6 @@ class HomeFragment : BaseFragment() {
                         elv_parent_category.smoothScrollToPosition(0)
                         fragmentPosition = 2
                         tabLayout.visibility = View.VISIBLE
-                        tv_chat.visibility = View.GONE
                         setToolBarParams(getString(R.string.wishlist), 0, "", R.drawable.back, true, 0, false)
                     }
                 }
