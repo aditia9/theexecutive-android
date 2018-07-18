@@ -87,6 +87,21 @@ class ShoppingBagFragment : BaseFragment() {
             }
         })
 
+        //for item move to wishlist
+        shoppingBagViewModel.mutualMoveToWishlistResponse.observe(this, Observer<ApiResponse<String>> { apiResponse ->
+            if (apiResponse?.error.isNullOrEmpty()) {
+                val response = apiResponse?.apiResponse
+                if (response is String) {
+                    Toast.makeText(activity as Context, response, Toast.LENGTH_SHORT).show()
+                    hideLoading()
+                    //getShoppingBag()
+                }
+            } else {
+                hideLoading()
+                Utils.showDialog(activity, apiResponse?.error, getString(R.string.ok), "", null)
+            }
+        })
+
 
         // getPromo code apply
         shoppingBagViewModel.mutualPromoCodeResponse.observe(this, Observer<ApiResponse<String>> { apiResponse ->

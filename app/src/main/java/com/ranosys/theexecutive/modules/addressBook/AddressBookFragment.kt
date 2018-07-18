@@ -38,17 +38,18 @@ class AddressBookFragment: BaseFragment() {
     private var liveAddress: MutableLiveData<MyAccountDataClass.Address>?  = null
     private var deleteAddressId: String? = ""
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        val view = inflater.inflate(R.layout.fragment_address_book, container, false)
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         mViewModel = ViewModelProviders.of(this).get(AddressBookViewModel::class.java)
-        addressList = GlobalSingelton.instance?.userInfo?.addresses?.toMutableList()
-
-
         observeAddressList()
         observeRemoveAddressApiResponse()
         observeSetDefaultAddressApiResponse()
+
+    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        val view = inflater.inflate(R.layout.fragment_address_book, container, false)
+        addressList = GlobalSingelton.instance?.userInfo?.addresses?.toMutableList()
 
         return view
     }

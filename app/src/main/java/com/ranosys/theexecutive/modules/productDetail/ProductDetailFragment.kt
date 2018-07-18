@@ -57,6 +57,7 @@ class ProductDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         if(null == productDetailViewModel.productList?.get()){
             if (Utils.isConnectionAvailable(activity as Context)) {
                 showLoading()

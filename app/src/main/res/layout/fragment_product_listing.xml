@@ -136,6 +136,28 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
+                android:id="@+id/tv_chat_catalog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/theme_black_color"
+                android:text="@string/chat"
+                android:textSize="@dimen/fourteen_sp"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:drawableLeft="@drawable/chat"
+                android:paddingLeft="@dimen/ten_dp"
+                android:paddingRight="@dimen/ten_dp"
+                android:paddingTop="@dimen/eight_dp"
+                android:paddingBottom="@dimen/eight_dp"
+                android:drawablePadding="@dimen/ten_dp"
+                android:layout_marginBottom="@dimen/eight_dp"
+                app:layout_goneMarginBottom="@dimen/match_constraint"
+                app:layout_constraintEnd_toEndOf="@id/product_list"
+                app:layout_constraintBottom_toTopOf="@+id/tv_promo_msg"
+                />
+
+            <TextView
                 android:id="@+id/tv_promo_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

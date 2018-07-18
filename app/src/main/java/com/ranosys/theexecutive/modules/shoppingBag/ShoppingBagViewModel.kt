@@ -22,6 +22,7 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
     var mutualShoppingBagItemResponse = MutableLiveData<ApiResponse<ShoppingBagQtyUpdateRequest>>()
     var mutualTotalResponse = MutableLiveData<ApiResponse<TotalResponse>>()
     var mutualDeleteItemResponse = MutableLiveData<ApiResponse<String>>()
+    var mutualMoveToWishlistResponse = MutableLiveData<ApiResponse<String>>()
     var mutualPromoCodeResponse = MutableLiveData<ApiResponse<String>>()
     var mutualApplyPromoCodeResponse = MutableLiveData<ApiResponse<String>>()
     var mutualPromoCodeDeleteResponse = MutableLiveData<ApiResponse<String>>()
@@ -161,17 +162,17 @@ class ShoppingBagViewModel(application: Application) : BaseViewModel(application
         AppRepository.moveItemFromCart(itemId = itemId, callBack = object : ApiCallback<String> {
             override fun onException(error: Throwable) {
                 apiResponse.error = error.message
-                mutualDeleteItemResponse.value = apiResponse
+                mutualMoveToWishlistResponse.value = apiResponse
             }
 
             override fun onError(errorMsg: String) {
                 apiResponse.error = errorMsg
-                mutualDeleteItemResponse.value = apiResponse
+                mutualMoveToWishlistResponse.value = apiResponse
             }
 
             override fun onSuccess(t: String?) {
                 apiResponse.apiResponse = t
-                mutualDeleteItemResponse.value = apiResponse
+                mutualMoveToWishlistResponse.value = apiResponse
             }
 
         })

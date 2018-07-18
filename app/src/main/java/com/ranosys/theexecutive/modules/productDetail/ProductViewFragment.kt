@@ -93,6 +93,11 @@ class ProductViewFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        tv_chat_detail.setOnClickListener {
+            startActivity(Intent(FacebookSdk.getApplicationContext(), ZopimChatActivity::class.java))
+        }
+
         super.onViewCreated(view, savedInstanceState)
         Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_one, Constants.IMAGE_RATIO, 40)
         Utils.setImageViewHeightWrtDeviceWidth(activity as Context, img_two, Constants.IMAGE_RATIO, 40)
@@ -321,10 +326,6 @@ class ProductViewFragment : BaseFragment() {
                 }
                 R.id.tv_buying_guidelinie -> {
                     prepareWebPageDialog(activity as Context, GlobalSingelton.instance?.staticPagesResponse?.buying_guideline ,getString(R.string.buying_guideline))
-                    productItemViewModel.clickedAddBtnId?.value = null
-                }
-                R.id.tv_chat -> {
-                    startActivity(Intent(FacebookSdk.getApplicationContext(), ZopimChatActivity::class.java))
                     productItemViewModel.clickedAddBtnId?.value = null
                 }
                 R.id.tv_wishlist -> {

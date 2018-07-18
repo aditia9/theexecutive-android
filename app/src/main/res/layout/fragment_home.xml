@@ -18,26 +18,6 @@
             android:layout_above="@+id/tabLayout"
             />
 
-        <TextView
-            android:id="@+id/tv_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tabLayout"
-            android:layout_alignParentRight="true"
-            android:background="@color/theme_black_color"
-            android:text="@string/chat"
-            android:textSize="@dimen/fourteen_sp"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:drawableLeft="@drawable/chat"
-            android:paddingLeft="@dimen/ten_dp"
-            android:paddingRight="@dimen/ten_dp"
-            android:paddingTop="@dimen/eight_dp"
-            android:paddingBottom="@dimen/eight_dp"
-            android:drawablePadding="@dimen/ten_dp"
-            android:layout_margin="@dimen/twenty_dp"
-            />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/half_dip"
