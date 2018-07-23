@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "685362101181",
+    "firebase_url": "https://the-executive-a18c5.firebaseio.com",
+    "project_id": "the-executive-a18c5",
+    "storage_bucket": "the-executive-a18c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685362101181:android:d69cbb2399e8e0aa",
+        "android_client_info": {
+          "package_name": "com.ranosys.theexecutive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685362101181-t8c6srnmnm99p1rjsgc645ciho8vu0o8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVfx1Mu7uVPkZ5tzRaRde7YhvNFgRfpT4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
