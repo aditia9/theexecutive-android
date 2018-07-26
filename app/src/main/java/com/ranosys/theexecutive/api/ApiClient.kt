@@ -50,6 +50,7 @@ class ApiClient {
                     .addInterceptor(interceptor)
                     .dispatcher(dispatcher)
                     .connectTimeout(ApiConstants.CONNECT_TIMEOUT.toLong(), TimeUnit.SECONDS)
+                    .readTimeout(ApiConstants.CONNECT_TIMEOUT.toLong(), TimeUnit.SECONDS)
                     .build()
             return  field
         }
