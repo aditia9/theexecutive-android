@@ -93,7 +93,7 @@ data class Item(
         val row_invoiced: Int,
         val row_total: Int,
         val row_total_incl_tax: Int,
-        val row_weight: Int,
+        val row_weight: Float,
         val sku: String,
         val store_id: Int,
         val tax_amount: Int,
