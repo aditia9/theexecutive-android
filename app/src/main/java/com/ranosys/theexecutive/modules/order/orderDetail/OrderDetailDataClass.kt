@@ -100,7 +100,7 @@ data class Item(
         val tax_invoiced: Int,
         val tax_percent: Int,
         val updated_at: String,
-        val weight: Int,
+        val weight: Float,
         val extension_attributes: ExtensionAttributes? = null,
         val parent_item_id: Int,
         val parent_item: ParentItem,
