@@ -18,11 +18,12 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.*
-import android.view.inputmethod.EditorInfo
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ExpandableListView
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import com.facebook.FacebookSdk
 import com.ranosys.theexecutive.R
@@ -31,6 +32,7 @@ import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.DialogFilterOptionBinding
 import com.ranosys.theexecutive.databinding.DialogSortOptionBinding
 import com.ranosys.theexecutive.databinding.FragmentProductListingBinding
+import com.ranosys.theexecutive.modules.category.SearchFragment
 import com.ranosys.theexecutive.modules.myAccount.DividerDecoration
 import com.ranosys.theexecutive.modules.productDetail.ProductDetailFragment
 import com.ranosys.theexecutive.rangeBar.RangeSeekBar
@@ -354,8 +356,9 @@ class ProductListingFragment: BaseFragment() {
             sortOptionDialog.show()
         }
 
-
-        et_search.addTextChangedListener(object: TextWatcher{
+        et_search.setOnClickListener { loadSearchFragment() }
+        btn_search.setOnClickListener { loadSearchFragment() }
+        /*et_search.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -396,18 +399,29 @@ class ProductListingFragment: BaseFragment() {
                 return@OnEditorActionListener true
             }
             false
-        })
+        })*/
+    }
+
+    private fun loadSearchFragment() {
+        FragmentUtils.addFragment(activity, SearchFragment.getInstance(
+                searchQuery = homeSearchQuery,
+                searchAction = {searchStr ->
+                                handleSearchAction(searchStr) },
+                getSearchQuery = {SearchStr -> mBinding.etSearch.setText("")
+                                               homeSearchQuery = ""}),
+                null, SearchFragment::class.java.simpleName, true)
     }
 
     private fun handleSearchAction(searchQuery: String) {
         if(searchQuery.isEmpty().not()){
             clearSelectedSortOption()
             resetFilters()
+            mBinding.etSearch.setText(searchQuery)
+            homeSearchQuery = searchQuery
             mViewModel.getSearchFilterOptions(searchQuery)
             mViewModel.getSortOptions(Constants.SORT_TYPE_SEARCH)
             performSearch(searchQuery)
             Utils.hideSoftKeypad(activity as Context)
-            mBinding.etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cancel, 0)
         }else{
             Toast.makeText(activity as Context, getString(R.string.enter_search_error), Toast.LENGTH_SHORT).show()
         }

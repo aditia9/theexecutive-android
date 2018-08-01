@@ -9,16 +9,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.view.ViewPager
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.ExpandableListView
-import android.widget.TextView
 import android.widget.Toast
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.api.ApiResponse
@@ -119,7 +114,10 @@ class CategoryFragment : BaseFragment() {
             false
         }
 
-        et_search_home.addTextChangedListener(object: TextWatcher {
+        et_search_home.setOnClickListener { loadSearchFragment() }
+        btn_search_action.setOnClickListener { loadSearchFragment() }
+
+        /*et_search_home.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -172,7 +170,7 @@ class CategoryFragment : BaseFragment() {
                 return@OnEditorActionListener true
             }
             false
-        })
+        })*/
 
         promotionBinding.tvPromotionText.setOnClickListener {
             if(!TextUtils.isEmpty(GlobalSingelton.instance?.configuration?.home_promotion_message_url))
@@ -187,6 +185,14 @@ class CategoryFragment : BaseFragment() {
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
+    }
+
+    private fun loadSearchFragment() {
+        FragmentUtils.addFragment(activity, SearchFragment.getInstance(searchAction = {searchStr ->
+            val bundle = Bundle()
+            bundle.putString(Constants.SEARCH_FROM_HOME_QUERY, searchStr)
+            FragmentUtils.addFragment(activity as Context, ProductListingFragment(), bundle, ProductListingFragment::class.java.name, true)
+        }), null, SearchFragment::class.java.simpleName, true)
     }
 
     override fun onDestroy() {
@@ -211,7 +217,7 @@ class CategoryFragment : BaseFragment() {
                 categoryModelView?.promotionResponse?.set(response as List<PromotionsResponseDataClass>?)
                 pagerAdapter.promotionList = categoryModelView?.promotionResponse?.get()
                 pagerAdapter.notifyDataSetChanged()
-                startScrollViewPager(viewPager, response.size)
+                //startScrollViewPager(viewPager, response.size)
             } else {
                 Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }
