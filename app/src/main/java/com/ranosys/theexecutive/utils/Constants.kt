@@ -70,6 +70,7 @@ object Constants {
     const val TYPE_CMS_PAGE: String = "CMS"
     const val TYPE_ORDER: String = "Order"
     const val SEARCH_FROM_HOME_QUERY: String = "search_from_home_query"
+    const val SEARCH_QUERY: String = "search_query"
     const val UNIVERSAL_CAT_ID: Int = 0
     const val URL_KEY: String = "url_key"
     const val URL_SUFFIX: String = ".html"
@@ -128,5 +129,6 @@ object Constants {
     const val COUNTRY_CODE_IN = "in"
     const val COUNTRY_CODE_US = "US"
     const val NOTIFICATION_ID_LIST: String = "USER_NOTIFICATION_IDS"
+    val SOFT_INPUT_KEYBOARD_DEF_HEIGHT: Int = 350
 
 }

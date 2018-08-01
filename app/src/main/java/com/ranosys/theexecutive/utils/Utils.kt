@@ -127,6 +127,7 @@ object Utils {
                 InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
+
     fun showDialog(context: Context?, title: String?, positiveMessage: String?, negativeMessage: String?, dialogOkCallback: DialogOkCallback?) {
         if (context != null) {
             var errorTitle = title
