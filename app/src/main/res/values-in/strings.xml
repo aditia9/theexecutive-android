@@ -179,7 +179,7 @@
     <string name="one">1</string>
     <string name="product_out_of_stock">Produk tidak tersedia</string>
     <string name="cart_out_of_stock">Ubah jumlah produk atau pindahkan ke wishlist Anda</string>
-    <string name="total">total</string>
+    <string name="total">Total</string>
     <string name="promo_code">Kode Promo</string>
     <string name="enter_your_promo_code">Masukan Kode Promo</string>
     <string name="btn_apply">Terapkan</string>

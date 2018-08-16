@@ -75,6 +75,4 @@ class HomeViewPager(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
     fun getItemAt(position: Int): Fragment {
         return sparseArray?.get(position)!!
     }
-
-
 }

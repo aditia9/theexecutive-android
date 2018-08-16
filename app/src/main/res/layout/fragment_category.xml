@@ -46,7 +46,6 @@
                 android:theme="@style/myAppTheme"
                 android:singleLine="true"
                 android:focusable="false"
-                android:hint="@string/search"
                 android:imeOptions="actionSearch"
                 android:backgroundTint="@color/theme_accent_color"/>
         </android.support.design.widget.TextInputLayout>
