@@ -138,18 +138,23 @@
                 </android.support.design.widget.TextInputLayout>
 
 
+                <EditText
+                    android:id="@+id/et_country_code"
+                    android:layout_width="80dp"
+                    android:paddingStart="@dimen/field_start_padding"
+                    android:drawableEnd="@drawable/dropdown"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no"/>
+
+
                 <Spinner
                     android:id="@+id/spinner_country_code"
                     android:layout_height="@dimen/match_constraint"
                     android:layout_width="wrap_content"
-                    android:minWidth="@dimen/match_constraint"
-                    android:spinnerMode="dropdown"
-                    android:overlapAnchor="false"
-                    android:entries="@array/country_code"
-                    android:background="@drawable/spinner"
-                    android:paddingBottom="@dimen/ten_dp"
-                    android:paddingTop="@dimen/ten_dp"
-                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:spinnerMode="dialog"
+                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toTopOf="@id/til_mobile_no"
                     app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
@@ -163,7 +168,7 @@
                     app:errorText="@{vm.mobileNumberError}"
                     android:labelFor="@+id/et_mobile_number"
                     android:theme="@style/tilTheme"
-                    app:layout_constraintStart_toEndOf="@id/spinner_country_code"
+                    app:layout_constraintStart_toEndOf="@id/et_country_code"
                     app:layout_constraintTop_toBottomOf="@id/til_address_2"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right">
 

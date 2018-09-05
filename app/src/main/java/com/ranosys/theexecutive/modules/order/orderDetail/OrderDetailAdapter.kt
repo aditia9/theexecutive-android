@@ -126,7 +126,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             }
 
             if(item?.items!![position - 1].original_price != 0){
-                itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item.items[position - 1].price.toString(), item.items[position - 1].price.toString())
+                itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item.items[position - 1].price.toString(), item.items[position - 1].price.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
             }
         }
     }
@@ -136,9 +136,9 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
         fun bind(context: Context?, item: OrderDetailResponse?, position: Int) {
             itemBinding?.item = item
 
-            itemBinding?.tvProductPrice?.text = Utils.getDisplayPrice(item?.subtotal_incl_tax.toString(), item?.subtotal_incl_tax.toString())
-            itemBinding?.tvShippingPrice?.text = Utils.getDisplayPrice(item?.shipping_incl_tax.toString(), item?.shipping_incl_tax.toString())
-            itemBinding?.tvTotalPrice?.text = Utils.getDisplayPrice(item?.grand_total.toString(), item?.grand_total.toString())
+            itemBinding?.tvProductPrice?.text = Utils.getDisplayPrice(item?.subtotal_incl_tax.toString(), item?.subtotal_incl_tax.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
+            itemBinding?.tvShippingPrice?.text = Utils.getDisplayPrice(item?.shipping_incl_tax.toString(), item?.shipping_incl_tax.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
+            itemBinding?.tvTotalPrice?.text = Utils.getDisplayPrice(item?.grand_total.toString(), item?.grand_total.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
 
             itemBinding?.tvProductQty?.text = (totalProductQty.toString() + " " + context?.getString(R.string.item))
 

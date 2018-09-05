@@ -147,20 +147,26 @@
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </android.support.design.widget.TextInputLayout>
+
                 <Spinner
                     android:id="@+id/spinner_country_code"
                     android:layout_height="@dimen/match_constraint"
                     android:layout_width="wrap_content"
-                    android:minWidth="@dimen/match_constraint"
-                    android:spinnerMode="dropdown"
-                    android:overlapAnchor="false"
-                    android:entries="@array/country_code"
-                    android:background="@drawable/spinner"
-                    android:onItemSelected="@{(parent, view, pos, id) -> registerViewModel.onCountryCodeSelection(parent, pos)}"
+                    android:spinnerMode="dialog"
+                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="@id/guideline_left"
                     app:layout_constraintTop_toTopOf="@id/til_mobile_no"
-
                     app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no" />
+
+                <EditText
+                    android:id="@+id/et_country_code"
+                    android:layout_width="80dp"
+                    android:paddingStart="@dimen/field_start_padding"
+                    android:drawableEnd="@drawable/dropdown"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    app:layout_constraintStart_toStartOf="@id/guideline_left"
+                    app:layout_constraintBottom_toBottomOf="@+id/til_mobile_no"/>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_mobile_no"
@@ -173,7 +179,7 @@
                     android:theme="@style/tilTheme"
                     app:errorText="@{registerViewModel.mobileNumberError}"
                     app:layout_constraintEnd_toEndOf="@+id/guideline_right"
-                    app:layout_constraintStart_toEndOf="@+id/spinner_country_code"
+                    app:layout_constraintStart_toEndOf="@+id/et_country_code"
                     app:layout_constraintTop_toBottomOf="@id/til_email_address">
 
                     <android.support.design.widget.TextInputEditText

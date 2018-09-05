@@ -255,6 +255,7 @@
     <string name="error_user_already_exist">Email anda sudah terdaftar, Login untuk masuk</string>
     <string name="state_label">Provinsi</string>
     <string name="version">Version:</string>
+    <string name="no_item_order_list">Anda belum melakukan pemesanan.</string>
 
     <string name="product_not_fit">Ukuran tidak sesuai</string>
     <string name="incorrect_product_received">Produk yang diterima tidak sesuai</string>
@@ -271,5 +272,7 @@
     <string name="alfamart">Kembali via Alfamart (Gratis)</string>
     <string name="return_mode">Mode Pengembalian</string>
     <string name="item">barang</string>
+    <string name="currency">Rp</string>
+
 
 </resources>

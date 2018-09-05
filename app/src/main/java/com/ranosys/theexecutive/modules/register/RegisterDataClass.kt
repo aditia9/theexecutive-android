@@ -105,4 +105,14 @@ class RegisterDataClass {
             val addresses: List<Address>,
             val disable_auto_group_change: Int
     )
+
+    data class CountryCode(
+            val name: String,
+            val dial_code: String,
+            val code: String
+    )
+
+    data class CountryCodeList(
+            val countryList: List<CountryCode>
+    )
 }

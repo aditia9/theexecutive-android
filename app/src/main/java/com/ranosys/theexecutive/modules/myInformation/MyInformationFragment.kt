@@ -14,9 +14,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import com.google.gson.Gson
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentMyInformationBinding
+import com.ranosys.theexecutive.modules.register.CountryAdapter
+import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_my_information.*
 
@@ -44,6 +48,36 @@ class MyInformationFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mBinding.etCountryCode.setOnTouchListener { v, event ->
+            mBinding.spinnerCountryCode.performClick()
+        }
+
+        //country spinner
+        val gson = Gson()
+        val countries = gson.fromJson((activity as BaseActivity).getCountryJson(), RegisterDataClass.CountryCodeList:: class.java)
+
+        val country = CountryAdapter(activity!!, countries.countryList)
+        mBinding.spinnerCountryCode.adapter = country
+        mBinding.spinnerCountryCode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val code: String = countries.countryList[position].dial_code
+                mBinding.etCountryCode.setText(code)
+
+                mViewModel.maskedUserInfo.get()?.run {
+                    if(mViewModel.maskedUserInfo.get()._countryCode == code){
+                        btn_save.background = (activity as Context).getDrawable(R.color.hint_color)
+                    }else{
+
+                        btn_save.background = (activity as Context).getDrawable(R.drawable.black_button_bg)
+                    }
+                }
+
+            }
+        }
+
 
         et_mobile_number.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -64,6 +98,7 @@ class MyInformationFragment: BaseFragment() {
             }
 
         })
+
         btn_save.setOnClickListener {
             //check if info updated
             val newMobileNo = et_mobile_number.text.toString()
@@ -72,7 +107,7 @@ class MyInformationFragment: BaseFragment() {
                 if(mViewModel.infoUpdated.not()) mViewModel.infoUpdated = true
             }
 
-            val countryCode = spinner_country_code.selectedItem.toString()
+            val countryCode = mBinding.etCountryCode.text.toString()
             if((mViewModel.maskedUserInfo.get()._countryCode == countryCode).not()){
                 mViewModel.maskedUserInfo.get()._countryCode = countryCode
                 if(mViewModel.infoUpdated.not()) mViewModel.infoUpdated = true
@@ -91,22 +126,6 @@ class MyInformationFragment: BaseFragment() {
             }
         }
 
-        spinner_country_code.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                mViewModel.maskedUserInfo.get()?.run {
-                    if(mViewModel.maskedUserInfo.get()._countryCode == (parent as Spinner).selectedItem){
-                        btn_save.background = (activity as Context).getDrawable(R.color.hint_color)
-                    }else{
-
-                        btn_save.background = (activity as Context).getDrawable(R.drawable.black_button_bg)
-                    }
-                }
-
-            }
-        }
     }
 
     override fun onResume() {
@@ -121,7 +140,7 @@ class MyInformationFragment: BaseFragment() {
                 Utils.showDialog(activity, getString(R.string.add_address_failure_msg), getString(R.string.ok), "", null)
             }else{
                 mBinding.info = mViewModel.maskedUserInfo.get()
-                mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(mViewModel.maskedUserInfo.get()._countryCode))
+                mBinding.etCountryCode.setText(mViewModel.maskedUserInfo.get()._countryCode)
             }
 
 

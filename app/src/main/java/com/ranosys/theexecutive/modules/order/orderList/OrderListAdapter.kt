@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.MyOrdersItemBinding
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 
 /**
@@ -44,7 +45,7 @@ class OrderListAdapter(var context: Context, private var orderList: List<OrderLi
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(getItem(position), action)
+        holder?.bind(getItem(position), action, context)
     }
 
     fun getItem(position: Int): OrderListResponse? {
@@ -54,7 +55,7 @@ class OrderListAdapter(var context: Context, private var orderList: List<OrderLi
 
     class Holder(var itemBinding: MyOrdersItemBinding?) : RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(item: OrderListResponse?, action: (Int, String, OrderListResponse?) -> Unit) {
+        fun bind(item: OrderListResponse?, action: (Int, String, OrderListResponse?) -> Unit, context: Context) {
             itemBinding?.item = item
 
 
@@ -67,7 +68,7 @@ class OrderListAdapter(var context: Context, private var orderList: List<OrderLi
                 item?.id?.let { action(0, it, item) }
             }
             if (null != item){
-                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.amount, item.amount).toString()
+                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.amount, item.amount, context.getString(R.string.currency) ?: Constants.IDR).toString()
                 if(!item.is_refundable){
                     itemBinding?.btnReturn?.visibility = View.GONE
                 }else{

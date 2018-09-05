@@ -14,6 +14,7 @@ import com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.ranosys.theexecutive.utils.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import java.io.IOException
 import java.util.*
 
 
@@ -160,5 +161,22 @@ open class BaseActivity: RunTimePermissionActivity(){
         } else {
             SavedPreferences.getInstance()?.setBooleanValue( Constants.ORIENTATION, false)
         }
+    }
+
+    fun getCountryJson(): String {
+        var json: String? = null
+        try {
+            val iStream = this?.getAssets()?.open("countryCodes.json")
+            val size = iStream?.available()
+            val buffer = ByteArray(size ?: 0)
+            iStream?.read(buffer)
+            iStream?.close()
+            json = String(buffer)
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            return ""
+        }
+
+        return json
     }
 }

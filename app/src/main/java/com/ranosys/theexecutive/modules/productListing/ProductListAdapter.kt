@@ -50,8 +50,8 @@ class ProductListAdapter(var productList: MutableList<ProductListingDataClass.It
 
             val product = prepareMaskedResponse(productItem)
             itemBinding.productItem = product
-            val normalPrice = "IDR\u00A0" + product.normalPrice
-            val spPrice = " IDR\u00A0" + product.specialPrice
+            val normalPrice = " ${ctx.getString(R.string.currency)}\u00A0" + product.normalPrice
+            val spPrice = "${ctx.getString(R.string.currency)}\u00A0" + product.specialPrice
 
             if(product.normalPrice == product.specialPrice || product.specialPrice.isBlank()){
                 product.displayPrice = normalPrice

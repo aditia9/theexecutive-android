@@ -170,7 +170,7 @@ class OrderReturnAdapter(var context: Context, private var OrderDetail: OrderDet
 
 
             if(item.items.get(position).original_price != 0){
-                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.items.get(position).price.toString(), item.items.get(position).price.toString())
+                itemBinding?.tvPrice?.text = Utils.getDisplayPrice(item.items.get(position).price.toString(), item.items.get(position).price.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
             }
 
 

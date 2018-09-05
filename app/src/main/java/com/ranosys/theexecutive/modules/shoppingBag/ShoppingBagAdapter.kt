@@ -172,7 +172,7 @@ class ShoppingBagAdapter(var context: Context, private var shoppingBagList: List
 
 
                 if(item?.qty!! > 0){
-                    itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice((item.extension_attributes.regular_price  * item.qty).toString(), (item.price*  item.qty).toString())
+                    itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice((item.extension_attributes.regular_price  * item.qty).toString(), (item.price*  item.qty).toString(), context?.getString(R.string.currency) ?: Constants.IDR)
                 }
 
                 if(item.extension_attributes.stock_item.is_in_stock){
@@ -218,7 +218,7 @@ class ShoppingBagAdapter(var context: Context, private var shoppingBagList: List
             }
 
             if (mTotalResponse.subtotal != 0) {
-                itemBinding?.tvTotal?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mTotalResponse.subtotal.toString())
+                itemBinding?.tvTotal?.text = context?.getString(R.string.currency) +" "+ Utils.getFromattedPrice(mTotalResponse.subtotal.toString())
             }
 
             if(!TextUtils.isEmpty(mPromoCode)){
@@ -227,8 +227,8 @@ class ShoppingBagAdapter(var context: Context, private var shoppingBagList: List
                 itemBinding?.labelGrandTotal?.visibility = View.VISIBLE
                 itemBinding?.tvGrandTotal?.visibility = View.VISIBLE
 
-                itemBinding?.tvDiscount?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mTotalResponse.discount_amount.toString())
-                itemBinding?.tvGrandTotal?.text = Constants.IDR +" "+ Utils.getFromattedPrice(mTotalResponse.subtotal_with_discount.toString())
+                itemBinding?.tvDiscount?.text = context?.getString(R.string.currency) +" "+ Utils.getFromattedPrice(mTotalResponse.discount_amount.toString())
+                itemBinding?.tvGrandTotal?.text = context?.getString(R.string.currency) +" "+ Utils.getFromattedPrice(mTotalResponse.subtotal_with_discount.toString())
             }
 
             if (!TextUtils.isEmpty(mPromoCode)) {

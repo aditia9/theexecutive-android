@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ranosys.theexecutive">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -21,6 +22,7 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup"
         >
         <activity android:name=".modules.splash.SplashActivity"
             android:screenOrientation="portrait"

@@ -18,8 +18,10 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.TextView
 import android.widget.Toast
+import com.google.gson.Gson
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
@@ -29,6 +31,7 @@ import com.ranosys.theexecutive.utils.*
 import com.tsongkha.spinnerdatepicker.DatePickerDialog
 import com.tsongkha.spinnerdatepicker.SpinnerDatePickerDialogBuilder
 import kotlinx.android.synthetic.main.fragment_register.*
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -159,6 +162,27 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+       et_country_code.setOnTouchListener { v, event ->
+            spinner_country_code.performClick()
+        }
+        //country spinner
+        val gson = Gson()
+        val countries = gson.fromJson((activity as BaseActivity).getCountryJson(), RegisterDataClass.CountryCodeList:: class.java)
+
+        val country = CountryAdapter(activity!!, countries.countryList)
+        spinner_country_code.adapter = country
+        spinner_country_code.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val code: String = countries.countryList[position].dial_code
+                et_country_code.setText(code)
+                registerViewModel.countryCode.set(code)
+            }
+        }
+
+
         tv_subscribe_msg.text = GlobalSingelton.instance?.configuration?.subscription_message
 
         if(isFromSocialLogin && !TextUtils.isEmpty(socialLoginEmail)){
@@ -191,7 +215,6 @@ class RegisterFragment: BaseFragment(), DatePickerDialog.OnDateSetListener {
 
         clickableTextView(tv_terms_and_conditions,getString(R.string.term_and_condition),getString(R.string.t_and_c))
     }
-
 
 
     private fun  clickableTextView(textView: TextView, termAndCodition:String,tc:String) {

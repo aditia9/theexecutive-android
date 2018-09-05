@@ -58,7 +58,7 @@ class WishlistAdapter (var context: Context, var wishlist: List<Item>?, val acti
         fun bind(context: Context?, item : Item?, position : Int, action: (Int, Int, Item?) -> Unit, listener: OnItemClickListener?){
             itemBinding?.item = item
 
-            itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString())
+            itemBinding?.tvRegularPrice?.text = Utils.getDisplayPrice(item?.regular_price.toString(), item?.final_price.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
             if(item?.type_id == Constants.CONFIGURABLE){
                 itemBinding?.imgBag?.setImageResource(R.drawable.eye)
                 itemBinding?.imgProductOverlay?.visibility = View.GONE
