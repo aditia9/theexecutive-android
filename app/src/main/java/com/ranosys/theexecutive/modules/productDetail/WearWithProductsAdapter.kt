@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.WearWithLayoutBinding
 import com.ranosys.theexecutive.modules.productListing.ProductListingDataClass
+import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.Utils
 
 /**
@@ -54,17 +55,17 @@ class WearWithProductsAdapter(var context : Context, var list : List<ProductList
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bind(getItem(position), clickListener, position)
+        holder?.bind(getItem(position), clickListener, position, context)
     }
 
     class Holder(private var itemBinding: WearWithLayoutBinding?): RecyclerView.ViewHolder(itemBinding?.root) {
 
-        fun bind(productLinks : ProductListingDataClass.ProductLinks?, listener: OnItemClickListener?, position: Int){
+        fun bind(productLinks: ProductListingDataClass.ProductLinks?, listener: OnItemClickListener?, position: Int, context: Context){
 
-            val normalPrice = "IDR\u00A0" + productLinks?.extension_attributes?.linked_product_regularprice
-            val spPrice = " IDR\u00A0" + productLinks?.extension_attributes?.linked_product_finalprice
+            val normalPrice = " ${context.getString(R.string.currency)}\u00A0" + productLinks?.extension_attributes?.linked_product_regularprice
+            val spPrice = " ${context.getString(R.string.currency)}\u00A0" + productLinks?.extension_attributes?.linked_product_finalprice
 
-            itemBinding?.tvNormalPrice?.text = Utils.getDisplayPrice(productLinks?.extension_attributes?.linked_product_regularprice.toString(), productLinks?.extension_attributes?.linked_product_finalprice.toString())
+            itemBinding?.tvNormalPrice?.text = Utils.getDisplayPrice(productLinks?.extension_attributes?.linked_product_regularprice.toString(), productLinks?.extension_attributes?.linked_product_finalprice.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
 //            if(productLinks?.extension_attributes?.linked_product_regularprice == productLinks?.extension_attributes?.linked_product_finalprice || productLinks?.extension_attributes?.linked_product_finalprice.toString().isBlank()){
 //                itemBinding?.tvNormalPrice?.text = normalPrice
 //            }else{

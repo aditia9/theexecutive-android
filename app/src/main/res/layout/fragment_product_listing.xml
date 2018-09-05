@@ -26,7 +26,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/theme_accent_color"
-                android:hint="@string/search"
                 android:focusableInTouchMode="false"
                 android:imeOptions="actionSearch"
                 android:inputType="none"

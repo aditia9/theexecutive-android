@@ -145,10 +145,6 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
         }
     }
 
-    fun onCountryCodeSelection(countryCodeSpinner: View, position: Int){
-        countryCode.set((countryCodeSpinner as Spinner).selectedItem.toString())
-    }
-
     private fun callCityApi(stateCode: String) {
         AppRepository.getCityList(stateCode, object : ApiCallback<List<RegisterDataClass.City>>{
             override fun onException(error: Throwable) {

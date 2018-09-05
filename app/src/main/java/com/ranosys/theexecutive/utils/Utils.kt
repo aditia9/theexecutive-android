@@ -352,10 +352,10 @@ object Utils {
 
     }
 
-    fun getDisplayPrice(configurePrice: String, configureSpecialPrice: String): SpannableStringBuilder {
+    fun getDisplayPrice(configurePrice: String, configureSpecialPrice: String, currency: String): SpannableStringBuilder {
         return if(configurePrice.toDouble() > configureSpecialPrice.toDouble() && !configureSpecialPrice.equals(Constants.ZERO)){
-            val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
-            val specialP = "IDR\u00A0" + Utils.getFromattedPrice(configureSpecialPrice)
+            val normalP = "$currency\u00A0" + Utils.getFromattedPrice(configurePrice)
+            val specialP = "$currency\u00A0" + Utils.getFromattedPrice(configureSpecialPrice)
             val displayPrice = "$normalP $specialP"
             SpannableStringBuilder(displayPrice).apply {
                 setSpan(StrikethroughSpan(), 0, normalP.length, 0)
@@ -363,7 +363,7 @@ object Utils {
                 setSpan(RelativeSizeSpan(1.1f), normalP.length, displayPrice.length, 0)
             }
         }else{
-            val normalP = "IDR\u00A0" + Utils.getFromattedPrice(configurePrice)
+            val normalP = "$currency\u00A0" + Utils.getFromattedPrice(configurePrice)
             SpannableStringBuilder(normalP)
         }
     }

@@ -162,12 +162,12 @@ class ProductViewFragment : BaseFragment() {
 
     private fun setPrice(){
         if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)){
-            price = SpannableStringBuilder("IDR\u00A0 ${Utils.getFromattedPrice(productItemViewModel.productItem?.price!!)}")
+            price = SpannableStringBuilder("${context?.getString(R.string.currency)}\u00A0 ${Utils.getFromattedPrice(productItemViewModel.productItem?.price!!)}")
             val attributes = productItemViewModel.productItem?.custom_attributes?.filter { it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL }?.toList()
             if (attributes?.isNotEmpty()!!) {
                 specialPrice = attributes[0].value.toString()
             }
-            val ss = Utils.getDisplayPrice(productItemViewModel.productItem?.price!!, specialPrice.toString())
+            val ss = Utils.getDisplayPrice(productItemViewModel.productItem?.price!!, specialPrice.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
             tv_price.text = ss
         }
 
@@ -357,7 +357,7 @@ class ProductViewFragment : BaseFragment() {
                                 configureSpecialPrice = attributes[0].value.toString()
                             }
 
-                            val ss = Utils.getDisplayPrice(configurePrice, configureSpecialPrice)
+                            val ss = Utils.getDisplayPrice(configurePrice, configureSpecialPrice, context?.getString(R.string.currency) ?: Constants.IDR)
                             childProductsMap[colorValue] = ImagesWithPrice(ss, productItemViewModel.productItem?.media_gallery_entries)
 
                         }
@@ -373,7 +373,7 @@ class ProductViewFragment : BaseFragment() {
                         if(sp.isNotEmpty()){
                             configSpecialPrice = sp[0].value.toString()
                         }
-                        val ss = Utils.getDisplayPrice(configSimplePrice, configSpecialPrice)
+                        val ss = Utils.getDisplayPrice(configSimplePrice, configSpecialPrice, context?.getString(R.string.currency) ?: Constants.IDR)
                         maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty,
                                 it.extension_attributes.stock_item.is_in_stock, ss))
                     }catch (e : Exception){

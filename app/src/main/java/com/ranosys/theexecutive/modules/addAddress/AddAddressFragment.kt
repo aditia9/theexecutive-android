@@ -8,13 +8,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Toast
+import com.google.gson.Gson
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentAddAddressBinding
+import com.ranosys.theexecutive.modules.register.CountryAdapter
+import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_add_address.*
+import java.io.IOException
 
 
 /**
@@ -62,6 +68,27 @@ class AddAddressFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mBinding.etCountryCode.setOnTouchListener { v, event ->
+            mBinding.spinnerCountryCode.performClick()
+        }
+
+        //country spinner
+        val gson = Gson()
+        val countries = gson.fromJson((activity as BaseActivity).getCountryJson(), RegisterDataClass.CountryCodeList:: class.java)
+
+        val country = CountryAdapter(activity!!, countries.countryList)
+        mBinding.spinnerCountryCode.adapter = country
+        mBinding.spinnerCountryCode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val code: String = countries.countryList[position].dial_code
+                mBinding.etCountryCode.setText(code)
+            }
+        }
+
         add_address.setOnClickListener {
             Utils.hideSoftKeypad(activity as Context)
             if (Utils.isConnectionAvailable(activity as Context)) {
@@ -70,7 +97,7 @@ class AddAddressFragment: BaseFragment() {
                     mViewModel.maskedAddress?.country = mBinding.spinnerCountry.selectedItem.toString()
                     mViewModel.maskedAddress?.state = mBinding.spinnerState.selectedItem.toString()
                     mViewModel.maskedAddress?.city = mBinding.spinnerCity.selectedItem.toString()
-                    mViewModel.maskedAddress?.countryCode = mBinding.spinnerCountryCode.selectedItem.toString()
+                    mViewModel.maskedAddress?.countryCode = mBinding.etCountryCode.text.toString()
                     mViewModel.addAddress()
 
                 }
@@ -100,4 +127,5 @@ class AddAddressFragment: BaseFragment() {
         super.onResume()
         setToolBarParams(getString(R.string.add_addresse), 0, "", R.drawable.back, true, 0 , false)
     }
+
 }

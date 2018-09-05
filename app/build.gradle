@@ -159,6 +159,8 @@ dependencies {
 
     implementation "com.ranosys.dochelper:dochelper:${rootProject.dochelperVersion}"
 
+    implementation 'com.hbb20:ccp:2.1.2'
+
 }
 apply plugin: 'com.google.gms.google-services'
 

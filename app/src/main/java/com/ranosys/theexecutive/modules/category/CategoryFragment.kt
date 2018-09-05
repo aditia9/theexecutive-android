@@ -217,7 +217,7 @@ class CategoryFragment : BaseFragment() {
                 categoryModelView?.promotionResponse?.set(response as List<PromotionsResponseDataClass>?)
                 pagerAdapter.promotionList = categoryModelView?.promotionResponse?.get()
                 pagerAdapter.notifyDataSetChanged()
-                //startScrollViewPager(viewPager, response.size)
+                startScrollViewPager(viewPager, response.size)
             } else {
                 Toast.makeText(activity, getString(R.string.common_error), Toast.LENGTH_LONG).show()
             }

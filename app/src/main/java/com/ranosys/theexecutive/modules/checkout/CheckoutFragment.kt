@@ -345,7 +345,7 @@ class CheckoutFragment : BaseFragment() {
             val amount = totalAmts?.single { it.code == Constants.GRAND_TOTAL_KEY }?.value
 
             if(amount.isNullOrEmpty().not()){
-                tv_total_amount.text = "${activity?.getString(R.string.total)} ${Constants.IDR} ${Utils.getFromattedPrice(amount!!)}"
+                tv_total_amount.text = "${activity?.getString(R.string.total)} ${getString(R.string.currency)} ${Utils.getFromattedPrice(amount!!)}"
             }else{
                 tv_total_amount.text = ""
             }
@@ -467,7 +467,7 @@ class CheckoutFragment : BaseFragment() {
         val convertView = LayoutInflater.from(activity).inflate(R.layout.total_segment_item, null)
         totalSegment.value?.run {
             convertView.item_name.text = totalSegment.title
-            convertView.item_value.text = "${Constants.IDR} ${Utils.getFromattedPrice(totalSegment.value)}"
+            convertView.item_value.text = "${getString(R.string.currency)} ${Utils.getFromattedPrice(totalSegment.value)}"
         }
 
 

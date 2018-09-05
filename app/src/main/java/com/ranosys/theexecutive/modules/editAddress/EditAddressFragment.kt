@@ -9,15 +9,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.google.gson.Gson
 import com.ranosys.theexecutive.R
+import com.ranosys.theexecutive.base.BaseActivity
 import com.ranosys.theexecutive.base.BaseFragment
 import com.ranosys.theexecutive.databinding.FragmentEditAddressBinding
 import com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass
+import com.ranosys.theexecutive.modules.register.CountryAdapter
+import com.ranosys.theexecutive.modules.register.RegisterDataClass
 import com.ranosys.theexecutive.utils.DialogOkCallback
 import com.ranosys.theexecutive.utils.Utils
 import kotlinx.android.synthetic.main.fragment_edit_address.*
+import kotlinx.android.synthetic.main.fragment_register.*
+import java.io.IOException
 
 /**
  * @Details screen for edit address
@@ -69,6 +76,26 @@ class EditAddressFragment:BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mBinding.etCountryCode.setOnTouchListener { v, event ->
+            mBinding.spinnerCountryCode.performClick()
+        }
+        //country spinner
+        val gson = Gson()
+        val countries = gson.fromJson((activity as BaseActivity).getCountryJson(), RegisterDataClass.CountryCodeList:: class.java)
+
+        val country = CountryAdapter(activity!!, countries.countryList)
+        mBinding.spinnerCountryCode.adapter = country
+        mBinding.spinnerCountryCode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val code: String = countries.countryList[position].dial_code
+                mBinding.etCountryCode.setText(code)
+            }
+        }
+
         edit_address.setOnClickListener {
 
             Utils.hideSoftKeypad(activity as Context)
@@ -78,7 +105,7 @@ class EditAddressFragment:BaseFragment() {
                     mViewModel.maskedAddress?.country = mBinding.spinnerCountry.selectedItem.toString()
                     mViewModel.maskedAddress?.state = mBinding.spinnerState.selectedItem.toString()
                     mViewModel.maskedAddress?.city = mBinding.spinnerCity.selectedItem.toString()
-                    mViewModel.maskedAddress?.countryCode = mBinding.spinnerCountryCode.selectedItem.toString()
+                    mViewModel.maskedAddress?.countryCode = mBinding.etCountryCode.text.toString()
                     mViewModel.editAddress()
 
                 }
@@ -96,7 +123,7 @@ class EditAddressFragment:BaseFragment() {
             if(apiResponse?.error.isNullOrBlank()){
 
                 val maskedAdd = mViewModel.maskedAddress
-                mBinding.spinnerCountryCode.setSelection((mBinding.spinnerCountryCode.adapter as ArrayAdapter<String>).getPosition(maskedAdd?._countryCode))
+                mBinding.etCountryCode.setText(maskedAdd?._countryCode)
 
                 val temp = mViewModel.countryList.single { it.full_name_english == maskedAdd?.country }
                 mBinding.spinnerCountry.setSelection(mViewModel.countryList.indexOf(temp))
@@ -129,4 +156,5 @@ class EditAddressFragment:BaseFragment() {
                     this.liveAddress = liveAddress
                 }
     }
+
 }
