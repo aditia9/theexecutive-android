@@ -83,6 +83,20 @@ class BindingAdapters {
             }
         }
 
+        //for images at home category
+        @JvmStatic
+        @BindingAdapter("bind:baseWithimageUrlCategory")
+        fun loadImageWithBaseUrlCategory(imageView: ImageView, imageUrl: String?) {
+            val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
+            imageUrl?.run {
+                GlideApp.with(imageView.context)
+                        .load(baseUrl+imageUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(imageView.width, imageView.height)
+                        .into(imageView)
+            }
+        }
+
 
         //for images in product listing product details
         @JvmStatic
