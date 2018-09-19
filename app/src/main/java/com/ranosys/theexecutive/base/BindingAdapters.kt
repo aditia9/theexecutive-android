@@ -3,12 +3,15 @@ package com.ranosys.theexecutive.base
 import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
 import android.databinding.ObservableField
+import android.graphics.Bitmap
 import android.support.design.widget.TextInputLayout
 import android.text.TextUtils
 import android.widget.ExpandableListView
 import android.widget.ImageView
 import android.widget.Spinner
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
@@ -48,8 +51,29 @@ class BindingAdapters {
         @JvmStatic
         @BindingAdapter("categoryItems")
         fun bindList(view: ExpandableListView, response: ObservableField<CategoryResponseDataClass>?) {
-            val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data)
-            view.setAdapter(adapter)
+            val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
+
+            if(response?.get() != null){
+                val imageUrl =  response?.get()?.children_data!![0].image
+                GlideApp.with(view.context.applicationContext)
+                        .asBitmap()
+                        .load(baseUrl+imageUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(object : SimpleTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                val ratio =  resource.height.toDouble() / resource.width.toDouble()
+                                val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data, ratio)
+                                view.setAdapter(adapter)
+                            }
+                        })
+
+            }else{
+                var ratio = .37
+                val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data, ratio)
+                view.setAdapter(adapter)
+            }
+
+
         }
 
 
@@ -83,17 +107,22 @@ class BindingAdapters {
             }
         }
 
+
         //for images at home category
         @JvmStatic
         @BindingAdapter("bind:baseWithimageUrlCategory")
         fun loadImageWithBaseUrlCategory(imageView: ImageView, imageUrl: String?) {
             val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
             imageUrl?.run {
-                GlideApp.with(imageView.context)
+                GlideApp.with(imageView.context.applicationContext)
+                        .asBitmap()
                         .load(baseUrl+imageUrl)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .override(imageView.width, imageView.height)
-                        .into(imageView)
+                        .into(object : SimpleTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                imageView.setImageBitmap(resource)
+                            }
+                        })
             }
         }
 
@@ -149,4 +178,6 @@ class BindingAdapters {
 
         }
     }
+
+
 }

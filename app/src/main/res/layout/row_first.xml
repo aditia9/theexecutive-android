@@ -27,10 +27,9 @@
         <ImageView
             android:id="@+id/img_parent_category_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/parent_category_image_height"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            bind:baseWithimageUrlCategory="@{childData.image}"
+            bind:baseWithimageUrl="@{childData.image}"
             android:contentDescription="@string/category_image"
             />
     </LinearLayout>
