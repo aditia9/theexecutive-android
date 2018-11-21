@@ -18,6 +18,7 @@ import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdap
 import com.ranosys.theexecutive.utils.Constants
 import com.ranosys.theexecutive.utils.GlideApp
 import com.ranosys.theexecutive.utils.GlobalSingelton
+import com.ranosys.theexecutive.utils.Utils
 
 
 /**
@@ -54,23 +55,26 @@ class BindingAdapters {
             val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
 
             if(response?.get() != null){
-                val imageUrl =  response?.get()?.children_data!![0].image
-                GlideApp.with(view.context.applicationContext)
-                        .asBitmap()
-                        .load(baseUrl+imageUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .into(object : SimpleTarget<Bitmap>() {
-                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                val ratio =  resource.height.toDouble() / resource.width.toDouble()
-                                val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data, ratio)
-                                view.setAdapter(adapter)
-                            }
-                        })
+                val ratioList : ArrayList<Double> = ArrayList()
+                for (data in response?.get()?.children_data!!){
+                    val imageUrl =  data.image
 
-            }else{
-                var ratio = .37
-                val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data, ratio)
+                    GlideApp.with(view.context.applicationContext)
+                            .asBitmap()
+                            .load(baseUrl+imageUrl)
+                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                            .into(object : SimpleTarget<Bitmap>() {
+                                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                    val ratio =  resource.height.toDouble() / resource.width.toDouble()
+                                    ratioList.add(ratio)
+                                }
+                            })
+                }
+
+                val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data, ratioList)
                 view.setAdapter(adapter)
+
+
             }
 
 
@@ -113,17 +117,21 @@ class BindingAdapters {
         @BindingAdapter("bind:baseWithimageUrlCategory")
         fun loadImageWithBaseUrlCategory(imageView: ImageView, imageUrl: String?) {
             val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
-            imageUrl?.run {
-                GlideApp.with(imageView.context.applicationContext)
+            if(imageUrl.isNullOrBlank().not()){
+                GlideApp.with(imageView.context)
                         .asBitmap()
                         .load(baseUrl+imageUrl)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .centerCrop()
                         .into(object : SimpleTarget<Bitmap>() {
                             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                val ratio =  resource.height.toDouble() / resource.width.toDouble()
+                                Utils.setImageViewHeightWrtDeviceWidth(imageView.context, imageView, ratio)
                                 imageView.setImageBitmap(resource)
                             }
                         })
             }
+
         }
 
 

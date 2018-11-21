@@ -3,16 +3,12 @@ package com.ranosys.theexecutive.modules.category.adapters
 import android.content.Context
 import android.database.DataSetObserver
 import android.databinding.DataBindingUtil
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ExpandableListAdapter
 import android.widget.ExpandableListView
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.databinding.RowFirstBinding
 import com.ranosys.theexecutive.modules.category.ChildrenData
@@ -26,7 +22,7 @@ import com.ranosys.theexecutive.utils.*
  * @Author Ranosys Technologies
  * @Date 02,March,2018
  */
-class CategoryThreeLevelAdapter(context: Context?, var list : MutableList<ChildrenData>?, val ratio: Double) : ExpandableListAdapter{
+class CategoryThreeLevelAdapter(context: Context?, var list: MutableList<ChildrenData>?, val ratio: ArrayList<Double>) : ExpandableListAdapter{
 
     var context: Context? = null
     private var categoryList: MutableList<ChildrenData>?
@@ -40,7 +36,7 @@ class CategoryThreeLevelAdapter(context: Context?, var list : MutableList<Childr
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false)
 
-        Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, ratio)
+        Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, ratio[p0])
         listGroupBinding.childData = getGroup(p0)
 
 

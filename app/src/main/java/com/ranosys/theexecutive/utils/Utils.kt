@@ -256,6 +256,7 @@ object Utils {
         val width = (getDeviceWidth(context) - convertDpIntoPx(context, widthMargin.toFloat())) / column
         val height = width.times(times)
         imageView.layoutParams?.height = height.toInt()
+        imageView.layoutParams?.width = width.toInt()
     }
 
     fun setViewHeightWrtDeviceWidth(context: Context, view: View, times: Double){
