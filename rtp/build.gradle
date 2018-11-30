@@ -10,7 +10,6 @@ android {
 
     }
     lintOptions { abortOnError false }
-    buildToolsVersion rootProject.buildToolsVersion
 }
 
 dependencies {
