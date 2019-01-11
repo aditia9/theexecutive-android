@@ -50,6 +50,7 @@ import java.util.regex.Pattern
  */
 object Utils {
 
+    var progressDialog : Dialog? = null
     fun printLog(TAG:String, message: String){
         if(BuildConfig.DEBUG){
             Log.e(TAG, message)
@@ -104,17 +105,24 @@ object Utils {
         return false
     }
 
-    fun showProgressDialog(context: Context?):Dialog{
-        val progressDialog = Dialog(context)
-        if (progressDialog.window != null) {
-            progressDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    fun showProgressDialog(context: Context?):Dialog?{
+        if(progressDialog == null ){
+            progressDialog = Dialog(context)
+            if (progressDialog!!.window != null) {
+                progressDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
+            progressDialog!!.show()
+            progressDialog!!.setContentView(R.layout.progress_dialog)
+            progressDialog!!.setCancelable(false)
+            progressDialog!!.setCanceledOnTouchOutside(false)
         }
-        progressDialog.show()
-        progressDialog.setContentView(R.layout.progress_dialog)
-        progressDialog.setCancelable(false)
-        progressDialog.setCanceledOnTouchOutside(false)
         return progressDialog
+    }
 
+    fun hideProgressDialog(){
+        if(progressDialog != null && progressDialog?.isShowing!!){
+            progressDialog!!.dismiss()
+        }
     }
 
     /**
@@ -252,9 +260,9 @@ object Utils {
                 TypedValue.COMPLEX_UNIT_DIP, dp, r?.displayMetrics))
     }
 
-    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double, widthMargin: Int = 0, column: Int = 1){
+    fun setImageViewHeightWrtDeviceWidth(context: Context, imageView: ImageView, times: Double?, widthMargin: Int = 0, column: Int = 1){
         val width = (getDeviceWidth(context) - convertDpIntoPx(context, widthMargin.toFloat())) / column
-        val height = width.times(times)
+        val height = width.times(times!!)
         imageView.layoutParams?.height = height.toInt()
         imageView.layoutParams?.width = width.toInt()
     }

@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="true"
+            android:singleLine="true"
             android:theme="@style/sub_heading_theme"
             android:padding="@dimen/ten_dp"
             android:text="@{childData.name}"
@@ -27,7 +28,7 @@
         <ImageView
             android:id="@+id/img_parent_category_image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/parent_category_image_height"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             bind:baseWithimageUrl="@{childData.image}"
             android:contentDescription="@string/category_image"

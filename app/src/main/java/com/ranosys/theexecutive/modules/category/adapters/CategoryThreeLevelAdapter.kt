@@ -22,7 +22,7 @@ import com.ranosys.theexecutive.utils.*
  * @Author Ranosys Technologies
  * @Date 02,March,2018
  */
-class CategoryThreeLevelAdapter(context: Context?, var list: MutableList<ChildrenData>?, val ratio: ArrayList<Double>) : ExpandableListAdapter{
+class CategoryThreeLevelAdapter(context: Context?, var list: MutableList<ChildrenData>?, val ratio: HashMap<Int, Double>?) : ExpandableListAdapter{
 
     var context: Context? = null
     private var categoryList: MutableList<ChildrenData>?
@@ -36,7 +36,9 @@ class CategoryThreeLevelAdapter(context: Context?, var list: MutableList<Childre
         val layoutInflater = LayoutInflater.from(p3?.context)
         val listGroupBinding: RowFirstBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_first, p3, false)
 
-        Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, ratio[p0])
+        if(ratio!![p0] != 0.0 ){
+            Utils.setImageViewHeightWrtDeviceWidth(p3?.context!!, listGroupBinding.imgParentCategoryImage, ratio[p0])
+        }
         listGroupBinding.childData = getGroup(p0)
 
 

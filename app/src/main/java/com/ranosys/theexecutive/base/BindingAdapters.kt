@@ -15,10 +15,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.ranosys.theexecutive.R
 import com.ranosys.theexecutive.modules.category.CategoryResponseDataClass
 import com.ranosys.theexecutive.modules.category.adapters.CategoryThreeLevelAdapter
-import com.ranosys.theexecutive.utils.Constants
-import com.ranosys.theexecutive.utils.GlideApp
-import com.ranosys.theexecutive.utils.GlobalSingelton
-import com.ranosys.theexecutive.utils.Utils
+import com.ranosys.theexecutive.utils.*
 
 
 /**
@@ -54,25 +51,34 @@ class BindingAdapters {
         fun bindList(view: ExpandableListView, response: ObservableField<CategoryResponseDataClass>?) {
             val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
 
-            if(response?.get() != null){
-                val ratioList : ArrayList<Double> = ArrayList()
-                for (data in response?.get()?.children_data!!){
-                    val imageUrl =  data.image
+            if (response?.get() != null) {
 
-                    GlideApp.with(view.context.applicationContext)
-                            .asBitmap()
-                            .load(baseUrl+imageUrl)
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                            .into(object : SimpleTarget<Bitmap>() {
-                                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                    val ratio =  resource.height.toDouble() / resource.width.toDouble()
-                                    ratioList.add(ratio)
-                                }
-                            })
+              //  Utils.showProgressDialog(view.context)
+                val ratioListSize = response?.get()?.children_data?.size!!
+                val ratioList: HashMap<Int, Double> = HashMap()
+
+                val imageCallBack: ImageCallBack
+
+                imageCallBack = ImageCallBack {
+                    ratioList.putAll(it)
+                    if (ratioList.size == ratioListSize){
+                        val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data, ratioList)
+                        view.setAdapter(adapter)
+                      //  Utils.hideProgressDialog()
+                    }
                 }
 
-                val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data, ratioList)
-                view.setAdapter(adapter)
+                var pos = 0
+
+                for (data in response?.get()?.children_data!!) {
+                    val imageUrl = data.image
+                    CheckSizeOfImage().getRatioOfImage(imageUrl, pos, view.context, imageCallBack)
+                    pos++
+                }
+
+
+                // val adapter = CategoryThreeLevelAdapter(view.context, response?.get()?.children_data, ratioList)
+                // view.setAdapter(adapter)
 
 
             }
@@ -103,7 +109,7 @@ class BindingAdapters {
             val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
             imageUrl?.run {
                 GlideApp.with(imageView.context)
-                        .load(baseUrl+imageUrl)
+                        .load(baseUrl + imageUrl)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(imageView.width, imageView.height)
                         .centerCrop()
@@ -117,15 +123,15 @@ class BindingAdapters {
         @BindingAdapter("bind:baseWithimageUrlCategory")
         fun loadImageWithBaseUrlCategory(imageView: ImageView, imageUrl: String?) {
             val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
-            if(imageUrl.isNullOrBlank().not()){
+            if (imageUrl.isNullOrBlank().not()) {
                 GlideApp.with(imageView.context)
                         .asBitmap()
-                        .load(baseUrl+imageUrl)
+                        .load(baseUrl + imageUrl)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .centerCrop()
                         .into(object : SimpleTarget<Bitmap>() {
                             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                                val ratio =  resource.height.toDouble() / resource.width.toDouble()
+                                val ratio = resource.height.toDouble() / resource.width.toDouble()
                                 Utils.setImageViewHeightWrtDeviceWidth(imageView.context, imageView, ratio)
                                 imageView.setImageBitmap(resource)
                             }
@@ -140,10 +146,10 @@ class BindingAdapters {
         @BindingAdapter("bind:baseUrlWithProductImageUrl")
         fun loadProductImageWithBaseUrl(imageView: ImageView, imageUrl: String?) {
             val baseUrl = GlobalSingelton.instance?.configuration?.product_media_url
-            if(imageUrl.isNullOrEmpty().not()){
+            if (imageUrl.isNullOrEmpty().not()) {
                 GlideApp.with(imageView.context)
                         .asBitmap()
-                        .load(baseUrl+imageUrl)
+                        .load(baseUrl + imageUrl)
                         .error(R.drawable.placeholder)// will be displayed if the image cannot be loaded
                         .fallback(R.drawable.placeholder)// will be displayed if the image url is null
                         .placeholder(R.drawable.placeholder)
@@ -160,7 +166,7 @@ class BindingAdapters {
         fun showOrderStatus(imageView: ImageView, status: String?) {
 
             var imageName = ""
-            when(status){
+            when (status) {
                 Constants.SUCCESS -> {
                     imageName = "order_success"
 

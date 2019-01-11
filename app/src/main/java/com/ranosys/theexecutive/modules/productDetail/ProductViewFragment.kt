@@ -16,6 +16,7 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Html
 import android.text.SpannableStringBuilder
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -724,11 +725,17 @@ class ProductViewFragment : BaseFragment() {
     private fun prepareAddToCartRequest(quoteId :  String?) : AddToCartRequest{
         var productOption : ProductOption? = null
         if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
-            val colorOption = ConfigurableItemOption(colorAttrId, colorValue)
-            val sizeOption = ConfigurableItemOption(sizeAttrId, sizeValue)
+
             val optionList : MutableList<ConfigurableItemOption> = mutableListOf()
-            optionList.add(colorOption)
-            optionList.add(sizeOption)
+            if(TextUtils.isEmpty(colorAttrId).not()){
+                val colorOption = ConfigurableItemOption(colorAttrId, colorValue)
+                optionList.add(colorOption)
+            }
+           if(TextUtils.isEmpty(sizeAttrId).not()){
+               val sizeOption = ConfigurableItemOption(sizeAttrId, sizeValue)
+               optionList.add(sizeOption)
+           }
+
             val cartExtAttrs = CartExtensionAttributes( optionList)
             productOption = ProductOption(cartExtAttrs)
         }
