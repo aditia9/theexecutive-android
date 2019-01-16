@@ -205,7 +205,7 @@ class CategoryFragment : BaseFragment() {
     }
 
     private fun getCategories() {
-        //showLoading()
+        showLoading()
         categoryModelView?.getCategories()
     }
 
@@ -226,7 +226,7 @@ class CategoryFragment : BaseFragment() {
 
     private fun observeCategoryApiResponse() {
         categoryModelView?.mutualHomeResponse?.observe(this, Observer<ApiResponse<CategoryResponseDataClass>> { apiResponse ->
-            //hideLoading()
+            hideLoading()
             val response = apiResponse?.apiResponse ?: apiResponse?.error
             if (response is CategoryResponseDataClass) {
 

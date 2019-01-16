@@ -58,6 +58,7 @@ class ProductViewFragment : BaseFragment() {
     private var sizeAttrId : String? = ""
     private var sizeValue : String? = ""
     private var itemQty : Int? = 1
+    private var childItemQty : Int? = 1
     private var selectedQty : Int = 1
     private var relatedSku : String = ""
     private var relatedName : String = ""
@@ -239,6 +240,7 @@ class ProductViewFragment : BaseFragment() {
     }
 
     private fun setColorImagesList(){
+
         productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.run{
             val length = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.size!!
             for(i in 0 .. length-1) {
@@ -266,6 +268,8 @@ class ProductViewFragment : BaseFragment() {
                         option.values.forEachIndexed({ index, value ->
                             sizeMap[index.toString()] = value.value_index.toString()
                         })
+
+                      //  isSizeAvailable = true
                         AppLog.e("Sizelist :  $sizeMap")
                         sizeAttrId = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)?.attribute_id
                         if(null == GlobalSingelton.instance?.sizeList) {
@@ -279,6 +283,10 @@ class ProductViewFragment : BaseFragment() {
                     }
                 }
             }
+          /*  if(!isSizeAvailable){
+                sizeDilaog.tv_select_size.visibility = View.GONE
+                sizeDilaog.tv_size_guide.visibility = View.GONE
+            }*/
         }
     }
 
@@ -342,6 +350,8 @@ class ProductViewFragment : BaseFragment() {
             hideLoading()
             if (response is List<*>) {
                 val list = response as List<ChildProductsResponse>
+                if(list.isNotEmpty())
+                childItemQty = list[0].extension_attributes.stock_item.qty
                 maxQuantityList?.clear()
                 list.forEach { it ->
                     try {
@@ -652,9 +662,31 @@ class ProductViewFragment : BaseFragment() {
         sizeDilaog.window.setLayout(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT /*+ rl_add_to_box.height*/)
         sizeDilaog.window.setGravity(Gravity.BOTTOM)
 
-        sizeDilaog.btn_done.setOnClickListener({
+        sizeDilaog.btn_done.setOnClickListener {
             if (productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
-                if (!sizeValue.isNullOrEmpty()) {
+
+                var isSizeAvailable = false
+
+                val length = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.size!!
+                for(i in 0 until length) {
+                    val option = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)
+                    when (option?.label) {
+                        Constants.SIZE_ -> {
+                            isSizeAvailable = true
+                        }
+                    }
+                }
+
+                if (!isSizeAvailable) {
+                    if (sizeDilaog.isShowing) {
+                        sizeDilaog.dismiss()
+                    }
+                    if(isFromWishList) {
+                        callWishListApi()
+                    }else{
+                        addToCartCall()
+                    }
+                } else if (!sizeValue.isNullOrEmpty()) {
                     if (sizeDilaog.isShowing) {
                         sizeDilaog.dismiss()
                     }
@@ -672,7 +704,7 @@ class ProductViewFragment : BaseFragment() {
                 }
                 addToCartCall()
             }
-        })
+        }
 
         sizeDilaog.img_forward.setOnClickListener {
             if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)) {
@@ -683,7 +715,14 @@ class ProductViewFragment : BaseFragment() {
                     } else {
                         Toast.makeText(activity as Context, getString(R.string.no_more_products), Toast.LENGTH_SHORT).show()
                     }
-                } else {
+                } else if (!isSizeAvailable()) {
+                    if (selectedQty < itemQty!!) {
+                        selectedQty++
+                        sizeDilaog.tv_quantity.text = selectedQty.toString()
+                    } else {
+                        Toast.makeText(activity as Context, getString(R.string.no_more_products), Toast.LENGTH_SHORT).show()
+                    }
+                }else {
                     Toast.makeText(activity, getString(R.string.select_size_err), Toast.LENGTH_SHORT).show()
                 }
             }else{
@@ -702,6 +741,8 @@ class ProductViewFragment : BaseFragment() {
                 sizeDilaog.tv_quantity.text =  selectedQty.toString()
             }
         }
+
+
 
         sizeDilaog.tv_size_guide.setOnClickListener { prepareWebPageDialog(activity as Context, GlobalSingelton.instance?.staticPagesResponse?.size_guideline ,getString(R.string.size_guideline)) }
 
@@ -769,12 +810,19 @@ class ProductViewFragment : BaseFragment() {
         if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)){
             sizeDilaog.rv_size_view.visibility = View.GONE
             sizeDilaog.tv_select_size.visibility = View.GONE
+            sizeDilaog.tv_size_guide.visibility = View.GONE
+        }else if(!isSizeAvailable()){
+            sizeDilaog.rv_size_view.visibility = View.VISIBLE
+            sizeDilaog.tv_select_size.visibility = View.GONE
+            sizeDilaog.tv_size_guide.visibility = View.GONE
         }
         else{
             sizeDilaog.rv_size_view.visibility = View.VISIBLE
             sizeDilaog.tv_select_size.visibility = View.VISIBLE
         }
 
+        if(price == null)
+         //   price = Utils.getDisplayPrice(productItemViewModel.productItem?.price!!, specialPrice.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
         sizeDilaog.tv_product_price.text = price
         selectedQty = 1
         itemQty = 1
@@ -803,7 +851,7 @@ class ProductViewFragment : BaseFragment() {
                         var selectedSizePrice = ""
                         if(priceList?.size!! > 0){
                             selectedSizePrice  = priceList?.single {
-                                it.colorValue == colorValue && it.sizeValue == sizeValue
+                               it.sizeValue == sizeValue
                             }?.price.toString()
                         }
                         sizeDilaog.tv_product_price.text = selectedSizePrice
@@ -813,9 +861,11 @@ class ProductViewFragment : BaseFragment() {
                         } else {
                             try {
                                 if (maxQuantityList?.size!! > 0) {
-                                    itemQty = maxQuantityList?.single { s ->
+                                 /*   itemQty = maxQuantityList?.single { s ->
                                         s.colorValue == colorValue && s.sizeValue == sizeValue
-                                    }?.maxQuantity
+                                    }?.maxQuantity*/
+
+                                    itemQty = maxQuantityList!![position].maxQuantity
                                 }
                             } catch (e: NoSuchElementException) {
                                 AppLog.printStackTrace(e)
@@ -829,7 +879,7 @@ class ProductViewFragment : BaseFragment() {
                             sizeValue = item?.value
 
                             val selectedSizePrice = priceList?.single {
-                                it.colorValue == colorValue && it.sizeValue == sizeValue
+                                it.sizeValue == sizeValue
                             }?.price
                             sizeDilaog.tv_product_price.text = selectedSizePrice
                         }
@@ -841,6 +891,8 @@ class ProductViewFragment : BaseFragment() {
         else{
             if(productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
                 itemQty = productItemViewModel.productItem?.extension_attributes?.stock_item?.qty ?: 0
+            }else if(productItemViewModel.productItem?.type_id.equals(Constants.CONFIGURABLE)){
+                itemQty = childItemQty
             }
         }
         sizeDilaog.show()
@@ -861,6 +913,22 @@ class ProductViewFragment : BaseFragment() {
             mImageDialog.dismiss()
         }
         mImageDialog.show()
+    }
+
+
+    private fun isSizeAvailable() : Boolean{
+        var isSizeAvailable = false
+
+        val length = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.size!!
+        for(i in 0 until length) {
+            val option = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)
+            when (option?.label) {
+                Constants.SIZE_ -> {
+                    isSizeAvailable = true
+                }
+            }
+        }
+        return isSizeAvailable
     }
 
     data class ColorsView(var label: String?, var attr_id:String?, var value : String?,

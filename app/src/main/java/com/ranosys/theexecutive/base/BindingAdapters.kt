@@ -49,8 +49,6 @@ class BindingAdapters {
         @JvmStatic
         @BindingAdapter("categoryItems")
         fun bindList(view: ExpandableListView, response: ObservableField<CategoryResponseDataClass>?) {
-            val baseUrl = GlobalSingelton.instance?.configuration?.category_media_url
-
             if (response?.get() != null) {
 
               //  Utils.showProgressDialog(view.context)

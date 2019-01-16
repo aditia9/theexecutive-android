@@ -79,11 +79,14 @@ class SizeRecyclerAdapter (var context: Context, var list: List<ProductViewFragm
                 itemBinding?.tvSize?.setTextColor(Color.BLACK)
             }
             try {
-                inStock = inStockList?.filter {
-                    it.colorValue == colorValue && it.sizeValue == sizeView.value
-                }?.single()?.isInStock
+               /* inStock = inStockList?.filter {
+                    it.colorValue == colorValue || it.sizeValue == sizeView.value
+                }?.single()?.isInStock*/
+                if(inStockList != null)
+                inStock = inStockList[position].isInStock
+
                 priceList = inStockList?.filter {
-                    it.colorValue == colorValue
+                    colorValue == "" || it.colorValue == colorValue
                 }?.toList()
                 if(inStock!!){
                     itemBinding?.tvOutOfStock?.visibility = View.GONE
