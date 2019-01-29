@@ -32,7 +32,7 @@
     <string name="maintenance_msg">Aplikasi sedang dalam perbaikan</string>
     <string name="force_update_msg">Versi terbaru telah tersedia</string>
     <string name="please_enter_your_email_address_below">Masukan alamat email</string>
-    <string name="password_info">Kami akan mengirimkan email untuk mengubah kata sandi anda</string>
+    <string name="password_info">Anda akan mendapatkan email untuk mengubah kata sandi</string>
     <string name="submit">Lanjutkan</string>
     <string name="subscribe_btn">Subscribe</string>
     <string name="forgot_password_title">Lupa kata sandi</string>
@@ -113,7 +113,7 @@
     <string name="clear">Hapus</string>
     <string name="image_one_detail">Product first image showing at top</string>
     <string name="image_two_detail">Product second image is showing</string>
-    <string name="composition">Komposisi dan Cara Perawatan</string>
+    <string name="composition">Cara Perawatan</string>
     <string name="size_guideline">Panduan ukuran</string>
     <string name="shipping">Info pengiriman</string>
     <string name="returns">Info pengembalian barang</string>
