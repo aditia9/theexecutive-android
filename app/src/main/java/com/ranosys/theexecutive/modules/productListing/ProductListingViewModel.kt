@@ -114,7 +114,12 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                         }
                     }
 
-                    priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }[0]
+                   // priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }[0]
+                    val localPriceFilter = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }
+                    if(localPriceFilter.isNotEmpty())
+                        priceFilter.value = localPriceFilter[0]
+                    else
+                        priceFilter.value = null
                 }
                 filterOptionList?.value = filterOptions.filters.toMutableList()
             }
