@@ -254,19 +254,26 @@ class ProductListingFragment: BaseFragment() {
     private fun observePriceFilter() {
         mViewModel.priceFilter.observe(this, Observer { priceFilter ->
 
-            filterOptionBinding.priceRangeBar.setCurrency(priceFilter?.options?.get(0)?.label)
-            val range = priceFilter?.options?.get(0)?.value
-            val min = range?.split("-")?.get(0)?.toLong()
-            val max = range?.split("-")?.get(1)?.toLong()
-            if(max == min)
-                filterOptionDialog.price_range_bar.isEnabled = false
+            if(priceFilter != null){
+                filterOptionBinding.priceRangeBar.setCurrency(priceFilter?.options?.get(0)?.label)
+                val range = priceFilter?.options?.get(0)?.value
+                val min = range?.split("-")?.get(0)?.toLong()
+                val max = range?.split("-")?.get(1)?.toLong()
+                if(max == min)
+                    filterOptionDialog.price_range_bar.isEnabled = false
 
-            filterOptionDialog.price_range_bar.visibility = View.VISIBLE
-            filterOptionBinding.priceRangeBar.setRangeValues(min, max)
-            filterOptionBinding.priceRangeBar.selectedMinValue = min
-            filterOptionBinding.priceRangeBar.selectedMaxValue = max
-            filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
-            filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
+                filterOptionDialog.price_range_bar.visibility = View.VISIBLE
+                filterOptionBinding.priceRangeBar.setRangeValues(min, max)
+                filterOptionBinding.priceRangeBar.selectedMinValue = min
+                filterOptionBinding.priceRangeBar.selectedMaxValue = max
+                filterOptionBinding.etMinPrice.setText(Utils.getFromattedPrice(min.toString()))
+                filterOptionBinding.etMaxPrice.setText(Utils.getFromattedPrice(max.toString()))
+            }else{
+                filterOptionDialog.price_range_bar.visibility = View.GONE
+                filterOptionBinding.etMinPrice.visibility = View.GONE
+                filterOptionBinding.etMaxPrice.visibility = View.GONE
+                filterOptionDialog.tv_price_label.visibility = View.GONE
+            }
         })
     }
 
@@ -278,6 +285,7 @@ class ProductListingFragment: BaseFragment() {
                 mBinding.tvFilterOption.isEnabled = true
                 filterOptionAdapter.optionsList = filterList.filterNot { it.name == Constants.FILTER_PRICE_LABEL }
                 filterOptionAdapter.notifyDataSetChanged()
+
 
                 //filterOptionBinding.filterList.expandGroup(0, true)
             }else{
