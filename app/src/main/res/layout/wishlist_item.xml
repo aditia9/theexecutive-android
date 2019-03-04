@@ -4,7 +4,7 @@
 
     <data>
         <variable name="item"
-            type="com.ranosys.theexecutive.modules.wishlist.Item"/>
+            type="com.delamibrands.theexecutive.modules.wishlist.Item"/>
 
     </data>
 

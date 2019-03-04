@@ -3,7 +3,7 @@
     <data>
         <variable
             name="shippingMethod"
-            type="com.ranosys.theexecutive.modules.checkout.CheckoutDataClass.GetShippingMethodsResponse" />
+            type="com.delamibrands.theexecutive.modules.checkout.CheckoutDataClass.GetShippingMethodsResponse" />
 
     </data>
 

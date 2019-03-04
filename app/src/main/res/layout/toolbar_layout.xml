@@ -6,10 +6,10 @@
         <import type="android.support.v4.content.ContextCompat" />
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
-        <import type="com.ranosys.theexecutive.R"/>
+        <import type="com.delamibrands.theexecutive.R"/>
         <variable
             name="toolbarViewModel"
-            type="com.ranosys.theexecutive.activities.ToolbarViewModel"/>
+            type="com.delamibrands.theexecutive.activities.ToolbarViewModel"/>
     </data>
 
     <android.support.v7.widget.Toolbar

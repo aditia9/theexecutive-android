@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="loginVM"
-            type="com.ranosys.theexecutive.modules.login.LoginViewModel"/>
+            type="com.delamibrands.theexecutive.modules.login.LoginViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

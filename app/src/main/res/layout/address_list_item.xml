@@ -6,7 +6,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.ranosys.theexecutive.utils.Utils"/>
+        <import type="com.delamibrands.theexecutive.utils.Utils"/>
         <variable
             name="isDefault"
             type="Boolean"/>
@@ -16,7 +16,7 @@
             type="String"/>
         <variable
             name="address"
-            type="com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass.Address"/>
+            type="com.delamibrands.theexecutive.modules.myAccount.MyAccountDataClass.Address"/>
     </data>
 
     <android.support.v7.widget.CardView

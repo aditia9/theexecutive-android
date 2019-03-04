@@ -5,7 +5,7 @@
     <data>
         <variable
             name="childData"
-            type="com.ranosys.theexecutive.modules.category.ChildrenData" />
+            type="com.delamibrands.theexecutive.modules.category.ChildrenData" />
     </data>
 
     <LinearLayout

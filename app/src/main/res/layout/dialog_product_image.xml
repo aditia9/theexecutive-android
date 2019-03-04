@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <com.ranosys.theexecutive.customViews.ZoomableImageView
+    <com.delamibrands.theexecutive.customViews.ZoomableImageView
         android:id="@+id/product_imageview"
         android:layout_width="@dimen/match_constraint"
         android:layout_height="@dimen/match_constraint"

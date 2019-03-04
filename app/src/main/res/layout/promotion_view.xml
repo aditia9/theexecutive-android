@@ -6,7 +6,7 @@
     <data>
         <variable
             name="promotionResponse"
-            type="com.ranosys.theexecutive.modules.category.PromotionsResponseDataClass" />
+            type="com.delamibrands.theexecutive.modules.category.PromotionsResponseDataClass" />
     </data>
 
     <RelativeLayout

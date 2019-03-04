@@ -6,7 +6,7 @@
     <data>
         <variable
             name="filter"
-            type="com.ranosys.theexecutive.modules.productListing.ProductListingDataClass.Filter"/>
+            type="com.delamibrands.theexecutive.modules.productListing.ProductListingDataClass.Filter"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

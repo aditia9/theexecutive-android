@@ -4,7 +4,7 @@
     <data>
         <variable
             name="newsLetterVM"
-            type="com.ranosys.theexecutive.modules.newsLetter.NewsLetterViewModel"/>
+            type="com.delamibrands.theexecutive.modules.newsLetter.NewsLetterViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

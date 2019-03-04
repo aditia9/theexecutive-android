@@ -75,14 +75,14 @@
             app:layout_constraintRight_toRightOf="@id/guideline_right"
             app:layout_constraintTop_toBottomOf="@id/tv_price_label">
 
-            <com.ranosys.theexecutive.rangeBar.RangeSeekBar
+            <com.delamibrands.theexecutive.rangeBar.RangeSeekBar
                 android:id="@+id/price_range_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tv_price_label"/>
         </LinearLayout>
 
-        <com.ranosys.theexecutive.PrefixEditText
+        <com.delamibrands.theexecutive.PrefixEditText
             android:id="@+id/et_min_price"
             android:layout_width="@dimen/match_constraint"
             android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
             app:layout_constraintTop_toBottomOf="@+id/range_bar_container"
             app:layout_constraintLeft_toLeftOf="@id/guideline_left"/>
 
-        <com.ranosys.theexecutive.PrefixEditText
+        <com.delamibrands.theexecutive.PrefixEditText
             android:id="@+id/et_max_price"
             android:tag="IDR "
             android:layout_width="@dimen/match_constraint"

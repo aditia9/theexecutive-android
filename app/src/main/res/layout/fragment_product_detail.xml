@@ -3,7 +3,7 @@
 
     <data>
         <variable name="productDetailVM"
-            type="com.ranosys.theexecutive.modules.productDetail.ProductDetailViewModel"/>
+            type="com.delamibrands.theexecutive.modules.productDetail.ProductDetailViewModel"/>
     </data>
 
     <RelativeLayout
@@ -13,7 +13,7 @@
         android:clickable="true"
         android:focusable="true">
 
-        <com.ranosys.theexecutive.customViews.CustomViewPager
+        <com.delamibrands.theexecutive.customViews.CustomViewPager
             android:id="@+id/product_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

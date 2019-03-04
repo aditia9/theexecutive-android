@@ -5,7 +5,7 @@
     <data>
         <variable
             name="item"
-            type="com.ranosys.theexecutive.modules.order.orderDetail.Item" />
+            type="com.delamibrands.theexecutive.modules.order.orderDetail.Item" />
     </data>
 
     <android.support.constraint.ConstraintLayout

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="paymentMethod"
-            type="com.ranosys.theexecutive.modules.checkout.CheckoutDataClass.PaymentMethod" />
+            type="com.delamibrands.theexecutive.modules.checkout.CheckoutDataClass.PaymentMethod" />
 
     </data>
 

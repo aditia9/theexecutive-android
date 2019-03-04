@@ -6,7 +6,7 @@
     <data>
         <variable
             name="toolbarViewModel"
-            type="com.ranosys.theexecutive.activities.ToolbarViewModel"/>
+            type="com.delamibrands.theexecutive.activities.ToolbarViewModel"/>
     </data>
 
 

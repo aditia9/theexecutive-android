@@ -8,7 +8,7 @@
         <import type="android.text.TextUtils"/>
 
         <variable name="vm"
-            type="com.ranosys.theexecutive.modules.checkout.OrderResultViewModel"/>
+            type="com.delamibrands.theexecutive.modules.checkout.OrderResultViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

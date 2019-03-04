@@ -3,7 +3,7 @@
         <data>
                 <variable
                     name="categoryModel"
-                    type="com.ranosys.theexecutive.modules.category.CategoryModelView"
+                    type="com.delamibrands.theexecutive.modules.category.CategoryModelView"
                     />
         </data>
 

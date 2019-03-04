@@ -7,7 +7,7 @@
     <data>
         <variable
             name="option"
-            type="com.ranosys.theexecutive.modules.productListing.ProductListingDataClass.SortOptionResponse"/>
+            type="com.delamibrands.theexecutive.modules.productListing.ProductListingDataClass.SortOptionResponse"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

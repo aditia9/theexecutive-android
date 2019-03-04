@@ -5,11 +5,11 @@
 
         <variable
             name="vm"
-            type="com.ranosys.theexecutive.modules.myInformation.MyInformationViewModel"/>
+            type="com.delamibrands.theexecutive.modules.myInformation.MyInformationViewModel"/>
 
         <variable
             name="info"
-            type="com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass.MaskedUserInfo"/>
+            type="com.delamibrands.theexecutive.modules.myAccount.MyAccountDataClass.MaskedUserInfo"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

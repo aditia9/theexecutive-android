@@ -4,7 +4,7 @@
 
     <data>
         <variable name="bankTransferVM"
-            type="com.ranosys.theexecutive.modules.bankTransfer.BankTransferViewModel"/>
+            type="com.delamibrands.theexecutive.modules.bankTransfer.BankTransferViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

@@ -9,7 +9,7 @@
         <import type="android.view.View"/>
         <variable
             name="productItem"
-            type="com.ranosys.theexecutive.modules.productListing.ProductListingDataClass.ProductMaskedResponse"/>
+            type="com.delamibrands.theexecutive.modules.productListing.ProductListingDataClass.ProductMaskedResponse"/>
     </data>
 
 

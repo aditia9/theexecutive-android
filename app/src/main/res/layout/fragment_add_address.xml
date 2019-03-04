@@ -6,10 +6,10 @@
     <data>
         <variable
             name="vm"
-            type="com.ranosys.theexecutive.modules.addAddress.AddAddressViewModel"/>
+            type="com.delamibrands.theexecutive.modules.addAddress.AddAddressViewModel"/>
         <variable
             name="address"
-            type="com.ranosys.theexecutive.modules.myAccount.MyAccountDataClass.MaskedUserInfo"/>
+            type="com.delamibrands.theexecutive.modules.myAccount.MyAccountDataClass.MaskedUserInfo"/>
     </data>
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_main_layout"

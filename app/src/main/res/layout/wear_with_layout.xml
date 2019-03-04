@@ -9,7 +9,7 @@
         <import type="android.view.View"/>
         <variable
             name="productLinks"
-            type="com.ranosys.theexecutive.modules.productListing.ProductListingDataClass.ProductLinks"/>
+            type="com.delamibrands.theexecutive.modules.productListing.ProductListingDataClass.ProductLinks"/>
     </data>
 
 

@@ -6,7 +6,7 @@
 
         <variable
             name="shoppingBagViewModel"
-            type="com.ranosys.theexecutive.modules.shoppingBag.ShoppingBagViewModel" />
+            type="com.delamibrands.theexecutive.modules.shoppingBag.ShoppingBagViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout

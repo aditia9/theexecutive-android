@@ -7,11 +7,11 @@
 
         <variable
             name="item"
-            type="com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse" />
+            type="com.delamibrands.theexecutive.modules.order.orderDetail.OrderDetailResponse" />
 
         <variable
             name="orderReturnViewModel"
-            type="com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnViewModel"/>
+            type="com.delamibrands.theexecutive.modules.order.orderReturn.OrderReturnViewModel"/>
 
     </data>
 

@@ -8,7 +8,7 @@
         <import type="android.view.View"/>
         <variable
             name="colorView"
-            type="com.ranosys.theexecutive.modules.productDetail.ProductViewFragment.ColorsView"/>
+            type="com.delamibrands.theexecutive.modules.productDetail.ProductViewFragment.ColorsView"/>
     </data>
 
     <RelativeLayout

@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.ranosys.theexecutive.modules.order.orderDetail.OrderDetailResponse" />
+            type="com.delamibrands.theexecutive.modules.order.orderDetail.OrderDetailResponse" />
 
     </data>
 

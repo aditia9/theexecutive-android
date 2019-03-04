@@ -12,7 +12,7 @@ android {
         abortOnError false
     }
     defaultConfig {
-        applicationId "com.ranosys.theexecutive"
+        applicationId "com.delamibrands.theexecutive"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
@@ -48,50 +48,29 @@ android {
         enabled = true
     }
 
-    flavorDimensions "client","server"
+    flavorDimensions "default"
     productFlavors {
 
-        productionClient {
-            dimension "client"
+        develop {
             resValue "string", 'app_name', "The Executive" //app name to be shown in device
             applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             resValue "string", 'gmail_server_client_id', "685362101181-t8c6srnmnm99p1rjsgc645ciho8vu0o8.apps.googleusercontent.com"
         }
-        uatClient {
-            dimension "client"
+
+        uat {
             resValue "string", 'app_name', "The Executive" //app name to be shown in device
-            applicationId "com.ranosys.theexecutive.uat"  //package name or bundle identifier
-            resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
+            applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
+            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
+            resValue "string", 'gmail_server_client_id', "685362101181-t8c6srnmnm99p1rjsgc645ciho8vu0o8.apps.googleusercontent.com"
         }
-        devClient {
-            dimension "client"
-            resValue "string", 'app_name', "The Executive" //app name to be shown in device
-            applicationId "com.ranosys.theexecutive.dev"  //package name or bundle identifier
-            resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
-        }
-        qatClient {
-            dimension "client"
-            resValue "string", 'app_name', "The Executive" //app name to be shown in device
-            applicationId "com.ranosys.theexecutive.qat"  //package name or bundle identifier
-            resValue "string", 'gmail_server_client_id', "818064356485-i9lv7o9d2q2s6v03h23ljjcntojmd178.apps.googleusercontent.com"
-        }
+
 
         production {
+            resValue "string", 'app_name', "The Executive" //app name to be shown in device
+            applicationId "com.delamibrands.theexecutive"  //package name or bundle identifier
             buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
-            dimension "server"
-        }
-
-        UAT {
-            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
-            dimension "server"
-        }
-        dev {
-            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
-            dimension "server"
-        }
-        QAT {
-            buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
-            dimension "server"
+            resValue "string", 'gmail_server_client_id', "685362101181-t8c6srnmnm99p1rjsgc645ciho8vu0o8.apps.googleusercontent.com"
         }
     }
 }

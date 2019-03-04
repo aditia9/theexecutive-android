@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ranosys.theexecutive">
+    package="com.delamibrands.theexecutive">
+
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -22,9 +23,10 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         >
-        <activity android:name=".modules.splash.SplashActivity"
+        <activity android:name="com.delamibrands.theexecutive.modules.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/myAppTheme"
             android:configChanges="orientation"
@@ -35,11 +37,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".base.BaseActivity"
+        <activity android:name="com.delamibrands.theexecutive.base.BaseActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize"
             />
-        <activity android:name=".activities.DashBoardActivity"
+        <activity android:name="com.delamibrands.theexecutive.activities.DashBoardActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:configChanges="orientation|screenSize"
             />
@@ -67,7 +69,7 @@
         <!--Service to handle notification from FCM-->
 
         <service
-            android:name=".modules.notification.service.FCMListenerService"
+            android:name="com.delamibrands.theexecutive.modules.notification.service.FCMListenerService"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -77,7 +79,7 @@
 
         <!--Service to get instanceID for FCM-->
 
-        <service android:name=".modules.notification.service.FCMInstanceIDService"
+        <service android:name="com.delamibrands.theexecutive.modules.notification.service.FCMInstanceIDService"
            >
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

@@ -6,11 +6,11 @@
         <data>
             <variable
                 name="item"
-                type="com.ranosys.theexecutive.modules.order.orderDetail.Item" />
+                type="com.delamibrands.theexecutive.modules.order.orderDetail.Item" />
 
             <variable
                 name="returnViewModel"
-                type="com.ranosys.theexecutive.modules.order.orderReturn.OrderReturnViewModel">
+                type="com.delamibrands.theexecutive.modules.order.orderReturn.OrderReturnViewModel">
             </variable>
         </data>
 

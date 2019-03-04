@@ -10,7 +10,7 @@
 
         <variable
             name="option"
-            type="com.ranosys.theexecutive.modules.productListing.ProductListingDataClass.FilterChildOption"/>
+            type="com.delamibrands.theexecutive.modules.productListing.ProductListingDataClass.FilterChildOption"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

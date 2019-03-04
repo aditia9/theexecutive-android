@@ -5,7 +5,7 @@
     <data>
         <import type = "android.text.Html"/>
         <variable name="productItemVM"
-            type="com.ranosys.theexecutive.modules.productDetail.ProductItemViewModel"/>
+            type="com.delamibrands.theexecutive.modules.productDetail.ProductItemViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

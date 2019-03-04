@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="sizeView"
-            type="com.ranosys.theexecutive.modules.productDetail.ProductViewFragment.SizeView"/>
+            type="com.delamibrands.theexecutive.modules.productDetail.ProductViewFragment.SizeView"/>
     </data>
 
     <RelativeLayout
