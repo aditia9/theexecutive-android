@@ -53,14 +53,14 @@ android {
 
         develop {
             resValue "string", 'app_name', "The Executive" //app name to be shown in device
-            applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
+            applicationId "com.delamibrands.theexecutive"  //package name or bundle identifier
             buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             resValue "string", 'gmail_server_client_id', "685362101181-t8c6srnmnm99p1rjsgc645ciho8vu0o8.apps.googleusercontent.com"
         }
 
         uat {
             resValue "string", 'app_name', "The Executive" //app name to be shown in device
-            applicationId "com.ranosys.theexecutive"  //package name or bundle identifier
+            applicationId "com.delamibrands.theexecutive"  //package name or bundle identifier
             buildConfigField 'String', 'API_URL', '"http://magento.theexecutive.co.id/"'
             resValue "string", 'gmail_server_client_id', "685362101181-t8c6srnmnm99p1rjsgc645ciho8vu0o8.apps.googleusercontent.com"
         }
