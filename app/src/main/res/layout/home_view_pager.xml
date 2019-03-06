@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+        <data>
+                <variable
+                    name="categoryModel"
+                    type="com.delamibrands.theexecutive.modules.category.CategoryModelView"
+                    />
+        </data>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/three_hundred_dp"
+                    android:scrollbars="none"
+                    >
+                </android.support.v4.view.ViewPager>
+
+                <TextView
+                    android:id="@+id/tv_promotion_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/viewpager"
+                    android:gravity="center"
+                    android:textSize="@dimen/sixteen_sp"
+                    android:paddingTop="@dimen/fifteen_dp"
+                    android:paddingBottom="@dimen/fifteen_dp"
+                    android:textStyle="bold"
+                    />
+
+        </RelativeLayout>
+</layout>

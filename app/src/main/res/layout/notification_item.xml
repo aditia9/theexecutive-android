@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
+
+        <variable
+            name="notification"
+            type="com.delamibrands.theexecutive.modules.notification.dataclasses.NotificationListResponse" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/sixteen_dp"
+        android:background="@{notification.is_read ? @color/notification_read_bg : @android:color/white}">
+
+        <ImageView
+            android:id="@+id/img_bullet"
+            android:layout_width="@dimen/ten_dp"
+            android:layout_height="@dimen/ten_dp"
+            android:layout_marginStart="@dimen/twenty_dp"
+            android:contentDescription="@string/app_name"
+            android:layout_marginTop="@dimen/five_dp"
+            android:src="@{notification.is_read ? @drawable/notification_read : @drawable/notification_unread}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/twenty_dp"
+            android:layout_marginStart="@dimen/fifteen_dp"
+            android:textStyle="bold"
+            android:text="@{notification.title}"
+            android:visibility="@{TextUtils.isEmpty(notification.title)? View.GONE : View.VISIBLE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_bullet"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_desc"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/fifteen_dp"
+            android:layout_marginEnd="@dimen/fifteen_dp"
+            android:layout_marginTop="@dimen/four_dp"
+            android:textSize="@dimen/fourteen_sp"
+            android:text="@{notification.description}"
+            app:layout_constraintStart_toEndOf="@id/img_bullet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+
+        <TextView
+            android:id="@+id/tv_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/fifteen_dp"
+            android:layout_marginTop="@dimen/three_dp"
+            android:paddingBottom="@dimen/three_dp"
+            android:textSize="@dimen/fourteen_sp"
+            android:textColor="@color/hint_color"
+            app:layout_constraintStart_toEndOf="@id/img_bullet"
+            app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+
+        <ImageView
+            android:id="@+id/img_notification"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="@{TextUtils.isEmpty(notification.image)? View.GONE : View.VISIBLE}"
+            bind:imageUrl="@{notification.image}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date_time" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/one_dp"
+            android:background="@color/divider_color"
+            app:layout_constraintTop_toBottomOf="@+id/img_notification"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+    </android.support.constraint.ConstraintLayout>
+</layout>

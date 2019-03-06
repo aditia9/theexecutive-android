@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <!-- View pager to swipe views -->
+        <com.delamibrands.theexecutive.customViews.CustomViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_above="@+id/tabLayout"
+            />
+
+        <TextView
+            android:id="@+id/tv_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tabLayout"
+            android:layout_alignParentEnd="true"
+            android:background="@color/theme_black_color"
+            android:text="@string/chat"
+            android:textSize="@dimen/fourteen_sp"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:drawableStart="@drawable/chat"
+            android:paddingLeft="@dimen/ten_dp"
+            android:paddingRight="@dimen/ten_dp"
+            android:paddingTop="@dimen/eight_dp"
+            android:paddingBottom="@dimen/eight_dp"
+            android:drawablePadding="@dimen/ten_dp"
+            android:layout_margin="@dimen/twenty_dp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/half_dip"
+            android:background="@color/divider_color"
+            android:layout_above="@id/tabLayout"/>
+
+        <!-- our tablayout to display tabs  -->
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            app:tabMode="fixed"
+            app:tabMaxWidth="@dimen/match_constraint"
+            app:tabGravity="fill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/five_dp"
+            android:paddingBottom="@dimen/five_dp"
+            android:layout_alignParentBottom="true"
+            app:tabIndicatorHeight="@dimen/match_constraint"
+            android:background="@color/white"
+            />
+    </RelativeLayout>
+</layout>

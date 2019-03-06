@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+    <string-array name="my_account_option_title_array">
+        <item>@string/my_information_option</item>
+        <item>@string/my_orders</item>
+        <item>@string/shipping_address</item>
+        <item>@string/notifications</item>
+        <item>@string/news_letter_option</item>
+        <item>@string/select_lang_title</item>
+        <item>@string/bank_transfer</item>
+        <item>@string/change_password</item>
+        <item>@string/buying_guide</item>
+        <item>@string/contact_us</item>
+        <item>@string/settings</item>
+    </string-array>
+
+
+    <string-array name="reason_array">
+        <item>@string/select_reason</item>
+        <item>@string/product_not_fit</item>
+        <item>@string/incorrect_product_received</item>
+        <item>@string/product_not_match_description</item>
+        <item>@string/product_not_match_expection</item>
+        <item>@string/quality_issue</item>
+    </string-array>
+
+    <integer-array name="my_account_option_icon_array">
+        <item>@drawable/info</item>
+        <item>@drawable/order</item>
+        <item>@drawable/shipping_address</item>
+        <item>@drawable/notification</item>
+        <item>@drawable/newsletter</item>
+        <item>@drawable/language</item>
+        <item>@drawable/bank_transfer</item>
+        <item>@drawable/change_password</item>
+        <item>@drawable/buying_guide</item>
+        <item>@drawable/contact</item>
+        <item>@drawable/setting</item>
+    </integer-array>
+
+    <string-array name="attachment_option_array">
+        <item>@string/take_photo</item>
+        <item>@string/choose_from_gallery</item>
+        <item>@string/cancel</item>
+    </string-array>
+</resources>

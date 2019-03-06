@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.support.v4.content.ContextCompat" />
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+        <import type="com.delamibrands.theexecutive.R"/>
+        <variable
+            name="toolbarViewModel"
+            type="com.delamibrands.theexecutive.activities.ToolbarViewModel"/>
+    </data>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/toolbar_left_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/ten_dp"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/toolbar_left_icon"
+                android:visibility="@{toolbarViewModel.isLeftIconVisible() ? View.VISIBLE : View.GONE,  default = visible}"
+                android:src="@{ContextCompat.getDrawable(context, toolbarViewModel.leftIcon)}"
+                android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="true" />
+
+
+            <TextView
+                android:id="@+id/toolbar_right_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='@{toolbarViewModel.cartCount}'
+                android:layout_marginRight="@dimen/sixteen_dp"
+                android:paddingTop="@dimen/six_dp"
+                android:layout_marginTop="@dimen/six_dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:textSize='@{toolbarViewModel.cartCount == "99+" ? @dimen/nine_sp : @dimen/twelve_sp}'
+                android:contentDescription="@string/toolbar_right_icon"
+                android:visibility="@{(toolbarViewModel.isRightIconVisible() &amp;&amp; toolbarViewModel.rightIcon == R.drawable.bag)? View.VISIBLE : View.GONE,  default = visible}"
+                android:background="@{ContextCompat.getDrawable(context, toolbarViewModel.rightIcon)}"
+                android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageView
+                android:id="@+id/toolbar_right_icon_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/four_dp"
+                android:visibility="@{(toolbarViewModel.isRightIconVisible() &amp;&amp; toolbarViewModel.rightIcon != R.drawable.bag) ? View.VISIBLE : View.GONE,  default = visible}"
+                android:src="@{ContextCompat.getDrawable(context, toolbarViewModel.rightIcon)}"
+                android:layout_marginRight="@dimen/sixteen_dp"
+                android:contentDescription="@string/toolbar_right_icon"
+                android:onClick="@{(view) -> toolbarViewModel.onIconClick(view)}"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="@dimen/match_constraint"
+                android:layout_height="wrap_content"
+                app:layout_goneMarginRight="28dp"
+                app:layout_goneMarginLeft="28dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="@dimen/eight_dp"
+                app:layout_constraintLeft_toRightOf="@id/toolbar_left_icon"
+                app:layout_constraintRight_toLeftOf="@id/toolbar_right_icon">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{toolbarViewModel.showLogo ? View.VISIBLE: View.GONE }"
+                    android:src="@drawable/logo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="match_parent"
+                    android:visibility="@{toolbarViewModel.showLogo ? View.GONE: View.VISIBLE }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    >
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:visibility="@{toolbarViewModel.showLogo ? View.GONE: View.VISIBLE }"
+                        android:theme="@style/heading_theme"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/toolbar_sub_title"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:text="@{toolbarViewModel.title}"
+                        />
+
+                    <TextView
+                        android:id="@+id/toolbar_sub_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/sixteen_sp"
+                        android:textColor="@color/email_color"
+                        android:text="@{toolbarViewModel.subTitle}"
+                        android:visibility="@{TextUtils.isEmpty(toolbarViewModel.subTitle) ? View.GONE : View.VISIBLE,  default = gone}"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/toolbar_title"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+                </android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.Toolbar>
+
+</layout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.text.TextUtils"/>
+        <import type="android.view.View"/>
+        <variable
+            name="productLinks"
+            type="com.delamibrands.theexecutive.modules.productListing.ProductListingDataClass.ProductLinks"/>
+    </data>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="@dimen/one_sixty_dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ten_dp"
+        >
+
+        <ImageView
+            android:id="@+id/product_image"
+            android:layout_width="@dimen/one_sixty_dp"
+            android:layout_height="@dimen/two_thirty_dp"
+            bind:baseUrlWithProductImageUrl="@{productLinks.extension_attributes.linked_product_image}"
+            android:contentDescription="@string/product_image"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textAllCaps="true"
+            android:textSize="@dimen/twelve_sp"
+            android:text="@{productLinks.extension_attributes.linked_product_name}"
+            android:layout_marginTop="@dimen/twelve_dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/product_image"/>
+
+        <TextView
+            android:id="@+id/tv_normal_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="=@{productLinks.extension_attributes.linked_product_regularprice}"
+            android:visibility="@{TextUtils.isEmpty(Integer.toString(productLinks.extension_attributes.linked_product_finalprice))? View.GONE : View.VISIBLE}"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:textSize="@dimen/twelve_sp"
+            app:layout_constraintLeft_toLeftOf="@id/product_image"
+            app:layout_constraintRight_toRightOf="@id/product_image"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            android:layout_marginBottom="@dimen/ten_dp"
+            android:paddingBottom="@dimen/twenty_dp"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

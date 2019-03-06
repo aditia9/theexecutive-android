@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="toolbarViewModel"
+            type="com.delamibrands.theexecutive.activities.ToolbarViewModel"/>
+    </data>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/outer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/toolbar_layout"
+            app:toolbarViewModel="@{toolbarViewModel}"/>
+
+        <FrameLayout
+            android:id="@+id/main_container"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="@dimen/match_constraint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

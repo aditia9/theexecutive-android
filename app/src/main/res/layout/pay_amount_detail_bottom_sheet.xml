@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/total_segment_bottom_sheet"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/twelve_dp"
+        android:paddingBottom="@dimen/twelve_dp"
+        android:layout_marginRight="@dimen/twenty_four_dp"
+        android:layout_marginLeft="@dimen/twenty_four_dp">
+
+        <ImageView
+            android:id="@+id/img_total_segment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/eight_dp"
+            android:contentDescription="@string/bottom_sheet_behavior"
+            android:src="@drawable/dropdown"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_total_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/eighteen_sp"
+            android:textStyle="bold"
+            android:capitalize="words"
+            android:layout_marginBottom="@dimen/sixteen_dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btn_pay"/>
+
+        <LinearLayout
+            android:id="@+id/ll_total_segment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_total_segment">
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_pay"
+            android:layout_width="@dimen/match_constraint"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/sixteen_dp"
+            android:theme="@style/button_theme"
+            android:background="@drawable/black_button_bg"
+            android:text="@string/confirm_order"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_total_segment" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.v7.widget.CardView>

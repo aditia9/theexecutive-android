@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/thirty_six_dp"
+    android:layout_marginRight="@dimen/twenty_four_dp"
+    android:layout_marginLeft="@dimen/twenty_four_dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="wrap_content"
+        android:text="@string/logout"
+        android:theme="@style/button_theme"
+        android:background="@drawable/black_button_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_app_version"
+        android:layout_width="wrap_content"
+        android:textColor="@color/hint_color"
+        app:layout_constraintTop_toBottomOf="@+id/btn_logout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/five_dp"
+        android:layout_height="wrap_content" />
+
+</android.support.constraint.ConstraintLayout>

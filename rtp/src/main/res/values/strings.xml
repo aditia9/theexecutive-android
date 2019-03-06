@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">RTP</string>
+    <string name="title_appinfo_title">Permission required</string>
+    <string name="title_btn_appinfo">APP INFO</string>
+    <string name="title_appinfo_message">Needs permission to access some things on your device. Select "Permission" in App info to re-enable </string>
+</resources>

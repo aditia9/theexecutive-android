@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "565555428292",
+    "firebase_url": "https://delami-notification.firebaseio.com",
+    "project_id": "delami-notification",
+    "storage_bucket": "delami-notification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565555428292:android:d69cbb2399e8e0aa",
+        "android_client_info": {
+          "package_name": "com.ranosys.theexecutive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "565555428292-im2hah5phca1em6jkn6cuu25ieii3leu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgvRu2tPA5V3RVfATKODDsgHOjZcBUe5o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565555428292:android:05e91ab900c37996",
+        "android_client_info": {
+          "package_name": "com.ranosys.theexecutive.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "565555428292-im2hah5phca1em6jkn6cuu25ieii3leu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgvRu2tPA5V3RVfATKODDsgHOjZcBUe5o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
