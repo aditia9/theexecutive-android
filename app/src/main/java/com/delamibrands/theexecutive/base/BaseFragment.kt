@@ -179,25 +179,7 @@ abstract class BaseFragment : LifecycleFragment() {
 
                 AppLog.e("PAYMENT URL - : $url")
 
-                if(url!!.contains(BuildConfig.API_URL)){
 
-                    when{
-                        url.contains(orderSuccessUrl) -> {
-                            webPagesDialog.dismiss()
-                            redirectToOrderResultPage(orderId, Constants.SUCCESS)
-                        }
-
-                        url.contains(orderFailureUrl) -> {
-                            webPagesDialog.dismiss()
-                            redirectToOrderResultPage(orderId, Constants.FAILURE)
-                        }
-
-                        url.contains(orderCancelUrl) -> {
-                            webPagesDialog.dismiss()
-                            redirectToOrderResultPage(orderId, Constants.CANCEL)
-                        }
-                    }
-                }
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -208,7 +190,28 @@ abstract class BaseFragment : LifecycleFragment() {
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 AppLog.e("PAYMENT URL - : ${request!!.url}")
-                view?.loadUrl(request!!.url.toString())
+                if(!url?.contains("cart")!!){
+                    view?.loadUrl(request.url.toString())
+                    if(request.url!!.toString().contains(BuildConfig.API_URL)){
+                        when{
+                            request.url!!.toString().contains(orderSuccessUrl) -> {
+                                webPagesDialog.dismiss()
+                                redirectToOrderResultPage(orderId, Constants.SUCCESS)
+                            }
+                            request.url!!.toString().contains(orderFailureUrl) -> {
+                                webPagesDialog.dismiss()
+                                redirectToOrderResultPage(orderId, Constants.FAILURE)
+                            }
+                            request.url!!.toString().contains(orderCancelUrl) -> {
+                                webPagesDialog.dismiss()
+                                redirectToOrderResultPage(orderId, Constants.CANCEL)
+                            }
+                        }
+                    }
+                }else{
+
+                }
+
                 return true
             }
         }

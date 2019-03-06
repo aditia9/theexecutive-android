@@ -56,7 +56,5 @@ object AppLog {
             ex.stackTrace
         }
     }
-
-
 }
 
