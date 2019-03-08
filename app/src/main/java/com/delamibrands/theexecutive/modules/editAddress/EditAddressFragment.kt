@@ -124,9 +124,12 @@ class EditAddressFragment:BaseFragment() {
 
                 val temp = mViewModel.countryList.single { it.full_name_english == maskedAdd?.country }
                 mBinding.spinnerCountry.setSelection(mViewModel.countryList.indexOf(temp))
-                val temp2 = mViewModel.countryList.flatMap { it.available_regions }.toList().single { it.name == maskedAdd?.state }
-                mBinding.spinnerState.setSelection(mViewModel.countryList.flatMap { it.available_regions }.toList().indexOf(temp2))
-
+               try {
+                   val temp2 = mViewModel.countryList.flatMap { it.available_regions }.toList().single { it.name == maskedAdd?.state }
+                   mBinding.spinnerState.setSelection(mViewModel.countryList.flatMap { it.available_regions }.toList().indexOf(temp2))
+               }catch (e: Exception){
+                   e.printStackTrace()
+               }
             }else{
                 Utils.showDialog(activity, getString(R.string.something_went_wrong_error), getString(R.string.ok), "", object: DialogOkCallback {
                     override fun setDone(done: Boolean) {
