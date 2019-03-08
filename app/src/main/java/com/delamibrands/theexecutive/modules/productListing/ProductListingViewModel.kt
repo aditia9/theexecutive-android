@@ -96,7 +96,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
     }
 
     fun getSearchFilterOptions(query: String) {
-        AppRepository.searchFilterOptionApi(query, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse> {
+        AppRepository.searchFilterOptionApi(query, object : ApiCallback<ProductListingDataClass.FilterOptionsResponse>{
             override fun onException(error: Throwable) {
                 Utils.printLog("search Filter option api", error.message?: "exception")
             }
@@ -114,10 +114,9 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                         }
                     }
 
-                   // priceFilter.value = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }[0]
-                    val localPriceFilter = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }
+                   var localPriceFilter = filterOptions.filters.filter { option -> option.name == Constants.FILTER_PRICE_LABEL }
                     if(localPriceFilter.isNotEmpty())
-                        priceFilter.value = localPriceFilter[0]
+                    priceFilter.value = localPriceFilter[0]
                     else
                         priceFilter.value = null
                 }
