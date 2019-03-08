@@ -206,6 +206,16 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
         }
     }
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mBinding.etFirstName.postDelayed({
+            mBinding.etFirstName.requestFocus()
+            mBinding.etFirstName.isFocusable = true
+            mBinding.etFirstName.isFocusableInTouchMode = true
+        }, 100)
+    }
     override fun onResume() {
         super.onResume()
         activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
