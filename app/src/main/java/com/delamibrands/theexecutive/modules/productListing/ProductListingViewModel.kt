@@ -114,7 +114,7 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                         }
                     }
 
-                   var localPriceFilter = filterOptions.filters.filter { option -> option.code == Constants.FILTER_PRICE_KEY }
+                   val localPriceFilter = filterOptions.filters.filter { option -> option.code == Constants.FILTER_PRICE_KEY }
                     if(localPriceFilter.isNotEmpty())
                     priceFilter.value = localPriceFilter[0]
                     else

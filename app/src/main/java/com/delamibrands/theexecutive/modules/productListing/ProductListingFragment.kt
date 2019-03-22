@@ -283,7 +283,7 @@ class ProductListingFragment: BaseFragment() {
             if(filterList?.isNotEmpty()!!){
                 mBinding.tvFilterOption.setTextColor(ContextCompat.getColor(activity as Context, R.color.theme_black_color))
                 mBinding.tvFilterOption.isEnabled = true
-                filterOptionAdapter.optionsList = filterList.filterNot { it.name == Constants.FILTER_PRICE_LABEL }
+                filterOptionAdapter.optionsList = filterList.filterNot { it.code == Constants.FILTER_PRICE_KEY }
                 filterOptionAdapter.notifyDataSetChanged()
 
 
@@ -505,7 +505,7 @@ class ProductListingFragment: BaseFragment() {
                             val input = Utils.getStringFromFormattedPrice(s.toString()).toLong()
                             filterOptionBinding.priceRangeBar.selectedMinValue = input
                         }
-                        catch (e : NumberFormatException){
+                        catch (e : Throwable){
                             AppLog.printStackTrace(e)
                         }
 
