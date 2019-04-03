@@ -158,7 +158,7 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
                 postcode = selectedAddress.postcode!!,
                 region_id = selectedAddress.region_id!!,
                 region_code = selectedAddress.region?.region_code!!,
-                region = selectedAddress.region.region,
+                region = selectedAddress.region!!.region,
                 street = selectedAddress.street!!,
                 customer_address_id = selectedAddress.id
         )
