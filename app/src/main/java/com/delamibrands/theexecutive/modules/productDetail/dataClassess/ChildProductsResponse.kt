@@ -31,7 +31,9 @@ data class ChildProductsResponse(
 data class ExtensionAttributesChild(
 		val website_ids: List<Int>,
 		val category_links: List<CategoryLinkChild>,
-		val stock_item: StockItem
+		val stock_item: StockItem,
+		val regular_price: Int,
+		val final_price : Int
 )
 
 data class CategoryLinkChild(
