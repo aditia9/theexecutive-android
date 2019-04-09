@@ -261,7 +261,7 @@ class SplashActivity : BaseActivity() {
         var reader: BufferedReader? = null
         var token = ""
         try {
-            reader = BufferedReader(InputStreamReader(assets.open(Constants.CONFIG_FILE_NAME)))
+            reader = BufferedReader(InputStreamReader(assets.open(Constants.CONFIG_FILE_PRODUCTION)))
             token = reader.readLine()
 
         } catch (e: IOException) {

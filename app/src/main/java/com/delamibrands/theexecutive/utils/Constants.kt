@@ -22,6 +22,7 @@ object Constants {
     const val ERROR = "Error"
     const val MAINTENENCE_OFF = "0"
     const val CONFIG_FILE_NAME = "config"
+    const val CONFIG_FILE_PRODUCTION = "proconfig"
     const val FORGOT_PASSWORD_REQUEST_PARAM_TEMPLATE = "email_reset"
     const val ALL: String = "all"
     const val TYPE_FACEBOOK: String = "facebook"
