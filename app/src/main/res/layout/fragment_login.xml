@@ -51,6 +51,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/existing_user_label"
                     android:theme="@style/sub_heading_theme"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/twelve_dp"
                     app:layout_constraintStart_toStartOf="@+id/guideline_left"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -119,7 +119,7 @@ object Constants {
     const val FAILURE = "failure"
     const val CANCEL = "cancelled"
     const val CANCEL_STATUS = "canceled"
-    const val IMAGE_RATIO: Double = 1.44
+    const val IMAGE_RATIO: Double = 1.40
     const val WIDTH_MARGIN : Int = 40
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"
