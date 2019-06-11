@@ -1,0 +1,11 @@
+package com.delamibrands.theexecutive.api.interfaces
+
+/**
+ * Created by Vikash Kumar Bijarniya on 29/1/18.
+ */
+interface ApiCallback<T>{
+    fun onException(error : Throwable)
+    fun onError(errorMsg : String)
+    fun onErrorCode(errorCode : Int){}
+    fun onSuccess(t : T?)
+}

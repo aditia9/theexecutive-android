@@ -44,7 +44,7 @@ class CustomViewPageAdapter(context : Context, list : List<PromotionsResponseDat
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
-        Utils.setImageViewHeightWrtDeviceWidth((view as RelativeLayout).getChildAt(0).context, (view as RelativeLayout).getChildAt(0) as ImageView, Constants.IMAGE_RATIO)
+        //Utils.setImageViewHeightWrtDeviceWidth((view as RelativeLayout).getChildAt(0).context, (view as RelativeLayout).getChildAt(0) as ImageView, Constants.IMAGE_RATIO)
         if(orientationOrder == 0){
             ((view as RelativeLayout).getChildAt(0) as ImageView).scaleType = ImageView.ScaleType.CENTER_CROP
 

@@ -22,6 +22,7 @@ object Constants {
     const val ERROR = "Error"
     const val MAINTENENCE_OFF = "0"
     const val CONFIG_FILE_NAME = "config"
+    const val CONFIG_FILE_PRODUCTION = "proconfig"
     const val FORGOT_PASSWORD_REQUEST_PARAM_TEMPLATE = "email_reset"
     const val ALL: String = "all"
     const val TYPE_FACEBOOK: String = "facebook"
@@ -118,7 +119,7 @@ object Constants {
     const val FAILURE = "failure"
     const val CANCEL = "cancelled"
     const val CANCEL_STATUS = "canceled"
-    const val IMAGE_RATIO: Double = 1.44
+    const val IMAGE_RATIO: Double = 1.40
     const val WIDTH_MARGIN : Int = 40
     const val BANK_RECIPIENT_LABEL: String = "Bank Recipient"
     const val TRANSFER_METHOD_LABEL: String = "Transfer Method"

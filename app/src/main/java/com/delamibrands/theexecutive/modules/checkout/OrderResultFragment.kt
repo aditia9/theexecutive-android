@@ -58,6 +58,10 @@ class OrderResultFragment: BaseFragment(){
         orderResultViewModel.apiError.observe(this, Observer { error ->
             handleError(error)
         })
+
+        orderResultViewModel.orderStatus.observe(this, Observer {
+            processOrderStatus()
+        })
     }
 
     private fun handleError(error: String?) {
@@ -112,5 +116,39 @@ class OrderResultFragment: BaseFragment(){
 
             return orderResultFragment
         }
+    }
+
+
+    private fun processOrderStatus() {
+        var statusStr = ""
+        var btnStr = ""
+        var infoStr = ""
+
+        if (orderResultViewModel.orderStatus.value?.order_state == Constants.CANCEL_STATUS) {
+            status = Constants.CANCEL
+        }
+
+        when (status) {
+            Constants.SUCCESS -> {
+                statusStr = getString(R.string.order_success_msg)
+                btnStr = getString(R.string.order_success_btn_text)
+                infoStr = getString(R.string.order_success_info)
+            }
+            Constants.CANCEL -> {
+                statusStr = getString(R.string.order_cancel_msg)
+                btnStr = getString(R.string.order_cancel_btn_text)
+                infoStr = getString(R.string.order_cancel_info)
+            }
+            Constants.FAILURE -> {
+                statusStr = getString(R.string.order_failure_msg)
+                btnStr = getString(R.string.order_failure_btn_text)
+                infoStr = getString(R.string.order_failure_info)
+            }
+        }
+
+        orderResultViewModel.statusMsg.set(statusStr)
+        orderResultViewModel.infoMsg.set(infoStr)
+        orderResultViewModel.btnAction.set(btnStr)
+        orderResultViewModel.statusImg.set(status)
     }
 }

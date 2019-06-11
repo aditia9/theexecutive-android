@@ -188,7 +188,7 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
         val mobile = "${maskedAddress?.countryCode}-${maskedAddress?.mobile}"
         val selectedState = stateList.single { it.name == maskedAddress?.state }
 
-        val newAddress = userInfo?.addresses!![0].copy(
+        val newAddress = MyAccountDataClass.Address(
                 id = null,
                 firstname = maskedAddress?.firstName,
                 lastname = maskedAddress?.lastName,
@@ -203,14 +203,51 @@ class AddAddressViewModel(application: Application): BaseViewModel(application) 
                         region = selectedState.name),
 
                 default_billing = null,
-                default_shipping = null
-
+                default_shipping = null,
+                customer_id = userInfo?.id.toString()
         )
 
-        userInfo.addresses?.add(newAddress)
+              //  if(userInfo?.addresses!!.size == 0){
+        /*            newAddress!![0].id = null
+                    newAddress[0].firstname = maskedAddress?.firstName
+                    newAddress[0].lastname = maskedAddress?.lastName
+                    newAddress[0].street = listOf(maskedAddress?.streedAdd1,maskedAddress?.streedAdd2) as List<String>
+                    newAddress[0].telephone = mobile
+                    newAddress[0].country_id = Utils.getCountryId(maskedAddress?.country)
+                    newAddress[0].city = maskedAddress?.city
+                    newAddress[0].postcode = maskedAddress?.postalCode
+                    newAddress[0].region_id = if(selectedState.id.isBlank().not()) selectedState.id else ""
+                    newAddress[0].region = RegisterDataClass.Region(region_code = selectedState.code,
+                            region_id = if(!TextUtils.isEmpty(selectedState.id)) selectedState.id.toInt() else 1,
+                            region = selectedState.name)
+
+                    newAddress[0].default_billing = null
+                    newAddress[0].default_shipping = null*/
+              /*  }else{
+                     newAddress = userInfo?.addresses.copy(
+                            id = null,
+                            firstname = maskedAddress?.firstName,
+                            lastname = maskedAddress?.lastName,
+                            street = listOf(maskedAddress?.streedAdd1,maskedAddress?.streedAdd2) as List<String>,
+                            telephone = mobile,
+                            country_id = Utils.getCountryId(maskedAddress?.country),
+                            city = maskedAddress?.city,
+                            postcode = maskedAddress?.postalCode,
+                            region_id = if(selectedState.id.isBlank().not()) selectedState.id else "",
+                            region = RegisterDataClass.Region(region_code = selectedState.code,
+                                    region_id = if(!TextUtils.isEmpty(selectedState.id)) selectedState.id.toInt() else 1,
+                                    region = selectedState.name),
+
+                            default_billing = null,
+                            default_shipping = null
+                    )
+                }*/
+
+
+        userInfo?.addresses?.add(newAddress)
 
         val editAddressRequest = MyAccountDataClass.UpdateInfoRequest(
-                customer = userInfo
+                customer = userInfo!!
         )
 
         val apiResponse = ApiResponse<MyAccountDataClass.UserInfoResponse>()

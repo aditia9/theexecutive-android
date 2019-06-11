@@ -50,6 +50,9 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        window.statusBarColor =
+                resources.getColor(R.color.white)
+
         //check for auth token in SP if not get from assets
         if (TextUtils.isEmpty(SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY))) {
             val token: String = getAuthToken()
@@ -258,7 +261,7 @@ class SplashActivity : BaseActivity() {
         var reader: BufferedReader? = null
         var token = ""
         try {
-            reader = BufferedReader(InputStreamReader(assets.open(Constants.CONFIG_FILE_NAME)))
+            reader = BufferedReader(InputStreamReader(assets.open(Constants.CONFIG_FILE_PRODUCTION)))
             token = reader.readLine()
 
         } catch (e: IOException) {

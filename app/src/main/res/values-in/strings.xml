@@ -99,7 +99,7 @@
     <string name="yes">Iya</string>
     <string name="no">Tidak</string>
     <string name="logout">Keluar</string>
-    <string name="existing_user_label">Pelanggan telah terdaftar</string>
+    <string name="existing_user_label">Pelanggan Terdaftar</string>
     <string name="new_user_label">Pelanggan baru</string>
     <string name="chat">Chat</string>
     <string name="close_app_text">Apakah anda yakin akan keluar dari aplikasi?</string>

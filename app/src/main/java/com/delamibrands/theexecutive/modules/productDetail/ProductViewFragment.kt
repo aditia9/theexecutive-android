@@ -350,8 +350,12 @@ class ProductViewFragment : BaseFragment() {
             hideLoading()
             if (response is List<*>) {
                 val list = response as List<ChildProductsResponse>
-                if(list.isNotEmpty())
-                childItemQty = list[0].extension_attributes.stock_item.qty
+                if(list.isNotEmpty()){
+                    childItemQty = list[0].extension_attributes.stock_item.qty
+                    val ssb = Utils.getDisplayPrice(list[0].extension_attributes.regular_price.toString(), list[0].extension_attributes.final_price.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
+                    tv_price.text = ssb
+                }
+
                 maxQuantityList?.clear()
                 list.forEach { it ->
                     try {
@@ -359,16 +363,17 @@ class ProductViewFragment : BaseFragment() {
                             s.attribute_code == Constants.COLOR
                         }.value.toString()
                         if (!childProductsMap.containsKey(colorValue)) {
-                            val configurePrice = it.price
+                            val configurePrice = it.extension_attributes.regular_price
                             var configureSpecialPrice = Constants.ZERO
                             val attributes = it.custom_attributes.filter {
                                 it.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL
                             }.toList()
-                            if (attributes.isNotEmpty()) {
+                           /* if (attributes.isNotEmpty()) {
                                 configureSpecialPrice = attributes[0].value.toString()
-                            }
+                            }*/
 
-                            val ss = Utils.getDisplayPrice(configurePrice, configureSpecialPrice, context?.getString(R.string.currency) ?: Constants.IDR)
+                            configureSpecialPrice = it.extension_attributes.final_price.toString()
+                            val ss = Utils.getDisplayPrice(configurePrice.toString(), configureSpecialPrice, context?.getString(R.string.currency) ?: Constants.IDR)
                             childProductsMap[colorValue] = ImagesWithPrice(ss, productItemViewModel.productItem?.media_gallery_entries)
 
                         }
@@ -376,8 +381,8 @@ class ProductViewFragment : BaseFragment() {
                         val sizeValue = it.custom_attributes.single { s ->
                             s.attribute_code == Constants.SIZE
                         }.value.toString()
-                        val configSimplePrice = it.price
-                        var configSpecialPrice = Constants.ZERO
+                        val configSimplePrice = it.extension_attributes.regular_price.toString()
+                        var configSpecialPrice =  it.extension_attributes.final_price.toString()
                         val sp = it.custom_attributes.filter { s ->
                             s.attribute_code == Constants.FILTER_SPECIAL_PRICE_LABEL
                         }.toList()
@@ -386,7 +391,7 @@ class ProductViewFragment : BaseFragment() {
                         }
                         val ss = Utils.getDisplayPrice(configSimplePrice, configSpecialPrice, context?.getString(R.string.currency) ?: Constants.IDR)
                         maxQuantityList?.add(MaxQuantity(colorValue, sizeValue, it.extension_attributes.stock_item.qty,
-                                it.extension_attributes.stock_item.is_in_stock, ss))
+                                it.extension_attributes.stock_item.is_in_stock, it.extension_attributes.final_price.toString(), it.extension_attributes.regular_price.toString()))
                     }catch (e : Exception){
                         AppLog.printStackTrace(e)
                     }
@@ -612,8 +617,10 @@ class ProductViewFragment : BaseFragment() {
             }
             if(colorOptionList?.size == 0){
                 colorsViewList?.add(ColorsView("", colorAttrId, "", productItemViewModel.productItem?.media_gallery_entries, childProductsMap[colorValue]?.price, true))
-                price = childProductsMap[colorValue]?.price
-                tv_price.text = childProductsMap[colorValue]?.price
+                if(colorValue.isNullOrEmpty().not()){
+                    price = childProductsMap[colorValue]?.price
+                    tv_price.text = childProductsMap[colorValue]?.price
+                }
             }
 
             AppLog.e("colorsViewList : " + productItemViewModel.productItem?.sku + " " + colorsViewList.toString())
@@ -822,8 +829,11 @@ class ProductViewFragment : BaseFragment() {
         }
 
         if(price == null)
-         //   price = Utils.getDisplayPrice(productItemViewModel.productItem?.price!!, specialPrice.toString(), context?.getString(R.string.currency) ?: Constants.IDR)
-        sizeDilaog.tv_product_price.text = price
+            sizeDilaog.tv_product_price.text = price
+        else
+            sizeDilaog.tv_product_price.text = Utils.getDisplayPrice(productItemViewModel.productItem?.extension_attributes?.regular_price!!, productItemViewModel.productItem?.extension_attributes?.final_price!!, context?.getString(R.string.currency) ?: Constants.IDR)
+
+
         selectedQty = 1
         itemQty = 1
         sizeDilaog.tv_quantity.text = selectedQty.toString()
@@ -852,9 +862,11 @@ class ProductViewFragment : BaseFragment() {
                         if(priceList?.size!! > 0){
                             selectedSizePrice  = priceList?.single {
                                it.sizeValue == sizeValue
-                            }?.price.toString()
+                            }?.finalPrice.toString()
                         }
-                        sizeDilaog.tv_product_price.text = selectedSizePrice
+                        sizeDilaog.tv_product_price.text = Utils.getDisplayPrice(priceList[position].regularPrice!!, priceList[position].finalPrice!!, context?.getString(R.string.currency) ?: Constants.IDR)
+
+
 
                         if (productItemViewModel.productItem?.type_id.equals(Constants.SIMPLE)) {
                             itemQty = productItemViewModel.productItem?.extension_attributes?.stock_item?.qty ?: 0
@@ -871,6 +883,13 @@ class ProductViewFragment : BaseFragment() {
                                 AppLog.printStackTrace(e)
                             }
                         }
+
+                        tv_price.text = Utils.getDisplayPrice(priceList[position].regularPrice!!, priceList[position].finalPrice!!, context?.getString(R.string.currency) ?: Constants.IDR)
+
+
+                     //   tv_price.text = Utils.getDisplayPrice(productItemViewModel.productItem?.extension_attributes?.regular_price!!, productItemViewModel.productItem?.extension_attributes?.final_price!!, context?.getString(R.string.currency) ?: Constants.IDR)
+
+
                     }else{
                         if(isFromWishList){
                             sizeViewList?.forEachIndexed { index, _ ->
@@ -880,7 +899,7 @@ class ProductViewFragment : BaseFragment() {
 
                             val selectedSizePrice = priceList?.single {
                                 it.sizeValue == sizeValue
-                            }?.price
+                            }?.finalPrice
                             sizeDilaog.tv_product_price.text = selectedSizePrice
                         }
                     }
@@ -938,7 +957,7 @@ class ProductViewFragment : BaseFragment() {
 
     data class ImagesWithPrice(var price: SpannableStringBuilder?, var list : List<ProductListingDataClass.MediaGalleryEntry>?)
 
-    data class MaxQuantity(var colorValue: String?, var sizeValue: String?, var maxQuantity: Int?, var isInStock: Boolean = true, var price: SpannableStringBuilder?)
+    data class MaxQuantity(var colorValue: String?, var sizeValue: String?, var maxQuantity: Int?, var isInStock: Boolean = true, var finalPrice: String?,  var regularPrice: String?)
 
     companion object {
         fun getInstance(productItem : ProductListingDataClass.Item?, productSku : String?, position : Int?, pagerPosition : Int?) =

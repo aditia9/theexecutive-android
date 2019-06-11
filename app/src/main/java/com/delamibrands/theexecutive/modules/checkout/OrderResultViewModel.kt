@@ -47,45 +47,8 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
                 if(t?.virtual_account_number != null){
                     virtualAccountNumber.set(t.virtual_account_number.toString())
                 }
-                processOrderStatus()
             }
 
         })
-
-
     }
-
-    private fun processOrderStatus() {
-        var statusStr = ""
-        var btnStr = ""
-        var infoStr = ""
-
-        if(orderStatus.value?.order_state == Constants.CANCEL_STATUS){
-            status = Constants.CANCEL
-        }
-
-        when(status){
-            Constants.SUCCESS -> {
-                statusStr = getApplication<Application>().resources.getString(R.string.order_success_msg)
-                btnStr = getApplication<Application>().resources.getString(R.string.order_success_btn_text)
-                infoStr = getApplication<Application>().resources.getString(R.string.order_success_info)
-            }
-            Constants.CANCEL -> {
-                statusStr = getApplication<Application>().resources.getString(R.string.order_cancel_msg)
-                btnStr = getApplication<Application>().resources.getString(R.string.order_cancel_btn_text)
-                infoStr = getApplication<Application>().resources.getString(R.string.order_cancel_info)
-            }
-            Constants.FAILURE -> {
-                statusStr = getApplication<Application>().resources.getString(R.string.order_failure_msg)
-                btnStr = getApplication<Application>().resources.getString(R.string.order_failure_btn_text)
-                infoStr = getApplication<Application>().resources.getString(R.string.order_failure_info)
-            }
-        }
-
-        statusMsg.set(statusStr)
-        infoMsg.set(infoStr)
-        btnAction.set(btnStr)
-        statusImg.set(status)
-    }
-
 }

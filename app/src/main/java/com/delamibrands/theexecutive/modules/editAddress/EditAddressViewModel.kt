@@ -115,7 +115,7 @@ class EditAddressViewModel(application: Application): BaseViewModel(application)
                 _city = address?.city,
                 _state = address?.region?.region,
                 _streedAdd1 = address?.street?.get(0),
-                _streedAdd2 = if (address?.street?.size!! > 1) address.street[1] else "",
+                _streedAdd2 = if (address?.street?.size!! > 1) address.street!![1] else "",
                 _mobile = mobileNo,
                 _postalCode = address.postcode,
                 _countryCode = countryCode
