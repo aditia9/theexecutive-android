@@ -150,7 +150,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun redirectToPlaystore() {
-        startActivity( Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.project.CK")))
+        startActivity( Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.delamibrands.theexecutive")))
         finish()
     }
 
