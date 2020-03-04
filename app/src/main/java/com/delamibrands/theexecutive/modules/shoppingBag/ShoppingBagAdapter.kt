@@ -97,7 +97,7 @@ class ShoppingBagAdapter(var context: Context, private var shoppingBagList: List
                 if (item?.product_option?.extension_attributes?.configurable_item_options != null && item.product_option.extension_attributes.configurable_item_options.isNotEmpty()) {
                     item.product_option.extension_attributes.configurable_item_options.forEach {
                         when (it.extension_attributes.attribute_label) {
-                            Constants.COLOR_ -> {
+                            Constants.COLOR_ , Constants.IN_COLOR_-> {
                                 if(!TextUtils.isEmpty(it.extension_attributes.option_label)){
                                     itemBinding?.tvProductColor?.text = it.extension_attributes.option_label
                                 }else{
@@ -105,7 +105,7 @@ class ShoppingBagAdapter(var context: Context, private var shoppingBagList: List
                                     itemBinding?.viewVertical?.visibility = View.GONE
                                 }
                             }
-                            Constants.SIZE_ -> {
+                            Constants.SIZE_, Constants.IN_SIZE_ -> {
                                 if(!TextUtils.isEmpty(it.extension_attributes.option_label)){
                                     itemBinding?.tvProductSize?.text = it.extension_attributes.option_label
                                 }else{

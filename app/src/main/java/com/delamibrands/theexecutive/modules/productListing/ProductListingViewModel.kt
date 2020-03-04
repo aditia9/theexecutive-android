@@ -167,10 +167,11 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
                 if(null == GlobalSingelton.instance?.colorList || null == GlobalSingelton.instance?.sizeList)
                     it.extension_attributes.configurable_product_options.forEach {
                         when(it.label){
-                            Constants.COLOR_ -> {
+                            Constants.COLOR_, Constants.IN_COLOR_ -> {
                                 getProductOptions(it.attribute_id, Constants.COLOR_)
                             }
-                            Constants.SIZE_ -> {
+
+                            Constants.SIZE_, Constants.IN_SIZE_ -> {
                                 getProductOptions(it.attribute_id, Constants.SIZE_)
                             }
                         }
@@ -190,10 +191,10 @@ class ProductListingViewModel(application: Application): BaseViewModel(applicati
 
             override fun onSuccess(t: List<ProductOptionsResponse>?) {
                 when(label){
-                    Constants.COLOR_ -> {
+                    Constants.COLOR_ , Constants.IN_COLOR_-> {
                         GlobalSingelton.instance?.colorList = t
                     }
-                    Constants.SIZE_ -> {
+                    Constants.SIZE_, Constants.IN_SIZE_ -> {
                         GlobalSingelton.instance?.sizeList = t
                     }
                 }

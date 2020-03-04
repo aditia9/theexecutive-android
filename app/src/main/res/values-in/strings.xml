@@ -273,6 +273,8 @@
     <string name="return_mode">Mode Pengembalian</string>
     <string name="item">barang</string>
     <string name="currency">Rp</string>
+    <string name="label_size">Warna</string>
+    <string name="label_color">Ukuran</string>
 
 
 </resources>
