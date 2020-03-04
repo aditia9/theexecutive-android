@@ -10,6 +10,7 @@ import com.delamibrands.theexecutive.api.interfaces.ApiCallback
 import com.delamibrands.theexecutive.base.BaseViewModel
 import com.delamibrands.theexecutive.modules.myAccount.MyAccountDataClass
 import com.delamibrands.theexecutive.modules.shoppingBag.ShoppingBagResponse
+import com.delamibrands.theexecutive.utils.Constants
 import com.delamibrands.theexecutive.utils.GlobalSingelton
 import com.delamibrands.theexecutive.utils.Utils
 
@@ -195,6 +196,29 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
                 orderId.value = t
             }
 
+        })
+    }
+
+    fun orderCommentApi(orderId: String?){
+
+        val request = CheckoutDataClass.OrderCommentRequest(
+            statusHistory = CheckoutDataClass.StatusHistory(
+                comment = Constants.ORDER_COMMENT
+            )
+        )
+
+        AppRepository.orderComment(orderId,request, callBack = object: ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                commonError.value = error.message
+            }
+
+            override fun onError(errorMsg: String) {
+                commonError.value = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                //Empty Override Method
+            }
         })
     }
 
