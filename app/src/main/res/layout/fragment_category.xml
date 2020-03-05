@@ -36,8 +36,7 @@
             android:theme="@style/tilTheme"
             android:labelFor="@+id/et_search"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/btn_search_action"
-          >
+            android:layout_toStartOf="@+id/btn_search_action">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_search_home"

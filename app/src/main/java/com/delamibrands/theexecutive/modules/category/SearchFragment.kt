@@ -3,6 +3,7 @@ package com.delamibrands.theexecutive.modules.category
 import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -57,24 +58,9 @@ class SearchFragment: BaseFragment(){
         (activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).showSoftInput(et_search_home,
                 InputMethodManager.SHOW_IMPLICIT)
 
-
-
-
-        rootlayout.viewTreeObserver.addOnGlobalLayoutListener {
-            if(isAdded){
-                val r = Rect()
-                rootlayout.getWindowVisibleDisplayFrame(r)
-
-                var heightDiff = rootlayout.rootView.height - (r.bottom - r.top)
-                if (heightDiff < 350 && keyboardVisibility) {
-                    keyboardVisibility = false
-                    removeFragment()
-                } else {
-                    keyboardVisibility = true
-
-                }
-            }
-        }
+        Handler().postDelayed({
+            setTreeObserver()
+        }, 500)
 
         if(searchQuery.isNullOrBlank() && searchQuery.isNullOrEmpty()){
             et_search_home.setText(searchQuery)
@@ -143,6 +129,24 @@ class SearchFragment: BaseFragment(){
             }
             false
         })
+    }
+
+    private fun setTreeObserver() {
+        rootlayout.viewTreeObserver.addOnGlobalLayoutListener {
+            if (isAdded) {
+                val r = Rect()
+                rootlayout.getWindowVisibleDisplayFrame(r)
+
+                var heightDiff = rootlayout.rootView.height - (r.bottom - r.top)
+                if (heightDiff < 350 && keyboardVisibility) {
+                    keyboardVisibility = false
+                    removeFragment()
+                } else {
+                    keyboardVisibility = true
+
+                }
+            }
+        }
     }
 
     private fun showSearchResult(searchQuery: String) {
