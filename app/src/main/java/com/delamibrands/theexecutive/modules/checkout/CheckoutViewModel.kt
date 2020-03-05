@@ -10,7 +10,6 @@ import com.delamibrands.theexecutive.api.interfaces.ApiCallback
 import com.delamibrands.theexecutive.base.BaseViewModel
 import com.delamibrands.theexecutive.modules.myAccount.MyAccountDataClass
 import com.delamibrands.theexecutive.modules.shoppingBag.ShoppingBagResponse
-import com.delamibrands.theexecutive.utils.Constants
 import com.delamibrands.theexecutive.utils.GlobalSingelton
 import com.delamibrands.theexecutive.utils.Utils
 
