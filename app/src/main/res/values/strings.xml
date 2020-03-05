@@ -279,9 +279,7 @@
     <string name="grand_total">Grand Total</string>
     <string name="item">item(s)</string>
     <string name="currency">IDR</string>
-
-
-
-
+    <string name="label_size">Size</string>
+    <string name="label_color">Color</string>
 
 </resources>

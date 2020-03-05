@@ -55,8 +55,10 @@ object Constants {
     const val SHORT_DESCRIPTION: String = "short_description"
     const val COLOR: String = "color"
     const val COLOR_: String = "Color"
+    const val IN_COLOR: String = "Warna"
     const val SIZE: String = "size"
     const val SIZE_: String = "Size"
+    const val IN_SIZE: String = "Ukuran"
     const val REQUEST_PAGE_LABEL: String = "p"
     const val REQUEST_PAGE_LIMIT_LABEL: String = "product_list_limit"
     const val REQUEST_SEARCH_LABEL: String = "q"
@@ -131,5 +133,8 @@ object Constants {
     const val COUNTRY_CODE_US = "US"
     const val NOTIFICATION_ID_LIST: String = "USER_NOTIFICATION_IDS"
     val SOFT_INPUT_KEYBOARD_DEF_HEIGHT: Int = 350
+    const val PRODUCTION = "production"
+
+    const val ORDER_COMMENT = "[MobileOrder-Android]"
 
 }

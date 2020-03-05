@@ -100,7 +100,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
             if(item?.items?.get(position -1)?.extension_attributes != null && item.items.get(position -1).extension_attributes?.options != null){
                 item.items[position - 1].extension_attributes?.options?.forEach {
                     when (it.label) {
-                        Constants.COLOR_ -> {
+                        Constants.COLOR_, Constants.IN_COLOR -> {
                             if(!TextUtils.isEmpty(it.label)){
                                 itemBinding?.tvProductColor?.text = it.value
                             }else{
@@ -108,7 +108,7 @@ class OrderDetailAdapter(var context: Context, private var OrderDetail: OrderDet
                                 itemBinding?.viewVertical?.visibility = View.GONE
                             }
                         }
-                        Constants.SIZE_ -> {
+                        Constants.SIZE_, Constants.IN_SIZE -> {
                             if(!TextUtils.isEmpty(it.label)){
                                 itemBinding?.tvProductSize?.text = it.value
                             }else{
