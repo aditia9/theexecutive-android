@@ -135,4 +135,6 @@ object Constants {
     val SOFT_INPUT_KEYBOARD_DEF_HEIGHT: Int = 350
     const val PRODUCTION = "production"
 
+    const val ORDER_COMMENT = "[MobileOrder-Android]"
+
 }

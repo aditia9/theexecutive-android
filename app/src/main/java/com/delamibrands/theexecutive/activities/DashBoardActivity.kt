@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
+import android.view.WindowManager
 import com.delamibrands.theexecutive.R
 import com.ranosys.dochelper.MediaHelperActivity
 
@@ -85,9 +86,11 @@ class DashBoardActivity : BaseActivity() {
                         if (fragment is HomeFragment) {
                             when (HomeFragment.fragmentPosition) {
                                 0 -> {
+                                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
                                     (fragment as BaseFragment).setToolBarParams("", R.drawable.logo, "", 0, false, R.drawable.bag, true, true)
                                 }
                                 1 -> {
+                                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                                     val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
                                     if(TextUtils.isEmpty(isLogin)){
                                         (fragment as BaseFragment).setToolBarParams(getString(R.string.login), 0, "", R.drawable.cancel, true, 0, false, true)
@@ -105,6 +108,7 @@ class DashBoardActivity : BaseActivity() {
                                     }
                                 }
                                 2 -> {
+                                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                                     (fragment as BaseFragment).setToolBarParams(getString(R.string.wishlist), 0, "", R.drawable.back, true, 0, false)
                                 }
                             }
@@ -129,6 +133,7 @@ class DashBoardActivity : BaseActivity() {
 
                         //refresh/load shopping bag list
                         if(fragment is ShoppingBagFragment){
+                            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                             fragment.getShoppingBag()
                         }
                     }

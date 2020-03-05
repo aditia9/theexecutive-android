@@ -527,6 +527,14 @@ interface ApiService {
                 ApiConstants.X_REQUESTED_WITH,
                 ApiConstants.CACHE_CONTROL)
         fun cancelOrder(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode:String, @Path("order_id") orderId: String, @Query("___store") addOnStoreCode : String): Call<Boolean>
+
+        @POST("rest/{store_code}/V1/orders/{order_id}/comments")
+        @Headers(ApiConstants.CONTENT_TYPE,
+            ApiConstants.X_REQUESTED_WITH,
+            ApiConstants.CACHE_CONTROL)
+        fun orderComment(@Header(ApiConstants.AUTHORIZATION_KEY) userToken: String?, @Path("store_code") storeCode: String, @Path("order_id") orderId: String?
+                         , @Body orderComment: CheckoutDataClass.OrderCommentRequest): Call<String>
+
     }
 
 
