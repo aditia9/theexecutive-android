@@ -132,4 +132,6 @@ object Constants {
     const val NOTIFICATION_ID_LIST: String = "USER_NOTIFICATION_IDS"
     val SOFT_INPUT_KEYBOARD_DEF_HEIGHT: Int = 350
 
+    const val ORDER_COMMENT = "[MobileOrder-Android]"
+
 }

@@ -136,4 +136,21 @@ class CheckoutDataClass {
             val order_state: String
     )
 
+    data class OrderCommentRequest(
+    val statusHistory: StatusHistory
+)
+
+    data class StatusHistory(
+    val comment: String,
+    val created_at: String? = null,
+    val entity_id: Int? = null,
+    val entity_name: String? = null,
+    val extension_attributes: ExtensionAttributes? = null,
+    val is_customer_notified: Int? = null,
+    val is_visible_on_front: Int? = null,
+    val parent_id: Int? = null,
+    val status: String? = null
+)
+
+
 }
