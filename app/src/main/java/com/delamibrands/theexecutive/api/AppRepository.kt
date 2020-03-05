@@ -1481,7 +1481,7 @@ object AppRepository {
 
     fun orderComment(orderId: String?, request: CheckoutDataClass.OrderCommentRequest, callBack: ApiCallback<String>){
         val retrofit = ApiClient.retrofit
-        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        val userToken: String? = SavedPreferences.getInstance()?.getStringValue(Constants.ACCESS_TOKEN_KEY)
         val storeCode: String = SavedPreferences.getInstance()?.getStringValue(Constants.SELECTED_STORE_CODE_KEY) ?: Constants.DEFAULT_STORE_CODE
         val callPost = retrofit?.create<ApiService.CheckoutService>(ApiService.CheckoutService::class.java)?.orderComment(ApiConstants.BEARER + userToken, storeCode, orderId, request)
 

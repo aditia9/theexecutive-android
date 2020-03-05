@@ -3,7 +3,6 @@ package com.delamibrands.theexecutive.modules.checkout
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.databinding.ObservableField
-import com.delamibrands.theexecutive.R
 import com.delamibrands.theexecutive.api.AppRepository
 import com.delamibrands.theexecutive.api.interfaces.ApiCallback
 import com.delamibrands.theexecutive.base.BaseViewModel
@@ -44,11 +43,36 @@ class OrderResultViewModel(application: Application) : BaseViewModel(application
             override fun onSuccess(t: CheckoutDataClass.OrderStatusResponse?) {
                 orderStatus.value = t
                 incrementalOrderId.set(t?.order_id)
+                orderCommentApi(orderId.get(), t?.status_code)
                 if(t?.virtual_account_number != null){
                     virtualAccountNumber.set(t.virtual_account_number.toString())
                 }
             }
 
+        })
+    }
+
+
+    fun orderCommentApi(orderId: String?, statusLabel: String?){
+        val request = CheckoutDataClass.OrderCommentRequest(
+                statusHistory = CheckoutDataClass.StatusHistory(
+                        comment = Constants.ORDER_COMMENT,
+                        status = statusLabel
+                )
+        )
+
+        AppRepository.orderComment(orderId,request, callBack = object: ApiCallback<String> {
+            override fun onException(error: Throwable) {
+                apiError.value = error.message
+            }
+
+            override fun onError(errorMsg: String) {
+                apiError.value = errorMsg
+            }
+
+            override fun onSuccess(t: String?) {
+                // Empty override method.
+            }
         })
     }
 }

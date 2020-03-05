@@ -357,7 +357,6 @@ class CheckoutFragment : BaseFragment() {
             hideLoading()
             clearCartInfo()
 
-            checkoutViewModel.orderCommentApi(orderId)
 
             //flag to keep track that payment has been initiated
             GlobalSingelton.instance?.paymentInitiated = true

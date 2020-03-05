@@ -199,29 +199,6 @@ class CheckoutViewModel(application: Application): BaseViewModel(application) {
         })
     }
 
-    fun orderCommentApi(orderId: String?){
-
-        val request = CheckoutDataClass.OrderCommentRequest(
-            statusHistory = CheckoutDataClass.StatusHistory(
-                comment = Constants.ORDER_COMMENT
-            )
-        )
-
-        AppRepository.orderComment(orderId,request, callBack = object: ApiCallback<String> {
-            override fun onException(error: Throwable) {
-                commonError.value = error.message
-            }
-
-            override fun onError(errorMsg: String) {
-                commonError.value = errorMsg
-            }
-
-            override fun onSuccess(t: String?) {
-                //Empty Override Method
-            }
-        })
-    }
-
     fun getTotalAmountsApi() {
         AppRepository.getTotalAmounts(callBack = object : ApiCallback<CheckoutDataClass.Totals> {
             override fun onException(error: Throwable) {
