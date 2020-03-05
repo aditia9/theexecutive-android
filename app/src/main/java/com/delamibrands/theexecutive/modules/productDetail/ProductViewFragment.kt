@@ -246,7 +246,7 @@ class ProductViewFragment : BaseFragment() {
             for(i in 0 .. length-1) {
                 val option = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)
                 when (option?.label) {
-                    Constants.IN_COLOR_, Constants.COLOR_ -> {
+                    Constants.IN_COLOR, Constants.COLOR_ -> {
                         option.values.forEachIndexed { index, value ->
                             if(index == 0) {
                                 colorValue = value.value_index.toString()
@@ -264,7 +264,7 @@ class ProductViewFragment : BaseFragment() {
                             AppLog.e("New color list : $colorOptionList")
                         }
                     }
-                    Constants.IN_SIZE_, Constants.SIZE_ -> {
+                    Constants.IN_SIZE, Constants.SIZE_ -> {
                         option.values.forEachIndexed({ index, value ->
                             sizeMap[index.toString()] = value.value_index.toString()
                         })
@@ -678,7 +678,7 @@ class ProductViewFragment : BaseFragment() {
                 for(i in 0 until length) {
                     val option = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)
                     when (option?.label) {
-                        Constants.SIZE_, Constants.IN_SIZE_ -> {
+                        Constants.SIZE_, Constants.IN_SIZE -> {
                             isSizeAvailable = true
                         }
                     }
@@ -942,7 +942,7 @@ class ProductViewFragment : BaseFragment() {
         for(i in 0 until length) {
             val option = productItemViewModel.productItem?.extension_attributes?.configurable_product_options?.get(i)
             when (option?.label) {
-                Constants.SIZE_,Constants.IN_SIZE_ -> {
+                Constants.SIZE_, Constants.IN_SIZE -> {
                     isSizeAvailable = true
                 }
             }
