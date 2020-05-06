@@ -6,12 +6,16 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.os.Bundle
-import com.ranosys.rtp.RunTimePermissionActivity
 import com.delamibrands.theexecutive.R
 import com.delamibrands.theexecutive.activities.ToolbarViewModel
 import com.delamibrands.theexecutive.modules.home.HomeFragment
 import com.delamibrands.theexecutive.modules.shoppingBag.ShoppingBagFragment
 import com.delamibrands.theexecutive.utils.*
+import com.facebook.FacebookSdk.addLoggingBehavior
+import com.facebook.FacebookSdk.setAutoLogAppEventsEnabled
+import com.facebook.LoggingBehavior
+import com.facebook.appevents.AppEventsLogger
+import com.ranosys.rtp.RunTimePermissionActivity
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import java.io.IOException
@@ -28,11 +32,11 @@ open class BaseActivity: RunTimePermissionActivity(){
     var toolbarViewModel: ToolbarViewModel? = null
     private lateinit var baseViewModel: BaseViewModel
 
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // changeStatusBarColor(R.color.white)
         requestedOrientation = if(Utils.isTablet(this)){
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }else{

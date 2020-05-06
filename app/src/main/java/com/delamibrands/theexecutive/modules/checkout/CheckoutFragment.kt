@@ -206,6 +206,7 @@ class CheckoutFragment : BaseFragment() {
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
             checkoutViewModel.placeOrderApi(checkoutViewModel.selectedPaymentMethod)
+
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
@@ -355,6 +356,11 @@ class CheckoutFragment : BaseFragment() {
         //observe order id
         checkoutViewModel.orderId.observe(this, Observer { orderId ->
             hideLoading()
+
+            val parameters = Bundle()
+            parameters.putString(Constants.FB_EVENT_TOTAL_PRICE, Constants.IDR+" "+checkoutViewModel.totalAmounts)
+            parameters.putString(Constants.FB_EVENT_ORDER_ID, orderId)
+            getLogger()!!.logEvent(Constants.FB_EVENT_NAME_INITIATED_CHECKOUT, parameters)
             clearCartInfo()
 
 

@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import android.view.WindowManager
 import com.delamibrands.theexecutive.R
-import com.ranosys.dochelper.MediaHelperActivity
-
 import com.delamibrands.theexecutive.api.AppRepository
 import com.delamibrands.theexecutive.api.interfaces.ApiCallback
 import com.delamibrands.theexecutive.base.BaseActivity
@@ -38,6 +36,10 @@ import com.delamibrands.theexecutive.utils.Constants
 import com.delamibrands.theexecutive.utils.FragmentUtils
 import com.delamibrands.theexecutive.utils.SavedPreferences
 import com.delamibrands.theexecutive.utils.Utils
+import com.facebook.FacebookSdk
+import com.facebook.LoggingBehavior
+import com.facebook.appevents.AppEventsLogger
+import com.ranosys.dochelper.MediaHelperActivity
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -50,11 +52,18 @@ class DashBoardActivity : BaseActivity() {
 
     lateinit var toolbarBinding: ActivityDashboardBinding
     private var mediaPicker: MediaHelperActivity? = null
+    private var logger: AppEventsLogger? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         toolbarBinding = DataBindingUtil.setContentView(this, R.layout.activity_dashboard)
         toolbarBinding.toolbarViewModel = toolbarViewModel
+
+
+        logger = AppEventsLogger.newLogger(this)
+        FacebookSdk.setAutoLogAppEventsEnabled(true)
+        FacebookSdk.addLoggingBehavior(LoggingBehavior.APP_EVENTS)
+
 
         val intent = intent
         val bundle = intent.extras
@@ -241,5 +250,9 @@ class DashBoardActivity : BaseActivity() {
         } else {
             Utils.showNetworkErrorDialog(this)
         }
+    }
+
+    fun getLogger(): AppEventsLogger? {
+        return logger
     }
 }

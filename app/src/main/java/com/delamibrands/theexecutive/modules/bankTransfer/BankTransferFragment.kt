@@ -58,6 +58,11 @@ class BankTransferFragment : BaseFragment(), DatePickerDialog.OnDateSetListener 
             bankTransferViewModel.emailAddress.set(SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL))
             bankTransferViewModel.firstName.set(SavedPreferences.getInstance()?.getStringValue(Constants.FIRST_NAME))
             bankTransferViewModel.lastName.set(SavedPreferences.getInstance()?.getStringValue(Constants.LAST_NAME))
+
+            val parameters = Bundle()
+            parameters.putString(Constants.FB_EVENT_EMAIL_ID, SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL))
+            getLogger()!!.logEvent(Constants.FB_EVENT_BANK_TRANSFER, parameters)
+
         }
 
         mBinding.bankTransferVM = bankTransferViewModel

@@ -347,6 +347,12 @@ class ProductListingFragment: BaseFragment() {
                 mLastClickTime = SystemClock.elapsedRealtime()
                 ApiClient.client?.dispatcher()?.cancelAll()
                 mViewModel.isLoading = false
+
+                val parameters = Bundle()
+                parameters.putString(Constants.FB_EVENT_PRODUCT_NAME, selectedProduct.name)
+                parameters.putString(Constants.FB_EVENT_PRODUCT_SKU, selectedProduct.sku)
+                getLogger()!!.logEvent(Constants.FB_EVENT_NAME_PRODUCT_DETAIL, parameters)
+
                 val fragment = ProductDetailFragment.getInstance(mViewModel.productListResponse?.items!!, selectedProduct.sku, selectedProduct.name, position)
                 FragmentUtils.addFragment(context!!, fragment, null, ProductDetailFragment::class.java.name, true)
             }

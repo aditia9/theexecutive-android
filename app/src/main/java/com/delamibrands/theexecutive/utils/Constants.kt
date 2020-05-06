@@ -137,4 +137,28 @@ object Constants {
 
     const val ORDER_COMMENT = "[MobileOrder-Android]"
 
+    /*
+    * For Facebook event tracker
+    */
+    const val FB_EVENT_NAME_ADDED_TO_CART = "ADDED TO CART"
+    const val FB_EVENT_NAME_ADDED_TO_WISHLIST = "ADDED TO WISHLIST"
+    const val FB_EVENT_NAME_PRODUCT_DETAIL = "PRODUCT DETAIL"
+    const val FB_EVENT_NAME_INITIATED_CHECKOUT = "INITIATED CHECKOUT"
+    const val FB_EVENT_NAME_PURCHASED = "PURCHASED"
+    const val FB_EVENT_NAME_SEARCHED = "SEARCHED"
+    const val FB_EVENT_BANK_TRANSFER = "BANK TRANSFER"
+    const val FB_EVENT_CONTACT_US = "CONTACT US"
+    const val FB_EVENT_SUBSCRIBE_TO_NEWSLETTER = "SUBSCRIBE TO NEWSLETTER"
+    const val FB_EVENT_BUYING_GUIDE = "BUYING GUIDE"
+
+
+    const val FB_EVENT_PRODUCT_NAME = "Product Name"
+    const val FB_EVENT_PRODUCT_SKU = "Product SKU"
+    const val FB_EVENT_QUANTITY = "Quantity"
+    const val FB_EVENT_TOTAL_PRICE = "Cart Amount"
+    const val FB_EVENT_ORDER_ID = "Order Id"
+    const val FB_EVENT_SEARCH_KEYWORD = "Keyword"
+    const val FB_EVENT_EMAIL_ID = "Email id"
+
+
 }
