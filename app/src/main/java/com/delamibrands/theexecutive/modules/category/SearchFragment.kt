@@ -38,6 +38,7 @@ class SearchFragment: BaseFragment(){
         // Inflate the layout for this fragment
         rootlayout = inflater.inflate(R.layout.fragment_search, container, false)
 
+
         return rootlayout
 
     }
@@ -152,6 +153,10 @@ class SearchFragment: BaseFragment(){
     private fun showSearchResult(searchQuery: String) {
         removeFragment()
         action(searchQuery)
+        val parameters = Bundle()
+        parameters.putString(Constants.FB_EVENT_SEARCH_KEYWORD, searchQuery)
+        getLogger()?.logEvent(Constants.FB_EVENT_NAME_SEARCHED, parameters)
+
     }
 
     private fun removeFragment(searchQuery: String = "") {

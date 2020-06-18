@@ -9,12 +9,14 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.KeyEvent
 import android.webkit.*
 import android.widget.RelativeLayout
 import com.delamibrands.theexecutive.BuildConfig
 import com.delamibrands.theexecutive.R
+import com.delamibrands.theexecutive.activities.DashBoardActivity
 import com.delamibrands.theexecutive.activities.ToolbarViewModel
 import com.delamibrands.theexecutive.api.AppRepository
 import com.delamibrands.theexecutive.api.interfaces.ApiCallback
@@ -22,6 +24,7 @@ import com.delamibrands.theexecutive.modules.checkout.CheckoutFragment
 import com.delamibrands.theexecutive.modules.checkout.OrderResultFragment
 import com.delamibrands.theexecutive.modules.home.HomeFragment
 import com.delamibrands.theexecutive.utils.*
+import com.facebook.appevents.AppEventsLogger
 import kotlinx.android.synthetic.main.web_pages_layout.*
 
 
@@ -147,12 +150,11 @@ abstract class BaseFragment : LifecycleFragment() {
     @SuppressLint("SetJavaScriptEnabled")
     fun prepareWebPageDialog(context : Context?, url : String?, title : String?, orderId: String = "") {
 
+        facebookEventTracking(title)
         //success and failure url for ip88
         val orderCancelUrl: String = "checkout/onepage/cancelled"
         val orderFailureUrl: String = "checkout/onepage/failure"
         val orderSuccessUrl: String = "checkout/onepage/success"
-
-
         val webPagesDialog = Dialog(context, R.style.Animation_Design_BottomSheetDialog)
         webPagesDialog.setContentView(R.layout.web_pages_layout)
         webPagesDialog.setCancelable(true)
@@ -243,6 +245,19 @@ abstract class BaseFragment : LifecycleFragment() {
 
     }
 
+    private fun facebookEventTracking(title: String?) {
+        val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
+        if(title == context?.getString(R.string.contact_us) && !TextUtils.isEmpty(isLogin)){
+                val parameters = Bundle()
+                parameters.putString(Constants.FB_EVENT_EMAIL_ID, SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL))
+                getLogger()!!.logEvent(Constants.FB_EVENT_CONTACT_US, parameters)
+        }else if(title == context?.getString(R.string.buying_guide) && !TextUtils.isEmpty(isLogin)){
+                val parameters = Bundle()
+                parameters.putString(Constants.FB_EVENT_EMAIL_ID, SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL))
+                getLogger()!!.logEvent(Constants.FB_EVENT_BUYING_GUIDE, parameters)
+        }
+    }
+
     private fun checkIfPaymentIsCancelled(webPagesDialog: Dialog, orderId: String) {
         activity?.run {
             val fragment = FragmentUtils.getCurrentFragment(activity as BaseActivity)
@@ -289,4 +304,11 @@ abstract class BaseFragment : LifecycleFragment() {
     }
 
 
+    open fun getLogger(): AppEventsLogger? {
+        return if (activity is DashBoardActivity) {
+            (activity as DashBoardActivity).getLogger()
+        } else {
+            AppEventsLogger.newLogger(context)
+        }
+    }
 }

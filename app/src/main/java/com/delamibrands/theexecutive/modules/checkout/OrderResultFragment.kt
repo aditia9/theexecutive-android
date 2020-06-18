@@ -80,6 +80,9 @@ class OrderResultFragment: BaseFragment(){
                     popUpAllFragments()
                     val bundle = Bundle()
                     bundle.putString(Constants.ORDER_ID, orderResultViewModel.incrementalOrderId.get())
+                    val parameters = Bundle()
+                    parameters.putString(Constants.FB_EVENT_ORDER_ID, orderResultViewModel.incrementalOrderId.get())
+                    getLogger()?.logEvent(Constants.FB_EVENT_NAME_PURCHASED, parameters)
                     FragmentUtils.addFragment(activity as Context, OrderDetailFragment(), bundle, OrderDetailFragment::class.java.name, true)
                 }
 

@@ -113,7 +113,10 @@ dependencies {
     kapt "com.android.databinding:compiler:${rootProject.kotinDatabindingVersion}"
 
     //fb login dependencies
-    implementation 'com.facebook.android:facebook-login:[4,5)'
+    implementation 'com.facebook.android:facebook-login:5.15.3'
+
+    implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
+
 
     //google playservice
     compile "com.google.android.gms:play-services-auth:${rootProject.fireBaseVersion}"

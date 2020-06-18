@@ -31,6 +31,11 @@ class NewsLetterFragment: BaseFragment() {
         val isLogin = SavedPreferences.getInstance()?.getStringValue(Constants.USER_ACCESS_TOKEN_KEY)
         if(!TextUtils.isEmpty(isLogin)) {
             mViewModel.email.set(SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL))
+
+            val parameters = Bundle()
+            parameters.putString(Constants.FB_EVENT_EMAIL_ID, SavedPreferences.getInstance()?.getStringValue(Constants.USER_EMAIL))
+            getLogger()!!.logEvent(Constants.FB_EVENT_SUBSCRIBE_TO_NEWSLETTER, parameters)
+
         }
 
         mBinding.newsLetterVM = mViewModel

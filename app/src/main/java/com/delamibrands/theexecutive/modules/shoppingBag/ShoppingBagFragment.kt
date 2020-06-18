@@ -246,6 +246,12 @@ class ShoppingBagFragment : BaseFragment() {
                     R.id.img_wishlist -> {
                         updateQty = qty!!
                         callAddToWishListFromBag(item?.item_id)
+
+                        val parameters = Bundle()
+                        parameters.putString(Constants.FB_EVENT_PRODUCT_NAME, item?.name)
+                        parameters.putString(Constants.FB_EVENT_PRODUCT_SKU, item?.sku)
+                        getLogger()!!.logEvent(Constants.FB_EVENT_NAME_ADDED_TO_WISHLIST, parameters)
+
                         itemPosition = pos
                     }
                     R.id.img_delete -> {
@@ -344,6 +350,9 @@ class ShoppingBagFragment : BaseFragment() {
         if (userToken.isNullOrBlank().not()) {
             showLoading()
             shoppingBagViewModel.moveItemFromCart(item_id)
+
+
+
         } else {
             LoginFragment()
         }

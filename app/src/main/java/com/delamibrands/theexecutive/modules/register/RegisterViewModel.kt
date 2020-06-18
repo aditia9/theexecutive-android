@@ -5,6 +5,7 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.databinding.ObservableField
+import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.text.TextUtils
 import android.view.View
@@ -21,6 +22,7 @@ import com.delamibrands.theexecutive.modules.login.LoginDataClass
 import com.delamibrands.theexecutive.utils.Constants
 import com.delamibrands.theexecutive.utils.SavedPreferences
 import com.delamibrands.theexecutive.utils.Utils
+import com.facebook.appevents.AppEventsConstants
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -218,6 +220,7 @@ class RegisterViewModel(application: Application): BaseViewModel(application) {
 
                 override fun onSuccess(response: RegisterDataClass.RegistrationResponse?) {
                     if(isSocialLogin) callLoginApi() else apiDirectRegSuccessResponse?.value = response
+
                 }
 
             })

@@ -48,8 +48,8 @@
 
 
     <!--fb integration-->
-    <string name="facebook_app_id">174246843202937</string>
-    <string name="fb_login_protocol_scheme">fb174246843202937</string>
+    <string name="facebook_app_id">4602416863117943</string>
+    <string name="fb_login_protocol_scheme">4602416863117943</string>
     <string name="email_address">Alamat email</string>
     <string name="login_with">Login dengan</string>
     <string name="facebook_login">Login with Facebook</string>

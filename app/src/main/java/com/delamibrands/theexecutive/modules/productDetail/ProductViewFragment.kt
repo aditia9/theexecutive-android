@@ -580,6 +580,11 @@ class ProductViewFragment : BaseFragment() {
         if (Utils.isConnectionAvailable(activity as Context)) {
             showLoading()
             productItemViewModel.callAddToWishListApi(colorAttrId, colorValue, sizeAttrId, sizeValue)
+
+            val parameters = Bundle()
+            parameters.putString(Constants.FB_EVENT_PRODUCT_NAME, productItemViewModel.productItem?.name)
+            parameters.putString(Constants.FB_EVENT_PRODUCT_SKU, productItemViewModel.productItem?.sku)
+            getLogger()!!.logEvent(Constants.FB_EVENT_NAME_ADDED_TO_WISHLIST, parameters)
         } else {
             Utils.showNetworkErrorDialog(activity as Context)
         }
@@ -796,6 +801,12 @@ class ProductViewFragment : BaseFragment() {
         )
 
         AppLog.e("AddToCartRequest : $colorValue$sizeValue$selectedQty")
+
+        val parameters = Bundle()
+        parameters.putString(Constants.FB_EVENT_PRODUCT_NAME, productItemViewModel.productItem?.name)
+        parameters.putString(Constants.FB_EVENT_PRODUCT_SKU, productSku)
+        parameters.putString(Constants.FB_EVENT_QUANTITY, selectedQty.toString())
+        getLogger()!!.logEvent(Constants.FB_EVENT_NAME_ADDED_TO_CART, parameters)
 
         return AddToCartRequest(cartItem)
     }
